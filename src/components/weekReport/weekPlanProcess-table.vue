@@ -7,13 +7,13 @@
             <td class="table-name">项目名称</td>
             <td><p>{{itemData.xmmc}}</p></td>
             <td class="table-name">产品名称</td>
-            <td><p>{{itemData.cpmc}}</p></td>
+            <td><p>{{itemData.cpmc_display}}</p></td>
         </tr>
         <tr>
             <td class="table-name">责任人</td>
             <td><p>{{itemData.zrrxm}}</p></td>
             <td class="table-name">任务名称</td>
-            <td><p>{{itemData.rwmc}}</p></td>
+            <td><p>{{itemData.rwmc_display}}</p></td>
             <td class="table-name">创建人</td>
             <td><p>{{itemData.cjrxm}}</p></td>
         </tr>

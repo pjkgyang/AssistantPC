@@ -77,7 +77,7 @@
                 <p style="margin:10px 0 !important;" v-if="ishow">
                    <el-button size="mini" type="success" @click="commitLcb">提报里程碑</el-button>
                    <el-button size="mini" type="primary" @click="exportLcb">导出</el-button>
-                   <span style="float:right;margin-top:5px">合计完工量 : <span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} 
+                   <span style="float:right;margin-top:5px"><span class="filter-weight">合计完工量 : </span><span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} 
                    </span>{{totalWgl<10000?'元':totalWgl<100000000?'万元':'亿'}}</span>
                    <p style="color:#aaa;font-size:12px;">说明：整体里程碑不允许调整计划，里程碑调整需要工程总确认后才生效。</p>
                 </p>

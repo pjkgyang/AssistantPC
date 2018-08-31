@@ -264,12 +264,14 @@ export default {
       isPlan:false,
       isCljh:true,
       cnjssj:'',
+      bzJssj:'',
       groupTag:'',
       isweekzj:false,
       paramObj:this.dateObj,
       prevMinDate:'',
       prevMaxDate:'',
-      isaddTask:true
+      isaddTask:true,
+      nextWeeksNum:''
     };
   },
   mounted(){
@@ -289,7 +291,8 @@ export default {
                 this.NextweekValue = this.zcValue+1;
                 this.NextMonth = this.monthly
             }
-                this.cnjssj = this.getWeekDate(year,month-1,this.weeksNum).split('至')[1];
+                this.bzJssj = this.getWeekDate(year,month-1,this.weeksNum).split('至')[1]; 
+                this.nextWeeksNum = getWeeks(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]);
                 this.nextWeekDay = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1==0?this.NextMonth.split('-')[1]:this.NextMonth.split('-')[1]-1,this.NextweekValue);
                 this.isWeekPlanBlocked(this.monthly,this.zcValue,false);         // 本周
                 this.isWeekPlanBlocked(this.NextMonth,this.NextweekValue,true);  // 下周
@@ -313,7 +316,8 @@ export default {
            this.NextweekValue = this.zcValue+1;
            this.NextMonth = this.monthly
        }
-        this.cnjssj = this.getWeekDate(year,month-1,this.weeksNum).split('至')[1];
+        this.bzJssj = this.getWeekDate(year,month-1,this.weeksNum).split('至')[1]; 
+        this.nextWeeksNum = getWeeks(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]);
         this.nextWeekDay = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1==0?this.NextMonth.split('-')[1]:this.NextMonth.split('-')[1]-1,this.NextweekValue);
         this.isWeekPlanBlocked(this.monthly,this.zcValue,false);         // 本周
         this.isWeekPlanBlocked(this.NextMonth,this.NextweekValue,true);  // 下周
@@ -397,8 +401,18 @@ export default {
             }
         }else if(param == 'wtcl-bz' || param == 'wtcl-xz'){
             this.wtShow = true; 
+            if(param == 'wtcl-xz'){
+              this.cnjssj = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1,this.nextWeeksNum).split('至')[1];
+            }else{
+              this.cnjssj = this.bzJssj
+            }
         }else if(param == 'lcb-bz' || param == 'lcb-xz'){ 
             this.lcbShow = true;
+            if(param == 'wtcl-xz'){
+              this.cnjssj = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1,this.nextWeeksNum).split('至')[1];
+            }else{
+              this.cnjssj = this.bzJssj  
+            }
         }   
         if(param == 'rwjd-bz'||param == 'wtcl-bz'||param == 'lcb-bz'){
             this.isNextWeek = false
@@ -1045,9 +1059,10 @@ export default {
         this.pageWeekWork(1,this.monthly,this.zcValue,false);
         this.pageWeekQuestion(1,this.monthly,this.zcValue,false);
         this.pageWeeklyReport(1,this.monthly,this.zcValue,false);
-        this.pageWeekWork(1,this.monthly,this.NextweekValue,true);
-        this.pageWeekQuestion(1,this.monthly,this.NextweekValue,true);
-        this.pageWeeklyReport(1,this.monthly,this.NextweekValue,true);
+        
+        this.pageWeekWork(1,this.NextMonth,this.NextweekValue,true);
+        this.pageWeekQuestion(1,this.NextMonth,this.NextweekValue,true);
+        this.pageWeeklyReport(1,this.NextMonth,this.NextweekValue,true);
         this.currentNowLcbPage = 1;
         this.currentNextLcbPage = 1;
         this.currentNowJdPage = 1;

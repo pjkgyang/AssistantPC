@@ -20,10 +20,10 @@
          </div>
       </template>
     </el-table-column>
-    <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip width="160"></el-table-column>
-    <el-table-column prop="rwmc" label="任务名称" show-overflow-tooltip width="140"></el-table-column>    
-    <el-table-column prop="cpmc" label="产品名称" show-overflow-tooltip width="160"></el-table-column>
-    <el-table-column prop="lcbms" label="里程碑名称" show-overflow-tooltip width="120" ></el-table-column>
+    <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip width="280"></el-table-column>
+    <el-table-column prop="rwmc_display" label="任务名称" show-overflow-tooltip width="280"></el-table-column>    
+    <el-table-column prop="cpmc_display" label="产品名称" show-overflow-tooltip width="160"></el-table-column>
+    <el-table-column prop="lcbms_display" label="里程碑名称" show-overflow-tooltip width="280" ></el-table-column>
     <el-table-column prop="zt_display" label="任务状态" show-overflow-tooltip width="100"></el-table-column>
     <el-table-column prop="yxj_display" label="优先级" show-overflow-tooltip width="100"></el-table-column>
     <el-table-column prop="cjrxm" label="发起人" show-overflow-tooltip width="80"></el-table-column>

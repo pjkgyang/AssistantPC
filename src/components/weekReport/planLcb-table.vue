@@ -7,13 +7,13 @@
             <td class="table-name">项目名称</td>
             <td><p>{{itemData.xmmc}}</p></td>
             <td class="table-name">项目内容</td>
-            <td :title="itemData.xmnr"><p>{{itemData.xmnr}}</p></td>
+            <td :title="itemData.xmnr_display"><p>{{itemData.xmnr_display}}</p></td>
         </tr>
         <tr>
             <td class="table-name">工作内容</td>
             <td><p>{{itemData.gznr}}</p></td>
             <td class="table-name">里程碑描述</td>
-            <td :title="itemData.lcbms"><p>{{itemData.lcbms}}</p></td>
+            <td :title="itemData.lcbms_display"><p>{{itemData.lcbms_display}}</p></td>
             <td class="table-name">里程碑状态</td>
             <td><p>{{itemData.zt_display}}</p></td>
         </tr>

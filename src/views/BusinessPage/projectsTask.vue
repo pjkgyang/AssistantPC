@@ -32,7 +32,7 @@
               <div>
                 <li v-if="taskList.length != 0 && taskList != null" :class="{'list-active':shownindex === index}" v-for="(task,index) of taskList" :key="index"  @click="getTaskinfo(task,index)">
                   <p>
-                    <strong :title="task.cp" :class="{'on_active':shownindex === index,'project_task_detail_cpmc':true}">{{task.cp_display}}</strong><br>
+                    <strong :title="task.cp_display" :class="{'on_active':shownindex === index,'project_task_detail_cpmc':true}">{{task.cp_display}}</strong><br>
                     <span style="display:inline-block;width:40px;">{{task.ywcrwzs}}/{{task.rwzs}}</span>&#x3000;
                     <span class="item_zrr ">甲</span> <span>{{task.jfzrrxm == ''?'暂无':task.jfzrrxm}}</span>&nbsp;&nbsp;
                     <span class="item_zrr item_zrr_YF">乙</span> <span>{{task.yfzrrxm}}</span>
@@ -215,6 +215,7 @@
                     <div class="activity-creator-operate">
                           <el-upload
                               class="upload-demo"
+
                               ref="upload"
                               action="dis"
                                multiple
@@ -235,7 +236,7 @@
       </el-dialog>
   <!-- 日报弹出层 -->
     <el-dialog title="填写日报" :visible.sync="dialogDailyVisible" @close="closeDailyParper" :close-on-click-modal="false"> 
-        <dailyParper @handleSubmit="handleSubmit" :taskName="taskName" :xmbh="xmbh" :closeDialogNum="closeDialogNum"></dailyParper> 
+        <dailyParper @handleSubmit="handleSubmit" :taskName="taskName" :xmbh="xmbh" :logInfo="TaskProcess" :closeDialogNum="closeDialogNum"></dailyParper> 
     </el-dialog>
     <!-- 编辑产品 -->
     <el-dialog title="修改产品信息" :visible.sync="dialogEditTaskVisible" :close-on-click-modal="false"> 
@@ -668,10 +669,10 @@ export default {
     handleDialog(data){  
       let param = data;
       if(typeof(data) == 'object' && data.type == 'daily'){ //填写日报
-        this.taskName = data.rwmc
+        this.taskName = data.rwmc_display
         this.TaskProcess = data
+        this.closeDialogNum = this.closeDialogNum -1
         this.dialogDailyVisible = !this.dialogDailyVisible
-
       }else if(typeof(data) == 'object' && data.type == 'commit'){  //提交里程碑
         this.lcbTaskDetail = data
         this.commitlcbVisible = !this.commitlcbVisible

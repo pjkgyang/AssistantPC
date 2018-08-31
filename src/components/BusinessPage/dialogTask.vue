@@ -68,7 +68,7 @@
             <div v-if="taskGroup" style="height:calc(100% - 35px);width:300px;border:1px solid #ccc;float:left;border-left:none">
               <ul>
                   <li><h4>产品分组</h4></li>
-                  <li class="choose-daily-item" v-for="(item,index) in cpgroup" @click="handleSeclist(index)">{{item.cp}}</li></li>
+                  <li class="choose-daily-item" v-for="(item,index) in cpgroup" @click="handleSeclist(index)">{{item.cp_display}}</li></li>
               </ul>
             </div>
         </transition>
@@ -76,7 +76,7 @@
             <div v-if="taskList" style="height:calc(100% - 35px);width:300px;border:1px solid #ccc;float:left;border-left:none">
               <ul v-for="(item,index) in tasksData">
                   <li ><h4 style="overflow:hidden;white-space:nowrap; text-overflow: ellipsis" :title="item.catalog">{{item.catalog}}</h4></li>
-                  <li :title="task.rwmc" class="choose-daily-item" v-for="task in item.tasks.rows"  @click="chooseRevelence(task)"><span class="el-icon-info"></span> {{task.rwmc}}</li>                 
+                  <li :title="task.rwmc_display" class="choose-daily-item" v-for="task in item.tasks.rows"  @click="chooseRevelence(task)"><span class="el-icon-info"></span> {{task.rwmc_display}}</li>                 
               </ul>
             </div>
         </transition>

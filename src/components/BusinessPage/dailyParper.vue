@@ -112,7 +112,7 @@ export default {
       this.date = this.logInfo.gcrq
       this.gs = this.logInfo.gs
       this.desc = this.logInfo.gcms
-      this.taskname =  this.logInfo.xmmc==undefined?'':this.logInfo.xmmc==''?'':this.logInfo.xmmc+'——'+this.logInfo.cpmc+'——'+this.logInfo.rwmc
+      this.taskname =  !this.logInfo.xmmc?'':this.taskName?this.taskName:this.logInfo.xmmc+'——'+this.logInfo.cpmc+'——'+this.logInfo.rwmc
    },
     computed:{
       taskLogInfo(){
@@ -216,13 +216,17 @@ export default {
     },
     watch:{
       closeDialogNum(n,o){
-        this.gs = "";
-        this.date = "";
-        this.desc = "";
-        this.fileList = [];
-        this.fileData = [];
-        this.filesData = [];
-        this.taskname = ''
+        if(n<o){
+          this.taskname = this.taskName
+        }else{
+          this.gs = "";
+          this.date = "";
+          this.desc = "";
+          this.fileList = [];
+          this.fileData = [];
+          this.filesData = [];
+          this.taskname = ''
+        }
       },
       taskLogInfo(n,o){
           if(n > o){

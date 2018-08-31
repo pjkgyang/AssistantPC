@@ -5,7 +5,7 @@
       <div class="task_label lcb_task" :data-rwbh="detailList.rwbh"  v-if="detailList.lx == 1" :class="{'gb-active':detailList.zt == 5}">
         <div class="lcb_task_top" @click="handleTaskinfo($event,index)">
             <div style="font-size:13px;">
-                  <p class="task_content" :title="detailList.rwmc"> {{detailList.rwmc_display}} </p>
+                  <p class="task_content" :title="detailList.rwmc_display"> {{detailList.rwmc_display}} </p>
                   <p><span class="lcb-task-type">里程碑任务</span></p>
                   <p class="lcb_task_info">
                     <span><span class="el-icon-erp-yonghu Lcbtask_task-titleTip"> 责任人 :&nbsp;</span>{{detailList.ssrxm == ''?'暂无':detailList.ssrxm}}</span>
@@ -39,7 +39,7 @@
               <div style="font-size:12px;width:100%;">
                   <p class="task_content">
                     <span class="task-switch"  title="关闭/重启任务" :class="{'el-icon-check':detailList.zt==2,'task-close':detailList.zt==2}" :data-info="detailList.rwbh+'&'+detailList.zt" @click="changeTaskState($event,detailList)"></span>
-                     {{detailList.rwmc}}</p>
+                     {{detailList.rwmc_display}}</p>
                   <p><span class="lcb-task-type">{{detailList.lx_dispaly}}</span></p>
                   <p class="lcb_task_info">
                     <span><span class="el-icon-erp-yonghu Lcbtask_task-titleTip"> 责任人 : </span>{{detailList.ssrxm == ''?'暂无':detailList.ssrxm}}</span>
@@ -194,10 +194,12 @@ export default {
   margin-left: 0;
   border-radius: 0px !important;
 }
-
-.task_label_bottom button,.task_label_bottom>button:first-child{
+.task_label_bottom>button:first-child{
+  border-left:none !important; 
+}
+.task_label_bottom button{
   background: none;
-  border: none !important;
+  border: none;
 }
 .empty-task{
   text-align: center;
