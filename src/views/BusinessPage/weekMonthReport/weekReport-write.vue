@@ -408,7 +408,7 @@ export default {
             }
         }else if(param == 'lcb-bz' || param == 'lcb-xz'){ 
             this.lcbShow = true;
-            if(param == 'wtcl-xz'){
+            if(param == 'lcb-xz'){
               this.cnjssj = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1,this.nextWeeksNum).split('至')[1];
             }else{
               this.cnjssj = this.bzJssj  

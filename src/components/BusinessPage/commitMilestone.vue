@@ -4,7 +4,7 @@
           <div class="task-detail-dialog-header" v-if="JSON.stringify(taskDetail) != '{}'">
             <p class="task-detail-dialog-header-mc">{{taskDetail.lcbms}} </p>
              <div style="display:flex">
-              <h2>{{taskDetail.rwmc}}</h2>
+              <h3>{{taskDetail.rwmc}}</h3>
              </div>
             <p class="task-detail-dialog-header-time">
               <span>开始日期</span> <span class="el-icon-date"></span> {{taskDetail.jhksrq==null?taskDetail.cnkssj:taskDetail.jhksrq}} - 
@@ -217,7 +217,7 @@ export default {
 .task-detail-dialog-header p{
   margin: 10px 0 !important;
 }
-.task-detail-dialog-header h2{
+.task-detail-dialog-header h3{
  font-weight: normal;
 }
 .task-detail-scenario-infos-wrap{
