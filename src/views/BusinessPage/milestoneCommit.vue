@@ -5,6 +5,9 @@
               <span class="filter-title">高级查询: </span><el-input size="small" style="width:50%" placeholder="请输入项目编号/项目名称/里程碑描述"  suffix-icon="el-icon-search" v-model="keyword" @change="searchLcbContent"> </el-input>
               &#x3000;<el-button size="mini" type="primary" @click="handleSearchLcb">查询</el-button>
             </div>
+            <!-- <div v-if="groupTag.indexOf('JYGL') != -1" >
+              <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter"></filterComponent>
+            </div> -->
             <div style="display:flex" class="filter">
                 <span class="filter-title">里程碑状态:</span>
                <el-checkbox-group v-model="checkList" @change="handleCheckbox">
@@ -79,7 +82,7 @@
                    <el-button size="mini" type="primary" @click="exportLcb">导出</el-button>
                    <span style="float:right;margin-top:5px"><span class="filter-weight">合计完工量 : </span><span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} 
                    </span>{{totalWgl<10000?'元':totalWgl<100000000?'万元':'亿'}}</span>
-                   <p style="color:#aaa;font-size:12px;">说明：整体里程碑不允许调整计划，里程碑调整需要工程总确认后才生效。</p>
+                   <p style="color:#aaa;font-size:12px;">说明：整体验收里程碑不允许调整，非整体验收里程碑里程碑调整需要用户确认后才生效</p>
                 </p>
                 <el-table
                     ref="multipleTable"
@@ -129,10 +132,12 @@
 import { queryMilestoneData ,submitMilestone ,ModifyMilestoneCommitmentDate,getMilestoneSubmitType } from '@/api/milestone.js'
 import pagination from '@/components/BusinessPage/pagination.vue'
 import commitMilestone from '@/components/BusinessPage/commitMilestone.vue'
+import filterComponent from '@/components/reportTable/filterComponent.vue'
 import { returnFloat} from '../../utils/util.js'; 
 export default {
   data(){
       return {
+          filterList:['qygc'],
           checkList: [],
           xmlbList:[],
           keyword:'',
@@ -140,6 +145,7 @@ export default {
           cnjssj:"",
           sjkssj:"",
           sjjssj:"",
+          qygc:"",
           total:null,
           pageSize:12,
           currentPage:1,
@@ -163,10 +169,12 @@ export default {
   },
 
    methods: {
+        handleChangeFilter(data){
+            this.qygc = data.qygc
+        },
         handleCommitMilestone(){
             this.milestoneVisible = false;
             this.queryMilestoneData(this.currentPage);
-            
         },
         checkboxInit(row,index){
             if (row.zt != '计划中' && row.zt != '处理中') // && row.zt != '处理中'
@@ -303,7 +311,7 @@ export default {
          })
      }
     },
-    mounted(){
+    activated(){
            this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
         if(this.groupTag.indexOf('JZGCRY') != -1){
             this.ishow = true
@@ -312,7 +320,7 @@ export default {
         }
         this.queryMilestoneData(1);
     },
-    components:{pagination,commitMilestone}
+    components:{pagination,commitMilestone,filterComponent}
 }
 </script>
 <style scoped>
@@ -329,6 +337,7 @@ export default {
     width: 100px;
     text-align: right;
     margin-right:10px;
+    font-weight: 700;
 }
 .milestone_tabel{
     margin:10px 0;

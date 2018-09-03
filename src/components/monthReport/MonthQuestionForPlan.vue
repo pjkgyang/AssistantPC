@@ -18,8 +18,8 @@
     <el-table-column prop="bt" label="问题标题" width="250" fixed="left" show-overflow-tooltip></el-table-column>
     <el-table-column prop="fbrxm" label="发布人" width="100" show-overflow-tooltip></el-table-column>
     <!-- <el-table-column prop="fbrssdw" label="发布人所属单位" width="300" show-overflow-tooltip></el-table-column> -->
-    <el-table-column prop="xmmc_display" label="所属项目"  width="300" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="cpmc_display" label="所属产品" width="300" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="xmmc" label="所属项目"  width="300" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="cpmc" label="所属产品" width="300" show-overflow-tooltip></el-table-column>
     <el-table-column prop="wtlb" label="问题类别" width="120"></el-table-column>
     <el-table-column prop="sfjj" label="是否紧急" width="120"></el-table-column>
     <el-table-column prop="wtlc" label="当前处理环节" width="140"></el-table-column>

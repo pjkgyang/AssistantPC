@@ -28,7 +28,8 @@
     <el-table-column prop="cnjjsj" label="承诺解决时间" width="120" show-overflow-tooltip></el-table-column>
     <el-table-column prop="zt_display" label="问题状态" width="120" show-overflow-tooltip v-if="othShow"></el-table-column>
     <el-table-column prop="wwcyy" label="未完成原因" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>
-    <el-table-column prop="hxcs" label="后续措施" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>    
+    <el-table-column prop="hxcs" label="后续措施" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>   
+    <el-table-column prop="yhmc" label="创建人" width="100" show-overflow-tooltip></el-table-column> 
     <el-table-column prop="cljh" label="处理计划" width="200" show-overflow-tooltip></el-table-column>
     <el-table-column label="批注" width="120" v-if="show">
        <template slot-scope="scope">

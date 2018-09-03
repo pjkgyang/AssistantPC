@@ -51,8 +51,8 @@
                         </el-table-column>
                         <el-table-column prop="xmbh" label="项目编号" width="100"></el-table-column>
                         <el-table-column prop="xmmc" label="项目名称" width="200" show-overflow-tooltip> </el-table-column>
-                        <el-table-column prop="xmnr" label="项目内容" width="250" show-overflow-tooltip> </el-table-column>
-                        <el-table-column prop="lcbms" label="里程碑描述" width="150" show-overflow-tooltip> </el-table-column>
+                        <el-table-column prop="xmnr_display" label="项目内容" width="250" show-overflow-tooltip> </el-table-column>
+                        <el-table-column prop="lcbms_display" label="里程碑描述" width="150" show-overflow-tooltip> </el-table-column>
                         <el-table-column prop="cnjssj" label="承诺完成时间" width="150"> </el-table-column>
                         <el-table-column prop="jhjssj" label="计划完成时间" width="150"> </el-table-column>
                         <el-table-column prop="zt_display" label="完成状态" width="100"> </el-table-column>

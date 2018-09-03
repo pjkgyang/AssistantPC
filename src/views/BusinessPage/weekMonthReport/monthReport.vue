@@ -14,7 +14,7 @@
                 <span v-if="groupTag.indexOf('JYGL') != -1">
                     <span class="filter-weight">区域:&nbsp;</span>
                     <el-select v-model="qyValue" size="small" placeholder="请选择" @change="handleSelectQy">
-                        <el-option v-for="item in gczdList" :key="item.label" :label="item.mc" :value="item.label"></el-option>
+                        <el-option v-for="item in gczdList" :key="item.id" :label="item.text" :value="item.id"></el-option>
                     </el-select>
                 </span>
                 <span>
@@ -114,7 +114,7 @@ import { getProjects} from '@/api/xmkb.js'
 import lcbztSelect from '@/components/monthReport/lcbzt-select.vue'
 import {pageMonthWork,saveMonthWork,pageMonthQuestion,getMonthQuestion,saveMonthQuestion,
 listComments,addComment,countMonthWorkWglg,refreshMonthWork,isMonthPlanBlocked,batchUpdateMonthQuestion,
-batchUpdateMonthWork} from '@/api/weekMonthReport.js'
+batchUpdateMonthWork,listMonthPlanQygc} from '@/api/weekMonthReport.js'
 
 const wzdContent = "<h5 style='font-weight:700'>本月计划尚未制定，<span style='color:#f00'>请制定本月计划。</span></h5>"
 const wfcContent = "<h5 style='font-weight:700'>本月计划已制订，尚未封存，<span style='color:#f00'>请填写未完成原因和后续措施。</span></h5>"
@@ -179,23 +179,16 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
       }
    },
    beforeMount(){
-      if (getSession("gczd") == null) {
-             getMenu("gczd", this.gczdList, true); //获取工程战队
-          } else {
-              this.gczdList = getSession("gczd");
-        }  
+    
    },
    mounted(){ 
         this.isJzuser = sessionStorage.isJZuser
         this.groupTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag
-        if(this.groupTag.indexOf('JYGL') != -1){
-            this.qyValue = '福建区域工程'
-        }else{
-            this.qyValue = ''
-        }
         this.monthValue = new Date().getFullYear()+'-'+((new Date().getMonth()+1)>=10?(new Date().getMonth()+1):'0'+(new Date().getMonth()+1))
+        this.listMonthPlanQygc();
         this.countMonthWorkWglg();
         this.isMonthPlanBlocked(this.monthValue);
+
    },
    activated(){
        this.getMonthWorkList(1);    // 月工作计划
@@ -269,6 +262,7 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
                 this.textTitle = '总览'
                 this.otherShow = true
             }
+            this.listMonthPlanQygc();
             this.isMonthPlanBlocked(val);  //是否封存
             this.getMonthWorkList(1);
             this.getMonthQuestionList(1); // 月问题计划
@@ -574,6 +568,18 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
                     this.itemList = data.data.rows
                 }
             });
+      },
+      listMonthPlanQygc(){
+        this.gczdList = [];
+        listMonthPlanQygc({
+            month:this.monthValue,
+        }).then(({data})=>{
+            if(data.state == 'success'){
+                this.gczdList = data.data;
+                this.gczdList.unshift({id:'',text:'全部'}); 
+                this.qyValue = '';
+            }
+        })
       },
         ToastMessage(content){
                this.$message.closeAll();

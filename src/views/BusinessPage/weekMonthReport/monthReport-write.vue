@@ -375,7 +375,6 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
             this.isPlan = false;
             this.wtInfo = data;
             this.yycsShow = false;
-            
             this.index = index;
             this.bjShow = true;
         },
@@ -388,11 +387,11 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
         handleEditofBatchPrevWt(){               // 上月问题编辑（批量） 
             this.Wid = '';
             this.isPlan = false;
-            this.isCurmonth = false;//是否本月
+            this.isCurmonth = false;             // 是否本月
             this.bjShow = true;   
         },
         handleSelectByZt(){
-             this.mapLcbxxForPlan(1);            //获取本月(计划)工作;
+             this.mapLcbxxForPlan(1);            // 获取本月(计划)工作;
              this.currentNowPlanPage = 1
         },
         handleEditofBatchNowWt(){               // 本月问题编辑（批量） 
@@ -523,22 +522,6 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
                    })
                 } 
             }
-
-            // saveMonthQuestion({
-            //     wid:this.wtInfo.ywtWid,
-            //     qygc:this.qyValue,
-            //     yf:this.monthly,
-            //     wtWid:this.wtInfo.wtwid,
-            //     cljh:param.gznr
-            // }).then(({data})=>{
-            //     if(data.state = 'success'){
-            //         this.bjShow=false
-            //         this.PrevquestionList[this.index].cljh = param.gznr
-            //         this.$alert('保存成功！', '提示', {confirmButtonText: '确定',type:'success'});
-            //     }else{
-            //         this.$alert(data.msg, '提示', {confirmButtonText: '确定',type:'error'});
-            //     }
-            // })
         },
         // handleDeleteQuestion(data){  // 删除问题
         //         this.$confirm('是否删除该问题?', '提示', {
@@ -698,6 +681,15 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
           this.gczdList = getSession("gczd");
         }
         
+    },
+    watch:{
+        bjShow(n,o){
+            if(!n){
+                this.data.gznr = '';
+                this.data.wwcyy = '';
+                this.data.hxcs = '';
+            }
+        }
     },
     mounted(){
         this.isJzuser = sessionStorage.isJZuser

@@ -14,11 +14,11 @@
              {label:'计划中',value:1},
              {label:'处理中',value:2},
              {label:'已完成',value:3},
-             {label:'停滞',value:4},
-             {label:'关闭',value:5},
-             {label:'取消',value:6},
-             {label:'待定',value:7},
-             {label:'完成待确认',value:9},
+            //  {label:'停滞',value:4},
+            //  {label:'关闭',value:5},
+            //  {label:'取消',value:6},
+            //  {label:'待定',value:7},
+            //  {label:'完成待确认',value:9},
          ],
          multipleLcbzt:this.multipleLcbztList
      }

@@ -325,6 +325,13 @@ export default {
            this.getWeekPlanData();             // 获取周计划填写
       })
   },
+    watch:{
+        gznrShow(n,o){
+            if(!n){
+              
+            }
+        }
+    },
   props:{
       dateObj:{
           type:Object,
@@ -375,17 +382,17 @@ export default {
       },
       handleXzlcbSizeChange(data){
         this.xzlcbPageSize = data;
-        this.pageWeekWork(1,this.monthly,this.NextweekValue,true);
+        this.pageWeekWork(1,this.NextMonth,this.NextweekValue,true);
         this.currentNextLcbPage = 1;
       },
       handleXzjdSizeChange(data){
         this.xzjdPageSize = data;
-        this.pageWeeklyReport(1,this.monthly,this.NextweekValue,true);
+        this.pageWeeklyReport(1,this.NextMonth,this.NextweekValue,true);
         this.currentNextJdPage = 1; 
       },
       handleXzwtSizeChange(data){
         this.xzwtPageSize = data;
-        this.pageWeekQuestion(1,this.monthly,this.NextweekValue,true);
+        this.pageWeekQuestion(1,this.NextMonth,this.NextweekValue,true);
         this.currentNextWtPage = 1;
       },
     handleAdded(param){                  // 进度 新增
@@ -732,7 +739,7 @@ export default {
             }).then(({data})=>{
               if(data.state == 'success'){
                   if(isNextWeek){
-                    this.pageWeeklyReport(this.currentNextJdPage,this.monthly,this.NextweekValue,true);
+                    this.pageWeeklyReport(this.currentNextJdPage,this.NextMonth,this.NextweekValue,true);
                   }else{
                     this.pageWeeklyReport(this.currentNowJdPage,this.monthly,this.zcValue,false);
                   }
@@ -754,7 +761,7 @@ export default {
             }).then(({data})=>{
               if(data.state == 'success'){
                   if(isNextWeek){
-                      this.pageWeekQuestion(this.currentNextWtPage,this.monthly,this.NextweekValue,true);
+                      this.pageWeekQuestion(this.currentNextWtPage,this.NextMonth,this.NextweekValue,true);
                   }else{
                       this.pageWeekQuestion(this.currentNowWtPage,this.monthly,this.zcValue,false);
                   }

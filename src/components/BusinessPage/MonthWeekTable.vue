@@ -28,6 +28,7 @@
       <el-table-column prop="wwcyy" label="未完成原因" width="120" show-overflow-tooltip v-if="wordShow"></el-table-column>
       <el-table-column prop="hxcs" label="后续措施" width="120" show-overflow-tooltip v-if="wordShow"></el-table-column>
       <el-table-column prop="wglg" label="完工量（元）" width="120" v-if="otherShow"></el-table-column>
+      <el-table-column prop="yhmc" label="创建人" width="100" ></el-table-column>
       <el-table-column prop="xmjlxm" label="项目经理" width="100"></el-table-column>
       <el-table-column prop="zddzxm" label="战队队长" width="100"></el-table-column>
       <el-table-column prop="zrrxm" label="责任人" width="100" ></el-table-column>

@@ -753,4 +753,14 @@ export function allowSaveWeekPlan(obj) {
   })
 }  
 
+// 
+export function listMonthPlanQygc(obj) {
+  let url = window.baseurl + suburl + "listMonthPlanQygc.do"
+  return axios.get(url, {
+    params: {
+      month:obj.month,
+      qygc:obj.qygc||''
+    }
+  })
+}  
 

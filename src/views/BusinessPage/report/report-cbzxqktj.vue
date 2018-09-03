@@ -104,14 +104,14 @@ export default {
     margin:10px 0;
     font-size: 13px;
 }  
-.query-title{
+/* .query-title{
     font-size: 14px;
     width: 100px;
     white-space: nowrap;
     text-align:left;
     padding: 3px 10px 0;
     font-weight: 700;
-}
+} */
 .query-list{
     width: 95%;
 }

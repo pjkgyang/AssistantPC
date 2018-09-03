@@ -23,6 +23,7 @@
       <el-table-column prop="gzms" label="工作内容" min-width="300" show-overflow-tooltip></el-table-column>
       <el-table-column prop="wwcyy" label="未完成原因" min-width="200" v-if="wordShow" show-overflow-tooltip></el-table-column>
       <el-table-column prop="hxcs" label="后续措施" min-width="200" v-if="wordShow" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="cjrxm" label="创建人" width="100"></el-table-column>
       <el-table-column prop="zrrxm" label="责任人" width="100"></el-table-column>
       <el-table-column  label="批注" width="120" v-if="isPz">
         <template slot-scope="scope">

@@ -41,7 +41,7 @@
                   </el-select>
                 </span>
             </div>
-           <div v-if="!isBlocked && isJzyh != 1" class="pull-right">
+           <div v-if="isZd && !isBlocked && isJzyh != 1" class="pull-right">
                 <el-button size="small" type="danger" @click="handleClickAddzb">制订项目周报</el-button>
            </div>
          </section>
@@ -135,7 +135,7 @@ import zdzjhDialog from "@/components/dialog/zdjh-dialog.vue";
 import lcbztSelect from '@/components/monthReport/lcbzt-select.vue'
 import weekReportFill from '@/views/BusinessPage/weekMonthReport/weekReport-write.vue'
 import { getProjects} from '@/api/xmkb.js'
-import { EventBus,getMenu, getSession,getWeeks,getLastMonth,GetNextDate,getNextMonth,weekIndexInMonth } from '@/utils/util.js'
+import { EventBus,getMenu, getSession,getWeeks,getLastMonth,GetNextDate,getNowFormatDate,weekIndexInMonth,getPreMonth } from '@/utils/util.js'
 import { pageWeekWork,pageWeekQuestion,pageWeeklyReport,listComments,addComment,saveWeekWork,
 refreshWeekWork,isWeekPlanBlocked,batchUpdateWeekQuestion,batchUpdateWeekWork,listWeekPlanPerson} from '@/api/weekMonthReport.js'
 
@@ -221,7 +221,9 @@ export default {
       NewMonth:'',
       isJzyh:'',  //是否为金智用户,
       dateObj:{},
-      shownn:true
+      shownn:true,
+      lastMonth:'',
+      isZd:true
     };
   },
   props: {},
@@ -242,19 +244,12 @@ export default {
     }
     this.isJzyh = sessionStorage.isJZuser
     this.userId = JSON.parse(sessionStorage.userInfo).uid;
-    this.year = new Date().getFullYear();
-    this.month = new Date().getMonth();
     this.NewYear = new Date().getFullYear();
     this.NewMonth = new Date().getMonth();
-    this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
-    this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
-    this.weekDay  = this.getWeekDate(this.weekValue);
-    this.monthValue = this.year+'-'+((this.month+1)>10?(this.month+1):'0'+(this.month+1));
-    this.dateObj.month = this.monthValue
-    this.dateObj.weekValue = this.weekValue
-    this.dateObj.weeksNum = this.weeksNum
-    // this.getProjects();
-    // this.weekDay = this.getMonthWeeks(this.year,this.month+1);
+    this.initializeDate();
+    this.dateObj.month = this.monthValue;
+    this.dateObj.weekValue = this.weekValue;
+    this.dateObj.weeksNum = this.weeksNum;
   },
   activated(){
        this.listWeekPlanPerson(); 
@@ -301,7 +296,14 @@ export default {
       this.year = val.split('-')[0];
       this.month = val.split('-')[1]-1;
       this.weekValue = 1
+      this.weeksNum =  getWeeks(this.year,this.month+1); //周数
       this.weekDay = this.getMonthWeeks(val.split('-')[0],val.split('-')[1]);
+      let startDate = this.weekDay.split('至')[0];
+      if(new Date(startDate).getTime() > new Date(getNowFormatDate()).getTime()){
+        this.isZd = false
+      }else{
+        this.isZd = true
+      }
       this.dateObj.month = this.monthValue
       this.dateObj.weekValue = this.weekValue
       this.dateObj.weeksNum = this.weeksNum
@@ -310,8 +312,14 @@ export default {
     },
     handleChooseWeek(val){
       let chooseDate = this.NewYear+'-'+((this.NewMonth+1)>10?(this.NewMonth+1):'0'+(this.NewMonth+1));
-      this.weekDay  = this.getWeekDate(val);
-      this.dateObj.weekValue = this.weekValue
+      this.weekDay  = this.getWeekDate(this.year,this.monthValue.split('-')[1]-1,val);
+      let startDate = this.weekDay.split('至')[0];
+      this.dateObj.weekValue = val;
+      if(new Date(startDate).getTime() > new Date(getNowFormatDate()).getTime()){
+        this.isZd = false
+      }else{
+        this.isZd = true
+      }
       this.listWeekPlanPerson();
       this.isWeekPlanBlocked(this.monthValue,this.weekValue);
       if(new Date(this.monthValue).getTime() > new Date(chooseDate).getTime()){
@@ -559,16 +567,38 @@ export default {
       this.getWeekReportData(1);
     },
 
-    getWeekDate(val){ // 获取周具体日期
-       this.weekStartDate = GetNextDate(getLastMonth(this.year,this.month),(val-1)*7)
+    getWeekDate(year,month,val){ // 获取周具体日期
+       this.weekStartDate = GetNextDate(getLastMonth(year,month),(val-1)*7)
        this.weekEndDate = GetNextDate(this.weekStartDate,6);
        return this.weekStartDate+' 至 '+this.weekEndDate
     },
     getMonthWeeks(year,month){  //第一周日期
-        this.weeksNum =  getWeeks(year,month); //周数
+        // this.weeksNum =  getWeeks(year,month); //周数
         this.weekStartDate = getLastMonth(this.year,this.month);
         this.weekEndDate = GetNextDate(getLastMonth(this.year,this.month),6)
         return  this.weekStartDate+' 至 '+this.weekEndDate
+    },
+      // 初始化日期（计算）
+   initializeDate(){     
+       this.year = new Date().getFullYear();
+       this.month = new Date().getMonth(); 
+       let lastMonth = getPreMonth(this.year+'-'+(this.month+1)) //获取上个月日期
+       let Year = lastMonth.split('-')[0];
+       let Month = lastMonth.split('-')[1]-1;
+       let week = getWeeks(Year,Month+1);  //获取上月周数
+       let weekStartDate = GetNextDate(getLastMonth(Year,Month),(week-1)*7)
+       let weekEndDate = GetNextDate(weekStartDate,6);
+       let NowDate = getNowFormatDate();  
+       if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && new Date(NowDate).getTime() <= new Date(weekEndDate).getTime()){
+            this.weekValue = this.curWeek =  this.weeksNum = getWeeks(Year,Month+1);
+            this.weekDay  = weekStartDate+' 至 '+weekEndDate
+            this.monthValue = lastMonth;
+       }else{
+            this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
+            this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
+            this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
+            this.monthValue = this.year+'-'+((this.month+1)>10?(this.month+1):'0'+(this.month+1));  
+       } 
     },
     getListComments(oid){  // 获取批注列表
           listComments({
@@ -659,14 +689,6 @@ export default {
         if(data.state == 'success'){
            this.options = data.data
            this.ryValue = ''
-          //  data.data.forEach((ele,i,arr)=>{
-          //    if(ele.id == JSON.parse(sessionStorage.userInfo).uid){
-          //       this.ryValue = ele.id
-          //       return ;
-          //    }else{
-          //         this.ryValue = data.data[0].id
-          //    }
-          //  })
            this.getWeekReportData(1);
         }else{
            this.$alert(data.msg, '提示', {confirmButtonText: '确定',type:'error'});

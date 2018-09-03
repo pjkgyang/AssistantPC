@@ -222,11 +222,13 @@ export default {
   font-size: 13px;
 }
 .query-title {
+  display: inline-block;
   font-size: 14px;
   width: 100px;
   white-space: nowrap;
-  text-align: left;
-  padding: 3px 10px 0;
+  text-align: right !important;
+  margin-right: 10px !important;
+  padding: 3px 0 !important;
   font-weight: 700;
 }
 .query-list {
