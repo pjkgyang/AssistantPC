@@ -27,8 +27,8 @@
                           </section>
                             <WeekLcbTable :tableData="LcbList" @handleClickPz="handleBzLcbPz" @handleClickCheck="handleBzLcbCheck" @handleCurrentChange="handleBzLcbChange" 
                          @handleSizeChange="handleBzlcbSizeChange" @handleSelectionChange="handleSelectionBzlcb" @handleClickDelete="handleDeleteBzLcb" @handleClickEdit="handleEditBzLcb" :wordShow="true" 
-                         :gznrShow="true" :isSelect="true" :isEdit="!isBlocked" :ispz='false' :pageSize="bzlcbPageSize" :records="LcbRecords" :currentPage="currentNowLcbPage"
-                         :bjWordShow="true" :isDelete="false"></WeekLcbTable>
+                         :gznrShow="true" :isSelect="true"  :ispz='false' :pageSize="bzlcbPageSize" :records="LcbRecords" :currentPage="currentNowLcbPage"
+                         :bjWordShow="!isBlocked" :isDelete="false"></WeekLcbTable>
                         </div>
                     </tableLayout>    
                     <tableLayout :title="'进度任务总结'">
@@ -36,7 +36,7 @@
                              <div class="weekly-addbtn"><el-button type="primary" size="small" @click="handleAdded('rwjd-bz')">新增</el-button></div>
                             <processTable :tableData="ProcessList"  @handleClickEdit="handleEditBzJd" @handleClickPz="handleBzJdPz" @handleClickCheck="handleBzJdCheck" @handleCurrentChange="handleBzJdChange"
                         @handleSizeChange="handleBzjdSizeChange" @handleClickDelete="handleDeleteBzjd" :isPz="false" :pageSize="bzjdPageSize" :records="JdRecords" :gznrShow="true" :currentPage="currentNextLcbPage"
-                         :bjWordShow="true" :deleteShow="!isBlocked"  :isEdit="!isBlocked" :wordShow="true"></processTable>
+                         :bjWordShow="!isBlocked" :deleteShow="!isBlocked" :wordShow="true"></processTable>
                         </div>
                     </tableLayout>    
                     <tableLayout :title="'问题处理总结'">
@@ -63,7 +63,7 @@
                             <div class="weekly-addbtn"></div>
                             <MonthWeekQuestionTable :tableData="QuestionList" @handleClickDelete="handleDeleteBzwt" @handleClickEdit="handleEditBzWt" @handleClickCheck="handleBzWtCheck"
                         @handleSizeChange="handleBzwtSizeChange" @handleCurrentChange="handleBzwtChange"  @handleSelectionChange="handleSelectionBzwt" :isSelect="true" :isPz="false" 
-                        :bjWordShow="true" :isEdit="!isBlocked" :deleteShow="!isBlocked" :show="false" :pageSize="bzwtPageSize" :records="WtRecords" :currentPage="currentNowWtPage"></MonthWeekQuestionTable>
+                        :bjWordShow="!isBlocked" :deleteShow="!isBlocked" :show="false" :pageSize="bzwtPageSize" :records="WtRecords" :currentPage="currentNowWtPage"></MonthWeekQuestionTable>
                         </div>
                     </tableLayout>  
                  </div>
@@ -102,7 +102,7 @@
                           </section>
                             <WeekLcbTable :tableData="nextLcbList" :pageSize="xzlcbPageSize" :records="nextLcbRecords" @handleClickPz="handleXzLcbPz" @handleClickCheck="handleXzLcbCheck" @handleCurrentChange="handleXzLcbChange"
                           @handleClickEdit="handleEditXzLcb" @handleSelectionChange="handleSelectionXzlcb" @handleSizeChange="handleXzlcbSizeChange" @handleClickDelete="handleDeleteXzLcb" :isSelect="true"  :gznrShow="true"  :wordShow="false" :ispz='false' 
-                        :bjWordShow="false" :isZj="false" :isDelete="!isNextBlocked" :isEdit="!isNextBlocked"  :currentPage="currentNextLcbPage"></WeekLcbTable>
+                        :bjWordShow="false" :isZj="false" :isDelete="!isNextBlocked"  :currentPage="currentNextLcbPage"></WeekLcbTable>
                         </div>
                     </tableLayout>    
                     <tableLayout :title="'进度任务计划'">
@@ -110,7 +110,7 @@
                             <div class="weekly-addbtn"><el-button type="primary" size="small" @click="handleAdded('rwjd-xz')">新增</el-button></div>
                             <processTable :tableData="nextProcessList"  @handleClickPz="handleXzJdPz"  @handleClickEdit="handleEditXzJd" @handleClickCheck="handleXzJdCheck" @handleCurrentChange="handleXzJdChange"
                           @handleSizeChange="handleXzjdSizeChange" @handleClickDelete="handleDeleteXzjd" :isPz="false" :pageSize="xzjdPageSize" :records="nextJdRecords" :currentPage="currentNextJdPage"
-                          :bjWordShow="true" :isZj="false" :deleteShow="!isNextBlocked" :isEdit="!isNextBlocked" ></processTable>
+                          :bjWordShow="!isNextBlocked" :isZj="false" :deleteShow="!isNextBlocked" ></processTable>
                         </div>
                     </tableLayout>    
                     <tableLayout :title="'问题处理计划'">
@@ -138,7 +138,7 @@
                              <!-- v-if="!isNextBlocked" -->
                             <MonthWeekQuestionTable :tableData="nextQuestionList" @handleClickDelete="handleDeleteXzwt" @handleCurrentChange="handleXzwtChange" @handleClickEdit="handleEditXzWt" @handleClickCheck="handleXzWtCheck" :currentPage="currentNextWtPage"
                            @handleSizeChange="handleXzwtSizeChange" @handleSelectionChange="handleSelectionXzwt" :othShow="false" :isSelect="true" :pageSize="xzwtPageSize" :records="nextWtRecords"  :isPz="false"  :show="false"
-                           :bjWordShow="true" :isZj="false" :deleteShow="!isNextBlocked" :isEdit="!isNextBlocked"></MonthWeekQuestionTable>
+                           :bjWordShow="!isNextBlocked" :isZj="false" :deleteShow="!isNextBlocked" ></MonthWeekQuestionTable>
                         </div>
                     </tableLayout>  
                     <tableLayout :title="''">
@@ -979,10 +979,10 @@ export default {
                 this.nextWtRecords = data.data.records
             }else{
                 data.data.rows.forEach(ele=>{
-                    if(new Date(ele.cjsj).getTime() >= this.prevMinDate){
-                       ele.szjh = false
-                    }else{
+                    if(new Date(ele.cjsj).getTime() > this.prevMinDate){
                        ele.szjh = true
+                    }else{
+                       ele.szjh = false
                     }
                 })
                 this.QuestionList = data.data.rows
@@ -1009,10 +1009,10 @@ export default {
             }else{
                  let _this = this;
                  this.ProcessList = data.data.rows.map(function (ele) {
-                      if(new Date(ele.cjsj).getTime() >= _this.prevMinDate){
-                            ele.szjh = false
+                      if(new Date(ele.cjsj).getTime() > _this.prevMinDate){
+                            ele.szjh = true   //是否可删除，总结
                         }else{
-                            ele.szjh = true
+                            ele.szjh = false 
                         }
                     return ele;
                  });
@@ -1030,11 +1030,11 @@ export default {
             }).then(({data})=>{
                 if(data.state == 'success'){
                     if(isNextWeek){
-                        this.isNextBlocked = false
-                        // this.isNextBlocked = data.data.block;
+                        // this.isNextBlocked = false
+                        this.isNextBlocked = data.data.block;
                     }else{
-                        this.isBlocked = false
-                        // this.isBlocked = data.data.block;
+                        // this.isBlocked = false
+                        this.isBlocked = data.data.block;
                         this.prevMinDate = new Date(data.data.min).getTime();
                         this.prevMaxDate = new Date(data.data.max).getTime();
                     } 

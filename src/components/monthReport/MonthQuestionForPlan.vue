@@ -9,10 +9,10 @@
     <el-table-column v-if="isSelect" type="selection"  width="55"></el-table-column>
     <el-table-column fixed="left" label="操作" width="140">
       <template slot-scope="scope">
-        <span v-if="deleteShow" ><el-button @click="handleClickDelete(scope.row,scope.$index)" type="text" style="color:red" size="small" >删除</el-button></span>
-        <span v-if="!deleteShow && isPz"><el-button @click="handleClickPz(scope.row)" type="text" size="small">批注</el-button></span>
-        <span v-if="isEdit"><span class="table-hr" v-if="deleteShow || isPz"> 丨 </span><el-button @click="handleClickEdit(scope.row,scope.$index)" type="text" size="small">计划</el-button></span>
-        <span><span class="table-hr"> 丨 </span><el-button @click="handleClickCheck(scope.row)" type="text" size="small">查看</el-button></span>
+        <span v-if="deleteShow" ><el-button @click="handleClickDelete(scope.row,scope.$index)" type="text" style="color:red" size="small" >删除 丨 </el-button></span>
+        <span v-if="!deleteShow && isPz"><el-button @click="handleClickPz(scope.row)" type="text" size="small">批注 丨 </el-button></span>
+        <span v-if="isEdit"><el-button @click="handleClickEdit(scope.row,scope.$index)" type="text" size="small">计划 丨 </el-button></span>
+        <span><el-button @click="handleClickCheck(scope.row)" type="text" size="small">查看</el-button></span>
       </template>
     </el-table-column>
     <el-table-column prop="bt" label="问题标题" width="250" fixed="left" show-overflow-tooltip></el-table-column>

@@ -123,14 +123,11 @@
          <div style="padding:0 10px">
           <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;">我要提问</el-button>
           <el-button  v-if="this.userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary"  @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
-          <!-- <a :href="baseUrl+'question/exportQuestionReport.do?noResponse='
-          +this.wxyztbg+'&urgent='+this.sfjj+'&cp='+this.cpbg+'&cpx='+this.cpxbg+'&bug='+this.sfbug+'&jjzt='+this.wjjztbg+'&zt='+this.cxzt+
-          '&keyword='+this.keyword+'&qyzd='+this.gczd+'&wtfl='+this.wtfl+'&dwlx='+this.dwlx+'&cb='+this.sfcb+'&wtlb='+this.wtlbbg+
-          '&sqgb='+this.sqgb+'&starDay='+this.starDay+'&endDay='+this.endDay+'&xmbh='">导出</a> -->
         </div>
         <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
       <ul class="project-question-list">
           <li v-for="(question,index) in questionList">
+            <section class="spacearound colcenter" >
               <div :class="{'question-type':true}">
                   <span :class="{'el-icon-question':question.fbzt != 1,'el-icon-success':question.fbzt == 1}"></span>
                   <p class="questionOperate" >   
@@ -141,7 +138,7 @@
               <div class="question-info">
                   <span class="question-info-bt" @click="handleQuestionDetail" :data-wid="question.wid">{{question.bt}}</span><br>
                   <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>&#x3000;
-                  <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0">已申请关闭</span>&#x3000;&#x3000;
+                  <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;&#x3000;
                   <p>
                       <span><span class="question-info-front"></span>发布人 : {{question.fbrxm}}</span>
                       <span><span class="question-info-front">所属单位 : </span>{{question.ssbm == null?'无':question.ssbm}}</span>
@@ -164,7 +161,12 @@
                           {{(question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) < new Date(question.cnjsrq).getTime()?Math.round((new Date(question.cnjsrq).getTime() - (question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.round(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq).getTime())/(1000 * 60 * 60 * 24))+' 天'}}
                     </span>
                   </span>
-              </div>                  
+              </div>     
+            </section>     
+            <section text-center  class="pull-right"  style="width:13%" v-if="question.sqgbCount > 0 && isJZuser == 1 && question.fbzt != 1 && username == question.fbrxm">
+               <el-button type="primary" size="mini" @click="handleReject(question,index)">驳回</el-button>
+               <el-button type="danger" size="mini" @click="handleClose(question,index)">关闭</el-button>
+            </section>
           </li>
           <div v-if="questionList.length == 0" style="text-align:center;padding-top:50px;">
               <img src="static/img/empty.png" alt="">
@@ -177,6 +179,7 @@
 </div>
 
        <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
+       <gxrDialog :show.sync="gxrShow"  :wtInfo="wtInfo" @closeQuestion="closeQuestion"></gxrDialog>
   </div>
 </template>
 <script>
@@ -188,16 +191,19 @@ import {
   queryQuestion,
   showQuestionCondition,
   canSubmitQuestion,
-  exportQuestionReport
+  exportQuestionReport,
+  applyDismiss
 } from "@/api/xmkb.js";
 import { isEdit } from '@/api/common.js'
 import { getMenu, getSession } from "@/utils/util.js";
 import twDialog from "@/components/dialog/tw-dialog.vue";
+import gxrDialog from "@/components/dialog/gxr-dialog.vue";
 export default {
   data() {
     return {
       questionTitle: "提交问题",
       show: false,
+      gxrShow:false,
       cnjsrq: "",
       question: {
         wtlb: "",
@@ -223,36 +229,15 @@ export default {
       wxyztlist: [],
       gczdList: [],
       zzrList: [
-        {
-          label: "1",
-          mc: "待我解决问题"
-        },
-        {
-          label: "0",
-          mc: "我的提问"
-        },
-        {
-          label: "3",
-          mc: "我受理过的问题"
-        },
-        {
-          label: "2",
-          mc: "我相关的问题"
-        }
+        {label: "1", mc: "待我解决问题"},
+        {label: "0",mc: "我的提问"},
+        {label: "3", mc: "我受理过的问题"},
+        {label: "2", mc: "我相关的问题"}
       ],
       dwlxList: [
-        {
-          label: "1",
-          mc: "学校"
-        },
-        {
-          label: "0",
-          mc: "金智"
-        },
-        {
-          label: "2",
-          mc: "合作伙伴"
-        }
+        {label: "1", mc: "学校"},
+        {label: "0", mc: "金智"},
+        {label: "2", mc: "合作伙伴"}
       ],
       wjjztlist: [],
       cpline: [],
@@ -285,7 +270,9 @@ export default {
       starDay:"",
       endDay:"",
       userGroupTag:"",
-      
+      fwzl:1,     // 质量评分
+      wtInfo:{},  // 问题详情
+      index:''    // 当前索引
     };
   },
   props: {},
@@ -293,7 +280,7 @@ export default {
     this.username = sessionStorage.getItem("username");
     this.isJZuser = sessionStorage.getItem("isJZuser");
     this.userGroupTag = JSON.parse(sessionStorage.getItem("userInfo")).userGroupTag;
-    
+
     showQuestionCondition().then(({ data }) => {
       //提问展示
       this.showCondition = data.data;
@@ -324,17 +311,55 @@ export default {
   },
 
   methods: {
+    handleReject(params,index){   // 驳回
+      // if(this.username != params.fbrxm){
+      //   this.$alert('对不起，您无权驳回', '提示', {confirmButtonText: '确定',type:'warning'});
+      //   return;
+      // }
+      this.$confirm("确定驳回该申请, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+          applyDismiss({
+            wid:'',
+            zbwid: params.wid
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.$alert("已成功驳回！", "提示", {
+                confirmButtonText: "确定",
+                type: "success",
+                callback: action => {
+                  this.questionList[index].sqgbCount = 0
+                }
+              });
+            } else {
+              this.$alert(data.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    handleClose(params,index){ //关闭问题
+      this.wtInfo = params;
+      this.index = index;
+      this.gxrShow = !this.gxrShow;
+    },
+    closeQuestion(){         //关闭问题成功
+      this.gxrShow = !this.gxrShow
+      this.questionList[this.index].fbzt = 1
+      this.questionList[this.index].sqgbCount = 0
+    },
+
     handleExport(){
           this.keyword = !this.keyword?'':this.keyword
           window.open(window.baseurl+'question/exportQuestionReport.do?noResponse='
           +this.wxyztbg+'&urgent='+this.sfjj+'&cp='+this.cpbg+'&cpx='+this.cpxbg+'&bug='+this.sfbug+'&jjzt='+this.wjjztbg+'&zt='+this.cxzt+
           '&keyword='+this.keyword+'&qyzd='+this.gczd+'&wtfl='+this.wtfl+'&dwlx='+this.dwlx+'&cb='+this.sfcb+'&wtlb='+this.wtlbbg+
-          '&sqgb='+this.sqgb+'&deadline='+this.cnqx+'&starDay='+this.starDay+'&endDay='+this.endDay+'&xmbh=')
-
-          // exportQuestionReport({}).then(({data})=>{
-          //   console.log(data)
-          // })
-           
+          '&sqgb='+this.sqgb+'&deadline='+this.cnqx+'&starDay='+this.starDay+'&endDay='+this.endDay+'&xmbh=');
     },
     handleTWsuccess() {
       // 提问 编辑成功
@@ -446,9 +471,11 @@ export default {
 
     searchQuestion() {      //查询问题
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handlequeryQuestion() {
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
 
     handleCurrentChange(data) {    // 分页切换
@@ -457,93 +484,109 @@ export default {
     },
     changeStarDay(val){  // 选择开始时间
        this.queryAllQuestions(1);
+       this.CurrentPage = 1;
     },
     changeEndDay(val){  // 选择结束时间
        this.queryAllQuestions(1);
+       this.CurrentPage = 1;
     },
     handleSFJJ(e) {      //是否紧急
       let sfjj = e.target.getAttribute("data-type");
       if (sfjj == null) return;
       this.sfjj = sfjj;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleSFCB(e) {      // 是否催办
       let sfcb = e.target.getAttribute("data-type");
       if (sfcb == null) return;
       this.sfcb = sfcb;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleCPX(e) {      //产品线
       let cpx = e.target.getAttribute("data-type");
       if (cpx == null) return;
       this.cpxbg = cpx;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleCP(e) {      //产品
       let cp = e.target.getAttribute("data-type");
       if (cp == null) return;
       this.cpbg = cp;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleWTLB(e) {      // 问题类别
       let wtlb = e.target.getAttribute("data-type");
       if (wtlb == null) return;
       this.wtlbbg = wtlb;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleSFBUG(e) {      //是否bug
       let sfbug = e.target.getAttribute("data-type");
       if (sfbug == null) return;
       this.sfbug = sfbug;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleCXZT(e) {      //查询状态
       let cxzt = e.target.getAttribute("data-type");
       if (cxzt == null) return;
       this.cxzt = cxzt;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleSQGB(e) {      //申请关闭
       let sqgb = e.target.getAttribute("data-type");
       if (sqgb == null) return;
       this.sqgb = sqgb;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleWXYZT(e) {      //未响应状态
       let wxyzt = e.target.getAttribute("data-type");
       if (wxyzt == null) return;
       this.wxyztbg = wxyzt;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleWJJZT(e) {      // 为解决问题
       let wjjzt = e.target.getAttribute("data-type");
       if (wjjzt == null) return;
       this.wjjztbg = wjjzt;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleCNQX(e){
       let cnqx = e.target.getAttribute("data-type");
       if (cnqx == null) return;
       this.cnqx = cnqx;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleGCZD(e) {      // 工程战队
       let gczd = e.target.getAttribute("data-type");
       if (gczd == null) return;
       this.gczd = gczd;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleDWLX(e) {      // 单位类型
       let dwlx = e.target.getAttribute("data-type");
       if (dwlx == null) return;
       this.dwlx = dwlx;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleZXR(e) {      //待解决问题
       let zxr = e.target.getAttribute("data-type");
       if (zxr == null) return;
       this.wtfl = zxr;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
 
     // 获取所有问题
@@ -588,7 +631,7 @@ export default {
     this.baseUrl = window.baseurl;
     
   },
-  components: { pagination, twDialog }
+  components: { pagination, twDialog,gxrDialog }
 };
 </script>
 <style scoped>
@@ -598,11 +641,13 @@ export default {
   padding: 10px;
 }
 .project-question-list > li {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
   border-bottom: 1px dotted #999;
   padding: 8px 0 5px;
+}
+.project-question-list > li::after{
+    content: '';
+    display: block;
+    clear: both;
 }
 .project-question-list > li:hover {
   background: #f5f7fa;

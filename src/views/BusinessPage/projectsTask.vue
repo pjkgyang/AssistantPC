@@ -269,7 +269,7 @@
     </div>
     <!-- 问题 -->
     <div v-if="tabsLabel == 'question'">
-        <question :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :isAll="isAll"></question>
+        <question :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :xmkbInfo="xmkbInfo" :isAll="isAll"></question>
     </div>
      <!-- 投诉 -->
     <div v-if="tabsLabel == 'complain'">

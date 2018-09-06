@@ -3,6 +3,7 @@
        <div class="project-question-detailList">
         <ul class="project-question-list">
             <li v-for="(question,index) in questionList">
+               <section class="spacearound colcenter" >
                 <div :class="{'question-type':true}">
                     <span :class="{'el-icon-question':question.fbzt != 1,'el-icon-success':question.fbzt == 1}"></span>
                     <p class="questionOperate" >   
@@ -13,7 +14,8 @@
                 </div>
                 <div class="question-info">
                     <span class="question-info-bt" @click="handleQuestionDetail(question.wid)" :data-wid="question.wid">{{question.bt}}</span><br>
-                    <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>
+                    <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>&#x3000;
+                    <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;
                     <p>
                         <span><span class="question-info-front"></span>发布人 : {{question.fbrxm}}</span>
                         <span><span class="question-info-front">所属单位 : </span>{{question.ssbm == null?'无':question.ssbm}}</span>
@@ -32,6 +34,11 @@
                         {{new Date().getTime() < new Date(question.qwjjrq).getTime()?Math.round((new Date(question.qwjjrq).getTime() - new Date().getTime())/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.round((new Date().getTime() - new Date(question.qwjjrq).getTime())/(1000 * 60 * 60 * 24))+' 天'}}
                     </span>
                 </div>
+                </section>
+                <section text-center  class="pull-right"  style="width:13%;" v-if="question.sqgbCount > 0 && isJZuser == 1 && question.fbzt != 1 && username == question.fbrxm">
+                    <el-button type="primary" size="mini" @click="handleReject(question,index)">驳回</el-button>
+                    <el-button type="danger" size="mini" @click="handleClose(question,index)">关闭</el-button>
+                </section>
             </li>
             <div v-if="questionList.length == 0" style="text-align:center;padding-top:50px;">
                 <img src="static/img/empty.png" alt="">
@@ -42,37 +49,86 @@
         <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
       </div>
     </div>
+     <gxrDialog :show.sync="gxrShow"  :wtInfo="wtInfo" @closeQuestion="closeQuestion"></gxrDialog>
   </div>
 </template>
 <script>
+import gxrDialog from "@/components/dialog/gxr-dialog.vue";
 import pagination from '@/components/BusinessPage/pagination.vue'
-import { queryReportQuestionLst} from '@/api/xmkb.js'
+import { queryReportQuestionLst,applyDismiss} from '@/api/xmkb.js'
 
 export default {
   data(){
       return{
+          gxrShow:false,
+          wtInfo:{},
+          index:'',
           questionList:[],
           curPage:1,
           pageSize:10,
           CurrentPage:1,
           total:null,
           Data:{},
-          queryId:""
+          queryId:"",
+          isJZuser:'',
+          username:""
     }
   },
   props:{
      
   },
   mounted(){
-    if(this.$route.params.id == 'questionPflist'){
-      
-    }
+    this.isJZuser = sessionStorage.getItem("isJZuser");
+    this.username = sessionStorage.username;
     this.queryId = this.$route.params.id
     this.getReportQuestion(1);  //获取报表问题
     document.title = '问题报表-问题列表'     
   },
 
   methods:{ 
+     handleReject(params,index){   // 驳回
+    //  if(this.username != params.fbrxm){
+    //     this.$alert('对不起，您无权驳回', '提示', {confirmButtonText: '确定',type:'warning'});
+    //     return;
+    //   }
+      this.$confirm("确定驳回该申请, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+          applyDismiss({
+            wid:'',
+            zbwid: params.wid
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.$alert("已成功驳回！", "提示", {
+                confirmButtonText: "确定",
+                type: "success",
+                callback: action => {
+                  //  this.queryAllQuestions(this.CurrentPage);
+                  this.questionList[index].sqgbCount = 0
+                }
+              });
+            } else {
+              this.$alert(data.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    handleClose(params,index){ //关闭问题
+      this.wtInfo = params;
+      this.index = index;
+      this.gxrShow = !this.gxrShow;
+    },
+    closeQuestion(){
+      this.gxrShow = !this.gxrShow
+      this.questionList[this.index].fbzt = 1
+      this.questionList[this.index].sqgbCount = 0 
+    },
       getReportQuestion(curPage){ 
             this.Data = this.$route.query;
             this.Data.curPage = curPage
@@ -113,7 +169,7 @@ export default {
   },
   watch:{},
   activated(){},
-  components:{pagination}
+  components:{pagination,gxrDialog}
 }
 </script>
 <style scoped>
@@ -130,11 +186,13 @@ export default {
 
 }
 .project-question-list>li{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
     border-bottom: 1px dotted #999;
     padding: 8px 5px;
+}
+.project-question-list>li::after{
+    content: '';
+    display: block;
+    clear: both;
 }
 .project-question-list>li:hover{
     cursor: pointer;

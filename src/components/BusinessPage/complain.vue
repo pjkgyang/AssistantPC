@@ -4,8 +4,8 @@
         <div class="complain-query">
              <p style="font-size:14px !important;margin-bottom:10px !important;">
               <span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&#x3000;<span style="font-weight:700">高级查询</span>&#x3000;
-             <el-input size="mini" style="width:300px" placeholder="请输入投诉人工号/手机号/项目编号/项目名称"></el-input>&#x3000;
-             <el-button size="mini" type="primary">查询</el-button>
+             <el-input v-model="keyword" size="mini" style="width:300px" placeholder="请输入投诉人工号/手机号/项目编号/项目名称"  @change="searchComplant"></el-input>&#x3000;
+             <el-button size="mini" type="primary" @click="handlequeryComplant">查询</el-button>
              </p>
              <div v-if="queryLJshow">
              <p class="query-list" flex-align>
@@ -85,7 +85,7 @@
       </div>
 
         <div style="text-align:center;padding:20px 0;">
-          <pagination v-if="total>8 && total != null" :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+          <pagination v-if="total>8 && total != null" :total="total" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
        </div>
 
        <el-dialog
@@ -149,6 +149,7 @@ export default {
         },
         total:null,
         pageSize:8,
+        currentPage:1,
         keyword:"",
         complainVisible:false,
         dialogComplainVisible:false,
@@ -165,7 +166,6 @@ export default {
         },
         wid:"",
         complainType:null,
-        pageData:1,
         windowUnitType:'',
         cxzt:'',
         sfcb:'',
@@ -212,6 +212,14 @@ export default {
     
   },
   methods:{
+    searchComplant(){
+       this.complaintList(1);
+       this.currentPage = 1
+    },
+    handlequeryComplant(){
+       this.complaintList(1);
+       this.currentPage = 1
+    },
     handleQueryShow(){  // 查询条件显示
        this.queryLJshow = !this.queryLJshow
     },
@@ -219,26 +227,29 @@ export default {
       let cxzt = e.target.getAttribute('data-type')
       this.cxzt = cxzt
       this.complaintList(1);
+      this.currentPage = 1
     },
     handleSFCB(e){   //是否催办
       let sfcb = e.target.getAttribute("data-type");
       this.sfcb = sfcb;
       this.complaintList(1);
+      this.currentPage = 1
     },
     handleTSLB(e){  //投诉类别
-      //投诉类别
       let tslb = e.target.getAttribute("data-type");
       this.tslb = tslb;
       this.complaintList(1);
+      this.currentPage = 1
     },
     handleGCZD(e){
       let gczd = e.target.getAttribute("data-type");
       this.gczd = gczd;
       this.complaintList(1);
+      this.currentPage = 1
     },
     // 分页
     handleCurrentChange(data){
-      this.pageData = data
+      this.currentPage = data
       this.complaintList(data);
     },
     //  编辑 
@@ -444,7 +455,7 @@ export default {
                 type:'success',
                 callback: action => {
                   this.complainVisible = false
-                  this.complaintList(this.pageData);
+                  this.complaintList(this.currentPage);
                 }
               });
             }else{

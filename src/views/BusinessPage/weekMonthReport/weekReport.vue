@@ -755,8 +755,8 @@ export default {
                 zxh:zxh
             }).then(({data})=>{
                 if(data.state == 'success'){
-                     this.isBlocked = false
-                    //  this.isBlocked = data.data;
+                    //  this.isBlocked = false
+                     this.isBlocked = data.data.bolck;
                      let _this = this;
                     // setTimeout(function(){
                     //     if(_this.userId == _this.ryValue && _this.LcbList.length && !data.data){

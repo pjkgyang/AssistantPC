@@ -9,11 +9,11 @@
       <el-table-column v-if="isSelect" type="selection"  width="55"></el-table-column>
       <el-table-column fixed="left" label="操作" width="150">
         <template slot-scope="scope">
-          <span v-if="isPz"><el-button  @click="handleClickPz(scope.row)" type="text" size="small">批注</el-button></span>
-          <span v-if="!isPz && deleteShow && !scope.row.szjh"><el-button style="color:red"  @click="handleClickDelete(scope.row,scope.$index)" type="text" size="small">删除</el-button></span>
+          <span v-if="isPz"><el-button  @click="handleClickPz(scope.row)" type="text" size="small">批注 丨 </el-button></span>
+          <span v-if="deleteShow && scope.row.szjh"><el-button style="color:red"  @click="handleClickDelete(scope.row,scope.$index)" type="text" size="small">删除 丨 </el-button></span>
           <!-- <span v-if="isEdit && !bjWordShow"><span class="table-hr"> 丨 </span><el-button @click="handleClickEdit(scope.row)" type="text" size="small">编辑</el-button></span> -->
-          <span v-if="isEdit && bjWordShow"><span class="table-hr" v-if="isPz || ( deleteShow && !scope.row.szjh )"> 丨 </span><el-button @click="handleClickEdit(scope.row)" type="text" size="small">{{isZj?'总结':'计划'}}</el-button></span>
-          <span><span class="table-hr" > 丨 </span><el-button @click="handleClickCheck(scope.row)" type="text" size="small">查看</el-button></span>
+          <span v-if="isEdit && bjWordShow"><el-button @click="handleClickEdit(scope.row)" type="text" size="small">{{isZj?'总结':'计划'}} 丨 </el-button></span>
+          <span><el-button @click="handleClickCheck(scope.row)" type="text" size="small">查看</el-button></span>
         </template>
       </el-table-column>
       <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>

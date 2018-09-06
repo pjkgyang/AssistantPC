@@ -174,12 +174,20 @@
             append-to-body>
             <div class="question-evaluate">
                 <div class="question-rate">
-                    <p><span>服务质量：</span><el-rate  v-model="fwzlValue" show-text :texts="['1 分','2 分','3 分','4 分','5 分']"></el-rate></p>
+                    <p><span class="filter-weight">服务质量：</span><el-rate  v-model="fwzlValue" show-text :texts="['1 分','2 分','3 分','4 分','5 分']"></el-rate></p>
                 </div> 
                 <p>说明：请认定贡献人工时，谢谢您的支持!</p>
                 <div>
-                   合计贡献人: <span style="color:#f00">{{ContributionPeople.length}} </span> 人
-                        <table class="ContributionPeople-table"  width="100%">
+                    <span class="filter-weight">合计贡献人: </span><span style="color:#f00">{{ContributionPeople.length}} </span> 人
+                    <el-table :data="ContributionPeople" style="width: 100%" border :max-height="580" border>
+                            <el-table-column prop="fbrxm" label="姓名" ></el-table-column>
+                            <el-table-column label="工时(小时)">
+                                <template slot-scope="scope">
+                                  <el-input v-model="scope.row.qrgs" :class="{'is-outline':questionReply.length!=0&&questionReply[0].sfhf == 1}" size="mini" :readonly="questionReply.length!=0&&questionReply[0].sfhf != 1"></el-input>
+                                </template>
+                            </el-table-column>
+                     </el-table>
+                    <!-- <table class="ContributionPeople-table"  width="100%">
                         <tr>
                             <th>姓名</th>
                             <th>工时(小时)</th>
@@ -191,7 +199,7 @@
                         <tr v-if="ContributionPeople.length == 0">
                              <td colspan="3">暂无贡献人</td>
                         </tr>
-                    </table>
+                    </table> -->
                     <div style="text-align:right;margin:10px 0;">
                      <el-button type='primary' size="mini" @click="commitQuestion">提交</el-button>
                     </div>
@@ -390,7 +398,6 @@
 </template>
 
 <script>
-
 import axios from "axios";
 import pagination from "@/components/BusinessPage/pagination.vue";
 import { getResponsibleTaskList } from "@/api/common.js";
@@ -426,9 +433,15 @@ import {
   waitVerification,
   queryLabel,
   operationLabel,
-  sendOperationMsg
+  sendOperationMsg,
+  canApplyClose
 } from "@/api/xmkb.js";
-import { queryUser, isgcXmtdbyWt, queryZjCpData,queryProjectParticipantMap } from "@/api/personal.js";
+import {
+  queryUser,
+  isgcXmtdbyWt,
+  queryZjCpData,
+  queryProjectParticipantMap
+} from "@/api/personal.js";
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import zdfzrChoose from "@/components/BusinessPage/zdfzrChoose.vue";
 import sqjsForm from "@/components/BusinessPage/sqjsForm.vue";
@@ -444,8 +457,8 @@ import {
 export default {
   data() {
     return {
-      userList:[],
-      pickerBeginDateBefore:this.handleFocusDate(),
+      userList: [],
+      pickerBeginDateBefore: this.handleFocusDate(),
       questionTitle: "提交问题",
       isSltitle: "承诺结束日期",
       isSLvisible: false,
@@ -502,7 +515,7 @@ export default {
       kfgzlValue: "",
       isgcXmtdbyWt: null,
       JDGZList: [],
-      username:'',
+      username: "",
       rylb: "",
       wtlbmc: "",
       sqgbgs: 0,
@@ -515,26 +528,26 @@ export default {
       hffjshow: false,
       zfcp: "",
       lchjList: [], //流程环节（转发人员）
-      show: false,     
-      ywxxShow:false,  // 运维消息弹窗
-      slContent: "",   // 受理内容
+      show: false,
+      ywxxShow: false, // 运维消息弹窗
+      slContent: "", // 受理内容
       isEditReplyIndex: null,
       replygs: "",
       hflx: "",
       wtbq: [],
-      User:"",
+      User: "",
       dm: null,
       sftj: [],
-      isCjwt:'',
-      qwjjrqZf:'',
-      slqwjjrq:''
+      isCjwt: "",
+      qwjjrqZf: "",
+      slqwjjrq: ""
     };
   },
   props: {},
   mounted() {
     this.baseUrl = window.baseurl;
     this.wid = this.$route.query.wid;
-    this.isCjwt = this.$route.query.f
+    this.isCjwt = this.$route.query.f;
     if (window.location.hash.includes("h=1")) {
       sessionStorage.setItem("Detailpannel", window.location.hash);
     } else {
@@ -546,7 +559,7 @@ export default {
           sessionStorage.setItem("username", res.data.data.nickName);
           sessionStorage.setItem("isJZuser", res.data.data.unitType);
           sessionStorage.setItem("userInfo", JSON.stringify(res.data.data));
-          this.username =  res.data.data.nickName;
+          this.username = res.data.data.nickName;
           this.isJZuser = res.data.data.unitType;
           this.User = res.data.data.userGroupTag;
         }
@@ -597,22 +610,32 @@ export default {
   },
 
   methods: {
-    handleFocusDate(){
-        let self = this
-        return {
-          disabledDate(time){
-                let curDate = (new Date()).getTime();
-                let delayHs = JSON.parse(self.qusetionInfo.cphs) * 24 * 3600 * 1000;
-                let delayDate = curDate + delayHs;
-               return time.getTime() < Date.now()-8.64e7 || time.getTime() > delayDate;
-          }
+    handleFocusDate() {
+      let self = this;
+      return {
+        disabledDate(time) {
+          let curDate = new Date().getTime();
+          let delayHs = JSON.parse(self.qusetionInfo.cphs) * 24 * 3600 * 1000;
+          let delayDate = curDate + delayHs;
+          return (
+            time.getTime() < Date.now() - 8.64e7 || time.getTime() > delayDate
+          );
         }
+      };
     },
-    handleCloseTag(i) {      //删除标签
-     if(this.User.indexOf('ProblemAdmin') == -1&&this.User.indexOf('ZJZBZ') == -1&&this.User.indexOf('ZJ') == -1){
-       this.$alert("抱歉，您无权操作问题标签", "提示", {confirmButtonText: "确定",type: "warning"});
-       return;
-     }
+    handleCloseTag(i) {
+      //删除标签
+      if (
+        this.User.indexOf("ProblemAdmin") == -1 &&
+        this.User.indexOf("ZJZBZ") == -1 &&
+        this.User.indexOf("ZJ") == -1
+      ) {
+        this.$alert("抱歉，您无权操作问题标签", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
       operationLabel({
         wid: this.wid,
         dm: this.wtbq[i].dm,
@@ -631,11 +654,19 @@ export default {
         }
       });
     },
-    handleClick(i) {      //添加标签
-     if(this.User.indexOf('ProblemAdmin') == -1&&this.User.indexOf('ZJZBZ') == -1&&this.User.indexOf('ZJ') == -1){
-       this.$alert("抱歉，您无权操作问题标签", "提示", {confirmButtonText: "确定",type: "warning"});
-       return;
-     }
+    handleClick(i) {
+      //添加标签
+      if (
+        this.User.indexOf("ProblemAdmin") == -1 &&
+        this.User.indexOf("ZJZBZ") == -1 &&
+        this.User.indexOf("ZJ") == -1
+      ) {
+        this.$alert("抱歉，您无权操作问题标签", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
       this.wtbq.forEach((ele, i, arr) => {
         if (ele.sjly == 2) this.sftj.push(ele.sjly);
       });
@@ -666,46 +697,52 @@ export default {
       this.sqdyzVisible = !this.sqdyzVisible;
     },
     // 发送消息
-    sendMsg(){
-        this.ywxxShow = true;
-        queryProjectParticipantMap({
-          xmbh:this.qusetionInfo.xmbh
-        }).then(({data})=>{
-           if(data.state == 'success'){
-                this.userList = data.data.qt
-              if(!!data.data.yf){
-                this.userList.unshift(data.data.yf);
-              } 
-              if(!!data.data.jf){
-                this.userList.unshift(data.data.jf);
-              }
-              this.userList.forEach(ele=>{
-                if(ele.unitType == 0){
-                  ele.unitName = '金智'
-                }else if(ele.unitType == 1){
-                  ele.unitName = '学校成员'
-                }else{
-                  ele.unitName = '合作伙伴'
-                }
-              })
-           }
-       })  
+    sendMsg() {
+      this.ywxxShow = true;
+      queryProjectParticipantMap({
+        xmbh: this.qusetionInfo.xmbh
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.userList = data.data.qt;
+          if (!!data.data.yf) {
+            this.userList.unshift(data.data.yf);
+          }
+          if (!!data.data.jf) {
+            this.userList.unshift(data.data.jf);
+          }
+          this.userList.forEach(ele => {
+            if (ele.unitType == 0) {
+              ele.unitName = "金智";
+            } else if (ele.unitType == 1) {
+              ele.unitName = "学校成员";
+            } else {
+              ele.unitName = "合作伙伴";
+            }
+          });
+        }
+      });
     },
     // 发送消息(提交)
-    handleSure(param){
-        sendOperationMsg({
-          wid:this.wid,
-          userIds:param.userids.join(','),
-          msg:param.content
-        }).then(({data})=>{
-          if(data.state == 'success'){
-             this.queryAnswers(this.wid); //  获取回复
-             this.ywxxShow = false;
-             this.$alert('发送成功！', '提示', {confirmButtonText: '确定',type:'success'}); 
-          }else{
-             this.$alert(data.msg, '提示', {confirmButtonText: '确定',type:'error'}); 
-          }
-        })
+    handleSure(param) {
+      sendOperationMsg({
+        wid: this.wid,
+        userIds: param.userids.join(","),
+        msg: param.content
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.queryAnswers(this.wid); //  获取回复
+          this.ywxxShow = false;
+          this.$alert("发送成功！", "提示", {
+            confirmButtonText: "确定",
+            type: "success"
+          });
+        } else {
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
+        }
+      });
     },
     saveSqdyz() {
       // 保存申请待验证
@@ -884,13 +921,13 @@ export default {
         wid: param.wid
       }).then(({ data }) => {
         if (data.state == "success") {
-           if(isCjwt){
-             this.$alert('取消成功', '提示', {
-              confirmButtonText: '确定',
+          if (isCjwt) {
+            this.$alert("取消成功", "提示", {
+              confirmButtonText: "确定",
               callback: action => {}
             });
-           }
-           param.wtjjj = 0;
+          }
+          param.wtjjj = 0;
         }
       });
     },
@@ -946,12 +983,14 @@ export default {
     handleJDGZ() {
       this.getCrowdId(true);
     },
-    handleYYRYZF() {      // 运营人员转发
+    handleYYRYZF() {
+      // 运营人员转发
       this.zdTitle = "运营人员转发";
       this.zdfzrVisible = true;
       this.queryCpData(1, "");
     },
-    handleYYRYLX(data) {      // 运营人员转发  筛选
+    handleYYRYLX(data) {
+      // 运营人员转发  筛选
       this.rylb = data;
       this.queryCpData(1);
     },
@@ -994,7 +1033,7 @@ export default {
         this.accreditShow = true;
         this.SLbtnDisabled = false;
         this.slContent = $("#summernoteT").summernote("code");
-        this.qusetionInfo.qwjjrqO = this.xgqwjjrq
+        this.qusetionInfo.qwjjrqO = this.xgqwjjrq;
         this.show = true;
       } else {
         this.fileList = [];
@@ -1003,7 +1042,10 @@ export default {
         this.isSltitle = "受理";
         this.isSLvisible = true;
         // this.xgqwjjrq = this.qusetionInfo.qwjjrq;
-        this.question.xgcnjsrq =  this.qusetionInfo.cnjsrq == ""? this.qusetionInfo.qwjjrq: this.qusetionInfo.cnjsrq;
+        this.question.xgcnjsrq =
+          this.qusetionInfo.cnjsrq == ""
+            ? this.qusetionInfo.qwjjrq
+            : this.qusetionInfo.cnjsrq;
         this.innerCNRQVisible = !this.innerCNRQVisible;
       }
     },
@@ -1018,7 +1060,8 @@ export default {
         return;
       }
       if (this.isSltitle == "修改承诺时间") {
-        changeCommitmentDate({          //修改承诺结束时间
+        changeCommitmentDate({
+          //修改承诺结束时间
           wid: this.wid,
           cnjsrq: this.xgcnjsrq
         }).then(({ data }) => {
@@ -1030,46 +1073,61 @@ export default {
               confirmButtonText: "确定",
               type: "success"
             });
-          }else{
-              this.$alert(data.msg, "提示", { confirmButtonText: "确定", type: "error", });
+          } else {
+            this.$alert(data.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
         });
       } else if (this.isSltitle == "受理") {
-        this.$confirm('期望解决日期:'+this.xgqwjjrq+'你的承诺解决日期:'+this.xgcnjsrq+',确认受理吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }) .then(() => {
+        this.$confirm(
+          "期望解决日期:" +
+            this.xgqwjjrq +
+            "你的承诺解决日期:" +
+            this.xgcnjsrq +
+            ",确认受理吗？",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }
+        )
+          .then(() => {
             customerQuestion({
-            wid: this.wid,
-            nr:$("#summernoteT").summernote("code") == "<p><br></p>"
-              ? ""
-              : $("#summernoteT").summernote("code"),
-            cnjsrq: this.xgcnjsrq,
-            qwjjrq: this.xgqwjjrq,
-            hjfjwid: "",
-            Guid: this.gsValue
-          }).then(({ data }) => {
-            if (data.state == "success") {
-              $("#summernoteT").summernote("code", "");
-              this.innerCNRQVisible = false;
-              this.$alert("受理成功！", "提示", {
-                confirmButtonText: "确定",
-                type: "success",
-                callback: action => {
-                  this.queryAnswers(this.wid);
-                  this.queryBtnAuth(this.wid);
-                  this.queryProcess(this.wid);
-                  this.queryQuestion(this.wid);
-                }
-              });
-            }else{
-              this.$alert(data.msg, "提示", { confirmButtonText: "确定", type: "error", });
-            }
-          });
-        })
-        .catch(() => {});
-
+              wid: this.wid,
+              nr:
+                $("#summernoteT").summernote("code") == "<p><br></p>"
+                  ? ""
+                  : $("#summernoteT").summernote("code"),
+              cnjsrq: this.xgcnjsrq,
+              qwjjrq: this.xgqwjjrq,
+              hjfjwid: "",
+              Guid: this.gsValue
+            }).then(({ data }) => {
+              if (data.state == "success") {
+                $("#summernoteT").summernote("code", "");
+                this.innerCNRQVisible = false;
+                this.$alert("受理成功！", "提示", {
+                  confirmButtonText: "确定",
+                  type: "success",
+                  callback: action => {
+                    this.queryAnswers(this.wid);
+                    this.queryBtnAuth(this.wid);
+                    this.queryProcess(this.wid);
+                    this.queryQuestion(this.wid);
+                  }
+                });
+              } else {
+                this.$alert(data.msg, "提示", {
+                  confirmButtonText: "确定",
+                  type: "error"
+                });
+              }
+            });
+          })
+          .catch(() => {});
       }
     },
     CancelChangeCNjsrq() {
@@ -1125,14 +1183,24 @@ export default {
     },
     //  申请结算
     requisitionSettlement() {
-      queryrHfHour({
-        wid: this.wid
-      }).then(({ data }) => {
-        if (data.state == "success") {
-          this.sqgbgs = data.data;
-        }
-      });
-      this.sqjsVisible = true;
+      canApplyClose({
+        wid:this.wid
+      }).then(({data})=>{
+        if(data.state == 'success'){
+             if(data.data){
+               queryrHfHour({
+                  wid: this.wid
+              }).then(({ data }) => {
+                if (data.state == "success") {
+                  this.sqgbgs = data.data;
+                }
+              });
+              this.sqjsVisible = true;
+             }else{
+               this.$alert('不可重复申请关闭，可驳回已有的再重新申请!', '标题名称', {confirmButtonText: '确定',type:'warning'});
+             }
+         }
+      })
     },
     submitForm(data) {
       //申请结算
@@ -1203,7 +1271,7 @@ export default {
           nr: data.nr,
           sfjsr: data.nickName,
           jsrbh: data.userName,
-          qwjjrq:data.qwjjrq,
+          qwjjrq: data.qwjjrq,
           hflx: 6
         }).then(({ data }) => {
           this.zdfzrVisible = false;
@@ -1230,7 +1298,7 @@ export default {
           nr: data.nr,
           ryData: data.yyryData.join("|"),
           bh: data.lchj, //流程环节
-          qwjjrq:data.qwjjrq,
+          qwjjrq: data.qwjjrq
         }).then(({ data }) => {
           if (data.state == "success") {
             this.zdfzrVisible = false;
@@ -1267,7 +1335,7 @@ export default {
       queryUser({
         curPage: curPage,
         pageSize: 10,
-        Isexternal:false,
+        Isexternal: false,
         keyword: this.cpKeyword
       }).then(({ data }) => {
         if (data.state == "success") {
@@ -1377,19 +1445,28 @@ export default {
     CommitZFWT() {
       //转发问题(提交)
       if (this.radio == 11 && this.zfcp == "") {
-        this.$alert("请选择产品", "提示", {  confirmButtonText: "确定",  type: "warning"});
+        this.$alert("请选择产品", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
         return;
       }
-      if(!this.qwjjrqZf){
-        this.$alert("请选择期望解决日期", "提示", {  confirmButtonText: "确定",  type: "warning"});
+      if (!this.qwjjrqZf) {
+        this.$alert("请选择期望解决日期", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
         return;
       }
       saveForward({
         wid: this.wid,
         bh: this.radio,
-        nr:$("#summernoteZF").summernote("code") == "<p><br></p>"? "": $("#summernoteZF").summernote("code"),
+        nr:
+          $("#summernoteZF").summernote("code") == "<p><br></p>"
+            ? ""
+            : $("#summernoteZF").summernote("code"),
         cpxbh: this.radio == 11 ? this.zfcp : "",
-        qwjjrq:this.qwjjrqZf
+        qwjjrq: this.qwjjrqZf
       }).then(({ data }) => {
         if (data.state == "success") {
           this.innerZFWTisible = false;
@@ -1490,7 +1567,7 @@ export default {
         if (data.state == "success") {
           this.ContributionPeople = data.data;
           this.ContributionPeople.forEach((ele, i, arr) => {
-            ele.qrgs = ele.confirmH.replace('/^.(d+)/','0.');
+            ele.qrgs = ele.confirmH.replace("/^.(d+)/", "0.");
           });
         }
       });
@@ -1510,8 +1587,7 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
+      }).then(() => {
           if (this.fwzlValue == 0) {
             this.$alert("请选择服务质量星级", "提示", {
               confirmButtonText: "确定",
@@ -1525,7 +1601,10 @@ export default {
             zlpf: this.fwzlValue,
             gxrData: gxrArr.join("|"),
             sfjj: "",
-            jjsm: $("#summernoteT").summernote("code") == "<p><br></p>"? "": $("#summernoteT").summernote("code")
+            jjsm:
+              $("#summernoteT").summernote("code") == "<p><br></p>"
+                ? ""
+                : $("#summernoteT").summernote("code")
           }).then(({ data }) => {
             if (data.state == "success") {
               this.innerVisible = false;
@@ -1628,7 +1707,7 @@ export default {
               }
             });
           }
-        try {
+          try {
             this.qusetionInfo.nr = decodeURIComponent(
               this.qusetionInfo.nr
             ).replace(
@@ -1646,7 +1725,7 @@ export default {
       this.questionReply = [];
       queryAnswers({
         wid: wid,
-        isSolution:this.isCjwt?true:''
+        isSolution: this.isCjwt ? true : ""
       }).then(({ data }) => {
         if (data.state == "success") {
           this.questionReply = data.data;
@@ -1672,32 +1751,38 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           this.btnShwon = data.data;
-          this.xgqwjjrq = data.data.qwjjrq
+          this.xgqwjjrq = data.data.qwjjrq;
         }
       });
     },
-    queryLabel(wid){//获取问题标签
-        queryLabel({      
-          wid:wid
-        }).then(({ data }) => {
-          if (data.state == "success") {
-            this.wtbq = data.data;
-            this.wtbq.forEach((ele, i, arr) => {
-              if (ele.sjly == 0) {
-                ele.type = "info";
-              } else {
-                ele.type = "";
-              }
-            });
-          }
-        });
-    },
+    queryLabel(wid) {
+      //获取问题标签
+      queryLabel({
+        wid: wid
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.wtbq = data.data;
+          this.wtbq.forEach((ele, i, arr) => {
+            if (ele.sjly == 0) {
+              ele.type = "info";
+            } else {
+              ele.type = "";
+            }
+          });
+        }
+      });
+    }
   },
-  watch: {
-     
-  },
+  watch: {},
   activated() {},
-  components: { pagination, itemChoose, zdfzrChoose, sqjsForm, twDialog ,xxDialog}
+  components: {
+    pagination,
+    itemChoose,
+    zdfzrChoose,
+    sqjsForm,
+    twDialog,
+    xxDialog
+  }
 };
 </script>
 <style scoped>
@@ -1836,7 +1921,7 @@ div.el-form-item {
   color: #888;
   font-size: 12px;
 }
-.question-evaluate .ContributionPeople-table {
+/* .question-evaluate .ContributionPeople-table {
   border: 1px solid #ccc;
   border-collapse: collapse;
 }
@@ -1848,7 +1933,7 @@ div.el-form-item {
   border: 1px solid #ccc;
   text-align: center;
   width: 33%;
-}
+} */
 .question-rate {
   margin: 10px 0;
 }
@@ -1902,18 +1987,16 @@ div.el-form-item {
   color: #f00;
   padding: 0 2px;
 }
-.item-wtbq{
+.item-wtbq {
   float: left;
   padding: 2px 0;
 }
-.item-wtbq-tag{
+.item-wtbq-tag {
   display: inline-block;
-  width:95%;
+  width: 95%;
   white-space: pre-wrap;
 }
-.is-outline{
-  outline:1px solid  #409eff !important; 
+.is-outline {
+  outline: 1px solid #409eff !important;
 }
-
-
 </style>

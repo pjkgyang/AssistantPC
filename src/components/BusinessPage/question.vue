@@ -121,8 +121,10 @@
        </div>
        <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
         <div style="padding:0 10px">
-          <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;">我要提问</el-button>
-          <el-button  v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary"  @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
+          <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;" :disabled="this.xmkbInfo.xmjd == '已终止'">
+              {{this.xmkbInfo.xmjd == '已终止'?'该项目已经终止,禁止提问':'我要提问'}}
+         </el-button>
+          <el-button :disabled="this.xmkbInfo.xmjd == '已终止'"  v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary"  @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
         </div>
         <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
       <ul class="project-question-list">
@@ -298,6 +300,12 @@ export default {
       isAll:{
         type:Boolean,
         default:true   
+      },
+      xmkbInfo:{
+          type:Object,
+          default:function(){
+              return {}
+          }
       }
   },
   mounted(){

@@ -700,3 +700,23 @@ export function sendOperationMsg(obj){
   }]
 })
 }
+
+// 判断是否  已有申请关闭
+export function canApplyClose(obj){
+	let url =  window.baseurl + quesurl + 'canApplyClose.do'
+	return axios.get(url,{
+		params:{
+			 wid:obj.wid,
+		}
+	})
+}
+
+//  
+export function queryResponsibleProduct(obj){
+	let url =  window.baseurl + quesurl + 'queryResponsibleProduct.do'
+	return axios.get(url,{
+		params:{
+			 xmbh:obj.xmbh
+		}
+	})
+}

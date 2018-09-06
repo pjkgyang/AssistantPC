@@ -199,7 +199,11 @@ export default new Router({
           name: 'QuestionSet',
           component: resolve => require(['@/views/BusinessPage/questionSet.vue'], resolve),
         },
-        
+        {
+          path: '/businesspage/teamVindicate',
+          name: 'TeamVindicate',
+          component: resolve => require(['@/views/BusinessPage/teamVindicate/index.vue'], resolve),
+        },
         {
           path: '/businesspage/personalSetting',
           name: 'PersonalSetting',

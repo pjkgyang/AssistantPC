@@ -24,13 +24,13 @@
                   </el-select>
                 </span>
             </div>
-           <div v-if="groupTag.indexOf('QYZ') != -1">
+           <div v-if="otherShow && !isBlocked && groupTag.indexOf('QYZ') != -1">
                 <el-button size="small" type="danger" @click="handleClickYdjh">制订月度计划</el-button>
            </div>
          </section>
       </header>    
         <article slot="content" style="position:relative">
-            <tableLayout :title="'月度工作'+nextTitle">
+            <tableLayout :title="'月度工作'+textTitle">
              <div></div>   
              <div slot="bottom">
                 <section class="month-plan-condition month-hwys">
@@ -45,7 +45,7 @@
                                 <span class="filter-weight">合计验收:<span style="color:#f00">{{workTotal.hjys}}</span> )</span>
                             </section>&#x3000;
                             <span class="colcenter">
-                                    <span class="filter-weight">计划状态:&nbsp;</span>
+                                    <span class="filter-weight">计划类别:&nbsp;</span>
                                     <el-select style="width:200px" v-model="ztValue" size="mini" placeholder="请选择" @change="handleSelectZt">
                                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                     </el-select>
@@ -60,7 +60,7 @@
                 @handleSizeChange="handleSizeChange" @handleClickCheck="handleYdjhCheck" @handleSelectionChange="handleSelectionChange" :isSelect="true" :pageSize="workPageSize" :records="records" :currentPage="currentPage"></MonthTable>
              </div>  
             </tableLayout>
-            <tableLayout :title="'月度问题处理'+nextTitle">
+            <tableLayout :title="'月度问题处理'+textTitle">
              <div slot="bottom">
                  <!-- <div>
                      <el-input style="width:300px" @change="handleEnterWtSearch"  size="small" v-model="Wtkeyword" placeholder="请输入项目编号/项目名称/问题标题/提问人"></el-input>&#x3000;
@@ -93,7 +93,7 @@
     <pzDialog :pzlbShow="pzlsShow" :tableData="pzList" :show.sync='pzShow' @handleClickSure="handleClickPzSure"></pzDialog>
     <detailDialog :show.sync="detailShow" :title="detailTitle" :detailType="detailType"></detailDialog>
     <zdzjhDialog :show.sync='jhzdShow' :title="'月度计划制订'">
-        <div slot="content"><monthReportFill @handleFormulate="handleFormulate"></monthReportFill></div>
+        <div slot="content"><monthReportFill @handleFormulate="handleFormulate" :jhzdShow="jhzdShow" :dateParam="monthValue"></monthReportFill></div>
     </zdzjhDialog>
  </div>
 </template>
@@ -173,7 +173,7 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
             isJzuser:'',
             itemList:[],
             itemValue:'',  //项目筛选,
-            nextTitle:'总览',
+            textTitle:'总览',
             otherShow:true
 
       }
@@ -188,7 +188,6 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
         this.listMonthPlanQygc();
         this.countMonthWorkWglg();
         this.isMonthPlanBlocked(this.monthValue);
-
    },
    activated(){
        this.getMonthWorkList(1);    // 月工作计划
@@ -252,10 +251,10 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
             this.bjShow = true;   
        },
         handleClickYdjh(){   // 指定月度计划
-            this.jhzdShow = true
+            this.jhzdShow = true;
         },
         changeMonthDate(val){  // 月日期
-            if(new Date(this.monthValue).getTime() > new Date(val).getTime()){
+            if(new Date(this.monthValue).getTime() > new Date().getTime()){
                 this.textTitle = '计划'
                 this.otherShow = false
             }else{
@@ -341,7 +340,7 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
             this.detailTitle = '问题处理详情'
             this.detailType.type = 'ybzlWt';
             this.detailType.wid = data.ywtWid;
-            this.detailType.planType = 4;
+            this.detailType.planType = 2;
             this.detailShow = true;
         },
         handleQuestionPz(data){              // ( 问题 )批注
@@ -540,8 +539,8 @@ const yfcContent = "<h5 style='font-weight:700'>本月计划 <span style='color:
                 month:month
             }).then(({data})=>{
                 if(data.state == 'success'){
-                    this.isBlocked = false;
-                    // this.isBlocked = data.data;
+                    // this.isBlocked = false;
+                    this.isBlocked = data.data;
                     let _this = this;
                     // setTimeout(function(){
                     //     if(_this.groupTag.indexOf('QYZ') != -1 && _this.monthWorkList.length && !data.data){

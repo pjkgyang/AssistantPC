@@ -50,11 +50,14 @@ export function queryMilestoneData(obj){
 			xmbh:obj.xmbh,
 			keyword:obj.keyword||"",
 			zt:obj.zt||"",
+			qygc:obj.qygc||"",
 			startCnjssj:obj.startCnjssj,
 			endCnjssj:obj.endCnjssj,
 			startSjjssj:obj.startSjjssj,
 			endSjjssj:obj.endSjjssj,
-			nrxmlb:obj.nrxmlb
+			nrxmlb:obj.nrxmlb||"",
+			yxmjl:obj.yxmjl||"",
+			yzrr:obj.yzrr||""
 		}
 	})
 }
@@ -98,5 +101,17 @@ export function exportMilestoneData(obj){
 	let url =  window.baseurl + suburl + 'exportMilestoneData.do'
 	return axios.get(url,{
 		params:obj
+	})
+}
+
+// 获取里程碑操作记录
+export function queryMilestoneOperationrecords(obj){
+	let url =  window.baseurl + suburl + 'queryMilestoneOperationrecords.do'
+	return axios.get(url,{
+		params:{
+			curPage:obj.curPage,
+			pageSize:obj.pageSize,
+			lcbbh:obj.lcbbh
+		}
 	})
 }

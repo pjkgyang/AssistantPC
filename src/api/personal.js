@@ -358,3 +358,16 @@ export function modifyProjectJfFzr(obj){
   }]
 })
 }
+
+
+export function getUsers(obj){
+	let url =  window.baseurl + suburl + 'getUsers.do'
+	return axios.get(url,{
+		params:{
+			curPage:obj.curPage,
+			pageSize:obj.pageSize,
+			unitType:obj.unitType,
+			keyword:obj.keyword
+  		}
+	})
+}

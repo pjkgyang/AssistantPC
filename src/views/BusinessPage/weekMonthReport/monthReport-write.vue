@@ -2,7 +2,7 @@
  <div>
    <layout :title="''" :shown='true'>
         <!-- v-if="dayNum > 1 && dayNum < 4"  -->
-       <div slot="btn" v-if="groupTag.indexOf('JYGL') == -1">
+       <div slot="btn" v-if="isAllowSave && groupTag.indexOf('JYGL') == -1">
             <el-button  type="danger" size="mini" @click="handleFormulate">保存</el-button>
        </div>
         <header slot="header" v-if="groupTag.indexOf('JYGL') != -1"> 
@@ -29,7 +29,7 @@
                                         <lcbztSelect :multipleLcbztList="prevlcbztList"  @handleChangeLcbzt="handleChangePrevLcbzt"></lcbztSelect>&nbsp;
                                     </div>
                                     <div class="colcenter">
-                                        <span class="filter-weight">计划状态：&nbsp;</span>
+                                        <span class="filter-weight">计划类别：&nbsp;</span>
                                         <el-select style="width:200px" v-model="ztValue" size="mini" placeholder="请选择" @change="handleSelectZt">
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                                         </el-select>
@@ -81,7 +81,7 @@
                    <div  flex >
                        <el-input style="width:300px;" @change="handleEnterPlanSearch"  size="mini" v-model="gzKeyword" placeholder="请输入项目编号/项目名称"></el-input>
                         <div class="colcenter">
-                            <span class="filter-weight"> 计划状态：</span>
+                            <span class="filter-weight"> 计划类别：</span>
                             <el-select style="width:180px" v-model="byztValue" size="mini" placeholder="请选择" @change="handleSelectByZt">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                             </el-select>
@@ -139,7 +139,7 @@
                             :isEdit="!isBlocked && groupTag.indexOf('JYGL') == -1"></MonthQuestionForPlan>
                         </div>
                     </tableLayout>  
-                    <tableLayout :title="''"  v-if="groupTag.indexOf('JYGL') == -1">
+                    <tableLayout :title="''"  v-if="isAllowSave && groupTag.indexOf('JYGL') == -1">
                         <div slot="bottom">
                             <div style="text-align:right">
                                <el-button  type="danger" size="mini" @click="handleFormulate">保存</el-button>
@@ -173,7 +173,7 @@ import detailDialog from "@/components/dialog/detail-dialog.vue";
 import { getMenu, getSession,getLastMonthDay  } from "@/utils/util.js";
 import { pageQuestionForPlan,mapLcbxxForPlan,pageMonthQuestion,addMonthQuestionPlan,
 saveMonthQuestion,deleteMonthQuestion,generateMonthWork,isMonthPlanBlocked,getCpx,pageMonthWork,
-batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from '@/api/weekMonthReport.js'
+batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh,allowSaveMonthPlan} from '@/api/weekMonthReport.js'
 
  export default {
    data () {
@@ -255,10 +255,20 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
         isBlockedOfsy:false,
         groupTag:'',
         keyword:'',
-        isJzuser:""
+        isJzuser:"",
+        isAllowSave:true
      }
    },
-   
+   props:{
+       dateParam:{
+         type:String,
+         default:''
+       },
+       jhzdShow:{
+           type:Boolean,
+           default:false
+       }
+   },
     methods:{ 
         handleEnterPrevWtSearch(){                   // 上月问题查询
             this.getMonthQuestionList(1);            // 月问题计划
@@ -628,20 +638,6 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
                  }
             })
         },
-        // addMonthQuestionPlan(wids){
-        //     addMonthQuestionPlan({
-        //         wids:wids,
-        //         month:this.monthly
-        //     }).then(({data})=>{
-        //         if(data.state == 'success'){
-        //             this.wtShow = false;
-        //             this.getMonthQuestionList(1);  //获取月制作 问题;
-        //             this.$alert('添加成功！', '提示', {confirmButtonText: '确定',type:'success'});
-        //         }else{
-        //             this.$alert(data.msg, '提示', {confirmButtonText: '确定',type:'error'});
-        //         }
-        //     })
-        // },
         isMonthPlanBlocked(month,isPrev){         // 是否封存
             isMonthPlanBlocked({
                 month:month
@@ -649,13 +645,20 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
                 if(data.state == 'success'){
                     if(isPrev){
                         this.isBlockedOfsy = false;
-                        // this.isBlockedOfsy = data.data;
                     }else{
                         this.isBlocked = false;
-                        // this.isBlocked =data.data;
                     }
                 }
             })
+        },
+        allowSaveMonthPlan(month){      //是否允许保存
+            allowSaveMonthPlan({ 
+                month:month
+            }).then(({data})=>{
+                if(data.state == 'success'){
+                    this.isAllowSave = data.data
+                }
+            }) 
         },
         promise () {
             let _this = this;
@@ -673,6 +676,39 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
                    })
             } )
         },
+        getDate(){
+                this.isJzuser = sessionStorage.isJZuser
+                this.groupTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag
+                if(this.groupTag.indexOf('JYGL') != -1){
+                    this.qyValue = this.gczdList[0].label
+                }else{
+                    this.qyValue = ''
+                }
+                this.promise().then((value)=>{
+                    this.mapLcbxxForPlan(1);            //获取本月(计划)工作;
+                })
+                this.monthly = this.dateParam;
+                let year = this.monthly.split('-')[0];
+                let month = this.monthly.split('-')[1]-0;
+                let oldYear;
+                let oldMonth;
+                if((month-0) == 1){
+                   oldYear = year - 1
+                   oldMonth = 12
+                }else{
+                   oldYear = year 
+                   oldMonth = month - 1
+                }
+                this.lastMonth = oldYear+'-'+(oldMonth>10?oldMonth:'0'+oldMonth);
+                this.lastDay = getLastMonthDay(year,month);
+                this.lastMonthDay = getLastMonthDay(oldYear,oldMonth)
+                this.getMonthWorkList(1);                                       //获取上月工作;
+                this.getMonthQuestionList(1);                                   //获取上月制作 问题;
+                this.pageQuestionForPlan(1);                                    //获取本月计划 问题;     
+                this.isMonthPlanBlocked(this.lastMonth,true);                        //上月是否封存
+                this.isMonthPlanBlocked(this.monthly,false);                          //本月是否封存
+                this.allowSaveMonthPlan(this.monthly);
+        }
     },
     beforeMount(){
        if (getSession("gczd") == null) {
@@ -689,32 +725,15 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh} from
                 this.data.wwcyy = '';
                 this.data.hxcs = '';
             }
-        }
+        },
+        jhzdShow(n,o){
+            if(n){
+                this.getDate();
+            }
+        },
     },
     mounted(){
-        this.isJzuser = sessionStorage.isJZuser
-        this.groupTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag
-        if(this.groupTag.indexOf('JYGL') != -1){
-            this.qyValue = this.gczdList[0].label
-        }else{
-             this.qyValue = ''
-        }
-        this.promise().then((value)=>{
-            this.mapLcbxxForPlan(1);            //获取本月(计划)工作;
-        })
-        let year = this.monthly.getFullYear();
-        let month = (this.monthly.getMonth()+1);
-        this.dayNum = this.monthly.getDate();  //天数
-        this.monthly = year+'-'+(month>10?month:'0'+month);
-        this.lastMonth = year+'-'+((month-1)>10?(month-1):'0'+(month-1));
-        this.lastDay = getLastMonthDay(year,month);
-        this.lastMonthDay = getLastMonthDay(year,month-1)
-        this.getMonthWorkList(1);                                       //获取上月工作;
-        this.getMonthQuestionList(1);                                   //获取上月制作 问题;
-        this.pageQuestionForPlan(1);                                    //获取本月计划 问题;     
-        this.isMonthPlanBlocked(this.lastMonth,true);                        //上月是否封存
-        this.isMonthPlanBlocked(this.monthly,false);                          //本月是否封存
-        document.title='月报-月度计划制订'
+      this.getDate();
     },
     components: {
         layout,

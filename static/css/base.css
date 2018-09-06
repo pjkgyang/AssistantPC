@@ -212,7 +212,7 @@ h1,h2,h3,h4,h5,h6{
     width: 600px;
 }
 .el-dialog{
-    margin-top:40px !important; 
+    margin:40px auto 20px !important ; 
     border-radius: 6px !important;
     overflow: hidden;
     box-shadow:0 2px 12px 0 rgba(0,0,0,.5)
@@ -275,18 +275,6 @@ h1,h2,h3,h4,h5,h6{
     float: left;
 }
 
-/* .el-tabs__nav-wrap::after */
-
- /* .el-pagination .btn-next,.el-pagination .btn-prev{
-    background: none;
-}
-.el-pagination button:disabled{
-    background: none;
-}
-.el-pager li{
-    background: none;
-} */
-
 
 .project_task_milestone  .el-table tr>td:nth-of-type(3){
     color: #409EFF;
@@ -312,12 +300,6 @@ h1,h2,h3,h4,h5,h6{
     left: 7px;
     top: 5px;
 }
-/* 
-.item-addUser button{
-    font-size: 12px;
-    margin-top: 5px;
-    padding:5px 8px;
-} */
 
 
 .fb_info .el-table {
@@ -392,9 +374,6 @@ h1,h2,h3,h4,h5,h6{
     border-color: #409EFF
 }
 
-.milestone_tabel .el-table__row td:nth-of-type(5),.milestone_tabel .el-table__row td:nth-of-type(4){
-    text-align: left;
-}
 
 .Question .el-form--inline .el-form-item__content{
     vertical-align: middle !important;
@@ -595,10 +574,12 @@ h1,h2,h3,h4,h5,h6{
 .Report-detailDialog .month-workplan{
     padding: 0 15px !important;
 }
-/* .report-ele-table th
-.report-ele-table .cell,.report-ele-table th{
-    white-space: nowrap !important;
-} */
+.milestone-filter .el-radio+.el-radio{
+    margin:0 0 0 10px;
+}
+.milestone-filter .el-radio{
+    margin-bottom:0;
+}
 @media screen and (max-width:1440px) {
     .project_task_detail_taskbar ul.task_list:nth-of-type(1){
          max-height: 410px !important;
@@ -617,7 +598,9 @@ h1,h2,h3,h4,h5,h6{
         width: 1400px !important;
     }
 }
-
+.layout-bgf .el-card__body{
+    padding: 10px 0;
+}
 @media screen and (max-width:1400px){
     .report-chooseitem{
         width:290px !important;

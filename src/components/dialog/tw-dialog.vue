@@ -19,7 +19,7 @@
                      <el-input size="mini" type="text" style="width:520px" v-model="xmmc" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="问题类别"  required v-if="(showCondition==1||showCondition==2)">
-                    <el-select v-model="question.wtlb" size="mini" placeholder="问题类别" style="width:192px">
+                    <el-select v-model="question.wtlb" size="mini" placeholder="请选择问题类别" style="width:192px">
                     <el-option
                         v-for="(item,index) in wtlb"
                         :key="index"
@@ -29,22 +29,22 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="是否紧急" required >
-                    <el-select v-model="question.sfjj" size="mini" placeholder="是否紧急" style="width:192px">
+                    <el-select v-model="question.sfjj" size="mini" placeholder="请选择是否紧急" style="width:192px">
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="问题级别" required v-if="(showCondition==1||showCondition==2)"> 
-                    <el-select v-model="question.wtjb" size="mini" placeholder="问题级别" style="width:192px">
+                    <el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:192px">
                         <el-option label="不严重" value="不严重"></el-option>
                         <el-option label="一般" value="一般"></el-option>
                         <el-option label="严重" value="严重"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="产品" required>
-                    <el-select v-model="question.cp" size="mini" placeholder="产品" style="width:192px">
+                    <el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:192px">
                         <el-option 
-                        v-for="(cp,index) in cplist"
+                        v-for="(cp,index) in xmcpList"
                         :key="index"
                         :label="cp.mc"
                         :value="cp.label">
@@ -52,23 +52,23 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="影响范围" required v-if="(showCondition==1||showCondition==2)">
-                    <el-select v-model="question.yxfw" size="mini" placeholder="影响范围" style="width:192px">
+                    <el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:192px">
                         <el-option label="影响局部" value="影响局部"></el-option>
                         <el-option label="影响整体" value="影响整体"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="是否bug" required v-if="(showCondition==1||showCondition==2)">
-                    <el-select v-model="question.sfbug" size="mini" placeholder="是否bug" style="width:192px">
+                    <el-select v-model="question.sfbug" size="mini" placeholder="请选择是否bug" style="width:192px">
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="0"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="版本号" required v-if="(showCondition==1||showCondition==2)">
-                <el-input size="mini" v-model="question.bbh" type="text" placeholder="版本号" style="width:193px;"></el-input>
+                <el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:193px;"></el-input>
                 </el-form-item>
 
                 <el-form-item label="期望解决日期" required v-if="!accreditShow">
-                    <el-date-picker  :picker-options="pickerBeginDateBefore"   :clearable="false" size="mini" v-model="question.qwjjrq" type="date"  placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
+                    <el-date-picker  :picker-options="pickerBeginDateQw"   :clearable="false" size="mini" v-model="question.qwjjrq" type="date"  placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="期望解决日期" required v-if="accreditShow">
                     <el-input size="mini"  style="width:193px;" readonly v-model="question.qwjjrqO"></el-input>
@@ -131,6 +131,7 @@ import {
   saveQuestion,
   customerQuestion,
   showQuestionCondition,
+  queryResponsibleProduct
 } from "@/api/xmkb.js";
 import { formatTime, getMenu, getSession, getMyDate } from "@/utils/util.js";
 export default {
@@ -150,7 +151,7 @@ export default {
         sfbug: "",
         bbh: "",
         title: "",
-        nr:'',
+        nr:'',    
         wid: "",
         qwjjrq: "",
         qwjjrqO: "",
@@ -162,7 +163,8 @@ export default {
       fileList: [],
       fileData: [],
       filesData: [],
-      pickerBeginDateBefore: {
+      pickerBeginDateBefore:this.handleFocusDate(),
+      pickerBeginDateQw:{
         disabledDate(time) {
             let curDate = (new Date()).getTime();
             let three = 30 * 24 * 3600 * 1000;
@@ -170,7 +172,8 @@ export default {
             return time.getTime() < Date.now()- 8.64e7 || time.getTime() > threeMonths;
         }
       },
-      isJZuser:null
+      isJZuser:null,
+      xmcpList:[]
     };
   },
   props: {
@@ -213,20 +216,33 @@ export default {
     guid:{
         type:String,
         default:''
-     }
+     },
+   
   },
   components:{itemChoose},
   methods:{
-    handleEdit(data) {  //选择项目（）
+    handleFocusDate(){
+        let self = this
+        return {
+          disabledDate(time){
+                let curDate = (new Date()).getTime();
+                let delayHs = JSON.parse(self.questionInfo.cphs) * 24 * 3600 * 1000;
+                let delayDate = curDate + delayHs;
+               return time.getTime() < Date.now()-8.64e7 || time.getTime() > delayDate;
+          }
+        }
+    },
+    handleEdit(data) {            //选择项目（）
+      this.queryResponsibleProduct(data.xmbh);
       (this.xmbh = data.xmbh), (this.xmmc = data.xmmc);
       this.dialogQuestionVisible = false;
     },
-    addQuestiontItem() {      //选择项目
+    addQuestiontItem() {         //选择项目
       this.dialogQuestionVisible = true;
     },
-   handleCancel(){  //关闭dialog
+    handleCancel(){              //关闭dialog
       this.visible = false   
-   },
+    },
 
     handleAccredit() {         //确认受理
       if (
@@ -364,7 +380,7 @@ export default {
           this.question.sfjj == "" ||
           this.question.xmbh == ""
         ) {
-          this.$alert("请将信息填写完整", "提示", {
+          this.$alert("请将信息填写完整!", "提示", {
             confirmButtonText: "确定",
             type: "warning"
           });
@@ -436,6 +452,27 @@ export default {
       this.fileList = r;
       this.$refs.upload.submit();
     },
+    queryResponsibleProduct(xmbh){   // 获取项目对应的产品
+      this.xmcpList = [];
+      queryResponsibleProduct({
+        xmbh:xmbh
+      }).then((res)=>{
+        if(res.data.state == 'success'){
+         if(JSON.stringify(res.data.data) == '{}'){
+           this.xmcpList = this.cplist
+         }else{
+           let Arr = Object.keys(res.data.data);
+           let McArr = Object.values(res.data.data)
+           for(var i = 0;i< Arr.length;i++){
+              this.xmcpList.push({
+                label:Arr[i],
+                mc:McArr[i]
+                })
+            }
+          }
+        }
+      });
+    }
   },
   watch: {
     show() {
@@ -478,16 +515,17 @@ export default {
             this.fileData = [];
             this.filesData = [];
        if(this.questionTitle == '我要提问'){ 
-         this.question.wtlb = "",
-         this.question.sfjj = "",
-         this.question.wtjb = "",
-         this.question.cp = "",
-         this.question.yxfw = "",
-         this.question.sfbug = "",
-         this.question.bbh = "",
-         this.question.title = "",
-         this.question.wid = ""
-         this.question.nr = ""
+          this.xmcpList = [];
+          this.question.wtlb = "";
+          this.question.sfjj = "";
+          this.question.wtjb = "";
+          this.question.cp = "";
+          this.question.yxfw = "";
+          this.question.sfbug = "";
+          this.question.bbh = "";
+          this.question.title = "";
+          this.question.wid = "";
+          this.question.nr = "";
           $('#summernote').summernote('code','')  
          if(this.chooseableItem){
              this.xmmc = ""
@@ -495,6 +533,7 @@ export default {
          }else{
            this.xmmc = this.itemInfo.xmmc
            this.xmbh = this.itemInfo.xmbh
+           this.queryResponsibleProduct(this.xmbh);
          }
         }else{
             this.question.title = this.questionInfo.bt;

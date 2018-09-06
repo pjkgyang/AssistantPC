@@ -212,7 +212,7 @@ h1,h2,h3,h4,h5,h6{
     width: 600px;
 }
 .el-dialog{
-    margin-top:40px !important; 
+    margin:40px auto 20px !important ; 
     border-radius: 6px !important;
     overflow: hidden;
     box-shadow:0 2px 12px 0 rgba(0,0,0,.5)
@@ -392,9 +392,9 @@ h1,h2,h3,h4,h5,h6{
     border-color: #409EFF
 }
 
-.milestone_tabel .el-table__row td:nth-of-type(5),.milestone_tabel .el-table__row td:nth-of-type(4){
+/* .milestone_tabel .el-table__row td:nth-of-type(7),.milestone_tabel .el-table__row td:nth-of-type(6){
     text-align: left;
-}
+} */
 
 .Question .el-form--inline .el-form-item__content{
     vertical-align: middle !important;
@@ -617,7 +617,9 @@ h1,h2,h3,h4,h5,h6{
         width: 1400px !important;
     }
 }
-
+.layout-bgf .el-card__body{
+    padding: 10px 0;
+}
 @media screen and (max-width:1400px){
     .report-chooseitem{
         width:290px !important;
