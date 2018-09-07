@@ -18,7 +18,7 @@
                     <el-table-column prop="xmmc" label="项目名称" ></el-table-column>
                     <el-table-column label="操作" width="110">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="handleAdd(scope.$index, scope.row)">添加</el-button>
+                            <el-button size="mini" :disabled="scope.row.ytj == 0" @click="handleAdd(scope.$index, scope.row)">{{!scope.row.ytj?'已添加':'添加'}}</el-button>
                         </template>
                         </el-table-column>
                     </el-table>
@@ -29,7 +29,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[20, 40, 70, 100]"
+                    :page-sizes="[15, 30, 50, 100]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total">
@@ -62,46 +62,61 @@
    methods:{
        handleCurrentChange(data){
            this.currentPage = data;
-
+           this.getTeamProjects();
        },
        handleSizeChange(data){
            this.pageSize = data;
            this.currentPage = 1;
-
+           this.getTeamProjects();
        },
        handleSearchUser(){
-          
+          this.currentPage = 1;
+          this.getTeamProjects();
        },
        handleAdd(index,row){        //添加
-          
-       },
-       getProjects(){
-           getProjects({
-            curPage: this.currentPage,
-            pageSize: this.pageSize,
-            keyword: this.keyword,
-            xmzt:'1,2,3',
-            xmlb:'',
-            sfgx:'',
-            pl:'',
-            isAll:true
-        }).then(({ data }) => {
-            if (data.state == "success") {
-                this.tableData = data.data.rows;
-                this.total = data.data.records;
-            }else{
-                this.$alert(data.msg, '提示', {
+            this.$post(this.API.addTeamProject,{
+                xmbh:row.xmbh,
+                qyzdwid:this.qyzdwid
+            }).then((res)=>{
+                if(res.state == 'success'){
+                    this.$alert('添加成功', '提示', {
                     confirmButtonText: '确定',
-                    type:'error'
-               });
-            }
-        });
-       }
+                    type:'success',
+                    callback: action => {
+                       row.ytj = 0
+                       this.$emit('addProjectSuccess','')
+                    }
+                  });
+                }
+            })
+       },
+        getTeamProjects(){      // 获取项目列表
+            this.$get(this.API.pageTeamProjects,{
+                curPage:this.currentPage,
+                pageSize:this.pageSize,
+                qyzdwid:'',
+                keyword:this.keyword
+            }).then((res)=>{
+                if(res.state == 'success'){
+                    if(!!res.data.rows){
+                        res.data.rows.forEach(element => {
+                            element.ytj = 1
+                        });
+                        this.tableData = res.data.rows
+                        this.total = res.data.records
+                    }
+                }
+            }) 
+        },
    },
    props:{
        show:{
            type:Boolean,
            default:false
+       },
+       qyzdwid:{
+           type:String,
+           default:''
        }
    },
      watch: {
@@ -110,7 +125,8 @@
             if(!n){
               
             }else{
-                this.getProjects();
+                this.currentPage = 1;
+               this.getTeamProjects();
             }
         }
     },

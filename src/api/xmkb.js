@@ -150,7 +150,7 @@ export function queryAllQuestions(obj){
 		params:{
 			curPage:obj.curPage,
 			pageSize:obj.pageSize,
-			xmbh:obj.xmbh,
+			xmbh:obj.xmbh||"",
 			urgent:obj.urgent||"",
 			cp:obj.cp||"",
 			cpx:obj.cpx||"",

@@ -1,6 +1,45 @@
 
 import axios from 'axios'
 import { Loading, Message, MessageBox } from 'element-ui'
+import Qs from 'qs'
+/**
+ * @method get
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function get(url, params = {}) {
+    return new Promise((resolve, reject) => {
+        axios.get(url, {
+            params: params
+        }).then(response => {
+            resolve(response.data);
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+
+/**
+ * @method post
+ * @param url
+ * @param data
+ * @returns {Promise} 
+ */
+export function post(url, data = {}) {
+    return new Promise((resolve, reject) => {
+        axios.post(url, data, {
+            transformRequest: [function (data) {
+                data = Qs.stringify(data);
+                return data;
+            }]
+        }).then(response => {
+            resolve(response.data);
+        }, err => {
+            reject(err)
+        })
+    })
+}
 
 let loading        //定义loading变量
 
@@ -22,18 +61,6 @@ function startLoading() {
 }
 function endLoading() {
     loading.close()
-}
-
-export function get(url, params = {}) {
-    return new Promise((resolve, reject) => {
-        axios.get(url, {
-            params: params
-        }).then(response => {
-            resolve(response.data);
-        }).catch(err => {
-            reject(err)
-        })
-    })
 }
 //声明一个变量 needLoadingRequestCount，每次调用showFullScreenLoading方法 needLoadingRequestCount + 1。
 //调用tryHideFullScreenLoading()方法，needLoadingRequestCount - 1。needLoadingRequestCount为 0 时，结束 loading。
@@ -99,10 +126,12 @@ axios.interceptors.response.use(
                     break;
             }
         }
-        MessageBox.alert('请求超时...', '提示', {
-            type: 'error',
-            confirmButtonText: '确定',
-        });
+        if (!!getCookie('access_token')) {
+            MessageBox.alert('请求超时...', '提示', {
+                type: 'error',
+                confirmButtonText: '确定',
+            });
+        }
         tryHideFullScreenLoading();
         return Promise.reject(error);
     })

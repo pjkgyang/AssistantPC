@@ -94,8 +94,8 @@
                     <el-table-column sortable label="里程碑状态" width="120" show-overflow-tooltip> 
                          <template slot-scope="scope">
                               <div slot="reference" class="name-wrapper">
-                                    <el-tag size="small"  type='success' v-if="scope.row.zt == '关闭'">{{ scope.row.zt }}</el-tag>
-                                    <el-tag size="small"  type='danger' v-if="scope.row.zt != '关闭'">{{ scope.row.zt }}</el-tag>
+                                    <el-tag size="small" title="点击查看操作详情" type='success' v-if="scope.row.zt == '关闭'" @click.native="handleCheckRrecord(scope.row)">{{ scope.row.zt }}</el-tag>
+                                    <el-tag size="small" title="点击查看操作详情" type='danger' v-if="scope.row.zt != '关闭'" @click.native="handleCheckRrecord(scope.row)">{{ scope.row.zt }}</el-tag>
                               </div>
                          </template>
                     </el-table-column>
@@ -144,7 +144,7 @@
             top="50px">
             <commitMilestone :shown="milestoneVisible"  @handleCommitMilestone="handleCommitMilestone" :xmbh="xmbh" :taskLcbbhArr="lcbbhArr"></commitMilestone>
         </el-dialog>
-        
+        <lcbjlDialog :show.sync="lcbjlShow" :lcbbh="lcbbh"></lcbjlDialog>  
   </div>
 </template>
 <script>
@@ -152,9 +152,12 @@ import { queryMilestoneData ,submitMilestone ,ModifyMilestoneCommitmentDate,getM
 import pagination from '@/components/BusinessPage/pagination.vue'
 import commitMilestone from '@/components/BusinessPage/commitMilestone.vue'
 import { returnFloat} from '../../utils/util.js'; 
+import lcbjlDialog from '@/components/dialog/lcbjl-dialog.vue'
 export default {
   data(){
       return {
+          lcbjlShow:false,
+          lcbbh:'',
           checkList: [],
           xmlbList:[],
           keyword:'',
@@ -188,6 +191,10 @@ export default {
       }
   },
    methods: {
+       handleCheckRrecord(data){                               // 查看里程碑操作记录
+            this.lcbbh = data.lcbbh
+            this.lcbjlShow = !this.lcbjlShow
+        },
         handleCommitMilestone(){
             this.milestoneVisible = false;
             this.queryMilestoneData(this.currentPage);
@@ -347,7 +354,7 @@ export default {
         }
         this.queryMilestoneData(1);
     },
-    components:{pagination,commitMilestone}
+    components:{pagination,commitMilestone,lcbjlDialog}
 }
 </script>
 <style scoped>
@@ -373,5 +380,7 @@ export default {
     background:#fff;
     box-shadow:0 0 5px #ccc
 }
-
+.name-wrapper .el-tag:hover{
+  cursor: pointer;
+}
 </style>

@@ -142,6 +142,7 @@ export default {
     /* top: 0; */
     /* left: 0; */
     width: 100%;
+    box-shadow: 0px 1px 6px #ddd;
     /* z-index: 188; */
     overflow-x: auto;
 }

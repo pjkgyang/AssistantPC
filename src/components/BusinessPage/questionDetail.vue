@@ -88,16 +88,16 @@
                     </p>
                     <span v-if="reply.sfhf == 1" flex-align-center>
                         <el-button  @click="handleReplyEdit($event,index)"  size="mini" style="width:60px;height:28px">编辑</el-button>
-                        <el-button  @click="handleReplyDelete($event,reply)" size="mini" type="danger" style="width:60px;height:28px">删除</el-button>
-                    </span>&#x3000;
+                        <el-button  @click="handleReplyDelete($event,reply)" size="mini" type="danger" style="width:60px;height:28px">删除</el-button>&#x3000;
+                    </span>
                     <span v-if="reply.wtjjj != 2 && !isCjwt" flex-align-center>
-                        <el-button  @click="handleSetResolve($event,reply)" :disabled="reply.wtjjj == 0" size="mini">{{reply.wtjjj==0?'已设为常见问题':reply.wtjjj==1?'设置为常见问题':''}}</el-button>
-                    </span>&#x3000;
+                        <el-button  @click="handleSetResolve($event,reply)" :disabled="reply.wtjjj == 0" size="mini">{{reply.wtjjj==0?'已设为常见问题':reply.wtjjj==1?'设置为常见问题':''}}</el-button>&#x3000;
+                    </span>
                     <span v-if="reply.wtjjj == 1 && isCjwt" flex-align-center>
-                        <el-button  @click="handleSetResolve($event,reply)"  size="mini">取消设置常见问题</el-button>
-                    </span>&#x3000;
+                        <el-button  @click="handleSetResolve($event,reply)"  size="mini">取消设置常见问题</el-button>&#x3000;
+                    </span>
                     <span v-if="(reply.hflx == 3||reply.hflx == 10) && qusetionInfo.fbzt != 1" flex-align-center>
-                            <el-button v-if="reply.sfbh == 0" :data-wid="reply.wid" @click="handleRejectQuestion($event,index)"  size="mini">驳回</el-button>
+                            <el-button type="primary" v-if="reply.sfbh == 0" :data-wid="reply.wid" @click="handleRejectQuestion($event,index)"  size="mini">驳回</el-button>
                             <el-tag v-if="reply.sfbh == 1" type="info" size="small">已驳回</el-tag>
                     </span>
                     </div>

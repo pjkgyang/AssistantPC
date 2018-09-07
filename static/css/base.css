@@ -465,6 +465,9 @@ h1,h2,h3,h4,h5,h6{
 .question-textarea .note-toolbar-wrapper,.zdfzr-note .note-toolbar-wrapper,.question-zf .note-toolbar-wrapper,.edit-reply .note-toolbar-wrapper{
     height: 40px !important;
 }
+.question-textarea .note-toolbar-wrapper .note-toolbar{
+    white-space: nowrap;
+}
 /* {
     height: 76px !important;
 } */

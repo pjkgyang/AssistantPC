@@ -2,29 +2,33 @@
     <div>
         <div class="layout-bgf">
             <el-card shadow="hover">
-                 <filterComponent :filterList="filterList"></filterComponent>
+                 <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter"></filterComponent>
             </el-card>
         </div>
-        <div class="layout-bgf">
-             <el-card shadow="hover">
-                <el-table :data="tableData" border style="width:98%;margin:0 auto" :max-height="tableHeight">
-                    <el-table-column fixed="left" label="操作" width="160">
+        <div class="layout-bgf" >
+             <el-card shadow="hover" style="padding:0 20px">
+               <div class="mb-12">
+                  <el-button type="primary" size="small">添加战队</el-button>
+               </div>
+                <el-table :data="tableData" border  :max-height="tableHeight">
+                    <el-table-column fixed="left" label="操作" width="220">
                         <template slot-scope="scope">
                             <el-button @click="handleClickDelete(scope.row)" type="danger" size="mini">删除</el-button>
                             <el-button @click="handleClickEdit(scope.row)" size="mini">编辑</el-button>
+                            <el-button @click="handleClickMaintain(scope.row)" size="mini">维护</el-button>
                         </template>
                     </el-table-column>
                     <el-table-column prop="qygc" label="区域工程" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="zdmc" label="战队名称" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="zddzxm" label="战队队长" width="120"></el-table-column>
-                    <el-table-column prop="sjldxm" label="上级领导姓名" width="120"></el-table-column>
+                    <el-table-column prop="qyzd" label="战队名称" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="qyzddzxm" label="战队队长" width="120"></el-table-column>
+                    <el-table-column prop="sjzgxm" label="上级领导姓名" width="120"></el-table-column>
                 </el-table>
                 <div text-right class="pd-10">
                     <el-pagination
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="currentPage"
-                        :page-sizes="[20, 50, 70, 100]"
+                        :page-sizes="[15, 30, 50, 100]"
                         :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="total">
@@ -32,54 +36,28 @@
                 </div>
             </el-card>
         </div>
-        <zdwh-dialog :show.sync="show" @handleAddUser="handleAddUser" @handleAddItem="handleAddItem"></zdwh-dialog>
-        <user-dialog :show.sync="userShow"></user-dialog>
-        <zdxm-dialog :show.sync="zdxmShow"></zdxm-dialog>
+        <zdwh-dialog :show.sync="show" :qyzdwid="qyzdwid" ></zdwh-dialog>
+        
     </div>
 </template>
 
 <script>
  import filterComponent from "@/components/reportTable/filterComponent.vue";
  import zdwhDialog from "@/components/dialog/zdwh-dialog.vue";
- import userDialog  from '@/components/dialog/user-dialog.vue'
- import zdxmDialog  from '@/components/dialog/zdxm-dialog.vue'
+
  export default {
    data () {
      return {
          show:false,
          userShow:false,
-         zdxmShow:false,
          filterList:['keyword','qygc'],
          tableHeight:window.innerHeight - 300,
          currentPage:1,
          pageSize:15,   
          total:0,
+         filterData:'',
+         qyzdwid:'',
          tableData: [{
-          qygc: '上海区域工程',
-          zdmc: 'xxx战队',
-          zddzxm: 'xxx',
-          sjldxm: '普陀区',
-        }, {
-          qygc: '上海区域工程',
-          zdmc: 'xxx战队',
-          zddzxm: 'xxx',
-          sjldxm: '普陀区',
-        }, {
-          qygc: '上海区域工程',
-          zdmc: 'xxx战队',
-          zddzxm: 'xxx',
-          sjldxm: '普陀区',
-        }, {
-          qygc: '上海区域工程',
-          zdmc: 'xxx战队',
-          zddzxm: 'xxx',
-          sjldxm: '普陀区',
-        }, {
-          qygc: '上海区域工程',
-          zdmc: 'xxx战队',
-          zddzxm: 'xxx',
-          sjldxm: '普陀区',
-        }, {
           qygc: '上海区域工程',
           zdmc: 'xxx战队',
           zddzxm: 'xxx',
@@ -112,28 +90,68 @@
         }]
      }
    },
+   mounted(){
+     this.getPageQyzd();
+   },
    methods: {
-      handleClickEdit(row) {
-        console.log(row)
-        this.show = !this.show;
+      handleChangeFilter(data){      
+          this.filterData = data;
+          console.log(this.filterData)
+          this.getPageQyzd();
       },
-      handleClickDelete(row){
+      handleClickEdit(row) {         // 编辑
           console.log(row)
       },
-      handleAddUser(){
-        this.userShow = !this.userShow;
+      handleClickMaintain(row){      // 维护
+          this.qyzdwid = row.wid;
+          this.show = !this.show;
       },
-      handleAddItem(){
-        this.zdxmShow = !this.zdxmShow;
+      handleClickDelete(row){        //删除
+       this.$confirm('请确定是否删除该战队?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$post(this.API.deleteQyzd,{
+            wid:row.wid
+          }).then((res)=>{
+            if(res.state == 'success'){
+              this.$alert('删除成功', '提示', {
+                confirmButtonText: '确定',
+                type:'success',
+                callback: action => {
+                  this.getPageQyzd(); 
+                }
+              }); 
+             }
+          })
+        }).catch(() => {});
       },
-      handleCurrentChange(){
-
+    
+      handleCurrentChange(data){
+        this.currentPage = data;
+        this.getPageQyzd();
       },
-      handleSizeChange(){
-
+      handleSizeChange(data){
+        this.pageSize = data;
+        this.currentPage = 1;
+        this.getPageQyzd();
       },
+      getPageQyzd(){
+        this.$get(this.API.pageQyzd,{
+          curPage:this.currentPage,
+          pageSize:this.pageSize,
+          qygc:this.filterData.gczd?this.filterData.gczd:'',
+          keyword:this.filterData.keyword?this.filterData.keyword:''
+        }).then((res)=>{
+          if(res.state == 'success'){
+            this.tableData = res.data.rows
+            this.total = res.data.records
+          }
+        })
+      }
     },
-   components: { filterComponent,zdwhDialog,userDialog,zdxmDialog }
+   components: { filterComponent,zdwhDialog }
  }
 </script>
 

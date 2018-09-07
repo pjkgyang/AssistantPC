@@ -25,7 +25,7 @@
                 <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'noResponseMore5D',table.noResponseMore5D)">{{table.noResponseMore5D}}</a></td>
                 <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'cqwwjj',table.cqwwjj)">{{table.cqwwjj}}</a></td>
                 <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'ccnwjj',table.ccnwjj)">{{table.ccnwjj}}</a></td>
-                <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'noSolveMore24H&',table.noSolveMore24H)">{{table.noSolveMore24H}}</a></td>
+                <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'noSolveMore24H',table.noSolveMore24H)">{{table.noSolveMore24H}}</a></td>
                 <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'noSolveMore48H',table.noSolveMore48H)">{{table.noSolveMore48H}}</a></td>
                 <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'noSolveMore5D',table.noSolveMore5D)">{{table.noSolveMore5D}}</a></td>
                 <td><a href="javaScript:void(0)" @click="handleWtslrgz(table.lcbh,'cqw',table.cqw)">{{table.cqw}}</a></td>

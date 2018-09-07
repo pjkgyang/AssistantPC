@@ -159,18 +159,18 @@ import {
   queryMilestoneData,
   submitMilestone,
   ModifyMilestoneCommitmentDate,
-  getMilestoneSubmitType,
+  getMilestoneSubmitType
 } from "@/api/milestone.js";
 import pagination from "@/components/BusinessPage/pagination.vue";
 import commitMilestone from "@/components/BusinessPage/commitMilestone.vue";
 import filterComponent from "@/components/reportTable/filterComponent.vue";
 import { returnFloat } from "../../utils/util.js";
-import lcbjlDialog from '@/components/dialog/lcbjl-dialog.vue'
+import lcbjlDialog from "@/components/dialog/lcbjl-dialog.vue";
 export default {
   data() {
     return {
-      lcbjlShow:false,
-      lcbbh:'',
+      lcbjlShow: false,
+      lcbbh: "",
       gczdList: [],
       checkList: [],
       xmlbList: [],
@@ -198,29 +198,32 @@ export default {
       xmbh: "",
       groupTag: "",
       ishow: true,
-      sfxmjl:'',
-      sfzrr:'',
+      sfxmjl: "",
+      sfzrr: ""
     };
   },
 
   methods: {
-    handleChooseXmjl(){
+    handleChooseXmjl() {
       this.queryMilestoneData(1);
       this.currentPage = 1;
     },
-    handleChooseZrr(){
+    handleChooseZrr() {
       this.queryMilestoneData(1);
       this.currentPage = 1;
     },
-    handleCheckRrecord(data){                               // 查看里程碑操作记录
-      this.lcbbh = data.lcbbh
-      this.lcbjlShow =! this.lcbjlShow
+    handleCheckRrecord(data) {
+      // 查看里程碑操作记录
+      this.lcbbh = data.lcbbh;
+      this.lcbjlShow = !this.lcbjlShow;
     },
-    handleChangeFilter(val) {                               // 区域工程
+    handleChangeFilter(val) {
+      // 区域工程
       this.queryMilestoneData(1);
       this.currentPage = 1;
     },
-    handleCommitMilestone() {                               // 提报里程碑     
+    handleCommitMilestone() {
+      // 提报里程碑
       this.milestoneVisible = false;
       this.queryMilestoneData(this.currentPage);
     },
@@ -306,7 +309,11 @@ export default {
           "&endSjjssj=" +
           this.sjjssj +
           "&nrxmlb=" +
-          this.xmlbList.join(",")
+          this.xmlbList.join(",") +
+          "&yxmjl=" +
+          this.sfxmjl +
+          "&yzrr=" +
+          this.sfzrr
       );
     },
     handleSearchLcb() {
@@ -383,8 +390,8 @@ export default {
         startSjjssj: !this.sjkssj ? "" : this.sjkssj,
         endSjjssj: !this.sjjssj ? "" : this.sjjssj,
         nrxmlb: this.xmlbList.length == 0 ? "" : this.xmlbList.join(","),
-        yxmjl:this.sfxmjl,
-        yzrr:this.sfzrr
+        yxmjl: this.sfxmjl,
+        yzrr: this.sfzrr
       }).then(({ data }) => {
         if (data.state == "success") {
           this.totalWgl = data.data.totalWgl;
@@ -427,7 +434,7 @@ export default {
     }
     this.queryMilestoneData(1);
   },
-  components: { pagination, commitMilestone, filterComponent,lcbjlDialog }
+  components: { pagination, commitMilestone, filterComponent, lcbjlDialog }
 };
 </script>
 <style scoped>
@@ -453,7 +460,7 @@ export default {
   background: #fff;
   box-shadow: 0 0 5px #ccc;
 }
-.name-wrapper .el-tag:hover{
+.name-wrapper .el-tag:hover {
   cursor: pointer;
 }
 </style>

@@ -275,18 +275,6 @@ h1,h2,h3,h4,h5,h6{
     float: left;
 }
 
-/* .el-tabs__nav-wrap::after */
-
- /* .el-pagination .btn-next,.el-pagination .btn-prev{
-    background: none;
-}
-.el-pagination button:disabled{
-    background: none;
-}
-.el-pager li{
-    background: none;
-} */
-
 
 .project_task_milestone  .el-table tr>td:nth-of-type(3){
     color: #409EFF;
@@ -312,12 +300,6 @@ h1,h2,h3,h4,h5,h6{
     left: 7px;
     top: 5px;
 }
-/* 
-.item-addUser button{
-    font-size: 12px;
-    margin-top: 5px;
-    padding:5px 8px;
-} */
 
 
 .fb_info .el-table {
@@ -392,9 +374,6 @@ h1,h2,h3,h4,h5,h6{
     border-color: #409EFF
 }
 
-/* .milestone_tabel .el-table__row td:nth-of-type(7),.milestone_tabel .el-table__row td:nth-of-type(6){
-    text-align: left;
-} */
 
 .Question .el-form--inline .el-form-item__content{
     vertical-align: middle !important;
@@ -485,6 +464,9 @@ h1,h2,h3,h4,h5,h6{
 .question-note .note-toolbar-wrapper,.complain-cplist .note-toolbar-wrapper,
 .question-textarea .note-toolbar-wrapper,.zdfzr-note .note-toolbar-wrapper,.question-zf .note-toolbar-wrapper,.edit-reply .note-toolbar-wrapper{
     height: 40px !important;
+}
+.question-textarea .note-toolbar-wrapper .note-toolbar{
+    white-space: nowrap;
 }
 /* {
     height: 76px !important;
@@ -595,10 +577,12 @@ h1,h2,h3,h4,h5,h6{
 .Report-detailDialog .month-workplan{
     padding: 0 15px !important;
 }
-/* .report-ele-table th
-.report-ele-table .cell,.report-ele-table th{
-    white-space: nowrap !important;
-} */
+.milestone-filter .el-radio+.el-radio{
+    margin:0 0 0 10px;
+}
+.milestone-filter .el-radio{
+    margin-bottom:0;
+}
 @media screen and (max-width:1440px) {
     .project_task_detail_taskbar ul.task_list:nth-of-type(1){
          max-height: 410px !important;

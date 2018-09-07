@@ -9,7 +9,7 @@
             @close="$emit('update:show', false)"
             :show="show">
             <div class="Question">
-            <el-form  style="width:700px;margin:0 auto"  class="demo-ruleForm"  :model="question" :inline="true" label-width="125px">
+            <el-form  style="width:750px;margin:0 auto"  class="demo-ruleForm"  :model="question" :inline="true" label-width="125px">
                 <el-form-item label="项目名称" required v-if="chooseableItem">
                     <el-input size="mini" type="text" style="width:520px;" v-model="xmmc" readonly placeholder="请选择项目">
                         <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
@@ -233,7 +233,9 @@ export default {
         }
     },
     handleEdit(data) {            //选择项目（）
-      this.queryResponsibleProduct(data.xmbh);
+      if(this.questionTitle == '我要提问'){
+        this.queryResponsibleProduct(data.xmbh);
+      }
       (this.xmbh = data.xmbh), (this.xmmc = data.xmmc);
       this.dialogQuestionVisible = false;
     },
@@ -503,14 +505,14 @@ export default {
           showQuestionCondition().then(({ data }) => {
             //提问展示
             this.showCondition = data.data;
-             if (getSession("ProblemType") == null) {
+          });
+        if (getSession("ProblemType") == null) {
                 getMenu("ProblemType", this.wtlb, "");
                 getMenu("cp", this.cplist, true);
             } else {
                 this.wtlb = getSession("ProblemType");
                 this.cplist = getSession("cp");
-            }
-        });
+           }
             this.fileList = [];
             this.fileData = [];
             this.filesData = [];
@@ -536,6 +538,7 @@ export default {
            this.queryResponsibleProduct(this.xmbh);
          }
         }else{
+            this.xmcpList = this.cplist
             this.question.title = this.questionInfo.bt;
             this.question.cp = this.questionInfo.cpbh;
             this.question.wtlb = this.questionInfo.wtlb;
@@ -549,7 +552,7 @@ export default {
             this.question.qwjjrq = this.questionInfo.qwjjrq;
             this.question.wid = this.questionInfo.wid
             this.xmmc = this.questionInfo.xmmc;
-            this.xmbh = this.questionInfo.xmbh;   
+            this.xmbh = this.questionInfo.xmbh; 
              this.$nextTick(() => {
                  $('#summernote').summernote('code',this.questionInfo.nr)  
              })
@@ -567,7 +570,7 @@ div.el-form-item {
   margin-bottom: 8px !important;
 }
 .question-textarea {
-  width: 700px;
+  width: 750px;
   margin: 0 auto;
 }
 .question-textarea > p {

@@ -2,7 +2,7 @@
   <div class="project-question">
        <div class="project-question-query">
            <div>
-                <span :class="{'isshown-query':true,'el-icon-arrow-down':!queryLJshow,'el-icon-arrow-up':queryLJshow}" @click="handleQueryShow"> </span> <span class="query-title">高级查询</span>
+                <span class="query-title"><span :class="{'isshown-query':true,'el-icon-arrow-down':!queryLJshow,'el-icon-arrow-up':queryLJshow}" @click="handleQueryShow"></span>&nbsp;高级查询</span>
                 <el-input v-model="keyword" style="width:493px;" size="small" placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称" @change="searchQuestion"></el-input>&#x3000;
                 <el-button type="primary" size="mini" @click="handlequeryQuestion">查询</el-button>
            </div>
@@ -74,55 +74,11 @@
               <el-button size="mini" type="primary"   @click="handleExport" style="margin-top:8px">导出</el-button>
          </div>
         <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
-       <ul class="project-question-list">
-          <li v-for="(question,index) in questionList">
-              <div :class="{'question-type':true}">
-                  <span :class="{'el-icon-question':question.fbzt != 1,'el-icon-success':question.fbzt == 1}"></span>
-                  <p class="questionOperate" >   
-                      <span class="el-icon-edit" :data-wid="question.wid"  v-if="question.isdel" @click="editQuestion"><span style="color:#409EFF"> 编辑</span></span>&nbsp;
-                      <span class="el-icon-delete" :data-wid="question.wid"  v-if="question.isdel" @click="deleteQuestion"><span style="color:#f00"> 删除</span></span>
-                  </p>
-             </div>
-              <div class="question-info">
-                  <span class="question-info-bt" @click="handleQuestionDetail" :data-wid="question.wid">{{question.bt}}</span><br>
-                  <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>&#x3000;
-                  <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0">已申请关闭</span>&#x3000;&#x3000;
-                  <p>
-                      <span><span class="question-info-front"></span>发布人 : {{question.fbrxm}}</span>
-                      <span><span class="question-info-front">所属单位 : </span>{{question.ssbm == null?'无':question.ssbm}}</span>
-                      <span><span class="question-info-front">问题类别 : </span>{{question.wtlb==null?'无':question.wtlb}}</span>
-                  </p>
-                  <p>
-                     <span><span class="question-info-front">产品 : </span>{{question.cpbh}}</span>
-                     <span><span class="question-info-front">是否紧急 : </span>{{question.jjyf == null?'无':question.jjyf == '1'?'是':'否'}}</span>
-                     <span><span class="question-info-front">版本号 : </span>{{question.bbh}}</span>
-                  </p>
-                   <p v-if="question.bqMc">
-                     <span class="question-info-front">问题标签 : <span class="question-wtbq" v-for="bq in question.bqMc.split(',')">{{bq}}</span></span>
-                  </p>
-              </div>
-              <div class="question-state">
-                  <span style="font-size:14px;color:#f00;" :class="{'ygb-color':question.fbzt == 1,'clz-color':question.fbzt != 1}">{{question.lcMc}}</span><br>
-                  <span style="font-size:14px;color:#7ECE64;margin-top:5px;"><span style="font-size:12px;color:#A8A8A8">回复数</span> &#x3000;{{question.replyCount}}</span><br>
-                  <span style="font-size:12px;color:#A8A8A8">
-                     <span v-if="question.fbzt != 1 && question.cnjsrq">
-                         {{new Date().getTime() < new Date(question.cnjsrq).getTime()?Math.round((new Date(question.cnjsrq).getTime() - new Date().getTime())/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.round((new Date().getTime() - new Date(question.cnjsrq).getTime())/(1000 * 60 * 60 * 24))+' 天'}}
-                    </span>
-                    <span v-if="question.fbzt == 1 && question.cnjsrq">
-                          {{(question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) < new Date(question.cnjsrq).getTime()?Math.round((new Date(question.cnjsrq).getTime() - (question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.round(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq).getTime())/(1000 * 60 * 60 * 24))+' 天'}}
-                    </span>
-                  </span>
-              </div>
-          </li>
-          <div v-if="questionList.length == 0" style="text-align:center;padding-top:50px;">
-              <img src="static/img/empty.png" alt="">
-              <p>暂无问题</p>
-          </div>
-      </ul>
-      <div style="margin-top:10px;text-align:right" v-if="total > 10">
-        <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+        <questionCard :questionList="questionList" :isShow="false" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"></questionCard>
+        <div style="margin-top:10px;text-align:right" v-if="total > 10">
+           <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+        </div>
       </div>
-</div>
 
        <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
   </div>
@@ -138,6 +94,7 @@ import {
 import { isEdit } from '@/api/common.js'
 import { getMenu, getSession,EventBus } from "@/utils/util.js";
 import twDialog from "@/components/dialog/tw-dialog.vue";
+import questionCard from "@/components/BusinessPage/questionCard.vue";
 export default {
   data() {
     return {
@@ -248,16 +205,15 @@ export default {
       window.open(routeData.href, "_blank");
     },
 
-    editQuestion(e) {      //编辑
+    editQuestion(params) {      //编辑
       this.questionTitle = "编辑问题";
-      let wid = e.currentTarget.getAttribute("data-wid");
       isEdit({
-        wid:wid
+        wid:params.wid
       }).then(({data})=>{
         if(data.state == 'success'){
            if(data.data){
               queryQuestion({             // 获取单个问题
-                wid: wid
+                wid:params.wid
               }).then(({ data }) => {
                 if (data.state == "success") {
                   this.qusetionInfo = data.data;
@@ -279,9 +235,8 @@ export default {
         }
       })
     },
-    deleteQuestion(e) {
+    deleteQuestion(params) {
       //删除 问题
-      let wid = e.currentTarget.getAttribute("data-wid");
       this.$confirm("是否删除该条问题?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -289,7 +244,7 @@ export default {
       })
         .then(() => {
           deleteQuestion({
-            wids: wid
+            wids:params.wid
           }).then(({ data }) => {
             if (data.state == "success") {
               this.$alert("删除成功", "提示", {
@@ -409,7 +364,7 @@ export default {
     this.queryAllQuestions(1);
     this.baseUrl = window.baseurl;
   },
-  components: { pagination, twDialog }
+  components: { pagination, twDialog ,questionCard }
 };
 </script>
 <style scoped>
@@ -418,32 +373,10 @@ export default {
   margin: 0 auto;
   padding: 10px;
 }
-.project-question-list > li {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-bottom: 1px dotted #999;
-  padding: 8px 0 5px;
-}
-.project-question-list > li:hover {
-  background: #f5f7fa;
-}
-.project-question-list > li:hover .questionOperate {
-  opacity: 1;
-}
 .question-type {
   text-align: center;
   width: 100px;
 }
-.questionOperate {
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-}
-.questionOperate > span:hover {
-  text-decoration: underline #888;
-}
-
 .question-type span.el-icon-question {
   font-size: 32px;
   color: #f56c6c;
@@ -452,49 +385,9 @@ export default {
   font-size: 30px;
   color: #67c23a;
 }
-
-.project-question-list .question-info {
-  width: 80%;
-}
-.project-question-list .question-info .question-info-front,
-.question-content .question-info-front {
-  color: #a8a8a8;
-  font-size: 12px;
-}
-.project-question-list .question-info > p {
-  margin: 3px 0 !important;
-  width: 100%;
-  white-space: nowrap;
-}
-.project-question-list .question-info > p > span {
-  display: inline-block;
-  width: 25%;
-  white-space: nowrap;
-  font-size: 14px;
-  color: #363748;
-}
-.project-question-list .question-info > p > span:nth-of-type(2) {
-  width: 40%;
-}
-.project-question-list .question-info > span {
-  font-size: 16px;
-  color: #409eff;
-}
-.project-question-list .question-info > span.question-info-bt:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-.project-question-list .question-info > p {
-  font-size: 14px;
-  color: #888;
-}
 .Question {
   padding: 10px 0;
 }
-div.el-form-item {
-  margin-bottom: 8px !important;
-}
-
 .project-question-query {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border-radius: 4px;
@@ -528,30 +421,12 @@ div.el-form-item {
   border-radius: 3px;
   margin: 5px 10px 0 0;
 }
-.isshown-query:hover {
-  cursor: pointer;
+.isshown-query:hover{
+   cursor: pointer;
 }
-
 .bg-active {
   background: #1997d7;
   color: #fff !important;
 }
-.question-state {
-  text-align: center;
-  width: 13%;
-}
-.question-state > span:nth-of-type(1) {
-  padding: 3px 8px;
-  border-radius: 2px;
-  font-size: 14px;
-  display: inline-block;
-}
-.ygb-color {
-  color: #7ece64 !important;
-  background: rgba(126, 206, 100, 0.2);
-}
-.clz-color {
-  color: #f56c6c;
-  background: rgba(245, 108, 108, 0.2);
-}
+
 </style>

@@ -19,7 +19,7 @@
                     <el-table-column prop="dept" label="部门" ></el-table-column>
                     <el-table-column label="操作" width="110">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="handleAdd(scope.$index, scope.row)">添加</el-button>
+                            <el-button size="mini" :disabled="scope.row.ytj == 0" @click="handleAdd(scope.$index,scope.row)">{{!scope.row.ytj?'已添加':'添加'}}</el-button>
                         </template>
                         </el-table-column>
                     </el-table>
@@ -51,7 +51,8 @@
           currentPage:1,
           pageSize:15,
           total:200,
-          tableData: []
+          tableData: [],
+          inx:''
      }
    },
    methods:{
@@ -68,22 +69,42 @@
            this.getUsers();
        },
        handleAdd(index,row){        //添加
-          
+            this.$post(this.API.saveZdcy,{
+                wid:'',
+                cyid:row.usercode,
+                cyxm:row.username,
+                qyzdwid:this.qyzdwid
+            }).then((res)=>{
+                if(res.state == 'success'){
+                    this.$alert('添加成功', '提示', {
+                    confirmButtonText: '确定',
+                    type:'success',
+                    callback: action => {
+                       row.ytj = 0
+                       this.$emit('addUserSuccess','')
+                    }
+                  });
+                }
+            })
        },
        getUsers(){
            getUsers({
             curPage: this.currentPage,
             pageSize: this.pageSize,
             unitType:0,
-            keyword: this.keyword
+            keyword: this.keyword,
+            dept:'01AM'
         }).then(({ data }) => {
             if (data.state == "success") {
-            if(!data.data || !data.data.rows.length){
+            if(!data.data || !data.data.rows){
                 this.total  = 0
                 this.tableData = []
             }else{
-                this.total = data.data.records;
-                this.tableData = data.data.rows;
+                 this.total = data.data.records;
+                 this.tableData = data.data.rows;
+                 this.tableData.forEach(ele=>{
+                    ele.ytj = 1
+                })
               }
             }
         });
@@ -93,6 +114,10 @@
        show:{
            type:Boolean,
            default:false
+       },
+       qyzdwid:{
+           type:String,
+           default:''
        }
    },
      watch: {

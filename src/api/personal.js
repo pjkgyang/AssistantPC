@@ -367,7 +367,8 @@ export function getUsers(obj){
 			curPage:obj.curPage,
 			pageSize:obj.pageSize,
 			unitType:obj.unitType,
-			keyword:obj.keyword
+			keyword:obj.keyword,
+			dept:obj.dept||''
   		}
 	})
 }

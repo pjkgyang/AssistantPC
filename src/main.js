@@ -13,10 +13,11 @@ import './utils/http.js'
 import global from './utils/global.js'
 Vue.prototype.globals = global
 import './utils/icon/iconfont.css'
-import {get} from './utils/http'
+import { get , post} from './utils/http'
 import API from './utils/api'
 Vue.prototype.API = API
-Vue.prototype.$get=get;
+Vue.prototype.$get = get;
+Vue.prototype.$post = post;
 
 // import es6Promise from "babel-polyfill";
 // es6Promise .polyfill();
