@@ -121,10 +121,10 @@
        </div>
        <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
         <div style="padding:0 10px">
-          <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;" :disabled="this.xmkbInfo.xmjd == '已终止'">
-              {{this.xmkbInfo.xmjd == '已终止'?'该项目已经终止,禁止提问':'我要提问'}}
+          <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;" :disabled="this.xmDetail.ztztmc == '已终止'">
+              {{this.xmDetail.ztztmc == '已终止'?'该项目已经终止,禁止提问':'我要提问'}}
          </el-button>
-          <el-button :disabled="this.xmkbInfo.xmjd == '已终止'"  v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary"  @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
+          <el-button :disabled="this.xmDetail.ztztmc == '已终止'"  v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary"  @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
         </div>
         <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
             <questionCard  :questionList="questionList" @handleQuestionDetail="handleQuestionDetail" @handleReject="handleReject"
@@ -148,7 +148,8 @@ import {
   queryQuestion,
   showQuestionCondition,
   canSubmitQuestion,
-  applyDismiss
+  applyDismiss,
+  getProject
 } from "@/api/xmkb.js";
 import { getMenu, getSession } from "@/utils/util.js";
 import { isEdit } from "@/api/common.js";
@@ -246,7 +247,8 @@ export default {
       starDay: "",
       endDay: "",
       keyword: "",
-      userGroupTag: ""
+      userGroupTag: "",
+      xmDetail:{}
     };
   },
   props: {
@@ -272,6 +274,15 @@ export default {
   mounted() {
     this.username = window.userName;
     this.baseUrl = window.baseurl;
+    getProject({
+      xmbh:this.xmbh
+    }).then(({data})=>{
+      if(data.state == 'success'){
+        this.xmDetail = data.data
+      }else{
+        this.$alert(data.msg, "提示", {confirmButtonText: "确定",type: "error"});
+      }
+    })
     if (!this.isAll) {
       this.wtfl = 2;
       this.cxzt = "";
@@ -314,17 +325,11 @@ export default {
   },
 
   methods: {
-    handleReject(params, index) {
-      // 驳回
-      this.$confirm("确定驳回该申请, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
+    handleReject(params,index,sm) {       // 驳回
           applyDismiss({
             wid: "",
-            zbwid: params.wid
+            zbwid: params.wid,
+            sm:sm
           }).then(({ data }) => {
             if (data.state == "success") {
               this.$alert("已成功驳回！", "提示", {
@@ -335,14 +340,9 @@ export default {
                 }
               });
             } else {
-              this.$alert(data.msg, "提示", {
-                confirmButtonText: "确定",
-                type: "error"
-              });
+              this.$alert(data.msg, "提示", {confirmButtonText: "确定",type: "error"});
             }
-          });
-        })
-        .catch(() => {});
+        });
     },
     handleClose(params, index) {
       //关闭问题

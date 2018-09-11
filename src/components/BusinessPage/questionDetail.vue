@@ -97,14 +97,14 @@
                         <el-button  @click="handleSetResolve($event,reply)"  size="mini">取消设置常见问题</el-button>&#x3000;
                     </span>
                     <span v-if="(reply.hflx == 3||reply.hflx == 10) && qusetionInfo.fbzt != 1" flex-align-center>
-                            <el-button type="primary" v-if="reply.sfbh == 0" :data-wid="reply.wid" @click="handleRejectQuestion($event,index)"  size="mini">驳回</el-button>
+                            <el-button type="primary" v-if="reply.sfbh == 0"  @click="handleRejectQuestion(reply.wid,index)"  size="mini">驳回</el-button>
                             <el-tag v-if="reply.sfbh == 1" type="info" size="small">已驳回</el-tag>
                     </span>
                     </div>
                 </div>
               </div>
               <div class="project-question-detail-bottom">
-                 <div v-html="reply.nr" v-if="reply.hflx != 9"></div>
+                 <div v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" v-if="reply.hflx != 9"></div>
                  <div  v-if="reply.hflx == 9"><a href="javascript:void(0)" @click="handleJDGZ">查看开发任务进度</a></div>
               </div>
           </li>
@@ -216,7 +216,7 @@
             <div style="padding:10px">
                 <span v-if="isSLvisible" style="display:inline-block;margin:15px 0;">
                   期望解决日期 : <el-date-picker  v-model="xgqwjjrq" type="date" placeholder="选择日期" format="yyyy-MM-dd"  :clearable="false" size="mini" readonly></el-date-picker>
-                </span><br>
+                </span>
                 <div v-if="false" style="display:flex;margin-bottom:15px;">
                     <span>环境信息 : </span>
                     <el-upload
@@ -234,11 +234,18 @@
                         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                     </el-upload>
                 </div>
-                承诺结束日期 : <el-date-picker  :picker-options="pickerBeginDateBefore" v-model="xgcnjsrq" type="date" placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
-                     <div style="text-align:right">
-                        <el-button type="primary" size="mini" @click="CommitChangeCNjsrq">提交</el-button>
-                        <el-button type="info" size="mini" @click="CancelChangeCNjsrq">取消</el-button>    
-                    </div>
+                 <div>
+                  <span class="filter-bt">承诺结束日期 :</span> 
+                  <el-date-picker  :picker-options="pickerBeginDateBefore" v-model="xgcnjsrq" type="date" placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
+                 </div>
+                  <div v-if="!isSLvisible" style="margin:15px 0">
+                    <span class="filter-bt before-require">说明：</span>
+                    <el-input  type="textarea"  :rows="2" style="width:400px" placeholder="请输入说明内容" v-model="cnjssm"></el-input>
+                  </div>     
+                  <div style="text-align:right">
+                      <el-button type="primary" size="mini" @click="CommitChangeCNjsrq">提交</el-button>
+                      <el-button type="info" size="mini" @click="CancelChangeCNjsrq">取消</el-button>    
+                  </div>
             </div>
         </el-dialog>
 
@@ -540,7 +547,9 @@ export default {
       sftj: [],
       isCjwt: "",
       qwjjrqZf: "",
-      slqwjjrq: ""
+      slqwjjrq: "",
+      bhsm: "",
+      cnjssm: ""
     };
   },
   props: {},
@@ -931,18 +940,21 @@ export default {
         }
       });
     },
-    handleRejectQuestion(e, param) {
-      // 驳回
-      let wid = e.currentTarget.getAttribute("data-wid");
-      this.$confirm("确定驳回该申请, 是否继续?", "提示", {
+    handleRejectQuestion(wid, param) {
+      this.$prompt("请输入驳回说明", "提示", {
+        // 驳回
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        inputType: "textarea",
+        inputPattern: /^\S/,
+        inputErrorMessage: "请输入驳回说明（必填）"
       })
-        .then(() => {
+        .then(({ value }) => {
+          this.bhsm = value;
           applyDismiss({
             wid: wid,
-            zbwid: this.wid
+            zbwid: this.wid,
+            sm: this.bhsm
           }).then(({ data }) => {
             if (data.state == "success") {
               this.$alert("已驳回", "提示", {
@@ -950,6 +962,8 @@ export default {
                 type: "success",
                 callback: action => {
                   this.questionReply[param].sfbh = 1;
+                  this.questionReply[param].nr =
+                    this.questionReply[param].nr + "<br>说明 : " + this.bhsm;
                 }
               });
             } else {
@@ -1041,7 +1055,6 @@ export default {
         this.filesData = [];
         this.isSltitle = "受理";
         this.isSLvisible = true;
-        // this.xgqwjjrq = this.qusetionInfo.qwjjrq;
         this.question.xgcnjsrq =
           this.qusetionInfo.cnjsrq == ""
             ? this.qusetionInfo.qwjjrq
@@ -1060,10 +1073,19 @@ export default {
         return;
       }
       if (this.isSltitle == "修改承诺时间") {
+        this.isSLvisible = false;
+        if (!this.cnjssm) {
+          this.$alert("请输入说明内容", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+          return;
+        }
         changeCommitmentDate({
           //修改承诺结束时间
           wid: this.wid,
-          cnjsrq: this.xgcnjsrq
+          cnjsrq: this.xgcnjsrq,
+          sm: this.cnjssm
         }).then(({ data }) => {
           if (data.state == "success") {
             this.innerCNRQVisible = false;
@@ -1184,23 +1206,27 @@ export default {
     //  申请结算
     requisitionSettlement() {
       canApplyClose({
-        wid:this.wid
-      }).then(({data})=>{
-        if(data.state == 'success'){
-             if(data.data){
-               queryrHfHour({
-                  wid: this.wid
-              }).then(({ data }) => {
-                if (data.state == "success") {
-                  this.sqgbgs = data.data;
-                }
-              });
-              this.sqjsVisible = true;
-             }else{
-               this.$alert('不可重复申请关闭，可驳回已有的再重新申请!', '标题名称', {confirmButtonText: '确定',type:'warning'});
-             }
-         }
-      })
+        wid: this.wid
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          if (data.data) {
+            queryrHfHour({
+              wid: this.wid
+            }).then(({ data }) => {
+              if (data.state == "success") {
+                this.sqgbgs = data.data;
+              }
+            });
+            this.sqjsVisible = true;
+          } else {
+            this.$alert(
+              "不可重复申请关闭，可驳回已有的再重新申请!",
+              "标题名称",
+              { confirmButtonText: "确定", type: "warning" }
+            );
+          }
+        }
+      });
     },
     submitForm(data) {
       //申请结算
@@ -1587,7 +1613,8 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => {
+      })
+        .then(() => {
           if (this.fwzlValue == 0) {
             this.$alert("请选择服务质量星级", "提示", {
               confirmButtonText: "确定",
@@ -1998,5 +2025,12 @@ div.el-form-item {
 }
 .is-outline {
   outline: 1px solid #409eff !important;
+}
+.filter-bt {
+  display: inline-block;
+  width: 100px;
+  vertical-align: top;
+  text-align: right;
+  font-weight: 700;
 }
 </style>

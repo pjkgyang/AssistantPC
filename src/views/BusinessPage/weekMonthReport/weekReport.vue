@@ -101,7 +101,8 @@
                               <!-- <el-button v-if="!isBlocked" :disabled="!multipleSelectWt.length" size="mini" @click="handleEditofBatchWt">编辑(批量)</el-button> -->
                         </section>
                         <MonthWeekQuestionTable :tableData="questionList" @handleClickEdit="handleQuestionEdit" @handleCurrentChange="handleQuestionPageChange"  @handleClickPz="handleQuestionPz" @handleClickCheck="handleQuestionCheck"
-                       :bjWordShow="true" :othShow="othShow" @handleSizeChange="handleSizeWtChange" @handleSelectionChange="handleSelectWt" :pageSize="WtPageSize" :records="WtRecords" :currentPage="currentQuestionPage" :isSelect="true" :isEdit="false"></MonthWeekQuestionTable>
+                       :bjWordShow="true" :othShow="othShow" @handleSizeChange="handleSizeWtChange" @handleSelectionChange="handleSelectWt" :pageSize="WtPageSize" :records="WtRecords" :currentPage="currentQuestionPage" :isSelect="true" :isEdit="false"
+                       :tjjd="true"></MonthWeekQuestionTable>
                     </div>
                 </tableLayout>  
         </article>

@@ -440,6 +440,7 @@ export default {
         fbcpmc:'',
         fbcpbh:'',
         xmkbInfo:{},
+        itemDetail:{},
         itemUserNum:null,
         taskDetailProcess:[],
         taskProcessNum:0,
@@ -473,6 +474,7 @@ export default {
       this.taskActive = '';
       this.ViewTransition = true;
       this.xmkbInfo = this.$route.query
+      this.itemDetail = this.$route.params.detail
       this.xmbh = this.$route.query.xmbh
       this.isAll =  JSON.parse(this.$route.query.isAll)
       this.tabsLabel = 'overview'; 

@@ -12,7 +12,7 @@
                 <tableLayout :title="'战队成员管理'">
                     <section slot="top">
                         <el-button type="primary" size="mini" @click.native='handleAddUser'>添加成员</el-button>
-                        <el-button type="danger" size="mini" @click.native='handleDeleteUser'>删除成员</el-button>
+                        <el-button :disabled="!multipleUserList.length" type="danger" size="mini" @click.native='handleDeleteUser'>删除成员</el-button>
                     </section>
                     <section slot="bottom">
                           <el-table
@@ -35,7 +35,7 @@
                 <tableLayout :title="'战队项目管理'">
                     <section slot="top">
                         <el-button type="primary" size="mini" @click.native='handleAddItem'>添加项目</el-button>
-                        <el-button type="danger" size="mini" @click.native='handleDeleteItem'>删除项目</el-button>
+                        <el-button :disabled="!multipleItemList.length" type="danger" size="mini" @click.native='handleDeleteItem'>删除项目</el-button>
                     </section>
                     <section slot="bottom">
                           <el-table
@@ -106,7 +106,7 @@
               this.multipleUserList.push(ele.wid);
           })
        },
-       handleSelectionChangeItem(){
+       handleSelectionChangeItem(val){
           this.multipleItemList = [];
           val.forEach(ele=>{
               this.multipleItemList.push(ele.xmbh);
@@ -149,9 +149,12 @@
                keyword:''
            }).then((res)=>{
                if(res.state == 'success'){
-                  if(!!res.data.rows){
+                  if(!!res.data.rows && !!res.data){
                      this.itemData = res.data.rows
                      this.itemTotal = res.data.records
+                  }else{
+                     this.itemData = []
+                     this.itemTotal = 0
                   }
                }
            }) 

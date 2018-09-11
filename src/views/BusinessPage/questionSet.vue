@@ -45,7 +45,7 @@
        </div>
        </div>
        <div style="background:#fff;margin-top:10px;box-shadow:0 0 5px #ccc;border-radius:5px;padding:10px;">
-         <questionCard :questionList="questionList" :isShow="false"></questionCard>
+         <questionCard :questionList="questionList" :isShow="false" @handleQuestionDetail="handleQuestionDetail"></questionCard>
       <div style="margin-top:10px;text-align:right" v-if="total > 10">
         <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
       </div>
@@ -137,13 +137,11 @@ export default {
       handleQueryShow(){ // 高级查询
         this.queryLJshow = !this.queryLJshow
       },
-        handleQuestionDetail(e){  //查看问题详情
-             //查看问题详情
-            let wid = e.target.getAttribute("data-wid");
+        handleQuestionDetail(params){  //查看问题详情
             let routeData = this.$router.resolve({
                 name: "questionDetail",
                 query: {
-                    wid: wid,
+                    wid:params.wid,
                     f:'1'
                 }
             });

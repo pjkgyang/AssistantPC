@@ -11,7 +11,6 @@
       <template slot-scope="scope">
         <span v-if="deleteShow && scope.row.szjh" ><el-button @click="handleClickDelete(scope.row,scope.$index)" type="text" style="color:red" size="small" >删除 丨 </el-button></span>
         <span v-if="!deleteShow && isPz"><el-button @click="handleClickPz(scope.row)" type="text" size="small">批注 丨 </el-button></span>
-        <!-- <span v-if="isEdit && !bjWordShow"><span class="table-hr" v-if="deleteShow||isPz"> 丨 </span><el-button @click="handleClickEdit(scope.row,scope.$index)" type="text" size="small">编辑</el-button></span> -->
         <span v-if="isEdit && bjWordShow"><el-button @click="handleClickEdit(scope.row,scope.$index)" type="text" size="small">{{isZj?'总结':'计划'}} 丨 </el-button></span>
         <span><el-button @click="handleClickCheck(scope.row)" type="text" size="small">查看</el-button></span>
       </template>
@@ -30,6 +29,14 @@
     <el-table-column prop="wwcyy" label="未完成原因" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>
     <el-table-column prop="hxcs" label="后续措施" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>   
     <el-table-column prop="yhmc" label="创建人" width="100" show-overflow-tooltip></el-table-column> 
+    <el-table-column prop="cjsj" label="创建时间" width="155" ></el-table-column>
+    <el-table-column  label="添加阶段" width="120" v-if="tjjd">
+        <template slot-scope="scope">
+          <el-tag size="mini" :type="!scope.row.tjjd?'danger':''">
+            {{scope.row.tjjd == 1?'计划中':scope.row.tjjd == 2?'总结时':scope.row.tjjd == 3?'增补':'未知'}}
+          </el-tag>
+        </template>
+    </el-table-column>
     <el-table-column prop="cljh" label="处理计划" width="200" show-overflow-tooltip></el-table-column>
     <el-table-column label="批注" width="120" v-if="show">
        <template slot-scope="scope">
@@ -47,7 +54,6 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="records">
           </el-pagination>
-        <!-- <pagination :pageSize="pageSize" :total="records" :currentPage="currentPage" @handleCurrentChange="handleCurrentChange"></pagination> -->
     </div>
   </div>
 </template>
@@ -64,33 +70,7 @@
       tableData:{
         type:Array,
         default:function(){
-          return [{
-          bt: 'UK1231321',
-          fbrxm: '上海市普陀区金沙江路',
-          ssdw: 'XXXXXX',
-          ssxm: 'XXXXXXXXXXX',
-          sscp: '上海市普陀区金沙江路 1518 弄',
-          wtlb: '未完成',
-          sfjj: '200333',
-          dqclhj: '200333',
-          cnjjrq: '2018-08-08',
-          qwjjrq: '2018-08-08',
-          cljh:'不处理',
-          pz: '3人批注',
-        },{
-          bt: 'UK1231321',
-          fbrxm: '上海市普陀区金沙江路',
-          ssdw: 'XXXXXX',
-          ssxm: 'XXXXXXXXXXX',
-          sscp: '上海市普陀区金沙江路 1518 弄',
-          wtlb: '未完成',
-          sfjj: '200333',
-          dqclhj: '200333',
-          cnjjrq: '2018-08-08',
-          qwjjrq: '2018-08-08',
-          cljh:'不处理',
-          pz: '3人批注',
-        },]
+          return []
         }
       },
       show:{
@@ -136,6 +116,10 @@
       isZj:{
         type:Boolean,
         default:true
+      },
+      tjjd:{
+         type:Boolean,
+         default:false
       }
     },
     methods: {

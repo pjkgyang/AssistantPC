@@ -74,7 +74,8 @@
               <el-button size="mini" type="primary"   @click="handleExport" style="margin-top:8px">导出</el-button>
          </div>
         <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
-        <questionCard :questionList="questionList" :isShow="false" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"></questionCard>
+        <questionCard :questionList="questionList" :isShow="false" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"
+        @handleQuestionDetail="handleQuestionDetail"></questionCard>
         <div style="margin-top:10px;text-align:right" v-if="total > 10">
            <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
@@ -192,13 +193,12 @@ export default {
       this.queryLJshow = !this.queryLJshow;
     },
 
-    handleQuestionDetail(e) {
+    handleQuestionDetail(params) {
       //查看问题详情
-      let wid = e.target.getAttribute("data-wid");
       let routeData = this.$router.resolve({
         name: "questionDetail",
         query: {
-          wid: wid,
+          wid: params.wid,
           bq:1
         }
       });

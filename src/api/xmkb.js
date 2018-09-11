@@ -5,6 +5,15 @@ var suburl = 'project/'
 var quesurl = 'question/'
 var exterurl = 'external/'
 
+// 获取项目
+export function getProject(obj){
+	let url =  window.baseurl + suburl + 'getProject.do'
+	return axios.get(url,{
+		params:{
+          xmbh:obj.xmbh
+		},
+	})
+}
 // 获取星标项目
 export function queryXbxm(obj){
 	let url =  window.baseurl + suburl + 'queryXbxm.do'
@@ -453,7 +462,8 @@ export function changeCommitmentDate(obj){
 	let url =  window.baseurl + quesurl + 'changeCommitmentDate.do'
 	return axios.post(url,{
 			 wid:obj.wid,
-			 cnjsrq:obj.cnjsrq
+			 cnjsrq:obj.cnjsrq,
+			 sm:obj.sm
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);
@@ -563,7 +573,8 @@ export function applyDismiss(obj){
 	let url = window.baseurl +quesurl+"applyDismiss.do"
 	return axios.post(url,{
 			wid:obj.wid,
-			zbwid:obj.zbwid
+			zbwid:obj.zbwid,
+			sm:obj.sm
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);

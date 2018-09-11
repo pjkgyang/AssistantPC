@@ -50,7 +50,7 @@ export default {
         }
       ],
       xmtjList: [{
-          xmmc:'123'
+          xmmc:''
       }],
       problems: [],
       complaint: [],
@@ -70,7 +70,6 @@ export default {
     };
   },
   mounted() {
-     console.log(this.$route.query)
      this.dwmc = this.$route.query.dwmc
      this.xmfl = this.$route.query.xmfl
      switch(this.xmfl){
@@ -99,7 +98,7 @@ export default {
        this.data.isAll = true;
        let routeData = this.$router.resolve({
         name: "ItemDetail",
-        query:this.data
+        query:this.data,
       });
       window.open(routeData.href, "_blank");
     },

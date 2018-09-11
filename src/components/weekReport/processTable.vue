@@ -24,6 +24,14 @@
       <el-table-column prop="wwcyy" label="未完成原因" min-width="200" v-if="wordShow" show-overflow-tooltip></el-table-column>
       <el-table-column prop="hxcs" label="后续措施" min-width="200" v-if="wordShow" show-overflow-tooltip></el-table-column>
       <el-table-column prop="cjrxm" label="创建人" width="100"></el-table-column>
+      <el-table-column prop="cjsj" label="创建时间" width="155"></el-table-column>
+      <el-table-column  label="添加阶段" width="120" v-if="isPz">
+        <template slot-scope="scope">
+          <el-tag size="mini" :type="!scope.row.tjjd?'danger':''">
+            {{scope.row.tjjd == 1?'计划中':scope.row.tjjd == 2?'总结时':scope.row.tjjd == 3?'增补':'未知'}}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="zrrxm" label="责任人" width="100"></el-table-column>
       <el-table-column  label="批注" width="120" v-if="isPz">
         <template slot-scope="scope">

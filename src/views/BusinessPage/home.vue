@@ -88,7 +88,8 @@
             <div class="list__item right-split" v-for="(item,i) in problems" :key="i">
               <h5><a href="javaScript:void(0)"  @click="handleOpenQuestionDetail(item.wid)">{{item.bt}}</a></h5>
               <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
-              <span class="time">{{item.fbrq}}</span>
+              <span class="time">{{item.fbrq}}</span><br>
+              <span>&nbsp;<span class="time"> 承诺结束日期 : {{item.cnjsrq}}</span></span>
             </div>
             <div v-if="problems.length == 0||problems==null" style="text-align:center;padding:10px 0">
                 <img src="static/img/none.png" alt="">
@@ -281,7 +282,7 @@ export default {
     queryRecentQuestions() {
       queryRecentQuestions({
         curPage: 1,
-        pageSize:10,
+        pageSize:6,
         unitNum: this.dwbh,
         isAll:true
       }).then(({ data }) => {
@@ -483,7 +484,6 @@ export default {
   margin-top: 8px;
   .list__item {
     padding: 4px;
-    margin-top: 4px;
     border-top: 1px solid #ebeef5;
   }
 

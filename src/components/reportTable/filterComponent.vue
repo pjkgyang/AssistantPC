@@ -4,7 +4,7 @@
             <div v-if="filterList.includes('keyword')">
                 <p>
                 <p class="query-title">高级搜索:</p>
-                <el-input v-model="filterWord.keyword" size="mini" style="width:260px;" placeholder="请输入项目名称/项目编号" @change="handleSearch"></el-input>&#x3000;
+                <el-input v-model="filterWord.keyword" size="mini" style="width:260px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
                 <el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button>
              </p>
            </div>
@@ -125,6 +125,10 @@ export default {
       default:()=>{
         return []
       }
+    },
+    placeholder:{
+      type:String,
+      default:'请输入项目名称/项目编号'
     }
   },
   methods: {
@@ -198,7 +202,7 @@ export default {
     //   },
   },
   mounted() {
-    if (getSession("ProjectCustomStatus") == null) {
+    if (!getSession("ProjectCustomStatus")||getSession("cpx")||getSession("gczd")) {
       getMenu("cpx", this.cpxline, true); // 获取产品线
       getMenu('ProjectCustomStatus',this.xmlxList,'');//获取工程战队   
       getMenu("gczd", this.gczdList, true); // 获取工程战队
@@ -207,7 +211,6 @@ export default {
       this.gczdList = getSession("gczd");
       this.xmlxList = getSession('ProjectCustomStatus');  
     }
-    // this.queryCostStat(1);
   },
   activated() {},
   watch: {},

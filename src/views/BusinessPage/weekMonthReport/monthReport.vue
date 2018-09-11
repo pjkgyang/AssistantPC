@@ -42,7 +42,9 @@
                             </div> -->
                             <section v-if="isJzuser != 1">
                                 <span class="filter-weight">( 合计完工:<span style="color:#f00">{{workTotal.hjwg}}</span></span>&#x3000;
-                                <span class="filter-weight">合计验收:<span style="color:#f00">{{workTotal.hjys}}</span> )</span>
+                                <span class="filter-weight">合计验收:<span style="color:#f00">{{workTotal.hjys}}</span></span>&#x3000;
+                                <span class="filter-weight">合计完工率:<span style="color:#f00">{{workTotal.hjwgl}}</span></span>&#x3000;
+                                <span class="filter-weight">合计验收率:<span style="color:#f00">{{workTotal.hjysl}}</span> )</span>
                             </section>&#x3000;
                             <span class="colcenter">
                                     <span class="filter-weight">计划类别:&nbsp;</span>

@@ -1327,7 +1327,7 @@ export default {
       this.taskActive = '';
       this.ViewTransition = true;
       this.tagGroup = JSON.parse(sessionStorage.getItem("userInfo")).userGroupTag;
-      if(this.$route.params.data == undefined){
+      if(!this.$route.params.data){
         this.xmbh = JSON.parse(sessionStorage.getItem('xmbh'));
         this.xmkbInfo  = JSON.parse(sessionStorage.getItem('xmData')); 
         if(this.tagGroup.includes('JZFGCRY')){

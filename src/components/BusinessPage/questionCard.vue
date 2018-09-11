@@ -55,7 +55,7 @@
 export default {
   data() {
     return {
-        username:''
+        username:'',
     };
   },
   props: {
@@ -77,8 +77,16 @@ export default {
       handleQuestionDetail(params){
           this.$emit('handleQuestionDetail',params);
       },
-      handleReject(params,index){
-          this.$emit('handleReject',params,index);   
+      handleReject(params,index){         // 驳回
+          this.$prompt('请输入驳回说明', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputType:'textarea',
+                    inputPattern: /^\S/,
+                    inputErrorMessage: '请输入驳回说明（必填）'
+          }).then(({ value }) => {
+             this.$emit('handleReject',params,index,value); 
+          }).catch(() => {});
       },
       handleClose(params,index){
           this.$emit('handleClose',params,index);   
