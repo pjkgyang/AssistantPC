@@ -10,7 +10,7 @@
                 <el-menu-item index="7" :route="{path:'/businesspage/toplist/qareport/xjpm-xm'}"><i class="el-icon-erp-report"></i> <span slot="title">问题星级评分-项目</span></el-menu-item>
                 <el-menu-item index="8" :route="{path:'/businesspage/toplist/qareport/xjpm-gr'}"><i class="el-icon-erp-report"></i> <span slot="title">问题星级评分-个人</span></el-menu-item> -->
 
-                <!-- <el-menu-item index="4" :route="{path:'/businesspage/report/qareport/qyxxyh'}"><i class="el-icon-menu"></i> <span slot="title">测试1111</span></el-menu-item> -->
+                <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/qareport/cbzxqktj'}"><i class="el-icon-menu"></i> <span slot="title">测试1111</span></el-menu-item>  -->
                 
             </el-menu>
             <!-- item.url.split('qareport/')[1] -->
@@ -41,23 +41,25 @@ export default {
     
       try{
         if(this.$route.path.includes('/businesspage/toplist')){
-           this.navList = window.menuTop.childNodes
-           this.defActive = '1'
+          //  this.navList = window.menuTop.childNodes
+           this.navList = window.menu.childNodes
            this.getUrl(this.navList);
         }else if(this.$route.path.includes('/businesspage/report')){
            this.navList = window.menu.childNodes
-           this.defActive = '1-1'
+            this.getUrl(this.navList);
+        }else if(this.$route.path.includes('/businesspage/wtfp')){
+           this.navList = window.menu.childNodes
+            this.getUrl(this.navList);
         }
       }catch(err){
           JSON.parse(sessionStorage.getItem('menuList')).forEach((ele,i,arr)=>{
-             if(ele.privid == 123 && this.$route.path.includes('/businesspage/toplist')){
+             if(ele.url== '/businesspage/toplist' && this.$route.path.includes('/businesspage/toplist')){
                this.navList = ele.childNodes
-               this.defActive = '1'
                this.getUrl(this.navList);
-             }else if(ele.privid == 91 && this.$route.path.includes('/businesspage/report')){
+             }else if(ele.url == '/businesspage/report' && this.$route.path.includes('/businesspage/report')){
                this.navList = ele.childNodes
-               this.defActive = '1-1'
                this.getUrl(this.navList);   
+             }else if(ele.url == '/businesspage/wtfp'){
              }
           })
       } 
@@ -72,6 +74,7 @@ export default {
     getUrl(obj){
       if(obj[0].url){
         this.$router.push({path:obj[0].url});
+        this.defActive = '1'
         return;
       }
       if(obj[0].childNodes.length){
@@ -102,7 +105,8 @@ export default {
   watch:{
        $route(from,to){
           if(from.redirectedFrom == '/businesspage/toplist'){
-            this.navList = window.menuTop.childNodes
+            // this.navList = window.menuTop.childNodes
+            this.navList = window.menu.childNodes  
             this.defActive = '1'
           }else if(from.redirectedFrom == '/businesspage/report'){
             this.navList = window.menu.childNodes

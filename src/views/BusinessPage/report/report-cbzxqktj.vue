@@ -7,10 +7,10 @@
             <div>
                 <p class="month-plan-explain">注：日报工时成本 = 日报工时 * 120（元/小时）；二开提报 = 二开中标费用 / 8800 * 18000</p>
             </div>
-           <el-button size="mini" type="primary" @click="exportTable">导出</el-button>
         </div>
         <div>
-            <tableComponent :tableData="dataList" :tableHead="headList" :currentPage="currentPage"  @handleCurrentChange="handleCurrentChange"></tableComponent>
+            <tableComponent :tableData="dataList" :tableHead="headList" :currentPage="currentPage"  @handleCurrentChange="handleCurrentChange"
+            @exportTable="exportTable" :height="'380px'" :width="'3500px'"></tableComponent>
             <!-- <tableComponent :tableData="dataList" :tableHead="headList"   @handleCurrentChange="handleCurrentChange"></tableComponent> -->
         </div>
     </div>    

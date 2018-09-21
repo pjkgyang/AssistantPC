@@ -253,7 +253,7 @@ export default {
 <style lang="scss" scoped>
 .view-pannel1 {
     // min-height: 1130px;
-    min-height: 850px;
+    min-height: 845px;
     font-size: 12px; 
 }
 

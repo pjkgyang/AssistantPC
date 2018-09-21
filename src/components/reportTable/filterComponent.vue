@@ -146,6 +146,7 @@ export default {
       let dwlx = e.target.getAttribute("data-type");
       if (dwlx == null) return;
       this.filterWord.dwlx = dwlx;
+      this.$emit('handleChangeFilter',this.filterWord)   
     },
     handleGCZD(e) {
       // 工程战队
@@ -160,18 +161,21 @@ export default {
       this.filterWord.cpxmc = e.target.getAttribute("data-mc");
       if (cpx == null) return;
       this.filterWord.cpx = cpx;
+      this.$emit('handleChangeFilter',this.filterWord)   
     },
     handleSJLB(e) {
       // 时间类别
       let sjlb = e.target.getAttribute("data-type");
       if (sjlb == null) return;
       this.filterWord.sjlb = sjlb;
+      this.$emit('handleChangeFilter',this.filterWord)   
     },
     handleJJZT(e) {
       // 解决状态
       let jjzt = e.target.getAttribute("data-type");
       if (jjzt == null) return;
       this.filterWord.jjzt = jjzt;
+      this.$emit('handleChangeFilter',this.filterWord)   
     },
     handleXMLX(e){
         let xmlx = e.target.getAttribute('data-type');  

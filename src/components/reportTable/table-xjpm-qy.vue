@@ -1,7 +1,7 @@
 <template>
     <div>
         <table class="table table-xjpmQy" border>
-            <caption>问题星级评分-区域</caption>
+            <!-- <caption>问题星级评分-区域</caption> -->
                  <thead> 
             <tr v-if="tableData.length != 0">
                 <th>分类</th>
@@ -103,11 +103,12 @@ export default {
 </script>
 <style scoped>
 .table {
-  border: 1px solid #ddd;
+  border: 1px solid #ebeef5;
   width: 100%;
 }
 .table thead {
   width: calc(100% - 1.2em) !important;
+  background: #f5f7fa;
 }
 .table thead,
 .table tfoot {
@@ -133,7 +134,7 @@ tbody tr {
   overflow-y: scroll;
 }
 .table caption {
-  border: 1px solid #ddd;
+  border: 1px solid #ebeef5;
   border-bottom: none;
   text-align: center;
   background: #eee !important;
@@ -145,7 +146,7 @@ tbody tr {
 .table th {
   height: 37px !important;
   text-align: center;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #ebeef5;
   padding: 0;
   margin: 0;
   vertical-align: middle;
@@ -155,12 +156,12 @@ tbody tr {
   width: 12%;
 }
 .table tr:last-child {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ebeef5;
 }
 .table td {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #ebeef5;
 }
 </style>

@@ -36,7 +36,6 @@ export default {
   mounted(){
     this.queryId = this.$route.params.id
     this.getReportQuestion(1);  //获取报表问题
-    document.title = '问题报表-问题列表'     
   },
 
   methods:{ 

@@ -126,6 +126,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import {
   saveQuestion,

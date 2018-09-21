@@ -265,7 +265,7 @@
     </div>
     <!-- 里程碑管理 -->
     <div v-if="tabsLabel == 'milestone'">
-      <milestoneGl :xmbh="xmbh"></milestoneGl>
+      <milestoneGl :xmbh="xmbh" :xmjl="xmkbInfo.yfzrrxm"></milestoneGl>
     </div>
     <!-- 问题 -->
     <div v-if="tabsLabel == 'question'">

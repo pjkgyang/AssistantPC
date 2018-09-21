@@ -359,6 +359,21 @@ export function modifyProjectJfFzr(obj){
 })
 }
 
+// 修改项目已方责任人
+export function modifyProjectManager(obj){
+	let url = window.baseurl +suburl+"modifyProjectManager.do"
+	return axios.post(url,{
+			xmbh:obj.xmbh,
+			yhbh:obj.yhbh,
+			yhxm:obj.yhxm
+	},{
+		transformRequest: [function (data) {
+　　data = Qs.stringify(data);
+    return data;
+  }]
+})
+}
+
 
 export function getUsers(obj){
 	let url =  window.baseurl + suburl + 'getUsers.do'

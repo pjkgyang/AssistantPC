@@ -74,12 +74,13 @@
        </section>
        <section class="milestone_tabel">
            <div style="padding:0 10px 10px;">
-                <p style="margin:10px 0 !important;"  v-if="ishow">
-                   <el-button size="mini" type="success" @click="commitLcb">提报里程碑</el-button>
-                   <el-button size="mini" type="primary" @click="exportLcb">导出客户签字项目计划</el-button>
-                   <span style="float:right;margin-top:5px"><span class="filter-weight">合计完工量 : </span><span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} 
+                <p style="margin:10px 0 !important;"  >
+                   <el-button size="mini" type="success" @click="commitLcb" v-if="ishow">提报里程碑</el-button>
+                   <el-button size="mini" type="primary" @click="exportLcb" v-if="ishow">导出客户签字项目计划</el-button>
+                   <el-button size="mini" type="primary" @click="handleChangeZrr" v-if="zrrShow">变更责任人</el-button>
+                   <span style="float:right;margin-top:5px" v-if="ishow"><span class="filter-weight">合计完工量 : </span><span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} 
                    </span>{{totalWgl<10000?'元':totalWgl<100000000?'万元':'亿'}}</span>
-                   <p style="color:#aaa;font-size:12px;">说明：整体里程碑不允许调整计划，里程碑调整需要工程总确认后才生效。</p>
+                   <p style="color:#aaa;font-size:12px;" v-if="ishow">说明：整体里程碑不允许调整计划，里程碑调整需要工程总确认后才生效。</p>
                 </p>
                 <el-table
                     ref="multipleTable"
@@ -144,243 +145,316 @@
             top="50px">
             <commitMilestone :shown="milestoneVisible"  @handleCommitMilestone="handleCommitMilestone" :xmbh="xmbh" :taskLcbbhArr="lcbbhArr"></commitMilestone>
         </el-dialog>
-        <lcbjlDialog :show.sync="lcbjlShow" :lcbbh="lcbbh"></lcbjlDialog>  
+        <lcbjlDialog  :show.sync="lcbjlShow" :lcbbh="lcbbh"></lcbjlDialog>
+        <cpListDialog :show.sync="cplistShow" :xmbh="xmbh"></cpListDialog>  
   </div>
 </template>
 <script>
-import { queryMilestoneData ,submitMilestone ,ModifyMilestoneCommitmentDate,getMilestoneSubmitType } from '@/api/milestone.js'
-import pagination from '@/components/BusinessPage/pagination.vue'
-import commitMilestone from '@/components/BusinessPage/commitMilestone.vue'
-import { returnFloat} from '../../utils/util.js'; 
-import lcbjlDialog from '@/components/dialog/lcbjl-dialog.vue'
+import {
+  queryMilestoneData,
+  submitMilestone,
+  ModifyMilestoneCommitmentDate,
+  getMilestoneSubmitType
+} from "@/api/milestone.js";
+import pagination from "@/components/BusinessPage/pagination.vue";
+import commitMilestone from "@/components/BusinessPage/commitMilestone.vue";
+import { returnFloat } from "../../utils/util.js";
+import lcbjlDialog from "@/components/dialog/lcbjl-dialog.vue";
+import cpListDialog from "@/components/dialog/cpList-dialog.vue";
 export default {
-  data(){
-      return {
-          lcbjlShow:false,
-          lcbbh:'',
-          checkList: [],
-          xmlbList:[],
-          keyword:'',
-          cnkssj:"",
-          cnjssj:"",
-          sjkssj:"",
-          sjjssj:"",
-          total:null,
-          pageSize:12,
-          currentPage:1,
-          tableData3: [],
-          totalWgl:'',
-          multipleSelection: [],
-          planVisible:false,
-          milestoneVisible:false,
-          ishownTZJH:true,
-          form:{
-            startDate:"",
-            endDate:"",
-            sm:""
-          },
-          lcbbhArr:[],
-          groupTag:'',
-          ishow:true
-      }
+  data() {
+    return {
+      lcbjlShow: false,
+      cplistShow: false,
+      lcbbh: "",
+      checkList: [],
+      xmlbList: [],
+      keyword: "",
+      cnkssj: "",
+      cnjssj: "",
+      sjkssj: "",
+      sjjssj: "",
+      total: null,
+      pageSize: 12,
+      currentPage: 1,
+      tableData3: [],
+      totalWgl: "",
+      multipleSelection: [],
+      planVisible: false,
+      milestoneVisible: false,
+      ishownTZJH: true,
+      form: {
+        startDate: "",
+        endDate: "",
+        sm: ""
+      },
+      lcbbhArr: [],
+      groupTag: "",
+      ishow: true,
+      zrrShow:true
+    };
   },
-  props:{
-      xmbh:{
-            type:String,
-            default:""
-      }
+  props: {
+    xmbh: {
+      type: String,
+      default: ""
+    },
+    xmjl: {
+      type: String,
+      default: ""
+    }
   },
-   methods: {
-       handleCheckRrecord(data){                               // 查看里程碑操作记录
-            this.lcbbh = data.lcbbh
-            this.lcbjlShow = !this.lcbjlShow
-        },
-        handleCommitMilestone(){
-            this.milestoneVisible = false;
-            this.queryMilestoneData(this.currentPage);
-        },
-        checkboxInit(row,index){
-            if (row.zt != '计划中' && row.zt != '处理中') // && row.zt != '处理中'
-                return 0;
-            else
-                return 1;
-            },
-        handleClose(){  //取消
-            this.planVisible = false
-        },
+  methods: {
+    handleCheckRrecord(data) {
+      // 查看里程碑操作记录
+      this.lcbbh = data.lcbbh;
+      this.lcbjlShow = !this.lcbjlShow;
+    },
+    handleCommitMilestone() {
+      this.milestoneVisible = false;
+      this.queryMilestoneData(this.currentPage);
+    },
+    checkboxInit(row, index) {
+      if (row.zt != "计划中" && row.zt != "处理中")
+        // && row.zt != '处理中'
+        return 0;
+      else return 1;
+    },
+    handleClose() {
+      //取消
+      this.planVisible = false;
+    },
 
-       handleCommit(){ //提交
-            ModifyMilestoneCommitmentDate({
-            xmbh:this.xmbh,
-            lcbbh:this.lcbbhArr.join(','),
-            startDate:this.form.startDate,
-            endDate:this.form.endDate,
-            sm:this.form.sm
-          }).then(({data})=>{
-             if(data.state == 'success'){
-                this.planVisible = !this.planVisible
-                this.$alert('修改成功', '提示', {
-                 confirmButtonText: '确定',
-                 type:'success',
-                 callback: action => {
-                   this.form.sm = ''
-                   this.queryMilestoneData(1);
-                 }
-              });  
-             }
-          })
-       },
-       // 提报里程碑
-       commitLcb(){
-         if(this.multipleSelection.length == 0){
-              this.$alert('请选择里程碑', '提示', {
-                 confirmButtonText: '确定',
-                 type:'warning',
-              }); 
-            return;
-          }else{
-              getMilestoneSubmitType({
-                    lcbbh:this.lcbbhArr.join(',')
-                }).then(({data})=>{
-                    if(data.state == 'success'){
-                        if(data.data.lcbType == -1){
-                             this.$alert('不允许同时提交多个项目的整体验收里程碑！','提示', {confirmButtonText: '确定',type:'warning',}); 
-                        }else{
-                            this.milestoneVisible = !this.milestoneVisible
-                        }
-                    }
-                })
+    handleCommit() {
+      //提交
+      ModifyMilestoneCommitmentDate({
+        xmbh: this.xmbh,
+        lcbbh: this.lcbbhArr.join(","),
+        startDate: this.form.startDate,
+        endDate: this.form.endDate,
+        sm: this.form.sm
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.planVisible = !this.planVisible;
+          this.$alert("修改成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: action => {
+              this.form.sm = "";
+              this.queryMilestoneData(1);
+            }
+          });
+        }
+      });
+    },
+    // 提报里程碑
+    commitLcb() {
+      if (this.multipleSelection.length == 0) {
+        this.$alert("请选择里程碑", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      } else {
+        getMilestoneSubmitType({
+          lcbbh: this.lcbbhArr.join(",")
+        }).then(({ data }) => {
+          if (data.state == "success") {
+            if (data.data.lcbType == -1) {
+              this.$alert("不允许同时提交多个项目的整体验收里程碑！", "提示", {
+                confirmButtonText: "确定",
+                type: "warning"
+              });
+            } else {
+              this.milestoneVisible = !this.milestoneVisible;
+            }
           }
-       },
-       exportLcb(){
-           this.cnkssj = !this.cnkssj?'':this.cnkssj;
-           this.cnjssj = !this.cnjssj?'':this.cnjssj;
-           this.sjkssj = !this.sjkssj?'':this.sjkssj;
-           this.sjjssj = !this.sjjssj?'':this.sjjssj;
-          window.open(window.baseurl+'milestone/exportMilestoneData.do?xmbh='+this.xmbh+'&keyword='+this.keyword+'&zt='+ this.checkList.join(',')+
-          '&startCnjssj='+this.cnkssj+'&endCnjssj='+this.cnjssj+'&startSjjssj='+this.sjkssj+'&endSjjssj='+this.sjjssj+'&nrxmlb='+this.xmlbList.join(','));
-       },
-        // 调整计划    
+        });
+      }
+    },
+    // 变更责任人
+    handleChangeZrr() {
+      this.cplistShow = !this.cplistShow;
+    },
+    exportLcb() {
+      this.cnkssj = !this.cnkssj ? "" : this.cnkssj;
+      this.cnjssj = !this.cnjssj ? "" : this.cnjssj;
+      this.sjkssj = !this.sjkssj ? "" : this.sjkssj;
+      this.sjjssj = !this.sjjssj ? "" : this.sjjssj;
+      window.open(
+        window.baseurl +
+          "milestone/exportMilestoneData.do?xmbh=" +
+          this.xmbh +
+          "&keyword=" +
+          this.keyword +
+          "&zt=" +
+          this.checkList.join(",") +
+          "&startCnjssj=" +
+          this.cnkssj +
+          "&endCnjssj=" +
+          this.cnjssj +
+          "&startSjjssj=" +
+          this.sjkssj +
+          "&endSjjssj=" +
+          this.sjjssj +
+          "&nrxmlb=" +
+          this.xmlbList.join(",")
+      );
+    },
+    // 调整计划
     //   adjustmentPlan(){
     //       if(this.multipleSelection.length == 0){
     //           this.$alert('请选择里程碑', '提示', {
     //              confirmButtonText: '确定',
     //              type:'warning',
-    //           }); 
+    //           });
     //         return;
     //       }
     //       this.planVisible = !this.planVisible
     //   },
-      handleSearchLcb(){  //查询里程碑
-          this.queryMilestoneData(1);
-      },
-      searchLcbContent(){  //支持回车
-         this.queryMilestoneData(1);
-      },
-      handleCurrentChange(data){   // 切换分页
-         this.queryMilestoneData(data);
-         this.currentPage = data
-      },
+    handleSearchLcb() {
+      //查询里程碑
+      this.queryMilestoneData(1);
+    },
+    searchLcbContent() {
+      //支持回车
+      this.queryMilestoneData(1);
+    },
+    handleCurrentChange(data) {
+      // 切换分页
+      this.queryMilestoneData(data);
+      this.currentPage = data;
+    },
 
-      handleCheckbox(val){    //选择里程碑状态
-        this.queryMilestoneData(1);
-      },
-      handleXMlb(val){   //查询项目类别
-         this.queryMilestoneData(1);
-      },
-      changeCnStartDate(){   //承诺开始时间
-        this.queryMilestoneData(1);
-      },
-      changeCnEndDate(){   //承诺结束时间
-        this.queryMilestoneData(1); 
-      },
-      changeSjStartDate(){ //实际开始时间
-        this.queryMilestoneData(1);
-      },
-      changeSjEndDate(){  //实际结束时间
-        this.queryMilestoneData(1);
-      },
-      //   全选
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-        this.lcbbhArr = [];
-        if(this.multipleSelection.length != 0){
-            this.multipleSelection.forEach((ele,i,arr)=>{
-                if(ele.lcbms.includes('整体验收')){
-                    this.ishownTZJH = false
-                }else{
-                    this.ishownTZJH = true 
-                }
-              this.lcbbhArr.push(ele.lcbbh);
-            })
-        }else{
-            this.ishownTZJH = true  
-        }
-      },
-      // 获取里程碑信息
-     queryMilestoneData(curPage){
-         queryMilestoneData({
-            curPage:curPage,
-            pageSize:this.pageSize,
-            xmbh:this.xmbh,
-            keyword:this.keyword,
-            zt:this.checkList.length == 0?"":this.checkList.join(','),
-            startCnjssj:!this.cnkssj?'':this.cnkssj,
-            endCnjssj:!this.cnjssj?'':this.cnjssj,
-            startSjjssj:!this.sjkssj?'':this.sjkssj,
-            endSjjssj:!this.sjjssj?'':this.sjjssj,
-            nrxmlb:this.xmlbList.length == 0?"":this.xmlbList.join(',')
-         }).then(({data})=>{
-            if(data.state == 'success'){
-                this.totalWgl = data.data.totalWgl
-                let  milestone = data.data.data.rows
-                 milestone.forEach((val,index,arr)=>{
-                    arr[index].wglv = returnFloat(val.wglv);
-                    arr[index].wglg = returnFloat(val.wglg);
-                   val.zt = val.zt == '1'?"计划中":val.zt == '2'?"处理中":val.zt == '3'?"已完成":val.zt == '4'?"停滞":val.zt == '5'?"关闭":val.zt == '6'?"取消":val.zt == '7'?"待定":"完成待确认"
-                });
-                this.tableData3 = milestone
-                this.total = data.data.data.records
-            }
-         })
-     }
+    handleCheckbox(val) {
+      //选择里程碑状态
+      this.queryMilestoneData(1);
     },
-    mounted(){
-        this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
-        if(this.groupTag.indexOf('JZGCRY') != -1){
-            this.ishow = true
-        }else{
-            this.ishow = false         
-        }
-        this.queryMilestoneData(1);
+    handleXMlb(val) {
+      //查询项目类别
+      this.queryMilestoneData(1);
     },
-    components:{pagination,commitMilestone,lcbjlDialog}
-}
+    changeCnStartDate() {
+      //承诺开始时间
+      this.queryMilestoneData(1);
+    },
+    changeCnEndDate() {
+      //承诺结束时间
+      this.queryMilestoneData(1);
+    },
+    changeSjStartDate() {
+      //实际开始时间
+      this.queryMilestoneData(1);
+    },
+    changeSjEndDate() {
+      //实际结束时间
+      this.queryMilestoneData(1);
+    },
+    //   全选
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      this.lcbbhArr = [];
+      if (this.multipleSelection.length != 0) {
+        this.multipleSelection.forEach((ele, i, arr) => {
+          if (ele.lcbms.includes("整体验收")) {
+            this.ishownTZJH = false;
+          } else {
+            this.ishownTZJH = true;
+          }
+          this.lcbbhArr.push(ele.lcbbh);
+        });
+      } else {
+        this.ishownTZJH = true;
+      }
+    },
+    // 获取里程碑信息
+    queryMilestoneData(curPage) {
+      queryMilestoneData({
+        curPage: curPage,
+        pageSize: this.pageSize,
+        xmbh: this.xmbh,
+        keyword: this.keyword,
+        zt: this.checkList.length == 0 ? "" : this.checkList.join(","),
+        startCnjssj: !this.cnkssj ? "" : this.cnkssj,
+        endCnjssj: !this.cnjssj ? "" : this.cnjssj,
+        startSjjssj: !this.sjkssj ? "" : this.sjkssj,
+        endSjjssj: !this.sjjssj ? "" : this.sjjssj,
+        nrxmlb: this.xmlbList.length == 0 ? "" : this.xmlbList.join(",")
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.totalWgl = data.data.totalWgl;
+          let milestone = data.data.data.rows;
+          milestone.forEach((val, index, arr) => {
+            arr[index].wglv = returnFloat(val.wglv);
+            arr[index].wglg = returnFloat(val.wglg);
+            val.zt =
+              val.zt == "1"
+                ? "计划中"
+                : val.zt == "2"
+                  ? "处理中"
+                  : val.zt == "3"
+                    ? "已完成"
+                    : val.zt == "4"
+                      ? "停滞"
+                      : val.zt == "5"
+                        ? "关闭"
+                        : val.zt == "6"
+                          ? "取消"
+                          : val.zt == "7" ? "待定" : "完成待确认";
+          });
+          this.tableData3 = milestone;
+          this.total = data.data.data.records;
+        }
+      });
+    }
+  },
+  mounted() {
+    this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+    if (this.groupTag.indexOf("JZGCRY") != -1) {
+      this.ishow = true;
+    } else {
+      this.ishow = false;
+    }
+
+    if (
+      this.groupTag.indexOf("JZGCRY") != -1 ||
+      this.groupTag.indexOf("QYZ") != -1 ||
+      this.groupTag.indexOf("ZDDZ") != -1 ||
+      (this.xmjl == sessionStorage.username)
+    ) {
+      this.zrrShow = true;
+    } else {
+      this.zrrShow = false;
+    }
+    this.queryMilestoneData(1);
+  },
+  components: { pagination, commitMilestone, lcbjlDialog, cpListDialog }
+};
 </script>
 <style scoped>
-.milestone-manage{
-    width: 90%;
-    margin:0 auto;
-    padding:8px 0 0 0;
+.milestone-manage {
+  width: 90%;
+  margin: 0 auto;
+  padding: 8px 0 0 0;
 }
-.filter{
-    margin-bottom: 15px;
+.filter {
+  margin-bottom: 15px;
 }
-.filter-title{
-    display: inline-block;
-    width: 100px;
-    text-align: right;
-    font-weight: 700;
-    margin-right:10px;
+.filter-title {
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+  font-weight: 700;
+  margin-right: 10px;
 }
-.milestone_tabel{
-    margin:10px 0;
-    border-radius:5px;
-    padding-top:3px;
-    background:#fff;
-    box-shadow:0 0 5px #ccc
+.milestone_tabel {
+  margin: 10px 0;
+  border-radius: 5px;
+  padding-top: 3px;
+  background: #fff;
+  box-shadow: 0 0 5px #ccc;
 }
-.name-wrapper .el-tag:hover{
+.name-wrapper .el-tag:hover {
   cursor: pointer;
 }
 </style>

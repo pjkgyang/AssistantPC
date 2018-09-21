@@ -260,8 +260,8 @@ modifyProductLeader(yhbh,yhxm,isJf){
           }
         });
       }
-        this.yfshown = true
-        this.$emit('changeCPzrr',this.changeObj)
+        this.yfshown = true;
+        this.$emit('changeCPzrr',this.changeObj);
     }
   })
 }

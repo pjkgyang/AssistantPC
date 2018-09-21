@@ -72,6 +72,11 @@ export default new Router({
           path: '/questionDetail',
           name: 'questionDetail',
           component: resolve => require(['@/components/BusinessPage/questionDetail.vue'], resolve),
+        },
+        {
+          path: '/businesspage/xxtsql',
+          name: 'BusinesspageXxtsql',
+          component: resolve => require(['@/views/BusinessPage/xxtsql.vue'], resolve),
         },{
           path: '/businesspage/report',
           name: 'Report',
@@ -151,19 +156,41 @@ export default new Router({
                 name: 'BusinessReportCbzxqktj',
                 component: resolve => require(['@/views/BusinessPage/report/report-cbzxqktj.vue'], resolve),
               },
-          ]
+
+              {
+                path: '/businesspage/report/qareport/cptsql',
+                name: 'BusinessReportCptsql',
+                component: resolve => require(['@/views/BusinessPage/report/cptsql-phb.vue'], resolve),
+              },
+              {
+                path: '/businesspage/report/qareport/qynltsql',
+                name: 'BusinessReportQynltsql',
+                component: resolve => require(['@/views/BusinessPage/report/qynltsql-phb.vue'], resolve),
+              },
+              {
+                path: '/businesspage/report/qareport/grnlqlts',
+                name: 'BusinessReportGrnlqlts',
+                component: resolve => require(['@/views/BusinessPage/report/grnlqlts-phb.vue'], resolve),
+              },
+              {
+                path: '/businesspage/report/qareport/xxtsql',
+                name: 'BusinessReportXxtsql',
+                component: resolve => require(['@/views/BusinessPage/report/xxtsql-pbh.vue'], resolve),
+              }
+              
+           ]
         },
         {
           path: '/businesspage/toplist',
           name: 'Phb',
           component: resolve => require(['@/views/BusinessPage/report.vue'], resolve),
           redirect:to => {
-            if(!!window.menuTop && window.menuTop.childNodes.length){
-               if(window.menuTop.childNodes[0].childNodes.length){
-                 return window.menuTop.childNodes[0].childNodes[0].url
-               }else{
-                return window.menuTop.childNodes[0].url
-               }
+            if(!!window.menu && window.menu.childNodes.length){
+              if(window.menu.childNodes[0].childNodes.length){
+                 return window.menu.childNodes[0].childNodes[0].url;
+              }else{
+               return window.menu.childNodes[0].url;
+              }
             }
           },
           children: [
@@ -191,9 +218,10 @@ export default new Router({
               path: '/businesspage/toplist/qareport/xjpm-gr',
               name: 'BusinessReportXjpfgr',
               component: resolve => require(['@/views/BusinessPage/report/report-xjpm-gr.vue'], resolve),
-            },
+            }
           ]
         },
+
         {
           path: '/businesspage/resolveSet',
           name: 'QuestionSet',
@@ -249,14 +277,12 @@ export default new Router({
         },
       ]
     },
-    // {
-    //   path: '/businesspage/ReportDetail',
-    //   name: 'MonthReportDetail',
-    //   component:monthReportDetail,
-    // },
     {
       path: '/report-list/:id.html',
       name: 'reportList',
+      meta:{
+        title:'问题列表'
+      },
       component: resolve => require(['@/views/BusinessPage/report/report-list.vue'], resolve),
     },
     {
@@ -264,16 +290,6 @@ export default new Router({
       name: 'qyxxyhDetail',
       component: resolve => require(['@/views/BusinessPage/report/qyxxyh/detail.vue'], resolve),
     },
-    // {
-    //   path: '/qyxxyhReport/user',
-    //   name: 'qyxxyhUser',
-    //   component: resolve => require(['@/views/BusinessPage/report/qyxxyh/schoolUser.vue'], resolve),
-    // },
-    // {
-    //   path: '/qyxxyhReport/project',
-    //   name: 'qyxxyhProject',
-    //   component: resolve => require(['@/views/BusinessPage/report/qyxxyh/project.vue'], resolve),
-    // },
     {
       path: '/qyreport-nnt',
       name: 'LogPannal1',
@@ -301,6 +317,14 @@ export default new Router({
             name: 'ItemDetail',
             component: resolve => require(['@/views/itemPage/item-detail.vue'], resolve),
       }]
+    },
+    {
+      path: '/xxtsql',
+      name: 'Xxtsql',
+      meta:{
+        title:'学校潜力提升'
+      },
+      component: resolve => require(['@/views/BusinessPage/report/xxtsqlPannel.vue'], resolve),
     },
   ]
 })

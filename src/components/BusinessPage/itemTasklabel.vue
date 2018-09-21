@@ -28,7 +28,7 @@
         <div class="task_label_bottom">
             <!-- <span data-lx="1"  :data-type="'changeDate&'+index" style="border-left:none"> 调整计划</span> -->
             <el-button  @click="handleTask($event,'jfqy',index)" :disabled="detailList.sfjfqr == 1">甲方确认</el-button>
-            <el-button  @click="handleTask($event,'commit',index)" v-if="detailList.zt != 5"> 提交里程碑</el-button>
+            <!-- <el-button  @click="handleTask($event,'commit',index)" v-if="detailList.zt != 5"> 提交里程碑</el-button> -->
             <el-button  @click="handleTask($event,'daily',index)"> 填写日报</el-button>
         </div>
         <div :class="{'task-priority':true,'task-priority-1':true}"></div>

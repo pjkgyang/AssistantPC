@@ -2,21 +2,21 @@
 <div>
     <div class="out-table">
           <el-table
-    :data="tableData.rows"
+    :data="!tableData.rows?tableData:tableData.rows"
     border
     class="report-ele-table"
     width="100%">
     <el-table-column v-for="(th,index) in tableHead" :key="index"  :label="th.zh"
      :width="th.en=='xmmc'||th.en=='xxmc'?260:120" show-overflow-tooltip>
          <template slot-scope="scope" >
-            <span  @click="handleRouter(th.en,scope.row)">{{scope.row[index]}}</span>
+            <span  @click="handleRouter(th.en,scope.row,index)">{{scope.row[index]}}</span>
             <!-- <a href="#">{{scope.row[index]}}</a> -->
       </template>
     </el-table-column>
 
   </el-table>
-         </div>
-         <div style="text-align:right;padding:10px 0">
+      </div>
+         <div style="text-align:right;padding:10px 0" v-if="pageShow">
             <pagination :currentPage="currentPage" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
     </div>
@@ -41,9 +41,11 @@ export default {
    },
   
    methods:{
-       handleRouter(index,row){
-           console.log(index)
+       handleRouter(param,row,index){
+           console.log(param)
            console.log(row)
+           console.log(index)
+
        },
         handleXxwt(data){
             console.log(data)
@@ -76,6 +78,10 @@ export default {
             type:Number,
             default:13   
         },
+        pageShow:{
+            type:Boolean,
+            default:true
+        }
    },
    components:{pagination}
 

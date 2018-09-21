@@ -15,6 +15,7 @@ Vue.prototype.globals = global
 import './utils/icon/iconfont.css'
 import { get , post} from './utils/http'
 import API from './utils/api'
+import Util from './utils/title';
 Vue.prototype.API = API
 Vue.prototype.$get = get;
 Vue.prototype.$post = post;
@@ -34,6 +35,15 @@ import 'summernote/dist/lang/summernote-zh-CN.js'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+
+router.beforeEach((to, from, next) => {
+  
+  if(JSON.stringify(to.meta) != '{}'){
+    console.log(to.meta.title)
+    Util.title(to.meta.title);
+  }
+  next();
+});
 
 /* eslint-disable no-new */
 new Vue({

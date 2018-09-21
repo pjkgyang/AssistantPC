@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="pannel3-right" col=1 flex-column>
-        <card col=1  style="overflow-y:auto">
+        <card col=1  style="overflow-y:hidden">
           <div class="card-head" slot="head">
             <h3 class="pull-left">问题</h3>
             <span class="pull-right card-head__more" @click="checkAllQuestion">查看更多...</span>
@@ -89,7 +89,7 @@
               <h5><a href="javaScript:void(0)"  @click="handleOpenQuestionDetail(item.wid)">{{item.bt}}</a></h5>
               <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
               <span class="time">{{item.fbrq}}</span><br>
-              <span>&nbsp;<span class="time"> 承诺结束日期 : {{item.cnjsrq}}</span></span>
+              <span>&nbsp;<span class="time"> 承诺结束日期 : {{!item.cnjsrq?'无':item.cnjsrq}}</span></span>
             </div>
             <div v-if="problems.length == 0||problems==null" style="text-align:center;padding:10px 0">
                 <img src="static/img/none.png" alt="">
@@ -97,7 +97,7 @@
             </div>
           </div>
         </card>
-        <card col=1 style="overflow-y:auto">
+        <card col=1 style="overflow-y:hidden">
           <div class="card-head" slot="head">
             <h3 class="pull-left">投诉</h3>
             <span class="pull-right card-head__more" @click="checkAllComplaint">查看更多...</span>

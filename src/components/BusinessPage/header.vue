@@ -163,14 +163,6 @@ export default {
               this.$router.push({ path:data.data[0].url });
             }
           }
-          this.menuList.forEach((ele, i, arr) => {
-            if (ele.privid == "91") {
-              window.menu = arr[i];
-            }
-            if(ele.privid == '123'){
-              window.menuTop = arr[i];
-            }
-          });
           sessionStorage.setItem('menuList',JSON.stringify(this.menuList));
         } else {
           this.$router.push({ path: "/" });
@@ -204,6 +196,12 @@ export default {
   },
   methods: {
     handleSelect(index, indexPath) {
+      window.menu = [];
+      this.menuList.forEach((ele,i,arr)=>{
+        if(ele.url == index){
+           window.menu = ele;
+        }
+      })
     },
     handleNotice() {
       this.$router.push({ path: "/businesspage/systemMsg" });

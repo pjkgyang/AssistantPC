@@ -895,11 +895,9 @@ export default {
       fd.append("fileUpload", file);
       fd.append("xmbh", this.xmbh);
 
-      axios
-        .post(window.baseurl + "attachment/uploadAttach.do", fd, {
+        axios.post(window.baseurl + "attachment/uploadAttach.do", fd, {
           headers: { "Content-Type": "multipart/form-data" }
-        })
-        .then(res => {
+        }).then(res => {
           if (res.data.state == "success") {
             this.fileData.push(res.data.data); //文件 list Arr
           } else {

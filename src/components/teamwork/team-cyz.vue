@@ -40,6 +40,7 @@
              <td>{{!itemYfzrr.userName?'':itemYfzrr.unitType == 0?'金智':itemYfzrr.unitType == 1?'学校成员':'合作伙伴'}}</td>
              <td>{{!itemYfzrr.dept?'':itemYfzrr.dept}}</td>
              <td>
+                 <el-button v-if="userTag || (itemYfzrr.userName == username)" plain size="mini"  @click="changeUser($event,itemYfzrr)">修改</el-button>
                  <el-button  plain size="mini" :data-wid="itemYfzrr.userId" @click="editUser($event,itemYfzrr)">编辑</el-button>
              </td>
            </tr>
@@ -83,7 +84,8 @@
                     <span :title="user.unit">{{user.unit}}</span>
                     <span>
                         <el-button :disabled="user.state == 'ytj'" size="mini"  v-if="isAddCyz"  @click="addItemCyz(user,index)">{{user.state == 'ytj'?'已添加':'添加'}}</el-button>
-                        <el-button size="mini" :data-info="user.nickName+'&'+user.uid"  v-else  @click="addItemJfzrr">修改为(甲方责任人)</el-button>
+                        <el-button size="mini" v-if="!isAddCyz && isJF" @click="addItemJfzrr(user)">修改为(甲方责任人)</el-button>
+                        <el-button size="mini" v-if="!isAddCyz && !isJF" @click="addItemYfzrr(user)">修改为(乙方责任人)</el-button>
                     </span>
                 </li>
                 <div v-if="UserList.length == 0">
@@ -199,13 +201,14 @@ import {
   queryDwUsers,
   clearProjectJfFzr,
   getRyCpx,
-  saveRy
+  saveRy,
+  modifyProjectManager
 } from "@/api/personal.js";
 import pagination from "@/components/BusinessPage/pagination.vue";
 import { getResponsibleTaskList } from "@/api/common.js";
 import { getUnits, getDepts } from "@/api/system.js";
 import { EventBus } from "../../utils/util.js";
-import { getMenu,getSession} from '@/utils/util.js'
+import { getMenu, getSession } from "@/utils/util.js";
 export default {
   data() {
     return {
@@ -220,7 +223,7 @@ export default {
         }
       ],
       dialogVisible: false,
-      editdialogVisible:false,
+      editdialogVisible: false,
       isAddCyz: true,
       itemCyz: [],
       itemJfzrr: {},
@@ -238,26 +241,29 @@ export default {
         yhdw: "",
         dw: "",
         bm: "",
-        sex:'',
-        yhlb:'1'
+        sex: "",
+        yhlb: "1"
       },
-      cpxFzyw:[],
+      cpxFzyw: [],
       cpxData: [],
-      sexList:[],
+      sexList: [],
       keyword: "",
       BtnDisabled: "",
       rylb: "",
       dwList: [],
-      bmList: [{mc:'1'},{mc:'2'},{mc:'3'},{mc:'4'}],
-      selectVisible:false,
-      fzywList:[],
-      fzywData:[],
-      isEdit:false,
-      isAllCpx:true,
-      userInfo:{},
-      itemUser:[],
-      yhlb:'',
-      Maplist:[]
+      bmList: [{ mc: "1" }, { mc: "2" }, { mc: "3" }, { mc: "4" }],
+      selectVisible: false,
+      fzywList: [],
+      fzywData: [],
+      isEdit: false,
+      isAllCpx: true,
+      userInfo: {},
+      itemUser: [],
+      yhlb: "",
+      Maplist: [],
+      isJF: true,
+      userTag:false,
+      username:''
     };
   },
   props: {
@@ -273,120 +279,143 @@ export default {
       type: String,
       default: ""
     },
-    tabName:{
-        type:String,
-        default:''
-      },
+    tabName: {
+      type: String,
+      default: ""
+    }
   },
   methods: {
-    handleBMfocus(){
-        this.selectVisible = true
+    handleBMfocus() {
+      this.selectVisible = true;
     },
-    handleBMblur(){
-        this.selectVisible = false
+    handleBMblur() {
+      this.selectVisible = false;
     },
-    chooseBm(e){        // 选择部门
-        let bm = e.target.getAttribute('data-bm');
-        this.form.bm = bm
+    chooseBm(e) {
+      // 选择部门
+      let bm = e.target.getAttribute("data-bm");
+      this.form.bm = bm;
     },
-    chooseRylb(val) {  // 选择人员类别
+    chooseRylb(val) {
+      // 选择人员类别
       if (this.isAddCyz) {
         this.queryUser(1, false);
       } else {
         this.queryUser(1, true);
       }
     },
-    editUser(e,data){  //编辑参与者
-        this.cpxData = [];
-        this.userInfo = data
-        if(!getSession('cp')){
-            getMenu('cp',this.cpxData,true)  //获取产品
-        }else{
-            this.cpxData = getSession('cp');
-        } 
-        if(data.unitType == 0){
-            this.getRyCpx(data.userId,this.xmbh);
-        }else{
-            this.getRyCpx(data.userId,this.xmbh);  
-            this.yhlb = data.yhlb
-        }
-        this.editdialogVisible = !this.editdialogVisible
+    changeUser(e, data) {
+      //修改乙方责任人
+      this.isAddCyz = false;
+      this.isJF = false;
+      this.queryUser(1, true);
+      this.dialogVisible = !this.dialogVisible;
     },
-    handleEditCommit(){  //保存 编辑 业务线
-        if(!this.isAllCpx && this.fzywList.length == 0){
-           this.$alert("请选择负责业务", "提示", {confirmButtonText: "确定",type: "warning"});
-        }else{
-            saveRy({
-              yhbh:this.userInfo.userId,
-              yhxm:this.userInfo.userName,
-              xmbh:this.xmbh,
-              cpxRy:this.isAllCpx?'':this.fzywList.join(String.fromCharCode(1)),
-              yhlb:this.userInfo.unitType==1?this.yhlb:'',
-              isAllCpx:this.isAllCpx
-            }).then(({data})=>{
-                if(data.state == 'success'){
-                  this.editdialogVisible = false
-                  this.queryProjectParticipantMap(); 
-                  this.$alert("保存成功", "提示", {confirmButtonText: "确定",type: "success"}); 
-                }
-            })
-        }   
+    editUser(e, data) {
+      //编辑参与者
+      this.cpxData = [];
+      this.userInfo = data;
+      if (!getSession("cp")) {
+        getMenu("cp", this.cpxData, true); //获取产品
+      } else {
+        this.cpxData = getSession("cp");
+      }
+      if (data.unitType == 0) {
+        this.getRyCpx(data.userId, this.xmbh);
+      } else {
+        this.getRyCpx(data.userId, this.xmbh);
+        this.yhlb = data.yhlb;
+      }
+      this.editdialogVisible = !this.editdialogVisible;
     },
-    delectUser(e, param) {  // 删除参与者
-        this.$confirm("是否删除此参与者?", "提示", {
+    handleEditCommit() {
+      //保存 编辑 业务线
+      if (!this.isAllCpx && this.fzywList.length == 0) {
+        this.$alert("请选择负责业务", "提示", {
           confirmButtonText: "确定",
-          cancelButtonText: "取消",
           type: "warning"
-        })
-          .then(() => {
-            deleteProjectParticipant({
-              xmbh: this.xmbh,
-              yhbh: param
-            }).then(({ data }) => {
-              if (data.state == "success") {
-                this.$alert("删除成功", "提示", {
-                  confirmButtonText: "确定",
-                  type: "success"
-                });
-                this.queryProjectParticipantMap();
-                this.$emit("addItemuser", "");
-              }
+        });
+      } else {
+        saveRy({
+          yhbh: this.userInfo.userId,
+          yhxm: this.userInfo.userName,
+          xmbh: this.xmbh,
+          cpxRy: this.isAllCpx
+            ? ""
+            : this.fzywList.join(String.fromCharCode(1)),
+          yhlb: this.userInfo.unitType == 1 ? this.yhlb : "",
+          isAllCpx: this.isAllCpx
+        }).then(({ data }) => {
+          if (data.state == "success") {
+            this.editdialogVisible = false;
+            this.queryProjectParticipantMap();
+            this.$alert("保存成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success"
             });
-          })
-          .catch(() => {});
+          }
+        });
+      }
+    },
+    delectUser(e, param) {
+      // 删除参与者
+      this.$confirm("是否删除此参与者?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          deleteProjectParticipant({
+            xmbh: this.xmbh,
+            yhbh: param
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.$alert("删除成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success"
+              });
+              this.queryProjectParticipantMap();
+              this.$emit("addItemuser", "");
+            }
+          });
+        })
+        .catch(() => {});
     },
     addStaff(e) {
       e.currentTarget.setAttribute("disabled", "disabled");
     },
-    changeJfZrr(e) {      //添加甲方
+    changeJfZrr(e) {
+      //添加甲方
       this.isAddCyz = false;
+      this.isJF = true;
       this.queryUser(1, true);
       this.dialogVisible = !this.dialogVisible;
     },
-    editJfZrr(){},
+    editJfZrr() {},
 
-    deleteJfZrr(){ // 删除甲方
-    this.$confirm('是否删除甲方责任人?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+    deleteJfZrr() {
+      // 删除甲方
+      this.$confirm("是否删除甲方责任人?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
           clearProjectJfFzr({
-              xmbh:this.xmbh
-            }).then(({data})=>{
-              if(data.state == 'success'){
-                this.$alert('删除成功', '提示', {
-                confirmButtonText: '确定',
-                type:"success",
+            xmbh: this.xmbh
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.$alert("删除成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success",
                 callback: action => {
                   this.queryProjectParticipantMap();
                 }
               });
-              }
-            })
-        }).catch(() => {
-        
-        });
+            }
+          });
+        })
+        .catch(() => {});
     },
     queryUser(curPage, needShowCyz) {
       queryDwUsers({
@@ -399,17 +428,20 @@ export default {
         keyword: this.keyword || ""
       }).then(({ data }) => {
         if (data.state == "success") {
-          if(!data.data || !data.data.rows.length){
-               this.total  = 0
-               this.UserList = []
-          }else{
-              this.total = data.data.records;
-              this.UserList = data.data.rows;
-              this.UserList.forEach((ele, i, arr) => {
-                if (ele.userName.slice(0, 1) == 1) {
-                  ele.userName = `${ele.userName.slice(0,3)}****${ele.userName.slice(-4)}`;
-                }
-              });
+          if (!data.data || !data.data.rows.length) {
+            this.total = 0;
+            this.UserList = [];
+          } else {
+            this.total = data.data.records;
+            this.UserList = data.data.rows;
+            this.UserList.forEach((ele, i, arr) => {
+              if (ele.userName.slice(0, 1) == 1) {
+                ele.userName = `${ele.userName.slice(
+                  0,
+                  3
+                )}****${ele.userName.slice(-4)}`;
+              }
+            });
           }
         }
       });
@@ -434,7 +466,7 @@ export default {
       addProjectParticipant({
         xmbh: this.xmbh,
         yhxm: data.nickName,
-        yhbh: data.uid,
+        yhbh: data.uid
       }).then(({ data }) => {
         if (data.state == "success") {
           this.$emit("addItemuser", "");
@@ -461,44 +493,49 @@ export default {
       this.innerVisible = !this.innerVisible;
       this.cpxData = [];
       this.isAllCpx = true;
-      if(getSession('cp') == null || getSession('GenderType') == null){
-           getMenu('cp',this.cpxData,true)  //获取产品
-           getMenu('GenderType',this.sexList)  //获取产品线
-     }else{
-          this.cpxData = getSession('cp');
-          this.sexList = getSession('GenderType');
-      } 
+      if (getSession("cp") == null || getSession("GenderType") == null) {
+        getMenu("cp", this.cpxData, true); //获取产品
+        getMenu("GenderType", this.sexList); //获取产品线
+      } else {
+        this.cpxData = getSession("cp");
+        this.sexList = getSession("GenderType");
+      }
       this.getUnits();
       this.getDepts();
     },
-    handleCommit() {        
+    handleCommit() {
       if (!this.form.name) {
         this.$alert("请输入姓名", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      }else if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.form.phone.trim())) { //^((0\d{2,3}-\d{7,8})|(1[3456789]\d{9}))$
+      } else if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.form.phone.trim())) {
+        //^((0\d{2,3}-\d{7,8})|(1[3456789]\d{9}))$
         this.$alert("请输入手机号码或号码有误", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      } else if (!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(this.form.email.trim())) {
+      } else if (
+        !/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(
+          this.form.email.trim()
+        )
+      ) {
         this.$alert("请输入正确邮箱地址或地址有误", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      }else if (!this.isAllCpx && this.cpxFzyw.length == 0) {
+      } else if (!this.isAllCpx && this.cpxFzyw.length == 0) {
         this.$alert("请选择负责业务", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      }else if(this.form.rylx=='1013'&&this.form.bm==""){    
-         this.$alert("请填写部门", "提示", {
+      } else if (this.form.rylx == "1013" && this.form.bm == "") {
+        this.$alert("请填写部门", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      }else if(this.form.rylx=='1004'&&this.form.dw==""){
-         this.$alert("请选择单位", "提示", {
+      } else if (this.form.rylx == "1004" && this.form.dw == "") {
+        this.$alert("请选择单位", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
@@ -509,14 +546,14 @@ export default {
           telNum: this.form.phone,
           email: this.form.email,
           pwd: this.form.pwd,
-          cpxdata:this.isAllCpx?'':this.cpxFzyw.join("|"),
+          cpxdata: this.isAllCpx ? "" : this.cpxFzyw.join("|"),
           rylx: this.form.rylx,
-          unitnum:this.form.rylx=='1013'?'':this.form.dw.split('&')[0],
-          unit:this.form.rylx=='1013'?'':this.form.dw.split('&')[1],
-          dept:this.form.rylx=='1004'?'':this.form.bm,
-          sex:this.form.sex==''?'0':this.form.sex,
-          yhlb:this.form.yhlb,
-          isAllCpx:this.isAllCpx
+          unitnum: this.form.rylx == "1013" ? "" : this.form.dw.split("&")[0],
+          unit: this.form.rylx == "1013" ? "" : this.form.dw.split("&")[1],
+          dept: this.form.rylx == "1004" ? "" : this.form.bm,
+          sex: this.form.sex == "" ? "0" : this.form.sex,
+          yhlb: this.form.yhlb,
+          isAllCpx: this.isAllCpx
         }).then(({ data }) => {
           if (data.state == "success") {
             this.$alert("添加成功", "提示", {
@@ -543,15 +580,11 @@ export default {
       }
     },
     //   修改甲方责任人
-    addItemJfzrr(e) {
-      let user = e.currentTarget.getAttribute("data-info");
-      let yhbh = user.split("&")[1];
-      let yhxm = user.split("&")[0];
-
+    addItemJfzrr(param) {
       modifyProjectJfFzr({
         xmbh: this.xmbh,
-        yhxm: yhxm,
-        yhbh: yhbh
+        yhxm: param.nickName,
+        yhbh: param.uid
       }).then(({ data }) => {
         if (data.state == "success") {
           this.$alert("修改成功", "提示", {
@@ -560,7 +593,27 @@ export default {
             callback: action => {
               this.$emit("addItemuser", "");
               this.queryProjectParticipantMap();
-             }
+            }
+          });
+          this.dialogVisible = !this.dialogVisible;
+        }
+      });
+    },
+    //   修改乙方责任人
+    addItemYfzrr(param) {
+      modifyProjectManager({
+        xmbh: this.xmbh,
+        yhxm: param.nickName,
+        yhbh: param.uid
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.$alert("修改成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: action => {
+              this.$emit("addItemuser", "");
+              this.queryProjectParticipantMap();
+            }
           });
           this.dialogVisible = !this.dialogVisible;
         }
@@ -572,47 +625,49 @@ export default {
         xmbh: this.xmbh
       }).then(({ data }) => {
         if (data.state == "success") {
-          Object.values(data.data).forEach((ele,i,arr)=>{
-           if(ele){
-             if(ele.length){
-                  ele.forEach((element,i,arr)=>{
-                    element.roleName = element.roleName.split(',')
-                 })
-             }else if(ele.userName){
-                ele.roleName = ele.roleName.split(',')
-             }
-           }
-          })
-          if(!data.data.jf){
-               this.itemJfzrr = {};
-          }else{
-              this.itemJfzrr = data.data.jf;
+          Object.values(data.data).forEach((ele, i, arr) => {
+            if (ele) {
+              if (ele.length) {
+                ele.forEach((element, i, arr) => {
+                  element.roleName = element.roleName.split(",");
+                });
+              } else if (ele.userName) {
+                ele.roleName = ele.roleName.split(",");
+              }
+            }
+          });
+          if (!data.data.jf) {
+            this.itemJfzrr = {};
+          } else {
+            this.itemJfzrr = data.data.jf;
           }
-          if(!data.data.yf){
-               this.itemYfzrr = {};
-          }else{
-              this.itemYfzrr = data.data.yf;
+          if (!data.data.yf) {
+            this.itemYfzrr = {};
+          } else {
+            this.itemYfzrr = data.data.yf;
           }
-          if(!data.data.qt || !data.data.qt.length){
-              this.itemCyz = [];
-          }else{
-              this.itemCyz = data.data.qt;
+          if (!data.data.qt || !data.data.qt.length) {
+            this.itemCyz = [];
+          } else {
+            this.itemCyz = data.data.qt;
           }
         }
       });
     },
 
-    getUnits() {  //获取单位
+    getUnits() {
+      //获取单位
       getUnits({
         dwlx: 2,
         keyword: ""
       }).then(({ data }) => {
         if (data.state == "success") {
-            this.dwList = data.data;
+          this.dwList = data.data;
         }
       });
     },
-    getDepts() {  //获取部门
+    getDepts() {
+      //获取部门
       getDepts({
         dwbh: "",
         dwmc: this.dwmc
@@ -620,42 +675,51 @@ export default {
         if (data.state == "success") {
           if (data.data != null) {
             this.bmList = data.data;
-          }
-           else {
+          } else {
             this.bmList = [];
           }
         }
       });
     },
-    getRyCpx(yhbh,xmbh){ // 获取产品线
-      this.fzywList  = [];  
-      getRyCpx({yhbh:yhbh,xmbh:xmbh}).then(({data})=>{
-          if(data.state == 'success'){
-               this.isAllCpx = data.data.isAllCpx
-                  if(data.data.isAllCpx){
-                    this.fzywList = [];
-                  }else{
-                    if(data.data.cpx && data.data.cpx.length !=0){
-                        data.data.cpx.forEach((ele,i,arr)=>{
-                        this.fzywList.push(ele.cpxbh + String.fromCharCode(2) + ele.cpxmc);
-                     })
-                    }else{
-                        this.fzywList = [];
-                    }
-                }
+    getRyCpx(yhbh, xmbh) {
+      // 获取产品线
+      this.fzywList = [];
+      getRyCpx({ yhbh: yhbh, xmbh: xmbh }).then(({ data }) => {
+        if (data.state == "success") {
+          this.isAllCpx = data.data.isAllCpx;
+          if (data.data.isAllCpx) {
+            this.fzywList = [];
+          } else {
+            if (data.data.cpx && data.data.cpx.length != 0) {
+              data.data.cpx.forEach((ele, i, arr) => {
+                this.fzywList.push(
+                  ele.cpxbh + String.fromCharCode(2) + ele.cpxmc
+                );
+              });
+            } else {
+              this.fzywList = [];
+            }
           }
-      })
+        }
+      });
     }
   },
-  watch:{
-      tabName(n,o){
-        if(n=='first'){
-            this.queryProjectParticipantMap(); 
-        }
+  watch: {
+    tabName(n, o) {
+      if (n == "first") {
+        this.queryProjectParticipantMap();
       }
+    }
   },
   mounted() {
-    this.queryProjectParticipantMap();
+      let GroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+      if(GroupTag.indexOf('JYGL') != -1||GroupTag.indexOf('QYZ') != -1||GroupTag.indexOf('ZDDZ') != -1){
+        this.userTag = true;
+      }else{
+        this.userTag = false;
+      }
+      this.username = sessionStorage.username;
+      this.queryProjectParticipantMap();
   },
   components: { pagination }
 };
@@ -664,7 +728,7 @@ export default {
 .item-addUser {
   margin: 0 20px;
 }
-.item-addUser  span.user-lx {
+.item-addUser span.user-lx {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -673,24 +737,25 @@ export default {
   border-radius: 50%;
   font-size: 12px;
 }
-.item-addUser .item-user-table{
-  width:100%;
+.item-addUser .item-user-table {
+  width: 100%;
   margin: 0 auto;
-  border: 1px solid #EBEEF5;
+  border: 1px solid #ebeef5;
 }
-.item-addUser .item-user-table button{
+.item-addUser .item-user-table button {
   padding: 5px 8px;
 }
-.item-addUser .item-user-table tr:hover{
-   background: #e2e9ee;
+.item-addUser .item-user-table tr:hover {
+  background: #e2e9ee;
 }
-.item-addUser .item-user-table th{
-  background: #F5F7FA;
+.item-addUser .item-user-table th {
+  background: #f5f7fa;
 }
-.item-addUser .item-user-table th,.item-addUser .item-user-table td{
-  text-align:center !important;
-  border-bottom: 1px solid #EBEEF5;
-  border-right: 1px solid #EBEEF5;
+.item-addUser .item-user-table th,
+.item-addUser .item-user-table td {
+  text-align: center !important;
+  border-bottom: 1px solid #ebeef5;
+  border-right: 1px solid #ebeef5;
   height: 35px !important;
 }
 
@@ -783,31 +848,32 @@ export default {
   width: 77%;
 }
 
- .component-fade-enter-active ,.component-fade-leave-active {
-   transition: all 0.3s ease;
+.component-fade-enter-active,
+.component-fade-leave-active {
+  transition: all 0.3s ease;
 }
 .component-fade-enter, .component-fade-leave-to
 /* .component-fade-leave-active for below version 2.1.8 */ {
   opacity: 0;
 }
-.bm-select{
+.bm-select {
   width: 200px;
   max-height: 260px;
-  border:1px solid #dcdfe6;
+  border: 1px solid #dcdfe6;
   background: #fff;
   overflow-y: auto;
   border-radius: 5px;
   position: absolute;
   top: 33px;
   color: #606266;
-  z-index:777;
+  z-index: 777;
 }
-.bm-select li,.bm-select div{
-  padding:3px 10px;
+.bm-select li,
+.bm-select div {
+  padding: 3px 10px;
 }
-.bm-select li:hover{
+.bm-select li:hover {
   cursor: pointer;
   background: #f5f7fa;
 }
-
 </style>
