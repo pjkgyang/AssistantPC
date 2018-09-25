@@ -14,7 +14,7 @@
                 
             </el-menu>
             <!-- item.url.split('qareport/')[1] -->
-        <!-- <div v-if="this.navMode == 'horizontal'" v-show="navBgShow" class="full-screen-navBg" @click.self="closeAll"></div> -->
+        <!-- <div v-if="this.navMode == 'horizontal'" v-s.how="navBgShow" class="full-screen-navBg" @click.self="closeAll"></div> -->
         </div>
           <div slot="content" class="layout-content">
             <keep-alive>

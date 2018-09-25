@@ -41,7 +41,8 @@
                   </el-select>
                 </span>
             </div>
-           <div v-if="isZd && !isBlocked && isJzyh != 1" class="pull-right">
+            <!-- 2018-9-25 修改 !isBlocked &&-->
+           <div v-if="isZd &&  isJzyh != 1" class="pull-right">
                 <el-button size="small" type="danger" @click="handleClickAddzb">制订项目周报</el-button>
            </div>
          </section>

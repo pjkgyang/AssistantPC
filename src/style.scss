@@ -211,3 +211,38 @@ img{
 .tasklog-ydzt-wy:hover{
   cursor: pointer;
 }
+
+.query-condition > div {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.query-title {
+  display: inline-block;
+  font-size: 14px;
+  width: 100px;
+  white-space: nowrap;
+  text-align: right !important;
+  margin-right: 10px !important;
+  padding: 3px 0 !important;
+  font-weight: 700;
+}
+.query-list {
+  width: 95%;
+}
+.query-list span:hover {
+  cursor: pointer;
+}
+.query-list span {
+  display: inline-block;
+  padding: 0px 5px;
+  color: #637d8a;
+  border-radius: 3px;
+  margin: 5px 10px 0 0;
+  font-size: 14px;
+}
+.bg-active {
+  background: #1997d7;
+  color: #fff !important;
+}

@@ -326,5 +326,13 @@ export default new Router({
       },
       component: resolve => require(['@/views/BusinessPage/report/xxtsqlPannel.vue'], resolve),
     },
+    {
+      path: '/zdsfwDetail',
+      name: 'ZdsfwDetail',
+      meta:{
+        title:'服务计划详情'
+      },
+      component: resolve => require(['@/views/BusinessPage/zdsfwDetail.vue'], resolve),
+    }
   ]
 })

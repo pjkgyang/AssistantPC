@@ -39,7 +39,6 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   
   if(JSON.stringify(to.meta) != '{}'){
-    console.log(to.meta.title)
     Util.title(to.meta.title);
   }
   next();

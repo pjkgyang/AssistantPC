@@ -24,7 +24,8 @@
                   </el-select>
                 </span>
             </div>
-           <div v-if="otherShow && !isBlocked && groupTag.indexOf('QYZ') != -1">
+            <!-- 2018-9-25 修改 !isBlocked &&-->
+           <div v-if="otherShow &&  groupTag.indexOf('QYZ') != -1">
                 <el-button size="small" type="danger" @click="handleClickYdjh">制订月度计划</el-button>
            </div>
          </section>

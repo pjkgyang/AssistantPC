@@ -2,7 +2,8 @@
  <div>
    <layout :title="''" :shown='true'>
         <!-- v-if="dayNum > 1 && dayNum < 4"  -->
-       <div slot="btn" v-if="isAllowSave && groupTag.indexOf('JYGL') == -1">
+        <!-- v-if="isAllowSave &&  -->
+       <div slot="btn"  v-if="groupTag.indexOf('JYGL') == -1">
             <el-button  type="danger" size="mini" @click="handleFormulate">保存</el-button>
        </div>
         <header slot="header" v-if="groupTag.indexOf('JYGL') != -1"> 

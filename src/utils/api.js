@@ -30,5 +30,7 @@ export default {
     getQyzd:window.baseurl+'qyzd/getQyzd.do',  //获取区域战队
 
  
+    // fujian
+    uploadAttach:window.baseurl+'attachment/uploadAttach.do' 
      
 }

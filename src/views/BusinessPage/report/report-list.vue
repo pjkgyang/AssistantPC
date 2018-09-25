@@ -107,7 +107,7 @@ export default {
        },
 
        handleQuestionDetail(params){    // 跳转详情
-            let routeData = this.$router.resolve({
+         let routeData = this.$router.resolve({
             name: "questionDetail",
             query: { 
                 wid:params.wid

@@ -196,11 +196,11 @@ export default {
   },
   methods: {
     handleSelect(index, indexPath) {
-      window.menu = [];
+      window.menu = null;
       this.menuList.forEach((ele,i,arr)=>{
         if(ele.url == index){
            window.menu = ele;
-        }
+         }
       })
     },
     handleNotice() {

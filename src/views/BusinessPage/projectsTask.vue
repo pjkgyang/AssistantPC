@@ -279,6 +279,10 @@
     <div v-if="tabsLabel == 'teamwork'">
        <teamWork :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :dwmc="xmkbInfo.dwmc"></teamWork>
     </div>
+    <!-- 主动式服务 -->
+    <div v-if="tabsLabel == 'zdsfw'">
+       <zdsfw :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" ></zdsfw>
+    </div>
   </div>
 
 
@@ -321,6 +325,7 @@ import  question from '@/components/BusinessPage/question.vue'
 import  complain from '@/components/BusinessPage/complain.vue'
 import  overview from '@/components/BusinessPage/overview.vue'
 import  teamWork from '@/components/BusinessPage/teamWork.vue'
+import  zdsfw from '@/components/BusinessPage/zdsfw.vue'
 import { getProjectCatalog } from '@/api/xmfz.js'
 import { getMilestoneCatalog  } from '@/api/milestone.js'
 import { getTasksByCatalog ,addOrUpdateTask ,getTasks,getTaskDto ,getTaskLogs ,deleteTask ,changeTaskStatus,confirmMilestone} from '@/api/task.js'
@@ -591,18 +596,15 @@ export default {
           if(this.filesArr[0].name == file.name)  return;
         }
         this.filesArr.push(file)
-
         let fd = new FormData();
         fd.append('fileUpload',file);
         fd.append('xmbh',this.xmbh)
-
 
         axios.post(window.baseurl+'attachment/uploadAttach.do',fd,{
           headers:{'Content-Type':'multipart/form-data'} 
         }).then((res)=>{
            this.fileData.push(res.data.data)
         })
-            
          return true
       },
       handleChange(file, fileList){
@@ -1388,7 +1390,8 @@ export default {
     question,
     complain,
     overview,
-    teamWork
+    teamWork,
+    zdsfw
     }
 }
 </script>

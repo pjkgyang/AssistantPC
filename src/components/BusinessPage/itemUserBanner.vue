@@ -21,7 +21,7 @@
                     <el-tab-pane label="里程碑" name="milestone" v-if="isJZuser != 1"></el-tab-pane> 
                     <el-tab-pane label="模板" name="template" v-if="groupTag.indexOf('JZGCRY') != -1"></el-tab-pane>
                     <el-tab-pane label="团队" name="teamwork" v-if="isJZuser != 1"></el-tab-pane>
-                    
+                    <el-tab-pane label="主动式服务" name="zdsfw"></el-tab-pane>
                 </el-tabs>
         </div>
         
