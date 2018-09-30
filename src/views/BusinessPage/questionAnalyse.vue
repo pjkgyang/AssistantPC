@@ -15,6 +15,20 @@
               </p>
            </div>
            <div>
+                <p class="query-title">问题分类:</p>
+                <p class="query-list"  @click="handleZXR">
+                    <span data-type=""  :class="{'bg-active':wtfl == ''}">全部</span>
+                    <span v-for="(zxr,index) in zzrList" :data-type="zxr.label" :key="index" :class="{'bg-active':wtfl == zxr.label}">{{zxr.mc}}</span>
+                 </p>
+           </div>
+           <div>
+                <p class="query-title">标签来源:</p>
+                <p class="query-list"  @click="handleBQLY">
+                    <span data-type=""  :class="{'bg-active':bqly == ''}">全部</span>
+                    <span v-for="(bqlyl,index) in bqlyList" :data-type="bqlyl.label" :key="index" :class="{'bg-active':bqly == bqlyl.label}">{{bqlyl.mc}}</span>
+                 </p>
+           </div>
+           <div>
               <p class="query-title">查询状态:</p>
               <p class="query-list" @click="handleCXZT">
                   <span data-type=""   :class="{'bg-active':cxzt == ''}">全部</span>
@@ -75,9 +89,9 @@
          </div>
         <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
         <questionCard :questionList="questionList" :isShow="false" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"
-        @handleQuestionDetail="handleQuestionDetail"></questionCard>
+        @handleQuestionDetail="handleQuestionDetail" :wtbqShow="true"></questionCard>
         <div style="margin-top:10px;text-align:right" v-if="total > 10">
-           <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+           <pagination :currentPage="CurrentPage"  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
       </div>
 
@@ -122,6 +136,19 @@ export default {
           mc: "合作伙伴"
         }
       ],
+       zzrList: [
+        {label: "1", mc: "待我解决问题"},
+        {label: "0",mc: "我的提问"},
+        {label: "3", mc: "我受理过的问题"},
+        {label: "2", mc: "我相关的问题"}
+      ],
+      bqlyList:[
+        {label: "1",mc: "我的标签"},
+        {label: "2",mc: "其他人的标签"},
+        {label: "3",mc: "无标签"},
+      ],
+      bqly:"",
+      wtfl:'',
       cxzt: "0",
       sqgb:"",
       cpline: [],
@@ -173,7 +200,8 @@ export default {
       handleExport(){
           this.keyword = !this.keyword?'':this.keyword
           window.open(window.baseurl+'question/exportQuestionReport.do?&cp='+this.cpbg+'&cpx='+this.cpxbg+'&zt='+this.cxzt+'&wtbq='+this.wtbq+'&sqgb='+this.sqgb+
-          '&keyword='+this.keyword+'&dwlx='+this.dwlx+'&wtlb='+this.wtlbbg+'&starDay='+this.starDay+'&endDay='+this.endDay+'&isAnalyse=true'+'&xmbh=')
+          '&keyword='+this.keyword+'&dwlx='+this.dwlx+'&wtlb='+this.wtlbbg+'&starDay='+this.starDay+'&endDay='+this.endDay+'&isAnalyse=true'+'&xmbh='+
+          '&wtfl='+this.wtfl+'&bqly='+this.bqly)
     },
     handleTWsuccess() {
       // 提问 编辑成功
@@ -269,9 +297,11 @@ export default {
     searchQuestion() {
       //查询问题
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handlequeryQuestion() {
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     // 分页切换
     handleCurrentChange(data) {
@@ -280,9 +310,11 @@ export default {
     },
     changeStarDay(val){  // 选择开始时间
        this.queryAllQuestions(1);
+       this.CurrentPage = 1;
     },
     changeEndDay(val){  // 选择结束时间
        this.queryAllQuestions(1);
+       this.CurrentPage = 1;
     },
      handleCXZT(e) {
       //查询状态
@@ -290,6 +322,23 @@ export default {
       if (cxzt == null) return;
       this.cxzt = cxzt;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
+    },
+    // 问题分类
+    handleZXR(e) {    
+      let zxr = e.target.getAttribute("data-type");
+      if (zxr == null) return;
+      this.wtfl = zxr;
+      this.queryAllQuestions(1);
+      this.CurrentPage = 1;
+    },
+    // 标签来源
+    handleBQLY(e){
+      let bqly = e.target.getAttribute("data-type");
+      if (bqly == null) return;
+      this.bqly = bqly;
+      this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleSQGB(e) {
       //申请关闭
@@ -297,30 +346,35 @@ export default {
       if (sqgb == null) return;
       this.sqgb = sqgb;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleWTBQ(e){ // 问题标签
       let wtbq = e.target.getAttribute("data-type");
       if (wtbq == null) return;
       this.wtbq = wtbq;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleCPX(e) {      //产品线
       let cpx = e.target.getAttribute("data-type");
       if (cpx == null) return;
       this.cpxbg = cpx;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleCP(e) {      //产品
       let cp = e.target.getAttribute("data-type");
       if (cp == null) return;
       this.cpbg = cp;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
     handleWTLB(e) {      // 问题类别
       let wtlb = e.target.getAttribute("data-type");
       if (wtlb == null) return;
       this.wtlbbg = wtlb;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
 
     handleDWLX(e) {      // 单位类型
@@ -328,6 +382,7 @@ export default {
       if (dwlx == null) return;
       this.dwlx = dwlx;
       this.queryAllQuestions(1);
+      this.CurrentPage = 1;
     },
 
 
@@ -347,7 +402,9 @@ export default {
         wtbq:this.wtbq,
         starDay:this.starDay,
         endDay:this.endDay,
-        isAnalyse:true
+        isAnalyse:true,
+        wtfl:this.wtfl,
+        bqly:this.bqly
       }).then(({ data }) => {
         if (data.state == "success") {
           if (data.data.rows != null) {

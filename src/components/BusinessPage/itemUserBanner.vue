@@ -4,7 +4,7 @@
             <breadcrumb :crumb="crumb" v-if="xmdetail"></breadcrumb>
             <slot name="xmmc"></slot>
       </div>
-      <div v-if="fbdetail" style="width:63%;display:flex;justify-content: space-between;">
+      <div v-if="fbdetail" style="width:65%;display:flex;justify-content: space-between;">
         <div v-if="shown">
             <div class="item-curmb">
                 <span @click="handleBack">项目看板(项目列表)</span> <span class="el-icon-arrow-right"></span><span>更多项目</span>
@@ -21,10 +21,9 @@
                     <el-tab-pane label="里程碑" name="milestone" v-if="isJZuser != 1"></el-tab-pane> 
                     <el-tab-pane label="模板" name="template" v-if="groupTag.indexOf('JZGCRY') != -1"></el-tab-pane>
                     <el-tab-pane label="团队" name="teamwork" v-if="isJZuser != 1"></el-tab-pane>
-                    <el-tab-pane label="主动式服务" name="zdsfw"></el-tab-pane>
+                    <!-- <el-tab-pane label="主动式服务" name="zdsfw"></el-tab-pane> -->
                 </el-tabs>
         </div>
-        
         <div style="height:100%" v-if="!shown">
             <p style="margin-left:30px !important;height:40px;" title="新建钉钉群" @click.prevent="handleAddDDgroup"  v-if="Operatepower">
                <img src="static/img/dingding.png" alt="" style="width:22px;height:22px;">

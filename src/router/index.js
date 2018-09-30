@@ -78,7 +78,7 @@ export default new Router({
           name: 'BusinesspageXxtsql',
           component: resolve => require(['@/views/BusinessPage/xxtsql.vue'], resolve),
         },{
-          path: '/businesspage/report',
+          path:'/businesspage/report',
           name: 'Report',
           component: resolve => require(['@/views/BusinessPage/report.vue'], resolve),
           redirect:to => {
@@ -156,28 +156,6 @@ export default new Router({
                 name: 'BusinessReportCbzxqktj',
                 component: resolve => require(['@/views/BusinessPage/report/report-cbzxqktj.vue'], resolve),
               },
-
-              {
-                path: '/businesspage/report/qareport/cptsql',
-                name: 'BusinessReportCptsql',
-                component: resolve => require(['@/views/BusinessPage/report/cptsql-phb.vue'], resolve),
-              },
-              {
-                path: '/businesspage/report/qareport/qynltsql',
-                name: 'BusinessReportQynltsql',
-                component: resolve => require(['@/views/BusinessPage/report/qynltsql-phb.vue'], resolve),
-              },
-              {
-                path: '/businesspage/report/qareport/grnlqlts',
-                name: 'BusinessReportGrnlqlts',
-                component: resolve => require(['@/views/BusinessPage/report/grnlqlts-phb.vue'], resolve),
-              },
-              {
-                path: '/businesspage/report/qareport/xxtsql',
-                name: 'BusinessReportXxtsql',
-                component: resolve => require(['@/views/BusinessPage/report/xxtsql-pbh.vue'], resolve),
-              }
-              
            ]
         },
         {
@@ -218,6 +196,32 @@ export default new Router({
               path: '/businesspage/toplist/qareport/xjpm-gr',
               name: 'BusinessReportXjpfgr',
               component: resolve => require(['@/views/BusinessPage/report/report-xjpm-gr.vue'], resolve),
+            },
+
+            {
+              path: '/businesspage/toplist/qareport/cptsql',
+              name: 'BusinessReportCptsql',
+              component: resolve => require(['@/views/BusinessPage/report/cptsql-phb.vue'], resolve),
+            },
+            {
+              path: '/businesspage/toplist/qareport/qynltsql',
+              name: 'BusinessReportQynltsql',
+              component: resolve => require(['@/views/BusinessPage/report/qynltsql-phb.vue'], resolve),
+            },
+            {
+              path: '/businesspage/toplist/qareport/grnlqlts',
+              name: 'BusinessReportGrnlqlts',
+              component: resolve => require(['@/views/BusinessPage/report/grnlqlts-phb.vue'], resolve),
+            },
+            {
+              path: '/businesspage/toplist/qareport/xxtsql',
+              name: 'BusinessReportXxtsql',
+              component: resolve => require(['@/views/BusinessPage/report/xxtsql-pbh.vue'], resolve),
+            },
+            {
+              path: '/businesspage/toplist/qareport/qyxqts',
+              name: 'BusinessReportQyxqts',
+              component: resolve => require(['@/views/BusinessPage/report/qygxxq-phb.vue'], resolve),
             }
           ]
         },

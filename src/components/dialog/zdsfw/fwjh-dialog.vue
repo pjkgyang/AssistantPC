@@ -12,19 +12,20 @@
             <div class="dialog-qrbhfw">
                 <el-form ref="form" :model="form" label-width="110px" size="mini">
                     <el-form-item label="产品" required>
-                        <el-input v-model="form.name"></el-input>
+                         <el-select v-model="cpbh" placeholder="请选择产品" style="width:100%;" @change="handleChangeCpValue">
+                            <el-option v-for="(cp,index) in cpList" :key="index" :label="cp.text" :value="cp.id+'&'+cp.text"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="服务内容" required>
-                        <el-select v-model="form.region" placeholder="请选择活动区域" style="width:100%;">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
+                        <el-select v-model="form.fwnr" placeholder="请选择服务内容" style="width:100%;">
+                           <el-option v-for="(fwnr,index) in fwnrList" :key="index" :label="fwnr.text" :value="fwnr.id"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="计划完成时间" required>
-                             <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.date" style="width:100%;"></el-date-picker>
+                         <el-date-picker :picker-options="pickerBeginDate"  type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.jhjsrq" style="width:100%;"></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="活动形式" prop="desc" required>
-                        <el-input type="textarea" v-model="form.desc"></el-input>
+                    <el-form-item label="说明" required>
+                        <el-input type="textarea" v-model="form.sm" placeholder="请填写说明内容" :rows="6"></el-input>
                     </el-form-item>
                     <el-form-item text-right>
                         <el-button type="primary" @click="handleCommit">保存</el-button>
@@ -37,52 +38,110 @@
 </template>
 
 <script>
- export default {
-   data () {
-     return {
-         visible:this.show,
-         form: {
-          name: '',
-          region: '',
-          date: '',
-          desc: ''
+export default {
+  data() {
+    return {
+      visible: this.show,
+      fwnrList:[],
+      form: {
+        cpbh: "",
+        cpmc:"",
+        fwnr: "",
+        jhjsrq: "",
+        sm: ""
+      },
+      cpbh:'',
+      pickerBeginDate: {
+        disabledDate(time) {
+          let curDate = new Date().getTime();
+          return (
+            time.getTime() < Date.now() - 8.64e7
+          );
         }
-     }
-   },
-   methods:{
-       handleClose(){  
-           this.visible = false
-       },
-       handleCommit(){
-           console.log(this.form)
-       },
-   },
-   props:{
-        show: {
-            type: Boolean,
-            default:false
-        },
-   },
-   watch: {
-        show (n,o) {
-            this.visible = this.show;
-            if(!n){
-              
-            }else{
-
-            }
-        }
+      },
+    };
+  },
+  methods: {
+    handleChangeCpValue(value) {
+      this.form.cpbh = value.split('&')[0];
+      this.form.cpmc = value.split('&')[1];
+      this.listFwnrByCp();
     },
-   components: {}
- }
+    handleClose() {
+      this.visible = false;
+    },
+    handleCommit() {
+      if(!this.validate()) return;
+      this.$emit('handleCommitFWJH',this.form)
+    },
+
+        // 获取服务内容
+    listFwnrByCp(){
+      this.$get(this.API.listFwnrByCp,{
+        cpbh:this.form.cpbh,
+        cpmc:this.form.cpmc,
+      }).then(res=>{
+        if(res.state == 'success'){
+           this.fwnrList = res.data;
+        }
+      })  
+    },
+
+    validate(){
+        if(!this.cpbh){
+            this.$alert('请选择产品!', '提示', {confirmButtonText: '确定',type:'warning'});
+            return false;
+        }
+        if(!this.form.fwnr){
+            this.$alert('请选择服务内容!', '提示', {confirmButtonText: '确定',type:'warning'});
+            return false;
+        }
+        if(!this.form.jhjsrq){
+            this.$alert('请选择计划完成日期!', '提示', {confirmButtonText: '确定',type:'warning'});
+            return false;
+        }
+        if(!this.form.sm){
+            this.$alert('请填写说明内容!', '提示', {confirmButtonText: '确定',type:'warning'});
+            return false;
+        }
+        return true;
+    }
+  },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    cpList: {
+      type: Array,
+      default: () => {
+        return [];
+      }
+    }
+  },
+  watch: {
+    show(n, o) {
+        this.visible = this.show;
+      if (!n) {
+        this.fwnrList = [];
+        this.cpbh = '';
+        this.form.fwnr = '';
+        this.form.jhjsrq = '';
+        this.form.sm = ''
+      } else {
+
+      }
+    }
+  },
+  components: {}
+};
 </script>
 
 <style scoped>
-.dialog-qrbhfw{
-    padding:15px 30px;
+.dialog-qrbhfw {
+  padding: 15px 30px;
 }
-.el-form-item--mini.el-form-item{
-    margin-bottom:8px;
+.el-form-item--mini.el-form-item {
+  margin-bottom: 8px;
 }
- 
 </style>

@@ -77,7 +77,7 @@ export default {
 <style scoped>
 
 .table {
-   border: 1px solid #ddd; 
+   border: 1px solid #ebeef5; 
 }
 .table thead {
     width: calc( 100% - 1.2em ) !important;
@@ -94,13 +94,13 @@ export default {
     overflow-y: scroll;
 }
 .table caption{
-    border: 1px solid #ddd;
+    border: 1px solid #ebeef5;
     border-bottom: none;
     text-align: center;
-    background: #eee;
+    background: #f5f7fa;
     font-size:18px;
     font-weight: 700;
-    color: #000;
+    color: #909399;
 }
 .table tr,.table th{
     height: 30px;

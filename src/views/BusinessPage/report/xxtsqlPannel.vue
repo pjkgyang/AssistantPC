@@ -2,7 +2,7 @@
  <div class="xxts-pannel">
      <section flex spacearound>
             <h4>学校名称：<span class="fontRed">{{detailData.dw}}</span></h4>
-            <h4>问题总数：<span class="fontRed">{{detailData.wtzs}}</span></h4>
+            <h4>问题总数：<a href="javaScript:;;" class="fontRed" @click="handleCheckDetail('wtzs',detailData.wtzs)">{{detailData.wtzs}}</a></h4>
             <h4>消耗工时总计：<span class="fontRed">{{detailData.hjgs}}</span></h4>
      </section><br>
      <tableLayout>
@@ -21,10 +21,10 @@
                     <th>改进学校中间件环境</th>
                  </tr>
                  <tr>
-                     <td>{{detailData.bq50}}</td>
-                     <td>{{detailData.bq51}}</td>
-                     <td>{{detailData.bq52}}</td>
-                     <td>{{detailData.bq53}}</td>
+                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','50')">{{detailData.bq50}}</a></td>
+                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','51')">{{detailData.bq51}}</a></td>
+                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','52')">{{detailData.bq52}}</a></td>
+                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','53')">{{detailData.bq53}}</a></td>
                  </tr>
              </table>
          </section>
@@ -44,9 +44,9 @@
                     <th>加强用户培训</th>
                  </tr>
                  <tr>
-                     <td>{{detailData.bq61}}</td>
-                     <td>{{detailData.bq62}}</td>
-                     <td>{{detailData.bq63}}</td>
+                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','61')">{{detailData.bq61}}</a></td>
+                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','62')">{{detailData.bq62}}</a></td>
+                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','63')">{{detailData.bq63}}</a></td>
                  </tr>
              </table>
          </section>
@@ -70,7 +70,11 @@
                 <el-table-column prop="ysrq" label="验收日期" width="120"></el-table-column>
                 <el-table-column prop="gbrq" label="过保日期" width="120"></el-table-column>
                 <el-table-column prop="gbts" label="在保天数" width="100"></el-table-column>
-                <el-table-column prop="wtzs" label="问题数" width="100"></el-table-column>
+                <el-table-column label="问题数" width="100">
+                   <template slot-scope="scope">
+                      <a href="javaScript:;;" @click="handleCheckDetail('wtzs',scope.row.wtzs,scope.row,'gb')">{{scope.row.wtzs}}</a>
+                   </template>
+                </el-table-column>
             </el-table>
             <div text-right>
                  <el-pagination
@@ -104,7 +108,11 @@
                 <el-table-column prop="ysrq" label="验收日期" width="120"></el-table-column>
                 <el-table-column prop="gbrq" label="过保日期" width="120"></el-table-column>
                 <el-table-column prop="gbts" label="在保天数" width="100"></el-table-column>
-                <el-table-column prop="wtzs" label="问题数" width="100"></el-table-column>
+                <el-table-column label="问题数" width="100">
+                    <template slot-scope="scope">
+                      <a href="javaScript:;;" @click="handleCheckDetail('wtzs',scope.row.wtzs,scope.row,'sh')">{{scope.row.wtzs}}</a>
+                   </template>
+                </el-table-column>
             </el-table>
             <div text-right>
                  <el-pagination
@@ -136,6 +144,11 @@
                 <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="sxrq" label="合同签订年份" width="200"></el-table-column>
                 <el-table-column prop="ztztmc" label="当前状态" width="200"></el-table-column>
+                <el-table-column label="问题数" width="100">
+                    <template slot-scope="scope">
+                      <a href="javaScript:;;" @click="handleCheckDetail('wtzs',scope.row.wtzs,scope.row,'zj')">{{scope.row.wtzs}}</a>
+                   </template>
+                </el-table-column>
             </el-table>
             <div text-right>
                  <el-pagination
@@ -212,6 +225,21 @@ export default {
     };
   },
   methods: {
+    handleCheckDetail(key,value,params,type) {
+      let obj = {};
+      if(!params){
+         obj['dwmc'] = this.detailData.dw;
+      }else{
+         obj['xmbh'] = params.xmbh;
+         obj['wtxmlx'] = type=='gb'?3:type=='sh'?2:1
+      }
+       obj[key] = value;
+      let { href } = this.$router.resolve({
+        path:"/report-list/questionlist.html",
+        query:obj
+      });
+      window.open(href, "_blank");
+    },
     //   过保 每页条数
     handleGbSizeChange(data) {
       this.gbPageSize = data;
@@ -343,10 +371,10 @@ export default {
     }
   },
   mounted() {
-    if(!!this.$route.query.dwmc){
-        this.dwmc = unescape(this.$route.query.dwmc);
-    }else{
-        this.dwmc = JSON.parse(sessionStorage.userInfo).unit
+    if (!!this.$route.query.dwmc) {
+      this.dwmc = unescape(this.$route.query.dwmc);
+    } else {
+      this.dwmc = JSON.parse(sessionStorage.userInfo).unit;
     }
     this.dwtsqlmxReport();
     this.pageGbWtxm(); //过保
@@ -364,7 +392,7 @@ export default {
   margin: 15px auto;
   background: #fff;
   padding: 20px;
-  border-radius:10px;
+  border-radius: 10px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1);
   h4,
   h5 {

@@ -129,7 +129,7 @@
           <questionCard  :questionList="questionList" @handleQuestionDetail="handleQuestionDetail" @handleReject="handleReject"
           @handleClose="handleClose" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"></questionCard>
           <div style="margin-top:10px;text-align:right" v-if="total > 10">
-             <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+             <pagination :currentPage="CurrentPage"  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
           </div>
       </div>
        <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
@@ -254,7 +254,7 @@ export default {
       }
     });
 
-    if (getSession("ProblemType") == null) {
+    if (!getSession("ProblemType")||!getSession("cp")||!getSession("DeadlineStatus")) {
         getMenu("ProblemType", this.wtlb, "");
         getMenu("cp", this.cplist, true);
         getMenu("DeadlineStatus", this.cnqxList,''); //承诺期限

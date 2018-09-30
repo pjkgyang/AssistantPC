@@ -21,7 +21,7 @@ export default {
 <style scoped>
 .layout-menu{
     width: 95%;
-    margin: 10px auto 0;
+    margin: 10px auto ;
 }
 .layout-menu:after{
     content:'';
@@ -48,6 +48,7 @@ export default {
     overflow-x: auto;
     box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
     float: right;
+    border-radius: 4px;
 }
 
 

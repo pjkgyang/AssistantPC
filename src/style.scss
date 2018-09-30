@@ -177,7 +177,10 @@ img{
   padding: 1px 2px;
   border-radius: 3px;
 }
-
+.table th{
+  color: #909399;
+  background: #f5f7fa;
+}
 .money {
   color: #F67A7A;
   font-weight: bold;
@@ -229,6 +232,7 @@ img{
   font-weight: 700;
 }
 .query-list {
+  display: inline-block;
   width: 95%;
 }
 .query-list span:hover {

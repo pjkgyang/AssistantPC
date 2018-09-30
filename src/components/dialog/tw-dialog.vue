@@ -42,7 +42,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="产品" required>
-                    <el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:192px">
+                    <el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:192px" @change="handleChangeCp">
                         <el-option 
                         v-for="(cp,index) in xmcpList"
                         :key="index"
@@ -126,23 +126,30 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import {
   saveQuestion,
   customerQuestion,
   showQuestionCondition,
-  queryResponsibleProduct
+  queryResponsibleProduct,
+  queryProductSolutionTime
 } from "@/api/xmkb.js";
-import { formatTime, getMenu, getSession, getMyDate } from "@/utils/util.js";
+import {
+  formatTime,
+  getMenu,
+  getSession,
+  getMyDate,
+  GetDateStr
+} from "@/utils/util.js";
 export default {
   data() {
     return {
-      dialogQuestionVisible:false,
+      dialogQuestionVisible: false,
       visible: this.show,
-      xmmc:'',
-      xmbh:'',
-      showCondition:'',
+      xmmc: "",
+      xmbh: "",
+      showCondition: "",
       question: {
         wtlb: "",
         sfjj: "",
@@ -152,7 +159,7 @@ export default {
         sfbug: "",
         bbh: "",
         title: "",
-        nr:'',    
+        nr: "",
         wid: "",
         qwjjrq: "",
         qwjjrqO: "",
@@ -164,17 +171,19 @@ export default {
       fileList: [],
       fileData: [],
       filesData: [],
-      pickerBeginDateBefore:this.handleFocusDate(),
-      pickerBeginDateQw:{
+      pickerBeginDateBefore: this.handleFocusDate(),
+      pickerBeginDateQw: {
         disabledDate(time) {
-            let curDate = (new Date()).getTime();
-            let three = 30 * 24 * 3600 * 1000;
-            let threeMonths = curDate + three;
-            return time.getTime() < Date.now()- 8.64e7 || time.getTime() > threeMonths;
+          let curDate = new Date().getTime();
+          let three = 30 * 24 * 3600 * 1000;
+          let threeMonths = curDate + three;
+          return (
+            time.getTime() < Date.now() - 8.64e7 || time.getTime() > threeMonths
+          );
         }
       },
-      isJZuser:null,
-      xmcpList:[]
+      isJZuser: null,
+      xmcpList: []
     };
   },
   props: {
@@ -182,83 +191,100 @@ export default {
       type: Boolean,
       default: false
     },
-    questionTitle:{
-        type:String,
-        default:''
+    questionTitle: {
+      type: String,
+      default: ""
     },
-    accreditShow:{
+    accreditShow: {
       type: Boolean,
       default: false
     },
-    wid:{
-        type:String,
-        default:''
+    wid: {
+      type: String,
+      default: ""
     },
-    slContent:{
-        type:String,
-        default:''
+    slContent: {
+      type: String,
+      default: ""
     },
-    questionInfo:{
-        type:Object,
-        default:function(){
-            return {}
-        }
+    questionInfo: {
+      type: Object,
+      default: function() {
+        return {};
+      }
     },
-    chooseableItem:{
+    chooseableItem: {
       type: Boolean,
-      default: true 
+      default: true
     },
-    itemInfo:{
-       type:Object,
-        default:function(){
-            return {}
-        }
+    itemInfo: {
+      type: Object,
+      default: function() {
+        return {};
+      }
     },
-    guid:{
-        type:String,
-        default:''
-     },
-   
+    guid: {
+      type: String,
+      default: ""
+    }
   },
-  components:{itemChoose},
-  methods:{
-    handleFocusDate(){
-        let self = this
-        return {
-          disabledDate(time){
-                let curDate = (new Date()).getTime();
-                let delayHs = JSON.parse(self.questionInfo.cphs) * 24 * 3600 * 1000;
-                let delayDate = curDate + delayHs;
-               return time.getTime() < Date.now()-8.64e7 || time.getTime() > delayDate;
-          }
+  components: { itemChoose },
+  methods: {
+    handleFocusDate() {
+      let self = this;
+      return {
+        disabledDate(time) {
+          let curDate = new Date().getTime();
+          let delayHs = JSON.parse(self.questionInfo.cphs) * 24 * 3600 * 1000;
+          let delayDate = curDate + delayHs;
+          return (
+            time.getTime() < Date.now() - 8.64e7 || time.getTime() > delayDate
+          );
         }
+      };
     },
-    handleEdit(data) {            //选择项目（）
-      if(this.questionTitle == '我要提问'){
+    handleEdit(data) {
+      //选择项目（）
+      if (this.questionTitle == "我要提问") {
         this.queryResponsibleProduct(data.xmbh);
       }
       (this.xmbh = data.xmbh), (this.xmmc = data.xmmc);
       this.dialogQuestionVisible = false;
     },
-    addQuestiontItem() {         //选择项目
+    addQuestiontItem() {
+      //选择项目
       this.dialogQuestionVisible = true;
     },
-    handleCancel(){              //关闭dialog
-      this.visible = false   
+    handleCancel() {
+      //关闭dialog
+      this.visible = false;
     },
 
-    handleAccredit() {         //确认受理
+    // 根据产品切换承诺结束日期范围（9.26）
+    handleChangeCp(val) {
+      if (!!this.accreditShow) {
+        queryProductSolutionTime({ cpbh: val }).then(({ data }) => {
+          if (data.state == "success") {
+            // this.question.cnjsrq = GetDateStr(data.data);
+            this.questionInfo.cphs = data.data;
+            this.question.cnjsrq = ''
+          }
+        });
+      }
+    },
+    handleAccredit() {
+      //确认受理
       if (
-        !this.xmbh||
-        !this.question.wtlb||
-        !this.question.sfjj||
-        !this.question.wtjb||
-        !this.question.cp||
-        !this.question.yxfw||
-        !this.question.sfbug||
-        !this.question.bbh||
+        !this.xmbh ||
+        !this.question.wtlb ||
+        !this.question.sfjj ||
+        !this.question.wtjb ||
+        !this.question.cp ||
+        !this.question.yxfw ||
+        !this.question.sfbug ||
+        !this.question.bbh ||
         !this.question.cnjsrq
-        ){
+      ) {
         this.$alert("受理选项全部为必填项，请填写完整", "提示", {
           confirmButtonText: "确定",
           type: "warning",
@@ -266,54 +292,62 @@ export default {
         });
         return;
       }
-       this.$confirm('期望解决日期:'+this.questionInfo.qwjjrq+'你的承诺解决日期:'+this.question.cnjsrq+',确认受理吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
+      this.$confirm(
+        "期望解决日期:" +
+          this.questionInfo.qwjjrq +
+          "你的承诺解决日期:" +
+          this.question.cnjsrq +
+          ",确认受理吗？",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }
+      )
         .then(() => {
-           customerQuestion({
-              wtlb: this.question.wtlb,
-              jjyf: this.question.sfjj,
-              wtjb: this.question.wtjb,
-              cpbh: this.question.cp,
-              yxfw: this.question.yxfw,
-              sfbg: this.question.sfbug,
-              bbh: this.question.bbh,
-              qwjjrq: this.questionInfo.qwjjrq,
-              cnjsrq: this.question.cnjsrq,
-              xmmc: this.xmmc,
-              xmbh: this.xmbh,
-              wid: this.wid,
-              Guid: this.guid,
-              hjfjwid: this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
-              nr:this.slContent  //受理内容
-            }).then(({ data }) => {
-              if (data.state == "success") {
-                this.visible = false;
-                this.$alert("受理成功！", "提示", {
-                  confirmButtonText: "确定",
-                  type: "success",
-                  callback: action => {
-                    this.$emit('handleSLsuccess','');
-                  }
-                });
-              } else {
-                this.$alert(data.msg, "提示", {
-                  confirmButtonText: "确定",
-                  type: "error",
-                  callback: action => {}
-                });
-              }
-            });
+          customerQuestion({
+            wtlb: this.question.wtlb,
+            jjyf: this.question.sfjj,
+            wtjb: this.question.wtjb,
+            cpbh: this.question.cp,
+            yxfw: this.question.yxfw,
+            sfbg: this.question.sfbug,
+            bbh: this.question.bbh,
+            qwjjrq: this.questionInfo.qwjjrq,
+            cnjsrq: this.question.cnjsrq,
+            xmmc: this.xmmc,
+            xmbh: this.xmbh,
+            wid: this.wid,
+            Guid: this.guid,
+            hjfjwid:
+              this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
+            nr: this.slContent //受理内容
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.visible = false;
+              this.$alert("受理成功！", "提示", {
+                confirmButtonText: "确定",
+                type: "success",
+                callback: action => {
+                  this.$emit("handleSLsuccess", "");
+                }
+              });
+            } else {
+              this.$alert(data.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error",
+                callback: action => {}
+              });
+            }
+          });
         })
-        .catch(() => {
-
-        })
+        .catch(() => {});
     },
 
-    handleCommit() {      //提交问题
-       this.question.nr = $("#summernote").summernote("code");
+    handleCommit() {
+      //提交问题
+      this.question.nr = $("#summernote").summernote("code");
       if (this.showCondition == 1 || this.showCondition == 2) {
         if (this.xmmc == "") {
           this.$alert("请先选择关联项目", "提示", {
@@ -331,7 +365,8 @@ export default {
           this.question.bbh == "" ||
           this.question.qwjjrq == "" ||
           this.question.title == "" ||
-          this.question.nr == "" || this.question.nr == "<p><br></p>"
+          this.question.nr == "" ||
+          this.question.nr == "<p><br></p>"
         ) {
           this.$alert("问题选项全部为必填项，请填写完整", "提示", {
             confirmButtonText: "确定",
@@ -339,7 +374,7 @@ export default {
           });
           return;
         }
-        saveQuestion({  
+        saveQuestion({
           wtlb: this.question.wtlb,
           jjyf: this.question.sfjj,
           wtjb: this.question.wtjb,
@@ -352,19 +387,20 @@ export default {
           xmmc: this.xmmc,
           xmbh: this.xmbh,
           nr: this.question.nr,
-          hjfjwid:this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
+          hjfjwid:
+            this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
           wid: this.question.wid
         }).then(({ data }) => {
           if (data.state == "success") {
-               this.visible = false;
-              (this.fileList = []),
+            this.visible = false;
+            (this.fileList = []),
               (this.fileData = []),
               (this.filesData = []),
               this.$alert("问题提交成功！", "提示", {
                 confirmButtonText: "确定",
                 type: "success",
                 callback: action => {
-                    this.$emit('handleTWsuccess','');     
+                  this.$emit("handleTWsuccess", "");
                 }
               });
           } else {
@@ -374,7 +410,8 @@ export default {
             });
           }
         });
-      } else if (this.showCondition == 0) {  // 老师提问
+      } else if (this.showCondition == 0) {
+        // 老师提问
         if (
           this.question.title == "" ||
           this.question.nr == "" ||
@@ -395,7 +432,8 @@ export default {
           wid: this.question.wid,
           cpbh: this.question.cp,
           qwjjrq: this.question.qwjjrq,
-          hjfjwid:this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
+          hjfjwid:
+            this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
           jjyf: this.question.sfjj,
           xmmc: this.xmmc, //老师提问新增项目编号
           xmbh: this.xmbh
@@ -406,7 +444,7 @@ export default {
               confirmButtonText: "确定",
               type: "success",
               callback: action => {
-                  this.$emit('handleTWsuccess','');     
+                this.$emit("handleTWsuccess", "");
               }
             });
           } else {
@@ -430,16 +468,18 @@ export default {
       fd.append("fileUpload", file);
       fd.append("xmbh", this.xmbh);
 
-      axios.post(window.baseurl + "attachment/uploadAttach.do", fd, {
+      axios
+        .post(window.baseurl + "attachment/uploadAttach.do", fd, {
           headers: { "Content-Type": "multipart/form-data" }
-        }).then(res => {
-          if(res.data.state == 'success'){
-                this.fileData.push(res.data.data)  //文件 list Arr
-            }else{
-               this.$alert(res.data.msg, '提示', {
-                confirmButtonText: '确定',
-                });
-            }
+        })
+        .then(res => {
+          if (res.data.state == "success") {
+            this.fileData.push(res.data.data); //文件 list Arr
+          } else {
+            this.$alert(res.data.msg, "提示", {
+              confirmButtonText: "确定"
+            });
+          }
         });
       return true;
     },
@@ -455,22 +495,23 @@ export default {
       this.fileList = r;
       this.$refs.upload.submit();
     },
-    queryResponsibleProduct(xmbh){   // 获取项目对应的产品
+    queryResponsibleProduct(xmbh) {
+      // 获取项目对应的产品
       this.xmcpList = [];
       queryResponsibleProduct({
-        xmbh:xmbh
-      }).then((res)=>{
-        if(res.data.state == 'success'){
-         if(JSON.stringify(res.data.data) == '{}'){
-           this.xmcpList = this.cplist
-         }else{
-           let Arr = Object.keys(res.data.data);
-           let McArr = Object.values(res.data.data)
-           for(var i = 0;i< Arr.length;i++){
+        xmbh: xmbh
+      }).then(res => {
+        if (res.data.state == "success") {
+          if (JSON.stringify(res.data.data) == "{}") {
+            this.xmcpList = this.cplist;
+          } else {
+            let Arr = Object.keys(res.data.data);
+            let McArr = Object.values(res.data.data);
+            for (var i = 0; i < Arr.length; i++) {
               this.xmcpList.push({
-                label:Arr[i],
-                mc:McArr[i]
-                })
+                label: Arr[i],
+                mc: McArr[i]
+              });
             }
           }
         }
@@ -480,44 +521,44 @@ export default {
   watch: {
     show() {
       this.visible = this.show;
-      if(this.show){
+      if (this.show) {
         this.$nextTick(() => {
-        $("#summernote").summernote({
-          dialogsInBody: true,
-          placeholder: "请输入内容",
-          focus: true,
-          height: 200,
-          width: 100 + "%",
-          minHeight: 200,
-          maxHeight: 200,
-          lang: "zh-CN",
-          toolbar: [
-            ["style", ["bold", "italic", "underline", "clear"]],
-            ["font", ["strikethrough", "superscript", "subscript"]],
-            ["fontsize", ["fontsize"]],
-            ["color", ["color"]],
-            ["para", ["ul", "ol", "paragraph"]],
-            ["height", ["height"]],
-            ["picture"],
-            ["link", ["linkDialogShow", "unlink"]]
-          ]
-        });
-      });
-          showQuestionCondition().then(({ data }) => {
-            //提问展示
-            this.showCondition = data.data;
+          $("#summernote").summernote({
+            dialogsInBody: true,
+            placeholder: "请输入内容",
+            focus: true,
+            height: 200,
+            width: 100 + "%",
+            minHeight: 200,
+            maxHeight: 200,
+            lang: "zh-CN",
+            toolbar: [
+              ["style", ["bold", "italic", "underline", "clear"]],
+              ["font", ["strikethrough", "superscript", "subscript"]],
+              ["fontsize", ["fontsize"]],
+              ["color", ["color"]],
+              ["para", ["ul", "ol", "paragraph"]],
+              ["height", ["height"]],
+              ["picture"],
+              ["link", ["linkDialogShow", "unlink"]]
+            ]
           });
+        });
+        showQuestionCondition().then(({ data }) => {
+          //提问展示
+          this.showCondition = data.data;
+        });
         if (getSession("ProblemType") == null) {
-                getMenu("ProblemType", this.wtlb, "");
-                getMenu("cp", this.cplist, true);
-            } else {
-                this.wtlb = getSession("ProblemType");
-                this.cplist = getSession("cp");
-           }
-            this.fileList = [];
-            this.fileData = [];
-            this.filesData = [];
-       if(this.questionTitle == '我要提问'){ 
+          getMenu("ProblemType", this.wtlb, "");
+          getMenu("cp", this.cplist, true);
+        } else {
+          this.wtlb = getSession("ProblemType");
+          this.cplist = getSession("cp");
+        }
+        this.fileList = [];
+        this.fileData = [];
+        this.filesData = [];
+        if (this.questionTitle == "我要提问") {
           this.xmcpList = [];
           this.question.wtlb = "";
           this.question.sfjj = "";
@@ -529,38 +570,41 @@ export default {
           this.question.title = "";
           this.question.wid = "";
           this.question.nr = "";
-          $('#summernote').summernote('code','')  
-         if(this.chooseableItem){
-             this.xmmc = ""
-             this.xmbh = ""
-         }else{
-           this.xmmc = this.itemInfo.xmmc
-           this.xmbh = this.itemInfo.xmbh
-           this.queryResponsibleProduct(this.xmbh);
-         }
-        }else{
-            this.xmcpList = this.cplist
-            this.question.title = this.questionInfo.bt;
-            this.question.cp = this.questionInfo.cpbh;
-            this.question.wtlb = this.questionInfo.wtlb;
-            this.question.sfjj = this.questionInfo.jjyf;
-            this.question.wtjb = this.questionInfo.wtjb;
-            this.question.yxfw = this.questionInfo.yxfw;
-            this.question.sfbug = this.questionInfo.sfbg;
-            this.question.bbh = this.questionInfo.bbh;
-            this.question.qwjjrqO = this.questionInfo.qwjjrqO;
-            this.question.cnjsrq = this.questionInfo.cnjsrq == ""? this.questionInfo.qwjjrqO: this.questionInfo.cnjsrqO;
-            this.question.qwjjrq = this.questionInfo.qwjjrq;
-            this.question.wid = this.questionInfo.wid
-            this.xmmc = this.questionInfo.xmmc;
-            this.xmbh = this.questionInfo.xmbh; 
-             this.$nextTick(() => {
-                 $('#summernote').summernote('code',this.questionInfo.nr)  
-             })
+          $("#summernote").summernote("code", "");
+          if (this.chooseableItem) {
+            this.xmmc = "";
+            this.xmbh = "";
+          } else {
+            this.xmmc = this.itemInfo.xmmc;
+            this.xmbh = this.itemInfo.xmbh;
+            this.queryResponsibleProduct(this.xmbh);
+          }
+        } else {
+          this.xmcpList = this.cplist;
+          this.question.title = this.questionInfo.bt;
+          this.question.cp = this.questionInfo.cpbh;
+          this.question.wtlb = this.questionInfo.wtlb;
+          this.question.sfjj = this.questionInfo.jjyf;
+          this.question.wtjb = this.questionInfo.wtjb;
+          this.question.yxfw = this.questionInfo.yxfw;
+          this.question.sfbug = this.questionInfo.sfbg;
+          this.question.bbh = this.questionInfo.bbh;
+          this.question.qwjjrqO = this.questionInfo.qwjjrqO;
+          this.question.cnjsrq =
+            this.questionInfo.cnjsrq == ""
+              ? this.questionInfo.qwjjrqO
+              : this.questionInfo.cnjsrqO;
+          this.question.qwjjrq = this.questionInfo.qwjjrq;
+          this.question.wid = this.questionInfo.wid;
+          this.xmmc = this.questionInfo.xmmc;
+          this.xmbh = this.questionInfo.xmbh;
+          this.$nextTick(() => {
+            $("#summernote").summernote("code", this.questionInfo.nr);
+          });
         }
       }
     }
-  },
+  }
 };
 </script>
 <style scoped>

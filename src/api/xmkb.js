@@ -179,7 +179,8 @@ export function queryAllQuestions(obj){
 			deadline:obj.deadline||"",
 			starDay:obj.starDay||'',
 			endDay:obj.endDay||'',
-			isAnalyse:obj.isAnalyse||""
+			isAnalyse:obj.isAnalyse||"",
+			bqly:obj.bqly||""
 		}
 	})
 }
@@ -728,6 +729,16 @@ export function queryResponsibleProduct(obj){
 	return axios.get(url,{
 		params:{
 			 xmbh:obj.xmbh
+		}
+	})
+}
+
+// 获取产品承诺日期
+export function queryProductSolutionTime(obj){
+	let url =  window.baseurl + quesurl + 'queryProductSolutionTime.do'
+	return axios.get(url,{
+		params:{
+			 cpbh:obj.cpbh
 		}
 	})
 }

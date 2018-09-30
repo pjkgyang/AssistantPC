@@ -31,6 +31,13 @@
                <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':filterWord.gczd == gcqy.label}">{{gcqy.mc}}</span>
               </p>
            </div>   
+            <div v-if="filterList.includes('cp')">
+              <p class="query-title">产品:</p>
+              <p class="query-list" @click="handleCP">
+                  <span data-type="" :class="{'bg-active':filterWord.cp == ''}">全部</span>
+                  <span v-for="(cpl,index) in cplist" :data-type="cpl.label" :class="{'bg-active':filterWord.cp == cpl.label}">{{cpl.mc}}</span>
+                  </p>
+           </div>
            <div v-if="filterList.includes('dwlx')">
               <p class="query-title">单位类型:</p>
               <p class="query-list" @click="handleDWLX">
@@ -92,6 +99,7 @@ export default {
       gczdList: [],
       cpxline: [],
       xmlxList:[],
+      cplist:[],
       dwlxList: [
         {label: "1",mc: "学校"},
         {label: "0", mc: "金智"},
@@ -109,6 +117,7 @@ export default {
         jjzt: "",
         cpxmc: "",
         gczd: "",
+        cp:"",
         dwlx: "",
         sjlb: "",
         cpx: "",
@@ -155,6 +164,13 @@ export default {
       this.filterWord.gczd = gczd;
       this.$emit('handleChangeFilter',this.filterWord)
     },
+    handleCP(e){
+      // 产品
+      let cp = e.target.getAttribute("data-type");
+      if (cp == null) return;
+      this.filterWord.cp = cp;
+      this.$emit('handleChangeFilter',this.filterWord)
+    },
     handleCPX(e) {
       // 产品线
       let cpx = e.target.getAttribute("data-type");
@@ -194,7 +210,8 @@ export default {
         if(sfzt == null) return;
         this.filterWord.sfzt = sfzt;
         this.$emit('handleChangeFilter',this.filterWord)
-    }
+    },
+    
    
     // queryCostStat(curPage){      //区域学校用户
     //         this.$get('http://172.16.40.61:8080/emap/sys/etender/api/report/queryCostStat.do',{
@@ -206,14 +223,16 @@ export default {
     //   },
   },
   mounted() {
-    if (!getSession("ProjectCustomStatus")||getSession("cpx")||getSession("gczd")) {
+    if (!getSession("ProjectCustomStatus")||getSession("cpx")||getSession("gczd")||getSession("cp")) {
       getMenu("cpx", this.cpxline, true); // 获取产品线
       getMenu('ProjectCustomStatus',this.xmlxList,'');//获取工程战队   
       getMenu("gczd", this.gczdList, true); // 获取工程战队
+      getMenu("cp", this.cplist, true); // 获取产品
     } else {
       this.cpxline = getSession("cpx");
       this.gczdList = getSession("gczd");
       this.xmlxList = getSession('ProjectCustomStatus');  
+      this.cplist = getSession("cp");
     }
   },
   activated() {},

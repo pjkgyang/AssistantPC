@@ -38,7 +38,6 @@ export default {
     }
   },
   mounted(){
-    
       try{
         if(this.$route.path.includes('/businesspage/toplist')){
           //  this.navList = window.menuTop.childNodes
@@ -131,6 +130,7 @@ export default {
 <style>
 
 .layout-content{
-  padding: 0 10px;
+  padding:10px;
+  border-radius: 5px;
 }
 </style>

@@ -604,7 +604,27 @@ export default {
         ["height", ["height"]],
         ["picture"],
         ["link", ["linkDialogShow", "unlink"]]
-      ]
+      ],
+      callbacks: {
+        // onImageUpload: (uploadFile=>{
+        //   var formData = new FormData();
+        //   formData.append("uploadFile", uploadFile[0]);
+        //   let config = {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data"
+        //     }
+        //   };
+        //   this.$http
+        //   //第一个参数是上传地址,字符串类型
+        //   //第二个是表单数据
+        //   //第三个是上传配置
+        //     .post(this.API.IMAGE_UPLOAD_ADDRESS, formData, config)
+        //     .then(response => { 
+        //         //以下是默认
+        //       $(this.$refs.summernote).summernote('insertImage',response.data,'img'); 
+        //     });
+        // })
+      }
     });
     //是否展示环境信息
     showHjFj({ wid: this.wid }).then(({ data }) => {

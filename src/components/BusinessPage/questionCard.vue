@@ -24,6 +24,13 @@
                      <span><span class="question-info-front">是否紧急 : </span>{{question.jjyf == null?'无':question.jjyf == '1'?'是':'否'}}</span>
                      <span><span class="question-info-front">版本号 : </span>{{question.bbh}}</span>
                   </p>
+                  <div v-if="wtbqShow">
+                    <span>
+                      <span class="question-info-front">标签 : </span>
+                      <span v-if="!!question.bqMc" v-for="bq in question.bqMc.split(',')" class="question-info-wtbq">{{bq}}&nbsp; </span>
+                      <span v-else v-for="bq in question.bqMc.split(',')" >无</span>
+                      </span>
+                  </div>
               </div>
               <div class="question-state">
                   <span style="font-size:14px;color:#f00;" :class="{'ygb-color':question.fbzt == 1,'clz-color':question.fbzt != 1}">{{question.lcMc}}</span><br>
@@ -68,6 +75,10 @@ export default {
     isShow:{
         type:Boolean,
         default:true
+    },
+    wtbqShow:{
+       type:Boolean,
+       default:false
     }
   },
   mounted(){
@@ -197,5 +208,11 @@ export default {
 .clz-color {
   color: #f56c6c;
   background: rgba(245, 108, 108, 0.2);
+}
+.question-info-wtbq{
+   background: rgb(81, 133, 230);
+   color: #fff;
+   padding: 1px 2px;
+   border-radius: 2px;
 }
 </style>

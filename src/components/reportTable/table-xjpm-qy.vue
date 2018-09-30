@@ -137,10 +137,10 @@ tbody tr {
   border: 1px solid #ebeef5;
   border-bottom: none;
   text-align: center;
-  background: #eee !important;
+  background: #f5f7fa !important;
   font-size: 18px;
   font-weight: 700;
-  color: #000;
+  color: #909399;
 }
 .table tr,
 .table th {

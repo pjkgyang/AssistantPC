@@ -12,11 +12,11 @@
             <div class="dialog-tbfw">
                <form action="">
                    <div flex>
-                       <span class="filter-weight">提报说明：</span>&nbsp;
-                       <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea" style="width:550px"></el-input>
+                       <span class="filter-weight before-require">提报说明：</span>&nbsp;
+                       <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="form.sm" style="width:550px"></el-input>
                    </div><br>
-                   <div flex>
-                       &#x3000;&#x3000;<span class="filter-weight">附件：</span>
+                   <div flex  v-if="wids.split(',').length == 1">
+                       &#x3000;&#x3000;&#x3000;<span class="filter-weight">附件：</span>
                        <div>
                         <el-upload
                                 class="upload-demo"
@@ -50,8 +50,11 @@
          visible:this.show,
          upload_url:'123',
          uploadForm: new FormData(),
-         textarea:'',
-         fileList:[]
+         form:{
+             sm:'',
+             fileList:''
+         },
+         files:[]
      }
    },
    methods:{
@@ -62,35 +65,58 @@
            this.uploadForm.append('fileUpload','');
        },
        handleCommit(){
-           axios.post(window.baseurl+'attachment/uploadAttach.do',this.uploadForm,{
-                  headers:{'Content-Type':'multipart/form-data'} 
-           }).then((res)=>{
-               if(res.state == 'success'){
-                    this.fileList = res.data.data.split(',');
-               }else{
-                    this.$alert(res.msg, '提示', {confirmButtonText: '确定',type:'error'});
-               }
-           }).catch(error=>{})
-           this.$refs.uploadfile.submit();
+           if(!this.validate()) return;
+           if(this.wids.split(',').length == 1){
+              this.$refs.uploadfile.submit();
+           }    
+           if(!!this.files.length){
+                axios.post(window.baseurl+'attachment/uploadAttach.do',this.uploadForm,{
+                    headers:{'Content-Type':'multipart/form-data'} 
+                }).then(res=>{
+                    if(res.data.state == 'success'){
+                        this.form.fileList = res.data.data
+                        this.$emit('handleCommitTB',this.form);
+                    }else{
+                        this.$alert(res.data.msg, '提示', {confirmButtonText: '确定',type:'error'});
+                    }
+                }).catch(error=>{});
+           }else{
+               this.$emit('handleCommitTB',this.form);
+           }
        },
        newFiles(file){
+         this.files = [];
+         this.files.push(file);
          this.uploadForm.append('fileUpload',file);
          return true;
+       },
+
+       validate(){
+           if(!this.form.sm){
+               this.$alert('请填写提报说明!', '提示', {confirmButtonText: '确定',type:'warning'});
+               return false;
+           }
+           return true;
        }
    },
    props:{
         show: {
             type: Boolean,
             default:false
+        },
+        wids:{
+            type:String,
+            default:''
         }
    },
    watch: {
         show (n,o) {
             this.visible = this.show;
             if(!n){
-              
+              this.form.sm = '';
+              this.uploadForm.append('fileUpload','');
             }else{
-
+               
             }
         }
     },

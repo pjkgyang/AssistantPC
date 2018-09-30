@@ -8,12 +8,12 @@
             <!-- <caption>产品线解决情况</caption> -->
                 <thead> 
                     <tr v-if="tableData.head">
-                    <th v-for="(th,i) in tableData.head" v-if="!th.hidden">{{th.zh}}</th>
+                       <th v-for="(th,i) in tableData.head" v-if="!th.hidden" :class="{'tdWidth':num.includes(i)}">{{th.zh}}</th>
                     </tr>
                 </thead>
                 <tbody :style="{height:height}">
                     <tr v-if="bodyData"  v-for="(body,k) in bodyData">
-                        <td v-for="(td,j) in body" v-if="!tableData.head[j].hidden">
+                        <td v-for="(td,j) in body" v-if="!tableData.head[j].hidden" :class="{'tdWidth':num.includes(j)}">
                             <!-- <a  href="javaScript:void(0)" @click="handleXxwt(j)">{{td}}</a> -->
                             <span :title="td" v-if="!tableData.head[j].canRedirect">{{td}}</span>
                             <a v-else href="javaScript:void(0)" @click="handleXxwt(body,j)" :title="td">{{td}}</a>
@@ -38,16 +38,18 @@ export default {
          tdList:[],
          limit:'',
          object:{},
-         total:20,
+         total:0,
          bodyData:[]
        }
    },
    updated(){
-        this.total = this.tableData.body.records
+        
         if(!!this.tableData.body.rows){
             this.bodyData = this.tableData.body.rows
+            this.total = this.tableData.body.records
         }else{
             this.bodyData = this.tableData.body
+            this.total = 0
         }
    },
   
@@ -59,8 +61,9 @@ export default {
           this.$emit('handleCurrentChange',data);    
         },
         handleXxwt(data,i){
-            // console.log(data);
-            // console.log(data[i]);
+            console.log(data);
+            console.log(i);
+            return;
             // console.log(this.tableData.head[i]);
             // return;
             this.$emit('handleXxwt',data,i,this.tableData.head);
@@ -95,6 +98,12 @@ export default {
         height:{
             type:String,
             default:'58vh'
+        },
+        num:{
+            type:Array,
+            default:()=>{
+                return []
+            }
         }
    },
    watch:{
@@ -158,5 +167,7 @@ export default {
     overflow: hidden;
     border-right: 1px solid #ebeef5;
 }
-
+.tdWidth{
+    width: 220px !important;
+}
 </style>

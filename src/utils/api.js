@@ -10,6 +10,7 @@ export default {
     grtsqlReport:window.baseurl+'report/grtsqlReport.do',  //个人能力提升排行榜 
     dwtsqlReport:window.baseurl+'report/dwtsqlReport.do',  //单位能力提升排行榜 
     dwtsqlmxReport:window.baseurl+'report/dwtsqlmxReport.do',  //单位能力提升明细
+    qyxqtsqlReport:window.baseurl+'report/qyxqtsqlReport.do',  //区域需求排行榜
     pageShWtxm:window.baseurl+'report/pageShWtxm.do',//单位售后阶段问题统计
     pageZjWtxm:window.baseurl+'report/pageZjWtxm.do',//单位在建阶段问题统计
     pageYqRwxm:window.baseurl+'report/pageYqRwxm.do',//单位延期任务统计
@@ -31,6 +32,22 @@ export default {
 
  
     // fujian
-    uploadAttach:window.baseurl+'attachment/uploadAttach.do' 
+    uploadAttach:window.baseurl+'attachment/uploadAttach.do', 
+
+    // 主动式服务
+    isVisibleTab:window.baseurl+'activeservice/isVisibleTab.do',//是否可见
+    saveActiveService:window.baseurl+'activeservice/saveActiveService.do',//保存主动式服务
+    deleteActiveService:window.baseurl+'activeservice/deleteActiveService.do',//删除主动式服务
+    pageActiveService:window.baseurl+'activeservice/pageActiveService.do',//主动式服务分页列表
+    listOperationLog:window.baseurl+'activeservice/listOperationLog.do',//主动式服务日志列表
+    submitActiveService:window.baseurl+'activeservice/submitActiveService.do',//提报主动式服务
+    changeCompleteDate:window.baseurl+'activeservice/changeCompleteDate.do',//调整计划完成日期
+    rejectActiveService:window.baseurl+'activeservice/rejectActiveService.do',//驳回主动式服务
+    getActiveService:window.baseurl+'activeservice/getActiveService.do', //获取主动式服务
+    confirmActiveService:window.baseurl+'activeservice/confirmActiveService.do', //确认主动式服务
+    listXmZdsfwCp:window.baseurl+'activeservice/listXmZdsfwCp.do',  // 获取产品
+    listFwnrByCp:window.baseurl+'activeservice/listFwnrByCp.do',   // 获取服务内容
+
+    
      
 }

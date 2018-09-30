@@ -1,22 +1,25 @@
 <template>
 <div>
+     <div text-right class="mb-12">
+        <el-button type="primary" size="mini" @click="exportTable">导出</el-button>
+    </div>
     <div class="out-table">
           <el-table
-    :data="!tableData.rows?tableData:tableData.rows"
-    border
-    class="report-ele-table"
-    width="100%">
-    <el-table-column v-for="(th,index) in tableHead" :key="index"  :label="th.zh"
-     :width="th.en=='xmmc'||th.en=='xxmc'?260:120" show-overflow-tooltip>
-         <template slot-scope="scope" >
-            <span  @click="handleRouter(th.en,scope.row,index)">{{scope.row[index]}}</span>
-            <!-- <a href="#">{{scope.row[index]}}</a> -->
-      </template>
-    </el-table-column>
-
-  </el-table>
+            :data="bodyData"
+            border
+            class="report-ele-table"
+            width="100%"
+            :max-height="Height==0?'auto':tableHeight">
+            <el-table-column v-for="(th,index) in tableData.head" :key="index" :label="th.zh" v-if="!th.hidden"
+            :width="widthArr.includes(index)?240:th.zh=='排名'||th.zh=='姓名'?70:th.zh=='工号'?100:Width" show-overflow-tooltip :fixed="indexArr.includes(index)?true:false" >
+                <template slot-scope="scope" >
+                    <span v-if="!th.canRedirect">{{scope.row[index]}}</span>
+                    <a v-else href="javaScript:void(0)" @click="handleRouter(scope.row,index)" >{{scope.row[index]}}</a>
+            </template>
+            </el-table-column>
+    </el-table>
       </div>
-         <div style="text-align:right;padding:10px 0" v-if="pageShow">
+         <div style="text-align:right;padding-top:10px" v-if="pageShow">
             <pagination :currentPage="currentPage" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
     </div>
@@ -27,47 +30,50 @@ import pagination from '@/components/BusinessPage/pagination.vue'
 export default {
    data(){
        return{
-         thList:[{name:'都是',value:'2222'},{name:'都是',value:'2222'},{name:'都是',value:'2222'}],
-         tdList:[],
-         limit:'',
-         object:{},
-         total:20
+         total:0,
+         bodyData:[],
+         tableHeight:window.innerHeight - this.Height
        }
    },
    updated(){
-        // this.total = this.tableData.body.records
-        window.onerror = function(){ return true };
-        console.log(this.tableData)
+            // if(!this.tableData.body.rows){
+            //     this.bodyData = this.tableData.body.rows
+            //     this.total = this.tableData.body.records
+            // }else{
+            //     this.bodyData = this.tableData.body
+            //     this.total = 0
+            // }
+        // this.$nextTick(function(){ 
+        //     if(!!this.tableData.body.rows){
+        //         this.bodyData = this.tableData.body.rows
+        //         this.total = this.tableData.body.records
+        //     }else{
+        //         this.bodyData = this.tableData.body
+        //         this.total = 0
+        //     }
+        // })
+
    },
   
    methods:{
-       handleRouter(param,row,index){
-           console.log(param)
-           console.log(row)
-           console.log(index)
-
-       },
-        handleXxwt(data){
-            console.log(data)
+       exportTable(){
+            this.$emit('exportTable','')  
         },
+       handleRouter(data,i){
+            this.$emit('handleXxwt',data,i,this.tableData.head);
+       },
         handleCurrentChange(data){
           this.$emit('handleCurrentChange',data);    
         }
    },
    computed:{
-       
+
    },
    props:{
-       tableData:{
+        tableData:{
            type:Object,
            default:function(){
                return {}
-           }
-       },
-       tableHead:{
-           type:Array,
-           default:function(){
-               return []
            }
        },
         currentPage:{
@@ -81,7 +87,39 @@ export default {
         pageShow:{
             type:Boolean,
             default:true
+        },
+        indexArr:{
+            type:Array,
+            default:()=>{
+                return [0,2]
+            }
+        },
+        Height:{
+            type:Number,
+            default:350
+        },
+        widthArr:{
+            type:Array,
+            default:()=>{
+                return [2,3,4,9]
+            } 
+        },
+        Width:{
+            type:Number,
+            default:190  
         }
+   },
+   watch:{
+       tableData(n,o){
+           let data = n.body;
+            if(!!data.rows){
+                this.bodyData = data.rows
+                this.total = data.records
+            }else{
+                this.bodyData = data
+                this.total = 0
+            }
+       }
    },
    components:{pagination}
 

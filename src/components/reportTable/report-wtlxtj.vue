@@ -83,7 +83,7 @@ export default {
 <style scoped>
 
 .table{
-    border: 1px solid #ddd;
+    border: 1px solid #ebeef5;
     width: 100%;
 
 }
@@ -102,18 +102,18 @@ export default {
     overflow-y: scroll;
 }
 .table caption{
-    border: 1px solid #ddd;
+    border: 1px solid #ebeef5;
     border-bottom: none;
     text-align: center;
-    background: #eee !important;
+    background: #f5f7fa !important;
     font-size:18px;
     font-weight: 700;
-    color: #000;
+    color: #909399;
 }
 .table tr,.table th{
     height: 37px !important;
     text-align:center;
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #ebeef5;
     padding: 0;
     margin: 0;
     vertical-align:middle;
@@ -122,12 +122,12 @@ export default {
     width: 12%;
 }
 .table tr:last-child{
-   border-bottom: 1px solid #ddd; 
+   border-bottom: 1px solid #ebeef5; 
 }
 .table td{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #ebeef5;
 }
 </style>

@@ -29,7 +29,7 @@
 
 <style scoped>
 .month-content-layout{
-    padding-bottom:18px;
+    padding-bottom:12px;
 }
  .month-content-top{
     margin-bottom: 8px;

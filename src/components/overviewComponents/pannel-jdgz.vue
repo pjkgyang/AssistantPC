@@ -105,7 +105,7 @@
         </div>
         <div class="box__right--plan" col=2>
           <h4>本月计划</h4>
-          <el-table :data="tableData" border style="width: 100%" max-height="170">
+          <el-table :data="tableData" border style="width: 100%" max-height="160">
             <el-table-column prop="xmnr_display" label="项目内容" align="center" show-overflow-tooltip></el-table-column>
             <el-table-column label="日期" align="center">
               <template slot-scope="scope">
