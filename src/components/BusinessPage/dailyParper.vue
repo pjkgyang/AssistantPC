@@ -112,7 +112,7 @@ export default {
       this.date = this.logInfo.gcrq
       this.gs = this.logInfo.gs
       this.desc = this.logInfo.gcms
-      this.taskname =  !this.logInfo.xmmc?'':this.taskName?this.taskName:this.logInfo.xmmc+'——'+this.logInfo.cpmc+'——'+this.logInfo.rwmc
+      this.taskname =  !this.logInfo.xmmc?'':this.taskName?this.taskName:this.logInfo.xmmc+' — '+this.logInfo.cpmc+' — '+this.logInfo.rwmc
    },
     computed:{
       taskLogInfo(){
@@ -236,9 +236,9 @@ export default {
             this.taskname = this.logInfo.xmmc==''?'':this.logInfo.xmmc+'—'+this.logInfo.cpmc+'—'+this.logInfo.rwmc
           }
       },
-      taskName(){
-        this.taskname = this.taskName
-      }
+      // taskName(){
+      //   this.taskname = this.taskName
+      // }
     },
     components:{dialogTask}
 }

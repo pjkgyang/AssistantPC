@@ -30,7 +30,6 @@ export default {
     addTeamProject:window.baseurl+'qyzd/addTeamProject.do',  //添加战队项目关联关系
     getQyzd:window.baseurl+'qyzd/getQyzd.do',  //获取区域战队
 
- 
     // fujian
     uploadAttach:window.baseurl+'attachment/uploadAttach.do', 
 
@@ -48,6 +47,12 @@ export default {
     listXmZdsfwCp:window.baseurl+'activeservice/listXmZdsfwCp.do',  // 获取产品
     listFwnrByCp:window.baseurl+'activeservice/listFwnrByCp.do',   // 获取服务内容
 
-    
-     
+    // 修改参与者 中标人
+    listZbxx:window.baseurl+'project/listZbxx.do', // 获取中标人列表
+    modifyZbr:window.baseurl+'personnel/modifyZbr.do', //修改中标人
+    modifySale:window.baseurl+'personnel/modifySale.do',
+
+
+    // 任务（进度）
+    getProductTasks:window.baseurl+'task/getProductTasks.do', //获取产品任务分页列表
 }

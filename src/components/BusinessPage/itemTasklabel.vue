@@ -27,7 +27,7 @@
         </div>
         <div class="task_label_bottom">
             <!-- <span data-lx="1"  :data-type="'changeDate&'+index" style="border-left:none"> 调整计划</span> -->
-            <el-button  @click="handleTask($event,'jfqy',index)" :disabled="detailList.sfjfqr == 1">甲方确认</el-button>
+            <el-button v-if="detailList.sfjfqr != 1" @click="handleTask($event,'jfqy',index)"  >甲方确认</el-button>
             <!-- <el-button  @click="handleTask($event,'commit',index)" v-if="detailList.zt != 5"> 提交里程碑</el-button> -->
             <el-button  @click="handleTask($event,'daily',index)"> 填写日报</el-button>
         </div>
@@ -58,7 +58,8 @@
           </div>
           <div class="task_label_bottom">
               <!-- <span v-if="(detailList.lx == 3 || detailList.lx == 5) && detailList.zt != 2"  data-lx="1" :data-type="'changeDate&'+index" class="el-icon-date"> 调整计划</span> -->
-              <el-button  @click="handleTask($event,'jfqy',index)" :disabled="detailList.zt == 3">{{detailList.lx == 3?'甲方确认':detailList.lx == 5?'乙方确认':'创建人确认'}}</el-button>
+              <el-button v-if="detailList.zt == 2 && detailList.lx == 1||detailList.lx == 3?userName == detailList.jfzrrxm:detailList.lx == 5?userName == detailList.yfzrrxm:userName == detailList.cjrxm"
+               @click="handleTask($event,'jfqy',index)" :disabled="detailList.zt == 3">{{detailList.lx == 3?'甲方确认':detailList.lx == 5?'乙方确认':'创建人确认'}}</el-button>
               <el-button v-if="detailList.lx == 9 && detailList.zt != 2"   @click="handleTask($event,'delete',index)">删除任务</el-button>
               <el-button v-if="detailList.lx == 9 && detailList.zt != 2"   @click="handleTask($event,'edit',index)">编辑任务</el-button>
               <el-button @click="handleTask($event,'daily',index)" > 填写日报</el-button>
@@ -77,7 +78,8 @@ import {changeTaskStatus} from '@/api/task.js'
 export default {
   data(){
     return{
-       checked:false
+       checked:false,
+       userName:''
     }
   },
   props:{
@@ -87,6 +89,9 @@ export default {
             return []
           }
       }
+  },
+  mounted(){
+    this.userName = window.userName
   },
   methods:{
     handleTaskinfo(e,param){      
@@ -100,22 +105,10 @@ export default {
       task.type = type
       this.$emit('handleTaskDialog',task);
     },
-    // handleTask(e,params){
-    //       let type = e.target.getAttribute("data-type");
-    //       let indx = type.split('&')[1]
-    //       let task  =  this.TaskDatas[indx]
-    //       task.type = type.split('&')[0]
-    //       this.$emit('handleTaskDialog',task);
-    //       return ;
-    // },
     changeTaskState(e,params){ // 开闭开启任务
       e.stopPropagation(); 
-      let groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag
-      if(!groupTag.includes('ProblemAdmin')){
-         this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
-         return;
-      }         
-      if(state==1){
+      let groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+      if(params.zt == 1){
         this.$confirm('您确定完成了本任务吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -131,6 +124,10 @@ export default {
           })
         }).catch(() => {});
       }else{
+         if(!groupTag.includes('ProblemAdmin')){
+            this.$alert('对不起,您没有操作权限！(如有问题，请联系管理员)', '提示', {confirmButtonText: '确定',type:'warning'});
+            return;
+         }    
         changeTaskStatus({
          rwbh:params.rwbh,
          state:params.zt==1?'2':'1'

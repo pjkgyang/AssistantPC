@@ -233,6 +233,7 @@ export default {
     background: #dddddd;;
     border-radius: 5px;
     margin:0 10px;
+    overflow-y: hidden;
 }
 .milestone_stage .milestone_stage_top{
   padding: 0 10px;

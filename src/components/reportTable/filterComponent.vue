@@ -31,6 +31,13 @@
                <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':filterWord.gczd == gcqy.label}">{{gcqy.mc}}</span>
               </p>
            </div>   
+            <div v-if="filterList.includes('bm')">
+              <p class="query-title">部门:</p>
+              <p class="query-list"  @click="handleBM">
+                <span data-type = ""  :class="{'bg-active':filterWord.bm == ''}">全部</span>
+                <span v-for="(bm,index) in bmList" :data-type="bm.label" :key="index" :class="{'bg-active':filterWord.bm == bm.label}">{{bm.mc}}</span>
+                </p>
+           </div> 
             <div v-if="filterList.includes('cp')">
               <p class="query-title">产品:</p>
               <p class="query-list" @click="handleCP">
@@ -112,11 +119,13 @@ export default {
         { mc: "集成", label: "集成" },
         { mc: "服务", label: "服务" }
       ],
+      bmList:[],
       filterWord:{
         sfzt:"",
         jjzt: "",
         cpxmc: "",
         gczd: "",
+        bm:"",
         cp:"",
         dwlx: "",
         sjlb: "",
@@ -162,6 +171,13 @@ export default {
       let gczd = e.target.getAttribute("data-type");
       if (gczd == null) return;
       this.filterWord.gczd = gczd;
+      this.$emit('handleChangeFilter',this.filterWord)
+    },
+    handleBM(e){
+      // 部门
+      let bm = e.target.getAttribute("data-type");
+      if (bm == null) return;
+      this.filterWord.bm = bm;
       this.$emit('handleChangeFilter',this.filterWord)
     },
     handleCP(e){
@@ -223,17 +239,36 @@ export default {
     //   },
   },
   mounted() {
-    if (!getSession("ProjectCustomStatus")||getSession("cpx")||getSession("gczd")||getSession("cp")) {
-      getMenu("cpx", this.cpxline, true); // 获取产品线
-      getMenu('ProjectCustomStatus',this.xmlxList,'');//获取工程战队   
-      getMenu("gczd", this.gczdList, true); // 获取工程战队
-      getMenu("cp", this.cplist, true); // 获取产品
-    } else {
-      this.cpxline = getSession("cpx");
-      this.gczdList = getSession("gczd");
-      this.xmlxList = getSession('ProjectCustomStatus');  
-      this.cplist = getSession("cp");
+    if(!getSession("ProjectCustomStatus")){
+       getMenu('ProjectCustomStatus',this.xmlxList,'');//获取项目类型
+    }else{
+       this.xmlxList = getSession('ProjectCustomStatus');   
     }
+
+    if(!getSession("cpx")){
+       getMenu('cpx',this.cpxline,true);//获取产品线
+    }else{
+       this.cpxline = getSession('cpx');   
+    }
+
+    if(!getSession("gczd")){
+       getMenu('gczd',this.gczdList,'');//获取工程战队
+    }else{
+       this.gczdList = getSession('gczd');   
+    }
+
+    if(!getSession("cp")){
+       getMenu('cp',this.cplist,true);//获取产品
+    }else{
+       this.cplist = getSession('cp');   
+    }
+
+    if(!getSession("bm")){
+       getMenu('bm',this.bmList,true);//获取部门
+    }else{
+       this.bmList = getSession('bm');   
+    }
+
   },
   activated() {},
   watch: {},

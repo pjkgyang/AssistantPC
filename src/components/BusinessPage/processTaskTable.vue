@@ -1,0 +1,81 @@
+<template>
+ <div　style="padding:0 10px">
+    <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 100%"
+        border
+        :max-height="tableHeight"
+        @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" fixed="left"></el-table-column>
+        <el-table-column label="操作"  fixed="left" width="150">
+        <template slot-scope="scope" >
+            <el-button v-if="scope.row.zt == 2 && scope.row.lx == 1||scope.row.lx == 3?userName == scope.row.jfzrrxm:scope.row.lx == 5?userName == scope.row.yfzrrxm:userName == scope.row.cjrxm"
+             size="mini" type="text" @click="handlejfqr(scope.row)">{{scope.row.lx == 3||scope.row.lx == 1?'甲方确认':scope.row.lx == 5?'乙方确认':'创建人确认'}}</el-button>
+            <el-button size="mini" type="text" @click="handletask(scope.row)">填写日报</el-button>
+        </template>
+        </el-table-column>
+        <!-- <el-table-column  prop="jd" label="阶段"  width="120"> </el-table-column> -->
+        <el-table-column prop="rwmc_display" label="任务名称" min-width="300" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="lx_dispaly" label="任务类型" width="120"></el-table-column>
+        <el-table-column prop="ssrxm" label="责任人" width="90" ></el-table-column>
+        <el-table-column  label="状态" width="90" >
+           <template slot-scope="scope">
+              <el-tag :type="scope.row.zt == 5 ? 'danger' :scope.row.zt == 2?'success': 'primary'"  size="mini"
+          disable-transitions>{{scope.row.zt_display}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="zt_display" label="是否确认" width="90">
+          <template slot-scope="scope">
+              <el-tag :type="scope.row.sfjfqr == '0' ? 'primary' : 'success'"  size="mini"
+          disable-transitions>{{scope.row.sfjfqr == '0'?'未确认':'已确认'}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="yxj_display" label="优先级" width="90"></el-table-column>
+        <el-table-column prop="jhksrq" label="计划开始日期" width="120"></el-table-column>
+        <el-table-column prop="jhjsrq" label="计划结束日期" width="120"></el-table-column>
+    </el-table>
+  <div>
+  </div>
+ </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+        tableHeight:window.innerHeight - 220,
+        multipleSelection: [],
+        userName:''
+    };
+  },
+  props:{
+    tableData:{
+      type:Array,
+      default:()=>{
+        return []
+      }
+    }
+  },
+  mounted(){
+    this.userName = window.userName;
+  },
+  methods:{
+      handlejfqr(data){
+        data.type = 'jfqr';
+        this.$emit('handlejfqr',data)  
+      },
+      handletask(data){
+        data.type = 'daily';
+        this.$emit('handletask',data)   
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      }  
+  },
+  components: {}
+};
+</script>
+
+<style scoped>
+</style>

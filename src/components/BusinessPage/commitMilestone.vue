@@ -32,6 +32,7 @@
                     </el-select>
                 </span>
                </p>
+               <p style="color:#bbb;font-size:12px">无销售人员或销售人员不正确，请联系项目经理在团队里修改销售责任人。</p>
            </div>
             <div style="padding:20px">
                  <p style="display:flex"><span style="display:inline-block;width:40px">说明:</span>
@@ -131,6 +132,13 @@ export default {
     },
 
     handleCommitMilestone() {
+      if(this.lcblx != 3 && this.lcblx != 2 && !this.valueXSQRR){
+        this.$alert('请选择销售确认人','提示',{
+           confirmButtonText: "确定",
+           type: "warning",
+        })
+        return;
+      }
       //提交里程碑
       submitMilestone({
         xmbh: this.xmbh,

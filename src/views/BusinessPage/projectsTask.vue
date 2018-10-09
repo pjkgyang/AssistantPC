@@ -14,20 +14,25 @@
     <div  v-if="tabsLabel == 'process'" style="display:flex">
     <div  class="project_task_detail_taskbar">
           <div class="project_info">
+              <div style="margin:5px 0" text-center>
+                <el-radio-group v-model="radio" @change="handleChangeRadio">
+                      <el-radio label="kbst">看板视图</el-radio>
+                      <el-radio label="bgst">表格视图</el-radio>
+                </el-radio-group>
+              </div>
             <div style="margin-bottom:5px;">
-             任务类型:
+                任务类型:
               <el-select v-model="rwlxValue" placeholder="请选择任务类型" size="mini" @change="handleChangeRwlx">
                 <el-option v-for="item in rwlxOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
              </el-select>
              </div>
               <div>
-             任务状态:
-              <el-select v-model="rwztValue" placeholder="请选择任务状态" size="mini" @change="handleChangeRwzt">
-                <el-option v-for="item in rwztOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-             </el-select>
+                任务状态:
+                  <el-select v-model="rwztValue" placeholder="请选择任务状态" size="mini" @change="handleChangeRwzt">
+                    <el-option v-for="item in rwztOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                </el-select>
               </div>
           </div>
-
             <ul class="task_list" >
               <div>
                 <li v-if="taskList.length != 0 && taskList != null" :class="{'list-active':shownindex === index}" v-for="(task,index) of taskList" :key="index"  @click="getTaskinfo(task,index)">
@@ -58,7 +63,7 @@
 
        <!-- 任务展示 -->
        <div class="project_task_milestone">
-        <div style="height:100%;" class="milestone-list" v-if="ViewTransition">
+        <div style="height:100%;" class="milestone-list" v-if="ViewTransition && radio != 'bgst'">
           <div v-for="(milestone,index) in milestones" :key="index" v-if="taskList.length != 0 && taskList != null">
             <itemTask  :rwlx="rwlxValue" :rwzt="rwztValue" :TaskDatas="milestone.tasks.rows" :index="index" :milestone="milestone" @handleDialog="handleDialog" @handleTaskinfo="handleTaskinfo" @addItemTask="addItemTask"></itemTask>   
           </div> 
@@ -68,29 +73,58 @@
           </div>
         </div>
 
-
         <!-- 表格形式 表格-->
-        <div v-if="!ViewTransition" style="padding:0 10px;min-width:1040px;background:#fff;margin:0 10px;border-radius:5px">
-          <div style="display:flex;justify-content:space-between;border-bottom:2px solid #e4e7ed;height:40px;margin:0 0 20px 10px;">
-            <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="今天的任务" name="first"></el-tab-pane>
-            <el-tab-pane label="所有任务" name="second"></el-tab-pane>
-          </el-tabs>
-            <div>
-              <div class="select_one">
-                  <itemSelect :options="options" @handleSelect="handleSelectWc"></itemSelect>
-              </div>
-              <div  class="select_two">
-                  <itemSelect :options="optionsSort"  @handleSelect="handleSelectSort"></itemSelect>
-              </div>
-           </div>
-          </div>
-              <itemtable :tableData="myTaskArr" @handleDailyParper="handleDailyParper" @changeTaskStaus="changeTaskStaus"  @handleCell="handleCell"></itemtable>
-            <div style="text-align:right;margin-top:20px;">
-              <!-- 分页 -->
-              <pagination v-if="records != 0 && records != null" :pageSize="pageSize" :total="records" @handleCurrentChange="handleCurrentChange"></pagination>  
+          <div v-if="!ViewTransition" class="my-table" style="padding:0 10px;min-width:1040px;background:#fff;margin:0 10px;border-radius:5px">
+            <div style="display:flex;justify-content:space-between;border-bottom:2px solid #e4e7ed;height:40px;margin:0 0 20px 10px;">
+              <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="今天的任务" name="first"></el-tab-pane>
+              <el-tab-pane label="所有任务" name="second"></el-tab-pane>
+            </el-tabs>
+              <div>
+                <div class="select_one">
+                    <itemSelect :options="options" @handleSelect="handleSelectWc"></itemSelect>
+                </div>
+                <div  class="select_two">
+                    <itemSelect :options="optionsSort"  @handleSelect="handleSelectSort"></itemSelect>
+                </div>
             </div>
-        </div>
+            </div>
+                <itemtable :tableData="myTaskArr" @handleDailyParper="handleDailyParper" @changeTaskStaus="changeTaskStaus"  @handleCell="handleCell"></itemtable>
+              <div style="text-align:right;margin-top:20px;">
+                <!-- 分页 -->
+                <pagination v-if="records != 0 && records != null" :pageSize="pageSize" :total="records" @handleCurrentChange="handleCurrentChange"></pagination>  
+              </div>
+          </div>
+
+        <transition name="el-zoom-in-top">
+          <div v-if="radio == 'bgst' && ViewTransition" style="background:#fff;margin:0 10px;border-radius:5px">
+              <div style="border-bottom:2px solid rgb(228, 231, 237);margin:0 10px 5px;padding:5px 0">
+                  <!-- <el-select v-model="bglx" placeholder="请选择" size="mini" style="width:160px;border:1px solid #ddd;border-radius:3px">
+                  <el-option
+                    v-for="item in bgOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>  -->
+                <el-checkbox v-model="sfxgValue" label="和我相关"  size="medium" border @change="handleChangeCheckbox"></el-checkbox>&#x3000;
+                <el-button v-if="rwztValue == '2' && radio == 'bgst' " type="danger" size="mini">批量关闭</el-button>
+                <el-button v-if="rwztValue == '1' && radio == 'bgst'" type="primary" size="mini">批量确认</el-button>
+              </div>
+            <taskTable :tableData="bgstList" @handlejfqr="handleDialog" @handletask="handleDialog"></taskTable>
+            <div text-right style="margin:0 11px;padding:5px 0">
+                <el-pagination
+                  @size-change="handleSizeChangeBg"
+                  @current-change="handleCurrentChangeBg"
+                  :current-page="bgCurrentPage"
+                  :page-sizes="[20, 35, 50 , 100]"
+                  :page-size="bgPageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="bgTotal">
+                </el-pagination>
+            </div>
+          </div>
+         </transition>
       </div>
       <!-- 任务详情弹出层 -->
       <el-dialog title="任务详情" :visible.sync="dialogTableVisible" width="700px" :close-on-click-modal="false"> 
@@ -120,7 +154,7 @@
               <p><span style="display:inline-block;width:90px" class="el-icon-service"> 责任人</span><span>{{lcbTasks.ssrxm == ''?'暂无':lcbTasks.ssrxm}}&#x3000;</span>
                <span v-if="lcbTasks.lx != 1 && Operatepower">
                 <span v-if="!xgssry">
-                      <el-select v-model="value8" size='mini' filterable :filter-method="filterSearch" @change="getTaskssry" placeholder="请选择/搜索用户姓名/编号">
+                      <el-select v-model="value" size='mini' filterable :filter-method="filterSearch" @change="getTaskssry" placeholder="请选择/搜索用户姓名/编号">
                           <el-option
                             v-for="(item,index) in taskSSry"
                             :key="index"
@@ -252,37 +286,60 @@
     </el-dialog>
     </div>
     <!-- 概览 -->
-    <div v-if="tabsLabel == 'overview'">
-         <overview :isAll="isAll" :xmbh="xmbh" :label="tabsLabel" @checkSkipDetail="checkSkipDetail"></overview>
-    </div>
+     <el-collapse-transition>
+      <div v-if="tabsLabel == 'overview'">
+          <overview :isAll="isAll" :xmbh="xmbh" :label="tabsLabel" @checkSkipDetail="checkSkipDetail"></overview>
+      </div>
+     </el-collapse-transition>
+
     <!-- 模板 -->
-    <div v-if="tabsLabel == 'template'">
-         <templateTabel></templateTabel>
-    </div>
+     <el-collapse-transition>
+      <div v-if="tabsLabel == 'template'">
+          <templateTabel></templateTabel>
+      </div>
+    </el-collapse-transition>
+
     <!-- 文件 -->
-    <div v-if="tabsLabel == 'files'">
-        <fileTable :xmbh="xmbh"></fileTable>
-    </div>
+     <el-collapse-transition>
+      <div v-if="tabsLabel == 'files'">
+          <fileTable :xmbh="xmbh"></fileTable>
+      </div>
+    </el-collapse-transition>
+
     <!-- 里程碑管理 -->
-    <div v-if="tabsLabel == 'milestone'">
-      <milestoneGl :xmbh="xmbh" :xmjl="xmkbInfo.yfzrrxm"></milestoneGl>
-    </div>
+     <el-collapse-transition>
+      <div v-if="tabsLabel == 'milestone'">
+        <milestoneGl :xmbh="xmbh" :xmjl="xmkbInfo.yfzrrxm"></milestoneGl>
+      </div>
+    </el-collapse-transition>
+
     <!-- 问题 -->
-    <div v-if="tabsLabel == 'question'">
-        <question :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :xmkbInfo="xmkbInfo" :isAll="isAll"></question>
-    </div>
+     <el-collapse-transition>
+      <div v-if="tabsLabel == 'question'">
+          <question :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :xmkbInfo="xmkbInfo" :isAll="isAll"></question>
+      </div>
+    </el-collapse-transition>
+
      <!-- 投诉 -->
-    <div v-if="tabsLabel == 'complain'">
-       <complain :xmbh="xmbh" :xmmc="xmkbInfo.xmmc"></complain>
-    </div>
+     <el-collapse-transition>
+      <div v-if="tabsLabel == 'complain'">
+        <complain :xmbh="xmbh" :xmmc="xmkbInfo.xmmc"></complain>
+      </div>
+    </el-collapse-transition>
+
     <!-- 团队 -->
-    <div v-if="tabsLabel == 'teamwork'">
-       <teamWork :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :dwmc="xmkbInfo.dwmc"></teamWork>
-    </div>
+     <el-collapse-transition>
+      <div v-if="tabsLabel == 'teamwork'">
+        <teamWork :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :dwmc="xmkbInfo.dwmc"></teamWork>
+      </div>
+     </el-collapse-transition>
+
     <!-- 主动式服务 -->
-    <div v-if="tabsLabel == 'zdsfw'">
-       <zdsfw :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" ></zdsfw>
-    </div>
+    <el-collapse-transition>
+      <div v-if="tabsLabel == 'zdsfw'">
+        <zdsfw :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" ></zdsfw>
+      </div>
+    </el-collapse-transition>
   </div>
 
 
@@ -302,7 +359,7 @@
           <el-button type="primary" size="mini" @click="handleSaveChat">保存</el-button>
         </div>
       </div>
-    </el-dialog> 
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -326,6 +383,7 @@ import  complain from '@/components/BusinessPage/complain.vue'
 import  overview from '@/components/BusinessPage/overview.vue'
 import  teamWork from '@/components/BusinessPage/teamWork.vue'
 import  zdsfw from '@/components/BusinessPage/zdsfw.vue'
+import taskTable from '@/components/BusinessPage/processTaskTable.vue'
 import { getProjectCatalog } from '@/api/xmfz.js'
 import { getMilestoneCatalog  } from '@/api/milestone.js'
 import { getTasksByCatalog ,addOrUpdateTask ,getTasks,getTaskDto ,getTaskLogs ,deleteTask ,changeTaskStatus,confirmMilestone} from '@/api/task.js'
@@ -340,55 +398,39 @@ import { getMyDate } from '../../utils/util.js';
 export default {
   data(){
     return{
+        bgTotal:0,
+        bgPageSize:20,
+        bgCurrentPage:1,
+        radio:'kbst',
+        bgOptions: [
+        {value: '',label: '全部'}, 
+        {value: '0', label: '待我关闭的任务'},
+        {value: '1', label: '待我确认的任务'}],
+        bglx: '',
+        bgstList:[],
+
         errorImg:'this.src="' + require('../../../static/img/defaultAvatar.png') + '"',
-        value8:"",
+        value:"",
         taskSSry:[],
-        options:[{
-          label:"未完成",
-          value:1
-        },{
-          label:"已完成",
-          value:2
-        }],
-        optionsSort:[{
-          label:"按优先级排序",
-          value:'1'
-        },{
-          label:"按截止时间排序",
-          value:'2'
-        },{
-          label:"按创建时间最近排序",
-          value:'3'
-        },{
-          label:"按项目名称排序",
-          value:'4'
-        }],
-        rwlxOptions:[{
-          label:"全部",
-          value:''
-        },{
-          label:"里程碑任务",
-          value:'1'
-        },{
-          label:"工程任务",
-          value:'3'
-        },{
-          label:"客户任务",
-          value:'5'
-        },{
-          label:"个人任务",
-          value:'9'
-        }],
-        rwztOptions:[{
-          label:"全部",
-          value:''
-        },{
-          label:"已完成",
-          value:'2'
-        },{
-          label:"未完成",
-          value:'1'
-        }],
+        options:[
+          {label:"未完成",value:1},
+          {label:"已完成",value:2}],
+        optionsSort:[
+        {label:"按优先级排序",value:'1'},
+        {label:"按截止时间排序",value:'2' },
+        {label:"按创建时间最近排序",value:'3' },
+        {label:"按项目名称排序",value:'4'}],
+        rwlxOptions:[
+        {label:"全部",value:'' },
+        {label:"里程碑任务",value:'1'},
+        {label:"工程任务",value:'3'},
+        {label:"客户任务",value:'5'},
+        {label:"个人任务",value:'9'}],
+        rwztOptions:[
+        {label:"全部",value:''},
+        {label:"已完成",value:'2' },
+        {label:"未完成", value:'1'},
+        {label:"已确认",value:'3'}],
         rwlxValue:"",
         rwztValue:"",        
         activeName2:"first",
@@ -476,7 +518,8 @@ export default {
         isAll:null,
         xmtdShow:true,
         tagGroup:'',
-        cpData:{}
+        cpData:{},
+        sfxgValue:false //是否相关
 
     }
   },
@@ -484,11 +527,59 @@ export default {
 
   },
   methods:{
+    // 切换与我相关任务
+    handleChangeCheckbox(val){
+      this.getProductTasks();
+    },
+    // 改变视图
+    handleChangeRadio(val){
+      if(val == 'bgst'){
+        this.getProductTasks();
+      }else{
+        this.getMilestone(this.fbcpmc,this.fbcpbh);
+      } 
+    },
+    // 切换分页（表格视图）
+    handleCurrentChangeBg(data){
+      this.bgCurrentPage = data;
+    },
+    // 切换分页每页条数（表格视图）
+    handleSizeChangeBg(data){
+      this.bgCurrentPage = 1;
+      this.bgPageSize = data;
+    },
+    // 获取列表（任务）
+    getProductTasks(){
+      this.$get(this.API.getProductTasks,{
+        curPage:this.bgCurrentPage,
+        pageSize:this.bgPageSize,
+        xmbh:this.xmbh,
+        cpbh:this.fbcpbh,
+        cpmc:this.fbcpmc,
+        taskType:this.rwlxValue,
+        rwzt:this.rwztValue,
+        sfxg:this.sfxgValue?1:0
+      }).then((res)=>{
+        if(res.state == 'success'){
+          console.log(res.data)
+          this.bgstList = res.data.rows
+          this.bgTotal = res.data.records
+        }
+      })
+    },
     handleChangeRwlx(val){
-      this.getProjectCatalog();
+      if(this.radio == 'kbst'){
+        this.getProjectCatalog();
+      }else{
+         this.getProductTasks();
+      }
     },
     handleChangeRwzt(val){
-      this.getProjectCatalog();
+      if(this.radio == 'kbst'){
+        this.getProjectCatalog();
+      }else{
+         this.getProductTasks();
+      }
     },
      checkSkipDetail(data){ // 查看详情
       this.tabsLabel = data
@@ -640,7 +731,12 @@ export default {
         this.cpData = data;
         this.fbcpmc = data.cp
         this.fbcpbh = data.cpbh
-        this.getMilestone(this.fbcpmc,this.fbcpbh);
+        if(this.radio == 'kbst'){
+          this.getMilestone(this.fbcpmc,this.fbcpbh);
+        }else{
+          this.bgCurrentPage = 1;
+          this.getProductTasks();
+        }
         this.ViewTransition = true;
         this.shownindex = params;
         this.taskActive = " "
@@ -678,7 +774,6 @@ export default {
       }else if(typeof(data) == 'object' && data.type == 'commit'){  //提交里程碑
         this.lcbTaskDetail = data
         this.commitlcbVisible = !this.commitlcbVisible
-
       }else if(typeof(data) == 'object' && data.type == 'edit'){
          this.getTasksByCatalog(data.catalog,data.catalogId,data.cpbh,data.cpmc,data.catalogType); //获取里程碑任务 
          this.editTaskInfo = data
@@ -686,10 +781,10 @@ export default {
          this.dialogEditLcbTaskVisible = !this.dialogEditLcbTaskVisible
       }else if(data.type == 'jfqy'){         // 甲方确认   
            if(data.lx == 1){
-             if(window.userName != this.cpData.jfzrrxm){
-              this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
-              return;
-             }
+            //  if(window.userName != this.cpData.jfzrrxm){
+            //   this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
+            //   return;
+            //  }
             this.$confirm('您确定要确认任务完成吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -699,23 +794,27 @@ export default {
                   lcbbh:data.lcbbh
                 }).then(({data})=>{
                     if(data.state == 'success'){
-                      this.getMilestone(this.cpData.cp,this.cpData.cpbh);
+                      if(this.radio == 'kbst'){
+                         this.getMilestone(this.cpData.cp,this.cpData.cpbh);
+                      }else{
+                         this.getProductTasks();
+                      }
                     }
                 })
             }).catch(()=>{});
            }else{
-              if(data.lx == 3 && window.userName != this.cpData.jfzrrxm) {
-                 this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
-                 return;
-              }
-              if(data.lx == 5 && window.userName != this.cpData.yfzrrxm){
-                 this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
-                 return; 
-              }
-              if(data.lx == 9 && window.userName != data.cjrxm){
-                this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
-                return;
-              }
+              // if(data.lx == 3 && window.userName != this.cpData.jfzrrxm) {
+              //    this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
+              //    return;
+              // }
+              // if(data.lx == 5 && window.userName != this.cpData.yfzrrxm){
+              //    this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
+              //    return; 
+              // }
+              // if(data.lx == 9 && window.userName != data.cjrxm){
+              //   this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
+              //   return;
+              // }
               this.$confirm('您确定要确认任务完成吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -726,7 +825,11 @@ export default {
                   state:3,
                }).then(({data})=>{
                   if(data.state == 'success'){
-                    this.getMilestone(this.cpData.cp,this.cpData.cpbh);
+                    if(this.radio == 'kbst'){
+                      this.getMilestone(this.cpData.cp,this.cpData.cpbh);
+                    }else{
+                      this.getProductTasks();
+                    }
                   }
                })
             }).catch(()=>{});
@@ -873,8 +976,9 @@ export default {
 
      //表格 提交日报
       handleDailyParper(data){  
-        // console.log(data)
-        this.taskName = data.rwmc
+        this.TaskProcess = data
+        this.closeDialogNum = this.closeDialogNum -1
+        this.taskName = data.xmmc +' — '+data.cpmc_display+' — '+data.rwmc_display
         this.dialogDailyVisible = !this.dialogDailyVisible
       },
       // 提交里程碑（表格）
@@ -977,7 +1081,6 @@ export default {
 
       // 填写日报 保存
       handleSubmit(data){         
-        // console.log(data)
         addOrUpdateTaskProcess({
               xmbh:this.TaskProcess.xmbh,
               rwbh:this.TaskProcess.rwbh,
@@ -1321,6 +1424,7 @@ export default {
 
 
   activated(){
+      this.radio = 'kbst';
       this.fbcpmc = '';
       this.fbcpbh = '';
       this.userListShow = false
@@ -1391,7 +1495,8 @@ export default {
     complain,
     overview,
     teamWork,
-    zdsfw
+    zdsfw,
+    taskTable
     }
 }
 </script>

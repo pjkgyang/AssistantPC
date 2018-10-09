@@ -24,11 +24,11 @@ export default {
     return {
       dataList: {},
       headList: [],
-      filterList: ["keyword", "qygc", "date", "dwlx", "xmlx", "cpx"],
+      filterList: ["keyword",'bm',"date", "dwlx", "xmlx", "cpx"],
       filterDate: {
         keyword: "",
         xmlx: "",
-        gczd: "",
+        bm:"",
         date: "",
         dwlx: "",
         cpx: ""
@@ -43,8 +43,8 @@ export default {
       let endDt = !this.filterDate.date ? "" : this.filterDate.date[1];
       window.open(
         window.baseurl +
-          "report/exportGrtsqlReport.do?qyzd=" +
-          this.filterDate.gczd +
+          "report/exportGrtsqlReport.do?bm=" +
+          this.filterDate.bm +
           "&startDt=" +
           startDt +
           "&endDt=" +
@@ -72,7 +72,8 @@ export default {
       this.$get(this.API.grtsqlReport, {
         curPage: this.currentPage,
         pageSize: this.pageSize,
-        qygc: this.filterDate.gczd,
+        // qygc: this.filterDate.gczd,
+        bm: this.filterDate.bm,
         startDt: !this.filterDate.date ? "" : this.filterDate.date[0],
         endDt: !this.filterDate.date ? "" : this.filterDate.date[1],
         wtxmlx: this.filterDate.xmlx,
@@ -94,13 +95,14 @@ export default {
     },
     handleXxwt(data, i, params) {
       let obj = {
-        qyzd: this.filterDate.gczd,
+        // qyzd: this.filterDate.gczd,
+        bm:this.filterDate.bm,
         startDt: !this.filterDate.date ? "" : this.filterDate.date[0],
         endDt: !this.filterDate.date ? "" : this.filterDate.date[1],
         wtxmlx: this.filterDate.xmlx,
         dwlx: this.filterDate.dwlx,
         cpxbh: this.filterDate.cpx,
-        keyword: this.filterDate.keyword
+        keyword: this.filterDate.keyword,
       };
       obj["wtxgrbh"] = data[1];
       if (params[i].en.indexOf(",") != -1) {

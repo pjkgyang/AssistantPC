@@ -1,6 +1,7 @@
 <template>
   <div class="item-addUser">   
     <div style="text-align:right;padding-bottom:10px;">
+      <el-button size="small" type="primary" @click="handleChangeZbr">修改中标人</el-button>
       <el-button size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
     </div>
     <div class="item-user-outTable">
@@ -53,6 +54,7 @@
                  <td>{{cyz.unitType == 0?'金智':cyz.unitType == 2?'合作伙伴':'学校成员'}}</td>
                  <td>{{cyz.dept}}</td>
                  <td>
+                   <el-button v-if="cyz.roleName.indexOf('销售') != -1 &&　(userTag || itemYfzrr.userName == username)"  plain size="mini"  plain @click="changeXsr(cyz)">修改</el-button>
                    <el-button v-if="cyz.edit"  plain size="mini" :data-wid="cyz.userId" plain @click="editUser($event,cyz)">编辑</el-button>
                    <el-button v-if="cyz.del" type="danger" size="mini" :data-wid="cyz.userId" plain @click="delectUser($event,cyz.userId)">删除</el-button>
                  </td>
@@ -187,6 +189,7 @@
                             <el-button type="primary" @click="handleEditCommit" size="mini">确 定</el-button>
                   </div>
          </el-dialog>   
+         <zbrDialog :show.sync="show" :count="count" :xmbh="xmbh" @handlemodifyZbr="handlemodifyZbr"></zbrDialog>
   </div>
 </template>
 <script>
@@ -205,6 +208,7 @@ import {
   modifyProjectManager
 } from "@/api/personal.js";
 import pagination from "@/components/BusinessPage/pagination.vue";
+import zbrDialog from "@/components/dialog/zbr-dialog.vue";
 import { getResponsibleTaskList } from "@/api/common.js";
 import { getUnits, getDepts } from "@/api/system.js";
 import { EventBus } from "../../utils/util.js";
@@ -212,6 +216,7 @@ import { getMenu, getSession } from "@/utils/util.js";
 export default {
   data() {
     return {
+      show:false,
       UserList: [
         {
           xm: "jobs",
@@ -263,7 +268,10 @@ export default {
       Maplist: [],
       isJF: true,
       userTag:false,
-      username:''
+      username:'',
+      zbrData:{},
+      count:0,
+      mark:false
     };
   },
   props: {
@@ -285,6 +293,15 @@ export default {
     }
   },
   methods: {
+    // 修改中标人
+    handlemodifyZbr(data){
+      this.mark = false;
+      this.zbrData.fbbh = data.fbbh
+      this.zbrData.xmbh = this.xmbh
+      this.isAddCyz = true;
+      this.queryUser(1, false);
+      this.dialogVisible = !this.dialogVisible;
+    },
     handleBMfocus() {
       this.selectVisible = true;
     },
@@ -327,6 +344,12 @@ export default {
         this.yhlb = data.yhlb;
       }
       this.editdialogVisible = !this.editdialogVisible;
+    },
+    // 修改中标人
+    changeXsr(data){
+         this.queryUser(1, false);
+         this.mark = true;
+         this.dialogVisible = !this.dialogVisible
     },
     handleEditCommit() {
       //保存 编辑 业务线
@@ -448,10 +471,16 @@ export default {
     },
     handleNewAdd() {
       // 新增参与者
+      this.zbrData = {};
+      this.mark = false;
       this.queryUser(1, false);
       this.isAddCyz = true;
       this.BtnDisabled = "";
       this.dialogVisible = !this.dialogVisible;
+    },
+    // 修改中标人
+    handleChangeZbr(){
+      this.show = !this.show     
     },
     //   分页查询用户
     handleCurrentChange(data) {
@@ -463,19 +492,44 @@ export default {
     },
     //   添加参与者
     addItemCyz(data, param) {
-      addProjectParticipant({
-        xmbh: this.xmbh,
-        yhxm: data.nickName,
-        yhbh: data.uid
-      }).then(({ data }) => {
-        if (data.state == "success") {
-          this.$emit("addItemuser", "");
-          this.queryProjectParticipantMap();
-          this.UserList[param].state = "ytj";
-        } else {
-          this.BtnDisabled = "";
+      if(this.mark){
+        this.$post(this.API.modifySale,{
+          xmbh:this.xmbh,
+          yhbh:data.uid,
+          yhxm:data.nickName
+        }).then((res)=>{
+          if(res.state == 'success'){
+            this.dialogVisible = !this.dialogVisible;
+            this.queryProjectParticipantMap();
+          }
+        })
+      }else{
+        if(JSON.stringify(this.zbrData) == '{}'){
+          addProjectParticipant({
+            xmbh: this.xmbh,
+            yhxm: data.nickName,
+            yhbh: data.uid
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.$emit("addItemuser", "");
+              this.queryProjectParticipantMap();
+              this.UserList[param].state = "ytj";
+            } else {
+              this.BtnDisabled = "";
+            }
+          });
+        }else{
+          this.zbrData.yhbh = data.uid
+          this.zbrData.yhxm = data.nickName
+          this.$post(this.API.modifyZbr,this.zbrData).then((res)=>{
+            if(res.state == 'success'){
+              this.dialogVisible = !this.dialogVisible;
+              this.count += 1;
+              this.queryProjectParticipantMap();
+            }
+          })
         }
-      });
+      }
     },
     //   搜索用户
     searchUser(val) {
@@ -721,7 +775,7 @@ export default {
       this.username = sessionStorage.username;
       this.queryProjectParticipantMap();
   },
-  components: { pagination }
+  components: { pagination,zbrDialog }
 };
 </script>
 <style scoped>
