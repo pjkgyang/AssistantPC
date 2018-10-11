@@ -21,7 +21,7 @@
                     <el-tab-pane label="里程碑" name="milestone" v-if="isJZuser != 1"></el-tab-pane> 
                     <el-tab-pane label="模板" name="template" v-if="groupTag.indexOf('JZGCRY') != -1"></el-tab-pane>
                     <el-tab-pane label="团队" name="teamwork" v-if="isJZuser != 1"></el-tab-pane>
-                    <!-- <el-tab-pane label="主动式服务" name="zdsfw"></el-tab-pane> -->
+                    <el-tab-pane label="主动式服务" name="zdsfw" v-if="zdsfwVisible"></el-tab-pane>
                 </el-tabs>
         </div>
         <div style="height:100%" v-if="!shown">
@@ -54,7 +54,8 @@ export default {
                     path:""
                 }],
             isJZuser:'',
-            groupTag:''
+            groupTag:'',
+            zdsfwVisible:false
         }
     },
 
@@ -87,11 +88,17 @@ export default {
       xmdetail:{
          type:Boolean,
          default:true     
+      },
+      xmbh:{
+        type:String,
+        default:"" 
       }
   },
   mounted(){
         this.isJZuser =  sessionStorage.getItem('isJZuser')
-        this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag
+        this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+        
+        
   },
   computed:{
     xminfo:{
@@ -120,13 +127,18 @@ export default {
  watch:{
       bannerACtive(n,o){
         if(n=='overview'){
-            this.banberActive = "overview"
+           this.banberActive = "overview"
         }else{
            this.banberActive = n 
         }
       },
       xminfo(n,o){
-           this.crumb[1].mc = n
+           this.crumb[1].mc = n;
+           this.$get(this.API.isVisibleTab,{xmbh:this.xmbh}).then(res=>{
+              if(res.state == 'success'){
+                    this.zdsfwVisible = res.data
+              }
+          })
       }
  },
   components:{breadcrumb}

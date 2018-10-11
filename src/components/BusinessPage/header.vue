@@ -138,6 +138,7 @@ export default {
       this.title = "/businesspage/projects";
     } else {
       this.title = window.location.hash.split("#")[1];
+      // this.title = window.location.pathname
     }
     this.baseUrl = window.baseurl;
     this.getMessages();
@@ -152,7 +153,9 @@ export default {
       if (data.state == "success") {
         if (data.data != null && data.data.length != 0) {
           this.menuList = data.data;
-          if (window.location.hash == "#/") {
+      //  if (!window.location.hash)
+          //  if (window.location.hash == "#/") 
+          if (window.location.hash == "#/"){
             if(!data.data[0].url){
                if(data.data[0].childNodes[0].url){
                   this.$router.push({ path:data.data[0].childNodes[0].url });
@@ -186,6 +189,7 @@ export default {
         this.title = "/businesspage/projects";
       } else {
         this.title = window.location.hash.split("#")[1];
+        // this.title = window.location.pathname
       }
       if(from.name != 'MonthReportWrite'){
          document.title = '金智教育工程小助手'

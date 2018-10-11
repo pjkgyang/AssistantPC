@@ -46,6 +46,7 @@ export default {
     confirmActiveService:window.baseurl+'activeservice/confirmActiveService.do', //确认主动式服务
     listXmZdsfwCp:window.baseurl+'activeservice/listXmZdsfwCp.do',  // 获取产品
     listFwnrByCp:window.baseurl+'activeservice/listFwnrByCp.do',   // 获取服务内容
+    isVisibleTab:window.baseurl+'activeservice/isVisibleTab.do', //是否可见主动式服务
 
     // 修改参与者 中标人
     listZbxx:window.baseurl+'project/listZbxx.do', // 获取中标人列表

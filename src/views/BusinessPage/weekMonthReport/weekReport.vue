@@ -244,6 +244,7 @@ export default {
       }else{
           this.qyValue = ''
     }
+    // console.log(new Date().getFullYear()+'-'+(new Date().getMonth()+1))
     this.isJzyh = sessionStorage.isJZuser
     this.userId = JSON.parse(sessionStorage.userInfo).uid;
     this.NewYear = new Date().getFullYear();
@@ -599,7 +600,7 @@ export default {
             this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
             this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
             this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
-            this.monthValue = this.year+'-'+((this.month+1)>10?(this.month+1):'0'+(this.month+1));  
+            this.monthValue = this.year+'-'+((this.month+1)>=10?(this.month+1):'0'+(this.month));  
        } 
     },
     getListComments(oid){  // 获取批注列表

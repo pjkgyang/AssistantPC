@@ -1,7 +1,7 @@
 <template>
 <div style="height:100%;overflow-x:auto">
   <div class="myItem-top-bread">
-    <user-banner :shown="false" :Operatepower="Operatepower"  :bannerACtive="tabsLabel" :itemMc="'['+xmkbInfo.xmbh+']'+xmkbInfo.xmmc" :fbdetail="true" :userNum="itemUserNum" @handleAddDDgroup="handleAddDDgroup" @handleItemUser="userListShow = !userListShow" @handleTabsClick="handleTabsClick"></user-banner>
+    <user-banner :shown="false" :Operatepower="Operatepower"  :bannerACtive="tabsLabel" :itemMc="'['+xmkbInfo.xmbh+']'+xmkbInfo.xmmc" :fbdetail="true" :userNum="itemUserNum" @handleAddDDgroup="handleAddDDgroup" @handleItemUser="userListShow = !userListShow" :xmbh="xmbh" @handleTabsClick="handleTabsClick"></user-banner>
     <el-collapse-transition>
      <div v-if="userListShow" class="project-item-people">
          <addItemUser :dwmc="xmkbInfo.dwmc" :xmbh="xmbh" @addItemuser="addItemuser"></addItemUser>
@@ -107,11 +107,11 @@
                     :value="item.value">
                   </el-option>
                 </el-select>  -->
-                <el-checkbox v-model="sfxgValue" label="和我相关"  size="medium" border @change="handleChangeCheckbox"></el-checkbox>&#x3000;
-                <el-button v-if="rwztValue == '2' && radio == 'bgst' " type="danger" size="mini">批量关闭</el-button>
-                <el-button v-if="rwztValue == '1' && radio == 'bgst'" type="primary" size="mini">批量确认</el-button>
+                <el-checkbox v-model="sfxgValue"  label="和我相关"  size="medium"  @change="handleChangeCheckbox"></el-checkbox>&#x3000;
+                <el-button v-if="rwztValue == '1' && radio == 'bgst' " type="danger" size="mini" @click="handleCloseBatchlot">批量关闭</el-button>
+                <el-button v-if="rwztValue == '2' && radio == 'bgst'" type="primary" size="mini" @click="handleCloseConfirm">批量确认</el-button>
               </div>
-            <taskTable :tableData="bgstList" @handlejfqr="handleDialog" @handletask="handleDialog"></taskTable>
+            <taskTable :tableData="bgstList" :rwzt="rwztValue" @handlejfqr="handleDialog" @handletask="handleDialog" @handleSelectionChange="handleSelectionChange"></taskTable>
             <div text-right style="margin:0 11px;padding:5px 0">
                 <el-pagination
                   @size-change="handleSizeChangeBg"
@@ -519,17 +519,76 @@ export default {
         xmtdShow:true,
         tagGroup:'',
         cpData:{},
-        sfxgValue:false //是否相关
-
+        sfxgValue:false, //是否相关
+        mutipleSelect:[],
+        lcbrwArr:[],
+        qtrwArr:[],
+        zdsfwVisible:false
     }
   },
   mounted(){
 
   },
   methods:{
+    // 复选表格
+    handleSelectionChange(data){
+      this.lcbrwArr = [];
+      this.qtrwArr = [];
+      data.forEach(ele=>{
+         if(ele.lx == 1){
+           this.lcbrwArr.push(ele.lcbbh);
+         }else{
+           this.qtrwArr.push(ele.rwbh);
+         }
+      })
+    },
+    handleCloseBatchlot(){
+        if(!this.qtrwArr.length){
+          this.$alert('请选择要关闭的任务','提示',{type:'warning',confirmButtonText: '确定'});
+          return;
+        }
+        changeTaskStatus({
+            rwbh:this.qtrwArr.join(','),
+            state:'2'
+          }).then(({data})=>{
+              if(data.state == 'success'){
+               this.getProductTasks(); 
+            }
+        })  
+    },
+    // 批量确认
+    handleCloseConfirm(){
+        if(this.lcbrwArr.length > 0 ){
+            confirmMilestone({
+              lcbbh:this.lcbrwArr.join(',')
+            }).then(({data})=>{
+              if(data.state == 'success'){
+                  if(this.radio == 'kbst'){
+                    this.getMilestone(this.cpData.cp,this.cpData.cpbh);
+                  }else{
+                    this.getProductTasks();
+                }
+              }
+            })
+         }
+         if(this.qtrwArr.length > 0 ){
+             changeTaskStatus({
+                  rwbh:this.qtrwArr.join(','),
+                  state:3,
+               }).then(({data})=>{
+                  if(data.state == 'success'){
+                    if(this.radio == 'kbst'){
+                      this.getMilestone(this.cpData.cp,this.cpData.cpbh);
+                    }else{
+                      this.getProductTasks();
+                    }
+               }
+            }) 
+         }
+    },
     // 切换与我相关任务
     handleChangeCheckbox(val){
-      this.getProductTasks();
+        this.getProductTasks();
     },
     // 改变视图
     handleChangeRadio(val){
@@ -542,11 +601,13 @@ export default {
     // 切换分页（表格视图）
     handleCurrentChangeBg(data){
       this.bgCurrentPage = data;
+      this.getProductTasks();
     },
     // 切换分页每页条数（表格视图）
     handleSizeChangeBg(data){
       this.bgCurrentPage = 1;
       this.bgPageSize = data;
+      this.getProductTasks();
     },
     // 获取列表（任务）
     getProductTasks(){
@@ -561,8 +622,11 @@ export default {
         sfxg:this.sfxgValue?1:0
       }).then((res)=>{
         if(res.state == 'success'){
-          console.log(res.data)
-          this.bgstList = res.data.rows
+          if(!res.data.rows){
+             this.bgstList = []
+          }else{
+             this.bgstList = res.data.rows
+          }
           this.bgTotal = res.data.records
         }
       })
@@ -765,7 +829,7 @@ export default {
 
     // 提交任务 填写日志对话框
     handleDialog(data){  
-      let param = data;
+      // let param = data;
       if(typeof(data) == 'object' && data.type == 'daily'){ //填写日报
         this.taskName = data.rwmc_display
         this.TaskProcess = data
@@ -779,7 +843,7 @@ export default {
          this.editTaskInfo = data
          this.dialog = true
          this.dialogEditLcbTaskVisible = !this.dialogEditLcbTaskVisible
-      }else if(data.type == 'jfqy'){         // 甲方确认   
+      }else if(data.type == 'jfqr'){   // 甲方确认   
            if(data.lx == 1){
             //  if(window.userName != this.cpData.jfzrrxm){
             //   this.$alert('对不起,您没有操作权限！', '提示', {confirmButtonText: '确定',type:'warning'});
@@ -963,10 +1027,7 @@ export default {
                     }
                 })
               }).catch(() => {
-
         });
-
-       
       },
       addUser(e) {
         e.stopPropagation();
@@ -1032,7 +1093,6 @@ export default {
 
       // 添加参与者
       addTaskParty(e){    
-
            let label = e.currentTarget.getAttribute('data-label');
            let index = label.split('&')[2]
            let yhbh = label.split('&')[1]
@@ -1421,8 +1481,6 @@ export default {
                 })
         },
     },
-
-
   activated(){
       this.radio = 'kbst';
       this.fbcpmc = '';
@@ -1467,15 +1525,16 @@ export default {
           this.Operatepower = true
         }
       }
-      
+     
       this.getItemUserNum();// 获取项目人员总数
+
       isVisibleXmtd({ // 是否显示 团队成员
          xmbh:this.xmbh
       }).then(({data})=>{
          if(data.state == 'success'){
              this.xmtdShow  = data.data
          }
-     }) 
+     });
     },
   components:{
     itemTask,

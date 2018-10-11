@@ -1,16 +1,14 @@
 <template>
+  <div>
     <div>
-       <div>
-           <filterComponent  :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"
-           ></filterComponent>
-       </div>
-        <div>
-            <!-- <tableComponent :tableData="dataList" :tableHead="headList" :pageShow="true" :currentPage="currentPage"  @handleCurrentChange="handleCurrentChange"
+      <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"></filterComponent>
+    </div>
+    <div>
+      <!-- <tableComponent :tableData="dataList" :tableHead="headList" :pageShow="true" :currentPage="currentPage"  @handleCurrentChange="handleCurrentChange"
             :height="'370px'" @handleXxwt="handleXxwt" @exportTable="exportTable"></tableComponent> -->
-            <tableComponents :tableData="dataList"  :pageShow="true" :currentPage="currentPage" :pageSize="pageSize"  @handleCurrentChange="handleCurrentChange"
-            @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[0,1,2,3]' :widthArr="[3]" :Width="140" :Height="0"></tableComponents>
-        </div>
-    </div>    
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[0,1,2,3]' :widthArr="[]" :Width="140" :Height="0"></tableComponents>
+    </div>
+  </div>
 </template>
 <script>
 import { getResponsibleTaskList } from "@/api/common.js";
@@ -24,17 +22,17 @@ export default {
     return {
       dataList: {},
       headList: [],
-      filterList: ["keyword",'bm',"date", "dwlx", "xmlx", "cpx"],
+      filterList: ["keyword", "bm", "date", "dwlx", "xmlx", "cpx"],
       filterDate: {
         keyword: "",
         xmlx: "",
-        bm:"",
+        bm: "",
         date: "",
         dwlx: "",
         cpx: ""
       },
       currentPage: 1,
-      pageSize:15
+      pageSize: 15
     };
   },
   methods: {
@@ -96,13 +94,13 @@ export default {
     handleXxwt(data, i, params) {
       let obj = {
         // qyzd: this.filterDate.gczd,
-        bm:this.filterDate.bm,
+        bm: this.filterDate.bm,
         startDt: !this.filterDate.date ? "" : this.filterDate.date[0],
         endDt: !this.filterDate.date ? "" : this.filterDate.date[1],
         wtxmlx: this.filterDate.xmlx,
         dwlx: this.filterDate.dwlx,
         cpxbh: this.filterDate.cpx,
-        keyword: this.filterDate.keyword,
+        keyword: this.filterDate.keyword
       };
       obj["wtxgrbh"] = data[1];
       if (params[i].en.indexOf(",") != -1) {

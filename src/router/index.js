@@ -8,16 +8,22 @@ import weekReportWrite from '@/views/BusinessPage/weekMonthReport/weekReport-wri
 import monthReportWrite from '@/views/BusinessPage/weekMonthReport/monthReport-write.vue'
 // import monthReportDetail from '@/views/BusinessPage/weekMonthReport/ReportDetail.vue'
 
-export default new Router({
+function getAbsolutePath () {
+  let path = location.pathname
+  return path.substring(0, path.lastIndexOf('/') + 1)
+ }
+
+ export default new Router({
+  // mode:'history',
+  // base:'/',
   routes: [
     {
       path: '/',
       name: 'BusinessPage',
-      // redirect: '/businesspage/home',
       component: resolve => require(['@/views/BusinessPage/businessHome.vue'], resolve), 
       children: [
         {
-          path: '/BusinessPage/home',
+          path: '/businesspage/home',
           name: 'BusinessPageHome',
           component: resolve => require(['@/views/BusinessPage/home.vue'], resolve),
         },
@@ -337,6 +343,28 @@ export default new Router({
         title:'服务计划详情'
       },
       component: resolve => require(['@/views/BusinessPage/zdsfwDetail.vue'], resolve),
+    },
+    {
+      path: '/rbdetial',
+      name: 'Rbdetial',
+      meta:{
+        title:'日报批注详情'
+      },
+      component: resolve => require(['@/views/BusinessPage/taskpzDetail/rbDetail.vue'], resolve),
+    },{
+      path: '/zbdetial',
+      name: 'Zbdetial',
+      meta:{
+        title:'周报批注详情'
+      },
+      component: resolve => require(['@/views/BusinessPage/taskpzDetail/zbDetail.vue'], resolve),
+    },{
+      path: '/ybdetial',
+      name: 'Ybdetial',
+      meta:{
+        title:'月报批注详情'
+      },
+      component: resolve => require(['@/views/BusinessPage/taskpzDetail/ybDetail.vue'], resolve),
     }
   ]
 })

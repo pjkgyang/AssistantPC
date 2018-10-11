@@ -415,9 +415,8 @@ export default {
     } else {
       this.ishow = false;
     }
-
     if (
-      this.groupTag.indexOf("JZGCRY") != -1 ||
+      this.groupTag.indexOf("JYGL") != -1 ||
       this.groupTag.indexOf("QYZ") != -1 ||
       this.groupTag.indexOf("ZDDZ") != -1 ||
       (this.xmjl == sessionStorage.username)

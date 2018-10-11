@@ -24,7 +24,6 @@
          </div>
 
          <div class="task-log-tabel">
-             
               <el-table :data="tableData" border style="width: 100%" height="calc(100vh - 185px)"> 
                  <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
@@ -439,10 +438,11 @@ export default {
 .task-log{
  min-width: 1280px;
  width: 90%;
- margin:10px  auto;
- padding: 10px;
+ margin:10px auto 0;
+ padding: 10px 10px 0;
  background: #fff;
- box-shadow:0 2px 12px 0 rgba(0,0,0,.1)
+ box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
+ border-radius: 4px;
 }
 .task-log-addDailyPaper {
   float: right;

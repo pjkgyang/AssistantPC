@@ -178,7 +178,6 @@ export default {
     handleCloseTZJH(){
           this.dialogchangeDateVisible = !this.dialogchangeDateVisible
     },
-
     handleTaskinfo(data){      //任务详情模态框
        data.lcbindex = this.index
        this.$emit('handleTaskinfo',data)

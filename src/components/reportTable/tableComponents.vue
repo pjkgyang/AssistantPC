@@ -11,11 +11,11 @@
             width="100%"
             :max-height="Height==0?'auto':tableHeight">
             <el-table-column v-for="(th,index) in tableData.head" :key="index" :label="th.zh" v-if="!th.hidden"
-            :width="widthArr.includes(index)?240:th.zh=='排名'||th.zh=='姓名'?70:th.zh=='工号'?100:Width" show-overflow-tooltip :fixed="indexArr.includes(index)?true:false" >
+            :width="widthArr.includes(index)?240:th.en=='xh'||th.en=='xm'?70:th.zh=='工号'||th.en=='gl'?100:Width" show-overflow-tooltip :fixed="indexArr.includes(index)?true:false" >
                 <template slot-scope="scope" >
                     <span v-if="!th.canRedirect">{{scope.row[index]}}</span>
                     <a v-else href="javaScript:void(0)" @click="handleRouter(scope.row,index)" >{{scope.row[index]}}</a>
-            </template>
+                </template>
             </el-table-column>
     </el-table>
       </div>

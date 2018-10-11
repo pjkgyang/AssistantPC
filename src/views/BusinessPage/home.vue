@@ -4,7 +4,7 @@
       <div class="select-group">
         <span class="select-group__title">学校名称<span style="color:#999">( 注 : 可输入学校名称查询 )</span></span>
         <el-select  v-model="schoolNames" filterable remote  clearable  placeholder="请选择" size="small" @change="changeUnit" :remote-method="remoteMethod">
-          <el-option v-for="(item,index) in schoolNamesOptions" :key="index" :label="item.jc" :value="item.wid">
+          <el-option v-for="(item,index) in schoolNamesOptions" :key="index" :label="item.mc" :value="item.wid">
          </el-option>
         </el-select>
         <span class="select-group__title">项目名称</span>
@@ -237,6 +237,7 @@ export default {
        this.getDwXmTjRT(data);
     },
     changeUnit(val) {  //切换学校
+        if(!val)  return;
         let obj = {};
         obj = this.schoolNamesOptions.find((item)=>{
             return item.wid === val;

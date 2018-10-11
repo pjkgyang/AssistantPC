@@ -596,7 +596,7 @@ h1,h2,h3,h4,h5,h6{
 
 @media screen and (max-width:1440px) {
     .project_task_detail_taskbar ul.task_list:nth-of-type(1){
-         max-height: 410px !important;
+         max-height: 400px !important;
     }
     .media-table tbody{
         height:56vh !important;

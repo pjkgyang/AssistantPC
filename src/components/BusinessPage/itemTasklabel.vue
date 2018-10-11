@@ -105,7 +105,7 @@ export default {
       task.type = type
       this.$emit('handleTaskDialog',task);
     },
-    changeTaskState(e,params){ // 开闭开启任务
+    changeTaskState(e,params){ // 关闭 开启任务
       e.stopPropagation(); 
       let groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
       if(params.zt == 1){

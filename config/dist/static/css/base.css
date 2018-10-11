@@ -274,12 +274,15 @@ h1,h2,h3,h4,h5,h6{
 .project_task_milestone .select_one ,.project_task_milestone .select_two{
     float: left;
 }
+.el-pagination .el-input .el-input__inner{
+    border:1px solid #ddd !important;
+}
 
 
-.project_task_milestone  .el-table tr>td:nth-of-type(3){
+.project_task_milestone .my-table .el-table tr>td:nth-of-type(3){
     color: #409EFF;
 }
-.project_task_milestone  .el-table tr>td:nth-of-type(3):hover{
+.project_task_milestone .my-table .el-table tr>td:nth-of-type(3):hover{
     cursor: pointer;
     text-decoration: underline;
 }
@@ -332,11 +335,11 @@ h1,h2,h3,h4,h5,h6{
 /* tasklog */
 .task-log-date .el-select .el-input__inner{
     height: 32px;
-  }
-.project_task_milestone .el-checkbox__input.is-checked .el-checkbox__inner{
+ }
+/* .project_task_milestone .el-checkbox__input.is-checked .el-checkbox__inner{
     background-color: #909399;
     border-color: #909399
-}
+} */
 
 .item-user-banner  .el-tabs__header{
     margin: 0;
@@ -583,13 +586,17 @@ h1,h2,h3,h4,h5,h6{
 .milestone-filter .el-radio{
     margin-bottom:0;
 }
-.el-scrollbar__wrap {
+.el-scrollbar .el-scrollbar__wrap {
     overflow-x: hidden !important;
     overflow-y: auto;
-  }
+}
+.el-scrollbar .el-select-dropdown__wrap.el-scrollbar__wrap{
+    overflow-x: scroll !important;
+} 
+
 @media screen and (max-width:1440px) {
     .project_task_detail_taskbar ul.task_list:nth-of-type(1){
-         max-height: 410px !important;
+         max-height: 400px !important;
     }
     .media-table tbody{
         height:56vh !important;
