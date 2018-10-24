@@ -1,7 +1,7 @@
 <template>
 <div style="height:100%;overflow-x:auto">
   <div class="myItem-top-bread">
-    <user-banner :shown="false" :Operatepower="Operatepower"  :bannerACtive="tabsLabel" :itemMc="'['+xmkbInfo.xmbh+']'+xmkbInfo.xmmc" :fbdetail="true" :userNum="itemUserNum" @handleAddDDgroup="handleAddDDgroup" @handleItemUser="userListShow = !userListShow" :xmbh="xmbh" @handleTabsClick="handleTabsClick"></user-banner>
+    <user-banner :shown="false" :Operatepower="Operatepower"  :bannerACtive="tabsLabel" :itemMc="'['+xmkbInfo.xmbh+']'+xmkbInfo.xmmc" :fbdetail="true" :userNum="itemUserNum" @handleAddDDgroup="handleAddDDgroup" @handleItemUser="userListShow = !userListShow" :xmbh="xmbh" :xmData="xmkbInfo" @handleTabsClick="handleTabsClick"></user-banner>
     <el-collapse-transition>
      <div v-if="userListShow" class="project-item-people">
          <addItemUser :dwmc="xmkbInfo.dwmc" :xmbh="xmbh" @addItemuser="addItemuser"></addItemUser>
@@ -14,7 +14,7 @@
     <div  v-if="tabsLabel == 'process'" style="display:flex">
     <div  class="project_task_detail_taskbar">
           <div class="project_info">
-              <div style="margin:5px 0" text-center>
+              <div style="margin:5px 0" text-left>
                 <el-radio-group v-model="radio" @change="handleChangeRadio">
                       <el-radio label="kbst">看板视图</el-radio>
                       <el-radio label="bgst">表格视图</el-radio>
@@ -56,9 +56,9 @@
                 </div>
             </ul>
      
-         <ul class="task_list task_complete_status">
+         <!-- <ul class="task_list task_complete_status">
            <li  @click="checkMyTask" data-type="Mytask" :class="{'task-active':taskActive == 'Mytask'}"><span class="el-icon-news"></span> 我的任务</li>
-         </ul>
+         </ul> -->
       </div>
 
        <!-- 任务展示 -->
@@ -401,7 +401,7 @@ export default {
         bgTotal:0,
         bgPageSize:20,
         bgCurrentPage:1,
-        radio:'kbst',
+        radio:'bgst',
         bgOptions: [
         {value: '',label: '全部'}, 
         {value: '0', label: '待我关闭的任务'},
@@ -519,7 +519,7 @@ export default {
         xmtdShow:true,
         tagGroup:'',
         cpData:{},
-        sfxgValue:false, //是否相关
+        sfxgValue:true, //是否相关
         mutipleSelect:[],
         lcbrwArr:[],
         qtrwArr:[],
@@ -547,18 +547,41 @@ export default {
           this.$alert('请选择要关闭的任务','提示',{type:'warning',confirmButtonText: '确定'});
           return;
         }
-        changeTaskStatus({
+        this.$confirm('您确定要关闭任务吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          changeTaskStatus({
             rwbh:this.qtrwArr.join(','),
             state:'2'
           }).then(({data})=>{
               if(data.state == 'success'){
+               this.$alert('关闭成功!','提示',{type:'success',confirmButtonText: '确定',
+               callback:action=>{
                this.getProductTasks(); 
+               }});
             }
-        })  
+          })  
+        }).catch(()=>{
+
+        })
     },
     // 批量确认
     handleCloseConfirm(){
-        if(this.lcbrwArr.length > 0 ){
+        if(!this.lcbrwArr.length){
+          this.$alert('请选择需确认的任务', '提示', {
+           confirmButtonText: '确定',
+           type:'warning'
+          });
+          return;
+        }
+          this.$confirm('您确定要确认任务完成吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            if(this.lcbrwArr.length > 0 ){
             confirmMilestone({
               lcbbh:this.lcbrwArr.join(',')
             }).then(({data})=>{
@@ -585,6 +608,8 @@ export default {
                }
             }) 
          }
+        }).catch(() => {});  
+
     },
     // 切换与我相关任务
     handleChangeCheckbox(val){
@@ -1482,7 +1507,7 @@ export default {
         },
     },
   activated(){
-      this.radio = 'kbst';
+      this.radio = 'bgst';
       this.fbcpmc = '';
       this.fbcpbh = '';
       this.userListShow = false
@@ -1494,7 +1519,7 @@ export default {
       if(!this.$route.params.data){
         this.xmbh = JSON.parse(sessionStorage.getItem('xmbh'));
         this.xmkbInfo  = JSON.parse(sessionStorage.getItem('xmData')); 
-        if(this.tagGroup.includes('JZFGCRY')){
+        if(this.tagGroup.includes('JZFGCRY') || this.tagGroup.includes('JYGL')){
            this.isAll = true           
         }else{
            this.isAll = this.xmkbInfo.isAll 
@@ -1504,7 +1529,7 @@ export default {
         sessionStorage.setItem('xmData',JSON.stringify(this.$route.params.data))
         this.xmbh = this.$route.params.data.xmbh ||  this.xmbh
         this.xmkbInfo = this.$route.params.data;
-        if(this.tagGroup.includes('JZFGCRY')){
+        if(this.tagGroup.includes('JZFGCRY') || this.tagGroup.includes('JYGL')){
             this.isAll = true     
         }else{
             this.isAll = this.$route.params.data.isAll;

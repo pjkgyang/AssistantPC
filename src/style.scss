@@ -64,16 +64,29 @@ img{
   align-items: center;
   text-align: center;
 }
+
 .colcenter,
 [colcenter] {
   display: flex;
   align-items: center;
 }
 
+.flexwrap,
+[flexwrap] {
+  flex-wrap: wrap;
+}
+
+
 @for $i from 1 to 15 {
   [col='#{$i}'] {
     flex: $i 0 0 !important;
   }
+}
+
+@mixin fontColors($fcolor, $scolor) {
+      background: linear-gradient(to right bottom, $fcolor,$scolor);
+      -webkit-background-clip: text;
+      color: transparent;
 }
 
 .introText {
@@ -129,6 +142,14 @@ img{
 }
 .filter-weight{
   font-weight: 700;
+}
+.pannelPadding-10{
+  padding: 10px;
+}
+.pannelPaddingBg-10{
+  padding: 10px;
+  background: #fff;
+  border-radius: 4px;
 }
 .before-require::before{
   content: '*';
@@ -249,4 +270,14 @@ img{
 .bg-active {
   background: #1997d7;
   color: #fff !important;
+}
+
+.personalJs-top .el-input .el-input__inner{
+  background: none;
+}
+.personalJs-top .el-input .el-input__inner::placeholder,.personalJs-top .el-input .el-input__icon{
+  color: #fff;
+}
+.personalJs-top .el-input .el-input__inner{
+  color: #fff;
 }

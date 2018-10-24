@@ -6,7 +6,7 @@
     <div>
       <!-- <tableComponent :tableData="dataList" :tableHead="headList" :pageShow="true" :currentPage="currentPage"  @handleCurrentChange="handleCurrentChange"
             :height="'370px'" @handleXxwt="handleXxwt" @exportTable="exportTable"></tableComponent> -->
-      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[0,1,2,3]' :widthArr="[]" :Width="140" :Height="0"></tableComponents>
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[0,1,2,3]' :widthArr="[]" :Width="'140'" :Height="0"></tableComponents>
     </div>
   </div>
 </template>

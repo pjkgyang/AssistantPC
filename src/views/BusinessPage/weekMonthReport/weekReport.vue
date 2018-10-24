@@ -54,19 +54,12 @@
             </div>
                <tableLayout :title="'里程碑工作'">
                     <div slot="bottom">
-                        <!-- <div flex class="mg-12">
-                          <el-input style="width:300px" @change="handleEnterSearch"  size="small" v-model="keyword" placeholder="请输入项目编号/项目名称"></el-input>&#x3000;
-                          <div class="colcenter">
-                              <span class="filter-weight">里程碑状态:&nbsp;</span>
-                              <lcbztSelect :multipleLcbztList="lcbztList" @handleChangeLcbzt="handleChangeLcbzt"></lcbztSelect>&#x3000;
-                          </div>
-                        </div>  -->
                        <section class="month-plan-condition mg-12" >
                             <el-button :disabled="!multipleSelection.length" size="mini" @click="handlePzofBatch">批量批注</el-button>
-                            <!-- <el-button v-if="!isBlocked" :disabled="!multipleSelection.length" size="mini" @click="handleEditofBatch">编辑(批量)</el-button> -->
                       </section>
                         <WeekLcbTable  @handleClickPz="handleLcbPz" @handleClickEdit="handleLcbEdit"  @handleClickCheck="handleLcbCheck" @handleCurrentChange="handleLcbCurrentChange" :currentPage="currentWorkPage" 
-                      :bjWordShow="false" :wordShow="wordShow" @handleSizeChange="handleSizeLcbChange" @handleSelectionChange="handleSelectLcb" :gznrShow="false" :pageSize="LcbPageSize" :records="LcbRecords" :tableData="LcbList" :isEdit="false" :isSelect="true"></WeekLcbTable>
+                      :bjWordShow="false" :wordShow="wordShow" @handleSizeChange="handleSizeLcbChange" @handleSelectionChange="handleSelectLcb" :gznrShow="false" :pageSize="LcbPageSize" :records="LcbRecords" 
+                      :tableData="LcbList" :isEdit="false" :isSelect="true"></WeekLcbTable>
                     </div>
                 </tableLayout>    
                 <tableLayout :title="'进度任务'">
@@ -81,25 +74,8 @@
                 </tableLayout>    
                 <tableLayout :title="'问题处理'">
                     <div slot="bottom">
-                  <!-- <div class="mg-12">
-                          <el-input style="width:300px" @change="handleWtEnterSearch"  size="small" v-model="wtKeyword" placeholder="请输入项目编号/项目名称/问题标题/提问人"></el-input>&#x3000;
-                          <span>
-                              <span class="filter-weight">问题状态：</span>
-                              <el-select v-model="wtztValue" size="small" placeholder="请选择" multiple @change="handleSelectWtzt">
-                                  <el-option v-for="item in wtztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                              </el-select>
-                          </span>
-                          <span>
-                              <span class="filter-weight">异常状态：</span>
-                              <el-select v-model="ycztValue" size="small" placeholder="请选择" @change="handleSelectYczt">
-                                  <el-option v-for="item in ycztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                              </el-select>
-                          </span>
-                      </div> -->
                         <section class="month-plan-condition mg-12" >
-                          <!--   -->
                               <el-button :disabled="!multipleSelectWt.length" size="mini" @click="handlePzofBatchWt">批量批注</el-button>
-                              <!-- <el-button v-if="!isBlocked" :disabled="!multipleSelectWt.length" size="mini" @click="handleEditofBatchWt">编辑(批量)</el-button> -->
                         </section>
                         <MonthWeekQuestionTable :tableData="questionList" @handleClickEdit="handleQuestionEdit" @handleCurrentChange="handleQuestionPageChange"  @handleClickPz="handleQuestionPz" @handleClickCheck="handleQuestionCheck"
                        :bjWordShow="true" :othShow="othShow" @handleSizeChange="handleSizeWtChange" @handleSelectionChange="handleSelectWt" :pageSize="WtPageSize" :records="WtRecords" :currentPage="currentQuestionPage" :isSelect="true" :isEdit="false"
@@ -285,7 +261,7 @@ export default {
           this.currentQuestionPage = 1;
       },
      handleChooseMonth(val){
-      let chooseDate = this.NewYear+'-'+((this.NewMonth+1)>10?(this.NewMonth+1):'0'+(this.NewMonth+1));
+      let chooseDate = this.NewYear+'-'+((this.NewMonth+1) < 10?'0'+(this.NewMonth+1):(this.NewMonth+1));
       if(new Date(this.monthValue).getTime() > new Date(chooseDate).getTime()){
           this.textTitle = '本周工作计划'
           this.wordShow = false
@@ -314,7 +290,7 @@ export default {
       this.isWeekPlanBlocked(this.monthValue,this.weekValue);
     },
     handleChooseWeek(val){
-      let chooseDate = this.NewYear+'-'+((this.NewMonth+1)>10?(this.NewMonth+1):'0'+(this.NewMonth+1));
+      let chooseDate = this.NewYear+'-'+((this.NewMonth+1) < 10?'0'+(this.NewMonth+1):(this.NewMonth+1));
       this.weekDay  = this.getWeekDate(this.year,this.monthValue.split('-')[1]-1,val);
       let startDate = this.weekDay.split('至')[0];
       this.dateObj.weekValue = val;
@@ -325,6 +301,8 @@ export default {
       }
       this.listWeekPlanPerson();
       this.isWeekPlanBlocked(this.monthValue,this.weekValue);
+      console.log(this.monthValue);
+      console.log(chooseDate);
       if(new Date(this.monthValue).getTime() > new Date(chooseDate).getTime()){
           this.textTitle = '本周工作计划'
           this.wordShow = false

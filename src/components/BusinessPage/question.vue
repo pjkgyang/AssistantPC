@@ -121,8 +121,8 @@
        </div>
        <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
         <div style="padding:0 10px">
-          <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;" :disabled="this.xmDetail.ztztmc == '已终止'">
-              {{this.xmDetail.ztztmc == '已终止'?'该项目已经终止,禁止提问':'我要提问'}}
+          <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;" :disabled="this.xmDetail.ztztmc == '已终止'||this.xmDetail.gcfwzt == '0'">
+              {{this.xmDetail.ztztmc == '已终止'?'该项目已经终止,禁止提问':this.xmDetail.gcfwzt == '0'?this.xmDetail.gcfwztsm:'我要提问'}}
          </el-button>
           <el-button :disabled="this.xmDetail.ztztmc == '已终止'"  v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary"  @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
         </div>
@@ -536,12 +536,24 @@ export default {
             wids:params.wid
           }).then(({ data }) => {
             if (data.state == "success") {
-              this.$alert("删除成功", "提示", {
-                confirmButtonText: "确定",
-                type: "success",
-                callback: action => {
-                  this.queryAllQuestions(1);
-                }
+               if(!!data.data){
+                 this.$alert("删除成功", "提示", {
+                  confirmButtonText: "确定",
+                  type: "success",
+                  callback: action => {
+                    this.queryAllQuestions(1);
+                  }
+                });
+               }else{
+                  this.$alert('删除失败', "提示", {
+                  confirmButtonText: "确定",
+                  type: "warning",
+                });
+              }
+            }else{
+              this.$alert(data.msg, "提示", {
+                  confirmButtonText: "确定",
+                  type: "warning",
               });
             }
           });

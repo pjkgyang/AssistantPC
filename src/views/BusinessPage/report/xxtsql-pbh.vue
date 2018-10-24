@@ -8,7 +8,7 @@
             <!-- <tableComponent :tableData="dataList" :tableHead="headList" :pageShow="true" :currentPage="currentPage"  @handleCurrentChange="handleCurrentChange"
             :height="'532px'" @handleXxwt="handleXxwt" @exportTable="exportTable" :num='[1]'></tableComponent> -->
             <tableComponents :tableData="dataList"  :pageShow="true" :currentPage="currentPage" :pageSize="pageSize"   @handleCurrentChange="handleCurrentChange"
-            @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[0,1]' :widthArr="[1,2,3,4,5]" :Width="165" :Height="0"></tableComponents>
+            @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[0,1]' :widthArr="[1,2,3,4,5]" :Width="'165'" :Height="0"></tableComponents>
         </div>
     </div>    
 </template>

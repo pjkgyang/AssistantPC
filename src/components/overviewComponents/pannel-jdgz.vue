@@ -3,18 +3,18 @@
     <div col=1>
       <span class="introText mr-20">甲方负责人</span><span class="baseText mr-20">{{xmtj.jfxm == ''?'暂无':xmtj.jfxm}}</span>
       <span class="introText mr-20">项目经理</span><span class="baseText mr-20">{{xmtj.xmjl == ''?'暂无':xmtj.xmjl}}</span>
-      <span class="introText mr-20">项目建设周期</span><span class="baseText">{{xmtj.xmksrq==''?'无':xmtj.xmksrq}} 至 {{xmtj.xmjsrq==''?'无':xmtj.xmjsrq}}</span>
+      <span class="introText mr-20">项目建设周期</span><span class="baseText">{{xmtj.xmksrq==''?'无':xmtj.xmksrq}} 至 {{xmtj.xmjsrq==''?'无':xmtj.xmjsrq}}</span><br>
+      <span class="introText mr-20">项目状态</span><span class="baseText mr-20">{{xmtj.ztztmc}}</span>
+      <span class="introText mr-20">服务期限</span><span class="baseText mr-20">{{xmtj.fwqx}} 月</span>
+      <span class="introText mr-20">服务开始日期</span><span class="baseText">{{!xmtj.fwksrq?'无':xmtj.fwksrq}}</span>
+      <span v-if="isJzuser == 0"><span class="introText mr-20">服务状态</span><span class="baseText">{{xmtj.gcfwzt=='0'?'停止':'已启动'}}</span></span>
+       <!-- <el-tag size="mini" :type="xmtj.gcfw=='0' ? 'danger' : 'primary'">{{xmtj.gcfw=='0'?'停止':'已启动'}}</el-tag> -->
     </div>
     <div class="jdgz-box" flex col=14>
       <div class="jdgz-box__left" col="4">
         <h4>进度</h4>
         <div class="box__left--steps">
           <el-progress :text-inside="true" :stroke-width="18" :percentage="xmtj.p_xmjd" style="width:90%;"></el-progress>
-          <!-- <div class="box__left--select">
-               <el-select v-model="jdValue" placeholder="请选择" size="small" style="width:90%">
-                <el-option  label="总体进度" value="11"></el-option>
-              </el-select>
-            </div> -->
           <div class="vertical-steps">
             <div :class="{'vertical-step__item':true,'vertical-step__item_now':process.completed}" v-for="(process,index) in xmtj.jdList" :key="index">
               {{process.jdmc}}
@@ -25,9 +25,9 @@
       <div class="jdgz-box__right" col="8" flex-column spacebetween>
         <div class="box__right--task" col=1>
           <div col=1 flex-column>
-            <h4>实施<span class="box__right--task_yhcb">催办<span>{{xmtj.ssrwcbzs}}</span>条</span>
-              <span class="box__right--task_yhcb">个人任务总数<span><a href="javaScript:;;">{{xmtj.ssgrrwzs}}</a></span>条</span>
-              <span class="box__right--task_yhcb">未完成个人任务<span><a href="javaScript:;;">{{xmtj.ssgrwwcrwzs }}</a></span>条</span>
+            <h4>实施<span class="box__right--task_yhcb">催办<span><a @click="handleCheckdetial('1','1')" href="javaScript:;;">{{xmtj.ssrwcbzs}}</a></span>条</span>
+              <span class="box__right--task_yhcb">个人任务总数<span><a @click="handleCheckdetial('1','5')" href="javaScript:;;">{{xmtj.ssgrrwzs}}</a></span>条</span>
+              <span class="box__right--task_yhcb">未完成个人任务<span><a @click="handleCheckdetial('1','6')" href="javaScript:;;">{{xmtj.ssgrwwcrwzs }}</a></span>条</span>
             </h4>
             <div class="right--task__container" flex>
               <div class="right--task__circle">
@@ -36,19 +36,19 @@
               <div class="right--task__card" flex-column>
                 <div class="vertical-items" flex spacearound col=1>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.ssrwcqs}}</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('1','2')" href="javaScript:;;">{{xmtj.ssrwcqs}}</a></span>
                     <span col=1 center class="introText">已超期</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.ssrwwwcs}}</span>
-                    <span col=1 center class="introText">未完成</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('1','7')" href="javaScript:;;">{{xmtj.ssdqrrws}}</a></span>
+                    <span col=1 center class="introText">待确认任务数</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.ssrwcqwcs}}</span>
-                    <span col=1 center class="introText">超期完成</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('1','8')" href="javaScript:;;">{{xmtj.ssyqrrws}}</a></span>
+                    <span col=1 center class="introText">已确认任务数</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.ssrwzs}}</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('1','0')" href="javaScript:;;">{{xmtj.ssrwzs}}</a></span>
                     <span col=1 center class="introText">总数</span>
                   </div>
                 </div>
@@ -56,9 +56,9 @@
             </div>
           </div>
           <div col=1 flex-column class="right--task_">
-            <h4>用户<span class="box__right--task_yhcb">催办<span>{{xmtj.yhrwcbzs}}</span>条</span>
-              <span class="box__right--task_yhcb">个人任务总数<span><a href="javaScript:;;">{{xmtj.yhgrrwzs}}</a></span>条</span>
-              <span class="box__right--task_yhcb">未完成个人任务<span><a href="javaScript:;;">{{xmtj.yhgrwwcrwzs }}</a></span>条</span>
+            <h4>用户<span class="box__right--task_yhcb">催办<span><a @click="handleCheckdetial('2','1')" href="javaScript:;;">{{xmtj.yhrwcbzs}}</a></span>条</span>
+              <span class="box__right--task_yhcb">个人任务总数<span><a @click="handleCheckdetial('2','5')" href="javaScript:;;">{{xmtj.yhgrrwzs}}</a></span>条</span>
+              <span class="box__right--task_yhcb">未完成个人任务<span><a @click="handleCheckdetial('2','6')"  href="javaScript:;;">{{xmtj.yhgrwwcrwzs }}</a></span>条</span>
             </h4>
             <div class="right--task__container" flex>
               <div class="right--task__circle">
@@ -67,19 +67,19 @@
               <div class="right--task__card" flex-column>
                 <div class="vertical-items" flex spacearound col=1>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.yhrwcqs}}</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('2','2')" href="javaScript:;;">{{xmtj.yhrwcqs}}</a></span>
                     <span col=1 center class="introText">已超期</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.yhrwwwcs}}</span>
-                    <span col=1 center class="introText">未完成</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('2','7')" href="javaScript:;;">{{xmtj.yhdqrrws}}</a></span>
+                    <span col=1 center class="introText">待确认任务数</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.yhrwcqwcs}}</span>
-                    <span col=1 center class="introText">超期完成</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('2','8')" href="javaScript:;;">{{xmtj.yhyqrrws}}</a></span>
+                    <span col=1 center class="introText">已确认任务数</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums">{{xmtj.yhrwzs}}</span>
+                    <span col=1 center class="nums"><a @click="handleCheckdetial('2','0')" href="javaScript:;;">{{xmtj.yhrwzs}}</a></span>
                     <span col=1 center class="introText">总数</span>
                   </div>
                 </div>
@@ -114,15 +114,15 @@
               <div class="right--task__card" flex-column>
                 <div class="vertical-items" flex spacearound col=1>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a href="javaScript:;;">{{!xmtj.rbdt?0:xmtj.rbdt}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleChecklist('/rbdetial')" href="javaScript:;;">{{!xmtj.rbdt?0:xmtj.rbdt}}</a></span>
                     <span col=1 center class="introText">日报动态</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a href="javaScript:;;">{{!xmtj.zbdt?0:xmtj.zbdt}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleChecklist('/zbdetial')" href="javaScript:;;">{{!xmtj.zbdt?0:xmtj.zbdt}}</a></span>
                     <span col=1 center class="introText">周报动态</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a href="javaScript:;;">{{!xmtj.ybdt?0:xmtj.ybdt}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleChecklist('/ybdetial')" href="javaScript:;;">{{!xmtj.ybdt?0:xmtj.ybdt}}</a></span>
                     <span col=1 center class="introText">月报动态</span>
                   </div>
                 </div>
@@ -139,11 +139,11 @@
               <div class="right--task__card" flex-column>
                 <div class="vertical-items" flex spacearound col=1>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a href="javaScript:;;">{{!xmtj.dqrlcbzs?0:xmtj.dqrlcbzs}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleCheckjdqr('0')" href="javaScript:;;">{{!xmtj.dqrlcbzs?0:xmtj.dqrlcbzs}}</a></span>
                     <span col=1 center class="introText">待确认里程碑</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a href="javaScript:;;">{{!xmtj.yqrlcbzs?0:xmtj.yqrlcbzs}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleCheckjdqr('1')" href="javaScript:;;">{{!xmtj.yqrlcbzs?0:xmtj.yqrlcbzs}}</a></span>
                     <span col=1 center class="introText">已确认里程碑</span>
                   </div>
                 </div>
@@ -178,7 +178,11 @@ export default {
           lcb: "试运行"
         }
       ],
-      jdValue: ""
+      listData:[],
+      jdValue: "",
+      queryData:{},
+      qrData:{},
+      isJzuser:''
     };
   },
   props: {
@@ -208,9 +212,45 @@ export default {
     if (this.xmtj.p_xmjd != undefined) {
       this.xmtj.p_xmjd = JSON.parse(this.xmtj.p_xmjd);
     }
+    this.isJzuser = sessionStorage.isJZuser
   },
   activated() {},
   methods: {
+    // 查看日报
+    handleChecklist(data){
+      let routeData = this.$router.resolve({
+        path:data,
+        query:{
+          xmbh:this.xmbh,
+          isAll:this.isAll
+        }
+      });
+      window.open(routeData.href, "_blank");
+    },
+
+    handleCheckdetial(personType,filterType){
+      this.queryData.personType = personType;
+      this.queryData.filterType = filterType;
+      this.queryData.xmbh = this.xmbh;
+      this.queryData.isAll = this.isAll;
+
+
+      let routeData = this.$router.resolve({
+        path:'/jdgzDetail',
+        query:this.queryData
+      });
+      window.open(routeData.href, "_blank");
+    },
+    handleCheckjdqr(data){
+      this.qrData.sfqr = data;
+      this.qrData.xmbh = this.xmbh;
+      this.qrData.lcbqr = 1;
+      let routeData = this.$router.resolve({
+        path:'/jdgzDetail',
+        query:this.qrData
+      });
+      window.open(routeData.href, "_blank");
+    },
     getMonthLcb() {
       getMonthLcb({
         xmbh: this.xmbh
@@ -222,7 +262,7 @@ export default {
     }
   },
   components: {
-    CircleBar
+    CircleBar,
   },
   watch: {
     xmbh() {

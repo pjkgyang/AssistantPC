@@ -21,8 +21,16 @@
           <circle-bar col=2 :percent="parseInt(wtgz.p_wtyql)"></circle-bar>
           <circle-bar col=2 :percent="parseInt(wtgz.p_wtmyd)" outerStroke="rgba(25, 190, 107,0.1)" inner-stroke="#19BE6B" text="满意度"></circle-bar>
           <div col=2 flex-column spacearound class="right-split">
-            <div class="satisfy" col=2><span class="pull-left" style="width:30px;">满意</span><img :src="satisfy" alt="satisfy" width="20"><span style="font-weight: bold;font-size: 16px;" class="pull-right">{{wtgz.wtmyzs}}</span></div>
-            <div class="notsatisfy" col=2><span class="pull-left" style="width:30px;white-space:nowrap">不满意</span><img :src="notsatisfy" alt="notsatisfy" width="20"><span style="font-weight: bold;font-size: 16px;" class="pull-right">{{wtgz.wtbmyzs}}</span></div>
+            <div class="satisfy" col=2 >
+              <span class="pull-left" style="width:30px;line-height:20px">满意</span>
+              <img :src="satisfy" alt="satisfy" width="20">
+              <span style="font-weight: bold;font-size: 16px;width:30px;" class="pull-right">{{wtgz.wtmyzs}}</span>
+            </div>
+            <div class="notsatisfy" col=2>
+              <span class="pull-left" style="width:30px;white-space:nowrap;line-height:20px">不满意</span>
+              <img :src="notsatisfy" alt="notsatisfy" width="20">
+              <span style="font-weight: bold;font-size: 16px;width:30px" class="pull-right">{{wtgz.wtbmyzs}}</span>
+              </div>
           </div>
         </div>
         <div class="wtgz-mid__right" col=5 flex>

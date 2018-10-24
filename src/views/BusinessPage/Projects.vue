@@ -323,9 +323,9 @@ export default {
   font-size: 15px;
   font-weight: 700;
   text-shadow: 0px 2px 5px #888;
-  /* background: linear-gradient( rgb(182, 180, 180), rgb(54, 54, 54));
-  -webkit-background-clip: text; */
-  color: #666;
+  background: linear-gradient( rgb(26, 150, 113), rgb(129, 143, 141));
+  -webkit-background-clip: text;
+  color: transparent;
 }
 .Project_detail > div {
   margin-bottom: 30px;

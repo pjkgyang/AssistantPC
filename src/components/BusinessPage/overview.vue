@@ -369,62 +369,6 @@ export default {
   height: 100%;
   background: #EBEEF5;
 }
-
-// .tag {
-//   border-radius: 2px;
-//   display: inline-block;
-//   padding: 2px 5px;
-//   margin: 5px 0 5px;
-// }
-
-// .tag.tag-green {
-//   background: rgba(25, 190, 107, 0.1);
-//   color: #19BE6B !important;
-// }
-
-// .tag.tag-yellow {
-//   background: rgba(255, 172, 54, 0.10);
-//   color: #FFAC36;
-// }
-
-// .tag.tag-red {
-//   background: rgba(255, 101, 94, 0.1);
-//   color: #FF655E;
-// }
-
-// .vertical-steps {
-//   padding-left: 30px;
-//   margin-top: 20px;
-// }
-
-// .vertical-step__item {
-//   min-height: 40px;
-//   padding-bottom: 5px;
-//   color: #C0C4CC;
-//   position: relative;
-// }
-
-// .vertical-step__item:before {
-//   content: '';
-//   position: absolute;
-//   left: -24px;
-//   top: 0;
-//   width: 1px;
-//   height: 100%;
-//   background: #C0C4CC;
-// }
-
-// .vertical-step__item:after {
-//   content: '';
-//   position: absolute;
-//   left: -30px;
-//   top: 0;
-//   width: 14px;
-//   border-radius: 50%;
-//   height: 14px;
-//   background: #409EFF;
-// }
-
 .horizenl-card__items {
   padding: 0 6px;
   background: #F8FAFB !important;

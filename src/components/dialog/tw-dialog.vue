@@ -245,6 +245,10 @@ export default {
     },
     handleEdit(data) {
       //选择项目（）
+      if(data.gcfwzt == '0'){
+        this.$alert(data.gcfwztsm,'提示',{type:'warning',confirmButtonText: '确定'});
+        return;
+      }
       if (this.questionTitle == "我要提问") {
         this.queryResponsibleProduct(data.xmbh);
       }

@@ -57,7 +57,16 @@ export function queryMilestoneData(obj){
 			endSjjssj:obj.endSjjssj,
 			nrxmlb:obj.nrxmlb||"",
 			yxmjl:obj.yxmjl||"",
-			yzrr:obj.yzrr||""
+			yzrr:obj.yzrr||"",
+			htbh:obj.htbh||"",
+			xmmc:obj.xmmc||"",
+			xmnr:obj.xmnr||"",
+			lcbms:obj.lcbms||"",
+			xmjl:obj.xmjl||"",
+			zrr:obj.zrr||"",
+			xmbh:obj.xmbh||"",
+			htxz:obj.htxz,
+			sfgx:obj.sfgx,
 		}
 	})
 }
@@ -73,7 +82,9 @@ export function submitMilestone(obj){
 			qzsj:obj.qzsj,
 			fwsj:obj.fwsj,
 			yhbh:obj.yhbh,
-			yhxm:obj.yhxm
+			yhxm:obj.yhxm,
+			bwcnwcsj:obj.bwcnwcsj,
+			fj:obj.fj||""
 
 	},{
 		transformRequest: [function (data) {

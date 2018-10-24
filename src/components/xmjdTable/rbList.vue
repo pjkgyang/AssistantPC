@@ -3,7 +3,7 @@
         <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight">
             <el-table-column label="批注" width="120">
                 <template slot-scope="scope">
-                    <span class="spanHover" @click="handleCheckpzDetail(scope.row)">0人批注</span>
+                    <a href="javaScript:;;"  @click="handleCheckpzDetail(scope.row.wid)">{{scope.row.yyzs}}人已阅</a>
                 </template>
             </el-table-column>
             <el-table-column prop="cjrxm" label="填写人" width="80"></el-table-column>

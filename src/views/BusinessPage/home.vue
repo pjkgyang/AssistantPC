@@ -77,8 +77,8 @@
            <pagination :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
       </div>
-      <div class="pannel3-right" col=1 flex-column>
-        <card col=1  style="overflow-y:hidden">
+      <div class="pannel3-right" col=1 flex-column >
+        <card col=1  style="overflow-y:hidden;">
           <div class="card-head" slot="head">
             <h3 class="pull-left">问题</h3>
             <span class="pull-right card-head__more" @click="checkAllQuestion">查看更多...</span>
@@ -86,7 +86,7 @@
           </div>
           <div class="card-body card-body__wt" slot="body" flex-column >
             <div class="list__item right-split" v-for="(item,i) in problems" :key="i">
-              <h5><a href="javaScript:void(0)"  @click="handleOpenQuestionDetail(item.wid)">{{item.bt}}</a></h5>
+              <h5 ><a  href="javaScript:void(0)"  @click="handleOpenQuestionDetail(item.wid)">{{item.bt}}</a></h5>
               <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
               <span class="time">{{item.fbrq}}</span><br>
               <span>&nbsp;<span class="time"> 承诺结束日期 : {{!item.cnjsrq?'无':item.cnjsrq}}</span></span>
@@ -283,7 +283,7 @@ export default {
     queryRecentQuestions() {
       queryRecentQuestions({
         curPage: 1,
-        pageSize:6,
+        pageSize:5,
         unitNum: this.dwbh,
         isAll:true
       }).then(({ data }) => {
@@ -301,7 +301,7 @@ export default {
     queryRecentComplaints() {
       queryRecentComplaints({
         curPage: 1,
-        pageSize: 6,
+        pageSize: 5,
         unitNum: this.dwbh,
         isAll:true
       }).then(({ data }) => {
@@ -420,12 +420,6 @@ export default {
   text-align: left;
   font-weight: 700;
   line-height: 30px;
-  // overflow: hidden;
-  // white-space: nowrap;
-  // text-overflow: ellipsis;
-  // border: 1px solid #000;
-  // width: 100%;
-
 }
 
 .select-group {
@@ -481,7 +475,7 @@ export default {
 
 .card-body__wt,
 .card-body__ts {
-  
+ 
   margin-top: 8px;
   .list__item {
     padding: 4px;
@@ -502,5 +496,11 @@ export default {
   .list__item .time {
     color: #9ea7b4;
   }
+}
+.textElipase{
+    overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 </style>

@@ -7,7 +7,7 @@
             <!-- <tableComponent :tableData="dataList" :tableHead="headList" :pageShow="false" :num='[2]' :height="'55vh'"
             @handleXxwt="handleXxwt" @exportTable="exportTable"></tableComponent> -->
             <tableComponents :tableData="dataList" :pageShow="false" @exportTable="exportTable" @handleXxwt="handleXxwt" 
-            :Width="140" :Height="0" :indexArr="[0,1]" :widthArr="[]"></tableComponents>
+            :Width="'140'" :Height="0" :indexArr="[0,1]" :widthArr="[]"></tableComponents>
         </div>
     </div>    
 </template>

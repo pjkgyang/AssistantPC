@@ -4,14 +4,10 @@
           <div slot="menu" class="menu report-menu">
             <el-menu background-color="#fff" text-color="#708087"  :active-text-color="'#409EFF'" ref="navbar" :router='true' :default-active='defActive'  :default-openeds='openeds' menu-trigger="click" @select="selectMenu"  unique-opened>
                 <nav-bar-item v-for="(item, n) in navList" :urlIndex="item.url" :item="item" :navIndex="String(n+1)" :key="n"></nav-bar-item>
-                <!-- <el-menu-item index="4" :route="{path:'/businesspage/toplist/qareport/xjpm-qy'}"><i class="el-icon-menu"></i> <span slot="title">问题星级评分-区域</span></el-menu-item>
-                <el-menu-item index="5" :route="{path:'/businesspage/toplist/qareport/xjpm-cp'}"><i class="el-icon-erp-report"></i> <span slot="title">问题星级评分-产品</span></el-menu-item>
-                <el-menu-item index="6" :route="{path:'/businesspage/toplist/qareport/xjpm-xx'}"><i class="el-icon-erp-report"></i> <span slot="title">问题星级评分-学校</span></el-menu-item>
-                <el-menu-item index="7" :route="{path:'/businesspage/toplist/qareport/xjpm-xm'}"><i class="el-icon-erp-report"></i> <span slot="title">问题星级评分-项目</span></el-menu-item>
-                <el-menu-item index="8" :route="{path:'/businesspage/toplist/qareport/xjpm-gr'}"><i class="el-icon-erp-report"></i> <span slot="title">问题星级评分-个人</span></el-menu-item> -->
-
-                <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/qareport/cbzxqktj'}"><i class="el-icon-menu"></i> <span slot="title">测试1111</span></el-menu-item>  -->
-                
+                <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/khbb/ydkhbb'}"><i class="el-icon-menu"></i> <span slot="title">测试一</span></el-menu-item>  -->
+                <!-- <el-menu-item index="6" :route="{path:'/businesspage/toplist/qareport/xxyswg'}"><i class="el-icon-menu"></i> <span slot="title">学校验收</span></el-menu-item> 
+                <el-menu-item index="7" :route="{path:'/businesspage/toplist/qareport/xmyswg'}"><i class="el-icon-menu"></i> <span slot="title">项目验收</span></el-menu-item> 
+                <el-menu-item index="8" :route="{path:'/businesspage/toplist/qareport/gryswg'}"><i class="el-icon-menu"></i> <span slot="title">个人验收</span></el-menu-item>  -->
             </el-menu>
             <!-- item.url.split('qareport/')[1] -->
         <!-- <div v-if="this.navMode == 'horizontal'" v-s.how="navBgShow" class="full-screen-navBg" @click.self="closeAll"></div> -->

@@ -1,6 +1,6 @@
 <template>
 <div>
-     <div text-right class="mb-12">
+     <div text-right class="mb-12" v-if="exportShow">
         <el-button type="primary" size="mini" @click="exportTable">导出</el-button>
     </div>
     <div class="out-table">
@@ -11,7 +11,7 @@
             width="100%"
             :max-height="Height==0?'auto':tableHeight">
             <el-table-column v-for="(th,index) in tableData.head" :key="index" :label="th.zh" v-if="!th.hidden"
-            :width="widthArr.includes(index)?240:th.en=='xh'||th.en=='xm'?70:th.zh=='工号'||th.en=='gl'?100:Width" show-overflow-tooltip :fixed="indexArr.includes(index)?true:false" >
+            :min-width="widthArr.includes(index)?240:th.zh=='排名'||th.en=='xm'?70:th.zh=='工号'||th.en=='gl'?100:Width" show-overflow-tooltip :fixed="indexArr.includes(index)?true:false" >
                 <template slot-scope="scope" >
                     <span v-if="!th.canRedirect">{{scope.row[index]}}</span>
                     <a v-else href="javaScript:void(0)" @click="handleRouter(scope.row,index)" >{{scope.row[index]}}</a>
@@ -19,7 +19,7 @@
             </el-table-column>
     </el-table>
       </div>
-         <div style="text-align:right;padding-top:10px" v-if="pageShow">
+         <div style="text-align:right;" v-if="pageShow">
             <pagination :currentPage="currentPage" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
     </div>
@@ -105,8 +105,12 @@ export default {
             } 
         },
         Width:{
-            type:Number,
-            default:190  
+            type:String,
+            default:'190'  
+        },
+        exportShow:{
+           type:Boolean,
+           default:true 
         }
    },
    watch:{

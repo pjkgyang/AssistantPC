@@ -28,7 +28,7 @@ export default {
   box-shadow: 0 4px 12px 0 rgba(73, 80, 96, 0.08);
   border-radius: 4px;
   margin: 6px;
-  padding: 12px 12px 8px;
+  padding: 6px 12px 8px;
 }
 .card-box__content {
   overflow: auto;

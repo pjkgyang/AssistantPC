@@ -9,7 +9,7 @@
                 </el-pagination>
             </div>
         </div>
-        <pzxqDialog :show.sync="show"></pzxqDialog>
+        <pzxqDialog :show.sync="show" :tableData="pzxqData" :rbshow="true"></pzxqDialog>
     </div>
 </template>
 
@@ -27,8 +27,12 @@ export default {
             cjrxm:'张三',
             xmbh:'uk123123',
             xmmc:'卡仕达金坷垃华盛顿科技阿什顿'
-        }]
+        }],
+      pzxqData:[]
     };
+  },
+  mounted(){
+      this.pageProjectPanelWorkLogs();
   },
   methods: {
     handleSizeChange(data) {
@@ -39,8 +43,40 @@ export default {
       this.currentPage = data;
     },
     handleCheckpzDetail(data){
+        this.getLogCommentsForHomePageDetail(data);
         this.show = !this.show
-    }
+    },
+    pageProjectPanelWorkLogs(){
+        this.$get(this.API.pageProjectPanelWorkLogs,{
+            curPage:this.currentPage,
+            pageSize:this.pageSize,
+            xmbh:this.$route.query.xmbh,
+            isAll:this.$route.query.isAll,
+        }).then((res)=>{
+            if(res.state == 'success'){
+                if(!res.data.rows){
+                    this.tableData = []
+                }else{
+                    this.tableData = res.data.rows
+                }
+                this.total = res.data.records
+            }
+        })
+    },
+    getLogCommentsForHomePageDetail(wid){
+        this.$get(this.API.getLogCommentsForHomePageDetail,{
+            wid:wid,
+            isAll:this.$route.query.isAll
+        }).then((res)=>{
+            if(res.state == 'success'){
+               if(!res.data){
+                  this.pzxqData = []
+               }else{
+                  this.pzxqData = res.data
+               }
+            }
+        })
+    },
   },
   components: { rbTable,pzxqDialog }
 };

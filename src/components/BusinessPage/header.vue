@@ -12,9 +12,6 @@
                   <li v-for="menu in menuList"> 
                       <div :class="{'nav_active':title == menu.url}" :data-router="menu.url">{{menu.privname}}</div>
                   </li>
-                <!-- <li>
-                    <div :class="{'nav_active':title == '/businesspage/qut-analyse'}"  data-router="/businesspage/qut-analyse">问题复盘</div>
-                  </li> -->
                 </ul>
               <div class="header-navmenu-elmenu"> 
                    <el-menu text-color="#708087"  :active-text-color="'#CD3333'" ref="navbar" :router='true'  :default-active="onRoutes"  @select="handleSelect" mode="horizontal" menu-trigger="hover" unique-opened>

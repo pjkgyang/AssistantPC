@@ -162,6 +162,11 @@ function getAbsolutePath () {
                 name: 'BusinessReportCbzxqktj',
                 component: resolve => require(['@/views/BusinessPage/report/report-cbzxqktj.vue'], resolve),
               },
+              {
+                path: '/businesspage/report/khbb/ydkhbb',
+                name: 'BusinessReportYdkhbb',
+                component: resolve => require(['@/views/BusinessPage/report/khbb/ydkhbb.vue'], resolve),
+              },
            ]
         },
         {
@@ -228,7 +233,30 @@ function getAbsolutePath () {
               path: '/businesspage/toplist/qareport/qyxqts',
               name: 'BusinessReportQyxqts',
               component: resolve => require(['@/views/BusinessPage/report/qygxxq-phb.vue'], resolve),
-            }
+            },
+
+            {
+              path: '/businesspage/toplist/qareport/qyyswg',
+              name: 'BusinessReportQyyswg',
+              component: resolve => require(['@/views/BusinessPage/report/yswgphb/qyyswg.vue'], resolve),
+            },
+            {
+              path: '/businesspage/toplist/qareport/xxyswg',
+              name: 'BusinessReportXxyswg',
+              component: resolve => require(['@/views/BusinessPage/report/yswgphb/xxyswg.vue'], resolve),
+            },
+            {
+              path: '/businesspage/toplist/qareport/xmyswg',
+              name: 'BusinessReportXmyswg',
+              component: resolve => require(['@/views/BusinessPage/report/yswgphb/xmyswg.vue'], resolve),
+            },
+            {
+              path: '/businesspage/toplist/qareport/gryswg',
+              name: 'BusinessReportGryswg',
+              component: resolve => require(['@/views/BusinessPage/report/yswgphb/gryswg.vue'], resolve),
+            },
+            
+
           ]
         },
 
@@ -262,6 +290,11 @@ function getAbsolutePath () {
               path: '/businesspage/personalSetting/xxsz',
               name: 'personalSetting-xxsz',
               component: resolve => require(['@/views/BusinessPage/personalSetting/msg-setting.vue'], resolve),
+            },
+            {
+              path: '/businesspage/personalSetting/grjs',
+              name: 'personalSetting-grjs',
+              component: resolve => require(['@/views/BusinessPage/personalSetting/personal-js.vue'], resolve),
             },
           ]
         },
@@ -365,6 +398,40 @@ function getAbsolutePath () {
         title:'月报批注详情'
       },
       component: resolve => require(['@/views/BusinessPage/taskpzDetail/ybDetail.vue'], resolve),
-    }
+    },
+    {
+      path: '/yswgdetail',
+      name: 'Yswgdetail',
+      meta:{
+        title:'验收完工详情'
+      },
+      component: resolve => require(['@/views/BusinessPage/report/yswgphb/detail.vue'], resolve),
+    },
+    {
+      path: '/jdgzDetail',
+      name: 'JdgzDetail',
+      meta:{
+        title:'进度跟踪详情'
+      },
+      component: resolve => require(['@/views/BusinessPage/jdgzDetail.vue'], resolve),
+    },
+    {
+      path: '/erssdetail',
+      name: 'Erss',
+      meta:{
+        title:''
+      },
+      component: resolve => require(['@/views/BusinessPage/report/cbzxqktj/erss.vue'], resolve),
+    },
+    {
+      path: '/khbbdetail/:id',
+      name: 'Khbbdetail',
+      meta:{
+        title:'考核报表'
+      },
+      component: resolve => require(['@/views/BusinessPage/report/khbb/khbbdetail.vue'], resolve),
+    },
+
+    
   ]
 })

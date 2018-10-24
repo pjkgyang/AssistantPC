@@ -90,7 +90,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="currentPage"
-                    :page-sizes="[20, 35, 50, 100]"
+                    :page-sizes="[15, 30, 50, 100]"
                     :page-size="pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total">
@@ -139,7 +139,7 @@ export default {
       ],
       lb:"",
       currentPage: 1,
-      pageSize: 20,
+      pageSize: 15,
       total: 0,
       tableData:[],
       multipleSelection: [],
@@ -308,10 +308,10 @@ export default {
         case "scjh":
         this.multipleSelection.forEach(ele=>{
           if(ele.zt != '0'){
-            Arr.push(ele.zt);
+            tbArr.push(ele.zt);
           }
         })
-        if(Arr.length){
+        if(tbArr.length){
             this.$alert('非计划中服务不能删除！', '提示', {confirmButtonText: '确定',type:'warning'});
             return;
         }

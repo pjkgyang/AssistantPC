@@ -90,7 +90,7 @@
                         <el-button size="mini" v-if="!isAddCyz && !isJF" @click="addItemYfzrr(user)">修改为(乙方责任人)</el-button>
                     </span>
                 </li>
-                <div v-if="UserList.length == 0">
+                <div v-if="UserList.length == 0" text-center class="pd-10">
                    暂无人员数据
                 </div>
              </ul>
@@ -299,7 +299,7 @@ export default {
       this.zbrData.fbbh = data.fbbh
       this.zbrData.xmbh = this.xmbh
       this.isAddCyz = true;
-      this.queryUser(1, false);
+      this.queryUser(1, true);
       this.dialogVisible = !this.dialogVisible;
     },
     handleBMfocus() {

@@ -68,7 +68,6 @@
                 <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="sxrq" label="合同签订年份" width="150"></el-table-column>
                 <el-table-column prop="ysrq" label="验收日期" width="120"></el-table-column>
-                <el-table-column prop="gbrq" label="过保日期" width="120"></el-table-column>
                 <el-table-column prop="gbts" label="在保天数" width="100"></el-table-column>
                 <el-table-column label="问题数" width="100">
                    <template slot-scope="scope">
@@ -107,7 +106,7 @@
                 <el-table-column prop="sxrq" label="合同签订年份" width="150"></el-table-column>
                 <el-table-column prop="ysrq" label="验收日期" width="120"></el-table-column>
                 <el-table-column prop="gbrq" label="过保日期" width="120"></el-table-column>
-                <el-table-column prop="gbts" label="在保天数" width="100"></el-table-column>
+                <el-table-column prop="zbts" label="在保天数" width="100"></el-table-column>
                 <el-table-column label="问题数" width="100">
                     <template slot-scope="scope">
                       <a href="javaScript:;;" @click="handleCheckDetail('wtzs',scope.row.wtzs,scope.row,'sh')">{{scope.row.wtzs}}</a>
@@ -226,15 +225,14 @@ export default {
   },
   methods: {
     handleCheckDetail(key,value,params,type) {
-      let obj = {};
-      if(!params){
-         obj['dwmc'] = this.detailData.dw;
-      }else{
-         obj['xmbh'] = params.xmbh;
-         obj['wtxmlx'] = type=='gb'?3:type=='sh'?2:1
-      }
-       obj[key] = value;
-      let { href } = this.$router.resolve({
+        let obj = {};
+        obj['dwmc'] = this.detailData.dw;
+        if(!!params){
+          obj['xmbh'] = params.xmbh;
+          obj['wtxmlx'] = type=='gb'?3:type=='sh'?2:1
+        }
+        obj[key] = value;
+       let { href } = this.$router.resolve({
         path:"/report-list/questionlist.html",
         query:obj
       });

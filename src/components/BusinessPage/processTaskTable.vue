@@ -17,7 +17,7 @@
             <el-button size="mini" type="text" v-if="scope.row.lx == 9 && scope.row.zt == '2' && userName == scope.row.cjrxm" @click="handlejfqr(scope.row)">创建人确认</el-button>
             <el-button size="mini" type="text" v-if="scope.row.lx == 5 && scope.row.zt == '2' && userName == scope.row.yfzrrxm" @click="handlejfqr(scope.row)">乙方确认</el-button>
             <el-button size="mini" type="text" v-if="scope.row.lx == 3 && scope.row.zt == '2' && userName == scope.row.jfzrrxm" @click="handlejfqr(scope.row)">甲方确认</el-button>
-            <el-button size="mini" type="text" v-if="scope.row.lx == 1 && scope.row.sfjfqr == 0" @click="handlejfqr(scope.row)">甲方确认</el-button>
+            <el-button size="mini" type="text" v-if="scope.row.lx == 1 && scope.row.sfjfqr == 0 && userName == scope.row.jfzrrxm" @click="handlejfqr(scope.row)">甲方确认</el-button>
             <el-button size="mini" type="text" @click="handletask(scope.row)">填写日报</el-button>
         </template>
         </el-table-column>
