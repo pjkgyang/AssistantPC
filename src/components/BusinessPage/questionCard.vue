@@ -12,7 +12,10 @@
              </div>
               <div class="question-info">
                   <span class="question-info-bt" :title="question.bt" @click="handleQuestionDetail(question)" :data-wid="question.wid">{{question.bt}}</span><br>
-                  <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>&#x3000;
+                  <span>
+                      <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>&#x3000;
+                      <span style="color:#363748;font-size:12px;">问题编号：{{question.wtbh}}</span>
+                  </span>&#x3000;
                   <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;&#x3000;
                   <p>
                       <span><span class="question-info-front"></span>发布人 : {{question.fbrxm}}</span>
@@ -36,11 +39,16 @@
                   <span style="font-size:14px;color:#f00;" :class="{'ygb-color':question.fbzt == 1,'clz-color':question.fbzt != 1}">{{question.lcMc}}</span><br>
                   <span style="font-size:14px;color:#7ECE64;margin-top:5px;"><span style="font-size:12px;color:#A8A8A8">回复数</span> &#x3000;{{question.replyCount}}</span><br>
                   <span style="font-size:12px;color:#A8A8A8" >
-                    <span v-if="question.fbzt != 1 && question.cnjsrq">
+                    <!-- <span v-if="question.fbzt != 1 && question.cnjsrq">
                           {{new Date().getTime() < new Date(question.cnjsrq).getTime()?Math.round((new Date(question.cnjsrq).getTime() - new Date().getTime())/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.round((new Date().getTime() - new Date(question.cnjsrq).getTime())/(1000 * 60 * 60 * 24))+' 天'}}
-                    </span>
-                    <span v-if="question.fbzt == 1 && question.cnjsrq">
-                          {{(question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) < new Date(question.cnjsrq).getTime()?Math.round((new Date(question.cnjsrq).getTime() - (question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.round(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq).getTime())/(1000 * 60 * 60 * 24))+' 天'}}
+                    </span> -->
+                    <!-- question.fbzt == 1 &&  -->
+                    <span v-if="question.cnjsrq">
+                          {{(question.sqgbsj?new Date(question.sqgbsj).getTime():
+                          question.gbsj?new Date(question.gbsj).getTime():
+                          new Date().getTime()) < new Date(question.cnjsrq+' 23:59:59').getTime()?
+                          Math.round((new Date(question.cnjsrq+' 23:59:59').getTime() - (question.sqgbsj?new Date(question.sqgbsj).getTime():
+                          question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.ceil(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq+' 23:59:59').getTime())/(1000 * 60 * 60 * 24))+' 天'}}
                     </span>
                   </span>
               </div>     
@@ -82,6 +90,7 @@ export default {
     }
   },
   mounted(){
+    
       this.username = sessionStorage.username;
   },
   methods:{
@@ -178,7 +187,7 @@ export default {
 .project-question-list .question-info > p > span:nth-of-type(2) {
   width: 40%;
 }
-.project-question-list .question-info > span {
+.project-question-list .question-info .question-info-bt {
   font-size: 16px;
   color: #409eff;
 }

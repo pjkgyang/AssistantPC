@@ -49,13 +49,13 @@ import layout from "@/components/layout/navitem.vue";
           childNodes: [],
           tag:''
         },
-        // {
-        //   privname: "个人结算",
-        //   url:'/businesspage/personalSetting/grjs',
-        //   icon:'el-icon-edit-outline',
-        //   childNodes: [],
-        //   tag:'JZGCRY'
-        // },
+        {
+          privname: "个人结算",
+          url:'/businesspage/personalSetting/grjs',
+          icon:'el-icon-edit-outline',
+          childNodes: [],
+          tag:'JZGCRY'
+        },
       ],
       navContent:'个人信息',
       tagGroup:''

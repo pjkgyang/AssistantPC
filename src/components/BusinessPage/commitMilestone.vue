@@ -32,15 +32,14 @@
           <p>
             <el-checkbox v-model="sfbwValue">是否备忘</el-checkbox>
           </p>
-          <div flex v-if="sfbwValue">
+          <!-- <div flex v-if="sfbwValue">
             <span style="display:inline-block;width:120px;margin-right:20px">附件：</span>
             <div>
               <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" :on-change="handleChangeFile" :before-upload="newFiles" :on-remove="handleRemove" multiple>
                 <el-button size="mini" type="primary">点击上传</el-button>
-                <!-- <div slot="tip" class="el-upload__tip">实验信息附件上传，只能传(.file)文件</div> -->
               </el-upload>
             </div>
-          </div>
+          </div> -->
           <p v-if="sfbwValue">
             <span style="display:inline-block;width:120px">备忘承诺完成时间: </span>
             <el-date-picker size="mini" v-model="cnwcrq" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
@@ -146,19 +145,19 @@ export default {
     });
   },
   methods: {
-    handleRemove(file, fileList) {
-      this.files = fileList;
-      this.uploadForm.append("fileUpload", "");
-    },
-    handleChangeFile(file, fileList) {
-      this.files = fileList;
-    },
-    newFiles(file) {
-      this.files = [];
-      this.files.push(file);
-      this.uploadForm.append("fileUpload", file);
-      return true;
-    },
+    // handleRemove(file, fileList) {
+    //   this.files = fileList;
+    //   this.uploadForm.append("fileUpload", "");
+    // },
+    // handleChangeFile(file, fileList) {
+    //   this.files = fileList;
+    // },
+    // newFiles(file) {
+    //   this.files = [];
+    //   this.files.push(file);
+    //   this.uploadForm.append("fileUpload", file);
+    //   return true;
+    // },
     chooseLCBscml(val) {
       this.getChildren(val.split("&")[1]);
     },
@@ -171,13 +170,13 @@ export default {
         });
         return;
       }
-      if (this.sfbwValue && !this.files.length) {
-        this.$alert("请务必上传备忘附件", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
-        return;
-      }
+      // if (this.sfbwValue && !this.files.length) {
+      //   this.$alert("请务必上传备忘附件", "提示", {
+      //     confirmButtonText: "确定",
+      //     type: "warning"
+      //   });
+      //   return;
+      // }
       if (this.sfbwValue && !this.cnwcrq) {
         this.$alert("请选择备忘承诺日期", "提示", {
           confirmButtonText: "确定",
@@ -185,32 +184,33 @@ export default {
         });
         return;
       }
-      if (this.sfbwValue) {
-        this.$refs.uploadfile.submit();
-      }else{
-        this.submitMilestone();
-      }
-      if (!!this.files.length) {
-        axios.post(
-            window.baseurl + "attachment/uploadAttach.do",
-            this.uploadForm,
-            {
-              headers: { "Content-Type": "multipart/form-data" }
-            }
-          )
-          .then(res => {
-            if (res.data.state == "success") {
-              this.form.fileList = res.data.data;
-             this.submitMilestone();
-            } else {
-              this.$alert(res.data.msg, "提示", {
-                confirmButtonText: "确定",
-                type: "error"
-              });
-            }
-          })
-          .catch(error => {});
-      } 
+      this.submitMilestone();
+      // if (this.sfbwValue) {
+      //   this.$refs.uploadfile.submit();
+      // }else{
+      //   this.submitMilestone();
+      // }
+      // if (!!this.files.length) {
+      //   axios.post(
+      //       window.baseurl + "attachment/uploadAttach.do",
+      //       this.uploadForm,
+      //       {
+      //         headers: { "Content-Type": "multipart/form-data" }
+      //       }
+      //     )
+      //     .then(res => {
+      //       if (res.data.state == "success") {
+      //         this.form.fileList = res.data.data;
+      //        this.submitMilestone();
+      //       } else {
+      //         this.$alert(res.data.msg, "提示", {
+      //           confirmButtonText: "确定",
+      //           type: "error"
+      //         });
+      //       }
+      //     })
+      //     .catch(error => {});
+      // } 
     },
     // 获取子模板
     getChildren(wid) {
@@ -283,6 +283,10 @@ export default {
       if(!n){
         this.files = [];
         this.cnwcrq = '';
+        this.textarea = '';
+        this.valueXSQRR = '';
+        this.startDate = "";
+        this.signDate = "";
       }
     }
   }

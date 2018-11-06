@@ -4,7 +4,7 @@
             <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"></filterComponent>
         </div>
         <div>
-            <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[0,1,2]' :widthArr="[]" :Width="'140'" :Height="0"></tableComponents>
+            <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[1,2,4]' :widthArr="[]" :Width="'150'" :Height="0"></tableComponents>
         </div>
     </div>
 </template>
@@ -78,26 +78,10 @@ export default {
       let url = '';
       let arr = params[i].en.split(",");
       let obj = {
-        // bm: this.filterData.bm,
         yf: this.filterData.yf,
-        // rylx: this.filterData.rylx.join(","),
-        // keyword: this.filterData.keyword,
-        bh:data[0],
-        gs:data[1]
+        rybh:data[0],
+        rygh:data[1]
       };
-      switch(arr[0]){
-          case 'lcbjs'||'lcbdcs':
-            url = '/khbbdetail/lcbxq';
-            break;
-          case 'wtsljs'||'wtslaqwcs':
-            url = '/khbbdetail/wt';
-            break;
-          case 'wtjs':
-            url = '/khbbdetail/ts';
-            break;
-            default:
-            break;
-      }
       if (params[i].en.indexOf(",") != -1) {
         if (arr[0] == arr[1]) {
           obj[arr[0]] = data[i];
@@ -109,10 +93,33 @@ export default {
           });
         }
       }
-      let decodeData = window.btoa(JSON.stringify(obj));
+      if(arr[0] == 'lcbjs'||arr[0] == 'lcbdcs'){
+         url = '/khbbdetail/lcbxq';
+         delete obj.rybh;
+      }else if(arr[0] == 'wtsljs'||arr[0] == 'wtslaqwcs'){
+         url = '/khbbdetail/wt';
+         delete obj.rygh;
+      }else if(arr[0] == 'wtjs'){
+         url = '/khbbdetail/ts';
+         delete obj.rybh;
+         delete obj.wtjs;
+      }else if(arr[0] == 'rbbts'){
+         url = '/rbdetail';
+         obj['sfbt'] = '1';
+         obj['sfglpz'] = '0';
+         delete obj.rygh;
+      }else if(arr[0] == 'zbbts'){
+         url = '/zbdetail';
+         obj['sfbt'] = '1';
+         obj['sfglpz'] = '0';
+         delete obj.rygh;
+      }else{
+        return;
+      }
+      // let decodeData = window.btoa(JSON.stringify(obj));
       let routeData = this.$router.resolve({
-        path: url+'&'+decodeData,
-        query:{}
+        path: url,
+        query:obj
       });
       window.open(routeData.href, "_blank");
     }

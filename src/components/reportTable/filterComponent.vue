@@ -21,6 +21,12 @@
           <el-date-picker @change="handleChangeYf" size="mini" v-model="filterWord.yf" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
         </p>
       </div>
+      <div v-if="filterList.includes('zdsfwzt')">
+        <p class="query-title">状态:</p>
+        <p class="query-list" @click="handleZt">
+          <span v-for="(zdszt,index) in zdsfwList" :data-type="zdszt.label" :key="index" :class="{'bg-active':filterWord.zdsfwzt == zdszt.label}">{{zdszt.mc}}</span>
+        </p>
+      </div>
       <div v-if="filterList.includes('lb')">
         <p class="query-title">类别:</p>
         <p class="query-list" @click="handleLB">
@@ -34,7 +40,7 @@
           <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':filterWord.gczd == gcqy.label}">{{gcqy.mc}}</span>
         </p>
       </div>
-      <div v-if="filterList.includes('bm')">
+      <div v-if="filterList.includes('bm') && filterShow">
         <p class="query-title">部门:</p>
         <p class="query-list" @click="handleBM">
           <span data-type="" :class="{'bg-active':filterWord.bm == ''}">全部</span>
@@ -141,6 +147,12 @@ export default {
         { mc: "集成", label: "集成" },
         { mc: "服务", label: "服务" }
       ],
+      zdsfwList: [
+        { label: '', mc: "全部" },
+        { label: '0', mc: "待生成" },
+        { label: '1', mc: "待发布" },
+        { label: '2', mc: "已发布" }
+      ],
       rylxList:[],
       bmList: [],
       filterWord: {
@@ -160,7 +172,8 @@ export default {
         lb: 2,
         lcbxmlx: "",
         yf:'',
-        rylx:[]
+        rylx:[],
+        zdsfwzt:''
       }
     };
   },
@@ -174,6 +187,10 @@ export default {
     placeholder: {
       type: String,
       default: "请输入项目名称/项目编号"
+    },
+    filterShow:{
+         type:Boolean,
+         default:true
     }
   },
   methods: {
@@ -194,6 +211,13 @@ export default {
       let dwlx = e.target.getAttribute("data-type");
       if (dwlx == null) return;
       this.filterWord.dwlx = dwlx;
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    handleZt(e){
+      // 主动式服务状态
+      let zt = e.target.getAttribute("data-type");
+      if (zt == null) return;
+      this.filterWord.zdsfwzt = zt;
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleLB(e) {

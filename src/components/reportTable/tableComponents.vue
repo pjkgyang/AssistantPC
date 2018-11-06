@@ -11,7 +11,7 @@
             width="100%"
             :max-height="Height==0?'auto':tableHeight">
             <el-table-column v-for="(th,index) in tableData.head" :key="index" :label="th.zh" v-if="!th.hidden"
-            :min-width="widthArr.includes(index)?240:th.zh=='排名'||th.en=='xm'?70:th.zh=='工号'||th.en=='gl'?100:Width" show-overflow-tooltip :fixed="indexArr.includes(index)?true:false" >
+            :min-width="widthArr.includes(index)?rowWidth:th.zh=='排名'||th.zh=='姓名'||th.zh=='评分'?80:th.zh=='工号'||th.zh=='贡献人姓名'||th.zh=='贡献人工号'||th.zh=='发布人'||th.en=='gl'?100:Width" show-overflow-tooltip :fixed="indexArr.includes(index)?true:false" >
                 <template slot-scope="scope" >
                     <span v-if="!th.canRedirect">{{scope.row[index]}}</span>
                     <a v-else href="javaScript:void(0)" @click="handleRouter(scope.row,index)" >{{scope.row[index]}}</a>
@@ -107,6 +107,10 @@ export default {
         Width:{
             type:String,
             default:'190'  
+        },
+        rowWidth:{
+            type:String,
+            default:'240'       
         },
         exportShow:{
            type:Boolean,

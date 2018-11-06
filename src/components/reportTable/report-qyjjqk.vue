@@ -2,7 +2,6 @@
     <div>
         <div style="overflow-x:auto;">
             <table class="table table-qyjjqk" border>
-                <caption>区域解决情况</caption>
                 <tr v-if="tableData.length != 0">
                     <th style="width:100px;">区域工程</th>
                     <th>{{tableData[0].qdjkrjj}}</th>
@@ -78,15 +77,7 @@ export default {
 .table {
    border: 1px solid #ebeef5; 
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 30px;
     text-align:center;

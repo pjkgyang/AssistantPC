@@ -142,7 +142,11 @@ export default {
 .card_color{
     color: #aaa;
 }
+.item_Card{
+    transition: all 0.218s linear;
+}
 .item_Card:hover{
-    box-shadow:  0 0 8px #666; 
+    transform: translate3d(0,-3px,0);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 </style>

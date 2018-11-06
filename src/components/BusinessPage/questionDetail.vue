@@ -17,7 +17,8 @@
                 <div class="question-type" ><span :class="{'el-icon-question':true}"></span></div>
                 <div class="question-content">
                     <span style="font-size:18px;color:#363748">{{qusetionInfo.bt}}</span><br>
-                    <span style="font-size:12px;color:#363748">{{qusetionInfo.fbrq}}</span>
+                     <span style="font-size:12px;color:#363748">{{qusetionInfo.fbrq}}</span>&#x3000;
+                     <span style="font-size:12px;color:#363748">问题编号：{{qusetionInfo.wtbh}}</span>
                     <div>
                         <span style="color:#000"><span class="question-info-front">所属项目 &#x3000;</span>{{qusetionInfo.xmmc==''?'无':qusetionInfo.xmmc}}</span>
                     </div>
@@ -68,7 +69,7 @@
           <li v-for="(reply,index) in questionReply">
               <div class="project-question-detail-top" style="background:#F5F7FA;height:44px;"> 
                 <div class="question-type" >
-                    <span class="question-reply">{{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'记录':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':'开发'}}</span>
+                    <span class="question-reply">{{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'记录':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}</span>
                 </div>
                 <div class="question-content-SC">
                     <span>{{reply.bt}}</span>
@@ -77,14 +78,14 @@
                         <span>回复人 : {{reply.fbrxm}}</span>&#x3000;
                         <span>流程状态 : {{reply.lcbh==''?'无':reply.lcbh}}</span>&#x3000;
                         <span>{{reply.fbsj}}</span>&#x3000;
-                        <span v-if="reply.fbrxm != qusetionInfo.fbrxm && reply.hflx != 11 && reply.hflx != 12">   <!-- 问题复盘 标签11 -->
+                        <span v-if="reply.fbrxm != qusetionInfo.fbrxm && reply.hflx != 11 && reply.hflx != 12 && reply.hflx != 13">   <!-- 问题复盘 标签11 -->
                             <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">是否bug:{{reply.sfbg==0?'否':'是'}}</span>&#x3000; 
                             <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">实施工时:{{reply.gs==''?0:reply.gs}}</span>
                             <span v-if="reply.hflx == 4">承诺结束日期:{{reply.cnjsrq==''?'无':reply.cnjsrq}}</span>&#x3000;
                             <span v-if="reply.hflx == 4">工时:{{reply.gs == ''?'0':reply.gs}}</span>
                             <span v-if="reply.hflx == 2||reply.hflx == 6">期望解决日期:{{reply.qwjjrq}}</span>
                         </span><br>
-                        <span v-if="reply.hflx==2||reply.hflx==6||reply.hflx==7||reply.hflx==12"><span>{{reply.hflx==2?'转发至：':reply.hflx==7?'催办人：':reply.hflx==12?'发送至：':'责任人：'}}</span>{{reply.sfjsr}}</span>
+                        <span v-if="reply.hflx==2||reply.hflx==6||reply.hflx==7||reply.hflx==12||reply.hflx==13"><span>{{reply.hflx==2?'转发至：':reply.hflx==7?'催办人：':reply.hflx==12||reply.hflx==13?'发送至：':'责任人：'}}</span>{{reply.sfjsr}}</span>
                     </p>
                     <span v-if="reply.sfhf == 1" flex-align-center>
                         <el-button  @click="handleReplyEdit($event,index)"  size="mini" style="width:60px;height:28px">编辑</el-button>
@@ -277,7 +278,7 @@
                      <el-date-picker size="mini" v-model="qwjjrqZf"  type="date" placeholder="选择期望解决日期"  value-format="yyyy-MM-dd"></el-date-picker>
                 </div>
                <div class="question-zf">
-                  <span style="display:inline-block;margin:10px 0 !important;">转发说明: &nbsp;&nbsp;</span>
+                  <span class="before-require" style="display:inline-block;margin:10px 0 !important;">转发说明: &nbsp;&nbsp;</span>
                   <div id="summernoteZF"></div>
                   <div style="text-align:right;margin:10px 0;">         
                         <el-button type="primary" size="mini" @click="CommitZFWT">提交</el-button>
@@ -1502,6 +1503,14 @@ export default {
         });
         return;
       }
+      if ($("#summernoteZF").summernote("code") == "<p><br></p>") {
+        this.$alert("请填写转发说明", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
+
       saveForward({
         wid: this.wid,
         bh: this.radio,

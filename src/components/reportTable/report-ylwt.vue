@@ -1,7 +1,6 @@
 <template>
     <div class="out-table">
         <table class="table" border>
-            <caption>问题受理人跟踪</caption>
             <tr v-if="tableData.length != 0">
                 <th>分类</th>
                 <!-- <th v-for="th in thList">{{th.mc}}</th>     -->
@@ -78,15 +77,7 @@ export default {
 .table {
    border:1px solid #ebeef5; 
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 30px;
     text-align:center;

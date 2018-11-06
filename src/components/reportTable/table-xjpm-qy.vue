@@ -133,15 +133,7 @@ tbody tr {
   width: 100%;
   overflow-y: scroll;
 }
-.table caption {
-  border: 1px solid #ebeef5;
-  border-bottom: none;
-  text-align: center;
-  background: #f5f7fa !important;
-  font-size: 18px;
-  font-weight: 700;
-  color: #909399;
-}
+
 .table tr,
 .table th {
   height: 37px !important;

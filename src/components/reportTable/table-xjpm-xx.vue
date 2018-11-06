@@ -1,7 +1,6 @@
 <template>
     <div>
         <table class="table" border>
-            <!-- <caption>问题星级评分-学校</caption> -->
                  <thead> 
             <tr v-if="tableData.length != 0">
                 <th>分类</th>
@@ -108,15 +107,7 @@ export default {
     width: 100%;
     overflow-y: scroll;
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa !important;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 37px !important;
     text-align:center;

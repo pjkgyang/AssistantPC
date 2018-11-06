@@ -1,10 +1,10 @@
 <template>
 <div>
-      <div>
+      <!-- <div>
           <UserBanner :shown="false" :fbdetail="false" :crumb="crumbData"></UserBanner>
-      </div>
+      </div> -->
   <div class="fbdetail_container">
-     <span class="el-icon-close close-page" @click="gobackTb"></span>
+      <!-- <span class="el-icon-close close-page" @click="gobackTb"></span> -->
        <div class="fb_name">
                 <div>
                     <p class="project__name">
@@ -47,15 +47,15 @@
                                    <th>立项日期</th>
                                    <td>{{htjbxx.lxrq}}</td>
                                    <th>合同服务开始时间</th>
-                                   <td>{{htjbxx.fwksrq}}</td>
+                                   <td>{{!htjbxx.fwksrq?'无':htjbxx.fwksrq}}</td>
                               </tr>
                                <tr>
                                    <th>服务期限(月)</th>
-                                   <td>{{htjbxx.fwqx}}</td>
+                                   <td>{{!htjbxx.fwqx?'无':htjbxx.fwqx}}</td>
                                    <th>客户经理</th>
-                                   <td>{{htjbxx.khjl}}</td>
+                                   <td>{{!htjbxx.khjl?'无':htjbxx.khjl}}</td>
                                    <th>项目经理</th>
-                                   <td>{{htjbxx.xmjl}}</td>
+                                   <td>{{!htjbxx.xmjl?'无':htjbxx.xmjl}}</td>
                               </tr>
                                 <tr>
                                    <th>项目性质</th>
@@ -122,7 +122,7 @@
                                 </tr>
                                 <tr>
                                    <th>审核意见</th>
-                                   <td colspan="5">{{fbxxData.shyj}}</td>
+                                   <td colspan="5">{{!fbxxData.shyj?'无':fbxxData.shyj}}</td>
                                 </tr>             
                         </table>
                     </div>
@@ -196,7 +196,6 @@
 </template>
 <script>
 import htnrTable from  '@/components/BusinessPage/htnrTable.vue'
-import UserBanner from '@/components/BusinessPage/itemUserBanner.vue'
 import {queryHtxx,queryFbxx,launchTb,saveTbxx} from '@/api/toubiao.js'
 import { EventBus ,returnFloat} from '../../utils/util.js'; 
 
@@ -216,14 +215,6 @@ export default {
                 fbcpData:[],
                 tbje:null,
                 zbxx:"",
-                crumbData:[{
-                        mc:'项目投标',
-                        path:'/BusinessPage/dataTab'
-                    },{
-                        mc:'分包详情',
-                        path:'/BusinessPage/fbdetail'
-                    }]
-                
         }
     },
   mounted(){
@@ -278,20 +269,17 @@ export default {
         })
       }
     },
-    gobackTb(){
-       this.$router.go(-1);
-    }
+    // gobackTb(){
+    //    this.$router.go(-1);
+    // }
   },
   activated(){
-       
        if(this.$route.params.data == undefined){
          this.fbData = JSON.parse(sessionStorage.getItem('fbData'));
        }else{
          sessionStorage.setItem('fbData',JSON.stringify(this.$route.params.data));
          this.fbData = this.$route.params.data || this.fbData
        }
-    //   this.fbData = this.$route.params.data || this.fbData;
-
      //  查询合同内容
       queryHtxx({
            xmbh:this.fbData.xmbh,
@@ -342,12 +330,14 @@ export default {
 
       
   },
-  components:{htnrTable,UserBanner}
+  components:{htnrTable}
 }
 </script>
 <style scoped>
     .fbdetail_container{
-       width: 1280px;
+       min-width:1200px;
+       max-width:80%;
+       /* max-width: 1280px; */
        margin:20px auto;
        border: 1px solid #ccc;
        box-shadow: 0 0 5px  #ccc;
@@ -417,8 +407,9 @@ export default {
         padding: 15px 20px;
     }
     .fb_info h6{
-        color: #999;
+        color: #999 ;
         font-size: 13px;
+        margin: 5px 0 !important;
     }
     .fb_info>div{
         margin-bottom: 50px;
@@ -449,6 +440,8 @@ export default {
     .fb_info h4{
         border-left: 5px solid #CD69C9;
         padding: 0 5px;
+        font-weight: 700;
+        margin-bottom: 10px !important;
     }
 
     .fb_info h6{
@@ -486,7 +479,7 @@ export default {
         padding: 5px 8px!important;
         border: 1px solid #000;
     }
-    .fbdetail_container .close-page{
+    /* .fbdetail_container .close-page{
         position:absolute;
         right:0;
         top:0;
@@ -498,7 +491,7 @@ export default {
     .fbdetail_container .close-page:hover{
         cursor: pointer;
         color: #ccc;
-    }
+    } */
     .max-length{
         color: #f00;
     }

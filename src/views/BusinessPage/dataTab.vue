@@ -76,9 +76,13 @@ export default {
       this.queryTbxx(1);
    },
    handleFBdetails(data){   //跳转到分包详情
-      // console.log(data)
-      // window.open('http://www.baidu.com')
-      this.$router.push({name:'FBdetail',params:{data:data}});
+      // this.$router.push({name:'FBdetail',params:{data:data}});
+      sessionStorage.setItem('fbData',JSON.stringify(data));
+       let routeData = this.$router.resolve({
+        path: '/businesspage/fbdetail',
+        query:{}
+      });
+      window.open(routeData.href, "_blank");
    },
    handleCurrentChange(data){
       this.queryTbxx(data);

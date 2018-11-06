@@ -21,12 +21,22 @@
                            <el-option v-for="(fwnr,index) in fwnrList" :key="index" :label="fwnr.text" :value="fwnr.id"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="计划完成时间" required>
+                    <!-- <el-form-item label="计划完成时间" required>
                          <el-date-picker :picker-options="pickerBeginDate"  type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.jhjsrq" style="width:100%;"></el-date-picker>
+                    </el-form-item> -->
+                     <el-form-item label="服务开始日期" required>
+                         <el-date-picker   type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.fwksrq" style="width:100%;"></el-date-picker>
                     </el-form-item>
-                    <el-form-item label="说明" required>
-                        <el-input type="textarea" v-model="form.sm" placeholder="请填写说明内容" :rows="6"></el-input>
+                    <el-form-item label="服务期限(月)" required>
+                        <el-input v-model="form.fwqx" placeholder="请输入服务期限（仅限正整数）"></el-input>
                     </el-form-item>
+                     <el-form-item label="服务次数" required>
+                        <el-input v-model="form.fwcs" placeholder="请输入服务次数（仅限正整数）"></el-input>
+                    </el-form-item>
+                    <el-form-item label="责任人" required>
+                         <el-input v-model="form.zrrxm" placeholder="请选择责任人" readonly style="width:433px;"></el-input>
+                         <el-button size="mini" @click="handleChangeZrr">更改责任人</el-button>
+                    </el-form-item><br>
                     <el-form-item text-right>
                         <el-button type="primary" @click="handleCommit">保存</el-button>
                         <el-button @click="handleClose">取消</el-button>
@@ -34,21 +44,28 @@
                     </el-form>  
             </div>
         </el-dialog>
+        <zrr-dialog :show.sync="zrrShow" @handleAddZrr="handleAddZrr"></zrr-dialog>
  </div>
 </template>
 
 <script>
+ import zrrDialog from '@/components/dialog/zdsfw/zrr-dialog.vue'
 export default {
   data() {
     return {
       visible: this.show,
+      zrrShow:false,
       fwnrList:[],
+      cpList:[],
       form: {
         cpbh: "",
         cpmc:"",
         fwnr: "",
-        jhjsrq: "",
-        sm: ""
+        fwksrq:"",
+        fwqx:"",
+        zrrxm:"",
+        zrrbh:"",
+        fwcs: ""
       },
       cpbh:'',
       pickerBeginDate: {
@@ -62,9 +79,23 @@ export default {
     };
   },
   methods: {
+    handleAddZrr(data){
+      this.form.zrrxm = data.username
+      this.form.zrrbh = data.userid
+      this.zrrShow = !this.zrrShow
+    },
+    handleChangeZrr(){
+      this.zrrShow = !this.zrrShow;
+    },
     handleChangeCpValue(value) {
       this.form.cpbh = value.split('&')[0];
       this.form.cpmc = value.split('&')[1];
+      this.cpList.forEach((ele,i,arr)=>{
+        if(this.form.cpbh == ele.id){
+           this.form.zrrxm =  ele.zrrxm;
+           this.form.zrrbh =  ele.zrrbh;
+        }
+      })
       this.listFwnrByCp();
     },
     handleClose() {
@@ -72,9 +103,8 @@ export default {
     },
     handleCommit() {
       if(!this.validate()) return;
-      this.$emit('handleCommitFWJH',this.form)
+      this.$emit('handleCommitFWJH',this.form);
     },
-
         // 获取服务内容
     listFwnrByCp(){
       this.$get(this.API.listFwnrByCp,{
@@ -96,27 +126,44 @@ export default {
             this.$alert('请选择服务内容!', '提示', {confirmButtonText: '确定',type:'warning'});
             return false;
         }
-        if(!this.form.jhjsrq){
-            this.$alert('请选择计划完成日期!', '提示', {confirmButtonText: '确定',type:'warning'});
+        
+        if(!this.form.fwksrq){
+            this.$alert('请选择服务开始日期!', '提示', {confirmButtonText: '确定',type:'warning'});
             return false;
         }
-        if(!this.form.sm){
-            this.$alert('请填写说明内容!', '提示', {confirmButtonText: '确定',type:'warning'});
+        if(!this.form.fwqx || !/^[1-9]\d*$/.test(this.form.fwqx)){
+            this.$alert('请填写服务期限或格式有误!', '提示', {confirmButtonText: '确定',type:'warning'});
+            return false;
+        }
+        if(!this.form.fwcs || !/^[1-9]\d*$/.test(this.form.fwcs)){
+            this.$alert('请填写服务次数或格式有误!', '提示', {confirmButtonText: '确定',type:'warning'});
             return false;
         }
         return true;
-    }
+    },
+        // 获取产品
+    listXmZdsfwCp() {
+      this.$get(this.API.listXmZdsfwCp, {
+        xmbh: this.xmbh
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data) {
+            this.cpList = [];
+          } else {
+            this.cpList = res.data;
+          }
+        }
+      });
+    },
   },
   props: {
     show: {
       type: Boolean,
       default: false
     },
-    cpList: {
-      type: Array,
-      default: () => {
-        return [];
-      }
+    xmbh:{
+      type:String,
+      default:''
     }
   },
   watch: {
@@ -127,13 +174,17 @@ export default {
         this.cpbh = '';
         this.form.fwnr = '';
         this.form.jhjsrq = '';
-        this.form.sm = ''
+        this.form.fwksrq = '';
+        this.form.fwqx = '';
+        this.form.zrrxm = '';
+        this.form.zrrbh = '';
+        this.form.fwcs = '';
       } else {
-
+        this.listXmZdsfwCp();
       }
     }
   },
-  components: {}
+  components: {zrrDialog}
 };
 </script>
 

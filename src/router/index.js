@@ -50,6 +50,9 @@ function getAbsolutePath () {
         {
           path: '/businesspage/fbdetail',
           name: 'FBdetail',
+          meta:{
+            title:'投标详情'
+          },
           component: resolve => require(['@/views/BusinessPage/fbdetail.vue'], resolve)
         },
         {
@@ -78,6 +81,24 @@ function getAbsolutePath () {
           path: '/questionDetail',
           name: 'questionDetail',
           component: resolve => require(['@/components/BusinessPage/questionDetail.vue'], resolve),
+        },
+        {
+          path: '/zdsfwxmlb',
+          name: 'zdsfwXmlb',
+          component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwList.vue'], resolve),
+        },
+        {
+          path: '/zdsfwlb',
+          name: 'zdsfwLb',
+          component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwMenu.vue'], resolve),
+        },
+        {
+          path: '/zdsfw',
+          name: 'Zdsfw',
+          meta:{
+            title:'主动式服务'
+          },
+          component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwPannel.vue'], resolve),
         },
         {
           path: '/businesspage/xxtsql',
@@ -166,6 +187,16 @@ function getAbsolutePath () {
                 path: '/businesspage/report/khbb/ydkhbb',
                 name: 'BusinessReportYdkhbb',
                 component: resolve => require(['@/views/BusinessPage/report/khbb/ydkhbb.vue'], resolve),
+              },
+              {
+                path: '/businesspage/report/khbb/ydjlb',
+                name: 'BusinessReportYdkhbb',
+                component: resolve => require(['@/views/BusinessPage/report/khbb/ydjlb.vue'], resolve),
+              },
+              {
+                path: '/businesspage/report/khbb/shgsb',
+                name: 'BusinessReportYdkhbb',
+                component: resolve => require(['@/views/BusinessPage/report/khbb/shgsb.vue'], resolve),
               },
            ]
         },
@@ -375,24 +406,24 @@ function getAbsolutePath () {
       meta:{
         title:'服务计划详情'
       },
-      component: resolve => require(['@/views/BusinessPage/zdsfwDetail.vue'], resolve),
+      component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwDetail.vue'], resolve),
     },
     {
-      path: '/rbdetial',
+      path: '/rbdetail',
       name: 'Rbdetial',
       meta:{
         title:'日报批注详情'
       },
       component: resolve => require(['@/views/BusinessPage/taskpzDetail/rbDetail.vue'], resolve),
     },{
-      path: '/zbdetial',
+      path: '/zbdetail',
       name: 'Zbdetial',
       meta:{
         title:'周报批注详情'
       },
       component: resolve => require(['@/views/BusinessPage/taskpzDetail/zbDetail.vue'], resolve),
     },{
-      path: '/ybdetial',
+      path: '/ybdetail',
       name: 'Ybdetial',
       meta:{
         title:'月报批注详情'

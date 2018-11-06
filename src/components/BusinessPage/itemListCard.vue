@@ -211,8 +211,9 @@ export default {
 
 .project-grid-card-info {
   height: 44%;
-  border-top: 1px solid #f1f1f1;
+  border-top: 1px solid #f1f1f1 !important;
   display: flex;
+  border: 1px solid rgba(0, 0, 0, 0);
 }
 .project-grid-card-info > div {
   padding: 10px 0 0 10px;
@@ -263,14 +264,16 @@ export default {
 .project-grid-card .project-grid-card_projectLeader {
   white-space: nowrap;
 }
-
+.project-grid-card,
+.project-grid-card-checkMore{
+  transition: all 0.218s linear;
+}
 .project-grid-card:hover,
 .project-grid-card-checkMore:hover {
   cursor: pointer;
-  transition: all 0.218s linear;
-  transform: translateY(-5px);
+  transform: translate3d(0,-3px,0);
   background:linear-gradient(to right bottom,rgb(222, 243, 243),rgb(255, 255, 255));
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 .project-grid-card:hover .el-icon-star-off,
 .project-grid-card:hover .el-icon-star-on {

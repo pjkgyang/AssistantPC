@@ -2,8 +2,8 @@
   <div class="milestone-manage">
     <section style="border-radius:5px;padding:8px 0;background:#fff;box-shadow:0 0 5px #ccc">
       <div class="filter">
-        <span class="filter-title">高级查询: </span>
-        <el-input size="small" style="width:40%" placeholder="请输入项目编号/项目名称/里程碑描述/项目内容/项目经理/责任人"   v-model="keyword" @change="searchLcbContent"> </el-input>
+        <span class="filter-title">高级查询:</span>
+        <el-input size="mini" style="width:40%" placeholder="请输入项目编号/项目名称/里程碑描述/项目内容/项目经理/责任人"   v-model="keyword" @change="searchLcbContent"> </el-input>
         <el-button type="primary" size="mini" @click="handleOpenfilter">{{!filterShow?'打开':'隐藏（清空）'}}高级查询条件<i :class='{"el-icon-arrow-up":!filterShow,"el-icon-arrow-down":filterShow,"el-icon--right":true}'></i></el-button>
         &#x3000;<el-button size="mini" type="primary" @click="handleSearchLcb">查询</el-button>
       </div>

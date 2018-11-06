@@ -114,15 +114,15 @@
               <div class="right--task__card" flex-column>
                 <div class="vertical-items" flex spacearound col=1>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a @click="handleChecklist('/rbdetial')" href="javaScript:;;">{{!xmtj.rbdt?0:xmtj.rbdt}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleChecklist('/rbdetail')" href="javaScript:;;">{{!xmtj.rbdt?0:xmtj.rbdt}}</a></span>
                     <span col=1 center class="introText">日报动态</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a @click="handleChecklist('/zbdetial')" href="javaScript:;;">{{!xmtj.zbdt?0:xmtj.zbdt}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleChecklist('/zbdetail')" href="javaScript:;;">{{!xmtj.zbdt?0:xmtj.zbdt}}</a></span>
                     <span col=1 center class="introText">周报动态</span>
                   </div>
                   <div class="vertical-items" flex-column>
-                    <span col=1 center class="nums"><a @click="handleChecklist('/ybdetial')" href="javaScript:;;">{{!xmtj.ybdt?0:xmtj.ybdt}}</a></span>
+                    <span col=1 center class="nums"><a @click="handleChecklist('/ybdetail')" href="javaScript:;;">{{!xmtj.ybdt?0:xmtj.ybdt}}</a></span>
                     <span col=1 center class="introText">月报动态</span>
                   </div>
                 </div>
@@ -212,7 +212,8 @@ export default {
     if (this.xmtj.p_xmjd != undefined) {
       this.xmtj.p_xmjd = JSON.parse(this.xmtj.p_xmjd);
     }
-    this.isJzuser = sessionStorage.isJZuser
+    this.isJzuser = sessionStorage.isJZuser;
+    
   },
   activated() {},
   methods: {

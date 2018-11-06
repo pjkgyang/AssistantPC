@@ -77,6 +77,8 @@ import PannelJdgz from '@/components/overviewComponents/pannel-jdgz.vue'
 import PannelWtgz from '@/components/overviewComponents/pannel-wtgz.vue'
 import PannelXmcb from '@/components/overviewComponents/pannel-xmcb.vue'
 import { getMonthLcb,getXmTj ,getDwTj,getYwy,getXmTjRT} from '@/api/home.js'
+import { EventBus } from "../../utils/util.js"; //事件总
+
 export default {
   data() {
     return {
@@ -125,13 +127,7 @@ export default {
         name:'本月用户量',
         value:10,
       }],
-      schoolNamesOptions: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }],
+      schoolNamesOptions: [],
       xmtj:{},
       ywxdm:"",
     }
@@ -152,6 +148,9 @@ export default {
   },
   mounted(){
       this.getXmTjInfo();
+     EventBus.$on("handleCommitSuccess", param => {
+         this.getXmTjInfo();
+    });
   },
   computed:{
      isAllxm(){

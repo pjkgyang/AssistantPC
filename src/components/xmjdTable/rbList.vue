@@ -23,7 +23,7 @@
 export default {
   data() {
     return {
-        tableHeight:window.innerHeight - 120
+        tableHeight:window.innerHeight - 80
     };
   },
   props: {

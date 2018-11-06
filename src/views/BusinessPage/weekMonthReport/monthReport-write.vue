@@ -700,7 +700,7 @@ batchUpdateMonthWork,batchUpdateMonthQuestion,batchUpdateMonthQuestionCljh,allow
                    oldYear = year 
                    oldMonth = month - 1
                 }
-                this.lastMonth = oldYear+'-'+(oldMonth>10?oldMonth:'0'+oldMonth);
+                this.lastMonth = oldYear+'-'+(oldMonth<10?'0'+oldMonth:oldMonth);
                 this.lastDay = getLastMonthDay(year,month);
                 this.lastMonthDay = getLastMonthDay(oldYear,oldMonth)
                 this.getMonthWorkList(1);                                       //获取上月工作;

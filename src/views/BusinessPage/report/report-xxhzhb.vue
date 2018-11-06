@@ -96,7 +96,7 @@ export default {
           window.open(routeData.href, "_blank");  
         },
         exportTable(){
-             window.open(window.baseurl+'report/exportylWtReportByCpx.do?dwlx='+this.dwlx+'&qyzd='+this.gczd+'&cpxbh='+this.cpxbh+'&cpxmc='+this.cpxmc+'&sjlb='+this.sjlb+'&lx=4'+'&keyword'+this.keyword);  
+             window.open(window.baseurl+'report/exportylWtReportByCpx.do?dwlx='+this.dwlx+'&qyzd='+this.gczd+'&cpxbh='+this.cpx+'&cpxmc='+this.cpxmc+'&sjlb='+this.sjlb+'&lx=4'+'&keyword'+this.keyword);  
         },
         handleSearch(){
             this.ylWtReportByCpx(1,15,4);    //学校报表

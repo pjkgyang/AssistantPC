@@ -59,7 +59,7 @@ export default {
       });
       window.open(routeData.href, "_blank");  
     },
-    handleReject(params,index){   // 驳回
+    handleReject(params,index,sm){   // 驳回
       this.$confirm("确定驳回该申请, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -67,7 +67,8 @@ export default {
       }).then(() => {
           applyDismiss({
             wid:'',
-            zbwid: params.wid
+            zbwid: params.wid,
+            sm:sm
           }).then(({ data }) => {
             if (data.state == "success") {
               this.$alert("已成功驳回！", "提示", {

@@ -1,7 +1,6 @@
 <template>
     <div class="out-table">
         <table class="table table-top" border>
-            <caption>问题响应跟踪</caption>
             <thead>
             <tr v-if="tableData2.length != 0">
                 <th>{{tableData2[0].sj}}</th>
@@ -109,15 +108,7 @@ export default {
 .table.table-top{
     width: calc( 100% - 1.2em ) !important;
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 30px;
     text-align:center;

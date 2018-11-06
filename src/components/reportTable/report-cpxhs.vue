@@ -1,7 +1,6 @@
 <template>
     <div class="out-table">
         <table class="table table-cpxhx" border>
-            <caption>产品线解决情况</caption>
             <thead> 
                <tr v-if="tableData.length != 0">
                     <th>产品线</th>
@@ -93,19 +92,11 @@ export default {
 }
 .table tbody{
     display: block;
-    height:50vh;
+    height:55vh;
     width: 100%;
     overflow-y: scroll;
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa !important;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 37px !important;
     text-align:center;

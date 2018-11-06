@@ -1,7 +1,6 @@
 <template>
     <div class="out-table">
         <table class="table table-wtgz" border>
-            <caption>问题跟踪整体情况</caption>
             <thead> 
                 <tr>
                     <th v-for="th in thList" >{{th.name}}</th>    
@@ -104,19 +103,11 @@ export default {
 }
 .table tbody{
     display: block;
-    height:60vh;
+    height:64vh;
     width: 100%;
     overflow-y: scroll;
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa !important;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 37px !important;
     text-align:center;

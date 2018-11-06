@@ -337,7 +337,7 @@
     <!-- 主动式服务 -->
     <el-collapse-transition>
       <div v-if="tabsLabel == 'zdsfw'">
-        <zdsfw :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" ></zdsfw>
+        <zdsfw :nxmbh="xmbh" :xmmc="xmkbInfo.xmmc" ></zdsfw>
       </div>
     </el-collapse-transition>
   </div>
@@ -364,36 +364,36 @@
 </template>
 <script>
 import Scrollbar from 'smooth-scrollbar';
-import itemTask from '@/components/BusinessPage/itemTask.vue'
-import itemtable from '@/components/BusinessPage/tabel.vue'
-import itemSelect from '@/components/BusinessPage/itemSelect.vue'
-import pagination from '@/components/BusinessPage/pagination.vue'
-import dailyParper from '@/components/BusinessPage/dailyParper.vue'
-import enditTaskInfo from '@/components/BusinessPage/editTaskinfo.vue'
-import UserBanner from '@/components/BusinessPage/itemUserBanner.vue'
-import addItemUser from '@/components/BusinessPage/addItemUser.vue'
+import itemTask from '@/components/BusinessPage/itemTask.vue';
+import itemtable from '@/components/BusinessPage/tabel.vue';
+import itemSelect from '@/components/BusinessPage/itemSelect.vue';
+import pagination from '@/components/BusinessPage/pagination.vue';
+import dailyParper from '@/components/BusinessPage/dailyParper.vue';
+import enditTaskInfo from '@/components/BusinessPage/editTaskinfo.vue';
+import UserBanner from '@/components/BusinessPage/itemUserBanner.vue';
+import addItemUser from '@/components/BusinessPage/addItemUser.vue';
 // import addItemTask from '@/components/BusinessPage/addItemTask.vue'
-import editLcbTasks from '@/components/BusinessPage/editLcbTasks.vue'
-import  templateTabel from '@/components/BusinessPage/templateTabel.vue'
-import  fileTable from '@/components/BusinessPage/fileTable.vue'
-import  milestoneGl from '@/components/BusinessPage/milestoneGl.vue'
-import  commitMilestone from '@/components/BusinessPage/commitMilestone.vue'
-import  question from '@/components/BusinessPage/question.vue'
-import  complain from '@/components/BusinessPage/complain.vue'
-import  overview from '@/components/BusinessPage/overview.vue'
-import  teamWork from '@/components/BusinessPage/teamWork.vue'
-import  zdsfw from '@/components/BusinessPage/zdsfw.vue'
-import taskTable from '@/components/BusinessPage/processTaskTable.vue'
-import { getProjectCatalog } from '@/api/xmfz.js'
-import { getMilestoneCatalog  } from '@/api/milestone.js'
+import editLcbTasks from '@/components/BusinessPage/editLcbTasks.vue';
+import  templateTabel from '@/components/BusinessPage/templateTabel.vue';
+import  fileTable from '@/components/BusinessPage/fileTable.vue';
+import  milestoneGl from '@/components/BusinessPage/milestoneGl.vue';
+import  commitMilestone from '@/components/BusinessPage/commitMilestone.vue';
+import  question from '@/components/BusinessPage/question.vue';
+import  complain from '@/components/BusinessPage/complain.vue';
+import  overview from '@/components/BusinessPage/overview.vue';
+import  teamWork from '@/components/BusinessPage/teamWork.vue';
+import  zdsfw from '@/components/zdsfw/zdsfw.vue';
+import taskTable from '@/components/BusinessPage/processTaskTable.vue';
+import { getProjectCatalog } from '@/api/xmfz.js';
+import { getMilestoneCatalog  } from '@/api/milestone.js';
 import { getTasksByCatalog ,addOrUpdateTask ,getTasks,getTaskDto ,getTaskLogs ,deleteTask ,changeTaskStatus,confirmMilestone} from '@/api/task.js'
 import { addOrUpdateTaskProcess ,queryTaskProcess ,getChildrenByLcbms ,getTemplateByRwbh} from '@/api/TaskProcess.js'
 import { querytaskParticipant ,queryUser ,queryProjectParticipant ,queryProjectParticipantMap, addTaskParticipant,deleteTaskParticipant ,modifyTaskLeader ,queryProductParticipant} from '@/api/personal.js'
-import { getChatId , updateChatId ,createChat} from '@/api/xmkb.js'
-import { isVisibleXmtd } from '@/api/xmtd.js'
-import axios from 'axios'
-import Qs from 'qs'
-import { getMyDate } from '../../utils/util.js'; 
+import { getChatId , updateChatId ,createChat} from '@/api/xmkb.js';
+import { isVisibleXmtd } from '@/api/xmtd.js';
+import axios from 'axios';
+import Qs from 'qs';
+import { getMyDate} from '../../utils/util.js'; 
 
 export default {
   data(){

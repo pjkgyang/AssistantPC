@@ -21,9 +21,19 @@ export default {
     pageBxDetail:window.baseurl+'report/pageBxDetail.do',//报销明细分页列表
     
     ydkhb:window.baseurl+'report/ydkhb.do', //月度考核报表
-    tsxqb:window.baseurl+'report/tsxqb.do', //投诉详情表
-    lcbxqb:window.baseurl+'report/lcbxqb.do', //里程碑详情表
-    wtxqb:window.baseurl+'report/wtxqb.do', //问题详情表
+    ydjlb:window.baseurl+'report/ydjlb.do', //月度奖励报表
+
+    ydkhtsxqb:window.baseurl+'report/ydkhtsxqb.do', //投诉详情表
+    ydkhlcbxqb:window.baseurl+'report/ydkhlcbxqb.do', //里程碑详情表
+    ydkhwtxqb:window.baseurl+'report/ydkhwtxqb.do', //问题详情表
+    ydwtshgsb:window.baseurl+'report/ydwtshgsb.do', //售后工时报表
+    ydwtshgsxqb:window.baseurl+'report/ydwtshgsxqb.do', //售后工时详情报表
+    ydjlwtxqb:window.baseurl+'report/ydjlwtxqb.do', //售后工时详情报表
+    nfxggs:window.baseurl+'report/nfxggs.do',  //能否修改工时
+    xggs:window.baseurl+'report/xggs.do', //修改工时
+
+
+    
 
     // 战队维护
     saveQyzd:window.baseurl+'qyzd/saveQyzd.do',                    // 保存区域战队
@@ -42,7 +52,7 @@ export default {
 
     // 主动式服务
     isVisibleTab:window.baseurl+'activeservice/isVisibleTab.do',//是否可见
-    saveActiveService:window.baseurl+'activeservice/saveActiveService.do',//保存主动式服务
+    saveActiveService:window.baseurl+'activeservice/saveActiveService.do',//保存主动式服务(编辑)
     deleteActiveService:window.baseurl+'activeservice/deleteActiveService.do',//删除主动式服务
     pageActiveService:window.baseurl+'activeservice/pageActiveService.do',//主动式服务分页列表
     listOperationLog:window.baseurl+'activeservice/listOperationLog.do',//主动式服务日志列表
@@ -54,6 +64,9 @@ export default {
     listXmZdsfwCp:window.baseurl+'activeservice/listXmZdsfwCp.do',  // 获取产品
     listFwnrByCp:window.baseurl+'activeservice/listFwnrByCp.do',   // 获取服务内容
     isVisibleTab:window.baseurl+'activeservice/isVisibleTab.do', //是否可见主动式服务
+    pageActiveServiceProject:window.baseurl+'activeservice/pageActiveServiceProject.do',//主动式服务（导航）
+    generateActiveService:window.baseurl+'activeservice/generateActiveService.do',//生成主动式服务（新增）
+    publishActiveService:window.baseurl+'activeservice/publishActiveService.do',//发布主动式服务（新增）
 
     // 修改参与者 中标人
     listZbxx:window.baseurl+'project/listZbxx.do', // 获取中标人列表
@@ -66,6 +79,8 @@ export default {
 
     // 项目看板里程碑明细(首页)
     pageProjectPanelMilestoneDetail:window.baseurl+'milestone/pageProjectPanelMilestoneDetail.do',
+    addMemo:window.baseurl+'milestone/addMemo.do',//提交项目备忘（里程碑）
+
 
     //  首页跳转日报数据列表
     pageProjectPanelWorkLogs:window.baseurl+'process/pageProjectPanelWorkLogs.do',
@@ -87,5 +102,11 @@ export default {
     startAfterSalesService:window.baseurl+'project/startAfterSalesService.do',
     stopAfterSalesService:window.baseurl+'project/stopAfterSalesService.do', //停止售后服务
     
+
+    // openTemplateFolder.do
+    openTemplateFolder:window.baseurl+'attachment/openTemplateFolder.do',
+
+
+    applyDismiss:window.baseurl+'question/applyDismiss.do',
 
 }

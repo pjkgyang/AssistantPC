@@ -152,7 +152,7 @@ export default {
           this.menuList = data.data;
       //  if (!window.location.hash)
           //  if (window.location.hash == "#/") 
-          if (window.location.hash == "#/"){
+           if (window.location.hash == "#/") {
             if(!data.data[0].url){
                if(data.data[0].childNodes[0].url){
                   this.$router.push({ path:data.data[0].childNodes[0].url });

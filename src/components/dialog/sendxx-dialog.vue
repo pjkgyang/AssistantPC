@@ -1,7 +1,7 @@
 <template>
  <div>
       <el-dialog
-            title="发送运维消息"
+            title="发送消息"
             width="700px"
             top="30px"
             :visible.sync="visible"

@@ -1,39 +1,50 @@
 <template>
-    <div>
-        <el-dialog title="修改项目配置" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
-            <div class="dialog-pz">
-                <section class="pd-10 itemSet-group">
-                    <p>
-                        <span class="filter-weight">项目服务状态：{{value?'启动':'停止'}}</span>
-                        <span>
-                            <el-switch v-model="value" active-color="#13ce66" inactive-color="#dcdfe6">
-                            </el-switch>
-                        </span>
-                    </p>
-                    <p>
-                        <span class="filter-weight before-require">{{value?'启动说明:':'停止说明:'}}</span>
-                        <span>
-                            <el-input type="textarea" :rows="4" :placeholder="value?'请输入启动说明:':'请输入停止说明:'" v-model="textarea">
-                            </el-input>
-                        </span>
-                    </p>
-                </section>
-                <section text-right class="pd-10">
-                    <el-button type="primary" size="mini" @click="handleCommit">保存</el-button>
-                    <el-button size="mini" @click="handleClose">取消</el-button>
-                </section>
-            </div>
-        </el-dialog>
-    </div>
+  <div>
+    <el-dialog title="修改项目配置" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
+      <div class="dialog-pz">
+        <section class="pd-10 itemSet-group">
+          <p>
+            <span class="filter-weight before-require">项目服务状态：{{value?'启动':'停止'}}</span>
+            <span>
+              <el-switch v-model="value" active-color="#13ce66" inactive-color="#dcdfe6">
+              </el-switch>
+            </span>
+          </p>
+          <p class="mg-12" v-if="!fwqxShow && value">
+            <span class="filter-weight before-require">项目服务期限：</span>
+            <span>
+              <el-date-picker v-model="ycfwqx" type="date" size="mini" style="width:220px" placeholder="选择日期" format="yyyy年MM月dd日" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </span>
+          </p>
+          <p>
+            <span class="filter-weight before-require">{{value?'启动说明:':'停止说明:'}}</span>
+            <span>
+              <el-input type="textarea" :rows="4" :placeholder="value?'请输入启动说明:':'请输入停止说明:'" v-model="textarea">
+              </el-input>
+            </span>
+          </p>
+        </section>
+        <section text-right class="pd-10">
+          <el-button type="primary" size="mini" @click="handleCommit">保存</el-button>
+          <el-button size="mini" @click="handleClose">取消</el-button>
+        </section>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
+import { EventBus,GetMonthBefore,GetDateStr } from "../../utils/util.js"; //事件总线
 export default {
   data() {
     return {
       visible: this.show,
+      xmData:{},
       value: false,
-      textarea: ""
+      textarea: "",
+      ycfwqx: '',
+      fwqxShow: false
     };
   },
   methods: {
@@ -44,31 +55,49 @@ export default {
           type: "warning"
         });
         return;
-      } else {
-        this.$confirm(this.value?"您是否确定启动服务？":"您是否确定停止服务？", "提示", {
+      }
+      if (!this.ycfwqx && !this.fwqxShow && this.value) {
+        this.$alert("请填写服务期限", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
+      this.$confirm(
+        this.value ? "您是否确定启动服务？" : "您是否确定停止服务？",
+        "提示",
+        {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(() => {
-            this.$post(
-              this.value
-                ? this.API.startAfterSalesService
-                : this.API.stopAfterSalesService,
-              {
-                xmbh: this.xmbh,
-                sm:this.textarea
-              }
-            ).then(res => {
-              if (res.state == "success") {
-                this.$alert("保存成功", "提示", {
-                  confirmButtonText: "确定",
-                  type: "success"
-                });
-                this.visible = false;
-              }
-            });
-          }).catch(() => {});
-      }
+        }
+      )
+        .then(() => {
+          this.$post(
+            this.value
+              ? this.API.startAfterSalesService
+              : this.API.stopAfterSalesService,
+            {
+              xmbh: this.xmbh,
+              sm: this.textarea,
+              ycfwqx:this.value?this.ycfwqx:''
+            }
+          ).then(res => {
+            if (res.state == "success") {
+              this.$alert("保存成功", "提示", {confirmButtonText: "确定",type: "success",
+              callback: action => {
+                 EventBus.$emit("handleCommitSuccess",'');
+                 if(this.value){
+                   this.xmData.gcfwzt = ''
+                 }else{
+                   this.xmData.gcfwzt = '0'
+                 }
+              }});
+              this.visible = false;
+            }
+          });
+        })
+        .catch(() => {});
     },
     handleClose() {
       this.visible = false;
@@ -90,16 +119,28 @@ export default {
       }
     }
   },
+  mounted(){
+   
+  },
   watch: {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
+        this.ycfwqx = ''
+        this.textarea = "";
       } else {
-         this.textarea = '';  
-        if (this.xmDetail.gcfwzt == "0") {
+        this.xmData = this.xmDetail;
+        if (this.xmData.gcfwzt == "0") {
           this.value = false;
+          this.fwqxShow = false;
         } else {
           this.value = true;
+          this.fwqxShow = true;
+        }
+        if(!!this.xmDetail.fwksrq){
+           this.ycfwqx = GetMonthBefore(this.xmDetail.fwksrq,Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+1);
+        }else{
+           this.ycfwqx = GetMonthBefore(GetDateStr(0),Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+1);
         }
       }
     }

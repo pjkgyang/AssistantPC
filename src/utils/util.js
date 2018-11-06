@@ -82,12 +82,23 @@ export function GetNextDate(newDate,DayCount){
     var s = y+"-"+(m<10?('0'+m):m)+"-"+(d<10?('0'+d):d);
     return  s;
 }
-// exports.install = function (Vue, options) {
-//     Vue.prototype.ajax = function (){
-//         alert('aaaaaaa');
-//     };
-// };
 
+export function GetMonthBefore(newDate,MonthCount){
+    var d = new Date(newDate);
+    // 因为getMonth()获取的月份的值只能在0~11之间所以我们在进行setMonth()之前先给其减一
+    d.setMonth((d.getMonth()) + MonthCount);
+    var yy1 = d.getFullYear();
+    var mm1 = d.getMonth()+1;
+    var dd1 = d.getDate();
+    if (mm1 < 10 ) {
+        mm1 = '0' + mm1;
+    }
+    if (dd1 < 10) {
+      dd1 = '0' + dd1;
+    }
+    var s = yy1 + '-' + mm1 + '-' + dd1;
+    return s;
+}
 
 // Unix 时间戳 转换当前时间
 export function formatTime(time) {

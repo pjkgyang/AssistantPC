@@ -1,7 +1,6 @@
 <template>
         <div class="out-table">
             <table class="table" border>
-                <caption>{{title}}</caption>
                 <tr v-if="tableData.length != 0">
                     <th style="width:100px;">分类</th>
                     <th>{{tableData[0].xzwt}}</th>
@@ -99,15 +98,7 @@ export default {
    border: 1px solid #ebeef5; 
    margin-bottom: 10px !important;
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 30px;
     text-align:center;

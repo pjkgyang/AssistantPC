@@ -177,8 +177,8 @@ export default {
           curPage:curPage,
           pageSize:11,
           keyword: this.xmkbkeyword,
-          xmlb: this.xmlbC,
-          sfgx: this.gxhtC,
+          xmlb:'',
+          sfgx:'',
           pl:''
       }).then(({data})=>{
         if(data.state == 'success'){
@@ -299,6 +299,7 @@ export default {
 
     EventBus.$on("searchXMKB", param => {
       this.xmkbkeyword = param;
+      this.show = false;
       this.getMyProjects(1);
     });
   },

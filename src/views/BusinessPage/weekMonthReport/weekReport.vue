@@ -266,6 +266,7 @@ export default {
           this.textTitle = '本周工作计划'
           this.wordShow = false
           this.othShow = false
+          
       }else{
           this.textTitle = '本周工作总结'
           this.wordShow = true
@@ -301,14 +302,16 @@ export default {
       }
       this.listWeekPlanPerson();
       this.isWeekPlanBlocked(this.monthValue,this.weekValue);
-      console.log(this.monthValue);
-      console.log(chooseDate);
       if(new Date(this.monthValue).getTime() > new Date(chooseDate).getTime()){
           this.textTitle = '本周工作计划'
           this.wordShow = false
           this.othShow = false
-      }else{
-            if(this.weekValue > this.curWeek){
+      }else if(new Date(this.monthValue).getTime() < new Date(chooseDate).getTime()){
+           this.textTitle = '本周工作总结'
+          this.wordShow = true
+          this.othShow = true
+      } else{
+          if(this.weekValue > this.curWeek){
               this.textTitle = '本周工作计划'
               this.wordShow = false
               this.othShow = false

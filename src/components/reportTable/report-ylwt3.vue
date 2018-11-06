@@ -1,7 +1,6 @@
 <template>
     <div class="out-table">
         <table class="table table-cpxygz" border>
-            <caption>产品响应跟踪</caption>
             <thead>
                 <tr v-if="tableData3.length != 0">
                     <th>分类</th>
@@ -89,19 +88,11 @@ export default {
 }
 .table tbody{
     display: block;
-    height:57vh;
+    height:61vh;
     width: 100%;
     overflow-y: scroll;
 }
-.table caption{
-    border: 1px solid #ebeef5;
-    border-bottom: none;
-    text-align: center;
-    background: #f5f7fa;
-    font-size:18px;
-    font-weight: 700;
-    color: #909399;
-}
+
 .table tr,.table th{
     height: 30px;
     text-align:center;
