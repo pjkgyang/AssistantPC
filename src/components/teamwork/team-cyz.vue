@@ -41,7 +41,8 @@
              <td>{{!itemYfzrr.userName?'':itemYfzrr.unitType == 0?'金智':itemYfzrr.unitType == 1?'学校成员':'合作伙伴'}}</td>
              <td>{{!itemYfzrr.dept?'':itemYfzrr.dept}}</td>
              <td>
-                 <el-button v-if="userTag || (itemYfzrr.userName == username)" plain size="mini"  @click="changeUser($event,itemYfzrr)">修改</el-button>
+               <!-- userTag || (itemYfzrr.userName == username) -->
+                 <el-button  v-if="this.GroupTag.includes('JYGL')" plain size="mini"  @click="changeUser($event,itemYfzrr)">修改</el-button>
                  <el-button  plain size="mini" :data-wid="itemYfzrr.userId" @click="editUser($event,itemYfzrr)">编辑</el-button>
              </td>
            </tr>
@@ -271,7 +272,8 @@ export default {
       username:'',
       zbrData:{},
       count:0,
-      mark:false
+      mark:false,
+      GroupTag:""
     };
   },
   props: {
@@ -766,8 +768,8 @@ export default {
     }
   },
   mounted() {
-      let GroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
-      if(GroupTag.indexOf('JYGL') != -1||GroupTag.indexOf('QYZ') != -1||GroupTag.indexOf('ZDDZ') != -1){
+      this.GroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+      if(this.GroupTag.indexOf('JYGL') != -1||this.GroupTag.indexOf('QYZ') != -1||this.GroupTag.indexOf('ZDDZ') != -1){
         this.userTag = true;
       }else{
         this.userTag = false;

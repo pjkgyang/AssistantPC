@@ -12,7 +12,8 @@
               <el-button v-if="xmData.jfzrrxm == username" :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('qrfw')">确认服务</el-button>
               <el-button v-if="xmData.jfzrrxm == username" :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('bhfw')">驳回服务</el-button>
               <el-button v-if="groupTag.includes('ZDSFWGLY')" type="primary" size="mini" @click="handleClick('xzjh')">新增自定义服务计划</el-button>
-              <el-button v-if="" :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('scjh')">删除服务计划</el-button>
+              <el-button v-if="groupTag.includes('ZDSFWGLY')" :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('scjh')">删除服务计划</el-button>
+              <el-button v-if="groupTag.includes('ZDSFWGLY')" :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('xgzrr')">批量修改责任人</el-button>
               <el-button v-if="groupTag.includes('ZDSFWGLY')" type="primary" size="mini" @click="handleClickScOrfb('sc')">生成</el-button>
               <el-button v-if="groupTag.includes('ZDSFWGLY')" type="primary" size="mini" @click="handleClickScOrfb('fb')">发布</el-button>
             </div>
@@ -24,9 +25,9 @@
             <el-table-column fixed="left" type="selection" width="55"></el-table-column>
             <el-table-column fixed="left" label="操作" width="210">
               <template slot-scope="scope">
-                <el-button v-if="scope.row.zt != '1' && isJzuser == '0'" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
-                <el-button v-if="xmData.jfzrrxm == username" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
-                <el-button v-if="scope.row.zt == '1' && xmData.jfzrrxm == username" type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
+                <el-button v-if="scope.row.zt != '1'  && isJzuser == '0'" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
+                <el-button v-if="scope.row.zt == '1' && (xmData.jfzrrxm == username||groupTag.includes('ZDSFWGLY'))" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
+                <el-button v-if="scope.row.zt == '1' && (xmData.jfzrrxm == username||groupTag.includes('ZDSFWGLY'))" type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
                 <el-button v-if="groupTag.includes('ZDSFWGLY')" type="text" size="mini" @click="handleClick('edit',scope.row)">编辑</el-button>
                 <el-button v-if="scope.row.sffb == '0' && groupTag.includes('ZDSFWGLY')" type="text" size="mini" @click="handleClick('scjh',scope.row)" style="color:#f00">删除</el-button>
                 <el-button type="text" size="mini" @click="handleCheckDetail(scope.row)">详情</el-button>
@@ -45,14 +46,14 @@
             <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
-                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':'关闭'}}</el-tag>
+                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="jhksrq" label="计划开始日期" width="140"></el-table-column>
             <el-table-column prop="jhjsrq" label="计划结束日期" width="140"></el-table-column>
             <el-table-column prop="sfgq" label="是否过期" width="100">
               <template slot-scope="scope">
-                <span>{{scope.row.sfgq=='0'?'未过期':'过期'}}</span>
+                <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':'过期'}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="zrrxm" label="责任人" width="100"></el-table-column>
@@ -70,7 +71,7 @@
       </section>
     </tableLayout>
     <tbfwDialog :show.sync='tbfwShow' @handleCommitTB="handleCommitTB" :wids="wids"></tbfwDialog>
-    <editDialog :show.sync='editShow' :data="rowsData" @handleEdit="handleEdit"></editDialog>
+    <editDialog :show.sync='editShow' :data="rowsData" @handleEdit="handleEdit" :plxgZrr="plxgZrr" :xmbh="xmbh"></editDialog>
     <qrbhfwDialog :show.sync='qrbhfwShow' :title="title" @handleCommitQR="handleCommitQR"></qrbhfwDialog>
     <fwjhDialog :show.sync='fwjhShow' :xmbh="xmbh" @handleCommitFWJH="handleCommitFWJH"></fwjhDialog>
     <sc-dialog :show.sync='scShow' :xmData="xmData" @handleScSuccess="handleScSuccess"></sc-dialog>
@@ -132,7 +133,8 @@ export default {
         ],
         sfgq: ""
       },
-      xmbh: this.nxmbh
+      xmbh: this.nxmbh,
+      plxgZrr: false
     };
   },
   methods: {
@@ -220,21 +222,40 @@ export default {
       });
     },
 
+    // 编辑（批量修改责任人）
     handleEdit(data) {
-      //调整计划完成日期
-      data.wid = this.rowsData.wid;
-      this.$post(this.API.saveActiveService, data).then(res => {
-        if (res.state == "success") {
-          this.$alert("保存成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.editShow = false;
-              this.pageActiveService();
-            }
-          });
-        }
-      });
+      if (this.plxgZrr) {
+        this.$post(this.API.updateZrr, {
+          zrrbh: data.zrrbh,
+          zrrxm: data.zrrxm,
+          wids: this.wids
+        }).then(res => {
+          if (res.state == "success") {
+            this.$alert("修改成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.editShow = false;
+                this.pageActiveService();
+              }
+            });
+          }
+        });
+      } else {
+        data.wid = this.rowsData.wid;
+        this.$post(this.API.saveActiveService, data).then(res => {
+          if (res.state == "success") {
+            this.$alert("保存成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.editShow = false;
+                this.pageActiveService();
+              }
+            });
+          }
+        });
+      }
     },
     handleSelectionChange(val) {
       //复选
@@ -244,6 +265,7 @@ export default {
         this.widsArr.push(ele.wid);
       });
     },
+
     handleClick(data, params) {
       this.wids = !params ? this.widsArr.join(",") : params.wid;
       let tbArr = [];
@@ -346,9 +368,14 @@ export default {
               this.filterData.lb
           );
           break;
-        case "edit": //修改计划完成日期
+        case "edit": //编辑
           this.editShow = true;
+          this.plxgZrr = false;
           this.rowsData = params;
+          break;
+        case "xgzrr": //修改责任人
+          this.editShow = true;
+          this.plxgZrr = true;
           break;
         default:
           break;
@@ -356,13 +383,11 @@ export default {
     },
     // 生成
     handleScSuccess(data) {
-      this.$post(this.API.generateActiveService,
-        {
-          xmbh: this.xmbh,
-          fwksrq:data.fwksrq,
-          fwqx:data.fwqx
-        }
-      ).then(res => {
+      this.$post(this.API.generateActiveService, {
+        xmbh: this.xmbh,
+        fwksrq: data.fwksrq,
+        fwqx: data.fwqx
+      }).then(res => {
         if (res.state == "success") {
           this.$alert("服务生成成功", "提示", {
             confirmButtonText: "确定",
@@ -510,6 +535,9 @@ export default {
       this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
       this.username = sessionStorage.username;
       this.isJzuser = sessionStorage.isJZuser;
+    }
+    if (this.groupTag.includes("ZDSFWGLY")) {
+      this.filterData.date = [];
     }
     getProject({ xmbh: this.xmbh }).then(({ data }) => {
       if (data.state == "success") {

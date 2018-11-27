@@ -519,8 +519,7 @@ export default {
                       this.pageWeekWork(this.currentWorkPage,this.monthValue,this.weekValue);
                     }
                   });
-                
-              }
+               }
            })  
         }else{
           batchUpdateWeekQuestion({  // 批量编辑周问题
@@ -570,7 +569,7 @@ export default {
        let Year = lastMonth.split('-')[0];
        let Month = lastMonth.split('-')[1]-1;
        let week = getWeeks(Year,Month+1);  //获取上月周数
-       let weekStartDate = GetNextDate(getLastMonth(Year,Month),(week-1)*7)
+       let weekStartDate = GetNextDate(getLastMonth(Year,Month),(week-1)*7);
        let weekEndDate = GetNextDate(weekStartDate,6);
        let NowDate = getNowFormatDate();  
        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && new Date(NowDate).getTime() <= new Date(weekEndDate).getTime()){

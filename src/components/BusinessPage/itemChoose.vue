@@ -38,6 +38,12 @@ export default {
       JzUser:''
     };
   },
+  props:{
+    sfts:{
+      type:Boolean,
+      default:false
+    }
+  },
   methods: {
     handleChooseItem(data) {
       this.getProjects(data);
@@ -71,7 +77,7 @@ export default {
         keyword: this.xMkeyword,
         xmlb: "",
         sfgx: "",
-        xmzt:'1,2,3',
+        xmzt:this.sfts?'1,2':'1,2,3',
         pl: ""
       }).then(({ data }) => {
         if (data.state == "success") {

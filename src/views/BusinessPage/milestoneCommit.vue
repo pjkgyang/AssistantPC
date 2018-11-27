@@ -130,14 +130,8 @@
           <el-table-column type="selection" width="55" :selectable='checkboxInit' v-if="ishow">
           </el-table-column>
           <el-table-column prop="qygc" min-width="130" label="区域工程" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="htbh" min-width="150" label="合同编号" show-overflow-tooltip></el-table-column>
           <el-table-column prop="xmbh" min-width="100" label="项目编号" show-overflow-tooltip></el-table-column>
           <el-table-column prop="xmmc" min-width="200" label="项目名称" show-overflow-tooltip></el-table-column>
-
-          <el-table-column prop="sfzt" min-width="100" label="是否在谈" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="sfgx" min-width="100" label="是否购销" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="dkl" min-width="100" label="到款率" show-overflow-tooltip></el-table-column>
-
           <el-table-column prop="xmnr_display" min-width="260" label="项目内容" show-overflow-tooltip></el-table-column>
           <el-table-column prop="lcbms_display" min-width="260" style="text-align:left" label="里程碑描述" show-overflow-tooltip> </el-table-column>
           <el-table-column prop="nrxmlb" min-width="90" label="项目类别" show-overflow-tooltip></el-table-column>
@@ -156,6 +150,10 @@
           <el-table-column prop="dwmc" min-width="200" label="学校名称" show-overflow-tooltip></el-table-column>
           <el-table-column prop="yfzrrxm" min-width="100" label="项目经理" show-overflow-tooltip></el-table-column>
           <el-table-column prop="zzrxm" label="责任人" width="100"> </el-table-column>
+          <el-table-column prop="htbh" min-width="150" label="合同编号" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="sfzt" min-width="100" label="是否在谈" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="sfgx" min-width="100" label="是否购销" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="dkl" min-width="100" label="到款率" show-overflow-tooltip></el-table-column>
         </el-table>
       </div>
       <div style="padding:5px 0;text-align:right">

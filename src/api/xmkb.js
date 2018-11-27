@@ -272,7 +272,9 @@ export function closeQuestion(obj){
 			zlpf:obj.zlpf,
 			gxrData:obj.gxrData,
 			sfjj:obj.sfjj,
-			jjsm:obj.jjsm			
+			jjsm:obj.jjsm,
+			gssfrk:obj.gssfrk,
+			cpsm:obj.cpsm			
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);
@@ -448,7 +450,7 @@ export function saveForward(obj){
 			 wid:obj.wid,
 			 bh:obj.bh,
 			 nr:obj.nr,
-			 cpxbh:obj.cpxbh,
+			 cpbh:obj.cpbh,
 			 qwjjrq:obj.qwjjrq
 	},{
 		transformRequest: [function (data) {

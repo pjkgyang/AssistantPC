@@ -18,8 +18,8 @@
             <el-table-column fixed="left" label="操作" width="150">
               <template slot-scope="scope">
                 <el-button v-if="scope.row.zt != '1' && isJzuser == '0'" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
-                <el-button type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
-                <el-button v-if="scope.row.zt == '1'" type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
+                <el-button v-if="scope.row.zt == '1' && scope.row.jffzrxm == username" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
+                <el-button v-if="scope.row.zt == '1' && (userGroupTag.includes('ZDSFWGLY') || scope.row.jffzrxm == username)" type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
                 <el-button type="text" size="mini" @click="handleCheckDetail(scope.row)">详情</el-button>
               </template>
             </el-table-column>
@@ -35,14 +35,14 @@
             <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
-                  <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':'关闭'}}</el-tag>
+                  <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="jhksrq" label="计划开始日期" width="140"></el-table-column>
             <el-table-column prop="jhjsrq" label="计划结束日期" width="140"></el-table-column>
             <el-table-column prop="sfgq" label="是否过期" width="100">
               <template slot-scope="scope">
-                  <span>{{scope.row.sfgq=='0'?'未过期':'过期'}}</span>
+                  <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':'过期'}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="zrrxm" label="责任人" width="100"></el-table-column>
@@ -108,7 +108,9 @@ export default {
         ],
         sfgq:""
       },
-      isJzuser:""
+      isJzuser:"",
+      userGroupTag:'',
+      username:""
     };
   },
   methods: {
@@ -378,6 +380,8 @@ export default {
     this.listXmZdsfwCp();
     this.pageActiveService();
     this.isJzuser = sessionStorage.isJZuser;
+    this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+    this.username = JSON.parse(sessionStorage.userInfo).nickName
   },
   props: {},
   components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter }

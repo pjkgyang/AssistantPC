@@ -2,64 +2,66 @@
   <div class="header">
     <!--BusinessPage 页面 header -->
     <div class="header-left">
-       <div class="title_menu">
-          <p>
-            <img src="static/img/logo2.png" alt="logo">&#x3000;<span>金智教育工程小助手</span>
-          </p>
-       </div>
-        <div class="header-navmenu">
-                <ul class="header_nav" @click="handleRouter"  v-if="false">
-                  <li v-for="menu in menuList"> 
-                      <div :class="{'nav_active':title == menu.url}" :data-router="menu.url">{{menu.privname}}</div>
-                  </li>
-                </ul>
-              <div class="header-navmenu-elmenu"> 
-                   <el-menu text-color="#708087"  :active-text-color="'#CD3333'" ref="navbar" :router='true'  :default-active="onRoutes"  @select="handleSelect" mode="horizontal" menu-trigger="hover" unique-opened>
-                      <nav-item :routes="menuList" navIndex=""></nav-item>
-                  </el-menu>
-              </div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;">
-          <div style="margin-right:15px;position:relative">
-              <input v-if="title == '/businesspage/dataTab'" type="text" class="searchKeyword" v-model="inputValue" placeholder="请输入搜索内容" @keyup="getInputVal">
-              <input v-if="title == '/businesspage/projects'" type="text" class="searchKeyword" v-model="inputValue" placeholder="请输入搜索内容" @keyup="getInputXmKB">
-              <span  v-if="title == '/businesspage/dataTab' ||title == '/businesspage/projects'" class="el-icon-search" style="position:absolute;top:6px;left:5px;"></span>
-          </div>
-          <div>
-            <p class="notice" @click="handleNotice">
-              <el-badge :value="noticNum == 0?'':noticNum" class="item" :max="99">
-               <span class="el-icon-bell" title="通知" style="font-size:20px"></span>
-             </el-badge>
-            </p>
-          </div>
-
-           <div style="margin:0 8px;font-size:13px;color:#f00" v-if="jf != -1">
-              <span>积分:</span>{{jf}}
-           </div>
-
-          <div v-if="shown" class="userLogin">
-              <img src="static/img/avatar1.png">
-                <a href="javascript:;;" @click="homeLogin">登录</a>
-          </div>
-
-          <div v-if="!shown" class="info">
-            <el-col :span="12">
-              <el-dropdown @command="handleCommand">
-                <span class="el-dropdown-link">
-                  <img :src="userInfo.logo" :onerror="errorImg"><span style="color:#000;white-space:nowrap;">&nbsp;{{userInfo.nickName}}</span>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item  v-for="(sys,index) in userNav" :key='index' :command="sys.homepage+'&&'+sys.privid">{{sys.privname}}</el-dropdown-item>
-                    <el-dropdown-item command="个人中心" :divided="userNav.length != 0">个人中心</el-dropdown-item>
-                    <el-dropdown-item command="退出" :divided="userNav.length != 0">
-                      退出
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-                </el-dropdown>
-            </el-col>
-          </div>
+      <div class="title_menu">
+        <p>
+          <img src="static/img/logo2.png" alt="logo">&#x3000;
+          <span>金智教育工程小助手</span>
+        </p>
       </div>
+      <div class="header-navmenu">
+        <ul class="header_nav" @click="handleRouter" v-if="false">
+          <li v-for="menu in menuList">
+            <div :class="{'nav_active':title == menu.url}" :data-router="menu.url">{{menu.privname}}</div>
+          </li>
+        </ul>
+        <div class="header-navmenu-elmenu">
+          <el-menu text-color="#708087" :active-text-color="'#CD3333'" ref="navbar" :router='true' :default-active="onRoutes" @select="handleSelect" mode="horizontal" menu-trigger="hover" unique-opened>
+            <nav-item :routes="menuList" navIndex=""></nav-item>
+          </el-menu>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;">
+      <div style="margin-right:15px;position:relative">
+        <input v-if="title == '/businesspage/dataTab'" type="text" class="searchKeyword" v-model="inputValue" placeholder="请输入搜索内容" @keyup="getInputVal">
+        <input v-if="title == '/businesspage/projects'" type="text" class="searchKeyword" v-model="inputValue" placeholder="请输入搜索内容" @keyup="getInputXmKB">
+        <span v-if="title == '/businesspage/dataTab' ||title == '/businesspage/projects'" class="el-icon-search" style="position:absolute;top:6px;left:5px;"></span>
+      </div>
+      <div>
+        <p class="notice" @click="handleNotice">
+          <el-badge :value="noticNum == 0?'':noticNum" class="item" :max="99">
+            <span class="el-icon-bell" title="通知" style="font-size:20px"></span>
+          </el-badge>
+        </p>
+      </div>
+
+      <div style="margin:0 8px;font-size:13px;color:#f00" v-if="jf != -1">
+        <span>积分:</span>{{jf}}
+      </div>
+
+      <div v-if="shown" class="userLogin">
+        <img src="static/img/avatar1.png">
+        <a href="javascript:;;" @click="homeLogin">登录</a>
+      </div>
+
+      <div v-if="!shown" class="info">
+        <el-col :span="12">
+          <el-dropdown @command="handleCommand">
+            <span class="el-dropdown-link">
+              <img :src="userInfo.logo" :onerror="errorImg">
+              <span style="color:#000;white-space:nowrap;">&nbsp;{{userInfo.nickName}}</span>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(sys,index) in userNav" :key='index' :command="sys.homepage+'&&'+sys.privid">{{sys.privname}}</el-dropdown-item>
+              <el-dropdown-item command="个人中心" :divided="userNav.length != 0">个人中心</el-dropdown-item>
+              <el-dropdown-item command="退出" :divided="userNav.length != 0">
+                退出
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-col>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -80,7 +82,8 @@ export default {
       navActive: "/businesspage/projects",
       title: "",
       inputValue: "",
-      errorImg:'this.src="' + require("../../../static/img/defaultAvatar.png") + '"',
+      errorImg:
+        'this.src="' + require("../../../static/img/defaultAvatar.png") + '"',
       baseUrl: "",
       noticNum: "",
       noticeList: "",
@@ -89,18 +92,18 @@ export default {
       noticeVisible: false,
       menuList: [],
       jf: "",
-      menuData:[]
+      menuData: []
     };
   },
   computed: {
     onRoutes() {
       if (this.$route.path.includes("/businesspage/report")) {
-          return "/businesspage/report";
-      }else if(this.$route.path.includes("/businesspage/task")){
-          return "/businesspage/projects";
-      }else if(this.$route.path.includes("/businesspage/toplist")){
-       return "/businesspage/toplist";
-      }else{
+        return "/businesspage/report";
+      } else if (this.$route.path.includes("/businesspage/task")) {
+        return "/businesspage/projects";
+      } else if (this.$route.path.includes("/businesspage/toplist")) {
+        return "/businesspage/toplist";
+      } else {
         return this.$route.path;
       }
     }
@@ -140,45 +143,51 @@ export default {
     this.baseUrl = window.baseurl;
     this.getMessages();
     EventBus.$on("changeNoticeNum", param => {
-       this.getMessages();
+      this.getMessages();
     });
     EventBus.$on("readAllMessages", param => {
-       this.noticNum = 0;
+      this.noticNum = 0;
     });
 
-    querySysPrivs().then(({ data }) => {      //获取导航 菜单
+    querySysPrivs().then(({ data }) => {
+      //获取导航 菜单
       if (data.state == "success") {
         if (data.data != null && data.data.length != 0) {
           this.menuList = data.data;
-      //  if (!window.location.hash)
-          //  if (window.location.hash == "#/") 
-           if (window.location.hash == "#/") {
-            if(!data.data[0].url){
-               if(data.data[0].childNodes[0].url){
-                  this.$router.push({ path:data.data[0].childNodes[0].url });
-               }else{
-                  this.$router.push({ path:data.data[0].childNodes[0].childNodes[0].url });
-               }
-            }else{
-              this.$router.push({ path:data.data[0].url });
+          //  if (!window.location.hash)
+          //  if (window.location.hash == "#/")
+          if (window.location.hash == "#/") {
+            if (!data.data[0].url) {
+              if (data.data[0].childNodes[0].url) {
+                this.$router.push({ path: data.data[0].childNodes[0].url });
+              } else {
+                this.$router.push({
+                  path: data.data[0].childNodes[0].childNodes[0].url
+                });
+              }
+            } else {
+              this.$router.push({ path: data.data[0].url });
             }
           }
-          sessionStorage.setItem('menuList',JSON.stringify(this.menuList));
+          sessionStorage.setItem("menuList", JSON.stringify(this.menuList));
         } else {
           this.$router.push({ path: "/" });
         }
       }
     });
 
-    queryIntegral().then(({ data }) => {      //获取积分
+    queryIntegral().then(({ data }) => {
+      //获取积分
       if (data.state == "success") {
         this.jf = data.data;
       }
     });
   },
   watch: {
-    $route(from, to) {      //切换header title
+    $route(from, to) {
+      //切换header title
       this.getMessages();
+
       this.navActive = window.location.hash.split("#")[1];
       if (window.location.hash.includes("/businesspage/report")) {
         this.title = "/businesspage/report";
@@ -188,30 +197,36 @@ export default {
         this.title = window.location.hash.split("#")[1];
         // this.title = window.location.pathname
       }
-      if(from.name != 'MonthReportWrite'){
-         document.title = '金智教育工程小助手'
-      }else{
-         document.title = '月报-月计划制订'  
+      if (from.name != "MonthReportWrite") {
+        document.title = "金智教育工程小助手";
+      } else {
+        document.title = "月报-月计划制订";
       }
     }
   },
   methods: {
     handleSelect(index, indexPath) {
+      if (index.indexOf("http://") != -1 || index.indexOf("https://") != -1) {
+        window.open(index);
+        return;
+      }
       window.menu = null;
-      this.menuList.forEach((ele,i,arr)=>{
-        if(ele.url == index){
-           window.menu = ele;
-         }
-      })
+      this.menuList.forEach((ele, i, arr) => {
+        if (ele.url == index) {
+          window.menu = ele;
+        }
+      });
     },
     handleNotice() {
       this.$router.push({ path: "/businesspage/systemMsg" });
       this.title = "/businesspage/systemMsg";
     },
-    handleCommand(data) {      //导航切换
+    handleCommand(data) {
+      //导航切换
       this.$emit("handleCommand", data);
     },
-    handleRouter(e) {      //切换页面
+    handleRouter(e) {
+      //切换页面
       let path = e.target.getAttribute("data-router");
       this.$router.push({ path: path });
     },
@@ -223,12 +238,14 @@ export default {
     },
     getInputXmKB(e) {
       if (e.keyCode == "13") {
-        this.$router.push({path:'/businesspage/projects'})
+        this.$router.push({ path: "/businesspage/projects" });
         EventBus.$emit("searchXMKB", this.inputValue);
       }
     },
     homeLogin() {
-      window.location.href ="http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=" +encodeURIComponent("http://careful.wisedu.com/#/");
+      window.location.href =
+        "http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=" +
+        encodeURIComponent("http://careful.wisedu.com/#/");
     },
     getMessages() {
       getMessages({
@@ -283,8 +300,8 @@ export default {
   margin-left: 15px;
   margin-bottom: 0;
 }
-.header .header-navmenu .header-navmenu-elmenu{
-  margin-left:20px;
+.header .header-navmenu .header-navmenu-elmenu {
+  margin-left: 20px;
 }
 .header .header-navmenu ul li {
   float: left;
@@ -318,7 +335,6 @@ export default {
 .header a:hover {
   color: lightskyblue;
   text-decoration: underline;
-  
 }
 
 .info {

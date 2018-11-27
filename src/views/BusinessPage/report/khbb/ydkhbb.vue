@@ -1,17 +1,18 @@
 <template>
+  <div>
     <div>
-        <div>
-            <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"></filterComponent>
-        </div>
-        <div>
-            <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[1,2,4]' :widthArr="[]" :Width="'150'" :Height="0"></tableComponents>
-        </div>
+      <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"></filterComponent>
     </div>
+    <div>
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[1,2,4]' :widthArr="[]" :Width="'150'" :Height="0" 
+      :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
+    </div>
+  </div>
 </template>
 <script>
 import { getResponsibleTaskList } from "@/api/common.js";
 import { queryCostStat } from "@/api/report.js";
-import { getMenu, getSession,getPreMonth } from "@/utils/util.js";
+import { getMenu, getSession, getPreMonth } from "@/utils/util.js";
 import tableComponents from "@/components/reportTable/tableComponents.vue";
 import filterComponent from "@/components/reportTable/filterComponent.vue";
 export default {
@@ -19,6 +20,7 @@ export default {
     return {
       dataList: {},
       headList: [],
+      archiveShow: false,
       filterList: ["keyword", "yf", "bm", "rylx"],
       filterData: {
         keyword: "",
@@ -31,10 +33,39 @@ export default {
     };
   },
   methods: {
+    handleArchive() {
+      this.$confirm("是否确定封存此月数据?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$post(this.API.depositAssessmentData, {
+          yf: this.filterData.yf,
+          khlx: "1"
+        }).then(res => {
+          if (res.state == "success") {
+            if(!!res.data){
+              this.$alert("封存成功!", "提示", {
+                confirmButtonText: "确定",
+                type: "success"
+              });
+              this.archiveShow = false;
+            }else{
+              this.$alert("封存失败!", "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          }else{
+            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          }
+        });
+      });
+    },
     exportTable() {
       window.open(
         window.baseurl +
-          "report/exportydkhb.do?bm=" +
+          "assessment/exportydkhb.do?bm=" +
           this.filterData.bm +
           "&yf=" +
           this.filterData.yf +
@@ -75,12 +106,12 @@ export default {
       });
     },
     handleXxwt(data, i, params) {
-      let url = '';
+      let url = "";
       let arr = params[i].en.split(",");
       let obj = {
         yf: this.filterData.yf,
-        rybh:data[0],
-        rygh:data[1]
+        rybh: data[0],
+        rygh: data[1]
       };
       if (params[i].en.indexOf(",") != -1) {
         if (arr[0] == arr[1]) {
@@ -93,33 +124,37 @@ export default {
           });
         }
       }
-      if(arr[0] == 'lcbjs'||arr[0] == 'lcbdcs'){
-         url = '/khbbdetail/lcbxq';
-         delete obj.rybh;
-      }else if(arr[0] == 'wtsljs'||arr[0] == 'wtslaqwcs'){
-         url = '/khbbdetail/wt';
-         delete obj.rygh;
-      }else if(arr[0] == 'wtjs'){
-         url = '/khbbdetail/ts';
-         delete obj.rybh;
-         delete obj.wtjs;
-      }else if(arr[0] == 'rbbts'){
-         url = '/rbdetail';
-         obj['sfbt'] = '1';
-         obj['sfglpz'] = '0';
-         delete obj.rygh;
-      }else if(arr[0] == 'zbbts'){
-         url = '/zbdetail';
-         obj['sfbt'] = '1';
-         obj['sfglpz'] = '0';
-         delete obj.rygh;
-      }else{
+      if (arr[0] == "lcbjs" || arr[0] == "lcbdcs") {
+        url = "/khbbdetail/lcbxq";
+        delete obj.rybh;
+      } else if (
+        arr[0] == "wtsljs" ||
+        arr[0] == "wtslaqwcs" ||
+        arr[0] == "dyslzs" ||
+        arr[0] == "aqsl"
+      ) {
+        url = "/khbbdetail/wt";
+        delete obj.rygh;
+      } else if (arr[0] == "tscls") {
+        url = "/khbbdetail/ts";
+        delete obj.rybh;
+      } else if (arr[0] == "rbbts") {
+        url = "/rbdetail";
+        obj["sfbt"] = "1";
+        obj["sfglpz"] = "0";
+        delete obj.rygh;
+      } else if (arr[0] == "zbbts") {
+        url = "/zbdetail";
+        obj["sfbt"] = "1";
+        obj["sfglpz"] = "0";
+        delete obj.rygh;
+      } else {
         return;
       }
       // let decodeData = window.btoa(JSON.stringify(obj));
       let routeData = this.$router.resolve({
         path: url,
-        query:obj
+        query: obj
       });
       window.open(routeData.href, "_blank");
     }
@@ -131,13 +166,18 @@ export default {
       (new Date().getMonth() + 1 < 10
         ? "0" + new Date().getMonth() + 1
         : new Date().getMonth() + 1);
-    this.filterData.yf =  getPreMonth(date);  
+    this.filterData.yf = getPreMonth(date);
     this.$nextTick(() => {
       this.ydkhb();
     });
-    window.onerror = function() {
-      return true;
-    };
+    this.$get(this.API.hasDepositData, {
+      yf: this.filterData.yf,
+      khlx: "1"
+    }).then(res => {
+      if (res.state == "success") {
+        this.archiveShow = !res.data;
+      }
+    });
   },
   activated() {},
   watch: {},

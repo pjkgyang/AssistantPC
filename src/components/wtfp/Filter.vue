@@ -1,0 +1,161 @@
+<template>
+    <div>
+        <div class="query-condition">
+            <div v-if="filterList.includes('keyword')">
+                <p>
+                    <p class="query-title">
+                        <span @click="handleExpand" :title="this.sfzk?'点击收起筛选条件':'点击展开筛选条件'" :class="{'expandIcon':true,'el-icon-arrow-up':this.sfzk==true,'el-icon-arrow-down':this.sfzk == false}"></span>&#x3000;高级搜索:</p>
+                    <el-input v-model="filterWord.keyword" size="mini" style="width:348px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
+                    <el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button>
+                </p>
+            </div>
+            <transition name="el-zoom-in-top">
+                <section v-if="sfzk" class="query-condition">
+                    <div v-if="filterList.includes('cp')">
+                        <p class="query-title">产品:</p>
+                        <p class="query-list" @click="handleCp">
+                            <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
+                            <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
+                        </p>
+                    </div>
+
+                    <div v-if="filterList.includes('jhcjrq')">
+                        <p class="query-title">计划创建日期:</p>
+                        <p class="query-list">
+                            <el-date-picker @change="changeDate" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.jhcjrq" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                            </el-date-picker>
+                        </p>
+                    </div>
+
+                    <div v-if="filterList.includes('fbrq')">
+                        <p class="query-title">发版日期:</p>
+                        <p class="query-list">
+                            <el-date-picker @change="changeDateFbrq" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.fbrq" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                            </el-date-picker>
+                        </p>
+                    </div>
+
+                    <div v-if="filterList.includes('sjpxrq')">
+                        <p class="query-title">实际培训日期:</p>
+                        <p class="query-list">
+                            <el-date-picker @change="changeDateSjpxrq" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.sjpxrq" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                            </el-date-picker>
+                        </p>
+                    </div>
+
+                    <div v-if="filterList.includes('jhzt')">
+                        <p class="query-title">计划状态:</p>
+                        <p class="query-list" @click="handleJhzt">
+                            <span v-for="(ztl,index) in jhztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.jhzt == ztl.lable}">{{ztl.mc}}</span>
+                        </p>
+                    </div>
+
+                    <div  v-if="filterList.includes('sfyq')">
+                        <p class="query-title">是否延期:</p>
+                        <p style="padding:5px 0">
+                            <el-radio-group v-model="filterWord.sfyq" @change="handleSfyq">
+                                <el-radio :label="1">是</el-radio>
+                                <el-radio :label="0">否</el-radio>
+                            </el-radio-group>
+                        </p>
+                    </div>
+
+                </section>
+            </transition>
+        </div>
+    </div>
+</template>
+<script>
+import { getMenu, getSession } from "@/utils/util.js";
+export default {
+  data() {
+    return {
+      cpList: [],
+      jhztList: [
+        { lable: "", mc: "全部" },
+        { lable: "0", mc: "未完成" },
+        { lable: "1", mc: "已完成" }
+      ],
+      filterWord: {
+        keyword: "",
+        cpbh: "",
+        cpmc: "",
+        jhcjrq: [],
+        fbrq: [],
+        sjpxrq:[],
+        jhzt:'',
+        sfyq:0,
+      },
+      groupTag: "",
+      sfzk: true
+    };
+  },
+  props: {
+    filterList: {
+      type: Array,
+      default: () => {
+        return ["keyword", "cp",'jhcjrq','fbrq','jhzt','sfyq'];
+      }
+    },
+    placeholder: {
+      type: String,
+      default: "请输入项目名称/项目编号"
+    },
+    xmbh: {
+      type: String,
+      default: ""
+    },
+    filterShow: {
+      type: Boolean,
+      default: true
+    }
+  },
+  methods: {
+    handleExpand() {
+      this.sfzk = !this.sfzk;
+    },
+    handleSearchBtn() {
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    handleSearch() {
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    changeDate(val) {
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    changeDateFbrq(){
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    changeDateSjpxrq(){
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    handleCp(e) {
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    handleSfyq(){
+        this.$emit("handleChangeFilter", this.filterWord);
+    },
+    handleJhzt(e) {
+      let jhzt = e.target.getAttribute("data-type");
+      if (jhzt == null) return;
+      this.filterWord.jhzt = jhzt;
+      this.$emit("handleChangeFilter", this.filterWord);
+    }
+  },
+  mounted() {
+     if (!getSession("cp") ) {
+      getMenu("cp", this.cplist, true);
+    } else {
+      this.cplist = getSession("cp");
+    }
+  },
+  activated() {},
+  watch: {},
+  components: {}
+};
+</script>
+<style scope>
+.nomargin span {
+  margin: 3px 0 !important;
+}
+</style>

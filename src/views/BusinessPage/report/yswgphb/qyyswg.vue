@@ -81,14 +81,16 @@ export default {
       });
     },
     handleXxwt(data, i, params) {
+      let arrEn = params[i].en.split(",");
       let obj = {
         // qyzd: this.filterDate.gczd,
         completionType: this.filterDate.lb,
         milestoneProjectType: this.filterDate.lcbxmlx,
         startDt: !this.filterDate.date ? "" : this.filterDate.date[0],
         endDt: !this.filterDate.date ? "" : this.filterDate.date[1],
+        qygc:data[1]
       };
-      if (params[i].en.indexOf(",") != -1) {
+      if (params[i].en.indexOf(",") != -1 && arrEn[0] != arrEn[1]) {
         let arr = params[i].en.split(",");
         arr.forEach((ele, i, arr) => {
           if (i == 0) {
@@ -96,8 +98,9 @@ export default {
           }
         });
       }else{
-        obj[params[i].en] =  data[i]
+        obj[arrEn[0]] =  data[i]
       }
+
       let routeData = this.$router.resolve({
         path: "/yswgdetail",
         query: obj

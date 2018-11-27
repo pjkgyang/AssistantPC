@@ -1,8 +1,11 @@
 <template>
   <div class="pd-10">
     <div class="bgfff">
-      <h4>{{$route.params.id == 'ydjlwtxq'||queryMark == 1?'月度奖励':$route.params.id == 'shgs'?'售后工时':'月度考核'}}报表 -{{$route.params.id.includes('ts')?'投诉详情': $route.params.id.includes('wt')?'问题详情': $route.params.id.includes('lcbxq')?'里程碑详情': $route.params.id.includes('shgs')?'售后工时详情': $route.params.id.includes('ydjlwtxq')?'月度计划问题详情':'详情'}}
+      <h4>{{$route.params.id == 'ydjlwtxq'||queryMark == 1?'月度奖励':$route.params.id == 'shgs'?'售后工时':'月度考核'}}报表 -{{$route.params.id.includes('ts')?'投诉详情': $route.params.id.includes('wt')?'问题详情': $route.params.id.includes('lcbxq')?'里程碑详情': $route.params.id.includes('shgs')?'售后工时详情': $route.params.id.includes('ydjlwtxq')?'问题详情':'详情'}}
       </h4>
+      <div text-right>
+        <el-button size="mini" type="primary" @click="handleExport">导出</el-button>
+      </div>
       <reportTable :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" :exportShow="false" :indexArr='[]' :widthArr="$route.params.id == 'shgs'?[3]:$route.params.id == 'wt'||$route.params.id == 'ydjlwtxq'||$route.params.id == 'ts'?[1,3]:[2,6]" :rowWidth="$route.params.id == 'shgs'?'300':'300'" :Width="'140'" :Height="140" @handleXxwt="handleXxwt"></reportTable>
     </div>
   </div>
@@ -22,15 +25,51 @@ export default {
     };
   },
   methods: {
+    handleExport() {
+      let url = '';
+      let param = '';
+      // 考核报表详情
+      if (this.$route.params.id == "lcbxq") {  // 里程碑(奖励，考核)
+        url = 'assessment/exportYdkhlcbxqb.do'
+        param = window.location.hash.split('?')[1]
+        if(param.indexOf('&ydjl=1') != -1){
+         param = param.replace('&ydjl=1','')
+        }
+      }
+      if(this.$route.params.id == "wt"){       // 问题
+        url = 'assessment/exportYdkhwtxqb.do'
+        param = window.location.hash.split('?')[1]
+      }
+      if(this.$route.params.id == "ts"){        // 投诉
+        url = 'assessment/exportYdkhtsxqb.do'
+        param = 'yf='+this.queryData.yf+'&rygh='+this.queryData.rygh
+      }
+      // 售后工时详情
+      if(this.$route.params.id == "shgs"){      //售后工时
+        url = 'assessment/exportYdwtshgsxqb.do'
+        param = window.location.hash.split('?')[1]
+      }
+      // 月度奖励详情
+      if(this.$route.params.id == "ydjlwtxq"){  //问题
+        url = 'assessment/exportYdjlwtxqb.do'
+        param = window.location.hash.split('?')[1]
+      }
+      window.open(
+          window.baseurl + url+"?"+param
+      );
+    },
     handleXxwt(data, i, params) {
       if (
         window.location.hash.includes("/khbbdetail/wt") ||
-        window.location.hash.includes("/khbbdetail/ydjlwtxq")||
-        window.location.hash.includes('/khbbdetail/ts')||
-        (window.location.hash.includes('/khbbdetail/shgs') && params[i].zh == '问题标题')
+        window.location.hash.includes("/khbbdetail/ydjlwtxq") ||
+        window.location.hash.includes("/khbbdetail/ts") ||
+        (window.location.hash.includes("/khbbdetail/shgs") &&
+          params[i].zh == "问题标题")
       ) {
         let routeData = this.$router.resolve({
-          path: window.location.hash.includes('/khbbdetail/ts')?"/complaintDetail":"/questionDetail",
+          path: window.location.hash.includes("/khbbdetail/ts")
+            ? "/complaintDetail"
+            : "/questionDetail",
           query: {
             wid: data[0]
           }
@@ -40,7 +79,8 @@ export default {
       }
       if (this.$route.params.id == "shgs") {
         this.$get(this.API.nfxggs, {
-          rygh: data[1]
+          rygh: data[1],
+          yf: this.queryData.yf
         }).then(res => {
           if (res.state == "success") {
             if (!res.data) {
@@ -60,7 +100,7 @@ export default {
                   this.$get(this.API.xggs, {
                     wid: data[0],
                     rygh: data[1],
-                    gs: value
+                    gs: value,
                   }).then(res => {
                     if (res.state == "success") {
                       this.$alert("修改成功", "标题名称", {

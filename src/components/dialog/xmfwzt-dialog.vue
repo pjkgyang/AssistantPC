@@ -8,7 +8,15 @@
             <span>
               <el-switch v-model="value" active-color="#13ce66" inactive-color="#dcdfe6">
               </el-switch>
+            </span>&#x3000;&#x3000;&#x3000;
+            <span v-if="xmData.gcfwzt != '0'">
+                <span class="filter-weight">到期时间:</span>
+                <span>{{!xmDetail.ycfwqx?'无':xmDetail.ycfwqx}}</span>
             </span>
+          </p>
+          <p style="color:#999;font-size:12px;padding:0 7px" >
+            <span>状态变更说明:</span>
+            <span>{{xmDetail.gcfwztsm}}</span>
           </p>
           <p class="mg-12" v-if="!fwqxShow && value">
             <span class="filter-weight before-require">项目服务期限：</span>
@@ -49,7 +57,7 @@ export default {
   },
   methods: {
     handleCommit() {
-      if (!this.textarea) {
+      if (/^[\s]*$/.test(this.textarea)) {
         this.$alert("请填写停止说明", "提示", {
           confirmButtonText: "确定",
           type: "warning"

@@ -76,7 +76,7 @@ export default {
   mounted(){
       this.hash = window.location.hash
       let _this = this;
-      if((window.location.hash.includes('questionDetail')||window.location.hash.includes('zdsfw')) && !window.location.hash.includes('h=1')){
+      if((window.location.hash.includes('questionDetail')||this.$route.path == '/zdsfw') && !window.location.hash.includes('h=1')){
           this.navshow = false;  return;
        }
         // 获取当前用户

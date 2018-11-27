@@ -8,7 +8,7 @@
           <task-label @changeTaskstate='changeTaskstate' :TaskDatas="LcbTaskDatas"  @handleTaskDialog="handleTaskDialog" @handleTaskinfo="handleTaskinfo"></task-label>
       </div>
         <!-- 添加任务 -->
-      <el-dialog title="添加任务" :visible.sync="dialogAddTaskVisible" append-to-body width="750px" :close-on-click-modal="false"> 
+      <el-dialog title="添加任务" :visible.sync="dialogAddTaskVisible" append-to-body width="650px" :close-on-click-modal="false"> 
             <addItemTask :lcbrw="LcbArr" :dialogVisible="commitSuccess" :lcbinfo="milestone"  @AddTaskCommit="AddTaskCommit"></addItemTask>
       </el-dialog>
           <!-- 修改承诺时间 -->
@@ -186,14 +186,14 @@ export default {
       let index = e.target.getAttribute('data-indx')
       this.data = this.milestone
       this.dialogAddTaskVisible = !this.dialogAddTaskVisible
-      this.getTasksByCatalog("1");
-      this.$emit('addItemTask',this.data)
+      this.getTasksByCatalog("1",true);
+      // this.$emit('addItemTask',this.data)
     },
     changeTaskstate(data){  //改变任务状态
       this.getTasksByCatalog(this.rwlx);
     },
 
-    getTasksByCatalog(taskType){
+    getTasksByCatalog(taskType,type){
       getTasksByCatalog({
             xmbh:this.milestone.xmbh,
             catalog:this.milestone.catalog,
@@ -208,7 +208,9 @@ export default {
             keyword:""
           }).then(({data})=>{
             if(data.state == 'success'){
-                  this.LcbTaskDatas = data.data.rows
+                  if(!type){
+                    this.LcbTaskDatas = data.data.rows
+                  }
                  if(taskType == '1'){
                    this.LcbArr = data.data.rows
                  }

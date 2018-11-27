@@ -90,7 +90,8 @@
                     <el-table-column prop="qssj" label="签署日期" width="100"></el-table-column>
                     <el-table-column prop="htje" label="合同金额(元)" width="120"></el-table-column>
                     <el-table-column prop="fwqx" label="服务期限" width="100"></el-table-column>
-                    
+                    <!-- <el-table-column prop="wglv" label="完工率(%)" width="100"></el-table-column> -->
+                    <!-- <el-table-column prop="wglg" label="完工量(元)" width="100"></el-table-column> -->
                 </el-table>
                 <pagination v-if="totalNum > 10 " :pageSize="pageSize" :total="totalNum" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
@@ -149,7 +150,7 @@ export default {
       isNone:false,
       myItemData:{},
       emptyArray:[],
-      urlData:{}
+      urlData:{},
     };
   },
   methods: {

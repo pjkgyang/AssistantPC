@@ -148,7 +148,7 @@ import Qs from 'qs'
                     confirmButtonText: '确定',
                     type:'success',
                     callback: action => {
-
+                      this.openRealFolder();
                       this.dialogVisible = false 
                     }
                  })

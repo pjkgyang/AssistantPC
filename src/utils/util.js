@@ -310,6 +310,7 @@ export function getNextMonth(date) {
     var t2 = year2 + '-' + month2 
     return t2;
 }
+
 // 获取上一个月
 export function  getPreMonth(date) {
     var arr = date.split('-');

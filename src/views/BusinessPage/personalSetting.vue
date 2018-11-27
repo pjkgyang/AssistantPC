@@ -52,9 +52,15 @@ import layout from "@/components/layout/navitem.vue";
         {
           privname: "个人结算",
           url:'/businesspage/personalSetting/grjs',
-          icon:'el-icon-edit-outline',
+          icon:'el-icon-erp-baobiaoguanli',
           childNodes: [],
           tag:'JZGCRY'
+        },
+        {
+          privname: "项目结算",
+          url:'/businesspage/personalSetting/xmjs',
+          icon:'el-icon-erp-baobiaoguanli',
+          childNodes: [],
         },
       ],
       navContent:'个人信息',
@@ -91,7 +97,6 @@ import layout from "@/components/layout/navitem.vue";
 
 <style scoped>
 .personal-setting-content{
-  height:90vh;
   padding: 10px 20px;
 }
 .personal-setting-content h4{

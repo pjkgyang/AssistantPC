@@ -20,18 +20,19 @@ export default {
     pageEktbDetail:window.baseurl+'report/pageEktbDetail.do', //二开提报明细分页列表
     pageBxDetail:window.baseurl+'report/pageBxDetail.do',//报销明细分页列表
     
-    ydkhb:window.baseurl+'report/ydkhb.do', //月度考核报表
-    ydjlb:window.baseurl+'report/ydjlb.do', //月度奖励报表
-
-    ydkhtsxqb:window.baseurl+'report/ydkhtsxqb.do', //投诉详情表
-    ydkhlcbxqb:window.baseurl+'report/ydkhlcbxqb.do', //里程碑详情表
-    ydkhwtxqb:window.baseurl+'report/ydkhwtxqb.do', //问题详情表
-    ydwtshgsb:window.baseurl+'report/ydwtshgsb.do', //售后工时报表
-    ydwtshgsxqb:window.baseurl+'report/ydwtshgsxqb.do', //售后工时详情报表
-    ydjlwtxqb:window.baseurl+'report/ydjlwtxqb.do', //售后工时详情报表
-    nfxggs:window.baseurl+'report/nfxggs.do',  //能否修改工时
-    xggs:window.baseurl+'report/xggs.do', //修改工时
-
+    // 考核报表
+    ydkhb:window.baseurl+'assessment/ydkhb.do', //月度考核报表
+    ydjlb:window.baseurl+'assessment/ydjlb.do', //月度奖励报表
+    ydkhtsxqb:window.baseurl+'assessment/ydkhtsxqb.do', //投诉详情表
+    ydkhlcbxqb:window.baseurl+'assessment/ydkhlcbxqb.do', //里程碑详情表
+    ydkhwtxqb:window.baseurl+'assessment/ydkhwtxqb.do', //问题详情表
+    ydwtshgsb:window.baseurl+'assessment/ydwtshgsb.do', //售后工时报表
+    ydwtshgsxqb:window.baseurl+'assessment/ydwtshgsxqb.do', //售后工时详情报表
+    ydjlwtxqb:window.baseurl+'assessment/ydjlwtxqb.do', //售后工时详情报表
+    nfxggs:window.baseurl+'assessment/nfxggs.do',  //能否修改工时
+    xggs:window.baseurl+'assessment/xggs.do', //修改工时
+    hasDepositData:window.baseurl+'assessment/hasDepositData.do',//考核数据是否已封存
+    depositAssessmentData:window.baseurl+'assessment/depositAssessmentData.do',//封存考核数据
 
     
 
@@ -67,6 +68,7 @@ export default {
     pageActiveServiceProject:window.baseurl+'activeservice/pageActiveServiceProject.do',//主动式服务（导航）
     generateActiveService:window.baseurl+'activeservice/generateActiveService.do',//生成主动式服务（新增）
     publishActiveService:window.baseurl+'activeservice/publishActiveService.do',//发布主动式服务（新增）
+    updateZrr:window.baseurl+'activeservice/updateZrr.do',//批量修改责任人
 
     // 修改参与者 中标人
     listZbxx:window.baseurl+'project/listZbxx.do', // 获取中标人列表
@@ -80,7 +82,6 @@ export default {
     // 项目看板里程碑明细(首页)
     pageProjectPanelMilestoneDetail:window.baseurl+'milestone/pageProjectPanelMilestoneDetail.do',
     addMemo:window.baseurl+'milestone/addMemo.do',//提交项目备忘（里程碑）
-
 
     //  首页跳转日报数据列表
     pageProjectPanelWorkLogs:window.baseurl+'process/pageProjectPanelWorkLogs.do',
@@ -97,16 +98,23 @@ export default {
     crowdSettlement:window.baseurl+'settlement/crowdSettlement.do', // 结算接口 - 二开结算
     presaleCallSettlement:window.baseurl+'settlement/presaleCallSettlement.do', // 结算接口 - 售前调用结算
     projectSettlement:window.baseurl+'settlement/projectSettlement.do', // 结算接口 - 项目结算
+    settlementApplication:window.baseurl+'settlement/settlementApplication.do',//结算申请列表
+    settlementPoints:window.baseurl+'settlement/settlementPoints.do',//获取结算点
+    saveSettlementApplication:window.baseurl+'settlement/saveSettlementApplication.do',//保存申请结算
+    settlementApplicationRecord:window.baseurl+'settlement/settlementApplicationRecord.do',//申请结算记录
+    settlementTeamMembers:window.baseurl+'settlement/settlementTeamMembers.do',//结算团队成员
 
     // 开始售后服务
     startAfterSalesService:window.baseurl+'project/startAfterSalesService.do',
     stopAfterSalesService:window.baseurl+'project/stopAfterSalesService.do', //停止售后服务
     
 
-    // openTemplateFolder.do
+     // 资源中心
     openTemplateFolder:window.baseurl+'attachment/openTemplateFolder.do',
-
-
+    openCoursewareFolder:window.baseurl+'attachment/openCoursewareFolder.do',//课件
     applyDismiss:window.baseurl+'question/applyDismiss.do',
+    queryCpxZjData:window.baseurl+'personnel/queryCpxZjData.do',
+   
+    
 
 }

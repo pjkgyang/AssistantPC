@@ -1,20 +1,20 @@
 <template>
+  <div>
     <div>
-        <div>
-            <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" 
-            :placeholder="'请输入姓名/工号'" :filterShow="filterShow"></filterComponent>
-        </div>
-        <div>
-            <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize"
-             @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" 
-             :indexArr='[]' :widthArr="[3]"  :Width="'140'" :Height="0"></tableComponents>
-        </div>
+      <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'" :filterShow="filterShow"></filterComponent>
     </div>
+    <div>
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize"
+       @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable"
+        :indexArr='[20]' :widthArr="[]" :Width="'130'" :Height="0" :archiveShow="archiveShow"
+         @handleArchive="handleArchive"></tableComponents>
+    </div>
+  </div>
 </template>
 <script>
 import { getResponsibleTaskList } from "@/api/common.js";
 import { queryCostStat } from "@/api/report.js";
-import { getMenu, getSession,getPreMonth } from "@/utils/util.js";
+import { getMenu, getSession, getPreMonth } from "@/utils/util.js";
 import tableComponents from "@/components/reportTable/tableComponents.vue";
 import filterComponent from "@/components/reportTable/filterComponent.vue";
 export default {
@@ -22,22 +22,52 @@ export default {
     return {
       dataList: {},
       headList: [],
+      archiveShow: false,
       filterList: ["keyword", "yf", "bm"],
       filterData: {
         keyword: "",
         yf: "",
-        bm: "",
+        bm: ""
       },
       currentPage: 1,
       pageSize: 15,
-      filterShow:true
+      filterShow: true
     };
   },
   methods: {
+    handleArchive() {
+      this.$confirm("是否确认此月数据?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$post(this.API.depositAssessmentData, {
+          yf: this.filterData.yf,
+          khlx: "3"
+        }).then(res => {
+          if (res.state == "success") {
+            if(!!res.data){
+              this.$alert("确认成功!", "提示", {
+                confirmButtonText: "确定",
+                type: "success"
+              });
+              this.archiveShow = false;
+            }else{
+              this.$alert("确认失败!", "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          }else{
+            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          }
+        });
+      });
+    },
     exportTable() {
       window.open(
         window.baseurl +
-          "report/exportydwtshgsb.do?bm=" +
+          "assessment/exportydwtshgsb.do?bm=" +
           this.filterData.bm +
           "&yf=" +
           this.filterData.yf +
@@ -75,27 +105,29 @@ export default {
       });
     },
     handleXxwt(data, i, params) {
-      let url = '';
+      let url = "";
       let arr = params[i].en.split(",");
       let obj = {
         yf: this.filterData.yf,
-        rygh:data[0],
+        rygh: data[0]
       };
-      if(arr[0] && !!params[i].canRedirect){
-        url = '/khbbdetail/shgs';
+      if (arr[0] && !!params[i].canRedirect) {
+        url = "/khbbdetail/shgs";
       }
       // let decodeData = window.btoa(JSON.stringify(obj));
       let routeData = this.$router.resolve({
         path: url,
-        query:obj
+        query: obj
       });
       window.open(routeData.href, "_blank");
     }
   },
   mounted() {
-    if(JSON.parse(sessionStorage.userInfo).userGroupTag.indexOf('JYGL') != -1){
+    if (
+      JSON.parse(sessionStorage.userInfo).userGroupTag.indexOf("JYGL") != -1
+    ) {
       this.filterShow = true;
-    }else{
+    } else {
       this.filterShow = false;
     }
     let date =
@@ -104,13 +136,18 @@ export default {
       (new Date().getMonth() + 1 < 10
         ? "0" + new Date().getMonth() + 1
         : new Date().getMonth() + 1);
-    this.filterData.yf =  getPreMonth(date);  
+    this.filterData.yf = getPreMonth(date);
     this.$nextTick(() => {
       this.ydwtshgsb();
     });
-    window.onerror = function() {
-      return true;
-    };
+    this.$get(this.API.hasDepositData, {
+      yf: this.filterData.yf,
+      khlx: "3"
+    }).then(res => {
+      if (res.state == "success") {
+        this.archiveShow = !res.data;
+      }
+    });
   },
   activated() {},
   watch: {},

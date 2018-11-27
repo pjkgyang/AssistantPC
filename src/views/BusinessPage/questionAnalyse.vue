@@ -2,7 +2,7 @@
   <div class="project-question">
        <div class="project-question-query">
            <div>
-                <span class="query-title"><span :class="{'isshown-query':true,'el-icon-arrow-down':!queryLJshow,'el-icon-arrow-up':queryLJshow}" @click="handleQueryShow"></span>&nbsp;高级查询</span>
+                <span class="query-title"><span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&nbsp;高级查询</span>
                 <el-input v-model="keyword" style="width:493px;" size="small" placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称" @change="searchQuestion"></el-input>&#x3000;
                 <el-button type="primary" size="mini" @click="handlequeryQuestion">查询</el-button>
            </div>
@@ -89,7 +89,7 @@
          </div>
         <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
         <questionCard :questionList="questionList" :isShow="false" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"
-        @handleQuestionDetail="handleQuestionDetail" :wtbqShow="true"></questionCard>
+        @handleQuestionDetail="handleQuestionDetail" :wtbqShow="true" :bjscShow="false" @handleImprovementPlan="handleImprovementPlan"></questionCard>
         <div style="margin-top:10px;text-align:right" v-if="total > 10">
            <pagination :currentPage="CurrentPage"  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
         </div>
@@ -197,7 +197,11 @@ export default {
 
   },
   methods: {
-      handleExport(){
+    handleImprovementPlan(data){
+      console.log(data);
+      this.xjjhShow = !this.xjjhShow
+    },
+    handleExport(){
           this.keyword = !this.keyword?'':this.keyword
           window.open(window.baseurl+'question/exportQuestionReport.do?&cp='+this.cpbg+'&cpx='+this.cpxbg+'&zt='+this.cxzt+'&wtbq='+this.wtbq+'&sqgb='+this.sqgb+
           '&keyword='+this.keyword+'&dwlx='+this.dwlx+'&wtlb='+this.wtlbbg+'&starDay='+this.starDay+'&endDay='+this.endDay+'&isAnalyse=true'+'&xmbh='+

@@ -271,7 +271,16 @@ img{
   background: #1997d7;
   color: #fff !important;
 }
-
+.emptyContent{
+  width: 200px;
+  height: 180px;
+  text-align: center;
+  margin:20px auto !important; 
+}
+.emptyContent img{
+  width: 100%;
+  height: 100%;
+}
 .personalJs-top .el-input .el-input__inner{
   background: none;
 }
@@ -280,4 +289,12 @@ img{
 }
 .personalJs-top .el-input .el-input__inner{
   color: #fff;
+}
+.expandIcon:hover{
+  cursor: pointer;
+}
+.textellipsis{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -119,6 +119,14 @@
           </el-checkbox-group>
         <!-- </p> -->
       </div>
+
+       <div v-if="filterList.includes('fbxz')">
+        <p class="query-title">分包性质:</p>
+        <p class="query-list" @click="handleFBXZ">
+          <span data-type="" :class="{'bg-active':filterWord.fbxz == ''}">全部</span>
+          <span v-for="(fbxzx,index) in fbxzList" :data-type="fbxzx.label" :class="{'bg-active':filterWord.fbxz == fbxzx.label}">{{fbxzx.mc}}</span>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -132,6 +140,7 @@ export default {
       xmlxList: [],
       lcbxmlxList: [],
       cplist: [],
+      fbxzList:[],//分包性质
       dwlxList: [
         { label: "1", mc: "学校" },
         { label: "0", mc: "金智" },
@@ -173,7 +182,8 @@ export default {
         lcbxmlx: "",
         yf:'',
         rylx:[],
-        zdsfwzt:''
+        zdsfwzt:'',
+        fbxz:''
       }
     };
   },
@@ -296,6 +306,12 @@ export default {
     },
     handleCheckedCitiesChange(){
        this.$emit("handleChangeFilter", this.filterWord);
+    },
+    handleFBXZ(e){
+      let fbxz = e.target.getAttribute("data-type");
+      if (fbxz == null) return;
+      this.filterWord.fbxz = fbxz;
+      this.$emit("handleChangeFilter", this.filterWord); 
     }
 
     // queryCostStat(curPage){      //区域学校用户
@@ -311,46 +327,52 @@ export default {
      let date = new Date().getFullYear()+'-'+(new Date().getMonth()+1<10?('0'+new Date().getMonth()+1):new Date().getMonth()+1)
     this.filterWord.yf = getPreMonth(date);
     
-    if (!getSession("ProjectCustomStatus")) {
+    if (!getSession("ProjectCustomStatus") && this.filterList.includes('xmlx')) {
       getMenu("ProjectCustomStatus", this.xmlxList, ""); //获取项目类型
     } else {
       this.xmlxList = getSession("ProjectCustomStatus");
     }
 
-    if (!getSession("MilestoneProjectType")) {
-      getMenu("MilestoneProjectType", this.lcbxmlxList, ""); //获取项目类型
+    if (!getSession("MilestoneProjectType")  && this.filterList.includes('lcbxmlx')) {
+      getMenu("MilestoneProjectType", this.lcbxmlxList, ""); //获取里程碑类型
     } else {
       this.lcbxmlxList = getSession("MilestoneProjectType");
     }
 
-    if (!getSession("cpx")) {
+    if (!getSession("cpx")  && this.filterList.includes('cpx')) {
       getMenu("cpx", this.cpxline, true); //获取产品线
     } else {
       this.cpxline = getSession("cpx");
     }
 
-    if (!getSession("gczd")) {
+    if (!getSession("gczd") && this.filterList.includes('qygc')) {
       getMenu("gczd", this.gczdList, true); //获取工程战队
     } else {
       this.gczdList = getSession("gczd");
     }
 
-    if (!getSession("cp")) {
+    if (!getSession("cp") && this.filterList.includes('cp')) {
       getMenu("cp", this.cplist, true); //获取产品
     } else {
       this.cplist = getSession("cp");
     }
 
-    if (!getSession("bm")) {
+    if (!getSession("bm") && this.filterList.includes('bm')) {
       getMenu("bm", this.bmList, true); //获取部门
     } else {
       this.bmList = getSession("bm");
     }
 
-    if (!getSession("rylx")) {
+    if (!getSession("rylx") && this.filterList.includes('rylx')) {
       getMenu("ProblemPersonType", this.rylxList, ""); //获取人员类型
     } else {
       this.rylxList = getSession("rylx");
+    }
+
+    if (!getSession("fbxz") && this.filterList.includes('fbxz')) {
+      getMenu("FbXz", this.fbxzList, ""); //获取分包性质
+    } else {
+      this.fbxzList = getSession("fbxz");
     }
   },
   activated() {},

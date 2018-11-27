@@ -365,14 +365,12 @@ h1,h2,h3,h4,h5,h6{
 .el-badge__content{
     line-height: 16px;
 }
-
 .el-popover{
-    top: 41px !important;
+    padding: 8px 0;
 }
 .el-form-item__content{
   line-height: 0;
 }
-
 
 /* 里程碑模板 */
 .milestone-manage .el-checkbox__input.is-checked .el-checkbox__inner{
@@ -599,7 +597,7 @@ h1,h2,h3,h4,h5,h6{
 
 @media screen and (max-width:1440px) {
     .project_task_detail_taskbar ul.task_list:nth-of-type(1){
-         max-height: 400px !important;
+         max-height: 380px !important;
     }
     .media-table tbody{
         height:56vh !important;

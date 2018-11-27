@@ -140,7 +140,7 @@
             top="50px"
             append-to-body>
             <div style="padding:10px;">
-                <itemChoose @handleEdit="handleChooseItem"></itemChoose>
+                <itemChoose @handleEdit="handleChooseItem" :sfts="true"></itemChoose>
             </div>
       </el-dialog> 
   </div>

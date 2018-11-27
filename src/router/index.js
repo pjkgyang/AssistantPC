@@ -101,6 +101,47 @@ function getAbsolutePath () {
           component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwPannel.vue'], resolve),
         },
         {
+          path: '/template',
+          name: 'Template',
+          meta:{
+            title:'模板'
+          },
+          component: resolve => require(['@/views/BusinessPage/resource/templateTabel.vue'], resolve),
+        },
+        {
+          path: '/courseware',
+          name: 'Courseware',
+          meta:{
+            title:'课件'
+          },
+          component: resolve => require(['@/views/BusinessPage/resource/courseware.vue'], resolve),
+        },
+        {
+          path: '/expertlist',
+          name: 'Expertlist',
+          meta:{
+            title:'专家列表'
+          },
+          component: resolve => require(['@/views/BusinessPage/resource/expertlist.vue'], resolve),
+        },
+        {
+          path: '/cpjh',
+          name: 'Cpjh',
+          meta:{
+            title:'产品计划'
+          },
+          component: resolve => require(['@/components/wtfp/cpjhList.vue'], resolve),
+        },
+        {
+          path: '/pxjh',
+          name: 'Pxjh',
+          meta:{
+            title:'培训计划'
+          },
+          component: resolve => require(['@/components/wtfp/pxjhList.vue'], resolve),
+        },
+        
+        {
           path: '/businesspage/xxtsql',
           name: 'BusinesspageXxtsql',
           component: resolve => require(['@/views/BusinessPage/xxtsql.vue'], resolve),
@@ -327,6 +368,11 @@ function getAbsolutePath () {
               name: 'personalSetting-grjs',
               component: resolve => require(['@/views/BusinessPage/personalSetting/personal-js.vue'], resolve),
             },
+            {
+              path: '/businesspage/personalSetting/xmjs',
+              name: 'personalSetting-xmjs',
+              component: resolve => require(['@/views/BusinessPage/personalSetting/item-js.vue'], resolve),
+            },
           ]
         },
         {
@@ -453,6 +499,22 @@ function getAbsolutePath () {
         title:''
       },
       component: resolve => require(['@/views/BusinessPage/report/cbzxqktj/erss.vue'], resolve),
+    },
+    {
+      path: '/gjjhcpl',
+      name: 'Gjjhcpl',
+      meta:{
+        title:'产品类改进计划'
+      },
+      component: resolve => require(['@/components/wtfp/gjjhcpl.vue'], resolve),
+    },
+    {
+      path: '/gjjhssl',
+      name: 'Gjjhssl',
+      meta:{
+        title:'实施类改进计划'
+      },
+      component: resolve => require(['@/components/wtfp/gjjhssl.vue'], resolve),
     },
     {
       path: '/khbbdetail/:id',

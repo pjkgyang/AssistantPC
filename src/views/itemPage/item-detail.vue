@@ -256,7 +256,7 @@
     </div>
     <!-- 模板 -->
     <div v-if="tabsLabel == 'template'">
-         <templateTabel></templateTabel>
+         <!-- <templateTabel></templateTabel> -->
     </div>
     <!-- 文件 -->
     <div v-if="tabsLabel == 'files'">
@@ -308,7 +308,7 @@ import UserBanner from '@/components/BusinessPage/itemUserBanner.vue'
 import addItemUser from '@/components/BusinessPage/addItemUser.vue'
 // import addItemTask from '@/components/BusinessPage/addItemTask.vue'
 import editLcbTasks from '@/components/BusinessPage/editLcbTasks.vue'
-import  templateTabel from '@/components/BusinessPage/templateTabel.vue'
+// import  templateTabel from '@/components/BusinessPage/templateTabel.vue'
 import  fileTable from '@/components/BusinessPage/fileTable.vue'
 import  milestoneGl from '@/components/BusinessPage/milestoneGl.vue'
 import  commitMilestone from '@/components/BusinessPage/commitMilestone.vue'
@@ -1302,7 +1302,7 @@ export default {
     UserBanner,
     addItemUser,
     editLcbTasks,
-    templateTabel,
+    // templateTabel,
     fileTable,
     milestoneGl,
     commitMilestone,

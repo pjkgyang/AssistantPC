@@ -11,8 +11,7 @@
                     <template v-for="(subItem,i) in item.childNodes">
                         <!-- 如果该子节点仍旧拥有子节点则递归创建 -->
                         <nav-item v-if="subItem.childNodes && subItem.childNodes.length" :navIndex="n+'-'+i" :routes="[subItem]" ></nav-item>
-
-                        <router-link v-else :to="subItem.url">
+                        <router-link v-else :to="subItem.url.includes('http://')||subItem.url.includes('https://')?'':subItem.url" >
                             <!-- <el-menu-item :index="navIndex ? navIndex+'-'+i : n+'-'+i"> -->
                             <el-menu-item :index="subItem.url ? subItem.url : ''"><i v-if="item.icon" class="item.icon"></i>{{ subItem.privname }}</el-menu-item>
                         </router-link>

@@ -1,70 +1,75 @@
 <template>
-    <div>
-        <div class="query-condition">
-            <div v-if="filterList.includes('keyword')">
-                <p>
-                    <p class="query-title">高级搜索:</p>
-                    <el-input v-model="filterWord.keyword" size="mini" style="width:348px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
-                    <el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button>
-                </p>
-            </div>
-            <div v-if="filterList.includes('date')">
-                <p class="query-title">计划日期:</p>
-                <p class="query-list">
-                        <el-date-picker @change="changeDate" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.date" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" >
-                        </el-date-picker>
-                </p>
-            </div>
-
-            <div v-if="filterList.includes('cp')">
-                <p class="query-title">产品:</p>
-                <p class="query-list" @click="handleCp">
-                    <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
-                    <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
-                </p>
-            </div>
-
-            <div v-if="filterList.includes('fwnr')">
-                <p class="query-title">服务内容:</p>
-                <p class="query-list" @click="handleFwnr">
-                    <span data-type="" :class="{'bg-active':filterWord.fwnr == ''}">全部</span>
-                    <span v-for="(fwnrl,index) in fwnrList" :data-type="fwnrl.id" :key="index" :class="{'bg-active':filterWord.fwnr == fwnrl.id}">{{fwnrl.text}}</span>
-                </p>
-            </div>
-
-            <div v-if="filterList.includes('fwzt')">
-                <p class="query-title">服务状态:</p>
-                <p class="query-list" @click="handleZt">
-                    <span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
-                    <span v-for="(ztl,index) in ztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.fwzt == ztl.lable}">{{ztl.mc}}</span>
-                </p>
-            </div>
-            <div v-if="filterList.includes('xmzt')">
-                <p class="query-title">项目状态:</p>
-                <p class="query-list" @click="handleXmzt">
-                    <span data-type="" :class="{'bg-active':filterWord.xmzt == ''}">全部</span>
-                    <span v-for="(xmzt,index) in xmztList" :data-type="xmzt.lable" :key="index" :class="{'bg-active':filterWord.xmzt == xmzt.lable}">{{xmzt.mc}}</span>
-                </p>
-            </div>
-
-            <div v-if="filterList.includes('lb')">
-                <p class="query-title">类别:</p>
-                <p class="query-list" @click="handleLb">
-                    <span v-for="(lbl,index) in lbList" :data-type="lbl.lable" :key="index" :class="{'bg-active':filterWord.lb == lbl.lable}">{{lbl.mc}}</span>
-                </p>
-            </div>
-
-            <div v-if="filterList.includes('sfgq')">
-                <p class="query-title">是否过期:</p>
-                 <p class="query-list" @click="handleSfgq">
-                    <span v-for="(gq,index) in gqList" :data-type="gq.lable" :key="index" :class="{'bg-active':filterWord.sfgq == gq.lable}">{{gq.mc}}</span>
-                </p>
-            </div>
+  <div>
+    <div class="query-condition">
+      <div v-if="filterList.includes('keyword')">
+        <p>
+          <p class="query-title">
+            <span @click="handleExpand" :title="this.sfzk?'点击收起筛选条件':'点击展开筛选条件'" :class="{'expandIcon':true,'el-icon-arrow-up':this.sfzk==true,'el-icon-arrow-down':this.sfzk == false}"></span>&#x3000;高级搜索:</p>
+          <el-input v-model="filterWord.keyword" size="mini" style="width:348px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
+          <el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button>
+        </p>
+      </div>
+       <transition name="el-zoom-in-top">
+      <section v-if="sfzk"  class="query-condition">
+        <div v-if="filterList.includes('date')">
+          <p class="query-title">计划日期:</p>
+          <p class="query-list">
+            <el-date-picker @change="changeDate" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.date" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </p>
         </div>
+
+        <div v-if="filterList.includes('cp')">
+          <p class="query-title">产品:</p>
+          <p class="query-list" @click="handleCp">
+            <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
+            <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
+          </p>
+        </div>
+
+        <div v-if="filterList.includes('fwnr')">
+          <p class="query-title">服务内容:</p>
+          <p class="query-list" @click="handleFwnr">
+            <span data-type="" :class="{'bg-active':filterWord.fwnr == ''}">全部</span>
+            <span v-for="(fwnrl,index) in fwnrList" :data-type="fwnrl.id" :key="index" :class="{'bg-active':filterWord.fwnr == fwnrl.id}">{{fwnrl.text}}</span>
+          </p>
+        </div>
+
+        <div v-if="filterList.includes('fwzt')">
+          <p class="query-title">服务状态:</p>
+          <p class="query-list" @click="handleZt">
+            <span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
+            <span v-for="(ztl,index) in ztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.fwzt == ztl.lable}">{{ztl.mc}}</span>
+          </p>
+        </div>
+        <div v-if="filterList.includes('xmzt')">
+          <p class="query-title">项目状态:</p>
+          <p class="query-list" @click="handleXmzt">
+            <span data-type="" :class="{'bg-active':filterWord.xmzt == ''}">全部</span>
+            <span v-for="(xmzt,index) in xmztList" :data-type="xmzt.lable" :key="index" :class="{'bg-active':filterWord.xmzt == xmzt.lable}">{{xmzt.mc}}</span>
+          </p>
+        </div>
+
+        <div v-if="filterList.includes('lb')">
+          <p class="query-title">类别:</p>
+          <p class="query-list" @click="handleLb">
+            <span v-for="(lbl,index) in lbList" :data-type="lbl.lable" :key="index" :class="{'bg-active':filterWord.lb == lbl.lable}">{{lbl.mc}}</span>
+          </p>
+        </div>
+
+        <div v-if="filterList.includes('sfgq')">
+          <p class="query-title">是否过期:</p>
+          <p class="query-list" @click="handleSfgq">
+            <span v-for="(gq,index) in gqList" :data-type="gq.lable" :key="index" :class="{'bg-active':filterWord.sfgq == gq.lable}">{{gq.mc}}</span>
+          </p>
+        </div>
+      </section>
+      </transition>
     </div>
+  </div>
 </template>
 <script>
-import {getLastMonthDay } from "@/utils/util.js";
+import { getLastMonthDay } from "@/utils/util.js";
 export default {
   data() {
     return {
@@ -72,8 +77,9 @@ export default {
       fwnrList: [],
       ztList: [
         { lable: "0", mc: "计划中" },
-        { lable: "1", mc: "已完成" },
-        { lable: "2", mc: "关闭" }
+        { lable: "3", mc: "已驳回" },
+        { lable: "1", mc: "完成待确认" },
+        { lable: "2", mc: "关闭" },
       ],
       lbList: [
         { lable: "", mc: "全部" },
@@ -89,10 +95,10 @@ export default {
         { lable: "已启动", mc: "已启动" },
         { lable: "未启动", mc: "未启动" }
       ],
-      gqList:[
-        {lable:'',mc:'全部'},
-        {lable:'0',mc:'未过期'},
-        {lable:'1',mc:'过期'},
+      gqList: [
+        { lable: "", mc: "全部" },
+        { lable: "0", mc: "未过期" },
+        { lable: "1", mc: "过期" }
       ],
       filterWord: {
         keyword: "",
@@ -102,16 +108,26 @@ export default {
         fwzt: "",
         lb: "",
         xmzt: "",
-        date:[this.getFirstDay(),getLastMonthDay(new Date().getFullYear(),(new Date().getMonth()+1)<10?'0'+(new Date().getMonth()+1):(new Date().getMonth()+1))],
-        sfgq:''
-      }
+        date: [
+          this.getFirstDay(),
+          getLastMonthDay(
+            new Date().getFullYear(),
+            new Date().getMonth() + 1 < 10
+              ? "0" + (new Date().getMonth() + 1)
+              : new Date().getMonth() + 1
+          )
+        ],
+        sfgq: ""
+      },
+      groupTag: "",
+      sfzk: true
     };
   },
   props: {
     filterList: {
       type: Array,
       default: () => {
-        return ["keyword", "cp", "fwnr", "fwzt", "xmzt", "lb","date","sfgq"];
+        return ["keyword", "cp", "fwnr", "fwzt", "xmzt", "lb", "date", "sfgq"];
       }
     },
     placeholder: {
@@ -128,16 +144,19 @@ export default {
     }
   },
   methods: {
+    handleExpand() {
+      this.sfzk = !this.sfzk;
+    },
     handleSearchBtn() {
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleSearch() {
       this.$emit("handleChangeFilter", this.filterWord);
     },
-    changeDate(val){
+    changeDate(val) {
       this.$emit("handleChangeFilter", this.filterWord);
     },
-    changeSfcq(){
+    changeSfcq() {
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleCp(e) {
@@ -178,7 +197,7 @@ export default {
       this.filterWord.lb = lb;
       this.$emit("handleChangeFilter", this.filterWord);
     },
-    handleSfgq(e){
+    handleSfgq(e) {
       let gq = e.target.getAttribute("data-type");
       if (gq == null) return;
       this.filterWord.sfgq = gq;
@@ -212,15 +231,19 @@ export default {
         }
       });
     },
-    getFirstDay(){
-        let year =  new Date().getFullYear();
-        let month = new Date().getMonth()+1;
-        month = month<10?'0'+month:month;
-        return  year+'-'+month+'-'+'01';
+    getFirstDay() {
+      let year = new Date().getFullYear();
+      let month = new Date().getMonth() + 1;
+      month = month < 10 ? "0" + month : month;
+      return year + "-" + month + "-" + "01";
     }
   },
   mounted() {
     this.listXmZdsfwCp();
+    this.groupTag = JSON.parse(sessionStorage.getItem("userInfo")).userGroupTag;
+    if (this.groupTag.includes("ZDSFWGLY")) {
+      this.filterWord.date = [];
+    }
   },
   activated() {},
   watch: {},
@@ -228,7 +251,7 @@ export default {
 };
 </script>
 <style scope>
-.nomargin span{
-  margin:3px 0 !important;
+.nomargin span {
+  margin: 3px 0 !important;
 }
 </style>

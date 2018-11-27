@@ -27,7 +27,8 @@ export function queryProjectParticipant(obj){
 	let url =  window.baseurl + suburl + 'queryProjectParticipant.do'
 	return axios.get(url,{
 		params:{
-			xmbh:obj.xmbh
+			xmbh:obj.xmbh,
+			sfjz:obj.sfjz||""
   		}	
 	})
 }

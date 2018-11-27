@@ -1,407 +1,362 @@
-<template>  
-<div> 
-  <div class="project-question">
+<template>
+  <div>
+    <div class="project-question">
       <div>
         <ul class="project-question-detail">
-            <li style="margin:10px 0;border:none">
-                <div class="question-steps">
-                    <el-steps align-center finish-status="success">
-                      <el-step v-for="(Process,index) in questionProcess" :status='Process.status'  :key="index" :title="Process.mc">
-                          <i v-if="Process.flag == 1" class="el-icon-time" slot="icon"></i>
-                        </el-step>
-                    </el-steps>
-                </div>
-            </li>
+          <li style="margin:10px 0;border:none">
+            <div class="question-steps">
+              <el-steps align-center finish-status="success">
+                <el-step v-for="(Process,index) in questionProcess" :status='Process.status' :key="index" :title="Process.mc">
+                  <i v-if="Process.flag == 1" class="el-icon-time" slot="icon"></i>
+                </el-step>
+              </el-steps>
+            </div>
+          </li>
           <li>
-              <div class="project-question-detail-top">
-                <div class="question-type" ><span :class="{'el-icon-question':true}"></span></div>
-                <div class="question-content">
-                    <span style="font-size:18px;color:#363748">{{qusetionInfo.bt}}</span><br>
-                     <span style="font-size:12px;color:#363748">{{qusetionInfo.fbrq}}</span>&#x3000;
-                     <span style="font-size:12px;color:#363748">问题编号：{{qusetionInfo.wtbh}}</span>
-                    <div>
-                        <span style="color:#000"><span class="question-info-front">所属项目 &#x3000;</span>{{qusetionInfo.xmmc==''?'无':qusetionInfo.xmmc}}</span>
-                    </div>
-                    <p>
-                        <span><span class="question-info-front">发布人 &#x3000;</span>{{qusetionInfo.fbrxm}}<span v-if="hffjshow">({{qusetionInfo.fbrbh}})</span> </span>
-                        <span><span class="question-info-front">所属单位 &#x3000;</span>{{qusetionInfo.ssbm == ''?'无':qusetionInfo.ssbm}}</span>
-                        <span><span class="question-info-front">问题类别 &#x3000;</span>{{wtlbmc == ''||wtlbmc == null?'无':wtlbmc}}</span>
-                    </p>
-                    <p>
-                        <span><span class="question-info-front">产品 &#x3000;</span>{{qusetionInfo.cpmc}}</span>
-                        <span><span class="question-info-front">是否紧急 &#x3000;</span>{{qusetionInfo.jjyf==null?'无':qusetionInfo.jjyf == 0?'否':'是'}}</span>
-                        <span><span class="question-info-front">版本号 &#x3000;</span>{{qusetionInfo.bbh}}</span>
-                    </p>
-                    <p>
-                        <span><span class="question-info-front">期望解决日期&#x3000;</span>{{qusetionInfo.qwjjrq==''?'无':qusetionInfo.qwjjrq}}&#x3000;</span>
-                        <span><span class="question-info-front">承诺结束日期&#x3000;</span>{{qusetionInfo.cnjsrq == ''?'无':qusetionInfo.cnjsrq}}</span>
-                        <span v-if="false"><span class="question-info-front">开发工作量 &#x3000;</span>{{qusetionInfo.kfgzl}} 人/天</span>
-                    </p>
-                    <p>
-                        <span><span class="question-info-front">解决责任人 &#x3000;</span>{{qusetionInfo.jjzrr}}</span>
-                        <span v-if="hffjshow"><span class="question-info-front">环境信息 &#x3000;</span>
-                         <a :href="baseUrl+'attachment/downloadFile.do?fjId='+qusetionInfo.hjfjwid" target="blank">{{qusetionInfo.fjmc}}</a>
-                       </span>
-                    </p>
-                    <p>
-                      <span><span class="question-info-front item-wtbq">问题标签 &#x3000;</span>
-                      <span class="item-wtbq-tag">
-                        <el-tag style="margin:0 10px 5px 0;"
-                              v-for="(tag,i) in wtbq"
-                              :key="i"
-                              :closable="tag.sjly == 2 || (User.indexOf('ProblemAdmin') != -1 && tag.sjly !=0)"
-                              size="mini"
-                              :type="tag.type"
-                              :title="tag.sjly == 0?'点击添加标签':''"
-                              @click.native="handleClick(i)"
-                              @close="handleCloseTag(i)">
-                              {{tag.mc}}
-                            </el-tag>
-                        </span>
-                        </span> 
-                    </p>
+            <div class="project-question-detail-top">
+              <div class="question-type">
+                <span :class="{'el-icon-question':true}"></span>
+              </div>
+              <div class="question-content">
+                <span style="font-size:18px;color:#363748">{{qusetionInfo.bt}}</span><br>
+                <span style="font-size:12px;color:#363748">{{qusetionInfo.fbrq}}</span>&#x3000;
+                <span style="font-size:12px;color:#363748">问题编号：{{qusetionInfo.wtbh}}</span>
+                <div>
+                  <span style="color:#000">
+                    <span class="question-info-front">所属项目 &#x3000;</span>{{qusetionInfo.xmmc==''?'无':qusetionInfo.xmmc}}</span>
                 </div>
+                <p>
+                  <span>
+                    <span class="question-info-front">发布人 &#x3000;</span>{{qusetionInfo.fbrxm}}
+                    <span v-if="hffjshow">({{qusetionInfo.fbrbh}})</span>
+                  </span>
+                  <span>
+                    <span class="question-info-front">所属单位 &#x3000;</span>{{qusetionInfo.ssbm == ''?'无':qusetionInfo.ssbm}}</span>
+                  <span>
+                    <span class="question-info-front">问题类别 &#x3000;</span>{{wtlbmc == ''||wtlbmc == null?'无':wtlbmc}}</span>
+                </p>
+                <p>
+                  <span>
+                    <span class="question-info-front">产品 &#x3000;</span>{{qusetionInfo.cpmc}}</span>
+                  <span>
+                    <span class="question-info-front">是否紧急 &#x3000;</span>{{qusetionInfo.jjyf==null?'无':qusetionInfo.jjyf == 0?'否':'是'}}</span>
+                  <span>
+                    <span class="question-info-front">版本号 &#x3000;</span>{{qusetionInfo.bbh}}</span>
+                </p>
+                <p>
+                  <span>
+                    <span class="question-info-front">期望解决日期&#x3000;</span>{{qusetionInfo.qwjjrq==''?'无':qusetionInfo.qwjjrq}}&#x3000;</span>
+                  <span>
+                    <span class="question-info-front">承诺结束日期&#x3000;</span>{{qusetionInfo.cnjsrq == ''?'无':qusetionInfo.cnjsrq}}</span>
+                  <span v-if="false">
+                    <span class="question-info-front">开发工作量 &#x3000;</span>{{qusetionInfo.kfgzl}} 人/天</span>
+                </p>
+                <p>
+                  <span>
+                    <span class="question-info-front">解决责任人 &#x3000;</span>{{qusetionInfo.jjzrr}}</span>
+                  <span v-if="hffjshow">
+                    <span class="question-info-front">环境信息 &#x3000;</span>
+                    <a :href="baseUrl+'attachment/downloadFile.do?fjId='+qusetionInfo.hjfjwid" target="blank">{{qusetionInfo.fjmc}}</a>
+                  </span>
+                </p>
+                <p>
+                  <span>
+                    <span class="question-info-front item-wtbq">问题标签 &#x3000;</span>
+                    <span class="item-wtbq-tag">
+                      <el-tag style="margin:0 10px 5px 0;" v-for="(tag,i) in wtbq" :key="i" :closable="tag.sjly == 2 || (User.indexOf('ProblemAdmin') != -1 && tag.sjly !=0)" size="mini" :type="tag.type" :title="tag.sjly == 0?'点击添加标签':''" @click.native="handleClick(i)" @close="handleCloseTag(i)">
+                        {{tag.mc}}
+                      </el-tag>
+                    </span>
+                  </span>
+                </p>
               </div>
-              <div class="project-question-detail-bottom">
-                 <div v-html="qusetionInfo.nr"></div>
-              </div>
+            </div>
+            <div class="project-question-detail-bottom">
+              <div v-html="qusetionInfo.nr"></div>
+            </div>
           </li>
           <li v-for="(reply,index) in questionReply">
-              <div class="project-question-detail-top" style="background:#F5F7FA;height:44px;"> 
-                <div class="question-type" >
-                    <span class="question-reply">{{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'记录':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}</span>
-                </div>
-                <div class="question-content-SC">
-                    <span>{{reply.bt}}</span>
-                    <div flex>
-                    <p style="width:85%;padding-top:5px">
-                        <span>回复人 : {{reply.fbrxm}}</span>&#x3000;
-                        <span>流程状态 : {{reply.lcbh==''?'无':reply.lcbh}}</span>&#x3000;
-                        <span>{{reply.fbsj}}</span>&#x3000;
-                        <span v-if="reply.fbrxm != qusetionInfo.fbrxm && reply.hflx != 11 && reply.hflx != 12 && reply.hflx != 13">   <!-- 问题复盘 标签11 -->
-                            <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">是否bug:{{reply.sfbg==0?'否':'是'}}</span>&#x3000; 
-                            <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">实施工时:{{reply.gs==''?0:reply.gs}}</span>
-                            <span v-if="reply.hflx == 4">承诺结束日期:{{reply.cnjsrq==''?'无':reply.cnjsrq}}</span>&#x3000;
-                            <span v-if="reply.hflx == 4">工时:{{reply.gs == ''?'0':reply.gs}}</span>
-                            <span v-if="reply.hflx == 2||reply.hflx == 6">期望解决日期:{{reply.qwjjrq}}</span>
-                        </span><br>
-                        <span v-if="reply.hflx==2||reply.hflx==6||reply.hflx==7||reply.hflx==12||reply.hflx==13"><span>{{reply.hflx==2?'转发至：':reply.hflx==7?'催办人：':reply.hflx==12||reply.hflx==13?'发送至：':'责任人：'}}</span>{{reply.sfjsr}}</span>
-                    </p>
-                    <span v-if="reply.sfhf == 1" flex-align-center>
-                        <el-button  @click="handleReplyEdit($event,index)"  size="mini" style="width:60px;height:28px">编辑</el-button>
-                        <el-button  @click="handleReplyDelete($event,reply)" size="mini" type="danger" style="width:60px;height:28px">删除</el-button>&#x3000;
-                    </span>
-                    <span v-if="reply.wtjjj != 2 && !isCjwt" flex-align-center>
-                        <el-button  @click="handleSetResolve($event,reply)" :disabled="reply.wtjjj == 0" size="mini">{{reply.wtjjj==0?'已设为常见问题':reply.wtjjj==1?'设置为常见问题':''}}</el-button>&#x3000;
-                    </span>
-                    <span v-if="reply.wtjjj == 1 && isCjwt" flex-align-center>
-                        <el-button  @click="handleSetResolve($event,reply)"  size="mini">取消设置常见问题</el-button>&#x3000;
-                    </span>
-                    <span v-if="(reply.hflx == 3||reply.hflx == 10) && qusetionInfo.fbzt != 1" flex-align-center>
-                            <el-button type="primary" v-if="reply.sfbh == 0"  @click="handleRejectQuestion(reply.wid,index)"  size="mini">驳回</el-button>
-                            <el-tag v-if="reply.sfbh == 1" type="info" size="small">已驳回</el-tag>
-                    </span>
-                    </div>
+            <div class="project-question-detail-top" style="background:#F5F7FA;height:44px;">
+              <div class="question-type">
+                <span class="question-reply">{{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'记录':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}</span>
+              </div>
+              <div class="question-content-SC">
+                <span>{{reply.bt}}</span>
+                <div flex>
+                  <p style="width:85%;padding-top:5px">
+                    <span>回复人 : {{reply.fbrxm}}</span>&#x3000;
+                    <span>流程状态 : {{reply.lcbh==''?'无':reply.lcbh}}</span>&#x3000;
+                    <span>{{reply.fbsj}}</span>&#x3000;
+                    <span v-if="reply.fbrxm != qusetionInfo.fbrxm && reply.hflx != 11 && reply.hflx != 12 && reply.hflx != 13">
+                      <!-- 问题复盘 标签11 -->
+                      <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">是否bug:{{reply.sfbg==0?'否':'是'}}</span>&#x3000;
+                      <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">实施工时:{{reply.gs==''?0:reply.gs}}</span>
+                      <span v-if="reply.hflx == 4">承诺结束日期:{{reply.cnjsrq==''?'无':reply.cnjsrq}}</span>&#x3000;
+                      <span v-if="reply.hflx == 4">工时:{{reply.gs == ''?'0':reply.gs}}</span>
+                      <span v-if="reply.hflx == 2||reply.hflx == 6">期望解决日期:{{reply.qwjjrq}}</span>
+                    </span><br>
+                    <span v-if="reply.hflx==2||reply.hflx==6||reply.hflx==7||reply.hflx==12||reply.hflx==13">
+                      <span>{{reply.hflx==2?'转发至：':reply.hflx==7?'催办人：':reply.hflx==12||reply.hflx==13?'发送至：':'责任人：'}}</span>{{reply.sfjsr}}</span>
+                  </p>
+                  <span v-if="reply.sfhf == 1" flex-align-center>
+                    <el-button @click="handleReplyEdit($event,index)" size="mini" style="width:60px;height:28px">编辑</el-button>
+                    <el-button @click="handleReplyDelete($event,reply)" size="mini" type="danger" style="width:60px;height:28px">删除</el-button>&#x3000;
+                  </span>
+                  <span v-if="reply.wtjjj != 2 && !isCjwt" flex-align-center>
+                    <el-button @click="handleSetResolve($event,reply,'')" :disabled="reply.wtjjj == 0" size="mini">{{reply.wtjjj==0?'已设为常见问题':reply.wtjjj==1?'设置为常见问题':''}}</el-button>&#x3000;
+                  </span>
+                  <span v-if="reply.wtjjj == 1 && isCjwt" flex-align-center>
+                    <el-button @click="handleSetResolve($event,reply,'close')" size="mini">取消设置常见问题</el-button>&#x3000;
+                  </span>
+                  <span v-if="(reply.hflx == 3||reply.hflx == 10) && qusetionInfo.fbzt != 1" flex-align-center>
+                    <el-button type="primary" v-if="reply.sfbh == 0" @click="handleRejectQuestion(reply.wid,index)" size="mini">驳回</el-button>
+                    <el-tag v-if="reply.sfbh == 1" type="info" size="small">已驳回</el-tag>
+                  </span>
                 </div>
               </div>
-              <div class="project-question-detail-bottom">
-                 <div v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" v-if="reply.hflx != 9"></div>
-                 <div  v-if="reply.hflx == 9"><a href="javascript:void(0)" @click="handleJDGZ">查看开发任务进度</a></div>
+            </div>
+            <div class="project-question-detail-bottom">
+              <div v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" v-if="reply.hflx != 9"></div>
+              <div v-if="reply.hflx == 9">
+                <a href="javascript:void(0)" @click="handleJDGZ">查看开发任务进度</a>
               </div>
+            </div>
           </li>
 
-            <li v-if="qusetionInfo.fbzt == 1">
-              <div class="project-question-detail-top" style="background:#F5F7FA;padding:10px 0;">
-                <div class="question-type" >
-                    <span class="question-reply">关闭</span>
-                </div>
-                <div class="question-content-SC">
-                    <p>
-                        <span>关闭人 : {{qusetionInfo.wtgbr}}</span>&#x3000;
-                        <span>{{qusetionInfo.gbsj}}</span>&#x3000;
-                    </p>
-                </div>
+          <li v-if="qusetionInfo.fbzt == 1">
+            <div class="project-question-detail-top" style="background:#F5F7FA;padding:10px 0;">
+              <div class="question-type">
+                <span class="question-reply">关闭</span>
               </div>
-                <div class="project-question-detail-bottom" style="padding:0 10px;">
-                  <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">服务评价</span>
-                  <div style="display:flex;border:none;padding:0;margin-bottom:5px;">
-                        <p style="display:flex;align-items:center;"><span>服务质量：</span><el-rate :disabled="true" v-model="zlpf" show-text :texts="['1分','2分','3分','4分','5分']"> </el-rate></p>
-                  </div>
-                  <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">有效贡献人</span>
-                  <p v-for="(GXR,index) in yxGXR" :key="index"><span>姓名 : {{GXR.gxrxm}}</span>&#x3000;工时 : <span>{{GXR.gs}} (小时)</span></p>
-                  <p v-if="yxGXR!=null&&yxGXR.length!=0">合计工时 : {{hjgs}} (小时)</p>
-                  <p v-if="yxGXR==null||yxGXR.length==0">暂无贡献人</p>
-                  <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">解决说明</span>
-                  <div style="padding:0 !important" v-html="qusetionInfo.jjsm"></div>
-               </div>
+              <div class="question-content-SC">
+                <p>
+                  <span>关闭人 : {{qusetionInfo.wtgbr}}</span>&#x3000;
+                  <span>{{qusetionInfo.gbsj}}</span>&#x3000;
+                </p>
+              </div>
+            </div>
+            <div class="project-question-detail-bottom" style="padding:0 10px;">
+              <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">服务评价</span>
+              <div style="display:flex;border:none;padding:0;margin-bottom:5px;">
+                <p style="display:flex;align-items:center;">
+                  <span>服务质量：</span>
+                  <el-rate :disabled="true" v-model="zlpf" show-text :texts="['1分','2分','3分','4分','5分']"> </el-rate>
+                </p>
+              </div>
+              <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">有效贡献人</span>
+              <p v-for="(GXR,index) in yxGXR" :key="index">
+                <span>姓名 : {{GXR.gxrxm}}</span>&#x3000;工时 :
+                <span>{{GXR.gs}} (小时)</span>
+              </p>
+              <p v-if="yxGXR!=null&&yxGXR.length!=0">合计工时 : {{hjgs}} (小时)</p>
+              <p v-if="yxGXR==null||yxGXR.length==0">暂无贡献人</p>
+              <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">解决说明</span>
+              <div style="padding:0 !important" v-html="qusetionInfo.jjsm"></div>
+            </div>
           </li>
 
-            <div style="margin-top:15px;" class="question-note">
-              <div style="margin:5px 0;" v-if="username != qusetionInfo.fbrxm && qusetionInfo.fbzt != 1 && (isJZuser == 0||isJZuser == 2)" > 
-                   实施工时 : <el-input v-model="gsValue" placeholder="请输入内容" size='mini' style="width:100px"></el-input>&nbsp;
-                是否bug : <el-select v-model="sfbgValue" placeholder="请选择" size="mini">
-                            <el-option label="是" value="1"></el-option>
-                            <el-option label="否" value="0"></el-option>
-                        </el-select>&nbsp;
-                        </el-date-picker>
-                    通知提问人 :  <el-radio v-model="tktwr" :label="true">是</el-radio>
-                                <el-radio v-model="tktwr" :label="false">否</el-radio>
-              </div>
-              <div id="summernoteT" ></div>
+          <div style="margin-top:15px;" class="question-note">
+            <div style="margin:5px 0;" v-if="username != qusetionInfo.fbrxm && qusetionInfo.fbzt != 1 && (isJZuser == 0||isJZuser == 2)">
+              实施工时 :
+              <el-input v-model="gsValue" placeholder="请输入内容" size='mini' style="width:100px"></el-input>&nbsp; 是否bug :
+              <el-select v-model="sfbgValue" placeholder="请选择" size="mini">
+                <el-option label="是" value="1"></el-option>
+                <el-option label="否" value="0"></el-option>
+              </el-select>&nbsp;
+              </el-date-picker>
+              通知提问人 :
+              <el-radio v-model="tktwr" :label="true">是</el-radio>
+              <el-radio v-model="tktwr" :label="false">否</el-radio>
             </div>
-            <div style="text-align:right;padding-top:10px">
-                <el-button size="mini" type="primary" @click="handleSqdyz" v-if="btnShwon.sqdyz">申请待验证</el-button>
-                <el-button size="mini" type="primary" @click="sendMsg" v-if="btnShwon.fsxx">发送消息</el-button>
-                <el-button size="mini" type="primary" @click="replyQuestion('yyjl')" v-if="btnShwon.yyjl">添加运营记录</el-button>
-                <el-button size="mini" type="primary" @click="changeCrowdId" v-if="btnShwon.xgcrowId">关联开发任务</el-button>
-                <el-button size="mini" type="primary" @click="accreditQuestion" v-if="btnShwon.sl">受理</el-button>
-                <el-button size="mini" type="info" @click="changeCNDate" v-if="btnShwon.cnsj">修改承诺时间</el-button>
-                <el-button size="mini" type="primary" @click="forwardingProblem" v-if="btnShwon.zf">转发问题</el-button>
-                <el-button size="mini" type="primary" @click="handleYYRYZF" v-if="btnShwon.yyzf">运营人员转发</el-button>
-                <el-button size="mini" type="primary" @click="appointPrincipal" v-if="btnShwon.zdr">指定解决人</el-button>
-                <el-button size="mini" type="primary" @click="requisitionSettlement" v-if="btnShwon.sqjs">申请关闭</el-button>
-                <el-button size="mini" type="primary" @click="remindsQuestion"  v-if="btnShwon.cb">催办</el-button>
-                <el-button size="mini" type="primary" @click="replyQuestion('hf')" v-if="btnShwon.hf" :disabled="isHF">回复</el-button>
-                <el-button size="mini" type="danger" @click="closeQuestion" v-if="btnShwon.gb">关闭问题</el-button>
-            </div>
-         </ul>
-       </div>
+            <div id="summernoteT"></div>
+          </div>
+          <div style="text-align:right;padding-top:10px">
+            <el-button size="mini" type="primary" @click="handleSqdyz" v-if="btnShwon.sqdyz">申请待验证</el-button>
+            <el-button size="mini" type="primary" @click="sendMsg" v-if="btnShwon.fsxx">发送消息</el-button>
+            <el-button size="mini" type="primary" @click="replyQuestion('yyjl')" v-if="btnShwon.yyjl">添加运营记录</el-button>
+            <el-button size="mini" type="primary" @click="changeCrowdId" v-if="btnShwon.xgcrowId">关联开发任务</el-button>
+            <el-button size="mini" type="primary" @click="accreditQuestion" v-if="btnShwon.sl">受理</el-button>
+            <el-button size="mini" type="info" @click="changeCNDate" v-if="btnShwon.cnsj">修改承诺时间</el-button>
+            <el-button size="mini" type="primary" @click="forwardingProblem" v-if="btnShwon.zf">转发问题</el-button>
+            <el-button size="mini" type="primary" @click="handleYYRYZF" v-if="btnShwon.yyzf">运营人员转发</el-button>
+            <el-button size="mini" type="primary" @click="appointPrincipal" v-if="btnShwon.zdr">指定解决人</el-button>
+            <el-button size="mini" type="primary" @click="requisitionSettlement" v-if="btnShwon.sqjs">申请关闭</el-button>
+            <el-button size="mini" type="primary" @click="remindsQuestion" v-if="btnShwon.cb">催办</el-button>
+            <el-button size="mini" type="primary" @click="replyQuestion('hf')" v-if="btnShwon.hf" :disabled="isHF">回复</el-button>
+            <el-button size="mini" type="danger" @click="closeQuestion" v-if="btnShwon.gb">关闭问题</el-button>
+          </div>
+        </ul>
+      </div>
 
-         <el-dialog
-            width="600px"
-            title="问题评价"
-            :visible.sync="innerVisible"
-            :close-on-click-modal="false"
-            append-to-body>
-            <div class="question-evaluate">
-                <div class="question-rate">
-                    <p><span class="filter-weight">服务质量：</span><el-rate  v-model="fwzlValue" show-text :texts="['1 分','2 分','3 分','4 分','5 分']"></el-rate></p>
-                </div> 
-                <p>说明：请认定贡献人工时，谢谢您的支持!</p>
-                <div>
-                    <span class="filter-weight">合计贡献人: </span><span style="color:#f00">{{ContributionPeople.length}} </span> 人
-                    <el-table :data="ContributionPeople" style="width: 100%" border :max-height="580" border>
-                            <el-table-column prop="fbrxm" label="姓名" ></el-table-column>
-                            <el-table-column label="工时(小时)">
-                                <template slot-scope="scope">
-                                  <el-input v-model="scope.row.qrgs" :class="{'is-outline':questionReply.length!=0&&questionReply[0].sfhf == 1}" size="mini" :readonly="questionReply.length!=0&&questionReply[0].sfhf != 1"></el-input>
-                                </template>
-                            </el-table-column>
-                     </el-table>
-                    <!-- <table class="ContributionPeople-table"  width="100%">
-                        <tr>
-                            <th>姓名</th>
-                            <th>工时(小时)</th>
-                        </tr>
-                        <tr v-for="(people,index) in ContributionPeople">
-                            <td>{{people.fbrxm}}</td>
-                            <td><el-input v-model="people.qrgs" :class="{'is-outline':questionReply.length!=0&&questionReply[0].sfhf == 1}" size="mini" :readonly="questionReply.length!=0&&questionReply[0].sfhf != 1"></el-input></td>
-                        </tr>
-                        <tr v-if="ContributionPeople.length == 0">
-                             <td colspan="3">暂无贡献人</td>
-                        </tr>
-                    </table> -->
-                    <div style="text-align:right;margin:10px 0;">
-                     <el-button type='primary' size="mini" @click="commitQuestion">提交</el-button>
-                    </div>
-                </div> 
+      <el-dialog width="600px" title="问题评价" :visible.sync="innerVisible" :close-on-click-modal="false" append-to-body>
+        <div class="question-evaluate">
+          <div class="question-rate">
+            <p>
+              <span class="filter-weight before-require">服务质量：</span>
+              <el-rate v-model="fwzlValue" show-text :texts="['1 分','2 分','3 分','4 分','5 分']"></el-rate>
+            </p>
+          </div>
+          <div class="question-rate" v-if="fwzlValue <= 3">
+            <p>
+              <span class="filter-weight before-require">评价说明：</span>
+            </p>
+            <p>
+                <el-input type="textarea" :rows="2" placeholder="请输入说明内容" v-model="cpsm" style="width:490px;"></el-input>
+            </p>
+          </div>
+          <p>说明：请认定贡献人工时，谢谢您的支持!</p>
+          <div>
+            <span class="filter-weight">合计贡献人: </span>
+            <span style="color:#f00">{{ContributionPeople.length}} </span> 人
+            <el-table :data="ContributionPeople" style="width: 100%" border :max-height="580" border>
+              <el-table-column prop="fbrxm" label="姓名"></el-table-column>
+              <el-table-column label="工时(小时)">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.qrgs" :class="{'is-outline':questionReply.length!=0&&questionReply[0].sfhf == 1}" size="mini" :readonly="questionReply.length!=0&&questionReply[0].sfhf != 1"></el-input>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="question-rate" >
+              <p>
+                <span class="filter-weight">工时认可：</span>
+             </p>
+             <el-radio-group v-model="gssfrk">
+              <el-radio  :label="1">是</el-radio>
+              <el-radio  :label="0">否</el-radio>
+             </el-radio-group>
+          </div>
+          <div style="text-align:right;margin:10px 0;">
+              <el-button type='primary' size="mini" @click="commitQuestion">提交</el-button>
             </div>
-        </el-dialog>
+        </div>
+      </el-dialog>
 
-        <el-dialog
-            width="600px"
-            :title="isSltitle"
-            :visible.sync="innerCNRQVisible"
-            :close-on-click-modal="false"
-            append-to-body>
-            <div style="padding:10px">
-                <span v-if="isSLvisible" style="display:inline-block;margin:15px 0;">
-                  期望解决日期 : <el-date-picker  v-model="xgqwjjrq" type="date" placeholder="选择日期" format="yyyy-MM-dd"  :clearable="false" size="mini" readonly></el-date-picker>
-                </span>
-                <div v-if="false" style="display:flex;margin-bottom:15px;">
-                    <span>环境信息 : </span>
-                    <el-upload
-                        style="width:510px;"
-                        class="upload-demo"
-                        ref="upload"
-                        :limit='1'
-                        :action="uploadAction"
-                        :before-upload="beforeUpload"
-                        :on-remove="handleRemove"
-                        :on-change="handleChange"
-                        :file-list="fileList"
-                        :show-file-list="true"
-                        :auto-upload="false">
-                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                    </el-upload>
-                </div>
-                 <div>
-                  <span class="filter-bt">承诺结束日期 :</span> 
-                  <el-date-picker  :picker-options="pickerBeginDateBefore" v-model="xgcnjsrq" type="date" placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
-                 </div>
-                  <div v-if="!isSLvisible" style="margin:15px 0">
-                    <span class="filter-bt before-require">说明：</span>
-                    <el-input  type="textarea"  :rows="2" style="width:400px" placeholder="请输入说明内容" v-model="cnjssm"></el-input>
-                  </div>     
-                  <div style="text-align:right">
-                      <el-button type="primary" size="mini" @click="CommitChangeCNjsrq">提交</el-button>
-                      <el-button type="info" size="mini" @click="CancelChangeCNjsrq">取消</el-button>    
-                  </div>
-            </div>
-        </el-dialog>
+      <el-dialog width="600px" :title="isSltitle" :visible.sync="innerCNRQVisible" :close-on-click-modal="false" append-to-body>
+        <div style="padding:10px">
+          <span v-if="isSLvisible" style="display:inline-block;margin:15px 0;">
+            期望解决日期 :
+            <el-date-picker v-model="xgqwjjrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" :clearable="false" size="mini" readonly></el-date-picker>
+          </span>
+          <div v-if="false" style="display:flex;margin-bottom:15px;">
+            <span>环境信息 : </span>
+            <el-upload style="width:510px;" class="upload-demo" ref="upload" :limit='1' :action="uploadAction" :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" :file-list="fileList" :show-file-list="true" :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            </el-upload>
+          </div>
+          <div>
+            <span class="filter-bt">承诺结束日期 :</span>
+            <el-date-picker :picker-options="pickerBeginDateBefore" v-model="xgcnjsrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
+          </div>
+          <div v-if="!isSLvisible" style="margin:15px 0">
+            <span class="filter-bt before-require">说明：</span>
+            <el-input type="textarea" :rows="2" style="width:400px" placeholder="请输入说明内容" v-model="cnjssm"></el-input>
+          </div>
+          <div style="text-align:right">
+            <el-button type="primary" size="mini" @click="CommitChangeCNjsrq">提交</el-button>
+            <el-button type="info" size="mini" @click="CancelChangeCNjsrq">取消</el-button>
+          </div>
+        </div>
+      </el-dialog>
 
-     <el-dialog
-            width="1000px"
-            title="转发问题"
-            :visible.sync="innerZFWTisible"
-            :close-on-click-modal="false"
-            append-to-body>
-            <div style="padding:10px;">
-               <span>转发对象: &nbsp;&nbsp;</span>
-               <span v-if="zfDx.length == 0"> 暂无</span>
-                <el-radio-group v-model="radio">
-                    <el-radio v-for="zfdx in zfDx" :key="zfdx.bh" :label="zfdx.bh">{{zfdx.mc}}</el-radio>
-                </el-radio-group> 
-                <div style="margin:10px 0;" v-if="radio == 11">
-                 <span>选择产品线:</span>
-                    <el-select v-model="zfcp" size="mini" placeholder="选择产品线" style="width:400px">
-                        <el-option 
-                        v-for="(cpx,index) in cpline"
-                        :key="index"
-                        :label="cpx.mc"
-                        :value="cpx.label">
-                        </el-option>
-                    </el-select>
-                </div>
-               <div style="margin-top:10px;">
-                     <span class="question-sqdyz-title">期望解决日期:</span>
-                     <el-date-picker size="mini" v-model="qwjjrqZf"  type="date" placeholder="选择期望解决日期"  value-format="yyyy-MM-dd"></el-date-picker>
-                </div>
-               <div class="question-zf">
-                  <span class="before-require" style="display:inline-block;margin:10px 0 !important;">转发说明: &nbsp;&nbsp;</span>
-                  <div id="summernoteZF"></div>
-                  <div style="text-align:right;margin:10px 0;">         
-                        <el-button type="primary" size="mini" @click="CommitZFWT">提交</el-button>
-                        <el-button type="info" size="mini" @click="CancelZFWT">取消</el-button>       
-                  </div>
-              </div>
+      <el-dialog width="1000px" title="转发问题" :visible.sync="innerZFWTisible" :close-on-click-modal="false" append-to-body>
+        <div style="padding:10px;" class="question_transmit">
+          <span class="filter-weight span_label before-require">转发对象: &nbsp;&nbsp;</span>
+          <span v-if="zfDx.length == 0"> 暂无</span>
+          <el-radio-group v-model="radio">
+            <el-radio v-for="zfdx in zfDx" :key="zfdx.bh" :label="zfdx.bh">{{zfdx.mc}}</el-radio>
+          </el-radio-group>
+          <div style="margin:10px 0;" v-if="radio == 11">
+            <span class="filter-weight span_label before-require">选择产品:</span>
+            <el-select v-model="zfcp" size="mini" placeholder="选择产品" style="width:400px">
+              <el-option v-for="(cp,index) in cplist" :key="index" :label="cp.mc" :value="cp.label">
+              </el-option>
+            </el-select>
+          </div>
+          <div style="margin-top:10px;">
+            <span class="question-sqdyz-title filter-weight span_label">期望解决日期:</span>
+            <el-date-picker size="mini" v-model="qwjjrqZf" type="date" placeholder="选择期望解决日期" value-format="yyyy-MM-dd"></el-date-picker>
+          </div>
+          <div class="question-zf">
+            <span class="before-require filter-weight span_label" style="display:inline-block;margin:10px 0 !important;">转发说明: &nbsp;&nbsp;</span>
+            <div id="summernoteZF"></div>
+            <div style="text-align:right;margin:10px 0;">
+              <el-button type="primary" size="mini" @click="CommitZFWT">提交</el-button>
+              <el-button type="info" size="mini" @click="CancelZFWT">取消</el-button>
             </div>
-        </el-dialog>
+          </div>
+        </div>
+      </el-dialog>
 
-      <el-dialog
-            title="选择项目"
-            :visible.sync="dialogQuestionVisible"
-            :close-on-click-modal="false"
-            width="1000px"
-            top="30px"
-            append-to-body>
-            <div style="padding:10px;">
-                <itemChoose @handleEdit="handleEdit"></itemChoose>
-            </div>
-        </el-dialog> 
-      <el-dialog
-            :title="zdTitle"
-            :visible.sync="zdfzrVisible"
-            :close-on-click-modal="false"
-            width="800px"
-            top="30px"
-            @close="ClosezdfzrVisible"
-            append-to-body>
-            <div style="padding:10px;">
-                <zdfzrChoose :lchjList="lchjList" :visible="zdfzrVisible"  :tableData="tableData" :zdTitle="zdTitle" :jkrTotal="jkrTotal" @handleYYRYLX="handleYYRYLX" @handleClose="handleClose" @handleCommitZdr="handleCommitZdr" @queryComplainZRR="queryComplainZRR" @queryComplainUser="queryComplainUser" @handleCurrentChange="handleZrrChange"></zdfzrChoose>
-            </div>
-    </el-dialog> 
-    <el-dialog
-            title="申请关闭"
-            :visible.sync="sqjsVisible"
-            :close-on-click-modal="false"
-            width="800px"
-            top="30px"
-            append-to-body>
-            <div style="padding:10px;">
-                <sqjsForm :gs="sqgbgs" @submitForm="submitForm" @closeForm="closeForm"></sqjsForm>
-            </div>
-    </el-dialog> 
-    <el-dialog
-            title="关联开发任务"
-            :visible.sync="crowdVisible"
-            :close-on-click-modal="false"
-            width="800px"
-            top="30px"
-            append-to-body>
-             <div style="padding:20px 10px ">
-                <p style="font-size:18px">开发任务编号:</p>
-                <el-input v-model="Crowdalue" placeholder="请输入开发任务编号"></el-input>
-                <p style="font-size:18px;margin-top:15px !important">开发工作量(人/天):</p>
-                <el-input v-model="kfgzlValue" placeholder="请输入开发工作量 "></el-input>
-                <p style="text-align:right;padding:10px 0">
-                    <el-button type="primary" size="small" @click="handleCommitCrowd">提交</el-button>
-                </p>    
-         </div>
-    </el-dialog> 
-    <el-dialog
-            :title="'进度跟踪' +'['+ Crowdalue +']'"
-            :visible.sync="jdgzVisible"
-            :close-on-click-modal="false"
-            width="800px"
-            top="30px"
-            append-to-body>
-             <div style="padding:20px 10px ">
-                 <div class="CrowdRwxx">
-                    <span>任务名称 : </span><span :title="JSON.stringify(CrowdRwxx) == '{}'?'':CrowdRwxx.rwmc" class="Crowdrwmc">{{JSON.stringify(CrowdRwxx) == '{}'?'无':CrowdRwxx.rwmc}}</span>
-                    <span>交付日期 : </span><span>{{JSON.stringify(CrowdRwxx) == '{}'?'无':CrowdRwxx.jfrq}}</span>
-                 </div>
-                 
-                      <el-table
-                        :data="JDGZList"
-                        style="width: 100%"
-                        border
-                        min-width="1200" >
-                        <el-table-column prop="czrxm" label="操作人姓名" show-overflow-tooltip width="100" ></el-table-column>
-                        <el-table-column prop="czsj" label="操作时间" show-overflow-tooltip width="180"></el-table-column>
-                        <el-table-column prop="shyy" label="审核意见" show-overflow-tooltip></el-table-column>
-                        <el-table-column prop="ztDisplay" label="状态" show-overflow-tooltip></el-table-column>
-                    </el-table>
-         </div>
-    </el-dialog> 
-    <el-dialog
-            title="编辑回复内容"
-            :visible.sync="editEplyVisible"
-            :close-on-click-modal="false"
-            width="800px"
-            top="30px"
-            append-to-body>
-             <div style="padding:20px 10px" class="edit-reply">
-                 <div v-if="hflx!=7||hflx!=6||hflx!=5||hflx!=9">
-                  <span>工时 : </span> <el-input v-model="replygs" placeholder="请输入工时" size='mini' style="width:200px"></el-input>&nbsp;
-                 </div><br>
-                 <div id="summernoteEditReplay"></div>
-                 <div style="text-align:right">
-                   <el-button type="primary" size="mini" @click="handleSaveReplyContent">保存</el-button>
-                 </div>
-            </div>
-    </el-dialog> 
-    <el-dialog
-            title="申请待验证"
-            :visible.sync="sqdyzVisible"
-            :close-on-click-modal="false"
-            width="600px"
-            top="30px"
-            append-to-body>
-             <div style="padding:20px 10px" class="question-sqdyz">
-               <span class="question-sqdyz-title">版本发布日期:</span>
-               <el-date-picker  v-model="sqdyzValue" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"  :clearable="false" size="mini"></el-date-picker>
-               <div style="text-align:right">
-                 <el-button size="mini" type="primary" @click="saveSqdyz">保存</el-button>
-               </div>
-            </div>
-    </el-dialog> 
+      <el-dialog title="选择项目" :visible.sync="dialogQuestionVisible" :close-on-click-modal="false" width="1000px" top="30px" append-to-body>
+        <div style="padding:10px;">
+          <itemChoose @handleEdit="handleEdit"></itemChoose>
+        </div>
+      </el-dialog>
+      <el-dialog :title="zdTitle" :visible.sync="zdfzrVisible" :close-on-click-modal="false" width="800px" top="30px" @close="ClosezdfzrVisible" append-to-body>
+        <div style="padding:10px;">
+          <zdfzrChoose :lchjList="lchjList" :visible="zdfzrVisible" :tableData="tableData" :zdTitle="zdTitle" :jkrTotal="jkrTotal" @handleYYRYLX="handleYYRYLX" @handleClose="handleClose" @handleCommitZdr="handleCommitZdr" @queryComplainZRR="queryComplainZRR" @queryComplainUser="queryComplainUser" @handleCurrentChange="handleZrrChange"></zdfzrChoose>
+        </div>
+      </el-dialog>
+      <el-dialog title="申请关闭" :visible.sync="sqjsVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
+        <div style="padding:10px;">
+          <sqjsForm :gs="sqgbgs" @submitForm="submitForm" @closeForm="closeForm"></sqjsForm>
+        </div>
+      </el-dialog>
+      <el-dialog title="关联开发任务" :visible.sync="crowdVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
+        <div style="padding:20px 10px ">
+          <p style="font-size:18px">开发任务编号:</p>
+          <el-input v-model="Crowdalue" placeholder="请输入开发任务编号"></el-input>
+          <p style="font-size:18px;margin-top:15px !important">开发工作量(人/天):</p>
+          <el-input v-model="kfgzlValue" placeholder="请输入开发工作量 "></el-input>
+          <p style="text-align:right;padding:10px 0">
+            <el-button type="primary" size="small" @click="handleCommitCrowd">提交</el-button>
+          </p>
+        </div>
+      </el-dialog>
+      <el-dialog :title="'进度跟踪' +'['+ Crowdalue +']'" :visible.sync="jdgzVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
+        <div style="padding:20px 10px ">
+          <div class="CrowdRwxx">
+            <span>任务名称 : </span>
+            <span :title="JSON.stringify(CrowdRwxx) == '{}'?'':CrowdRwxx.rwmc" class="Crowdrwmc">{{JSON.stringify(CrowdRwxx) == '{}'?'无':CrowdRwxx.rwmc}}</span>
+            <span>交付日期 : </span>
+            <span>{{JSON.stringify(CrowdRwxx) == '{}'?'无':CrowdRwxx.jfrq}}</span>
+          </div>
 
-    <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :wid="wid" :slContent="slContent" 
-    :questionInfo="qusetionInfo" :guid="gsValue" @handleSLsuccess="handleSLsuccess"></twDialog>
-    <!-- 发送运维消息 -->
-    <xxDialog :show.sync="ywxxShow" :tableData="userList" @handleSure="handleSure"></xxDialog>  
-  </div>
+          <el-table :data="JDGZList" style="width: 100%" border min-width="1200">
+            <el-table-column prop="czrxm" label="操作人姓名" show-overflow-tooltip width="100"></el-table-column>
+            <el-table-column prop="czsj" label="操作时间" show-overflow-tooltip width="180"></el-table-column>
+            <el-table-column prop="shyy" label="审核意见" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="ztDisplay" label="状态" show-overflow-tooltip></el-table-column>
+          </el-table>
+        </div>
+      </el-dialog>
+      <el-dialog title="编辑回复内容" :visible.sync="editEplyVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
+        <div style="padding:20px 10px" class="edit-reply">
+          <div v-if="hflx!=7||hflx!=6||hflx!=5||hflx!=9">
+            <span>工时 : </span>
+            <el-input v-model="replygs" placeholder="请输入工时" size='mini' style="width:200px"></el-input>&nbsp;
+          </div><br>
+          <div id="summernoteEditReplay"></div>
+          <div style="text-align:right">
+            <el-button type="primary" size="mini" @click="handleSaveReplyContent">保存</el-button>
+          </div>
+        </div>
+      </el-dialog>
+      <el-dialog title="申请待验证" :visible.sync="sqdyzVisible" :close-on-click-modal="false" width="600px" top="30px" append-to-body>
+        <div style="padding:20px 10px" class="question-sqdyz">
+          <span class="question-sqdyz-title">版本发布日期:</span>
+          <el-date-picker v-model="sqdyzValue" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
+          <div style="text-align:right">
+            <el-button size="mini" type="primary" @click="saveSqdyz">保存</el-button>
+          </div>
+        </div>
+      </el-dialog>
+
+      <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :wid="wid" :slContent="slContent" :questionInfo="qusetionInfo" :guid="gsValue" @handleSLsuccess="handleSLsuccess"></twDialog>
+      <!-- 发送运维消息 -->
+      <xxDialog :show.sync="ywxxShow" :tableData="userList" @handleSure="handleSure"></xxDialog>
+    </div>
   </div>
 </template>
 
@@ -482,6 +437,8 @@ export default {
       sqdyzVisible: false,
       sqdyzValue: "", //申请待验证日期
       fwzlValue: 0,
+      cpsm:'',  //差评说明
+      gssfrk:1,//工时是否确认
       sfbgValue: "0", //回复是否bug
       gsValue: "0",
       cnjsrq: "",
@@ -620,9 +577,9 @@ export default {
         //   //第二个是表单数据
         //   //第三个是上传配置
         //     .post(this.API.IMAGE_UPLOAD_ADDRESS, formData, config)
-        //     .then(response => { 
+        //     .then(response => {
         //         //以下是默认
-        //       $(this.$refs.summernote).summernote('insertImage',response.data,'img'); 
+        //       $(this.$refs.summernote).summernote('insertImage',response.data,'img');
         //     });
         // })
       }
@@ -916,9 +873,11 @@ export default {
       fd.append("fileUpload", file);
       fd.append("xmbh", this.xmbh);
 
-        axios.post(window.baseurl + "attachment/uploadAttach.do", fd, {
+      axios
+        .post(window.baseurl + "attachment/uploadAttach.do", fd, {
           headers: { "Content-Type": "multipart/form-data" }
-        }).then(res => {
+        })
+        .then(res => {
           if (res.data.state == "success") {
             this.fileData.push(res.data.data); //文件 list Arr
           } else {
@@ -942,20 +901,30 @@ export default {
       this.$refs.upload.submit();
     },
 
-    handleSetResolve(e, param) {
+    handleSetResolve(e, param,data) {
       //设置问题解决集
       setSolution({
         zbwid: this.wid,
-        wid: param.wid
+        wid: param.wid,
+        isCancel:!!data?1:''
       }).then(({ data }) => {
         if (data.state == "success") {
-          if (isCjwt) {
+          if (this.isCjwt) {
             this.$alert("取消成功", "提示", {
+              confirmButtonText: "确定",
+              callback: action => {
+                this.queryAnswers(this.wid); //  获取回复 
+              }
+            });
+          }else{
+            this.$alert("设置成功", "提示", {
               confirmButtonText: "确定",
               callback: action => {}
             });
           }
-          param.wtjjj = 0;
+          if(!data){
+            param.wtjjj = 0;
+          }
         }
       });
     },
@@ -1518,7 +1487,7 @@ export default {
           $("#summernoteZF").summernote("code") == "<p><br></p>"
             ? ""
             : $("#summernoteZF").summernote("code"),
-        cpxbh: this.radio == 11 ? this.zfcp : "",
+        cpbh: this.radio == 11 ? this.zfcp : "",
         qwjjrq: this.qwjjrqZf
       }).then(({ data }) => {
         if (data.state == "success") {
@@ -1650,15 +1619,22 @@ export default {
             });
             return;
           }
+          if (this.fwzlValue <= 3 && !this.cpsm) {
+              this.$alert("请填写评价说明", "提示", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+            return;
+          }
           closeQuestion({
             wid: this.wid,
             zlpf: this.fwzlValue,
             gxrData: gxrArr.join("|"),
             sfjj: "",
-            jjsm:
-              $("#summernoteT").summernote("code") == "<p><br></p>"
-                ? ""
-                : $("#summernoteT").summernote("code")
+            jjsm:$("#summernoteT").summernote("code") == "<p><br></p>"? "": $("#summernoteT").summernote("code"),
+            cpsm:this.fwzlValue<=3?this.cpsm:'',
+            gssfrk:this.gssfrk
           }).then(({ data }) => {
             if (data.state == "success") {
               this.innerVisible = false;
@@ -1975,21 +1951,11 @@ div.el-form-item {
   color: #888;
   font-size: 12px;
 }
-/* .question-evaluate .ContributionPeople-table {
-  border: 1px solid #ccc;
-  border-collapse: collapse;
-}
-.question-evaluate .ContributionPeople-table th {
-  border: 1px solid #ccc;
-  text-align: center;
-}
-.question-evaluate .ContributionPeople-table td {
-  border: 1px solid #ccc;
-  text-align: center;
-  width: 33%;
-} */
 .question-rate {
   margin: 10px 0;
+}
+.question-rate label{
+  margin-bottom:0;
 }
 .question-rate:after {
   content: "";
@@ -2050,14 +2016,15 @@ div.el-form-item {
   width: 95%;
   white-space: pre-wrap;
 }
-.is-outline {
-  outline: 1px solid #409eff !important;
-}
 .filter-bt {
   display: inline-block;
   width: 100px;
   vertical-align: top;
   text-align: right;
   font-weight: 700;
+}
+.question_transmit .span_label{
+  display: inline-block;
+  width: 110px;
 }
 </style>

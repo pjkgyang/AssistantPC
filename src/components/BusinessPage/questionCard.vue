@@ -5,7 +5,7 @@
             <section class="spacearound colcenter" >
               <div :class="{'question-type':true}">
                   <span :class="{'el-icon-question':question.fbzt != 1,'el-icon-success':question.fbzt == 1}"></span>
-                  <p class="questionOperate" >   
+                  <p class="questionOperate" v-if="bjscShow">   
                       <span class="el-icon-edit" :data-wid="question.wid"  v-if="question.isdel" @click="editQuestion(question)"><span style="color:#409EFF"> 编辑</span></span>&nbsp;
                       <span class="el-icon-delete" :data-wid="question.wid"  v-if="question.isdel" @click="deleteQuestion(question)"><span style="color:#f00"> 删除</span></span>
                   </p>
@@ -50,7 +50,10 @@
                           Math.round((new Date(question.cnjsrq+' 23:59:59').getTime() - (question.sqgbsj?new Date(question.sqgbsj).getTime():
                           question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.ceil(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq+' 23:59:59').getTime())/(1000 * 60 * 60 * 24))+' 天'}}
                     </span>
-                  </span>
+                  </span><br>
+                  <!-- <span v-if="!bjscShow">
+                     <el-button size="mini" type='primary' @click="handleImprovementPlan(question)">改进计划</el-button>
+                  </span> -->
               </div>     
             </section>     
             <section text-center  class="pull-right"  style="width:15%" v-if="question.sqgbCount > 0  && question.fbzt != 1 && username==question.fbrxm && isShow">
@@ -87,13 +90,19 @@ export default {
     wtbqShow:{
        type:Boolean,
        default:false
+    },
+    bjscShow:{
+       type:Boolean,
+       default:true
     }
   },
   mounted(){
-    
       this.username = sessionStorage.username;
   },
   methods:{
+      handleImprovementPlan(params){
+          this.$emit('handleImprovementPlan',params);
+      },
       handleQuestionDetail(params){
           this.$emit('handleQuestionDetail',params);
       },

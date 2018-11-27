@@ -5,8 +5,7 @@
     style="width: 100%"
     @cell-click="cellClick"
     border
-    min-width="1200"
-    >
+    :max-height="tableInnerHeight">
      <el-table-column
       fixed="left"
       label="操作"
@@ -20,7 +19,6 @@
          </div>
       </template>
     </el-table-column>
-    <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip width="280"></el-table-column>
     <el-table-column prop="rwmc_display" label="任务名称" show-overflow-tooltip width="280"></el-table-column>    
     <el-table-column prop="cpmc_display" label="产品名称" show-overflow-tooltip width="160"></el-table-column>
     <el-table-column prop="lcbms_display" label="里程碑名称" show-overflow-tooltip width="280" ></el-table-column>
@@ -50,6 +48,7 @@ export default {
   data(){
       return{
         milestoneVisible:false,
+        tableInnerHeight:window.innerHeight - 200,
         taskDetail:{}
       }
   },
@@ -57,40 +56,7 @@ export default {
     tableData:{
        type:Array,
        default:function(){
-         return [{
-          lcbmc: '安装部署',
-          rwmc: '测试项目',
-          rwbh: 'UK2017-20000',
-          rwxz: 'xxx',
-          rwzz: '执行中',
-          date: "3月2日 09:00 - 18:00",
-          gs:10.5,
-          yxj:'紧急',
-          fqr:'雷锋',
-          cyr:['张三丰 ',' 雷锋']
-        },{
-          lcbmc: '安装部署',
-          rwmc: '测试项目',
-          rwbh: 'UK2017-20000',
-          rwxz: 'xxx',
-          rwzz: '执行中',
-          date: "3月2日 09:00 - 18:00",
-           gs:10.5,
-          yxj:'高',
-          fqr:'雷锋',
-          cyr:['张三丰 ',' 雷锋']
-        }, {
-          lcbmc: '安装部署',
-          rwmc: '测试项目',
-          rwbh: 'UK2017-20000',
-          rwxz: 'xxx',
-          rwzz: '执行中',
-          date: "3月2日 09:00 - 18:00",
-           gs:10.5,
-          yxj:'高',
-          fqr:'雷锋',
-          cyr:['张三丰 ',' 雷锋']
-        },]
+         return []
        }
     }
   },
