@@ -2,7 +2,7 @@
  <div>
      <el-dialog
             title="人员列表"
-            width="800px"
+            width="700px"
             :visible.sync="visible"
             :append-to-body="true"
             :close-on-click-modal="false"

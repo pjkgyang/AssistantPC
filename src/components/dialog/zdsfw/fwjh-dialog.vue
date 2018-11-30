@@ -156,7 +156,7 @@ export default {
     // 获取产品
     listXmZdsfwCp() {
       this.$get(this.API.listXmZdsfwCp, {
-        xmbh: this.xmbh
+        xmbh:''
       }).then(res => {
         if (res.state == "success") {
           if (!res.data) {

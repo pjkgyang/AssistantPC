@@ -43,20 +43,23 @@ export default {
           khlx: "2"
         }).then(res => {
           if (res.state == "success") {
-           if(!!res.data){
+            if (!!res.data) {
               this.$alert("封存成功!", "提示", {
                 confirmButtonText: "确定",
                 type: "success"
               });
               this.archiveShow = false;
-            }else{
+            } else {
               this.$alert("封存失败!", "提示", {
                 confirmButtonText: "确定",
                 type: "error"
               });
             }
-          }else{
-            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
         });
       });
@@ -78,10 +81,13 @@ export default {
       this.currentPage = data;
       this.ydjlb();
     },
-    handleChangeFilter(data) {
+    handleChangeFilter(data,params) {
       this.filterData = data;
       this.currentPage = 1;
       this.ydjlb();
+      if(!!params){
+        this.hasDepositData();
+      }
     },
     ydjlb() {
       this.$get(this.API.ydjlb, {
@@ -101,6 +107,16 @@ export default {
             confirmButtonText: "确定",
             type: "error"
           });
+        }
+      });
+    },
+    hasDepositData() {
+      this.$get(this.API.hasDepositData, {
+        yf: this.filterData.yf,
+        khlx: "2"
+      }).then(res => {
+        if (res.state == "success") {
+          this.archiveShow = !res.data;
         }
       });
     },
@@ -127,7 +143,24 @@ export default {
         arr[0] == "wtcndcs"
       ) {
         url = "/khbbdetail/ydjlwtxq";
+      } else if (arr[0] == "tscls") {
+        url = "/khbbdetail/ts";
+      } else if (arr[0] == "rbbts") {
+        url = "/rbdetail";
+        obj["sfbt"] = "1";
+        obj["sfglpz"] = "0";
+        obj["rybh"] = data[0];
+        delete obj.rygh;
+      } else if (arr[0] == "zbbts") {
+        url = "/zbdetail";
+        obj["sfbt"] = "1";
+        obj["sfglpz"] = "0";
+        obj["rybh"] = data[0];
+        delete obj.rygh;
+      } else {
+        return;
       }
+
       if (!!params[i].canRedirect) {
         if (arr[0] == arr[1] || arr.length == 1) {
           obj[arr[0]] = data[i];
@@ -158,15 +191,8 @@ export default {
     this.$nextTick(() => {
       this.ydjlb();
     });
-
-    this.$get(this.API.hasDepositData, {
-      yf: this.filterData.yf,
-      khlx: "2"
-    }).then(res => {
-      if (res.state == "success") {
-        this.archiveShow = !res.data;
-      }
-    });
+    
+    this.hasDepositData();
   },
   activated() {},
   watch: {},

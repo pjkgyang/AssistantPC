@@ -4,10 +4,7 @@
       <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'" :filterShow="filterShow"></filterComponent>
     </div>
     <div>
-      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize"
-       @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable"
-        :indexArr='[20]' :widthArr="[]" :Width="'130'" :Height="0" :archiveShow="archiveShow"
-         @handleArchive="handleArchive"></tableComponents>
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[20]' :widthArr="[]" :Width="'130'" :Height="0" :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
     </div>
   </div>
 </template>
@@ -46,20 +43,23 @@ export default {
           khlx: "3"
         }).then(res => {
           if (res.state == "success") {
-            if(!!res.data){
+            if (!!res.data) {
               this.$alert("确认成功!", "提示", {
                 confirmButtonText: "确定",
                 type: "success"
               });
               this.archiveShow = false;
-            }else{
+            } else {
               this.$alert("确认失败!", "提示", {
                 confirmButtonText: "确定",
                 type: "error"
               });
             }
-          }else{
-            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
         });
       });
@@ -79,10 +79,23 @@ export default {
       this.currentPage = data;
       this.ydwtshgsb();
     },
-    handleChangeFilter(data) {
+    handleChangeFilter(data,params) {
       this.filterData = data;
       this.currentPage = 1;
       this.ydwtshgsb();
+      if (!!params) {
+        this.hasDepositData();
+      }
+    },
+    hasDepositData() {
+      this.$get(this.API.hasDepositData, {
+        yf: this.filterData.yf,
+        khlx: "3"
+      }).then(res => {
+        if (res.state == "success") {
+          this.archiveShow = !res.data;
+        }
+      })
     },
     ydwtshgsb() {
       this.$get(this.API.ydwtshgsb, {
@@ -94,8 +107,6 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           this.dataList = res.data;
-          //  this.dataList = res.data.body;
-          //  this.headList = res.data.head;
         } else {
           this.$alert(res.msg, "提示", {
             confirmButtonText: "确定",
@@ -137,17 +148,12 @@ export default {
         ? "0" + new Date().getMonth() + 1
         : new Date().getMonth() + 1);
     this.filterData.yf = getPreMonth(date);
+    
     this.$nextTick(() => {
       this.ydwtshgsb();
     });
-    this.$get(this.API.hasDepositData, {
-      yf: this.filterData.yf,
-      khlx: "3"
-    }).then(res => {
-      if (res.state == "success") {
-        this.archiveShow = !res.data;
-      }
-    });
+
+    this.hasDepositData();
   },
   activated() {},
   watch: {},

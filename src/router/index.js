@@ -125,6 +125,14 @@ function getAbsolutePath () {
           component: resolve => require(['@/views/BusinessPage/resource/expertlist.vue'], resolve),
         },
         {
+          path: '/newspecial',
+          name: 'newSpecial',
+          meta:{
+            title:'新人专用'
+          },
+          component: resolve => require(['@/views/BusinessPage/resource/newspecial.vue'], resolve),
+        },
+        {
           path: '/cpjh',
           name: 'Cpjh',
           meta:{
@@ -140,7 +148,22 @@ function getAbsolutePath () {
           },
           component: resolve => require(['@/components/wtfp/pxjhList.vue'], resolve),
         },
-        
+        {
+          path: '/cpgjjhlist',
+          name: 'cpjhList',
+          meta:{
+            title:'改进计划产品列表'
+          },
+          component: resolve => require(['@/components/wtfp/cpjhList.vue'], resolve),
+        },
+         {
+          path: '/ssgjjhlist',
+          name: 'ssjhList',
+          meta:{
+            title:'改进计划能力列表'
+          },
+          component: resolve => require(['@/components/wtfp/pxjhList.vue'], resolve),
+        },
         {
           path: '/businesspage/xxtsql',
           name: 'BusinesspageXxtsql',
@@ -515,6 +538,14 @@ function getAbsolutePath () {
         title:'实施类改进计划'
       },
       component: resolve => require(['@/components/wtfp/gjjhssl.vue'], resolve),
+    },
+    {
+      path: '/stafflist',
+      name: 'staffList',
+      meta:{
+        title:'员工列表'
+      },
+      component: resolve => require(['@/components/wtfp/yglist.vue'], resolve),
     },
     {
       path: '/khbbdetail/:id',

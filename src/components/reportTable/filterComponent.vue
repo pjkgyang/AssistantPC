@@ -214,7 +214,7 @@ export default {
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleChangeYf(){
-      this.$emit("handleChangeFilter", this.filterWord);
+      this.$emit("handleChangeFilter", this.filterWord,'yf');
     },
     handleDWLX(e) {
       // 单位类型

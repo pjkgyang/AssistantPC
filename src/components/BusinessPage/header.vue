@@ -65,7 +65,7 @@
   </div>
 </template>
 <script>
-import { EventBus } from "../../utils/util.js"; //事件总线
+import { encryptByDES,EventBus } from '@/utils/util.js'
 import { getMessages } from "@/api/notice.js";
 import { queryHomePage, querySysPrivs } from "@/api/system.js";
 import { queryIntegral } from "@/api/personal.js";
@@ -207,7 +207,8 @@ export default {
   methods: {
     handleSelect(index, indexPath) {
       if (index.indexOf("http://") != -1 || index.indexOf("https://") != -1) {
-        window.open(index);
+         let des = encryptByDES('assistant'+window.userId,'WISEDUUSER');
+         window.open(index+'?sign='+des);
         return;
       }
       window.menu = null;

@@ -1,13 +1,33 @@
 
 import Vue from 'vue';
 import { getResponsibleTaskList } from '@/api/common.js'
+import CryptoJS from 'crypto-js';
 
 // 总线
 export const EventBus = new Vue();
 
-
+// DES 加密
+export function encryptByDES(message, key){
+    const keyHex = CryptoJS.enc.Utf8.parse(key);
+    const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+     });
+    return encrypted.toString();
+  }
+// DES 解密
+export function  decryptByDES(ciphertext, key){
+    const keyHex = CryptoJS.enc.Utf8.parse(key);
+    // direct decrypt ciphertext
+    const decrypted = CryptoJS.DES.decrypt({
+       ciphertext: CryptoJS.enc.Base64.parse(ciphertext)
+     }, keyHex, {
+       mode: CryptoJS.mode.ECB,
+       padding: CryptoJS.pad.Pkcs7
+    });
+    return decrypted.toString(CryptoJS.enc.Utf8);
+  }
 //  保留两位小数1
-
 export function returnFloat(value) {
     var value = Math.round(parseFloat(value) * 100) / 100;
     var xsd = value.toString().split(".");

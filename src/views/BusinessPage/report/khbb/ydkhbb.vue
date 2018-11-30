@@ -4,8 +4,7 @@
       <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"></filterComponent>
     </div>
     <div>
-      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[1,2,4]' :widthArr="[]" :Width="'150'" :Height="0" 
-      :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[1,2,4]' :widthArr="[]" :Width="'150'" :Height="0" :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
     </div>
   </div>
 </template>
@@ -44,20 +43,23 @@ export default {
           khlx: "1"
         }).then(res => {
           if (res.state == "success") {
-            if(!!res.data){
+            if (!!res.data) {
               this.$alert("封存成功!", "提示", {
                 confirmButtonText: "确定",
                 type: "success"
               });
               this.archiveShow = false;
-            }else{
+            } else {
               this.$alert("封存失败!", "提示", {
                 confirmButtonText: "确定",
                 type: "error"
               });
             }
-          }else{
-            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
         });
       });
@@ -79,10 +81,23 @@ export default {
       this.currentPage = data;
       this.ydkhb();
     },
-    handleChangeFilter(data) {
+    handleChangeFilter(data,params) {
       this.filterData = data;
       this.currentPage = 1;
       this.ydkhb();
+       if(!!params){
+        this.hasDepositData();
+      }
+    },
+    hasDepositData() {
+      this.$get(this.API.hasDepositData, {
+        yf: this.filterData.yf,
+        khlx: "1"
+      }).then(res => {
+        if (res.state == "success") {
+          this.archiveShow = !res.data;
+        }
+      })
     },
     ydkhb() {
       this.$get(this.API.ydkhb, {
@@ -170,14 +185,8 @@ export default {
     this.$nextTick(() => {
       this.ydkhb();
     });
-    this.$get(this.API.hasDepositData, {
-      yf: this.filterData.yf,
-      khlx: "1"
-    }).then(res => {
-      if (res.state == "success") {
-        this.archiveShow = !res.data;
-      }
-    });
+
+    this.hasDepositData();
   },
   activated() {},
   watch: {},

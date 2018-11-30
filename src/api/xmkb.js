@@ -180,7 +180,9 @@ export function queryAllQuestions(obj){
 			starDay:obj.starDay||'',
 			endDay:obj.endDay||'',
 			isAnalyse:obj.isAnalyse||"",
-			bqly:obj.bqly||""
+			bqly:obj.bqly||"",
+			wtfbq:obj.wtfbq||"",
+			wtgjzt:obj.wtgjzt||""
 		}
 	})
 }
@@ -743,4 +745,20 @@ export function queryProductSolutionTime(obj){
 			 cpbh:obj.cpbh
 		}
 	})
+}
+
+// 关联开发任务
+export function addOrUpdateCrowdId(obj){
+	let url = window.baseurl +quesurl+"addOrUpdateCrowdId.do"
+	return axios.post(url,{
+		wid:obj.wid,
+		hfwid:obj.hfwid,
+		crowdId:obj.crowdId,
+		kfgzl:obj.kfgzl
+	},{
+		transformRequest: [function (data) {
+　　data = Qs.stringify(data);
+    return data;
+  }]
+})
 }

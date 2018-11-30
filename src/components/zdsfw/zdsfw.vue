@@ -571,7 +571,6 @@ export default {
 
 <style lang="scss" scoped>
 .myitem-zdsfw {
-  // height: calc(100vh - 110px);
   padding: 10px 20px;
 }
 .pannel-cpmc:hover {

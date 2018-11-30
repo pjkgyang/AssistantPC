@@ -86,7 +86,7 @@
                     <span>{{user.userName}}</span>
                     <span :title="user.unit">{{user.unit}}</span>
                     <span>
-                        <el-button :disabled="user.state == 'ytj'" size="mini"  v-if="isAddCyz"  @click="addItemCyz(user,index)">{{user.state == 'ytj'?'已添加':'添加'}}</el-button>
+                        <el-button :disabled="user.state == 'ytj'" size="mini"  v-if="isAddCyz && jszbr"  @click="addItemCyz(user,index)">{{user.state == 'ytj'?'已添加':'添加'}}</el-button>
                         <el-button size="mini" v-if="!isAddCyz && isJF" @click="addItemJfzrr(user)">修改为(甲方责任人)</el-button>
                         <el-button size="mini" v-if="!isAddCyz && !isJF" @click="addItemYfzrr(user)">修改为(乙方责任人)</el-button>
                     </span>
@@ -273,7 +273,8 @@ export default {
       zbrData:{},
       count:0,
       mark:false,
-      GroupTag:""
+      GroupTag:"",
+      jszbr:false
     };
   },
   props: {
@@ -301,6 +302,7 @@ export default {
       this.zbrData.fbbh = data.fbbh
       this.zbrData.xmbh = this.xmbh
       this.isAddCyz = true;
+      this.jszbr = true;
       this.queryUser(1, true);
       this.dialogVisible = !this.dialogVisible;
     },
@@ -323,10 +325,11 @@ export default {
         this.queryUser(1, true);
       }
     },
+    //修改乙方责任人
     changeUser(e, data) {
-      //修改乙方责任人
       this.isAddCyz = false;
       this.isJF = false;
+      this.jszbr = false; //是否修改中标人
       this.queryUser(1, true);
       this.dialogVisible = !this.dialogVisible;
     },
@@ -349,7 +352,7 @@ export default {
     },
     // 修改中标人
     changeXsr(data){
-         this.queryUser(1, false);
+         this.queryUser(1, true);
          this.mark = true;
          this.dialogVisible = !this.dialogVisible
     },
@@ -413,6 +416,7 @@ export default {
       //添加甲方
       this.isAddCyz = false;
       this.isJF = true;
+      this.jszbr = false; //是否修改中标人
       this.queryUser(1, true);
       this.dialogVisible = !this.dialogVisible;
     },
@@ -471,12 +475,13 @@ export default {
         }
       });
     },
-    handleNewAdd() {
       // 新增参与者
+    handleNewAdd() {
       this.zbrData = {};
       this.mark = false;
       this.queryUser(1, false);
       this.isAddCyz = true;
+      this.jszbr = true; //是否修改中标人
       this.BtnDisabled = "";
       this.dialogVisible = !this.dialogVisible;
     },
@@ -535,6 +540,10 @@ export default {
     },
     //   搜索用户
     searchUser(val) {
+      if(this.jszbr){
+         this.queryUser(1, true);
+         return;
+      }
       if (this.isAddCyz) {
         this.queryUser(1, false);
       } else {

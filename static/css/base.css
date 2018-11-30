@@ -216,9 +216,11 @@ h1,h2,h3,h4,h5,h6{
 }
 .el-dialog{
     margin:40px auto 20px !important ; 
-    border-radius: 6px !important;
     overflow: hidden;
     box-shadow:0 2px 12px 0 rgba(0,0,0,.5)
+}
+.el-dialog__header{
+    font-weight: 700;
 }
 .el-dialog__title{
     font-size: 16px;
@@ -321,13 +323,6 @@ h1,h2,h3,h4,h5,h6{
 .fb_info .el-table td{
     padding: 6px 0 !important;
     color: #000;
-}
-
-
-/*  */
-.el-dialog__header{
-    background: #eee;
-    border-bottom: 1px solid #ccc;
 }
 
 /* 分页 */

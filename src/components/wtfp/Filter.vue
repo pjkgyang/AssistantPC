@@ -11,14 +11,26 @@
             </div>
             <transition name="el-zoom-in-top">
                 <section v-if="sfzk" class="query-condition">
+                  <div v-if="filterList.includes('bbh')">
+                        <p class="query-title">版本号:</p>
+                        <p>
+                           <el-input v-model="filterWord.bbh" size="mini" style="width:348px;" placeholder="请输入版本号" @change="handleSearch"></el-input>&#x3000;
+                        </p>
+                    </div>
                     <div v-if="filterList.includes('cp')">
                         <p class="query-title">产品:</p>
                         <p class="query-list" @click="handleCp">
                             <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
-                            <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
+                            <span v-for="(cpx,index) in cplist" :data-index="index" :data-type="cpx.label" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.label&&filterWord.cpmc == cpx.mc}">{{cpx.mc}}</span>
                         </p>
                     </div>
-
+                     <div v-if="filterList.includes('pxxs')">
+                        <p class="query-title">培训形式:</p>
+                        <p class="query-list" @click="handlePxxs">
+                            <span data-type="" :class="{'bg-active':filterWord.pxxs == ''}">全部</span>
+                            <span v-for="(pxxs,index) in pxxslist" :data-index="index" :data-type="pxxs.label" :key="index" :class="{'bg-active':filterWord.pxxs == pxxs.label&&filterWord.cpmc == pxxs.mc}">{{pxxs.mc}}</span>
+                        </p>
+                    </div> 
                     <div v-if="filterList.includes('jhcjrq')">
                         <p class="query-title">计划创建日期:</p>
                         <p class="query-list">
@@ -70,21 +82,28 @@ import { getMenu, getSession } from "@/utils/util.js";
 export default {
   data() {
     return {
-      cpList: [],
+      cplist: [],
       jhztList: [
         { lable: "", mc: "全部" },
         { lable: "0", mc: "未完成" },
         { lable: "1", mc: "已完成" }
       ],
+      pxxslist:[
+        {label:1,mc:'线上直播'},
+        {label:2,mc:'线下培训'},
+        {label:3,mc:'线上加线下'}
+      ],
       filterWord: {
         keyword: "",
         cpbh: "",
         cpmc: "",
+        bbh:"",
         jhcjrq: [],
         fbrq: [],
         sjpxrq:[],
         jhzt:'',
         sfyq:0,
+        pxxs:''
       },
       groupTag: "",
       sfzk: true
@@ -94,7 +113,7 @@ export default {
     filterList: {
       type: Array,
       default: () => {
-        return ["keyword", "cp",'jhcjrq','fbrq','jhzt','sfyq'];
+        return ["keyword", "cp",'jhcjrq','fbrq','jhzt','sfyq','bbh'];
       }
     },
     placeholder: {
@@ -121,15 +140,27 @@ export default {
       this.$emit("handleChangeFilter", this.filterWord);
     },
     changeDate(val) {
+      if(!val) this.filterWord.jhcjrq = [];
       this.$emit("handleChangeFilter", this.filterWord);
     },
-    changeDateFbrq(){
+    changeDateFbrq(val){
+      if(!val) this.filterWord.fbrq = [];
       this.$emit("handleChangeFilter", this.filterWord);
     },
-    changeDateSjpxrq(){
+    changeDateSjpxrq(val){
+      if(!val) this.filterWord.sjpxrq = [];
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleCp(e) {
+      let cp = e.target.getAttribute("data-type");
+      if (cp == null) return;
+      this.filterWord.cpbh = cp;
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+    handlePxxs(e){
+      let pxxs = e.target.getAttribute("data-type");
+      if (pxxs == null) return;
+      this.filterWord.pxxs = pxxs;
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleSfyq(){
@@ -143,7 +174,7 @@ export default {
     }
   },
   mounted() {
-     if (!getSession("cp") ) {
+    if (!getSession("cp") ) {
       getMenu("cp", this.cplist, true);
     } else {
       this.cplist = getSession("cp");

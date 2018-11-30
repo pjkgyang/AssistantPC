@@ -110,11 +110,23 @@ export default {
     
 
      // 资源中心
-    openTemplateFolder:window.baseurl+'attachment/openTemplateFolder.do',
+    openTemplateFolder:window.baseurl+'attachment/openTemplateFolder.do',//模板
     openCoursewareFolder:window.baseurl+'attachment/openCoursewareFolder.do',//课件
     applyDismiss:window.baseurl+'question/applyDismiss.do',
     queryCpxZjData:window.baseurl+'personnel/queryCpxZjData.do',
+    openNewcomerFolder:window.baseurl+'attachment/openNewcomerFolder.do', //新人专用
    
+    // 问题复盘 改进计划
+    pageProductPlan:window.baseurl+'wtgj/pageProductPlan.do',//获取产品改进计划列表
+    pageCapacityPlan:window.baseurl+'wtgj/pageCapacityPlan.do',//获取能力改进计划列表
+    deleteProductPlan:window.baseurl+'wtgj/pageCapacityPlan.do',//删除产品计划
+    deleteCapacityPlan:window.baseurl+'wtgj/deleteCapacityPlan.do',//删除能力改进计划
+    removeFromPlan:window.baseurl+'wtgj/removeFromPlan.do',//剔除计划
+    publishProduct:window.baseurl+'wtgj/publishProduct.do',//发布产品
+    addOrUpdateProductPlan:window.baseurl+'wtgj/addOrUpdateProductPlan.do',//新增或修改产品计划
+    addOrUpdateCapacityPlan:window.baseurl+'wtgj/addOrUpdateCapacityPlan.do',//新增或修改能力改进计划
+    addInPlan:window.baseurl+'wtgj/addInPlan.do',//纳入计划
+    abilityTraining:window.baseurl+'wtgj/abilityTraining.do',//培训
+    pageStaff:window.baseurl+'personnel/pageStaff.do'//员工列表
     
-
 }

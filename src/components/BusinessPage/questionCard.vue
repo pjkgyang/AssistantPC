@@ -14,7 +14,8 @@
                   <span class="question-info-bt" :title="question.bt" @click="handleQuestionDetail(question)" :data-wid="question.wid">{{question.bt}}</span><br>
                   <span>
                       <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>&#x3000;
-                      <span style="color:#363748;font-size:12px;">问题编号：{{question.wtbh}}</span>
+                      <span style="color:#363748;font-size:12px;">问题编号：{{question.wtbh}}</span>&#x3000;
+                      <span v-if="gjjhShow && (wtfbq=='W03' || wtfbq=='W05')" class="question-gjjhzt question-tag-ysqgb">{{question.gjzt==0?'未纳入计划':question.gjzt==1?'计划中':'计划已改进'}}</span>
                   </span>&#x3000;
                   <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;&#x3000;
                   <p>
@@ -23,7 +24,7 @@
                       <span><span class="question-info-front">问题类别 : </span>{{question.wtlb==null?'无':question.wtlb}}</span>
                   </p>
                   <p>
-                     <span><span class="question-info-front">产品 : </span>{{question.cpbh}}</span>
+                     <span><span class="question-info-front">产品 : </span>{{question.cpmc}}</span>
                      <span><span class="question-info-front">是否紧急 : </span>{{question.jjyf == null?'无':question.jjyf == '1'?'是':'否'}}</span>
                      <span><span class="question-info-front">版本号 : </span>{{question.bbh}}</span>
                   </p>
@@ -51,9 +52,9 @@
                           question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.ceil(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq+' 23:59:59').getTime())/(1000 * 60 * 60 * 24))+' 天'}}
                     </span>
                   </span><br>
-                  <!-- <span v-if="!bjscShow">
+                  <span v-if="!bjscShow && gjjhShow">
                      <el-button size="mini" type='primary' @click="handleImprovementPlan(question)">改进计划</el-button>
-                  </span> -->
+                  </span>
               </div>     
             </section>     
             <section text-center  class="pull-right"  style="width:15%" v-if="question.sqgbCount > 0  && question.fbzt != 1 && username==question.fbrxm && isShow">
@@ -94,6 +95,14 @@ export default {
     bjscShow:{
        type:Boolean,
        default:true
+    },
+    gjjhShow:{
+       type:Boolean,
+       default:false 
+    },
+    wtfbq:{
+      type:String,
+      default:''
     }
   },
   mounted(){
@@ -232,5 +241,8 @@ export default {
    color: #fff;
    padding: 1px 2px;
    border-radius: 2px;
+}
+.question-gjjhzt{
+   background: rgb(55, 146, 82) !important;
 }
 </style>

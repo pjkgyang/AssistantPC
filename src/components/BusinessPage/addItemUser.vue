@@ -111,7 +111,7 @@
                                </ul>
                             </el-collapse-transition>
                         </el-form-item>
-                        <el-form-item label="性别" >
+                        <el-form-item label="性别" required>
                              <el-select v-model="form.sex" placeholder="请选择" style="width:200px">
                                 <el-option  label="男" value="1" ></el-option>
                                 <el-option  label="女" value="2" ></el-option>
@@ -176,7 +176,7 @@ export default {
         yhdw: "",
         dw: "",
         bm: "",
-        sex:''
+        sex:'1'
       },
       cpxData: [],
       sexList:[],
@@ -384,7 +384,7 @@ export default {
           unitnum:this.form.rylx=='1013'?'':this.form.dw.split('&')[0],
           unit:this.form.rylx=='1013'?'':this.form.dw.split('&')[1],
           dept:this.form.rylx=='1004'?'':this.form.bm,
-          sex:this.form.sex==''?'0':this.form.sex
+          sex:this.form.sex
         }).then(({ data }) => {
           if (data.state == "success") {
             this.$alert("添加成功", "提示", {

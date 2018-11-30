@@ -112,13 +112,17 @@
                     <el-button type="primary" v-if="reply.sfbh == 0" @click="handleRejectQuestion(reply.wid,index)" size="mini">驳回</el-button>
                     <el-tag v-if="reply.sfbh == 1" type="info" size="small">已驳回</el-tag>
                   </span>
+                  <span v-if="reply.hflx == 9 && !!isgcXmtdbyWt" flex-align-center>
+                    <el-button @click="handleEditkfrw($event,reply)" type="primary" size="mini">编辑开发任务</el-button>&#x3000;
+                  </span>
                 </div>
               </div>
             </div>
             <div class="project-question-detail-bottom">
               <div v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" v-if="reply.hflx != 9"></div>
               <div v-if="reply.hflx == 9">
-                <a href="javascript:void(0)" @click="handleJDGZ">查看开发任务进度</a>
+                <a href="javascript:void(0)" @click="handleJDGZ(reply.crowdid)">查看开发任务进度</a><br>
+                <div v-html="reply.nr"></div>
               </div>
             </div>
           </li>
@@ -305,16 +309,16 @@
       </el-dialog>
       <el-dialog title="关联开发任务" :visible.sync="crowdVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
         <div style="padding:20px 10px ">
-          <p style="font-size:18px">开发任务编号:</p>
-          <el-input v-model="Crowdalue" placeholder="请输入开发任务编号"></el-input>
-          <p style="font-size:18px;margin-top:15px !important">开发工作量(人/天):</p>
-          <el-input v-model="kfgzlValue" placeholder="请输入开发工作量 "></el-input>
+          <p style="font-size:14px">开发任务编号:</p>
+          <el-input size="mini" v-model="Crowdvalue" placeholder="请输入开发任务编号"></el-input>
+          <p style="font-size:14px;margin-top:15px !important">开发工作量(人/天):</p>
+          <el-input size="mini" v-model="kfgzlValue" placeholder="请输入开发工作量 "></el-input>
           <p style="text-align:right;padding:10px 0">
             <el-button type="primary" size="small" @click="handleCommitCrowd">提交</el-button>
           </p>
         </div>
       </el-dialog>
-      <el-dialog :title="'进度跟踪' +'['+ Crowdalue +']'" :visible.sync="jdgzVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
+      <el-dialog :title="'进度跟踪' +'['+ crowdId +']'" :visible.sync="jdgzVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
         <div style="padding:20px 10px ">
           <div class="CrowdRwxx">
             <span>任务名称 : </span>
@@ -381,6 +385,7 @@ import {
   changeCommitmentDate,
   customerQuestion,
   updateCrowdId,
+  addOrUpdateCrowdId,//关联开发任务
   getCrowdId,
   saveYyzfData,
   getCrowdRwzt,
@@ -475,10 +480,10 @@ export default {
       isJZuser: "",
       tktwr: true,
       SLbtnDisabled: false,
-      Crowdalue: "",
+      Crowdvalue: "",
       CrowdRwxx: {},
       kfgzlValue: "",
-      isgcXmtdbyWt: null,
+      isgcXmtdbyWt: false,
       JDGZList: [],
       username: "",
       rylb: "",
@@ -507,7 +512,10 @@ export default {
       qwjjrqZf: "",
       slqwjjrq: "",
       bhsm: "",
-      cnjssm: ""
+      cnjssm: "",
+
+      hfwid:"",
+      crowdId:""
     };
   },
   props: {},
@@ -594,6 +602,7 @@ export default {
     this.queryBtnAuth(this.wid); //获取按钮权限
     this.queryQuestion(this.wid, 1); // 获取单个问题
     this.queryAnswers(this.wid); //  获取回复
+    
   },
 
   methods: {
@@ -978,26 +987,36 @@ export default {
       this.isSltitle = "修改承诺时间";
       this.innerCNRQVisible = !this.innerCNRQVisible;
     },
+    //编辑开发任务 
+    handleEditkfrw(e,data){
+       this.hfwid = data.wid
+       this.Crowdvalue = data.crowdid;
+       this.kfgzlValue = data.kfgzl;
+       this.crowdVisible = !this.crowdVisible;
+    },
+    // 添加开发任务
     changeCrowdId() {
+      this.hfwid = '';
       this.crowdVisible = !this.crowdVisible;
-      this.getCrowdId(false);
+      // this.getCrowdId(false);
     },
-    handleJDGZ() {
-      this.getCrowdId(true);
+    handleJDGZ(data) {
+      this.crowdId = data;
+      this.getCrowdId(data);
     },
+     // 运营人员转发
     handleYYRYZF() {
-      // 运营人员转发
       this.zdTitle = "运营人员转发";
       this.zdfzrVisible = true;
       this.queryCpData(1, "");
     },
+    // 运营人员转发  筛选
     handleYYRYLX(data) {
-      // 运营人员转发  筛选
       this.rylb = data;
       this.queryCpData(1);
     },
+    //更改crowd
     handleCommitCrowd() {
-      //更改crowd
       if (!/^\d+(\.\d+)?$/.test(this.kfgzlValue)) {
         this.$alert("请输入正确开发工作量", "提示", {
           confirmButtonText: "确定",
@@ -1005,16 +1024,15 @@ export default {
         });
         return;
       }
-      updateCrowdId({
-        crowdId: this.Crowdalue,
-        wid: this.wid,
-        kfgzl: this.kfgzlValue
+      addOrUpdateCrowdId({
+        wid:this.wid,
+        hfwid:this.hfwid,
+        crowdId:this.Crowdvalue,
+        kfgzl:this.kfgzlValue
       }).then(({ data }) => {
         if (data.state == "success") {
           this.crowdVisible = false;
-          this.$alert(
-            this.Crowdalue == "" ? "Crowd任务编号已清空！" : "关联成功！",
-            "提示",
+          this.$alert(!this.hfwid? "新增成功" : "编辑成功","提示",
             {
               confirmButtonText: "确定",
               type: "success",
@@ -1026,7 +1044,29 @@ export default {
             }
           );
         }
-      });
+       });
+      // updateCrowdId({
+      //   crowdId: this.Crowdvalue,
+      //   wid: this.wid,
+      //   kfgzl: this.kfgzlValue
+      // }).then(({ data }) => {
+      //   if (data.state == "success") {
+      //     this.crowdVisible = false;
+      //     this.$alert(
+      //       this.Crowdvalue == "" ? "Crowd任务编号已清空！" : "关联成功！",
+      //       "提示",
+      //       {
+      //         confirmButtonText: "确定",
+      //         type: "success",
+      //         callback: action => {
+      //           this.queryBtnAuth(this.wid);
+      //           this.queryAnswers(this.wid);
+      //           this.queryQuestion(this.wid);
+      //         }
+      //       }
+      //     );
+      //   }
+      // });
     },
     accreditQuestion() {
       //受理
@@ -1143,19 +1183,9 @@ export default {
     CancelChangeCNjsrq() {
       this.innerCNRQVisible = false;
     },
-    getCrowdId(type) {
-      //获取crowd id
-      getCrowdId({
-        wid: this.wid
-      }).then(({ data }) => {
-        if (data.state == "success") {
-          this.Crowdalue = data.data.crowdid;
-          this.kfgzlValue = data.data.kfgzl;
-        }
-      });
-      if (type) {
+    getCrowdId(rwbh) {
         getCrowdRwzt({
-          rwbh: this.qusetionInfo.crowdid //this.qusetionInfo.crowdid
+          rwbh:rwbh //this.qusetionInfo.crowdid
         }).then(({ data }) => {
           if (data.state == "success") {
             if (data.data != null && data.data.length != 0) {
@@ -1170,7 +1200,7 @@ export default {
         });
 
         getCrowdRwxx({
-          rwbh: this.qusetionInfo.crowdid
+          rwbh:rwbh //this.qusetionInfo.crowdid
         }).then(({ data }) => {
           if (data.state == "success") {
             if (data.data != null) {
@@ -1181,7 +1211,6 @@ export default {
             this.jdgzVisible = true;
           }
         });
-      }
     },
 
     /************************************************* */
@@ -1530,8 +1559,8 @@ export default {
       //回复
       let reg = /^\d+(\.\d+)?$/;
       let hfnr = $("#summernoteT").summernote("code");
-      if (!reg.test(this.gsValue)) {
-        this.$alert("请输入正确工时", "提示", {
+      if (!reg.test(this.gsValue) && this.gsValue > 8) {
+        this.$alert("请输入正确工时且单次工时不能超过8小时,大于8小时请分多个回复!", "提示", {
           confirmButtonText: "确定",
           type: "error"
         });
