@@ -13,8 +13,8 @@
                 <span>
                   <span class="el-icon-erp-yonghu Lcbtask_task-titleTip"> 责任人 :&nbsp;</span>{{detailList.ssrxm == ''?'暂无':detailList.ssrxm}}</span>
                 <span>
-                   <span class="el-icon-circle-check-outline Lcbtask_task-titleTip"> 甲方确认 :&nbsp;</span>
-                   <span>{{detailList.sfjfqr==0?'未确认':'已确认'}} </span>
+                  <span class="el-icon-circle-check-outline Lcbtask_task-titleTip"> 甲方确认 :&nbsp;</span>
+                  <span>{{detailList.sfjfqr==0?'未确认':'已确认'}} </span>
                 </span>
               </p>
               <p class="lcb_task_info">
@@ -31,7 +31,7 @@
                 <span>
                   <span class="el-icon-date Lcbtask_task-titleTip"> 计划完成日期 :&nbsp;</span>{{detailList.jhjsrq}}</span>
                 <span>
-                   <span class="el-icon-date Lcbtask_task-titleTip"> 实际结束日期 :&nbsp;</span>{{detailList.sjjsrq}}</span>
+                  <span class="el-icon-date Lcbtask_task-titleTip"> 实际结束日期 :&nbsp;</span>{{detailList.sjjsrq}}</span>
                 </span>
               </p>
             </div>
@@ -61,7 +61,7 @@
                 </span>
                 <span>
                   <span class="el-icon-date Lcbtask_task-titleTip"> 实际结束日期 :&nbsp;</span>{{detailList.sjjsrq}}
-               </span>
+                </span>
               </p>
               <p class="lcb_task_info">
                 <span>
@@ -77,9 +77,9 @@
                 <span>
                   <span class="el-icon-erp-yonghu Lcbtask_task-titleTip"> 责任人 : </span>{{detailList.ssrxm == ''?'暂无':detailList.ssrxm}}
                 </span>
-                 <!-- <span> -->
-                    <span style="font-size:12px;" class="el-icon-erp-yonghu" v-if="detailList.lx != 3 && detailList.lx != 5">
-                    <span class="Lcbtask_task-titleTip">创建人 : </span>{{detailList.cjrxm == ''?'暂无':detailList.cjrxm}}</span>
+                <!-- <span> -->
+                <span style="font-size:12px;" class="el-icon-erp-yonghu" v-if="detailList.lx != 3 && detailList.lx != 5">
+                  <span class="Lcbtask_task-titleTip">创建人 : </span>{{detailList.cjrxm == ''?'暂无':detailList.cjrxm}}</span>
                 <!-- </span> -->
               </p>
             </div>
@@ -98,6 +98,19 @@
         暂无任务
       </li>
     </ul>
+
+    <el-dialog title="完成任务" :visible.sync="taskVisible" width="50%" :append-to-body="true">
+      <div>
+        &#x3000;
+        <span class="filter-weight before-require">任务完成日期:</span>
+        <el-date-picker size="mini" v-model="wcsj" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
+        </el-date-picker>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handClose" size="mini">取 消</el-button>
+        <el-button type="primary" @click="handleCommit" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -106,7 +119,10 @@ export default {
   data() {
     return {
       checked: false,
-      userName: ""
+      userName: "",
+      taskVisible: false,
+      wcsj: "",
+      taskInfo: {}
     };
   },
   props: {
@@ -121,6 +137,39 @@ export default {
     this.userName = window.userName;
   },
   methods: {
+    // 关闭弹出层
+    handClose() {
+      this.wcsj = "";
+      this.taskVisible = !this.taskVisible;
+    },
+    // 确定
+    handleCommit() {
+      if (!this.wcsj) {
+        this.$alert("请选择完成时间", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
+      this.$confirm("您确定完成了本任务吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          changeTaskStatus({
+            rwbh: this.taskInfo.rwbh,
+            state: this.taskInfo.zt == 1 ? "2" : "1",
+            wcsj: this.wcsj
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.$emit("changeTaskstate", "");
+            }
+          });
+        })
+        .catch(() => {});
+      this.taskVisible = !this.taskVisible;
+    },
     handleTaskinfo(e, param) {
       let data = this.TaskDatas[param];
       this.TaskDatas[param].index = param;
@@ -133,9 +182,14 @@ export default {
       this.$emit("handleTaskDialog", task);
     },
     changeTaskState(e, params) {
-      // 关闭 开启任务
       e.stopPropagation();
       let groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+      this.taskInfo = params;
+      if (params.zt == 1) {
+        this.taskVisible = true;
+        return;
+      }
+      // 关闭 开启任务
       if (params.zt == 1) {
         this.$confirm("您确定完成了本任务吗?", "提示", {
           confirmButtonText: "确定",
@@ -154,8 +208,12 @@ export default {
           })
           .catch(() => {});
       } else {
-        if (params.lx == 9){
-          if (params.sfjfqr == "0" && (this.userName == params.cjrxm || this.userName == params.ssrxm)) {
+        // 个人任务
+        if (params.lx == 9) {
+          if (
+            params.sfjfqr == "0" &&
+            (this.userName == params.cjrxm || this.userName == params.ssrxm)
+          ) {
             changeTaskStatus({
               rwbh: params.rwbh,
               state: params.zt == 1 ? "2" : "1"
@@ -165,14 +223,12 @@ export default {
               }
             });
           } else {
-            this.$alert(
-              "对不起,您没有操作权限！(如有问题，请联系管理员)",
-              "提示",
+            this.$alert("对不起,您没有操作权限！(如有问题，请联系管理员)", "提示",
               { confirmButtonText: "确定", type: "warning" }
             );
           }
-        }else{
-          if(!groupTag.includes('ProblemAdmin')){
+        } else {
+          if (groupTag.includes("ProblemAdmin")) {
             changeTaskStatus({
               rwbh: params.rwbh,
               state: params.zt == 1 ? "2" : "1"
@@ -182,14 +238,11 @@ export default {
               }
             });
           } else {
-            this.$alert(
-              "对不起,您没有操作权限！(如有问题，请联系管理员)",
-              "提示",
+            this.$alert("对不起,您没有操作权限！(如有问题，请联系管理员)","提示",
               { confirmButtonText: "确定", type: "warning" }
             );
           }
         }
-        // !groupTag.includes('ProblemAdmin')
       }
     }
   }

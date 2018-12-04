@@ -332,7 +332,7 @@
       <!-- 团队 -->
       <el-collapse-transition>
         <div v-if="tabsLabel == 'teamwork'">
-          <teamWork :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :dwmc="xmkbInfo.dwmc"></teamWork>
+          <teamWork :xmbh="xmbh" :xmInfo="xmkbInfo"></teamWork>
         </div>
       </el-collapse-transition>
 

@@ -762,3 +762,12 @@ export function addOrUpdateCrowdId(obj){
   }]
 })
 }
+
+export function canClose(obj){
+	let url =  window.baseurl + quesurl + 'canClose.do'
+	return axios.get(url,{
+		params:{
+			wid:obj.wid
+		}
+	})
+}

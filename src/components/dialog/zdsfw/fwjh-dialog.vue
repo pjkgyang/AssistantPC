@@ -22,7 +22,7 @@
           <el-form-item label="服务期限(月)" required>
             <el-input v-model="form.fwqx" placeholder="请输入服务期限（仅限正整数）"></el-input>
           </el-form-item>
-          <el-form-item label="服务次数" required>
+          <el-form-item label="服务次数(年)" required>
             <el-input v-model="form.fwcs" placeholder="请输入服务次数（仅限正整数）"></el-input>
           </el-form-item>
           <el-form-item label="责任人" required>

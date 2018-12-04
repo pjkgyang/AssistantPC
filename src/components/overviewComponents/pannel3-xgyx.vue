@@ -7,7 +7,7 @@
       <span class="introText mr-20">售后服务周期<span class="baseText">&#x3000;{{xmtj.fwqx==''?'无':xmtj.fwqx}} </span>月</span>
     </div>
     <div class="xgyx__body" flex col=14>
-      <div class="xgyx__body--wtzz" col=4 flex-column>
+      <div class="xgyx__body--wtzz" col=6 flex-column>
         <h4 col=1>问题追踪</h4>
         <div class="xgyx__wtzz--container" col=8 flex-column>
           <div col=1 flex spacearound>
@@ -28,51 +28,56 @@
               <span col=5 center class="text introText">无解决时间</span>
             </div>
           </div>
-          <div col=3>
+         <div flex col="3" class="xgyx_zjtc" spacebetween>
+          <div>
             <h5>最近提出</h5>
             <div class="list__item" v-for="(item,index) in xmtj.zjtcwtList">
               <h6 :title="item.bt"><a :href="'http://careful.wisedu.com/#/questionDetail?wid='+ item.wid"  target="blank">{{index+1}} . {{item.bt}}</a></h6>
-              <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
-              <span class="time">{{item.fbrq}}</span>
+              <span>
+                <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
+                <span class="time">{{item.fbrq}}</span>
+              </span>
             </div>
             <div v-if="xmtj.zjtcwtList ==null ||xmtj.zjtcwtList.length == 0" style="text-align:center;">
                   <p style="line-height:100px;font-weight:700">暂无内容</p>
             </div>
           </div>
+          <!-- <div>
+            <h5>最近催办</h5>
+            <div class="list__item" v-for="(item,index) in xmtj.zjtcwtList">
+              <h6 :title="item.bt"><a :href="'http://careful.wisedu.com/#/questionDetail?wid='+ item.wid"  target="blank">{{index+1}} . {{item.bt}}</a></h6>
+              <span>
+                <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
+                <span class="time">{{item.fbrq}}</span>
+              </span>
+            </div>
+            <div v-if="xmtj.zjtcwtList ==null ||xmtj.zjtcwtList.length == 0" style="text-align:center;">
+                  <p style="line-height:100px;font-weight:700">暂无内容</p>
+            </div>
+          </div> -->
+          </div>
         </div>
       </div>
+
       <div class="xgyx__body--xmjz" col=3>
-        <h4 col=1>项目进展</h4>
+        <div col=1 flex>
+            <h4>项目进展</h4>&#x3000;
+            <el-tag size="mini" type="danger">延期</el-tag>&#x3000;
+            <a href="javaScript:;;" @click="handleReminde">催办</a>
+        </div>
         <div class="xgyx__xmjz--container" col=8 flex-column>
           <el-progress :text-inside="true" :stroke-width="18" :percentage="xmtj.p_xmjd" style="width:90%;"></el-progress>
           <div class="vertical-steps">
              <div :class="{'vertical-step__item':true,'done':process.completed,'todo':!process.completed}" v-for="(process,index) in xmtj.jdList" :key="index">
               {{process.jdmc}}
             </div>
-            <!-- <div class="vertical-step__item done">
-              启动
-            </div>
-            <div class="vertical-step__item done">
-              安装部署
-              <br>
-              <span class="tag tag-yellow">已延期</span>
-              <br>
-            </div>
-            <div class="vertical-step__item todo">
-              系统部署及功能确认
-            </div>
-            <div class="vertical-step__item todo">
-              试运行
-            </div>
-            <div class="vertical-step__item todo">
-              结项
-            </div> -->
           </div>
             <!-- <div v-if="xmtj.jdList ==null ||xmtj.jdList.length == 0" style="text-align:center;">
                <p style="border-top:1px solid #eee;border-bottom:1px solid #eee;">无</p>
            </div> -->
         </div>
       </div>
+
       <div class="xgyx__body--rwwcqk" col=3 flex-column>
         <h4 col=1>任务完成情况</h4>
         <div class="xgyx__rwwcqk--container" col=8 flex-column>
@@ -91,14 +96,22 @@
             </div>
           </div>
           <div class="horizenl-card" col=3 spacearound>
-            <div class="horizenl-card__items">
+            <!-- 2018-12-04 修改 -->
+            <div class="horizenl-card__items" flex spacebetween>
+              <span class="introText">付款进度（到款率）</span>
+              <span style="color: #1989FA;font-weight: bold;">40%</span>
+            </div>
+            <div>
+              <p class="horizenl-card_fkjd" flex spacebetween><span>1.  2018-08-08</span> <span>付款</span></p>
+            </div>
+            <!-- <div class="horizenl-card__items" flex spacearound>
               <div class="pull-left introText">投诉</div>
               <div class="pull-right"><span style="color: #1989FA;font-weight: bold;">{{xmtj.xmtszs}}</span>&nbsp;条</div>
             </div>
-            <div class="horizenl-card__items">
+            <div class="horizenl-card__items" flex spacearound>
               <div class="pull-left introText">催办</div>
               <div class="pull-right"><span style="color: #1989FA;font-weight: bold;">{{xmtj.rwcbzs}}</span>&nbsp;条</div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -156,7 +169,11 @@ export default {
     }
   },
   mounted() {},
-  methods: {},
+  methods: {
+    handleReminde(){
+
+    }
+  },
   components: {},
 }
 
@@ -172,6 +189,17 @@ export default {
     h5 {
       font-size: 14px;
       font-weight: bolder;
+    }
+    .xgyx__body--wtzz{
+      width: 49% !important;
+      .xgyx__wtzz--container{
+        width: 100%;
+      }
+      .xgyx_zjtc{
+        >div{
+          width: 100%;
+        }
+      }
     }
     .xgyx__body--wtzz,
     .xgyx__body--xmjz {
@@ -246,19 +274,31 @@ export default {
       .horizenl-card {
         .horizenl-card__items {
           height: 36px;
-          margin-top: 10px;
+          // margin-top: 10px;
+          margin: 5px 0;
           padding: 0 6px;
           background: #F8FAFB;
-          margin-left: 10px;
           line-height: 3;
+        }
+        .horizenl-card_fkjd{
+          color: #9EA7B4;
+          padding: 0 6px;
         }
       }
     }
     .list__item {
-      margin-top: 8px;
-      min-width:21vw;
-      max-width:21vw;
-      h6 {
+      margin-top: 6px;
+      // min-width:21vw;
+      // max-width:21vw;
+      // border: 1px solid #000;
+      >span{
+        display: inline-block;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      h6{
         font-size: 12px;
         color: #464C5B;
         font-weight: normal;

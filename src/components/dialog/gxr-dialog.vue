@@ -1,56 +1,73 @@
 <template>
- <div>
-     <el-dialog
-            title="问题评价"
-            width="600px"
-            :visible.sync="visible"
-            :append-to-body="true"
-            :close-on-click-modal="false"
-            @close="$emit('update:show', false)"
-            :show="show">
-                <div style="padding:0 10px">
-                   <tableLayout>
-                     <div slot="top">
-                        <p><span class="filter-weight">服务质量：</span><el-rate  v-model="fwzlValue" show-text :texts="['1 分','2 分','3 分','4 分','5 分']"></el-rate></p>
-                    </div> 
-                    <p>说明：请认定贡献人工时，谢谢您的支持!</p>
-                    <div slot="bottom">
-                        <span class="filter-weight">合计贡献人: </span><span style="color:#f00">{{tableData.length}}</span> 人
-                        <el-table :data="tableData" style="width: 100%" border :max-height="580" border>
-                            <el-table-column prop="fbrxm" label="姓名" ></el-table-column>
-                            <el-table-column label="工时(小时)">
-                                <template slot-scope="scope">
-                                    <!-- <el-input v-model="scope.row.qrgs" :readonly="true" size="mini"></el-input> -->
-                                    <span>{{scope.row.qrgs}}</span>
-                                </template>
-                                </el-table-column>
-                          </el-table>
-                        <div style="text-align:right;margin:10px 0;">
-                        <el-button type='primary' size="mini" @click="commitQuestion">提交</el-button>
-                        </div>
-                    </div> 
-                </tableLayout>
+  <div>
+    <el-dialog title="问题评价" width="600px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
+      <div style="padding:0 10px">
+        <tableLayout>
+          <div slot="top">
+            <p>
+              <span class="filter-weight before-require">服务质量：</span>
+              <el-rate v-model="fwzlValue" show-text :texts="['1 分','2 分','3 分','4 分','5 分']"></el-rate>
+            </p>
+            <div v-if="fwzlValue <= 3">
+              <span class="filter-weight before-require">评价说明：</span><br>
+              <el-input type="textarea" :rows="2" placeholder="请输入说明内容" v-model="cpsm" style="width:570px;"></el-input>
             </div>
-      </el-dialog>
- </div>
+          </div>
+
+          <p>说明：请认定贡献人工时，谢谢您的支持!</p>
+          <div slot="bottom">
+            <span class="filter-weight">合计贡献人: </span>
+            <span style="color:#f00">{{tableData.length}}</span> 人
+            <el-table :data="tableData" style="width: 100%" border :max-height="580" border>
+              <el-table-column prop="fbrxm" label="姓名"></el-table-column>
+              <el-table-column label="工时(小时)">
+                <template slot-scope="scope">
+                  <!-- <el-input v-model="scope.row.qrgs" :readonly="true" size="mini"></el-input> -->
+                  <span>{{scope.row.qrgs}}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div flex colcenter>
+              <p>
+                <span class="filter-weight">工时认可：</span>
+              </p>
+              <el-radio-group v-model="gssfrk">
+                <el-radio :label="1">是</el-radio>
+                <el-radio :label="0">否</el-radio>
+              </el-radio-group>
+            </div>
+            <div style="text-align:right;margin:10px 0;">
+              <el-button type='primary' size="mini" @click="commitQuestion">提交</el-button>
+               <el-button type='' size="mini" @click="visible = false">取消</el-button>
+            </div>
+          </div>
+        </tableLayout>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
- import tableLayout  from '@/components/layout/tableLayout.vue'
- import { queryrReferenceHour,queryQuestion,closeQuestion } from '@/api/xmkb.js'
- export default {
-   data () {
-     return {
-          visible:this.show,
-          fwzlValue:0,
-          tableData:[],
-
-     }
-   },
-   methods:{
-    queryrReferenceHour(wid){
-        queryrReferenceHour({
-        wid:wid
+import tableLayout from "@/components/layout/tableLayout.vue";
+import {
+  queryrReferenceHour,
+  queryQuestion,
+  closeQuestion
+} from "@/api/xmkb.js";
+export default {
+  data() {
+    return {
+      visible: this.show,
+      fwzlValue: 0,
+      cpsm: "",
+      gssfrk:1,
+      tableData: []
+    };
+  },
+  methods: {
+    queryrReferenceHour(wid) {
+      queryrReferenceHour({
+        wid: wid
       }).then(({ data }) => {
         if (data.state == "success") {
           this.tableData = data.data;
@@ -60,16 +77,16 @@
         }
       });
     },
-    queryQuestion(wid){
-        queryQuestion({
-            wid:wid
-        }).then(({data})=>{
-            if(data.state == 'success'){
-                this.fwzlValue = !!data.data.zlpf?data.data.zlpf:0
-            }
-        })
+    queryQuestion(wid) {
+      queryQuestion({
+        wid: wid
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.fwzlValue = !!data.data.zlpf ? data.data.zlpf : 0;
+        }
+      });
     },
-    commitQuestion(){
+    commitQuestion() {
       //关闭问题（提交）
       let gxrArr = [];
       if (this.tableData.length != 0) {
@@ -77,13 +94,23 @@
           gxrArr.push(ele.fbrxm + "," + ele.fbrbh + "," + ele.qrgs);
         });
       }
+
       this.$confirm("确定要关闭此问题吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => {
+      })
+        .then(() => {
           if (this.fwzlValue == 0) {
             this.$alert("请选择服务质量星级", "提示", {
+              confirmButtonText: "确定",
+              type: "warning",
+              callback: action => {}
+            });
+            return;
+          }
+          if (this.fwzlValue <= 3 && !this.cpsm) {
+            this.$alert("请填写评价说明", "提示", {
               confirmButtonText: "确定",
               type: "warning",
               callback: action => {}
@@ -94,52 +121,59 @@
             wid: this.wtInfo.wid,
             zlpf: this.fwzlValue,
             gxrData: gxrArr.join("|"),
-            sfjj:"",
-            jjsm:''
+            sfjj: "",
+            jjsm: "",
+            cpsm: this.fwzlValue <= 3 ? this.cpsm : "",
+            gssfrk: this.gssfrk
           }).then(({ data }) => {
             if (data.state == "success") {
               this.innerVisible = false;
-              this.$alert(data.msg, "提示", {confirmButtonText: "确定",type: "success",
+              this.$alert(data.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "success",
                 callback: action => {
-                     this.$emit('closeQuestion','') 
+                  this.$emit("closeQuestion", "");
                 }
               });
             } else {
-              this.$alert(data.msg, "提示", {confirmButtonText: "确定",type: "error"});
+              this.$alert(data.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
             }
           });
         })
         .catch(() => {});
+    }
+  },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
     },
-   },
-   props:{
-       show:{
-           type:Boolean,
-           default:false
-       },
-       wtInfo:{
-           type:Object,
-           default:function(){
-               return {}
-           }
-       }
-   },
-     watch: {
-        show (n,o) {
-            this.visible = this.show;
-            if(!n){
-              
-            }else{
-               this.queryrReferenceHour(this.wtInfo.wid);
-               this.queryQuestion(this.wtInfo.wid);
-            }
-        }
-    },
-   components: {tableLayout}
- }
+    wtInfo: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    }
+  },
+  watch: {
+    show(n, o) {
+      this.visible = this.show;
+      if (!n) {
+      } else {
+        this.queryrReferenceHour(this.wtInfo.wid);
+        this.queryQuestion(this.wtInfo.wid);
+      }
+    }
+  },
+  components: { tableLayout }
+};
 </script>
 
 <style scoped>
-
- 
+.el-radio{
+  margin-bottom: 0;
+}
 </style>

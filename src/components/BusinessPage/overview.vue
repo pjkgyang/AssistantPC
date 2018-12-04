@@ -49,10 +49,6 @@
               <span col=6 center class="introText fs-16">{{item.name}}</span>
               <span col=6 center class="nums">{{item.value}}</span>
             </div>
-             <!-- <div  v-if="syqkLis==null||syqkLis.length == 0" style="text-align:center;width:100%;padding-top:50px">
-                 <img src="static/img/none.png" alt="">
-                  <p class="empty_content">暂无使用情况信息</p>
-               </div> -->
             </div>
           </div>
         </card>

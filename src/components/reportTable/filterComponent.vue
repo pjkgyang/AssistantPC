@@ -345,7 +345,7 @@ export default {
       this.cpxline = getSession("cpx");
     }
 
-    if (!getSession("gczd") && this.filterList.includes('qygc')) {
+    if (!getSession("gczd")) {
       getMenu("gczd", this.gczdList, true); //获取工程战队
     } else {
       this.gczdList = getSession("gczd");

@@ -12,6 +12,7 @@
         <p class="file-name">文件名</p>
         <p class="file-size">文件大小</p>
         <p class="file-cjsj" style="padding-right:30px">修改时间</p>
+        <p class="file-evaluate"></p>
       </div>
       <li :data-fjbh="fileList.parentwid" data-type="back" @click="handleFile" class="file-back" v-if="fileList.parentwid != '-1' && JSON.stringify(fileList)!='{}'">
         <div style="padding:10px 20px">
@@ -40,21 +41,30 @@
         <div class="file-cjsj" style="line-height:44px">
           {{file.xgsj == null?'--':file.xgsj}}
         </div>
+        <div class="file-evaluate">
+          <div flex colcenter v-if="fileIndex == index">
+             <img title="好评" src="static/img/praise.png" alt="好评">
+             <img title="差评" src="static/img/nopraise.png" alt="差评">
+          </div>
+        </div>
       </li>
     </ul>
      <div v-if="JSON.stringify(fileList) === '{}'" class="emptyContent">
         <img src="static/img/kong.png" alt="">
         <p>暂无数据</p>
     </div>
+    <pjsmDialog :show.sync="pjsmShow" @handleClickSure="handleClickSure"></pjsmDialog>
   </div>
 </template>
 
 
 <script>
 import { downloadXmFile} from "@/api/TaskProcess.js";
+import pjsmDialog from '@/components/dialog/resource/pjsm-dialog'
 export default {
   data() {
     return {
+      pjsmShow:false,
       fileList: {},
       fileBread: [],
       fjbh: "",
@@ -74,6 +84,16 @@ export default {
   },
 
   methods: {
+     // 评价提交
+    handleClickSure(data){
+      console.log(data)
+      this.pjsmShow = !this.pjsmShow
+    },
+    // 评价
+    handlePraise(e,param){
+      e.stopPropagation();
+      this.pjsmShow = !this.pjsmShow;
+    },
     openCoursewareFolder(path) {
       this.$get(this.API.openCoursewareFolder, {
         path: path
@@ -140,28 +160,30 @@ export default {
         }
       });
     },
-  }
+  },
+  components:{pjsmDialog}
 };
 </script>
 
 
-<style scoped>
-.file-list li > div:after {
-  content: "";
-  display: block;
-  clear: both;
-}
-
-.file-list li {
-  border-bottom: 1px solid #ccc;
-  font-size: 13px;
-}
-.file-list li img {
-  margin: 0 10px 0 0;
-}
-.file-list li:hover {
-  cursor: pointer;
-   background: rgba(174, 192, 194, 0.2);
+<style lang="scss" scoped>
+.file-list {
+  li {
+    border-bottom: 1px solid #ccc;
+    font-size: 13px;
+    > div:after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+    img {
+      margin: 0 10px 0 0;
+    }
+    &:hover {
+      cursor: pointer;
+      background: rgba(174, 192, 194, 0.2);
+    }
+  }
 }
 .file-breadcrumb {
   font-weight: 700;
@@ -175,17 +197,21 @@ export default {
   font-weight: 500;
   color: #606266;
 }
-.file-header:after {
-  content: "";
-  display: block;
-  clear: both;
-}
 .file-header {
   padding: 10px 20px;
   color: #888;
   border-bottom: 1px solid #ccc;
+  > p {
+    float: left;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
 }
-.file-header .file-name {
+.file-name {
   width: 40%;
 }
 .file-size {
@@ -193,23 +219,21 @@ export default {
   text-align: center;
 }
 .file-cjsj {
-  width: 40%;
+  width: 35%;
   text-align: right;
 }
-.file-header > p {
-  float: left;
-}
-
-.upload-files {
-  float: right;
-  font-size: 13px;
-  display: flex;
-}
-.upload-files .el-icon-circle-plus {
-  color: #409eff;
-}
-.upload-files:hover {
-  cursor: pointer;
-  color: #409eff;
+.file-evaluate{
+  width: 5%;
+  text-align: right;
+  justify-content: flex-end;
+  div{
+    height:100%;
+    justify-content:flex-end;
+  }
+  img{
+    width: 16px;
+    height: 16px;
+    margin: 0 0 0 5px !important;
+  }
 }
 </style>

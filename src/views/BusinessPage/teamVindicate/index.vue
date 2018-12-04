@@ -45,7 +45,6 @@
  import filterComponent from "@/components/reportTable/filterComponent.vue";
  import zdwhDialog from "@/components/dialog/zdwh-dialog.vue";
  import addzdDialog from "@/components/dialog/addzd-dialog.vue";
-
  export default {
    data () {
      return {
@@ -69,7 +68,7 @@
    mounted(){
      this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag
      if((this.userGroupTag.indexOf('JYGL') != -1 ||this.userGroupTag.indexOf('ZDDZ') != -1) && this.userGroupTag.indexOf('QYZ') == -1){
-       this.limitShow = false;
+        this.limitShow = false;
      }
      if(this.userGroupTag.indexOf('JYGL') != -1){
         this.filterList.push('qygc');

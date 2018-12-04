@@ -26,9 +26,14 @@
               <el-table-column prop="jhpxsj" label="计划培训日期" width="110"></el-table-column>
               <el-table-column prop="sjpxsj" label="实际培训日期" width="110"></el-table-column>
               <el-table-column prop="fxrxm" label="分享人" width="110"></el-table-column>
+               <el-table-column  label="推荐参与人数" width="110">
+                <template slot-scope="scope">
+                  <a href="javaScript:;;" @click="handleCehckCyrs(scope.row.wid,'2')">{{scope.row.tjrs}}</a>
+               </template>
+              </el-table-column>
               <el-table-column  label="参与人数" width="100">
                 <template slot-scope="scope">
-                  <a href="javaScript:;;" @click="handleCehckCyrs(scope.row.wid)">{{scope.row.cyrs}}</a>
+                  <a href="javaScript:;;" @click="handleCehckCyrs(scope.row.wid,'1')">{{scope.row.cyrs}}</a>
                </template>
               </el-table-column>
               <el-table-column prop="cjsj" label="创建日期" width="160"></el-table-column>
@@ -57,7 +62,7 @@
         </el-pagination>
       </div>
     </div>
-    <sspx-dialog :show.sync="sspxShow" :itemData="itemData" @handleCommitSave="handleCommitSave"></sspx-dialog>
+    <sspx-dialog :show.sync="sspxShow" :itemData="itemData" @handleCommitSave="handleCommitSave" ></sspx-dialog>
   </div>
 </template>
 
@@ -88,11 +93,12 @@ export default {
     };
   },
   methods: {
-    handleCehckCyrs(data){
+    handleCehckCyrs(data,type){
       let routeData = this.$router.resolve({
         path: "/stafflist",
         query:{
-          nljhwid:data
+          nljhwid:data,
+          type:type
         }
       });
       window.open(routeData.href, "_blank");
@@ -111,20 +117,12 @@ export default {
 
     // 培训提交
     handleCommitSave(data) {
-      let rylist = data.ry.replace(/，/g, ",");
-      console.log(data);
-      this.$confirm("请再次确定参加人员工号：" + rylist, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
           this.$post(this.API.abilityTraining, {
             wid: this.itemData.wid,
             sjwcsj: data.sjwcsj,
             pxsp: data.pxsp,
             fjData: data.fileList,
-            ry: rylist
+            ry: data.ry
           }).then(res => {
             if (res.state == "success") {
               this.sspxShow = !this.sspxShow;
@@ -142,8 +140,6 @@ export default {
               });
             }
           });
-        })
-        .catch(() => {});
     },
     // 下载附件
     handleDownFile(index, row, e) {

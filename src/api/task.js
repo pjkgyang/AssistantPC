@@ -59,7 +59,8 @@ export function changeTaskStatus(obj){
 	let url = window.baseurl +suburl+"changeTaskStatus.do"
 	return axios.post(url,{
 			rwbh:obj.rwbh,
-            state:obj.state,                  
+			state:obj.state,               
+			wcsj:obj.wcsj   
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);

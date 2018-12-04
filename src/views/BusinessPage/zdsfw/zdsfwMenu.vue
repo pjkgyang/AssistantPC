@@ -97,15 +97,17 @@ export default {
         fwzt: "",
         lb: "",
         xmzt: "",
-        date: [
-          this.getFirstDay(),
-          getLastMonthDay(
-            new Date().getFullYear(),
-            new Date().getMonth() + 1 < 10
-              ? "0" + (new Date().getMonth() + 1)
-              : new Date().getMonth() + 1
-          )
-        ],
+        jhksrq:"",
+        jhjsrq:"",
+        // date: [
+        //   this.getFirstDay(),
+        //   getLastMonthDay(
+        //     new Date().getFullYear(),
+        //     new Date().getMonth() + 1 < 10
+        //       ? "0" + (new Date().getMonth() + 1)
+        //       : new Date().getMonth() + 1
+        //   )
+        // ],
         sfgq:""
       },
       isJzuser:"",
@@ -277,9 +279,9 @@ export default {
               "&xmzt=" +
               this.filterData.xmzt +
               "&jhksrq=" +
-              this.filterData.date[0] +
+              this.filterData.jhksrq +
               "&jhjsrq=" +
-              this.filterData.date[1] +
+              this.filterData.jhjsrq +
               "&sfgq=" +
               this.filterData.sfgq +
               "&keyword=" +
@@ -358,8 +360,8 @@ export default {
         zt: this.filterData.fwzt,
         lb: this.filterData.lb,
         xmzt: this.filterData.xmzt,
-        jhksrq: this.filterData.date[0],
-        jhjsrq: this.filterData.date[1],
+        jhksrq: this.filterData.jhksrq,
+        jhjsrq: this.filterData.jhjsrq,
         sfgq: this.filterData.sfgq,
         keyword: this.filterData.keyword
       }).then(res => {

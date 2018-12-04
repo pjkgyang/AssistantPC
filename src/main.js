@@ -37,9 +37,14 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  if(JSON.stringify(to.meta) != '{}'){
-    Util.title(to.meta.title);
+  if(!to.meta.title){
+    document.title = '金智教育工程小助手'
+  }else{
+    document.title = to.meta.title
   }
+  // if(JSON.stringify(to.meta) != '{}'){
+  //   Util.title(to.meta.title);
+  // }
   next();
 });
 

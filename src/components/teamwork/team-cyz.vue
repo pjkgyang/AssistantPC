@@ -1,7 +1,8 @@
 <template>
   <div class="item-addUser">   
     <div style="text-align:right;padding-bottom:10px;">
-      <el-button size="small" type="primary" @click="handleChangeZbr">修改中标人</el-button>
+      <!--2018-12-04 甲方责任人不可见修改中标人和团队成员。 -->
+      <el-button size="small" type="primary" @click="handleChangeZbr" v-if="this.jsJf">修改中标人</el-button>
       <el-button size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
     </div>
     <div class="item-user-outTable">
@@ -293,6 +294,10 @@ export default {
     tabName: {
       type: String,
       default: ""
+    },
+    jsJf:{
+      type: Boolean,
+      default: false
     }
   },
   methods: {

@@ -1,11 +1,12 @@
 <template>
     <div class="project-teamwork">
         <div class="project-teamwork-content">
+          <!-- 2018-12.04修改 甲方责任人不可见修改中标人和团队成员 -->
             <el-tabs tab-position="top" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="参与者" name="first">
-                    <teamCyz :xmbh="xmbh" :xmmc="xmmc" :tabName="tabName" :dwmc="dwmc"></teamCyz>
+                    <teamCyz :xmbh="xmbh" :xmmc="xmInfo.xmmc" :tabName="tabName" :dwmc="xmInfo.dwmc" :jsJf="jsJf"></teamCyz>
                 </el-tab-pane>
-                <el-tab-pane label="团队成员" name="second">
+                <el-tab-pane label="团队成员" name="second" v-if="jsJf">
                     <teamTdcy :tabName="tabName" :xmbh="xmbh"></teamTdcy>
                 </el-tab-pane>
             </el-tabs>
@@ -21,22 +22,27 @@ export default {
   data() {
     return {
       activeName: "first",
-      tabName: ""
+      tabName: "",
+      jsJf:true
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.xmInfo);
+    console.log(sessionStorage.username);
+    if(sessionStorage.username == this.xmInfo.jfzrrxm){
+      this.jsJf = false
+    }
+  },
   props: {
     xmbh: {
       type: String,
       default: ""
     },
-    xmmc: {
-      type: String,
-      default: ""
-    },
-    dwmc: {
-      type: String,
-      default: ""
+    xmInfo:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
     }
   },
   methods: {

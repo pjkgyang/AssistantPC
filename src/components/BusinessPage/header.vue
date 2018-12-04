@@ -197,18 +197,18 @@ export default {
         this.title = window.location.hash.split("#")[1];
         // this.title = window.location.pathname
       }
-      if (from.name != "MonthReportWrite") {
-        document.title = "金智教育工程小助手";
-      } else {
-        document.title = "月报-月计划制订";
-      }
+      // if (from.name != "MonthReportWrite") {
+      //   document.title = "金智教育工程小助手";
+      // } else {
+      //   document.title = "月报-月计划制订";
+      // }
     }
   },
   methods: {
     handleSelect(index, indexPath) {
       if (index.indexOf("http://") != -1 || index.indexOf("https://") != -1) {
          let des = encryptByDES('assistant'+window.userId,'WISEDUUSER');
-         window.open(index+'?sign='+des);
+         window.open(index.includes('?')?(index+'&sign='+des):(index+'?sign='+des));
         return;
       }
       window.menu = null;

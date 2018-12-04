@@ -126,7 +126,6 @@ export default {
     max-height:63vh;
     overflow-y: auto;
     margin-bottom: 20px;
-
 }
 
 </style>
