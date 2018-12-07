@@ -20,6 +20,7 @@ Vue.prototype.API = API
 Vue.prototype.$get = get;
 Vue.prototype.$post = post;
 
+// import 'babel-polyfill';
 // import es6Promise from "babel-polyfill";
 // es6Promise .polyfill();
 

@@ -107,6 +107,9 @@ export default {
     // 开始售后服务
     startAfterSalesService:window.baseurl+'project/startAfterSalesService.do',
     stopAfterSalesService:window.baseurl+'project/stopAfterSalesService.do', //停止售后服务
+    addProjectProcess:window.baseurl+'project/addProjectProcess.do',//添加项目催办
+    pageProjectReminder:window.baseurl+'project/pageProjectReminder.do',
+
     
 
      // 资源中心
@@ -115,6 +118,10 @@ export default {
     applyDismiss:window.baseurl+'question/applyDismiss.do',
     queryCpxZjData:window.baseurl+'personnel/queryCpxZjData.do',
     openNewcomerFolder:window.baseurl+'attachment/openNewcomerFolder.do', //新人专用
+    good:window.baseurl+'attachment/good.do', //好评
+    bad:window.baseurl+'attachment/bad.do', //差评
+    logs:window.baseurl+'attachment/logs.do', //记录
+    getCount:window.baseurl+'attachment/getCount.do',//获取记录数
    
     // 问题复盘 改进计划
     pageProductPlan:window.baseurl+'wtgj/pageProductPlan.do',//获取产品改进计划列表

@@ -325,7 +325,7 @@
       <!-- 投诉 -->
       <el-collapse-transition>
         <div v-if="tabsLabel == 'complain'">
-          <complain :xmbh="xmbh" :xmmc="xmkbInfo.xmmc"></complain>
+          <complain :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :xmkbInfo="xmkbInfo"></complain>
         </div>
       </el-collapse-transition>
 

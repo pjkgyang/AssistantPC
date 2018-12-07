@@ -53,13 +53,13 @@
             <span v-for="(wtfbql,index) in wtfbqlist" :data-type="wtfbql.label" :class="{'bg-active':wtfbq === wtfbql.label}">{{wtfbql.mc}}</span>
           </p>
         </div>
-        <!-- <div>
+        <div>
           <p class="query-title">改进状态:</p>
           <p class="query-list" @click="handleGJZT">
             <span data-type="" :class="{'bg-active':gjzt == ''}">全部</span>
             <span v-for="(wtgjzt,index) in wtgjztlist" :data-type="wtgjzt.label" :class="{'bg-active':gjzt === wtgjzt.label}">{{wtgjzt.mc}}</span>
           </p>
-        </div> -->
+        </div>
 
         <div>
           <p class="query-title">问题标签:</p>
@@ -448,8 +448,8 @@ export default {
       this.CurrentPage = 1;
       this.queryAllQuestions(1);
     },
+    // 改进状态
     handleGJZT(e) {
-      //申请关闭
       let gjzt = e.target.getAttribute("data-type");
       if (gjzt == null) return;
       this.gjzt = gjzt;

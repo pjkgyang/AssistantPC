@@ -15,11 +15,11 @@
                     <el-tag size="mini"  :type="scope.row.zt === '已发布' ? 'success' : 'primary'">{{scope.row.zt}}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="sfgx" label="是否购销" width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="sfzt" label="是否在谈" width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="dkl" label="到款率" width="90" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sfgx" label="是否购销" width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sfzt" label="合同性质" width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="dkl" label="到款率" width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="fwqx" label="服务期限" width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="fwksrq" label="服务开始日期" width="140" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="lxrq" label="立项日期" width="140" show-overflow-tooltip></el-table-column>
         </el-table>
         </el-table>
     </div>

@@ -3,47 +3,50 @@
   <div class="complain-list">
         <div class="complain-query">
              <p style="font-size:14px !important;margin-bottom:10px !important;">
-              <span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&#x3000;<span style="font-weight:700">高级查询</span>&#x3000;
+              &nbsp;&nbsp;<span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&#x3000;<span style="font-weight:700">高级查询</span>&nbsp;&nbsp;
              <el-input v-model="keyword" size="mini" style="width:300px" placeholder="请输入投诉人工号/手机号/项目编号/项目名称"  @change="searchComplant"></el-input>&#x3000;
              <el-button size="mini" type="primary" @click="handlequeryComplant">查询</el-button>
              </p>
              <div v-if="queryLJshow">
-             <p class="query-list" flex-align>
-                <span class="query-title">查询状态 : </span>
-                <span>
-                  <span data-type=""  :class="{'bg-active':cxzt == ''}"  @click="handleCXZT">全部</span>
-                  <span data-type="1" :class="{'bg-active':cxzt == '1'}"  @click="handleCXZT">未处理</span>
-                  <span data-type="2" :class="{'bg-active':cxzt == '2'}"  @click="handleCXZT">处理中</span>
-                  <span data-type="3" :class="{'bg-active':cxzt == '3'}"  @click="handleCXZT">已关闭</span>
-                </span>
-             </p>
-              <p class="query-list" flex-align>
+             <div flex>
+                <span class="query-title">查询状态:</span>
+                <p class="query-list">
+                    <span data-type=""  :class="{'bg-active':cxzt == ''}"  @click="handleCXZT">全部</span>
+                    <span data-type="1" :class="{'bg-active':cxzt == '1'}"  @click="handleCXZT">未处理</span>
+                    <span data-type="2" :class="{'bg-active':cxzt == '2'}"  @click="handleCXZT">处理中</span>
+                    <span data-type="3" :class="{'bg-active':cxzt == '3'}"  @click="handleCXZT">已关闭</span>
+                </p>
+             </div>
+              <div flex>
                    <span class="query-title">是否催办:</span>
-                   <span>
+                   <p class="query-list">
                       <span data-type="" :class="{'bg-active':sfcb == ''}"   @click="handleSFCB">全部</span>
                       <span data-type="1" :class="{'bg-active':sfcb == '1'}"  @click="handleSFCB">是</span>
                       <span data-type="0" :class="{'bg-active':sfcb == '0'}"  @click="handleSFCB">否</span>
-                   </span>
-              </p>    
-             <p class="query-list" flex-align>
-               <span class="query-title">投诉类别 : </span>
-               <span>
+                   </p>
+              </div>    
+             <div flex>
+               <span class="query-title">投诉类别:</span>
+               <p class="query-list">
                   <span data-type=""  :class="{'bg-active':tslb == ''}"  @click="handleTSLB">全部</span>
                   <span v-for="(complain,index) in complaintType" :data-type="complain.label" :key="index" :class="{'bg-active':tslb == complain.label}"  @click="handleTSLB">{{complain.mc}}</span>
-               </span>
-              </p>
-              <p class="query-list" v-if="showCondition == 2" flex-align>
-               <span class="query-title" >区域战队: </span>
-               <span>
-                  <span data-type=""  :class="{'bg-active':gczd == ''}"  @click="handleGCZD">全部</span>
-                  <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':gczd == gcqy.label}"  @click="handleGCZD">{{gcqy.mc}}</span>
-              </span>  
-              </p>
+               </p>
+              </div>
+              <div v-if="showCondition == 2" flex>
+                <span class="query-title">区域战队:</span>
+                <p class="query-list">
+                    <span data-type=""  :class="{'bg-active':gczd == ''}"  @click="handleGCZD">全部</span>
+                    <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':gczd == gcqy.label}"  @click="handleGCZD">{{gcqy.mc}}</span>
+                </p>  
+              </div>
              </div>
         </div> 
        
+       <!-- 2018-12-05 修改：过保且售后服务状态未启动，不能提问，不能投诉。 -->
        <div style="background:#fff; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);margin-top:10px;padding:10px;border-radius:4px;">
-       <el-button type="danger" @click="handleComplain" >我要投诉</el-button> 
+       <el-button type="danger" @click="handleComplain" :disabled="xmkbInfo.ztztmc=='已过保' && xmkbInfo.gcfwzt=='0'">
+         {{xmkbInfo.ztztmc=='已过保' && xmkbInfo.gcfwzt=='0'?'过保且售后服务状态未启动，不能投诉':'我要投诉'}}
+        </el-button> 
        <!-- v-if="windowUnitType == 1" -->
        <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
        <ul>
@@ -188,12 +191,17 @@ export default {
       xmmc:{
          type:String,
          default:''  
+      },
+      xmkbInfo:{
+        type:Object,
+        default:()=>{
+          return {}
+        }
       }
   },
   mounted(){
- 
+        console.log(this.xmkbInfo);
         this.windowUnitType =  sessionStorage.getItem('isJZuser')
-        
         showQuestionCondition().then(({data})=>{ //提问展示
           this.showCondition = data.data
        })
@@ -537,7 +545,7 @@ export default {
   border-radius: 4px;
   padding: 10px;
 }
-.complain-query .query-list span{
+/* .complain-query .query-list span{
     display: inline-block;
     padding: 0px 5px;
     color: #637D8A;
@@ -555,7 +563,7 @@ export default {
     padding: 0 10px;
     color: #000;
     font-weight: 700;
-}
+} */
 .complain-content-info{
   width: 100%;
   white-space: nowrap;

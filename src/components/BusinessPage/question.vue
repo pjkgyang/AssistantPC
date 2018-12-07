@@ -1,43 +1,44 @@
-<template>  
+<template>
   <div class="project-question">
-       <div class="project-question-query">
-           <div>
-                <span class="query-title"><span :class="{'isshown-query':true,'el-icon-arrow-down':!queryLJshow,'el-icon-arrow-up':queryLJshow}" @click="handleQueryShow"></span>&nbsp;高级查询</span>
-                <el-input v-model="keyword" style="width:493px;" size="small" placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称" @change="searchQuestion"></el-input>&#x3000;
-                <el-button type="primary" size="mini" @click="handlequeryQuestion">查询</el-button>
-           </div>
-            <div class="query-condition" v-if="queryLJshow">
-            <div>
-              <p class="query-title">提问时间:</p>
-              <p class="query-list" >
-                 <el-date-picker @change="changeStarDay" v-model="starDay" size="mini" type="date" placeholder="选择开始日期"  value-format="yyyy-MM-dd"></el-date-picker> &#x3000; 至 &#x3000; 
-                 <el-date-picker @change="changeEndDay" v-model="endDay" size="mini" type="date" placeholder="选择结束日期"  value-format="yyyy-MM-dd"></el-date-picker>
-              </p>
-           </div>    
-            <div>
-                <p class="query-title">问题分类:</p>
-                <p class="query-list"  @click="handleZXR">
-                    <span data-type=""  :class="{'bg-active':wtfl == ''}">全部</span>
-                    <span v-for="(zxr,index) in zzrList" :data-type="zxr.label" :key="index" :class="{'bg-active':wtfl == zxr.label}">{{zxr.mc}}</span>
-                 </p>
-           </div>
-            <div>
-              <p class="query-title">查询状态:</p>
-              <p class="query-list" @click="handleCXZT">
-                  <span data-type=""   :class="{'bg-active':cxzt == ''}">全部</span>
-                  <span data-type="0" :class="{'bg-active':cxzt == '0'}">处理中</span>
-                  <span data-type="1" :class="{'bg-active':cxzt == '1'}">已关闭</span>
-              </p>
-           </div>
-           <div>
-              <p class="query-title">申请关闭:</p>
-              <p class="query-list" @click="handleSQGB">
-                  <span data-type=""   :class="{'bg-active':sqgb == ''}">全部</span>
-                  <span data-type="1" :class="{'bg-active':sqgb == '1'}">是</span>
-                  <span data-type="0" :class="{'bg-active':sqgb == '0'}">否</span>
-              </p>
-           </div>
-            <!-- <div>
+    <div class="project-question-query">
+      <div>
+        <span class="query-title">
+          <span :class="{'isshown-query':true,'el-icon-arrow-down':!queryLJshow,'el-icon-arrow-up':queryLJshow}" @click="handleQueryShow"></span>&nbsp;高级查询</span>
+        <el-input v-model="keyword" style="width:493px;" size="small" placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称" @change="searchQuestion"></el-input>&#x3000;
+        <el-button type="primary" size="mini" @click="handlequeryQuestion">查询</el-button>
+      </div>
+      <div class="query-condition" v-if="queryLJshow">
+        <div>
+          <p class="query-title">提问时间:</p>
+          <p class="query-list">
+            <el-date-picker @change="changeStarDay" v-model="starDay" size="mini" type="date" placeholder="选择开始日期" value-format="yyyy-MM-dd"></el-date-picker> &#x3000; 至 &#x3000;
+            <el-date-picker @change="changeEndDay" v-model="endDay" size="mini" type="date" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+          </p>
+        </div>
+        <div>
+          <p class="query-title">问题分类:</p>
+          <p class="query-list" @click="handleZXR">
+            <span data-type="" :class="{'bg-active':wtfl == ''}">全部</span>
+            <span v-for="(zxr,index) in zzrList" :data-type="zxr.label" :key="index" :class="{'bg-active':wtfl == zxr.label}">{{zxr.mc}}</span>
+          </p>
+        </div>
+        <div>
+          <p class="query-title">查询状态:</p>
+          <p class="query-list" @click="handleCXZT">
+            <span data-type="" :class="{'bg-active':cxzt == ''}">全部</span>
+            <span data-type="0" :class="{'bg-active':cxzt == '0'}">处理中</span>
+            <span data-type="1" :class="{'bg-active':cxzt == '1'}">已关闭</span>
+          </p>
+        </div>
+        <div>
+          <p class="query-title">申请关闭:</p>
+          <p class="query-list" @click="handleSQGB">
+            <span data-type="" :class="{'bg-active':sqgb == ''}">全部</span>
+            <span data-type="1" :class="{'bg-active':sqgb == '1'}">是</span>
+            <span data-type="0" :class="{'bg-active':sqgb == '0'}">否</span>
+          </p>
+        </div>
+        <!-- <div>
                <p class="query-title">是否紧急:</p>
                <p class="query-list" @click="handleSFJJ">
                    <span data-type="" :class="{'bg-active':sfjj == ''}">全部</span>
@@ -45,36 +46,36 @@
                    <span data-type="0" :class="{'bg-active':sfjj == '0'}">否</span>
                 </p>    
            </div> -->
-           <div>
-               <p class="query-title">是否催办:</p>
-               <p class="query-list" @click="handleSFCB">
-                   <span data-type="" :class="{'bg-active':sfcb == ''}">全部</span>
-                   <span data-type="1" :class="{'bg-active':sfcb == '1'}">是</span>
-                   <span data-type="0" :class="{'bg-active':sfcb == '0'}">否</span>
-                </p>    
-           </div>
-            <div v-if="showCondition==1||showCondition==2">
-              <p class="query-title">产品线:</p>
-              <p class="query-list" @click="handleCPX">
-                  <span data-type="" :class="{'bg-active':cpxbg == ''}">全部</span>
-                  <span v-for="(cpx,index) in cpline" :data-type="cpx.label" :class="{'bg-active':cpxbg === cpx.label}">{{cpx.mc}}</span>
-              </p>
-           </div>
-            <div v-if="showCondition==1||showCondition==2">
-              <p class="query-title">产品:</p>
-              <p class="query-list" @click="handleCP">
-                  <span data-type="" :class="{'bg-active':cpbg == ''}">全部</span>
-                  <span v-for="(cp,index) in cplist" :data-type="cp.label" :class="{'bg-active':cpbg == cp.label}">{{cp.mc}}</span>
-                  </p>
-           </div>
-           <div v-if="showCondition==1||showCondition==2">
-              <p class="query-title">问题类别:</p>
-              <p class="query-list" @click="handleWTLB">
-                  <span data-type="" :class="{'bg-active':wtlbbg == ''}">全部</span>
-                  <span v-for="(wtlbd,index) in wtlb" :data-type="wtlbd.label" :class="{'bg-active':wtlbbg == wtlbd.label}">{{wtlbd.mc}}</span>
-                  </p>
-           </div>
-           <!-- <div v-if="showCondition==1||showCondition==2">
+        <div>
+          <p class="query-title">是否催办:</p>
+          <p class="query-list" @click="handleSFCB">
+            <span data-type="" :class="{'bg-active':sfcb == ''}">全部</span>
+            <span data-type="1" :class="{'bg-active':sfcb == '1'}">是</span>
+            <span data-type="0" :class="{'bg-active':sfcb == '0'}">否</span>
+          </p>
+        </div>
+        <div v-if="showCondition==1||showCondition==2">
+          <p class="query-title">产品线:</p>
+          <p class="query-list" @click="handleCPX">
+            <span data-type="" :class="{'bg-active':cpxbg == ''}">全部</span>
+            <span v-for="(cpx,index) in cpline" :data-type="cpx.label" :class="{'bg-active':cpxbg === cpx.label}">{{cpx.mc}}</span>
+          </p>
+        </div>
+        <div v-if="showCondition==1||showCondition==2">
+          <p class="query-title">产品:</p>
+          <p class="query-list" @click="handleCP">
+            <span data-type="" :class="{'bg-active':cpbg == ''}">全部</span>
+            <span v-for="(cp,index) in cplist" :data-type="cp.label" :class="{'bg-active':cpbg == cp.label}">{{cp.mc}}</span>
+          </p>
+        </div>
+        <div v-if="showCondition==1||showCondition==2">
+          <p class="query-title">问题类别:</p>
+          <p class="query-list" @click="handleWTLB">
+            <span data-type="" :class="{'bg-active':wtlbbg == ''}">全部</span>
+            <span v-for="(wtlbd,index) in wtlb" :data-type="wtlbd.label" :class="{'bg-active':wtlbbg == wtlbd.label}">{{wtlbd.mc}}</span>
+          </p>
+        </div>
+        <!-- <div v-if="showCondition==1||showCondition==2">
               <p class="query-title">是否bug:</p>
               <p class="query-list"  @click="handleSFBUG">
                   <span data-type=""  :class="{'bg-active':sfbug == ''}">全部</span>
@@ -82,62 +83,60 @@
                   <span data-type="0" :class="{'bg-active':sfbug == '0'}">否</span>
               </p>
            </div> -->
-           <div v-if="showCondition==1||showCondition==2">
-              <p class="query-title">未响应状态:</p>
-              <p class="query-list" @click="handleWXYZT">
-                  <span data-type="" :class="{'bg-active':wxyztbg == ''}">全部</span>
-                  <span v-for="(item,index) in wxyztlist" :data-type="item.label" :class="{'bg-active':wxyztbg == item.label}">{{item.mc}}</span>
-                  </p>
-           </div>
-           <div v-if="showCondition==1||showCondition==2">
-              <p class="query-title">未解决状态:</p>
-              <p class="query-list" @click="handleWJJZT">
-                  <span data-type="" :class="{'bg-active':wjjztbg == ''}">全部</span>
-                  <span v-for="(item,index) in wjjztlist" :data-type="item.label" :class="{'bg-active':wjjztbg == item.label}">{{item.mc}}</span>
-                  </p>
-           </div>
-           <div v-if="isJZuser == 0">
-              <p class="query-title">到期查询:</p>
-              <p class="query-list" @click="handleCNQX">
-                  <span data-type="" :class="{'bg-active':cnqx == ''}">全部</span>
-                  <span v-for="(item,index) in cnqxList" :data-type="item.label" :class="{'bg-active':cnqx == item.label}">{{item.mc}}</span>
-                </p>
-           </div>
-           <div  v-if="showCondition==1||showCondition==2">
-            <p class="query-title">区域工程:</p>
-            <p class="query-list"  @click="handleGCZD">
-               <span data-type = ""  :class="{'bg-active':gczd == ''}">全部</span>
-               <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':gczd == gcqy.label}">{{gcqy.mc}}</span>
-              </p>
-           </div>
-           <div v-if="showCondition==1||showCondition==2">
-              <p class="query-title">单位类型:</p>
-              <p class="query-list" @click="handleDWLX">
-                  <span data-type="" :class="{'bg-active':dwlx == ''}">全部</span>
-                  <span v-for="(dwlxx,index) in dwlxList" :data-type="dwlxx.label" :class="{'bg-active':dwlx == dwlxx.label}">{{dwlxx.mc}}</span>
-                  </p>
-           </div>
-       </div>
-       </div>
-       <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
-        <div style="padding:0 10px">
-          <el-button  type="danger"   @click="handleQuestion" style="font-size:16px;" :disabled="this.xmDetail.ztztmc == '已终止'||this.xmDetail.gcfwzt == '0'">
-              {{this.xmDetail.ztztmc == '已终止'?'该项目已经终止,禁止提问':this.xmDetail.gcfwzt == '0'?this.xmDetail.gcfwztsm:'我要提问'}}
-         </el-button>
-          <el-button :disabled="this.xmDetail.ztztmc == '已终止'"  v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary"  @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
+        <div v-if="showCondition==1||showCondition==2">
+          <p class="query-title">未响应状态:</p>
+          <p class="query-list" @click="handleWXYZT">
+            <span data-type="" :class="{'bg-active':wxyztbg == ''}">全部</span>
+            <span v-for="(item,index) in wxyztlist" :data-type="item.label" :class="{'bg-active':wxyztbg == item.label}">{{item.mc}}</span>
+          </p>
         </div>
-        <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
-            <questionCard  :questionList="questionList" @handleQuestionDetail="handleQuestionDetail" @handleReject="handleReject"
-          @handleClose="handleClose" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"></questionCard>
-            <div style="margin-top:10px;text-align:right" v-if="total > 10">
-                 <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
-            </div>
-       </div>
+        <div v-if="showCondition==1||showCondition==2">
+          <p class="query-title">未解决状态:</p>
+          <p class="query-list" @click="handleWJJZT">
+            <span data-type="" :class="{'bg-active':wjjztbg == ''}">全部</span>
+            <span v-for="(item,index) in wjjztlist" :data-type="item.label" :class="{'bg-active':wjjztbg == item.label}">{{item.mc}}</span>
+          </p>
+        </div>
+        <div v-if="isJZuser == 0">
+          <p class="query-title">到期查询:</p>
+          <p class="query-list" @click="handleCNQX">
+            <span data-type="" :class="{'bg-active':cnqx == ''}">全部</span>
+            <span v-for="(item,index) in cnqxList" :data-type="item.label" :class="{'bg-active':cnqx == item.label}">{{item.mc}}</span>
+          </p>
+        </div>
+        <div v-if="showCondition==1||showCondition==2">
+          <p class="query-title">区域工程:</p>
+          <p class="query-list" @click="handleGCZD">
+            <span data-type="" :class="{'bg-active':gczd == ''}">全部</span>
+            <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':gczd == gcqy.label}">{{gcqy.mc}}</span>
+          </p>
+        </div>
+        <div v-if="showCondition==1||showCondition==2">
+          <p class="query-title">单位类型:</p>
+          <p class="query-list" @click="handleDWLX">
+            <span data-type="" :class="{'bg-active':dwlx == ''}">全部</span>
+            <span v-for="(dwlxx,index) in dwlxList" :data-type="dwlxx.label" :class="{'bg-active':dwlx == dwlxx.label}">{{dwlxx.mc}}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
+      <div style="padding:0 10px">
+        <el-button type="danger" @click="handleQuestion" style="font-size:16px;" :disabled="this.xmDetail.ztztmc == '已终止'||(this.xmDetail.gcfwzt == '0' && this.xmDetail.ztztmc=='已过保')">
+          {{this.xmDetail.ztztmc == '已终止'?'该项目已经终止,禁止提问':this.xmDetail.gcfwzt == '0'&& this.xmDetail.ztztmc=='已过保'?this.xmDetail.gcfwztsm:'我要提问'}}
+        </el-button>
+        <el-button :disabled="this.xmDetail.ztztmc == '已终止'" v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('GCCPZJ')||userGroupTag.includes('QYZ')" size="mini" type="primary" @click="handleExport" style="float:right;margin-top:8px">导出</el-button>
+      </div>
+      <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
+      <questionCard :questionList="questionList" @handleQuestionDetail="handleQuestionDetail" @handleReject="handleReject" @handleClose="handleClose" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"></questionCard>
+      <div style="margin-top:10px;text-align:right" v-if="total > 10">
+        <pagination :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+      </div>
+    </div>
 
-      <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" 
-      :chooseableItem="chooseableItem" :itemInfo="itemInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
-      <gxrDialog :show.sync="gxrShow"  :wtInfo="wtInfo" @closeQuestion="closeQuestion"></gxrDialog>
-      <sqgbwtDialog :show.sync="sqgbShow"></sqgbwtDialog>
+    <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" :chooseableItem="chooseableItem" :itemInfo="itemInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
+    <gxrDialog :show.sync="gxrShow" :wtInfo="wtInfo" @closeQuestion="closeQuestion"></gxrDialog>
+    <sqgbwtDialog :show.sync="sqgbShow"></sqgbwtDialog>
   </div>
 </template>
 <script>
@@ -248,7 +247,7 @@ export default {
       endDay: "",
       keyword: "",
       userGroupTag: "",
-      xmDetail:{}
+      xmDetail: {}
     };
   },
   props: {
@@ -275,14 +274,17 @@ export default {
     this.username = window.userName;
     this.baseUrl = window.baseurl;
     getProject({
-      xmbh:this.xmbh
-    }).then(({data})=>{
-      if(data.state == 'success'){
-        this.xmDetail = data.data
-      }else{
-        this.$alert(data.msg, "提示", {confirmButtonText: "确定",type: "error"});
+      xmbh: this.xmbh
+    }).then(({ data }) => {
+      if (data.state == "success") {
+        this.xmDetail = data.data;
+      } else {
+        this.$alert(data.msg, "提示", {
+          confirmButtonText: "确定",
+          type: "error"
+        });
       }
-    })
+    });
     if (!this.isAll) {
       this.wtfl = 2;
       this.cxzt = "";
@@ -325,24 +327,28 @@ export default {
   },
 
   methods: {
-    handleReject(params,index,sm) {       // 驳回
-          applyDismiss({
-            wid: "",
-            zbwid: params.wid,
-            sm:sm
-          }).then(({ data }) => {
-            if (data.state == "success") {
-              this.$alert("已成功驳回！", "提示", {
-                confirmButtonText: "确定",
-                type: "success",
-                callback: action => {
-                  this.questionList[index].sqgbCount = 0;
-                }
-              });
-            } else {
-              this.$alert(data.msg, "提示", {confirmButtonText: "确定",type: "error"});
+    handleReject(params, index, sm) {
+      // 驳回
+      applyDismiss({
+        wid: "",
+        zbwid: params.wid,
+        sm: sm
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.$alert("已成功驳回！", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: action => {
+              this.questionList[index].sqgbCount = 0;
             }
-        });
+          });
+        } else {
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
+        }
+      });
     },
     handleClose(params, index) {
       //关闭问题
@@ -470,7 +476,7 @@ export default {
                 confirmButtonText: "确定",
                 type: "warning",
                 callback: action => {
-                   this.sqgbShow = !this.sqgbShow;
+                  this.sqgbShow = !this.sqgbShow;
                 }
               }
             );
@@ -496,13 +502,13 @@ export default {
       //编辑
       this.questionTitle = "编辑问题";
       isEdit({
-        wid:params.wid
+        wid: params.wid
       }).then(({ data }) => {
         if (data.state == "success") {
           if (data.data) {
             queryQuestion({
               // 获取单个问题
-              wid:params.wid
+              wid: params.wid
             }).then(({ data }) => {
               if (data.state == "success") {
                 this.qusetionInfo = data.data;
@@ -533,27 +539,27 @@ export default {
       })
         .then(() => {
           deleteQuestion({
-            wids:params.wid
+            wids: params.wid
           }).then(({ data }) => {
             if (data.state == "success") {
-               if(!!data.data){
-                 this.$alert("删除成功", "提示", {
+              if (!!data.data) {
+                this.$alert("删除成功", "提示", {
                   confirmButtonText: "确定",
                   type: "success",
                   callback: action => {
                     this.queryAllQuestions(1);
                   }
                 });
-               }else{
-                  this.$alert('删除失败', "提示", {
+              } else {
+                this.$alert("删除失败", "提示", {
                   confirmButtonText: "确定",
-                  type: "warning",
+                  type: "warning"
                 });
               }
-            }else{
+            } else {
               this.$alert(data.msg, "提示", {
-                  confirmButtonText: "确定",
-                  type: "warning",
+                confirmButtonText: "确定",
+                type: "warning"
               });
             }
           });

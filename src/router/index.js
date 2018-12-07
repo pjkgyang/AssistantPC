@@ -25,11 +25,17 @@ function getAbsolutePath () {
         {
           path: '/businesspage/home',
           name: 'BusinessPageHome',
+          meta:{
+            title:'项目看板'
+          },
           component: resolve => require(['@/views/BusinessPage/home.vue'], resolve),
         },
         {
           path: '/businesspage/projects',
           name: 'Projects',
+          meta:{
+            title:'我的项目'
+          },
           component: resolve => require(['@/views/BusinessPage/Projects.vue'], resolve),
         },
         {
@@ -40,11 +46,17 @@ function getAbsolutePath () {
         {
           path: '/businesspage/task',
           name: 'Task',
+          meta:{
+            title:'项目详情'
+          },
           component: resolve => require(['@/views/BusinessPage/projectsTask.vue'], resolve),
         },
         {
           path: '/businesspage/milestone',
           name: 'Milestone',
+          meta:{
+            title:'里程碑'
+          },
           component: resolve => require(['@/views/BusinessPage/milestoneCommit.vue'], resolve),
         },
         {
@@ -58,38 +70,62 @@ function getAbsolutePath () {
         {
           path: '/businesspage/dailypaper',
           name: 'DailyPaper',
+          meta:{
+            title:'日报'
+          },
           component: resolve => require(['@/views/BusinessPage/taskLog.vue'], resolve)
         },
         {
           path: '/businesspage/complain',
           name: 'Complaint',
+          meta:{
+            title:'投诉'
+          },
           component: resolve => require(['@/views/BusinessPage/complain.vue'], resolve)
         },
         {
           path: '/businesspage/systemMsg',
           name: 'systemMsg',
+          meta:{
+            title:'系统消息'
+          },
           component: resolve => require(['@/views/BusinessPage/systemMsg.vue'], resolve)
         },{
           path: '/businesspage/question',
           name: 'Question',
+          meta:{
+            title:'问题'
+          },
           component: resolve => require(['@/views/BusinessPage/question.vue'], resolve)
         }, {
           path: '/businesspage/qut-analyse',
           name: 'QutAnalyse',
+          meta:{
+            title:'问题复盘'
+          },
           component: resolve => require(['@/views/BusinessPage/questionAnalyse.vue'], resolve)
         },{
           path: '/questionDetail',
           name: 'questionDetail',
+          meta:{
+            title:'问题详情'
+          },
           component: resolve => require(['@/components/BusinessPage/questionDetail.vue'], resolve),
         },
         {
           path: '/zdsfwxmlb',
           name: 'zdsfwXmlb',
+          meta:{
+            title:'主动式服务项目列表'
+          },
           component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwList.vue'], resolve),
         },
         {
           path: '/zdsfwlb',
           name: 'zdsfwLb',
+          meta:{
+            title:'主动式服务'
+          },
           component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwMenu.vue'], resolve),
         },
         {

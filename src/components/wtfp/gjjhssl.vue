@@ -29,9 +29,14 @@
               </el-table-column>
               <el-table-column prop="jhpxsj" label="计划日期" width="110"></el-table-column>
               <el-table-column prop="fxrxm" label="分享人" width="110"></el-table-column>
+              <el-table-column  label="推荐参与人数" width="110">
+                <template slot-scope="scope">
+                  <a href="javaScript:;;" @click="handleCehckCyry(scope.row.wid,'2')">{{scope.row.tjrs}}</a>
+               </template>
+              </el-table-column>
               <el-table-column label="参与人员" width="110">
                  <template slot-scope="scope">
-                      <a href="javaScript:;;" @click="handleCehckCyry(scope.row.wid)">{{scope.row.cyrs}}</a>
+                      <a href="javaScript:;;" @click="handleCehckCyry(scope.row.wid,'1')">{{scope.row.cyrs}}</a>
                   </template>
               </el-table-column>
               <el-table-column prop="cjsj" label="创建日期" width="180"></el-table-column>
@@ -101,11 +106,12 @@ export default {
   },
   methods: {
     // 参与人员
-    handleCehckCyry(data){
+    handleCehckCyry(data,type){
        let routeData = this.$router.resolve({
         path: "/stafflist",
         query:{
-          nljhwid:data
+          nljhwid:data,
+          type:type
         }
       });
       window.open(routeData.href, "_blank");
@@ -113,7 +119,7 @@ export default {
      // 跳转 
     handleCehckwts(data){
       let routeData = this.$router.resolve({
-        path: "/report-list/gjjh",
+        path: "/report-list/questionlist.html",
         query:{
           jhwid:data,
           jhlx:'2'

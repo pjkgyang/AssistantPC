@@ -1,0 +1,2 @@
+webpackJsonp([62],{RMdV:function(e,n){},sMyb:function(e,n,t){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var o={data:function(){return{}},components:{pannelComponent:t("tsay").a}},a={render:function(){var e=this.$createElement,n=this._self._c||e;return n("div",[n("pannelComponent",{attrs:{downloadApi:"downloadCoursewareFile.do",resourceType:2}})],1)},staticRenderFns:[]};var r=t("Z0/y")(o,a,!1,function(e){t("RMdV")},"data-v-4e9b0f98",null);n.default=r.exports}});
+//# sourceMappingURL=62.01b2d82d44873040eaa8.js.map

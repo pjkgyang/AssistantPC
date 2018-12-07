@@ -1,8 +1,9 @@
 <template>
   <div class="item-addUser">   
     <div style="text-align:right;padding-bottom:10px;">
-      <!--2018-12-04 甲方责任人不可见修改中标人和团队成员。 -->
-      <el-button size="small" type="primary" @click="handleChangeZbr" v-if="this.jsJf">修改中标人</el-button>
+      <!--2018-12-04 甲方责任人不可见修改中标人和团队成员。
+         经营管理 添加中标人 -->
+      <el-button size="small" type="primary" @click="handleChangeZbr" v-if="this.GroupTag.includes('JYGL')">修改中标人</el-button>
       <el-button size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
     </div>
     <div class="item-user-outTable">
@@ -14,6 +15,7 @@
                <th>工号/手机号</th>
                <th>单位类型</th>
                <th>部门</th>
+               <th>创建时间</th>
                <th>操作</th>
              </tr>
          </thead>
@@ -26,6 +28,7 @@
              <td>{{itemJfzrr.userCode}}</td>
              <td>{{itemJfzrr.unitType == 0?'金智':itemJfzrr.unitType == 2?'合作伙伴':!itemJfzrr.unitType?'':'学校成员'}}</td>
              <td>{{!itemJfzrr.dept?'':itemJfzrr.dept}}</td>
+             <td>{{itemJfzrr.cjsj}}</td>
              <td>
                 <el-button size="mini" :data-wid="itemJfzrr.userId" @click="changeJfZrr">修改</el-button>
                 <el-button  plain size="mini" :data-wid="itemJfzrr.userId" @click="editUser($event,itemJfzrr)">编辑</el-button>
@@ -41,6 +44,7 @@
              <td>{{itemYfzrr.userCode}}</td>
              <td>{{!itemYfzrr.userName?'':itemYfzrr.unitType == 0?'金智':itemYfzrr.unitType == 1?'学校成员':'合作伙伴'}}</td>
              <td>{{!itemYfzrr.dept?'':itemYfzrr.dept}}</td>
+             <td>{{itemYfzrr.cjsj}}</td>
              <td>
                <!-- userTag || (itemYfzrr.userName == username) -->
                  <el-button  v-if="this.GroupTag.includes('JYGL')" plain size="mini"  @click="changeUser($event,itemYfzrr)">修改</el-button>
@@ -55,6 +59,8 @@
                  <td>{{cyz.userCode}}</td>
                  <td>{{cyz.unitType == 0?'金智':cyz.unitType == 2?'合作伙伴':'学校成员'}}</td>
                  <td>{{cyz.dept}}</td>
+                 <td>{{cyz.cjsj}}</td>
+
                  <td>
                    <el-button v-if="cyz.roleName.indexOf('销售') != -1 &&　(userTag || itemYfzrr.userName == username)"  plain size="mini"  plain @click="changeXsr(cyz)">修改</el-button>
                    <el-button v-if="cyz.edit"  plain size="mini" :data-wid="cyz.userId" plain @click="editUser($event,cyz)">编辑</el-button>

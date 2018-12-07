@@ -27,8 +27,8 @@ export default {
     };
   },
   mounted() {
-    console.log(this.xmInfo);
-    console.log(sessionStorage.username);
+    // console.log(this.xmInfo);
+    // console.log(sessionStorage.username);
     if(sessionStorage.username == this.xmInfo.jfzrrxm){
       this.jsJf = false
     }
@@ -59,14 +59,14 @@ export default {
   padding: 20px;
 }
 .project-teamwork-content {
-  /* box-shadow: 0 2px 12px 0 rgba(0,0,0,.1); */
   background: rgba(255, 255, 255, 1);
   border-radius: 5px;
   padding: 10px;
-  height: calc(100vh - 150px);
+  /* height: calc(100vh - 150px); */
 }
 .el-tab-pane {
-  height: calc(100vh - 230px);
+  max-height: calc(100vh - 230px);
   overflow-y: auto;
+  margin: 8px 0;
 }
 </style>

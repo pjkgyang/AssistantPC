@@ -115,7 +115,7 @@
             title="选择项目"
             :visible.sync="dialogQuestionVisible"
             :close-on-click-modal="false"
-            width="1000px"
+            width="800px"
             top="30px"
             append-to-body>
             <div style="padding:10px;">
@@ -244,11 +244,11 @@ export default {
       };
     },
     handleEdit(data) {
-      //选择项目（）
-      if(data.gcfwzt == '0'){
-        this.$alert(data.gcfwztsm,'提示',{type:'warning',confirmButtonText: '确定'});
-        return;
-      }
+      // //选择项目（）
+      // if(data.gcfwzt == '0'){
+      //   this.$alert(data.gcfwztsm,'提示',{type:'warning',confirmButtonText: '确定'});
+      //   return;
+      // }
       if (this.questionTitle == "我要提问") {
         this.queryResponsibleProduct(data.xmbh);
       }

@@ -139,28 +139,28 @@
                 </p>
               </div>
             </div>
-            <div class="project-question-detail-bottom" style="padding:0 10px;">
+            <div class="project-question-detail-bottom" style="padding:0 30px;">
               <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">服务评价</span>
               <div style="display:flex;border:none;padding:0;margin-bottom:5px;">
                 <p style="display:flex;align-items:center;">
-                  <span>服务质量：</span>
+                  <span style="padding:0 12px">服务质量：</span>
                   <el-rate :disabled="true" v-model="zlpf" show-text :texts="['1分','2分','3分','4分','5分']"> </el-rate>
                 </p>
               </div>
               <section v-if="zlpf<=3">
                 <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">服务评价说明</span>
-                <div style="padding:0 !important" >{{!qusetionInfo.cpsm?'无':qusetionInfo.cpsm}}</div>
+                <div style="padding:0 !important;text-indent:12px">{{!qusetionInfo.cpsm?'无':qusetionInfo.cpsm}}</div>
               </section>
               <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">有效贡献人</span>
-              <p v-for="(GXR,index) in yxGXR" :key="index">
+              <p v-for="(GXR,index) in yxGXR" :key="index" style="text-indent:12px">
                 <span>姓名 : {{GXR.gxrxm}}</span>&#x3000;工时 :
                 <span>{{GXR.gs}} (小时)</span>
               </p>
-              <p v-if="yxGXR!=null&&yxGXR.length!=0">合计工时 : {{hjgs}} (小时)</p>
+              <p v-if="yxGXR!=null&&yxGXR.length!=0" style="text-indent:12px">合计工时 : {{hjgs}} (小时)</p>
               <p v-if="yxGXR==null||yxGXR.length==0">暂无贡献人</p>
               <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">解决说明</span>
-              <div style="padding:0 !important" v-html="!qusetionInfo.jjsm?'无':qusetionInfo.jjsm"></div>
-              <section>
+              <div style="padding:0 !important;text-indent:12px" v-html="!qusetionInfo.jjsm?'无':qusetionInfo.jjsm"></div>
+              <section v-if="qusetionInfo.gssfrk != ''">
                 <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">是否认可工时:</span>
                 <span style="padding:0 !important;color:#888;">{{qusetionInfo.gssfrk==1?'是':'否'}}</span>
               </section>
@@ -1546,13 +1546,13 @@ export default {
       //回复
       let reg = /^\d+(\.\d+)?$/;
       let hfnr = $("#summernoteT").summernote("code");
-      if (!reg.test(this.gsValue) && this.gsValue > 8) {
+      if (!reg.test(this.gsValue) || this.gsValue > 8) {
         this.$alert(
           "请输入正确工时且单次工时不能超过8小时,大于8小时请分多个回复!",
           "提示",
           {
             confirmButtonText: "确定",
-            type: "error"
+            type: "warning"
           }
         );
         return;

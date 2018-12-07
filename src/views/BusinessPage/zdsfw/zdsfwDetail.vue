@@ -37,7 +37,7 @@
                     </div>
                     <div>
                         <span class="contenTitle">相关材料:</span>
-                        <a v-if="!!cpData.fjList" v-for="fj in cpData.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh"><span class="el-icon-download"></span>{{fj.fjmc}}</a> 
+                        <a style="margin-right:30px;" v-if="!!cpData.fjList" v-for="fj in cpData.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 
                         <span class="filter-weight" v-if="!cpData.fjList">无</span>
                     </div>
                  </div>

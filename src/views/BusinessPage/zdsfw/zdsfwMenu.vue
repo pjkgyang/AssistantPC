@@ -12,6 +12,9 @@
               <el-button :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('qrfw')">确认服务</el-button>
               <el-button :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('bhfw')">驳回服务</el-button>
             </div>
+            <div>
+              <el-button type="primary" size="mini" @click="handleClick('export')">导出</el-button>
+            </div>
           </div>
           <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border @selection-change="handleSelectionChange">
             <el-table-column fixed="left" type="selection" width="55"></el-table-column>
@@ -27,25 +30,27 @@
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="ztztmc" label="项目状态" min-width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="xmlb" label="项目类别" min-width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="sfgx" label="是否购销" min-width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="dkl" label="到款率" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="cpmc" label="产品" min-width="240" show-overflow-tooltip></el-table-column>
             <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
-                  <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
+                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
-            </el-table-column>
+            </el-table-column>  
             <el-table-column prop="jhksrq" label="计划开始日期" width="140"></el-table-column>
             <el-table-column prop="jhjsrq" label="计划结束日期" width="140"></el-table-column>
+            <el-table-column prop="sjjsrq" label="实际结束日期" width="140"></el-table-column>
             <el-table-column prop="sfgq" label="是否过期" width="100">
               <template slot-scope="scope">
-                  <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':'过期'}}</el-tag>
+                <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':'过期'}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="zrrxm" label="责任人" width="100"></el-table-column>
+            <el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>
+            <!-- <el-table-column prop="ztztmc" label="项目状态" min-width="100" show-overflow-tooltip></el-table-column> -->
+            <el-table-column prop="xmlb" label="项目类别" min-width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sfzt" label="合同性质" min-width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sfgx" label="是否购销" min-width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="dkl" label="到款率" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
@@ -262,8 +267,7 @@ export default {
                   });
                 }
               });
-            })
-            .catch(() => {});
+            }).catch(() => {});
           break;
         case "export":
           window.open(
@@ -287,7 +291,8 @@ export default {
               "&keyword=" +
               this.filterData.keyword +
               "&lb=" +
-              this.filterData.lb
+              this.filterData.lb + 
+              "&sffb=1"
           );
           break;
         case "sc": //生成
@@ -363,7 +368,8 @@ export default {
         jhksrq: this.filterData.jhksrq,
         jhjsrq: this.filterData.jhjsrq,
         sfgq: this.filterData.sfgq,
-        keyword: this.filterData.keyword
+        keyword: this.filterData.keyword,
+        sffb:1
       }).then(res => {
         if (res.state == "success") {
           this.tableData = res.data.rows;
