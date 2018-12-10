@@ -246,13 +246,13 @@ export default {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
-    handleCheckRrecord(data) {
       // 查看里程碑操作记录
+    handleCheckRrecord(data) {
       this.lcbbh = data.lcbbh;
       this.lcbjlShow = !this.lcbjlShow;
     },
-    handleChangeFilter(val) {
       // 区域工程
+    handleChangeFilter(val) {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
@@ -262,13 +262,13 @@ export default {
       this.queryMilestoneData();
     },
     checkboxInit(row, index) {
+       // && row.zt != '处理中'
       if (row.zt != "计划中" && row.zt != "处理中")
-        // && row.zt != '处理中'
         return 0;
       else return 1;
     },
+    //取消
     handleClose() {
-      //取消
       this.planVisible = false;
     },
 
@@ -367,16 +367,16 @@ export default {
           this.sfgx
       );
     },
+    //查询里程碑
     handleSearchLcb() {
-      //查询里程碑
       this.queryMilestoneData();
     },
+    //支持回车
     searchLcbContent() {
-      //支持回车
       this.queryMilestoneData();
     },
+    // 切换分页
     handleCurrentChange(data) {
-      // 切换分页
       this.currentPage = data;
       this.queryMilestoneData();
     },
@@ -385,13 +385,13 @@ export default {
       this.pageSize = data;
       this.queryMilestoneData();
     },
+    //选择里程碑状态
     handleCheckbox(val) {
-      //选择里程碑状态
       this.currentPage = 1;
       this.queryMilestoneData();
     },
+    //查询项目类别
     handleXMlb(val) {
-      //查询项目类别
       this.currentPage = 1;
       this.queryMilestoneData();
     },
@@ -399,23 +399,23 @@ export default {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
+    //承诺开始时间
     changeCnStartDate() {
-      //承诺开始时间
       this.currentPage = 1;
       this.queryMilestoneData();
     },
+    //承诺结束时间
     changeCnEndDate() {
-      //承诺结束时间
       this.currentPage = 1;
       this.queryMilestoneData();
     },
+    //实际开始时间
     changeSjStartDate() {
-      //实际开始时间
       this.currentPage = 1;
       this.queryMilestoneData();
     },
+    //实际结束时间
     changeSjEndDate() {
-      //实际结束时间
       this.currentPage = 1;
       this.queryMilestoneData();
     },

@@ -18,7 +18,7 @@
               <el-button size="mini" @click="handlecheckout" v-if="fileList.length == 0 || fileList == null">检出</el-button>
               <el-button size="mini" @click="handleUpdateFile" v-if="fileList.length != 0 && fileList != null">更新</el-button>
 
-              <el-upload class="upload-demo" ref="upload" multiple  :action="uploadAction" :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" :file-list="fileListArr" :show-file-list="false" :auto-upload="false">
+              <el-upload class="upload-demo" ref="upload" multiple :action="uploadAction" :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" :file-list="fileListArr" :show-file-list="false" :auto-upload="false">
                 <el-button slot="trigger" size="mini" style="border: none" icon="el-icon-circle-plus">上传</el-button>
               </el-upload>
             </div>
@@ -36,8 +36,7 @@
               </span>
             </div>
           </li>
-          <li v-for="(file,index) in fileList.files" style="padding:0 20px;display:flex" :data-fj="file.fjmc+'&'+file.sfwjml"
-           :data-fjbh="file.fjbh" @click="handleFile" @mouseover="fileIndex = index">
+          <li v-for="(file,index) in fileList.files" style="padding:0 20px;display:flex" :data-fj="file.fjmc+'&'+file.sfwjml" :data-fjbh="file.fjbh" @click="handleFile" @mouseover="fileIndex = index">
             <div style="width:40%;padding:6px 0">
               <div v-if="file.sfwjml == 1">
                 <span><img style="float:left" src="static/img/files.png" alt="">
@@ -59,8 +58,8 @@
             </div>
             <div class="file-evaluate">
               <div flex colcenter v-if="fileIndex == index && file.sfwjml == '0'">
-                <span @click="handlePraise($event,'1',file.fjbh)"><img title="好评" src="static/img/praise.png" alt="好评" >({{file.good}})</span>&nbsp;
-                <span @click="handlePraise($event,'0',file.fjbh)"><img title="差评" src="static/img/nopraise.png" alt="差评" >({{file.bad}})</span>&#x3000;
+                <span @click="handlePraise($event,'1',file.fjbh)"><img title="好评" src="static/img/praise.png" alt="好评">({{file.good}})</span>&nbsp;
+                <span @click="handlePraise($event,'0',file.fjbh)"><img title="差评" src="static/img/nopraise.png" alt="差评">({{file.bad}})</span>&#x3000;
                 <a href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>
               </div>
             </div>
@@ -70,8 +69,7 @@
     </el-collapse-transition>
     <el-collapse-transition>
       <section v-if="catalogue == 'record'">
-        <oprateRecord :jdList="jdList" :fileCounts="fileCounts" :isSvn="true" @hadnleChangeTab="hadnleChangeTab" @hadnleChange="hadnleChange"
-        :currentPage="currentPage" :pageSize="pageSize" :total="total"></oprateRecord>
+        <oprateRecord :jdList="jdList" :fileCounts="fileCounts" :isSvn="true" @hadnleChangeTab="hadnleChangeTab" @hadnleChange="hadnleChange" :currentPage="currentPage" :pageSize="pageSize" :total="total"></oprateRecord>
       </section>
     </el-collapse-transition>
 
@@ -121,18 +119,18 @@ export default {
       SVNValue: "",
       baseUrl: null,
       catalogue: "file",
-      fjPath:"",
-      fileIndex:"",
-      appraiseType:"",
-      currentPage:1,
-      pageSize:15,
-      total:0,
-      jdList:[],
-      logTabName:'',
-      logsFjpath:'',
-      oldFjpath:'',//记录根目录路径
-      fileCounts:{},
-      dialogTitle:''
+      fjPath: "",
+      fileIndex: "",
+      appraiseType: "",
+      currentPage: 1,
+      pageSize: 15,
+      total: 0,
+      jdList: [],
+      logTabName: "",
+      logsFjpath: "",
+      oldFjpath: "", //记录根目录路径
+      fileCounts: {},
+      dialogTitle: ""
     };
   },
   props: {
@@ -158,20 +156,20 @@ export default {
 
   methods: {
     // 分页切换
-    hadnleChange(data,type){
-       if(type == 'size'){
+    hadnleChange(data, type) {
+      if (type == "size") {
         this.currentPage = 1;
         this.pageSize = data;
-      }else{
+      } else {
         this.currentPage = data;
       }
       this.getLogs();
     },
     // 切换tab
-    hadnleChangeTab(data){
-      if(data == 9){
-        this.logTabName = '';
-      }else{
+    hadnleChangeTab(data) {
+      if (data == 9) {
+        this.logTabName = "";
+      } else {
         this.logTabName = data;
       }
       this.currentPage = 1;
@@ -180,7 +178,7 @@ export default {
     // 评价提交
     handleClickSure(data) {
       this.$post(this.appraiseType == 1 ? this.API.good : this.API.bad, {
-        xmbh:this.xmbh,
+        xmbh: this.xmbh,
         path: this.fjPath,
         lx: 4,
         sm: data
@@ -189,30 +187,33 @@ export default {
           this.pjsmShow = !this.pjsmShow;
           this.$alert("评价成功", "提示", {
             confirmButtonText: "确定",
-            type:'success',
+            type: "success",
             callback: action => {
               this.openRealFolder();
             }
           });
-        }else{
-          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
       });
     },
     // 评价
-    handlePraise(e, param,data) {
+    handlePraise(e, param, data) {
       e.stopPropagation();
       this.appraiseType = param;
       this.fjPath = data;
-      if(param == 2){
+      if (param == 2) {
         this.logsFjpath = data;
-        this.catalogue = 'record';
+        this.catalogue = "record";
         return;
       }
-      if(param == 1){
-        this.dialogTitle = '点赞说明'
-      }else if(param == 0){
-        this.dialogTitle = '优化建议'  
+      if (param == 1) {
+        this.dialogTitle = "点赞说明";
+      } else if (param == 0) {
+        this.dialogTitle = "优化建议";
       }
       this.pjsmShow = !this.pjsmShow;
     },
@@ -237,9 +238,8 @@ export default {
         }
       });
     },
-
+    // svn提交(修改)
     handleCommitSVN() {
-      // svn提交(修改)
       updateSvnUrl({
         xmbh: this.xmbh,
         svn: this.SVNValue
@@ -261,8 +261,9 @@ export default {
         }
       });
     },
+    // 切换SVN
     handlechangeSVN() {
-      this.dialogVisible = !this.dialogVisible;
+      this.dialogVisible = true;
     },
     handlecheckout() {
       //检出文件
@@ -290,7 +291,7 @@ export default {
     handleAllfile() {
       this.openRealFolder();
       this.fileBread = [];
-      this.logsFjpath = '';
+      this.logsFjpath = "";
     },
 
     // 面包屑导航
@@ -302,12 +303,16 @@ export default {
         xmbh: this.xmbh
       }).then(({ data }) => {
         if (data.state == "success") {
-          this.fileList = data.data;
-          this.fileBread.forEach((ele, i, arr) => {
-            if (ele.fjbh.includes(fjbh)) {
-              this.fileBread.splice(i + 1, 9999);
-            }
-          });
+          if (!data.data) {
+            this.fileList = [];
+          } else {
+            this.fileList = data.data;
+            this.fileBread.forEach((ele, i, arr) => {
+              if (ele.fjbh.includes(fjbh)) {
+                this.fileBread.splice(i + 1, 9999);
+              }
+            });
+          }
         }
       });
     },
@@ -331,16 +336,20 @@ export default {
         xmbh: this.xmbh
       }).then(({ data }) => {
         if (data.state == "success") {
-          this.fileList = data.data;
-          this.oldFjpath = this.fileList.wid;
-          if (type == "back") {
-            this.fileBread.pop();
-          } else {
-            if (fj.split("&")[1] == 1) {
-              this.fileBread.push(this.fjobj);
+            if(!data.data){
+              this.fileList = [] 
+            }else{
+              this.fileList = data.data;
+              this.oldFjpath = this.fileList.wid;
+              if (type == "back") {
+                this.fileBread.pop();
+              } else {
+                if (fj.split("&")[1] == 1) {
+                  this.fileBread.push(this.fjobj);
+                }
+              }
             }
-          }
-        }
+         }
       });
     },
 
@@ -351,7 +360,11 @@ export default {
         xmbh: this.xmbh
       }).then(({ data }) => {
         if (data.state == "success") {
-          this.fileList = data.data;
+          if (!data.data) {
+            this.fileList = [];
+          } else {
+            this.fileList = data.data;
+          }
         } else {
           checkout({
             xmbh: this.xmbh
@@ -366,7 +379,11 @@ export default {
                     xmbh: this.xmbh
                   }).then(({ data }) => {
                     if (data.state == "success") {
-                      this.fileList = data.data;
+                      if(!data.data){
+                        this.fileList = []
+                      }else{
+                        this.fileList = data.data;
+                      }
                     }
                   });
                 }
@@ -436,46 +453,46 @@ export default {
       this.$refs.upload.submit();
     },
     //  获取记录
-    getLogs(){
-        this.$get(this.API.logs,{
-          curPage:this.currentPage,
-          pageSize:this.pageSize,
-          path:this.logsFjpath,
-          lx:4,
-          xmbh:this.xmbh,
-          czlx:this.logTabName
-        }).then(res=>{
-          if(res.state == 'success'){
-            if(!res.data.rows){
-              this.jdList = []
-            }else{
-              this.jdList = res.data.rows
-            }
-            this.total = res.data.records
+    getLogs() {
+      this.$get(this.API.logs, {
+        curPage: this.currentPage,
+        pageSize: this.pageSize,
+        path: this.logsFjpath,
+        lx: 4,
+        xmbh: this.xmbh,
+        czlx: this.logTabName
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data.rows) {
+            this.jdList = [];
+          } else {
+            this.jdList = res.data.rows;
           }
-      })
+          this.total = res.data.records;
+        }
+      });
     },
     // 获取记录数
-    getCount(){
-      this.$get(this.API.getCount,{
-        path:this.logsFjpath,
-        lx:4,
-        xmbh:this.xmbh,
-      }).then(res=>{
-        if(res.state == 'success'){
-          this.fileCounts = res.data
+    getCount() {
+      this.$get(this.API.getCount, {
+        path: this.logsFjpath,
+        lx: 4,
+        xmbh: this.xmbh
+      }).then(res => {
+        if (res.state == "success") {
+          this.fileCounts = res.data;
         }
-      })
+      });
     }
   },
-  watch:{
-    catalogue(n,o){
-      if(n == 'record'){
-        this.logTabName = '';
+  watch: {
+    catalogue(n, o) {
+      if (n == "record") {
+        this.logTabName = "";
         this.getLogs();
         this.getCount();
-      }else{
-        this.logsFjpath = this.oldFjpath
+      } else {
+        this.logsFjpath = this.oldFjpath;
       }
     }
   },

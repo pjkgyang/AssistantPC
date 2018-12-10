@@ -10,11 +10,11 @@
         <li v-for="(item,index) in itemList" flex spacebetween @mouseover="listIndex = index">
           <p class="item-name textellipsis" :title="item.cpx">{{item.cpxmc}}</p>
           <p class="item-size textellipsis" :title="item.gczj">{{item.gczj}}
-            <!-- <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'1')" v-if="listIndex == index && item.gczj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a> -->
+            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'1')" v-if="listIndex == index && item.gczj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
           </p>
           <p class="item-cpzj textellipsis" :title="item.cpzj">
             {{item.cpzj}}
-            <!-- <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'2')" v-if="listIndex == index && item.cpzj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a> -->
+            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'2')" v-if="listIndex == index && item.cpzj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
           </p>
         </li>
       </div>

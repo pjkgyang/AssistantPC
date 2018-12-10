@@ -15,8 +15,8 @@
                             <div>
                                 <span>{{scope.row.name}}</span>&#x3000;
                                 <span>
-                                    <span title="好评" class="zjlist-pj"><img src="static/img/praise.png" alt="">(0)</span>&nbsp;
-                                    <span title="差评" class="zjlist-pj"><img src="static/img/nopraise.png" alt="">(1)</span>
+                                    <span title="点击好评" class="zjlist-pj" @click="handlePraise('1')"><img src="static/img/praise.png" alt="">(0)</span>&nbsp;
+                                    <span title="点击差评" class="zjlist-pj" @click="handlePraise('0')"><img src="static/img/nopraise.png" alt="">(1)</span>
                                 </span>
                             </div>
                         </template>
@@ -140,6 +140,9 @@ export default {
 }
 .zjlist-pj {
   cursor: pointer;
+}
+.zjlist-pj:hover{
+   font-weight: 700;
 }
 .demo-table-expand {
   font-size: 0;
