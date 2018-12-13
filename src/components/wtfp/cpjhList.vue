@@ -11,9 +11,10 @@
                     </div>
                     <div style="margin:10px 0">
                         <el-table :data="tableData" border style="width: 100%">
-                            <el-table-column fixed="left" label="操作" width="100">
+                            <el-table-column fixed="left" label="操作" width="220">
                                 <template slot-scope="scope">
                                     <el-button type="success" size="mini" @click="handleRelease(scope.row)">发布</el-button>
+                                    <el-button type="primary" size="mini" @click="handlePlnrjh(scope.row)" >批量纳入计划</el-button>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="cpmc" label="产品" min-width="180"></el-table-column>
@@ -40,6 +41,7 @@
             </div>
         </div>
         <cpfb-dialog :show.sync="cpfbShow" :planData="planData" @handleCommit="handleCommit"></cpfb-dialog>
+        <wtfplist-dialog :show.sync="wtfpShow" :jhData="jhData" :lx="1"  @handleNrsuccess="handleNrsuccess"></wtfplist-dialog>
     </div>
 </template>
 
@@ -47,12 +49,14 @@
 import filterCondition from "@/components/wtfp/Filter.vue";
 import tableLayout from "@/components/layout/tableLayout.vue";
 import cpfbDialog from "@/components/dialog/wtfp/cpfb-dialog.vue";
-
+import wtfplistDialog from "@/components/dialog/wtfp/wtfplist-dialog.vue";
 export default {
   data() {
     return {
       cpfbShow: false,
+      wtfpShow:false,
       tableData: [],
+      jhData:{},
       currentPage: 1,
       pageSize: 15,
       total: 0,
@@ -70,10 +74,14 @@ export default {
     };
   },
   methods: {
+     // 批量纳入成功
+    handleNrsuccess(){
+      this.pageProductPlan();
+    },
       // 跳转 
     handleCehckwts(data){
       let routeData = this.$router.resolve({
-        path: "/report-list/gjjh",
+        path: "/report-list/questionlist.html",
         query:{
           jhwid:data,
           jhlx:'1'
@@ -100,6 +108,11 @@ export default {
     handleRelease(data) {
       this.planData = data;
       this.cpfbShow = !this.cpfbShow;
+    },
+    // 批量纳入计划
+    handlePlnrjh(data){
+      this.jhData = data;
+      this.wtfpShow = !this.wtfpShow
     },
     handleExport() {
       window.open(
@@ -162,7 +175,7 @@ export default {
   mounted() {
     this.pageProductPlan();
   },
-  components: { filterCondition, tableLayout, cpfbDialog }
+  components: { filterCondition, tableLayout, cpfbDialog ,wtfplistDialog}
 };
 </script>
 

@@ -2,15 +2,22 @@
     <div class="pannelPadding-10">
         <div class="pannelPaddingBg-10">
             <div>
-                <el-input style="width:300px;" size="mini" placeholder="请输入工号/部门名称/一级部门名称/姓名/区域战队" @change="handleSearch"></el-input>
+                <el-input v-model="keyword" style="width:500px;" size="mini" placeholder="请输入工号/部门名称/一级部门名称/姓名/区域战队" @change="handleSearch"></el-input>
                 <el-button @click="handleSearch" size="mini" type="primary">查询</el-button>
             </div><br>
             <div>
                 <el-table :data="tableData" border style="width: 100%"  :max-height="tableHeight">
-                    <el-table-column prop="xm" label="姓名" min-width="50"></el-table-column>
-                    <el-table-column prop="bh" label="工号" min-width="50"></el-table-column>
+                    <el-table-column prop="xm" label="姓名" width="90"></el-table-column>
+                    <el-table-column prop="bh" label="工号" width="90"></el-table-column>
                     <el-table-column prop="ssbm" label="所属部门" width="140"></el-table-column>
                     <el-table-column prop="ssyjbm" label="所属一级部门" width="140"></el-table-column>
+                    <el-table-column prop="cpx" label="产品线" show-overflow-tooltip min-width="130"></el-table-column>
+                    <el-table-column prop="rzdj" label="任职等级" width="100"></el-table-column>
+
+                    <el-table-column prop="gkzbsc" label="观看直播时长" width="120" v-if="this.$route.query.type == 1"></el-table-column>
+                    <el-table-column prop="gkhfsc" label="观看回放时长" width="120" v-if="this.$route.query.type == 1"></el-table-column>
+                    <el-table-column prop="gkzsc" label="观看总时长" width="120" v-if="this.$route.query.type == 1"></el-table-column>
+                    
                     <el-table-column prop="zt" label="状态" width="80"></el-table-column>
                     <el-table-column prop="rzrq" label="入职日期" width="110"></el-table-column>
                     <el-table-column prop="lzrq" label="离职日期" width="110"></el-table-column>
@@ -19,7 +26,6 @@
                     <el-table-column prop="zxmc" label="职系名称"  width="100" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="ygmc" label="用工名称"  width="100" ></el-table-column>
                     <el-table-column prop="xlmc" label="学历"  width="140" ></el-table-column>
-                    <el-table-column prop="ygmc" label="用工名称"  width="110" ></el-table-column>
                     <el-table-column prop="byyx" label="毕业院校" min-width="180" show-overflow-tooltip></el-table-column>
                 </el-table>
                 <div text-right>
@@ -64,7 +70,8 @@ export default {
         pageSize: this.pageSize,
         keyword: this.keyword,
         nljhwid: this.$route.query.nljhwid,
-        type: this.$route.query.type
+        type: this.$route.query.type,
+        cpbh:this.$route.query.cpbh
       }).then(res => {
         if (res.state == "success") {
           if(!res.data.rows){

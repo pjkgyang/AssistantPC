@@ -1607,10 +1607,7 @@ export default {
         this.isAll = this.xmkbInfo.isAll;
       }
     } else {
-      sessionStorage.setItem(
-        "xmbh",
-        JSON.stringify(this.$route.params.data.xmbh)
-      );
+      sessionStorage.setItem("xmbh", JSON.stringify(this.$route.params.data.xmbh));
       sessionStorage.setItem("xmData", JSON.stringify(this.$route.params.data));
       this.xmbh = this.$route.params.data.xmbh || this.xmbh;
       this.xmkbInfo = this.$route.params.data;
@@ -1637,14 +1634,7 @@ export default {
     }
 
     this.getItemUserNum(); // 获取项目人员总数
-    isVisibleXmtd({
-      // 是否显示 团队成员
-      xmbh: this.xmbh
-    }).then(({ data }) => {
-      if (data.state == "success") {
-        this.xmtdShow = data.data;
-      }
-    });
+
   },
   components: {
     itemTask,

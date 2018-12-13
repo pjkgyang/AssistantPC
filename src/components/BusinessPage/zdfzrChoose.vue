@@ -199,6 +199,7 @@ export default {
         this.multipleSelection = [];
       }
     },
+    
     queryComplainUser() {
       this.$emit("queryComplainUser", this.cpKeyword);
       this.radio = "";
@@ -214,12 +215,12 @@ export default {
         this.multipleSelection = [];
       }
     },
+    //分页
     handleCurrentChange(data) {
-      //分页
       this.$emit("handleCurrentChange", data);
     },
+    // 获取单选
     getCurrentRow(index, row) {
-      // 获取单选
       this.ryData = row;
     },
     handleCommitZdr() {

@@ -36,7 +36,7 @@
                 </span>
               </div>
               <div v-if="file.sfwjml == 0">
-                <a :href="baseUrl+'attachment/'+downloadApi+'?path='+file.fjbh" target="blank">
+                <a :href="baseUrl+'attachment/downloadTemplateFile.do?path='+file.fjbh+'&lx='+resourceType" target="blank">
                   <span class="el-icon-document" style="font-size:32px;margin: 0 10px 0 0;"></span>
                   <span style="margin-top:10px">{{file.fjmc}}</span>
                 </a>
@@ -50,8 +50,8 @@
             </div>
             <div class="file-evaluate">
               <div flex colcenter v-if="fileIndex == index && file.sfwjml == '0'">
-                <span @click="handlePraise($event,'1',file.fjbh)"><img title="好评" src="static/img/praise.png" alt="好评" >({{file.good}})</span>&nbsp;
-                <span @click="handlePraise($event,'0',file.fjbh)"><img title="差评" src="static/img/nopraise.png" alt="差评" >({{file.bad}})</span>&#x3000;
+                <span @click="handlePraise($event,'1',file.fjbh)"><span class="appraise-hp"></span> ({{file.good}})</span>&nbsp;
+                <span @click="handlePraise($event,'0',file.fjbh)"><span class="appraise-cp"></span> ({{file.bad}})</span>&#x3000;
                 <a href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>
               </div>
             </div>
@@ -66,7 +66,7 @@
     <el-collapse-transition>
       <section v-if="catalogue == 'record'">
         <oprateRecord :jdList="jdList" :fileCounts="fileCounts" @hadnleChangeTab="hadnleChangeTab" @hadnleChange="hadnleChange" :currentPage="currentPage"
-        :pageSize="pageSize" :total="total"></oprateRecord>
+        :pageSize="pageSize" :total="total" @handleCommit="handleCommit"></oprateRecord>
       </section>
     </el-collapse-transition>
     <pjsmDialog :show.sync="pjsmShow" @handleClickSure="handleClickSure" :title="dialogTitle"></pjsmDialog>
@@ -106,10 +106,6 @@ export default {
       type: String,
       default: ""
     },
-    downloadApi: {
-      type: String,
-      default: ""
-    },
     resourceType: {
       type: Number,
       default: 0
@@ -119,8 +115,14 @@ export default {
     this.baseUrl = window.baseurl;
     this.openFolder();
   },
-
   methods: {
+    handleCommit(){
+      if(this.catalogue == 'file'){
+        this.openFolder(); 
+      }else{
+        this.getLogs();
+      }
+    },
     // 分页切换
     hadnleChange(data, type) {
       if(type == 'size'){
@@ -156,7 +158,7 @@ export default {
             callback: action => {}
           });
         }else{
-          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'success'});
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
         }
       });
     },
@@ -266,7 +268,7 @@ export default {
             }
             this.total = res.data.records
           }else{
-            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'success'});
+            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
           }
       })
     },
@@ -279,7 +281,7 @@ export default {
         if(res.state == 'success'){
           this.fileCounts = res.data
         }else{
-           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'success'}); 
+           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'}); 
         }
       })
     }
@@ -364,10 +366,31 @@ export default {
     height: 100%;
     justify-content: flex-end;
   }
-  img {
-    width: 16px;
-    height: 16px;
-    margin: 0 0 0 5px !important;
+  .appraise-hp{
+    display:inline-block;
+    margin-bottom: -3px;
+    width:16px;
+    height:16px;
+    background:url('../../../static/img/appraiseImg.png');
+    background-position:0 -16px;
   }
+  .appraise-hp:hover{
+    background-position:0 -48px;
+  }
+  .appraise-cp{
+    display:inline-block;
+    margin-bottom: -3px;
+    width:16px;
+    height:16px;
+    background:url('../../../static/img/appraiseImg.png');
+  }
+  .appraise-cp:hover{
+    background-position:0 -32px;
+  }
+  // img {
+  //   width: 16px;
+  //   height: 16px;
+  //   margin: 0 0 0 5px !important;
+  // }
 }
 </style>

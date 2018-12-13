@@ -18,7 +18,9 @@
               <el-button size="mini" @click="handlecheckout" v-if="fileList.length == 0 || fileList == null">检出</el-button>
               <el-button size="mini" @click="handleUpdateFile" v-if="fileList.length != 0 && fileList != null">更新</el-button>
 
-              <el-upload class="upload-demo" ref="upload" multiple :action="uploadAction" :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" :file-list="fileListArr" :show-file-list="false" :auto-upload="false">
+              <el-upload class="upload-demo" ref="upload" multiple :action="uploadAction" 
+              :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" 
+              :file-list="fileListArr" :show-file-list="false" :auto-upload="false">
                 <el-button slot="trigger" size="mini" style="border: none" icon="el-icon-circle-plus">上传</el-button>
               </el-upload>
             </div>
@@ -58,8 +60,8 @@
             </div>
             <div class="file-evaluate">
               <div flex colcenter v-if="fileIndex == index && file.sfwjml == '0'">
-                <span @click="handlePraise($event,'1',file.fjbh)"><img title="好评" src="static/img/praise.png" alt="好评">({{file.good}})</span>&nbsp;
-                <span @click="handlePraise($event,'0',file.fjbh)"><img title="差评" src="static/img/nopraise.png" alt="差评">({{file.bad}})</span>&#x3000;
+                <span @click="handlePraise($event,'1',file.fjbh)"><span class="appraise-hp"></span>({{file.good}})</span>&nbsp;
+                <span @click="handlePraise($event,'0',file.fjbh)"><span class="appraise-cp"></span>({{file.bad}})</span>&#x3000;
                 <a href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>
               </div>
             </div>
@@ -419,25 +421,33 @@ export default {
       fd.append("xmbh", this.xmbh);
       fd.append("path", this.fjbh);
 
-      axios
-        .post(window.baseurl + "attachment/uploadXmFile.do", fd, {
+      axios.post(window.baseurl + "attachment/uploadXmFile.do", fd, {
           headers: { "Content-Type": "multipart/form-data" }
-        })
-        .then(res => {
-          this.$alert("上传成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              openRealFolder({
+        }).then(res => {
+          if(res.state == 'success'){
+            openRealFolder({
                 path: this.fjbh,
                 xmbh: this.xmbh
-              }).then(({ data }) => {
+            }).then(({ data }) => {
                 if (data.state == "success") {
                   this.fileList = data.data;
                 }
-              });
-            }
-          });
+            });
+          }
+          // this.$alert("上传成功", "提示", {
+          //   confirmButtonText: "确定",
+          //   type: "success",
+          //   callback: action => {
+          //     openRealFolder({
+          //       path: this.fjbh,
+          //       xmbh: this.xmbh
+          //     }).then(({ data }) => {
+          //       if (data.state == "success") {
+          //         this.fileList = data.data;
+          //       }
+          //     });
+          //   }
+          // });
         });
       return false;
     },
@@ -582,10 +592,31 @@ export default {
     height: 100%;
     justify-content: flex-end;
   }
-  img {
-    width: 16px;
-    height: 16px;
-    margin: 0 0 0 5px !important;
+  .appraise-hp{
+    display:inline-block;
+    margin-bottom: -3px;
+    width:16px;
+    height:16px;
+    background:url('../../../static/img/appraiseImg.png');
+    background-position:0 -16px;
   }
+  .appraise-hp:hover{
+    background-position:0 -48px;
+  }
+  .appraise-cp{
+    display:inline-block;
+    margin-bottom: -3px;
+    width:16px;
+    height:16px;
+    background:url('../../../static/img/appraiseImg.png');
+  }
+  .appraise-cp:hover{
+    background-position:0 -32px;
+  }
+  // img {
+  //   width: 16px;
+  //   height: 16px;
+  //   margin: 0 0 0 5px !important;
+  // }
 }
 </style>

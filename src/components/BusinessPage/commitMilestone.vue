@@ -281,12 +281,7 @@ export default {
     },
     sfbwValue(n,o){
       if(!n){
-        this.files = [];
         this.cnwcrq = '';
-        this.textarea = '';
-        this.valueXSQRR = '';
-        this.startDate = "";
-        this.signDate = "";
       }
     }
   }

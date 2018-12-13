@@ -1,203 +1,212 @@
 <template>
-  <div class="item-addUser">   
+  <div class="item-addUser">
     <div style="text-align:right;padding-bottom:10px;">
       <!--2018-12-04 甲方责任人不可见修改中标人和团队成员。
          经营管理 添加中标人 -->
-      <el-button size="small" type="primary" @click="handleChangeZbr" v-if="this.GroupTag.includes('JYGL')">修改中标人</el-button>
+      <el-button size="small" type="primary" @click="handleChangeZbr" v-if="GroupTag.includes('JYGL')">修改中标人</el-button>
       <el-button size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
     </div>
     <div class="item-user-outTable">
-       <table class="item-user-table" >
-         <thead>
-             <tr>
-               <th>角色</th>
-               <th>姓名</th>
-               <th>工号/手机号</th>
-               <th>单位类型</th>
-               <th>部门</th>
-               <th>创建时间</th>
-               <th>操作</th>
-             </tr>
-         </thead>
-           <tr>
-              <td>
-                <el-tag  v-if="itemJfzrr.roleName"  style="margin-right:5px;" size="mini" v-for="(roleName,index) in itemJfzrr.roleName" :key="index">{{roleName}}</el-tag>
-                <el-tag  v-if="!itemJfzrr.roleName" size="mini" >甲方</el-tag>
-              </td>
-             <td>{{!itemJfzrr.userName?'暂无':itemJfzrr.userName}}</td>
-             <td>{{itemJfzrr.userCode}}</td>
-             <td>{{itemJfzrr.unitType == 0?'金智':itemJfzrr.unitType == 2?'合作伙伴':!itemJfzrr.unitType?'':'学校成员'}}</td>
-             <td>{{!itemJfzrr.dept?'':itemJfzrr.dept}}</td>
-             <td>{{itemJfzrr.cjsj}}</td>
-             <td>
-                <el-button size="mini" :data-wid="itemJfzrr.userId" @click="changeJfZrr">修改</el-button>
-                <el-button  plain size="mini" :data-wid="itemJfzrr.userId" @click="editUser($event,itemJfzrr)">编辑</el-button>
-                <el-button v-if="itemJfzrr.userName" type="danger" plain size="mini" :data-wid="itemJfzrr.userId" @click="deleteJfZrr">删除</el-button>
-              </td>
-           </tr>
-           <tr>
-             <td>
-               <el-tag v-if="itemYfzrr.roleName" style="margin-right:5px;" size="mini" v-for="(roleName,index) in itemYfzrr.roleName" :key="index">{{roleName}}</el-tag>
-                <el-tag  v-if="!itemYfzrr.roleName" size="mini" >乙方</el-tag>
-             </td>
-             <td>{{!itemYfzrr.userName?'暂无':itemYfzrr.userName}}</td>
-             <td>{{itemYfzrr.userCode}}</td>
-             <td>{{!itemYfzrr.userName?'':itemYfzrr.unitType == 0?'金智':itemYfzrr.unitType == 1?'学校成员':'合作伙伴'}}</td>
-             <td>{{!itemYfzrr.dept?'':itemYfzrr.dept}}</td>
-             <td>{{itemYfzrr.cjsj}}</td>
-             <td>
-               <!-- userTag || (itemYfzrr.userName == username) -->
-                 <el-button  v-if="this.GroupTag.includes('JYGL')" plain size="mini"  @click="changeUser($event,itemYfzrr)">修改</el-button>
-                 <el-button  plain size="mini" :data-wid="itemYfzrr.userId" @click="editUser($event,itemYfzrr)">编辑</el-button>
-             </td>
-           </tr>
-           <tr v-for="(cyz,index) in itemCyz" v-if="itemCyz.length">
-                 <td>
-                   <el-tag style="margin-right:5px;" size="mini" v-for="(roleName,index) in cyz.roleName" :key="index">{{roleName}}</el-tag>
-                 </td>
-                 <td>{{cyz.userName}}</td>
-                 <td>{{cyz.userCode}}</td>
-                 <td>{{cyz.unitType == 0?'金智':cyz.unitType == 2?'合作伙伴':'学校成员'}}</td>
-                 <td>{{cyz.dept}}</td>
-                 <td>{{cyz.cjsj}}</td>
+      <table class="item-user-table">
+        <thead>
+          <tr>
+            <th>角色</th>
+            <th>姓名</th>
+            <th>工号/手机号</th>
+            <th>单位类型</th>
+            <th>部门</th>
+            <th>创建时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>
+            <el-tag v-if="itemJfzrr.roleName" style="margin-right:5px;" size="mini" v-for="(roleName,index) in itemJfzrr.roleName" :key="index">{{roleName}}</el-tag>
+            <el-tag v-if="!itemJfzrr.roleName" size="mini">甲方</el-tag>
+          </td>
+          <td>{{!itemJfzrr.userName?'暂无':itemJfzrr.userName}}</td>
+          <td>{{itemJfzrr.userCode}}</td>
+          <td>{{itemJfzrr.unitType == 0?'金智':itemJfzrr.unitType == 2?'合作伙伴':!itemJfzrr.unitType?'':'学校成员'}}</td>
+          <td>{{!itemJfzrr.dept?'':itemJfzrr.dept}}</td>
+          <td>{{itemJfzrr.cjsj}}</td>
+          <td>
+            <el-button v-if="itemJfzrr.userName !== username && itemJfzrr.unitType != 1" size="mini" @click="changeJfZrr">修改</el-button>
+            <el-button v-if="itemJfzrr.edit" plain size="mini" @click="editUser($event,itemJfzrr)">编辑</el-button>
+            <el-button v-if="itemJfzrr.del" type="danger" plain size="mini" @click="deleteJfZrr">删除</el-button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <el-tag v-if="itemYfzrr.roleName" style="margin-right:5px;" size="mini" v-for="(roleName,index) in itemYfzrr.roleName" :key="index">{{roleName}}</el-tag>
+            <el-tag v-if="!itemYfzrr.roleName" size="mini">乙方</el-tag>
+          </td>
+          <td>{{!itemYfzrr.userName?'暂无':itemYfzrr.userName}}</td>
+          <td>{{itemYfzrr.userCode}}</td>
+          <td>{{!itemYfzrr.userName?'':itemYfzrr.unitType == 0?'金智':itemYfzrr.unitType == 1?'学校成员':'合作伙伴'}}</td>
+          <td>{{!itemYfzrr.dept?'':itemYfzrr.dept}}</td>
+          <td>{{itemYfzrr.cjsj}}</td>
+          <td>
+            <el-button v-if="!!GroupTag.includes('JYGL')" plain size="mini" @click="changeUser($event,itemYfzrr)">修改</el-button>
+            <el-button v-if="itemYfzrr.edit" plain size="mini" @click="editUser($event,itemYfzrr)">编辑</el-button>
+          </td>
+        </tr>
+        <tr v-for="(cyz,index) in itemCyz" v-if="itemCyz.length">
+          <td>
+            <el-tag style="margin-right:5px;" size="mini" v-for="(roleName,index) in cyz.roleName" :key="index">{{roleName}}</el-tag>
+          </td>
+          <td>{{cyz.userName}}</td>
+          <td>{{cyz.userCode}}</td>
+          <td>{{cyz.unitType == 0?'金智':cyz.unitType == 2?'合作伙伴':'学校成员'}}</td>
+          <td>{{cyz.dept}}</td>
+          <td>{{cyz.cjsj}}</td>
 
-                 <td>
-                   <el-button v-if="cyz.roleName.indexOf('销售') != -1 &&　(userTag || itemYfzrr.userName == username)"  plain size="mini"  plain @click="changeXsr(cyz)">修改</el-button>
-                   <el-button v-if="cyz.edit"  plain size="mini" :data-wid="cyz.userId" plain @click="editUser($event,cyz)">编辑</el-button>
-                   <el-button v-if="cyz.del" type="danger" size="mini" :data-wid="cyz.userId" plain @click="delectUser($event,cyz.userId)">删除</el-button>
-                 </td>
-           </tr>
-       </table>  
+          <td>
+            <el-button v-if="cyz.roleName.indexOf('销售') != -1 &&　(userTag || itemYfzrr.userName == username)" plain size="mini" plain @click="changeXsr(cyz)">修改</el-button>
+            <el-button v-if="cyz.edit" plain size="mini" :data-wid="cyz.userId" plain @click="editUser($event,cyz)">编辑</el-button>
+            <el-button v-if="cyz.del" type="danger" size="mini" :data-wid="cyz.userId" plain @click="delectUser($event,cyz.userId)">删除</el-button>
+          </td>
+        </tr>
+      </table>
     </div>
-        <el-dialog
-            title="人员列表"
-            :visible.sync="dialogVisible"
-            width="750px"
-            :close-on-click-modal="false"
-            @close="closeOutPerson"
-            :append-to-body=true>
-             <ul class="item-user-list">
-                <li style="position:relative" flex><el-input v-model="keyword" size="mini":class="{'isAddCyz-cyz':isAddCyz,'isAddCyz-jf':!isAddCyz}" placeholder="搜索人员姓名/编号" @change="searchUser"></el-input>
-                    <span style="width:40%" v-if="isAddCyz">人员类别:
-                           <el-select v-model="rylb" placeholder="请选择" style="width:150px" size="mini" @change="chooseRylb">
-                                <el-option  label="无" value="" ></el-option>
-                                <el-option  label="金智" value="0" ></el-option>
-                                <el-option  label="学校" value="1" ></el-option>
-                                <el-option  label="合作伙伴" value="2" ></el-option>
-                            </el-select>
-                    </span>
-                   <span  class="el-icon-circle-plus  invite-newUser" @click="inviteNewuser" >添加</span>
-                </li>
-                <li v-for="(user,index) in UserList"  v-if="UserList.length != 0">
-                    <span>{{user.nickName}}</span>
-                    <span>{{user.userName}}</span>
-                    <span :title="user.unit">{{user.unit}}</span>
-                    <span>
-                        <el-button :disabled="user.state == 'ytj'" size="mini"  v-if="isAddCyz && jszbr"  @click="addItemCyz(user,index)">{{user.state == 'ytj'?'已添加':'添加'}}</el-button>
-                        <el-button size="mini" v-if="!isAddCyz && isJF" @click="addItemJfzrr(user)">修改为(甲方责任人)</el-button>
-                        <el-button size="mini" v-if="!isAddCyz && !isJF" @click="addItemYfzrr(user)">修改为(乙方责任人)</el-button>
-                    </span>
-                </li>
-                <div v-if="UserList.length == 0" text-center class="pd-10">
-                   暂无人员数据
-                </div>
-             </ul>
-             <div style="padding:10px 0;text-align:center">
-              <pagination v-if="" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
-              </div>
-                  <el-dialog
-                    width="750px"
-                    title="添加外部人员"
-                    :visible.sync="innerVisible"
-                    :close-on-click-modal="false"
-                    append-to-body>
-                     <el-form :model="form" style="margin:10px 0;padding:0 50px;" size="mini" label-width="80px" :inline="true" >
-                        <el-form-item label="姓名"  required>
-                             <el-input required v-model="form.name" style="width:200px" clearable placeholder="请输入姓名"></el-input>
-                        </el-form-item>
-                         <el-form-item label="密码" required>
-                             <el-input type="password" required v-model="form.pwd" style="width:200px" clearable placeholder="6-12位字母、数字和下划线"></el-input>
-                        </el-form-item>
-                        <el-form-item label="手机号" required>
-                             <el-input required v-model="form.phone" style="width:200px" clearable placeholder="请输入手机号"></el-input>
-                        </el-form-item>
-                         <el-form-item label="邮箱" required>
-                             <el-input required v-model="form.email" style="width:200px" clearable placeholder="请输入邮箱"></el-input>
-                        </el-form-item>
-                        <el-form-item label="负责业务" >
-                             <el-select v-model="cpxFzyw" placeholder="请选择" multiple  style="width:420px" :disabled='isAllCpx'>
-                                <el-option v-for="(yw,index) in cpxData"  :label="yw.mc" :value="yw.mc+','+yw.label" :key="index"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="" >
-                            <el-checkbox v-model="isAllCpx">全部</el-checkbox>
-                        </el-form-item><br>
-                        <el-form-item label="人员类型" required>
-                             <el-select v-model="form.rylx" placeholder="请选择" style="width:200px" >
-                                <el-option  label="学校成员" value="1013" ></el-option>
-                                <el-option  label="合作伙伴" value="1004" ></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="单位" v-if="form.rylx == '1004'" required>
-                             <el-select v-model="form.dw" placeholder="请选择" style="width:200px">
-                                <el-option :title="dw.text" :label="dw.text" :value="dw.id+'&'+dw.text" v-for="(dw,i) in dwList" :key="i"></el-option>
-                            </el-select>
-                        </el-form-item>
-                         <el-form-item label="部门" required v-else>
-                               <el-input size="mini" placeholder="请输入部门/选择部门" v-model="form.bm" style="width:200px" @blur="handleBMblur" @focus="handleBMfocus"></el-input>
-                            <transition name="component-fade">
-                               <ul class="bm-select" v-if="selectVisible">
-                                 <li v-for="(item,index) in bmList" :key="index" :data-bm='item.mc' @click="chooseBm" v-if="bmList.length != 0">{{item.mc}}</li>  
-                                 <div v-if="bmList.length == 0" style="color:#aaa;text-align:center">无数据</div>
-                               </ul>
-                            </transition>
-                        </el-form-item>
-                        <el-form-item label="性别" >
-                             <el-select v-model="form.sex" placeholder="请选择" style="width:200px">
-                                <el-option  label="男" value="1" ></el-option>
-                                <el-option  label="女" value="2" ></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="用户类别" v-if="form.rylx == '1013'">
-                             <el-select v-model="form.yhlb" placeholder="请选择" style="width:200px">
-                                <el-option  label="学校老师" value="1" ></el-option>
-                                <el-option  label="学校领导" value="2" ></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <p style="color:#aaa;font-weight:700;font-size:12px;padding:0 20px">( 注 : 手机号为用户默认登录账号 )</p>
-                    </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="innerVisible = false" size="mini">取 消</el-button>
-                            <el-button type="primary" @click="handleCommit" size="mini">确 定</el-button>
-                        </div>
-                 </el-dialog>
-        </el-dialog>
-         <el-dialog
-            title="编辑人员信息"
-            :visible.sync="editdialogVisible"
-            width="750px"
-            :close-on-click-modal="false"
-            :append-to-body=true>
-               <el-form style="margin:10px 0;padding:0 50px;" size="mini" label-width="80px" :inline="true" >
-                   <el-form-item label="负责业务" required>
-                          <el-select v-model="fzywList" placeholder="请选择" multiple  style="width:400px" :disabled='isAllCpx'>
-                                <el-option v-for="(yw,index) in cpxData"  :label="yw.mc" :value="yw.label + String.fromCharCode(2) + yw.mc" :key="index"></el-option>
-                          </el-select>
-                          <el-form-item label="" >
-                            <el-checkbox v-model="isAllCpx">全部</el-checkbox>
-                        </el-form-item>
-                    </el-form-item>
-                    <el-form-item label="用户类别" required v-if="userInfo.unitType == 1">
-                         <el-radio v-model="yhlb" label="1">学校老师</el-radio>
-                         <el-radio v-model="yhlb" label="2">学校领导</el-radio>
-                    </el-form-item>
-                </el-form>
-                  <div slot="footer" class="dialog-footer">
-                            <el-button @click="editdialogVisible = false" size="mini">取 消</el-button>
-                            <el-button type="primary" @click="handleEditCommit" size="mini">确 定</el-button>
-                  </div>
-         </el-dialog>   
-         <zbrDialog :show.sync="show" :count="count" :xmbh="xmbh" @handlemodifyZbr="handlemodifyZbr"></zbrDialog>
+
+    <el-dialog title="人员列表" :visible.sync="dialogVisible" width="750px" :close-on-click-modal="false" @close="closeOutPerson" :append-to-body=true>
+      <ul class="item-user-list">
+        <li style="position:relative" flex>
+          <el-input v-model="keyword" size="mini" :style="{width:isAddCyz && itemJfzrr.userId != userId && isJzuser!= 1?'300px':'655px'}" :class="{'isAddCyz-cyz':isAddCyz,'isAddCyz-jf':!isAddCyz}" placeholder="搜索人员姓名/编号" @change="searchUser"></el-input>
+          <!-- 项目甲方不显示 -->
+          <span style="width:40%" v-if="isAddCyz && itemJfzrr.userId != userId && isJzuser != 1">人员类别:
+            <el-select v-model="rylb" placeholder="请选择" style="width:150px" size="mini" @change="chooseRylb">
+              <el-option label="无" value=""></el-option>
+              <el-option label="金智" value="0"></el-option>
+              <el-option label="学校" value="1"></el-option>
+              <el-option label="合作伙伴" value="2"></el-option>
+            </el-select>
+          </span>
+          <span class="el-icon-circle-plus  invite-newUser" @click="inviteNewuser">添加</span>
+        </li>
+        <li v-for="(user,index) in UserList" v-if="UserList.length != 0">
+          <span>{{user.nickName}}</span>
+          <span>{{user.userName}}</span>
+          <span :title="user.unit">{{user.unit}}</span>
+          <span>
+            <el-button :disabled="user.state == 'ytj'" size="mini" v-if="isAddCyz && jszbr" @click="addItemCyz(user,index)">{{user.state == 'ytj'?'已添加':'添加'}}</el-button>
+            <el-button size="mini" v-if="!isAddCyz && isJF" @click="addItemJfzrr(user)">修改为(甲方责任人)</el-button>
+            <el-button size="mini" v-if="!isAddCyz && !isJF" @click="addItemYfzrr(user)">修改为(乙方责任人)</el-button>
+          </span>
+        </li>
+        <div v-if="UserList.length == 0" text-center class="pd-10">
+          暂无人员数据
+        </div>
+      </ul>
+      <div style="padding:10px 0;text-align:center">
+        <pagination v-if="" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
+      </div>
+    </el-dialog>
+
+    <el-dialog width="750px" title="添加外部人员" :visible.sync="innerVisible" :close-on-click-modal="false" append-to-body>
+      <el-form :model="form" style="margin:10px 0;padding:0 30px;min-height:330px" size="mini" label-width="80px" :inline="true">
+        <el-form-item label="姓名" required>
+          <el-input required v-model="form.name" style="width:210px" clearable placeholder="请输入姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" required>
+          <el-input type="password" required v-model="form.pwd" style="width:210px" clearable placeholder="6-12位字母、数字和下划线"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" required>
+          <el-input required v-model="form.phone" style="width:210px" clearable placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" required>
+          <el-input required v-model="form.email" style="width:210px" clearable placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="负责业务" required>
+          <el-select v-model="cpxFzyw" placeholder="请选择" multiple :style="{width:form.rylx == '1013'?'514px':'440px'}" :disabled='form.rylx == "1013"?false:isAllCpx'>
+            <el-option v-for="(yw,index) in cpxData" :label="yw.mc" :value="yw.mc+','+yw.label" :key="index"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 2018.12.11 学校用户不显示全部-->
+        <el-form-item label="" v-if="form.rylx != '1013'">
+          <el-checkbox v-model="isAllCpx">全部</el-checkbox>
+        </el-form-item><br>
+
+        <!-- v-if="itemJfzrr.userId != userId && isJzuser != 1" -->
+        <!-- 2018.12.11 学校用户不显示全部-->
+        <el-form-item label="人员类型" required v-if="isJzuser != 1">
+          <el-select v-model="form.rylx" placeholder="请选择" style="width:210px">
+            <el-option label="学校成员" value="1013"></el-option>
+            <el-option label="合作伙伴" value="1004"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="单位" v-if="form.rylx == '1004'" required>
+          <el-select v-model="form.dw" placeholder="请选择" style="width:210px">
+            <el-option :title="dw.text" :label="dw.text" :value="dw.id+'&'+dw.text" v-for="(dw,i) in dwList" :key="i"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="部门" required v-else>
+          <el-input size="mini" placeholder="请输入部门/选择部门" v-model="form.bm" style="width:210px" @blur="handleBMblur" @focus="handleBMfocus"></el-input>
+          <transition name="component-fade">
+            <ul class="bm-select" v-if="selectVisible">
+              <li v-for="(item,index) in bmList" :key="index" @click="chooseBm(item.mc)" v-if="bmList.length != 0">{{item.mc}}</li>
+              <div v-if="bmList.length == 0" style="color:#aaa;text-align:center">无数据</div>
+            </ul>
+          </transition>
+        </el-form-item>
+        <el-form-item label="性别" required>
+          <el-select v-model="form.sex" placeholder="请选择" style="width:210px">
+            <el-option label="男" value="1"></el-option>
+            <el-option label="女" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户类别" v-if="form.rylx == '1013'">
+          <el-select v-model="form.yhlb" placeholder="请选择" style="width:210px">
+            <el-option label="学校老师" value="1"></el-option>
+            <el-option label="学校领导" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <p style="color:#aaa;font-weight:700;font-size:12px;padding:0 20px">( 注 : 手机号为用户默认登录账号 )</p>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="innerVisible = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="handleCommit" size="mini">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="编辑人员信息" :visible.sync="editdialogVisible" width="660px" :close-on-click-modal="false" :append-to-body=true>
+      <el-form style="margin:10px 0 80px;padding:0 50px;" size="mini" label-width="80px" :inline="true">
+        <el-form-item label="负责业务" required>
+          <el-select v-model="fzywList" placeholder="请选择" multiple :style="{width:userInfo.unitType != 1?'400px':'470px'}" :disabled='userInfo.unitType == 1?false:isAllCpx'>
+            <el-option v-for="(yw,index) in cpxData" :label="yw.mc" :value="yw.label + String.fromCharCode(2) + yw.mc" :key="index"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 2018.12.11 学校用户不显示全部-->
+        <el-form-item label="" v-if="userInfo.unitType != 1">
+          <el-checkbox v-model="isAllCpx">全部</el-checkbox>
+        </el-form-item>
+        <el-form-item label="用户类别" required v-if="userInfo.unitType == 1">
+          <el-radio v-model="yhlb" label="1">学校老师</el-radio>
+          <el-radio v-model="yhlb" label="2">学校领导</el-radio>
+        </el-form-item><br>
+        <el-form-item label="用户类别" required v-if="userInfo.unitType == 1">
+          <el-select v-model="editInfo.sex" placeholder="请选择" style="width:450px">
+            <el-option label="保密" value="0"></el-option>
+            <el-option label="男" value="1"></el-option>
+            <el-option label="女" value="2"></el-option>
+          </el-select>
+        </el-form-item><br>
+        <el-form-item label="部门" required v-if="userInfo.unitType == 1">
+          <el-input size="mini" placeholder="请输入部门/选择部门" v-model="editInfo.bm" style="width:450px" @blur="handleBMblur" @focus="handleBMfocus"></el-input>
+          <transition name="component-fade">
+            <ul class="bm-select" v-if="selectVisible">
+              <li v-for="(item,index) in bmList" :key="index" @click="chooseEditBm(item.mc)" v-if="bmList.length != 0">{{item.mc}}</li>
+              <div v-if="bmList.length == 0" style="color:#aaa;text-align:center">无数据</div>
+            </ul>
+          </transition>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editdialogVisible = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="handleEditCommit" size="mini">确 定</el-button>
+      </div>
+    </el-dialog>
+    <zbrDialog :show.sync="show" :count="count" :xmbh="xmbh" @handlemodifyZbr="handlemodifyZbr"></zbrDialog>
   </div>
 </template>
 <script>
@@ -224,7 +233,7 @@ import { getMenu, getSession } from "@/utils/util.js";
 export default {
   data() {
     return {
-      show:false,
+      show: false,
       UserList: [
         {
           xm: "jobs",
@@ -264,7 +273,7 @@ export default {
       BtnDisabled: "",
       rylb: "",
       dwList: [],
-      bmList: [{ mc: "1" }, { mc: "2" }, { mc: "3" }, { mc: "4" }],
+      bmList: [],
       selectVisible: false,
       fzywList: [],
       fzywData: [],
@@ -275,13 +284,19 @@ export default {
       yhlb: "",
       Maplist: [],
       isJF: true,
-      userTag:false,
-      username:'',
-      zbrData:{},
-      count:0,
-      mark:false,
-      GroupTag:"",
-      jszbr:false
+      userTag: false,
+      username: "", //用户姓名
+      userId: "", //用户编号
+      zbrData: {},
+      count: 0,
+      mark: false,
+      GroupTag: "",
+      jszbr: false,
+      isJzuser: 0,
+      editInfo: {
+        sex: "",
+        bm: ""
+      }
     };
   },
   props: {
@@ -301,17 +316,17 @@ export default {
       type: String,
       default: ""
     },
-    jsJf:{
+    jsJf: {
       type: Boolean,
       default: false
     }
   },
   methods: {
     // 修改中标人
-    handlemodifyZbr(data){
+    handlemodifyZbr(data) {
       this.mark = false;
-      this.zbrData.fbbh = data.fbbh
-      this.zbrData.xmbh = this.xmbh
+      this.zbrData.fbbh = data.fbbh;
+      this.zbrData.xmbh = this.xmbh;
       this.isAddCyz = true;
       this.jszbr = true;
       this.queryUser(1, true);
@@ -323,10 +338,13 @@ export default {
     handleBMblur() {
       this.selectVisible = false;
     },
-    chooseBm(e) {
-      // 选择部门
-      let bm = e.target.getAttribute("data-bm");
+    // 选择部门
+    chooseBm(bm) {
       this.form.bm = bm;
+    },
+    // 选择edit部门
+    chooseEditBm(bm) {
+      this.editInfo.bm = bm;
     },
     chooseRylb(val) {
       // 选择人员类别
@@ -344,46 +362,61 @@ export default {
       this.queryUser(1, true);
       this.dialogVisible = !this.dialogVisible;
     },
+    //编辑参与者
     editUser(e, data) {
-      //编辑参与者
       this.cpxData = [];
       this.userInfo = data;
-      if (!getSession("cp")) {
-        getMenu("cp", this.cpxData, true); //获取产品
+      // 2018.12.10 改为可以用产品
+      if (!getSession("kycp")) {
+        getMenu("kycp", this.cpxData, true); //获取产品
       } else {
-        this.cpxData = getSession("cp");
+        this.cpxData = getSession("kycp");
       }
       if (data.unitType == 0) {
         this.getRyCpx(data.userId, this.xmbh);
-      } else {
+      }else {
         this.getRyCpx(data.userId, this.xmbh);
         this.yhlb = data.yhlb;
+        if(data.unitType == 1){
+          this.getDepts();
+        }
       }
+      this.editInfo.bm = data.dept;
+      this.editInfo.sex = data.sex;
       this.editdialogVisible = !this.editdialogVisible;
     },
     // 修改中标人
-    changeXsr(data){
-         this.queryUser(1, true);
-         this.mark = true;
-         this.dialogVisible = !this.dialogVisible
+    changeXsr(data) {
+      this.queryUser(1, true);
+      this.mark = true;
+      this.dialogVisible = !this.dialogVisible;
     },
+    //保存 编辑 业务线
     handleEditCommit() {
-      //保存 编辑 业务线
-      if (!this.isAllCpx && this.fzywList.length == 0) {
+      // 学校老师  金智编辑学校老师
+      if(this.userInfo.unitType == 1){
+          this.isAllCpx = false;
+      }
+      if (!this.isAllCpx && this.fzywList.length == 0 && this.userInfo.unitType != 1) {
         this.$alert("请选择负责业务", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      } else {
+      }else if(this.fzywList.length == 0 && this.userInfo.unitType == 1){
+        this.$alert("请选择负责业务", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      }else {
         saveRy({
           yhbh: this.userInfo.userId,
           yhxm: this.userInfo.userName,
           xmbh: this.xmbh,
-          cpxRy: this.isAllCpx
-            ? ""
-            : this.fzywList.join(String.fromCharCode(1)),
+          cpxRy: this.isAllCpx?"":this.fzywList.join(String.fromCharCode(1)),
           yhlb: this.userInfo.unitType == 1 ? this.yhlb : "",
-          isAllCpx: this.isAllCpx
+          isAllCpx: this.isAllCpx,
+          dept: this.editInfo.bm,
+          xm: this.editInfo.sex
         }).then(({ data }) => {
           if (data.state == "success") {
             this.editdialogVisible = false;
@@ -423,8 +456,8 @@ export default {
     addStaff(e) {
       e.currentTarget.setAttribute("disabled", "disabled");
     },
+    //添加甲方
     changeJfZrr(e) {
-      //添加甲方
       this.isAddCyz = false;
       this.isJF = true;
       this.jszbr = false; //是否修改中标人
@@ -433,8 +466,8 @@ export default {
     },
     editJfZrr() {},
 
+    // 删除甲方
     deleteJfZrr() {
-      // 删除甲方
       this.$confirm("是否删除甲方责任人?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -462,17 +495,15 @@ export default {
         curPage: curPage,
         pageSize: this.pageSize,
         xmbh: this.xmbh,
-        unittype: this.rylb,
+        unittype: this.itemJfzrr.userId == this.userId ? 1 : this.rylb,
         //   onlyxx:onlyxx,
         needShowCyz: needShowCyz,
         keyword: this.keyword || ""
       }).then(({ data }) => {
         if (data.state == "success") {
           if (!data.data || !data.data.rows.length) {
-            this.total = 0;
             this.UserList = [];
           } else {
-            this.total = data.data.records;
             this.UserList = data.data.rows;
             this.UserList.forEach((ele, i, arr) => {
               if (ele.userName.slice(0, 1) == 1) {
@@ -483,11 +514,16 @@ export default {
               }
             });
           }
+         this.total = data.data.records;
         }
       });
     },
-      // 新增参与者
+    // 新增参与者
     handleNewAdd() {
+      // 学校老师 只能获取学校用户
+      if(this.isJzuser == 1){
+        this.rylb = 1;
+      }
       this.zbrData = {};
       this.mark = false;
       this.queryUser(1, false);
@@ -497,8 +533,8 @@ export default {
       this.dialogVisible = !this.dialogVisible;
     },
     // 修改中标人
-    handleChangeZbr(){
-      this.show = !this.show     
+    handleChangeZbr() {
+      this.show = !this.show;
     },
     //   分页查询用户
     handleCurrentChange(data) {
@@ -510,19 +546,19 @@ export default {
     },
     //   添加参与者
     addItemCyz(data, param) {
-      if(this.mark){
-        this.$post(this.API.modifySale,{
-          xmbh:this.xmbh,
-          yhbh:data.uid,
-          yhxm:data.nickName
-        }).then((res)=>{
-          if(res.state == 'success'){
+      if (this.mark) {
+        this.$post(this.API.modifySale, {
+          xmbh: this.xmbh,
+          yhbh: data.uid,
+          yhxm: data.nickName
+        }).then(res => {
+          if (res.state == "success") {
             this.dialogVisible = !this.dialogVisible;
             this.queryProjectParticipantMap();
           }
-        })
-      }else{
-        if(JSON.stringify(this.zbrData) == '{}'){
+        });
+      } else {
+        if (JSON.stringify(this.zbrData) == "{}") {
           addProjectParticipant({
             xmbh: this.xmbh,
             yhxm: data.nickName,
@@ -536,24 +572,24 @@ export default {
               this.BtnDisabled = "";
             }
           });
-        }else{
-          this.zbrData.yhbh = data.uid
-          this.zbrData.yhxm = data.nickName
-          this.$post(this.API.modifyZbr,this.zbrData).then((res)=>{
-            if(res.state == 'success'){
+        } else {
+          this.zbrData.yhbh = data.uid;
+          this.zbrData.yhxm = data.nickName;
+          this.$post(this.API.modifyZbr, this.zbrData).then(res => {
+            if (res.state == "success") {
               this.dialogVisible = !this.dialogVisible;
               this.count += 1;
               this.queryProjectParticipantMap();
             }
-          })
+          });
         }
       }
     },
     //   搜索用户
     searchUser(val) {
-      if(this.jszbr){
-         this.queryUser(1, true);
-         return;
+      if (this.jszbr) {
+        this.queryUser(1, true);
+        return;
       }
       if (this.isAddCyz) {
         this.queryUser(1, false);
@@ -569,24 +605,54 @@ export default {
       this.innerVisible = !this.innerVisible;
       this.cpxData = [];
       this.isAllCpx = true;
-      if (getSession("cp") == null || getSession("GenderType") == null) {
-        getMenu("cp", this.cpxData, true); //获取产品
-        getMenu("GenderType", this.sexList); //获取产品线
+      if (!getSession("kycp") || !getSession("GenderType")) {
+        getMenu("kycp", this.cpxData, true); //获取产品
+        getMenu("GenderType", this.sexList); //获取性别
       } else {
-        this.cpxData = getSession("cp");
+        this.cpxData = getSession("kycp");
         this.sexList = getSession("GenderType");
+      }
+      if (this.isJzuser == 1) {
+        this.getXxCpx();
       }
       this.getUnits();
       this.getDepts();
     },
+    // 获取学校产品线
+    getXxCpx(){
+      let Arrlist = [];
+        this.$get(this.API.getXxCpx, {
+          dwmc: this.dwmc
+        }).then(res => {
+          if(res.state == 'success'){
+            if(!res.data.isAllCpx){
+              let Arr = Object.keys(res.data.cpx);
+              let McArr = Object.values(res.data.cpx)
+              for(var i = 0;i< Arr.length;i++){
+                  Arrlist.push({
+                    label:Arr[i],
+                    mc:McArr[i]
+                  })
+                }
+              this.cpxData = Arrlist
+            }else{
+              this.cpxData = getSession("kycp");
+            }
+          }
+        });
+    },
     handleCommit() {
+      // 学校老师  金智提交学校老师
+      if(this.form.rylx == '1013'){
+          this.isAllCpx = false;
+      }
+
       if (!this.form.name) {
         this.$alert("请输入姓名", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
       } else if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.form.phone.trim())) {
-        //^((0\d{2,3}-\d{7,8})|(1[3456789]\d{9}))$
         this.$alert("请输入手机号码或号码有误", "提示", {
           confirmButtonText: "确定",
           type: "warning"
@@ -600,7 +666,19 @@ export default {
           confirmButtonText: "确定",
           type: "warning"
         });
-      } else if (!this.isAllCpx && this.cpxFzyw.length == 0) {
+      } else if (
+        !this.isAllCpx &&
+        this.cpxFzyw.length == 0 &&
+        this.form.rylx != '1013'
+      ) {
+        this.$alert("请选择负责业务", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      }else if(
+        this.cpxFzyw.length == 0 &&
+        this.form.rylx == '1013'
+      ){
         this.$alert("请选择负责业务", "提示", {
           confirmButtonText: "确定",
           type: "warning"
@@ -742,8 +820,8 @@ export default {
         }
       });
     },
+   //获取部门
     getDepts() {
-      //获取部门
       getDepts({
         dwbh: "",
         dwmc: this.dwmc
@@ -757,23 +835,45 @@ export default {
         }
       });
     },
+    // 获取产品线
     getRyCpx(yhbh, xmbh) {
-      // 获取产品线
       this.fzywList = [];
       getRyCpx({ yhbh: yhbh, xmbh: xmbh }).then(({ data }) => {
+        this.isAllCpx = data.data.isAllCpx;
         if (data.state == "success") {
-          this.isAllCpx = data.data.isAllCpx;
-          if (data.data.isAllCpx) {
-            this.fzywList = [];
-          } else {
-            if (data.data.cpx && data.data.cpx.length != 0) {
-              data.data.cpx.forEach((ele, i, arr) => {
+          if(this.isJzuser == 1){
+            if(!this.isAllCpx){
+              this.getXxCpx();
+              if(!data.data.cpx){
+                this.fzywList = [];
+              }else{
+                data.data.cpx.forEach((ele, i, arr) => {
+                    this.fzywList.push(
+                      ele.cpxbh + String.fromCharCode(2) + ele.cpxmc
+                    );
+                }); 
+              }
+            }else{
+             this.cpxData =  getSession("kycp");
+             this.cpxData.forEach((ele, i, arr) => {
                 this.fzywList.push(
-                  ele.cpxbh + String.fromCharCode(2) + ele.cpxmc
+                  ele.label + String.fromCharCode(2) + ele.mc
                 );
-              });
-            } else {
+             });
+            }
+          }else{
+            if (data.data.isAllCpx) {
               this.fzywList = [];
+            } else {
+              if (data.data.cpx && data.data.cpx.length != 0) {
+                data.data.cpx.forEach((ele, i, arr) => {
+                  this.fzywList.push(
+                    ele.cpxbh + String.fromCharCode(2) + ele.cpxmc
+                  );
+                });
+              } else {
+                this.fzywList = [];
+              }
             }
           }
         }
@@ -788,16 +888,22 @@ export default {
     }
   },
   mounted() {
-      this.GroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
-      if(this.GroupTag.indexOf('JYGL') != -1||this.GroupTag.indexOf('QYZ') != -1||this.GroupTag.indexOf('ZDDZ') != -1){
-        this.userTag = true;
-      }else{
-        this.userTag = false;
-      }
-      this.username = sessionStorage.username;
-      this.queryProjectParticipantMap();
+    this.GroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+    if (
+      this.GroupTag.indexOf("JYGL") != -1 ||
+      this.GroupTag.indexOf("QYZ") != -1 ||
+      this.GroupTag.indexOf("ZDDZ") != -1
+    ) {
+      this.userTag = true;
+    } else {
+      this.userTag = false;
+    }
+    this.username = sessionStorage.username;
+    this.userId = JSON.parse(sessionStorage.userInfo).uid;
+    this.isJzuser = sessionStorage.isJZuser;
+    this.queryProjectParticipantMap();
   },
-  components: { pagination,zbrDialog }
+  components: { pagination, zbrDialog }
 };
 </script>
 <style scoped>
@@ -934,7 +1040,7 @@ export default {
 }
 .bm-select {
   width: 200px;
-  max-height: 260px;
+  max-height: 150px;
   border: 1px solid #dcdfe6;
   background: #fff;
   overflow-y: auto;
@@ -942,7 +1048,7 @@ export default {
   position: absolute;
   top: 33px;
   color: #606266;
-  z-index: 777;
+  z-index: 7777;
 }
 .bm-select li,
 .bm-select div {

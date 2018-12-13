@@ -4,10 +4,10 @@
           <div slot="menu" class="menu report-menu">
             <el-menu background-color="#fff" text-color="#708087"  :active-text-color="'#409EFF'" ref="navbar" :router='true' :default-active='defActive'  :default-openeds='openeds' menu-trigger="click" @select="selectMenu"  unique-opened>
                 <nav-bar-item v-for="(item, n) in navList" :urlIndex="item.url" :item="item" :navIndex="String(n+1)" :key="n"></nav-bar-item>
-                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/khbb/ydjlb'}"><i class="el-icon-menu"></i> <span slot="title">月度奖励</span></el-menu-item> 
-                <el-menu-item index="5" :route="{path:'/businesspage/report/khbb/ydkhbb'}"><i class="el-icon-menu"></i> <span slot="title">月度考核</span></el-menu-item> 
-                <el-menu-item index="7" :route="{path:'/businesspage/report/khbb/shgsb'}"><i class="el-icon-menu"></i> <span slot="title">售后工时</span></el-menu-item> 
-             -->
+               
+                <el-menu-item index="6" :route="{path:'/businesspage/report/use/wtslip'}"><i class="el-icon-menu"></i> <span slot="title">问题受理ip</span></el-menu-item> 
+                <el-menu-item index="5" :route="{path:'/businesspage/report/use/userlogin'}"><i class="el-icon-menu"></i> <span slot="title">用户登录</span></el-menu-item> 
+            
                 <!-- <el-submenu index="8">
                   <template slot="title">
                     <i class="el-icon-menu"></i>

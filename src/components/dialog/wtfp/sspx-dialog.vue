@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="培训" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
       <div class="dialog-xjjh">
-        <el-form ref="form" :model="form" label-width="110px" size="mini" :inline="true">
+        <el-form ref="form" :model="form" label-width="115px" size="mini" :inline="true">
           <el-form-item label="产品" required>
             <el-input :disabled="true" v-model="form.cpmc" placeholder="" style="width:550px"></el-input>
           </el-form-item><br>
@@ -24,6 +24,9 @@
           <el-form-item label="培训视频" required>
             <el-input type="textarea" v-model="form.pxsp" placeholder='请输入视频地址(用英文逗号 " , " 隔开)' style="width:550px"></el-input>
           </el-form-item><br>
+          <el-form-item label="培训课时(小时)" required>
+            <el-input  v-model="form.pxsc" placeholder="请输入培训时长" style="width:550px"></el-input>
+          </el-form-item><br>
           <el-form-item label="培训课件" required>
             <div>
               <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" :before-upload="newFiles" :on-remove="handleRemove" multiple>
@@ -41,6 +44,9 @@
                     <th>工号</th>
                     <th>姓名</th>
                     <th>部门</th>
+                    <th>观看直播时长</th>
+                    <th>观看回放时长</th>
+                    <th>观看总时长</th>
                     <th>提示</th>
                   </tr>
                 </thead>
@@ -51,6 +57,9 @@
                     <td>{{table.data.gh}}</td>
                     <td>{{table.data.xm}}</td>
                     <td>{{table.data.bm}}</td>
+                    <td>{{table.data.zbsc}}</td>
+                    <td>{{table.data.hfsc}}</td>
+                    <td>{{table.data.zsc}}</td>
                     <td>{{table.msg}}</td>
                   </tr>
                 </table>
@@ -67,7 +76,7 @@
         </el-form>
       </div>
     </el-dialog>
-    <cjryDialog :show.sync="tjryDialog" @handleUploadSuccess="handleUploadSuccess"></cjryDialog>
+    <cjryDialog :show.sync="tjryDialog" :wid="itemData.wid" @handleUploadSuccess="handleUploadSuccess"></cjryDialog>
   </div>
 </template>
 
@@ -89,6 +98,7 @@ export default {
         fxrxm: "",
         pxsp: "",
         fileList: "",
+        pxsc:"",
         ry: ""
       },
       upload_url: "123",
@@ -120,8 +130,7 @@ export default {
       if (!this.validate()) return;
       this.$refs.uploadfile.submit();
       if (!!this.files.length) {
-        axios
-          .post(
+        axios.post(
             window.baseurl + "attachment/uploadAttach.do",
             this.uploadForm,
             {
@@ -146,7 +155,6 @@ export default {
     },
     newFiles(file) {
       this.files = [];
-      console.log(file.size / 1024 / 1024 < 10);
       if (file.size / 1024 / 1024 < 10) {
         this.files.push(file);
         this.uploadForm.append("fileUpload", file);
@@ -164,8 +172,15 @@ export default {
         });
         return false;
       }
-      if (!this.form.ry) {
-        this.$alert("请填写参加人员", "提示", {
+      // if (!this.form.ry) {
+      //   this.$alert("请填写参加人员", "提示", {
+      //     confirmButtonText: "确定",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // }
+      if (!/^\d+(\.\d+)?$/.test(this.form.pxsc)) {
+        this.$alert("请输入正确培训时长", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
@@ -189,14 +204,13 @@ export default {
   watch: {
     show(n, o) {
       this.visible = this.show;
-
       if (!n) {
         this.form.sjwcsj = "";
         this.form.pxsp = "";
         this.files = [];
         this.form.ry = "";
         this.tableData = [];
-        console.log(this.tableData);
+        this.form.fileList = '';
       } else {
         this.form.cpmc = this.itemData.cpmc;
         this.form.pxzt = this.itemData.pxzt;
@@ -233,18 +247,19 @@ export default {
       text-align: center;
       border-bottom: 1px solid #ebeef5;
     }
-    th:nth-of-type(3),
-    td:nth-of-type(3) {
-      width: 30%;
-    }
+    // th:nth-of-type(3),
+    // td:nth-of-type(3) {
+    //   width: 30%;
+    // }
   }
   .table.table-top {
     width: calc(100% - 1.2em) !important;
   }
   .table th,
   table td {
-    width: 20%;
+    width: 13%;
   }
+
   .tbody-table {
     max-height: 260px;
     overflow-y: scroll;

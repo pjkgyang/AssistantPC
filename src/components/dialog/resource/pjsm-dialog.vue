@@ -11,7 +11,7 @@
             :show="show">
             <div class="dialog-pj">
                 <section >
-                    <p class="pj-title before-require">{{title}}:</span>
+                    <p class="pj-title">{{title}}:</span>
                     <p class="pj-content">
                        <el-input type="textarea" :rows="5" :maxlength="500" style="width:670px"  placeholder="请输入内容" v-model="sm"></el-input>
                     </p>
@@ -38,7 +38,7 @@
            this.visible = false
        },
        handleClickSure(){
-           if(!this.validate()) return;
+        //    if(!this.validate()) return;
            this.$emit('handleClickSure',this.sm);
        },
        validate(){

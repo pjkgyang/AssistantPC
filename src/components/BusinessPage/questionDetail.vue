@@ -147,9 +147,9 @@
                   <el-rate :disabled="true" v-model="zlpf" show-text :texts="['1分','2分','3分','4分','5分']"> </el-rate>
                 </p>
               </div>
-              <section v-if="zlpf<=3">
+              <section v-if="zlpf<=3 && !!qusetionInfo.cpsm">
                 <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">服务评价说明</span>
-                <div style="padding:0 !important;text-indent:12px">{{!qusetionInfo.cpsm?'无':qusetionInfo.cpsm}}</div>
+                <div style="padding:0 !important;text-indent:12px" :class="{'isRedColor':!!qusetionInfo.cpsm}">{{!qusetionInfo.cpsm?'无':qusetionInfo.cpsm}}</div>
               </section>
               <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">有效贡献人</span>
               <p v-for="(GXR,index) in yxGXR" :key="index" style="text-indent:12px">
@@ -162,7 +162,7 @@
               <div style="padding:0 !important;text-indent:12px" v-html="!qusetionInfo.jjsm?'无':qusetionInfo.jjsm"></div>
               <section v-if="qusetionInfo.gssfrk != ''">
                 <span style="border-left:4px solid #8A2BE2;font-weight:700;padding:0 8px;">是否认可工时:</span>
-                <span style="padding:0 !important;color:#888;">{{qusetionInfo.gssfrk==1?'是':'否'}}</span>
+                <span style="padding:0 !important;color:#888;" :class="{'isRedColor':qusetionInfo.gssfrk != 1}">{{qusetionInfo.gssfrk==1?'是':'否'}}</span>
               </section>
             </div>
           </li>
@@ -392,7 +392,6 @@ import {
   queryProcess,
   changeCommitmentDate,
   customerQuestion,
-  updateCrowdId,
   addOrUpdateCrowdId, //关联开发任务
   getCrowdId,
   saveYyzfData,
@@ -522,7 +521,6 @@ export default {
       slqwjjrq: "",
       bhsm: "",
       cnjssm: "",
-
       hfwid: "",
       crowdId: ""
     };
@@ -549,15 +547,14 @@ export default {
         }
       }
     });
-
     this.queryLabel(this.wid);
-    if (getSession("ProblemType") == null) {
+    if (!getSession("ProblemType") || !getSession("kycp") || !getSession("cpx")) {
       getMenu("ProblemType", this.wtlb, "");
-      getMenu("cp", this.cplist, true);
+      getMenu("kycp", this.cplist, true);
       getMenu("cpx", this.cpline, true); //获取产品线
     } else {
       this.wtlb = getSession("ProblemType");
-      this.cplist = getSession("cp");
+      this.cplist = getSession("kycp");
       this.cpline = getSession("cpx");
     }
 
@@ -1032,28 +1029,6 @@ export default {
           });
         }
       });
-      // updateCrowdId({
-      //   crowdId: this.Crowdvalue,
-      //   wid: this.wid,
-      //   kfgzl: this.kfgzlValue
-      // }).then(({ data }) => {
-      //   if (data.state == "success") {
-      //     this.crowdVisible = false;
-      //     this.$alert(
-      //       this.Crowdvalue == "" ? "Crowd任务编号已清空！" : "关联成功！",
-      //       "提示",
-      //       {
-      //         confirmButtonText: "确定",
-      //         type: "success",
-      //         callback: action => {
-      //           this.queryBtnAuth(this.wid);
-      //           this.queryAnswers(this.wid);
-      //           this.queryQuestion(this.wid);
-      //         }
-      //       }
-      //     );
-      //   }
-      // });
     },
     accreditQuestion() {
       //受理
@@ -2060,5 +2035,10 @@ div.el-form-item {
 .question_transmit .span_label {
   display: inline-block;
   width: 110px;
+}
+
+.isRedColor{
+  color: #f00;
+  font-weight: 700;
 }
 </style>

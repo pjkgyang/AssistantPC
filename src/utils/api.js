@@ -20,6 +20,11 @@ export default {
     pageEktbDetail:window.baseurl+'report/pageEktbDetail.do', //二开提报明细分页列表
     pageBxDetail:window.baseurl+'report/pageBxDetail.do',//报销明细分页列表
     
+    // 使用报表
+    problemsameIPStat:window.baseurl+'usageReport/problemsameIPStat.do',//提问受理IP相同统计报表
+    userLoginStat:window.baseurl+'usageReport/userLoginStat.do',//用户登录统计报表
+    userLoginReport:window.baseurl+'usageReport/userLoginReport.do',//用户登录详情
+
     // 考核报表
     ydkhb:window.baseurl+'assessment/ydkhb.do', //月度考核报表
     ydjlb:window.baseurl+'assessment/ydjlb.do', //月度奖励报表
@@ -122,7 +127,17 @@ export default {
     bad:window.baseurl+'attachment/bad.do', //差评
     logs:window.baseurl+'attachment/logs.do', //记录
     getCount:window.baseurl+'attachment/getCount.do',//获取记录数
-   
+    expertgood:window.baseurl+'personnel/expertgood.do',//专家好评
+    expertbad:window.baseurl+'personnel/expertbad.do',//专家差评
+    experlogs:window.baseurl+'personnel/logs.do',//专家操作记录
+    experts:window.baseurl+'personnel/listExperts.do',//专家列表
+    addFjGjjh:window.baseurl+'attachment/addFjGjjh.do',//添加改进状态
+    pageFjGjjh:window.baseurl+'attachment/pageFjGjjh.do',//附件改进计划分页列表
+
+
+    // 获取学校产品线
+    getXxCpx:window.baseurl+'personnel/getXxCpx.do',
+
     // 问题复盘 改进计划
     pageProductPlan:window.baseurl+'wtgj/pageProductPlan.do',//获取产品改进计划列表
     pageCapacityPlan:window.baseurl+'wtgj/pageCapacityPlan.do',//获取能力改进计划列表
@@ -134,6 +149,9 @@ export default {
     addOrUpdateCapacityPlan:window.baseurl+'wtgj/addOrUpdateCapacityPlan.do',//新增或修改能力改进计划
     addInPlan:window.baseurl+'wtgj/addInPlan.do',//纳入计划
     abilityTraining:window.baseurl+'wtgj/abilityTraining.do',//培训
-    pageStaff:window.baseurl+'personnel/pageStaff.do'//员工列表
+    pageStaff:window.baseurl+'personnel/pageStaff.do',//员工列表
+    planImprovementProblemList:window.baseurl+'question/planImprovementProblemList.do',//计划改进问题列表
     
+    // 更新项目签订类型
+    updateProjectSignType:window.baseurl+'project/updateProjectSignType.do'
 }

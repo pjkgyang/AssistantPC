@@ -24,6 +24,13 @@
                             <span v-for="(cpx,index) in cplist" :data-index="index" :data-type="cpx.label" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.label&&filterWord.cpmc == cpx.mc}">{{cpx.mc}}</span>
                         </p>
                     </div>
+                    <div v-if="filterList.includes('pxks')">
+                        <p class="query-title">培训课时:</p>
+                        <p class="query-list" @click="handleKs">
+                            <span data-type="" :class="{'bg-active':filterWord.pxsc == ''}">全部</span>
+                            <span v-for="(pxks,index) in pxkslist" :data-index="index" :data-type="pxks.label" :key="index" :class="{'bg-active':filterWord.pxsc == pxks.label}">{{pxks.mc}}</span>
+                        </p>
+                    </div>
                      <div v-if="filterList.includes('pxxs')">
                         <p class="query-title">培训形式:</p>
                         <p class="query-list" @click="handlePxxs">
@@ -39,10 +46,10 @@
                         </p>
                     </div>
 
-                    <div v-if="filterList.includes('fbrq')">
-                        <p class="query-title">发版日期:</p>
+                    <div v-if="filterList.includes('jhpxrq')">
+                        <p class="query-title">计划培训日期:</p>
                         <p class="query-list">
-                            <el-date-picker @change="changeDateFbrq" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.fbrq" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                            <el-date-picker @change="changeDateFbrq" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.jhpxrq" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                             </el-date-picker>
                         </p>
                     </div>
@@ -85,13 +92,19 @@ export default {
       cplist: [],
       jhztList: [
         { lable: "", mc: "全部" },
-        { lable: "0", mc: "未完成" },
-        { lable: "1", mc: "已完成" }
+        { lable: "1", mc: "未完成" },
+        { lable: "2", mc: "已完成" }
       ],
       pxxslist:[
         {label:1,mc:'线上直播'},
         {label:2,mc:'线下培训'},
         {label:3,mc:'线上加线下'}
+      ],
+      pxkslist:[
+        {label:1,mc:'1小时以内'},
+        {label:2,mc:'1小时~2小时'},
+        {label:3,mc:'2小时~3小时'},
+        {label:4,mc:'3小时以上'}
       ],
       filterWord: {
         keyword: "",
@@ -99,11 +112,12 @@ export default {
         cpmc: "",
         bbh:"",
         jhcjrq: [],
-        fbrq: [],
+        jhpxrq: [],
         sjpxrq:[],
         jhzt:'',
         sfyq:0,
-        pxxs:''
+        pxxs:'',
+        pxsc:''
       },
       groupTag: "",
       sfzk: true
@@ -113,7 +127,7 @@ export default {
     filterList: {
       type: Array,
       default: () => {
-        return ["keyword", "cp",'jhcjrq','fbrq','jhzt','sfyq','bbh'];
+        return ["keyword", "cp",'jhcjrq','jhpxrq','jhzt','sfyq','bbh'];
       }
     },
     placeholder: {
@@ -144,7 +158,7 @@ export default {
       this.$emit("handleChangeFilter", this.filterWord);
     },
     changeDateFbrq(val){
-      if(!val) this.filterWord.fbrq = [];
+      if(!val) this.filterWord.jhpxrq = [];
       this.$emit("handleChangeFilter", this.filterWord);
     },
     changeDateSjpxrq(val){
@@ -157,6 +171,14 @@ export default {
       this.filterWord.cpbh = cp;
       this.$emit("handleChangeFilter", this.filterWord);
     },
+    // 培训时长
+    handleKs(e) {
+      let cpks = e.target.getAttribute("data-type");
+      if (cpks == null) return;
+      this.filterWord.pxsc = cpks;
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+
     handlePxxs(e){
       let pxxs = e.target.getAttribute("data-type");
       if (pxxs == null) return;

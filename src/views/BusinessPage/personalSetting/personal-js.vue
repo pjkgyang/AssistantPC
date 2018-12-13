@@ -6,6 +6,9 @@
           <section class="pd-10">
             <el-date-picker v-model="year" type="year" placeholder="选择年" value-format="yyyy" format="yyyy 年" @change="handleChangeDate"></el-date-picker>
           </section>
+          <section style="color:#555;text-align:center">
+            <span style="font-size:20px">{{username}}<br><span style="font-size:18px">{{data.khmc}}</span></span>
+          </section>
           <section flex spacearound class="personalJs-top-month" style="height:45%">
             <div v-for="monthly in monthList">
               <p :class="{'monthprocessmc':true,'colorActive':month == monthly.val}">{{monthly.mc}}</p>
@@ -15,6 +18,7 @@
               </div>
             </div>
           </section>
+
         </div>
       </section>
       <section slot="bottom" class="personalJs-bottom" flex spacearound>
@@ -23,10 +27,11 @@
           <div class="personalJs-menu-dl">
             <h5>我的账户:</h5>
             <dl>
-              <dt class="bordeBottom">本月收入:<span class="colorActive">{{!data.sfzcb?0:data.sfzcb}} 元</span></dt>
-              <dd>本月项目实发:<span>{{data.shfa}} 元</span></dd>
-              <dd>冲入奖金池:<span>{{data.byxzjj}} 元</span></dd>
-              <dd>本月奖金池领取:<span>{{data.byyljj}} 元</span></dd>
+              <dt class="bordeBottom">本月收入:<span class="colorActive">{{!data.sfgz?0:data.sfgz}} 元</span></dt>
+              <dd>本月项目实发:<span>{{data.xmsf}} 元</span></dd>
+              <dd>本月非项目实发:<span>{{data.fxmsf}} 元</span></dd>
+              <dd>冲入奖金池:<span>{{data.crjjc}} 元</span></dd>
+              <dd>本月奖金池领取:<span>{{data.jjclq}} 元</span></dd>
               <dt class="bordeTopBottom">项目结余:<span>{{data.byjy}} 元</span></dt>
               <dt>奖金池结余:<span>{{data.wfjj}} 元</span></dt>
             </dl>
@@ -36,19 +41,25 @@
               <dt>本月项目结算:<span><a @click="handleCheckJs('xmjs')" href="javaScript:;;">{{data.xmjs}} 元</a></span></dt>
               <dt>本月CROWD结算:<span><a @click="handleCheckJs('ekjs')" href="javaScript:;;">{{data.crowdjs}} 元</a></span></dt>
               <dt>本月售前调用:<span><a @click="handleCheckJs('sqdy')" href="javaScript:;;">{{data.sqjs}} 元</a></span></dt>
+              <dt>本月售后结算:<span>{{data.shjs}} 元</span></dt>
+              <dt>非服务调用:<span>{{data.ffwjs}} 元</span></dt>
               <dt>本月其他结算:<span>{{data.qtjs}} 元</span></dt>
               <p>{{data.qtjssm}}</p>
-              <dt>本月奖惩:<span>{{data.jc}} 元</span></dt>
-              <p>{{data.jcsm}}</p>
-              <dt class="bordeBottom">本月结算合计:<span>{{data.yifa}} 元</span></dt>
-              <dt>本月项目实发:<span>{{data.shfa}} 元</span></dt>
+              <!-- <dt class="bordeBottom">本月结算合计:<span>{{data.jshj}} 元</span></dt> -->
+              <dt>本月项目实发:<span>{{data.xmsf}} 元</span></dt>        
               <dt>本月项目结余:<span>{{data.byjy}} 元</span></dt>
             </dl>
+            <h5>非项目结算:</h5>
+            <dl>
+              <dt>讲师费:<span>{{data.jsjs}} 元</span></dt>
+              <dt>安装部署:<span>{{data.azbs}} 元</span></dt>
+              <dt>本月奖惩:<span>{{data.jc}} 元</span></dt>
+              <p>说明:{{!data.jcsm?'无':data.jcsm}}</p>
+            </dl>
+
             <h5>奖金池:</h5>
             <dl>
               <dt>上月结余:<span>{{data.syjyjj}} 元</span></dt>
-              <dt>本月新增:<span>{{data.byxzjj}} 元</span></dt>
-              <dt>本月已领:<span>{{data.byyljj}} 元</span></dt>
               <dt>本月结余:<span>{{data.wfjj}} 元</span></dt>
             </dl>
           </div>
@@ -80,6 +91,9 @@
               <p>5.结算金额总计:36136 = 33136 + 2000 + 1000 + 0;</p>
               <p>6.应发工资:24136 = 36136 - 12000 （4月份已发工资）;</p>
               <p>7.实发工资:24136 > 12000,按24136发放,24136其中12000为工资,12136元为奖金金额;</p>
+            </section>
+            <section>
+               <p style="color:#f00;font-size:12px">说明:非项目考核人员按实际工资结算</p>
             </section>
           </div>
         </div>

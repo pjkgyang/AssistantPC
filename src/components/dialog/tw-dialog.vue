@@ -499,8 +499,8 @@ export default {
       this.fileList = r;
       this.$refs.upload.submit();
     },
+    // 获取项目对应的产品
     queryResponsibleProduct(xmbh) {
-      // 获取项目对应的产品
       this.xmcpList = [];
       queryResponsibleProduct({
         xmbh: xmbh
@@ -552,12 +552,12 @@ export default {
           //提问展示
           this.showCondition = data.data;
         });
-        if (getSession("ProblemType") == null) {
+        if (!getSession("ProblemType") ||　!getSession("kycp")) {
           getMenu("ProblemType", this.wtlb, "");
-          getMenu("cp", this.cplist, true);
+          getMenu("kycp", this.cplist, true);
         } else {
           this.wtlb = getSession("ProblemType");
-          this.cplist = getSession("cp");
+          this.cplist = getSession("kycp");
         }
         this.fileList = [];
         this.fileData = [];

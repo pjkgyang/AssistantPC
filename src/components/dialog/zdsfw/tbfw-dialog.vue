@@ -114,6 +114,8 @@
             this.visible = this.show;
             if(!n){
               this.form.sm = '';
+              this.form.fileList = [];
+              this.files = [];
               this.uploadForm.append('fileUpload','');
             }else{
                

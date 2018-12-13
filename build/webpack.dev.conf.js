@@ -21,6 +21,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devtool: config.dev.devtool,
 
   // these devServer options should be customized in /config/index.js
+  // webpack 开发服务功能
   devServer: {
     clientLogLevel: 'warning',
     historyApiFallback: {

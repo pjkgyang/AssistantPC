@@ -58,7 +58,7 @@
       <div class="pannel3-mid" col=3 flex-column>
         <card col=1 v-for="(xmtj,index) in xmtjList" :key="index">
           <div class="card-head" slot="head">
-          <h3 :data-info="xmtj.xmbh+'&'+xmtj.xmmc" @click="checkItemDetails" class="home-xmmc">[{{xmtj.xmbh}}]{{xmtj.xmmc}}</h3></div>
+          <h3  @click="checkItemDetails(xmtj)" class="home-xmmc">[{{xmtj.xmbh}}]{{xmtj.xmmc}}</h3></div>
           <div class="card-body card-body__syqk height100" slot="body" >
             <pannel3-xgyx :xmtj="xmtj"></pannel3-xgyx>
           </div>
@@ -219,12 +219,15 @@ export default {
     queryItem(){
         this.getDwXmTjRT(1,this.xmmcValue);
     },
-    checkItemDetails(e){  //查看项目详情
-       let xmbh = e.target.getAttribute('data-info').split('&')[0];
-       let xmmc = e.target.getAttribute('data-info').split('&')[1];
-       this.data.xmbh = xmbh;
-       this.data.xmmc = xmmc;
-       this.data.isAll = true
+    checkItemDetails(params){  //查看项目详情
+       this.data.xmbh = params.xmbh;
+       this.data.xmmc = params.xmmc;
+       this.data.isAll = true;
+       this.data.ztztmc = params.ztztmc;
+       this.data.gcfwzt = params.gcfwzt;
+       this.data.xx = params.xx;
+       this.data.yh = params.yh;
+       this.data.sfzq = params.sfzq;
        this.$router.push({ name: 'Task',params:{data:this.data}});
     },
     checkAllQuestion(){

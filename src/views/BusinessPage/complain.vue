@@ -3,7 +3,8 @@
     <div style="hieght:80%;">
       <div class="complain-query">
         <p style="font-size:14px !important;margin-bottom:10px  !important;">
-          &#x3000;&nbsp;<span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&nbsp;
+          &#x3000;&nbsp;
+          <span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&nbsp;
           <span style="font-weight:700">高级查询</span>&nbsp;&nbsp;
           <el-input v-model="keyword" size="mini" style="width:300px" placeholder="请输入投诉人工号/手机号/项目编号/项目名称" @change="searchComplant"></el-input>&#x3000;
           <el-button size="mini" type="primary" @click="handlequeryComplant">查询</el-button>
@@ -205,13 +206,17 @@ export default {
       this.showCondition = data.data;
     });
 
-    if (getSession("ComplaintType") == null) {
-      getMenu("cp", this.cpList, true); //获取产品
+    if (
+      !getSession("ComplaintType") ||
+      !getSession("kycp") ||
+      !getSession("gczd")
+    ) {
+      getMenu("kycp", this.cpList, true); //获取产品
       getMenu("gczd", this.gczdList, true); //获取工程战队
       getMenu("ComplaintType", this.complaintType); //未响应状态
     } else {
       this.complaintType = getSession("ComplaintType");
-      this.cpList = getSession("cp");
+      this.cpList = getSession("kycp");
       this.gczdList = getSession("gczd");
     }
   },
@@ -322,13 +327,11 @@ export default {
 
     // 选择项目
     handleChooseItem(data) {
-
       this.form.xmmc = data.xmmc;
       this.form.xmbh = data.xmbh;
       this.form.cp = "";
       this.form.cpbh = "";
       this.form.object = [];
-
       // this.getMenu('cp',this.cpList,true);//获取产品
       queryProjectParticipant({
         xmbh: data.xmbh
@@ -341,7 +344,29 @@ export default {
             }
           });
         }
-      });
+      })
+      // 获取项目对应的产品
+      // queryResponsibleProduct(xmbh){
+      //   this.xmcpList = [];
+      //   queryResponsibleProduct({
+      //     xmbh: xmbh
+      //   }).then(res => {
+      //     if (res.data.state == "success") {
+      //       if (JSON.stringify(res.data.data) == "{}") {
+      //         this.xmcpList = this.cplist;
+      //       } else {
+      //         let Arr = Object.keys(res.data.data);
+      //         let McArr = Object.values(res.data.data);
+      //         for (var i = 0; i < Arr.length; i++) {
+      //           this.xmcpList.push({
+      //             label: Arr[i],
+      //             mc: McArr[i]
+      //           });
+      //         }
+      //       }
+      //     }
+      //   })
+      // }
       this.dialogComplainVisible = false;
     },
     // 选择项目

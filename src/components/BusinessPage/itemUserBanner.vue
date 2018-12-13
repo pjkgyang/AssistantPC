@@ -20,13 +20,12 @@
             <el-tab-pane label="配置库" name="files"></el-tab-pane>
             <!-- 学校成员 1  不显示 -->
             <el-tab-pane label="里程碑" name="milestone" v-if="isJZuser != 1"></el-tab-pane>
-            <!-- <el-tab-pane label="模板" name="template" v-if="groupTag.indexOf('JZGCRY') != -1"></el-tab-pane> -->
-            <el-tab-pane label="团队" name="teamwork" v-if="isJZuser != 1"></el-tab-pane>
+            <el-tab-pane label="团队" name="teamwork" v-if="isJZuser != 1 || xmData.jfzrrxm == username"></el-tab-pane>
             <el-tab-pane label="主动式服务" name="zdsfw" v-if="zdsfwVisible"></el-tab-pane>
           </el-tabs>
         </div>
+        <!-- // 只有金智的显示 -->
         <div style="height:100%" v-if="!shown" flex>
-          <!-- // 只有金智的显示 -->
           <p @click.prevent="handleItemUser" title="项目人员管理" v-if="isJZuser == 0" colcenter>
             <span>
               <span><img src="static/img/rygl.png" alt=""></span>
@@ -37,7 +36,7 @@
           <p style="margin-left:10px !important;height:40px;" title="新建钉钉群" colcenter @click.prevent="handleAddDDgroup" v-if="Operatepower">
             <img src="static/img/dingding.png" alt="" style="width:20px;height:20px;">
           </p>
-
+  
           <el-dropdown trigger="hover" @command="handleCommand" v-if="groupTag.indexOf('JYGL') != -1||groupTag.indexOf('QYZ') != -1||groupTag.indexOf('ProblemAdmin') != -1">
                  <!-- ((username == xmDetail.yfzrrxm || groupTag.indexOf('QYZ') != -1 || groupTag.indexOf('ZDDZ') != -1)) -->
             <p style="margin-left:10px !important;height:40px;" title="设置" colcenter>
@@ -45,22 +44,28 @@
             </p>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="fwzt">服务状态</el-dropdown-item>
+              <el-dropdown-item command="xmsz">项目设置</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
       </div>
     </div>
+
     <xmfwzt-dialog :show.sync='showDialog' :xmbh="xmbh" :xmDetail="xmDetail"></xmfwzt-dialog>
+    <xmsz-dialog :show.sync='xmszShow' :xmbh="xmbh" :xmDetail="xmDetail" @handleSuccess="handleSuccess"></xmsz-dialog>
+
   </div>
 </template>
 <script>
 import breadcrumb from "@/components/BusinessPage/breadcrumb.vue";
 import xmfwztDialog from "@/components/dialog/xmfwzt-dialog.vue";
+import xmszDialog from "@/components/dialog/xmsz-dialog.vue";
 export default {
   data() {
     return {
       show: false,
       showDialog: false,
+      xmszShow: false,
       banberActive: "overview",
       crumb: [
         {
@@ -134,8 +139,16 @@ export default {
     }
   },
   methods: {
+    handleSuccess(data){
+      this.xmDetail.sfzq = data?1:0;
+      sessionStorage.setItem("xmData", JSON.stringify(this.xmDetail));
+    },
     handleCommand(command) {
-      this.showDialog = !this.showDialog;
+      if(command == 'fwzt'){
+        this.showDialog = !this.showDialog;
+      }else{
+        this.xmszShow = !this.xmszShow
+      }
     },
     handleItemUser(e) {
       this.$emit("handleItemUser", "");
@@ -169,7 +182,7 @@ export default {
       });
     }
   },
-  components: { breadcrumb, xmfwztDialog }
+  components: { breadcrumb, xmfwztDialog,xmszDialog }
 };
 </script>
 <style scoped>

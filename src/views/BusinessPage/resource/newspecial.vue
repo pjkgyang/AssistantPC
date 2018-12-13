@@ -1,9 +1,6 @@
 <template>
   <!-- downloadApi：下载api    resourceType:文件类型-->
-  <pannelComponent 
-  :downloadApi="'downloadTemplateFile.do'" 
-  :resourceType="3">
-  </pannelComponent>
+  <pannelComponent :resourceType="3"></pannelComponent>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="修改项目配置" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
+    <el-dialog title="服务状态" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
       <div class="dialog-pz">
         <section class="pd-10 itemSet-group">
           <p>

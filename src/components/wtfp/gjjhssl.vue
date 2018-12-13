@@ -31,12 +31,12 @@
               <el-table-column prop="fxrxm" label="分享人" width="110"></el-table-column>
               <el-table-column  label="推荐参与人数" width="110">
                 <template slot-scope="scope">
-                  <a href="javaScript:;;" @click="handleCehckCyry(scope.row.wid,'2')">{{scope.row.tjrs}}</a>
+                  <a href="javaScript:;;" @click="handleCehckCyry(scope.row,'2')">{{scope.row.tjrs}}</a>
                </template>
               </el-table-column>
               <el-table-column label="参与人员" width="110">
                  <template slot-scope="scope">
-                      <a href="javaScript:;;" @click="handleCehckCyry(scope.row.wid,'1')">{{scope.row.cyrs}}</a>
+                      <a href="javaScript:;;" @click="handleCehckCyry(scope.row,'1')">{{scope.row.cyrs}}</a>
                   </template>
               </el-table-column>
               <el-table-column prop="cjsj" label="创建日期" width="180"></el-table-column>
@@ -110,8 +110,9 @@ export default {
        let routeData = this.$router.resolve({
         path: "/stafflist",
         query:{
-          nljhwid:data,
-          type:type
+          nljhwid:data.wid,
+          type:type,
+          cpbh:data.cpbh
         }
       });
       window.open(routeData.href, "_blank");

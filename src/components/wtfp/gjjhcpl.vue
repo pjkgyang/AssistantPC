@@ -8,10 +8,10 @@
         </section>
         <section slot="bottom" style="margin-top:30px">
           <el-button type="primary" size="mini" @click="handleXjjh">新建计划</el-button>
-          <!-- <el-button type="primary" size="mini" @click="handleNrjh">纳入计划</el-button> -->
-          <!-- <el-button type="primary" size="mini">删除计划</el-button> -->
+          <!-- <el-button type="primary" size="mini" @click="handlePLNrjh">批量纳入计划</el-button> -->
           <div style="margin:10px 0">
-            <el-table :data="tableData" border style="width: 100%">
+            <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
+              <el-table-column type="selection" width="55"></el-table-column>
               <el-table-column fixed="left" label="操作" width="220">
                 <template slot-scope="scope">
                   <el-button type="text" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
@@ -29,9 +29,9 @@
               <el-table-column prop="fbsj" label="发版日期" width="150"></el-table-column>
               <el-table-column prop="cjsj" label="创建日期" width="150"></el-table-column>
               <el-table-column prop="cjrxm" label="创建人" width="110"></el-table-column>
-              <el-table-column  label="纳入计划问题数" width="130">
+              <el-table-column label="纳入计划问题数" width="130">
                 <template slot-scope="scope">
-                      <a href="javaScript:;;" @click="handleCehckwts(scope.row.wid)">{{scope.row.jhwtzs}}</a>
+                  <a href="javaScript:;;" @click="handleCehckwts(scope.row.wid)">{{scope.row.jhwtzs}}</a>
                 </template>
               </el-table-column>
             </el-table>
@@ -57,7 +57,7 @@ export default {
     return {
       xjjhShow: false,
       cpfbShow: false,
-      isEdit:false,
+      isEdit: false,
       tableData: [
         {
           cpmc: "产品",
@@ -89,7 +89,7 @@ export default {
       pageSize: 10,
       total: 0,
       keyword: "",
-      wtData:this.questionData,
+      wtData: this.questionData
     };
   },
   props: {
@@ -110,77 +110,98 @@ export default {
   watch: {
     show(n, o) {
       if (n) {
-        this.wtwid = this.questionData.wid
-        console.log(this.questionData)
+        this.wtwid = this.questionData.wid;
         this.pageProductPlan();
       }
     }
   },
   methods: {
-    // 跳转 
-    handleCehckwts(data){
+    // 跳转
+    handleCehckwts(data) {
       let routeData = this.$router.resolve({
         path: "/report-list/questionlist.html",
-        query:{
-          jhwid:data,
-          jhlx:'1'
+        query: {
+          jhwid: data,
+          jhlx: "1"
         }
       });
       window.open(routeData.href, "_blank");
     },
 
-    handleNrjhOrTcjh(params,param){
-      this.$confirm(param=='nrjh'?"是否将此问题纳入计划?":"确定要剔除 "+params.wtbt+' 问题的改进计划吗?', "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.$post(param=='nrjh'?this.API.addInPlan:this.API.removeFromPlan,{
-          lx:1,
-          wtwid:this.questionData.wid,
-          wid:params.wid
-        }).then(res=>{
-          if(res.state == 'success'){
-             this.$alert(param=='nrjh'?'纳入成功':'剔除成功', "提示", {confirmButtonText: "确定",type:'success'});
-             this.pageProductPlan(); 
-          }else{
-            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
-          }
+    handleNrjhOrTcjh(params, param) {
+      this.$confirm(
+        param == "nrjh"
+          ? "是否将此问题纳入计划?"
+          : "确定要剔除 " + params.wtbt + " 问题的改进计划吗?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }
+      )
+        .then(() => {
+          this.$post(
+            param == "nrjh" ? this.API.addInPlan : this.API.removeFromPlan,
+            {
+              lx: 1,
+              wtwid: this.questionData.wid,
+              wid: params.wid
+            }
+          ).then(res => {
+            if (res.state == "success") {
+              this.$alert(param == "nrjh" ? "纳入成功" : "剔除成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success"
+              });
+              this.pageProductPlan();
+            } else {
+              this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          });
         })
-      }).catch(() => {});
+        .catch(() => {});
     },
     // 编辑
-    handleEdit(data){
+    handleEdit(data) {
       this.isEdit = true;
       this.wtData = data;
       this.wtData.wtwid = this.questionData.wid;
       this.xjjhShow = !this.xjjhShow;
     },
     // 删除
-    handleDelect(params){
-       this.$confirm("是否确定将此计划删除?", "提示", {
+    handleDelect(params) {
+      this.$confirm("是否确定将此计划删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => {
-        this.$post(this.API.deleteProductPlan,{
-          wid:params.wid
-        }).then(res=>{
-          if(res.state == 'success'){
-             this.$alert('删除成功', "提示", {
-              confirmButtonText: "确定",
-              type:'success'
-             });
-             this.pageProductPlan(); 
-          }else{
-             this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
-          }
+      })
+        .then(() => {
+          this.$post(this.API.deleteProductPlan, {
+            wid: params.wid
+          }).then(res => {
+            if (res.state == "success") {
+              this.$alert("删除成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success"
+              });
+              this.pageProductPlan();
+            } else {
+              this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          });
         })
-      }).catch(() => {});
+        .catch(() => {});
     },
     // 新建成功
-    handleSavesuccess(){
-       this.pageProductPlan();
+    handleSavesuccess() {
+      this.pageProductPlan();
     },
     handleSizeChange(data) {
       this.pageSize = data;
@@ -202,12 +223,8 @@ export default {
       this.wtData = this.questionData;
       this.xjjhShow = !this.xjjhShow;
     },
-    // 发布
-    handleRelease() {
-      this.cpfbShow = !this.cpfbShow;
-    },
-    // 纳入计划
-    handleNrjh() {
+    // 批量纳入计划
+    handlePLNrjh() {
       this.$confirm("是否将此问题纳入计划, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -216,32 +233,36 @@ export default {
         .then(() => {})
         .catch(() => {});
     },
+    // 发布
+    handleRelease() {
+      this.cpfbShow = !this.cpfbShow;
+    },
 
     // 获取产品列表
     pageProductPlan() {
       this.$get(this.API.pageProductPlan, {
         curPage: this.currentPage,
         pageSize: this.pageSize,
-        cpbh:this.questionData.cpbh,
+        cpbh: this.questionData.cpbh,
         keyword: this.keyword,
-        wtwid:this.questionData.wid
-      }).then(res => {
-        if (res.state == "success") {
-          if (!!res.data.rows) {
-            this.tableData = res.data.rows;
+        wtwid: this.questionData.wid
+      })
+        .then(res => {
+          if (res.state == "success") {
+            if (!!res.data.rows) {
+              this.tableData = res.data.rows;
+            } else {
+              this.tableData = [];
+            }
+            this.total = res.data.records;
           } else {
-            this.tableData = [];
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
-          this.total = res.data.records;
-        } else {
-          this.$alert(res.msg, "提示", {
-            confirmButtonText: "确定",
-            type:'error'
-          });
-        }
-      }).catch(error=>{
-          
-      });
+        })
+        .catch(error => {});
     }
   },
   components: { tableLayout, xjjhDialog, cpfbDialog }

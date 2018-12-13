@@ -25,11 +25,7 @@
                 <el-table-column prop="cznr" label="说明" min-width="400" >
                 </el-table-column>
             </el-table> -->
-            <steps-component :jdList="jdList">
-                <section slot="topContent">
-                    dasdasd
-                </section>
-            </steps-component>
+            <steps-component :jdList="jdList"  @handleCommit="handleCommit"></steps-component>
             <div v-if="!jdList.length" text-center class="mg-12">
                 暂无记录
             </div>
@@ -82,6 +78,9 @@ export default {
     }
   },
   methods: {
+    handleCommit(){
+      this.$emit('handleCommit','')
+    },
     handleClick(tab, event) {
       this.$emit("hadnleChangeTab", this.activeName);
     },

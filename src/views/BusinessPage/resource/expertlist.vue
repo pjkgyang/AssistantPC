@@ -10,11 +10,11 @@
         <li v-for="(item,index) in itemList" flex spacebetween @mouseover="listIndex = index">
           <p class="item-name textellipsis" :title="item.cpx">{{item.cpxmc}}</p>
           <p class="item-size textellipsis" :title="item.gczj">{{item.gczj}}
-            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'1')" v-if="listIndex == index && item.gczj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'2')" v-if="listIndex == index && item.gczj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
           </p>
           <p class="item-cpzj textellipsis" :title="item.cpzj">
             {{item.cpzj}}
-            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'2')" v-if="listIndex == index && item.cpzj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'1')" v-if="listIndex == index && item.cpzj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
           </p>
         </li>
       </div>
@@ -24,23 +24,32 @@
       </div>
     </ul>
 
-    <zjpjDialog :show.sync="zjpjShow"></zjpjDialog>
+    <zjpjDialog :show.sync="zjpjShow" :tableData="tableData" @handlePraise="handlePraise"></zjpjDialog>
+    <pjsmDialog :show.sync="pjsmShow" :title="title" @handleClickSure="handleClickSure"></pjsmDialog>
+    
   </div>
 </template>
 
 
 <script>
 import { downloadXmFile } from "@/api/TaskProcess.js";
-import zjpjDialog from '@/components/dialog/resource/zjpj-dialog'
+import zjpjDialog from '@/components/dialog/resource/zjpj-dialog';
+import pjsmDialog from '@/components/dialog/resource/pjsm-dialog';
+
 export default {
   data() {
     return {
       zjpjShow:false,
+      pjsmShow:false,
       itemList: [],
       fjbh: "",
       fjobj: {},
       baseUrl: null,
-      listIndex: ""
+      listIndex: 9999,
+      tableData:[],
+      rylx:'',
+      title:'',
+      type:''//评价类型
     };
   },
   props: {
@@ -69,11 +78,55 @@ export default {
         }
       });
     },
+    getExperts(cpxbh){
+      this.$get(this.API.experts,{
+        cpxbh:cpxbh,
+        rylx:this.rylx
+      }).then(res=>{
+        if(res.state == 'success'){
+           if(!res.data){
+            this.tableData = []
+           }else{
+            this.tableData = res.data
+           }
+         }
+      })
+    },
+    // 查看详情
     handleCheckDetail(params,data){
+      this.rylx = data;
+      this.getExperts(params);
       this.zjpjShow = !this.zjpjShow
+    },
+    // 
+    handlePraise(params,type){
+      this.xminfo = params;
+      this.title = type == 1?"好评说明":'优化建议';
+      this.type = type;
+      this.pjsmShow = !this.pjsmShow
+    },
+    // 评价确定
+    handleClickSure(sm){
+       this.$post(this.type=='1'?this.API.expertgood:this.API.expertbad,{
+        rylx:this.rylx,
+        sm:sm,
+        rybh:this.xminfo.bh,
+        ryxm:this.xminfo.xm,
+        cpxbh:this.xminfo.cpxbh,
+        cpxmc:this.xminfo.cpx
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.pjsmShow = !this.pjsmShow
+          this.$alert('评价成功', "提示", {confirmButtonText: "确定",type:'success',callback:action=>{
+             this.getExperts(this.xminfo.cpxbh);
+          }});
+        }else{
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
+        }
+      })
     }
   },
-  components:{zjpjDialog}
+  components:{zjpjDialog,pjsmDialog}
 };
 </script>
 

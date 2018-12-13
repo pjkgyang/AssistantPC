@@ -336,7 +336,10 @@ export function saveRy(obj){
 			xmbh:obj.xmbh,
 			cpxRy:obj.cpxRy,
 			yhlb:obj.yhlb,
-			isAllCpx:obj.isAllCpx
+			isAllCpx:obj.isAllCpx,
+			dept:obj.dept,
+			xb:obj.xb,
+
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);

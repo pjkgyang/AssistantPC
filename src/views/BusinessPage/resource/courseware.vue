@@ -1,9 +1,7 @@
 <template>
    <div> 
      <!-- downloadApi：下载api    resourceType:文件类型-->
-    <pannelComponent 
-    :downloadApi="'downloadCoursewareFile.do'" 
-    :resourceType="2">
+    <pannelComponent :resourceType="2">
     </pannelComponent>
   </div>
 </template>

@@ -8,7 +8,7 @@
                     <a href="javaScript:;;" @click="handleDownload">下载人员模板</a>
                 </span>
                 <p style="margin-left:14px !important;font-size:12px;color:#aaa">
-                    上传人员列表前,可先下载对照模板<span style="color:#f00;">（注：模板不一致，或造成人员添加失败）；</span>
+                    上传人员列表前,可先下载对照模板<span style="color:#f00;">（注：模板不一致，或造成人员添加失败）</span>
                 </p>
             </div><br>
             <div flex>
@@ -49,11 +49,15 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    wid:{
+      type:String,
+      default:''
     }
   },
   methods: {
+    // 
     handleDownload(){
-        // 
         window.open(window.baseurl+'wtgj/downloadTrainingStaff.do');
     },
     handleClose() {
@@ -63,6 +67,7 @@ export default {
       this.uploadForm.append("fileUpload", "");
     },
     handleCommit() {
+      this.uploadForm.append("wid", this.wid);
       this.$refs.uploadfile.submit();
       if (!!this.files.length) {
         axios
@@ -76,7 +81,6 @@ export default {
           .then(res => {
             if (res.data.state == "success") {
               this.form.fileList = res.data.data;
-              console.log(res);
               this.visible = false;
               this.$emit('handleUploadSuccess',res.data.data);
             } else {
@@ -95,7 +99,6 @@ export default {
       this.files = [];
       this.files.push(file);
       this.uploadForm.append("fileUpload", file);
-
       return true;
     }
   },
@@ -103,9 +106,12 @@ export default {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
-
+        // this.uploadForm.append("wid",'');
+        this.uploadForm = new FormData();
+        this.form.fileList = '';
+        this.files = [];
       } else {
-
+        
       }
     }
   },

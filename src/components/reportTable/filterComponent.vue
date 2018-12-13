@@ -4,7 +4,7 @@
       <div v-if="filterList.includes('keyword')">
         <p>
           <p class="query-title">高级搜索:</p>
-          <el-input v-model="filterWord.keyword" size="mini" style="width:260px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
+          <el-input v-model="filterWord.keyword" size="mini" style="width:350px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
           <el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button>
         </p>
       </div>
