@@ -4,7 +4,10 @@
       <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"></filterComponent>
     </div>
     <div>
-      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[1,2,3]' :widthArr="[6]" :Width="'130'" :Height="0" :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" 
+      :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" 
+      @exportTable="exportTable" :indexArr='[1,2,3]' :widthArr="[6]" :Width="'130'" :Height="0" 
+      :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
     </div>
   </div>
 </template>
@@ -20,7 +23,7 @@ export default {
       dataList: {},
       headList: [],
       archiveShow: false,
-      filterList: ["keyword", "yf", "bm", "rylx"],
+      filterList: ["keyword", "yf","yfDate", "bm", "rylx"],
       filterData: {
         keyword: "",
         yf: "",
@@ -71,6 +74,10 @@ export default {
           this.filterData.bm +
           "&yf=" +
           this.filterData.yf +
+          "&startMonth=" +
+          this.filterData.startMonth +
+          "&endMonth=" +
+          this.filterData.endMonth +
           "&rylx=" +
           this.filterData.rylx.join(",") +
           "&keyword=" +
@@ -81,12 +88,17 @@ export default {
       this.currentPage = data;
       this.ydjlb();
     },
+    // 筛选条件
     handleChangeFilter(data,params) {
       this.filterData = data;
       this.currentPage = 1;
       this.ydjlb();
       if(!!params){
-        this.hasDepositData();
+        if(!!data.yf){
+          this.hasDepositData();
+        }else{
+          this.archiveShow = false;
+        }
       }
     },
     ydjlb() {
@@ -95,6 +107,8 @@ export default {
         pageSize: this.pageSize,
         bm: this.filterData.bm,
         yf: this.filterData.yf,
+        startMonth:this.filterData.startMonth,
+        endMonth:this.filterData.endMonth,
         rylx: this.filterData.rylx.join(","),
         keyword: this.filterData.keyword
       }).then(res => {
@@ -140,7 +154,9 @@ export default {
         arr[0] == "wtqwjs" ||
         arr[0] == "wtqwdcs" ||
         arr[0] == "wtcnjs" ||
-        arr[0] == "wtcndcs"
+        arr[0] == "wtcndcs" ||
+        arr[0] == "wtzfs" ||  
+        arr[0] == "wtzfjs"
       ) {
         url = "/khbbdetail/ydjlwtxq";
       } else if (arr[0] == "tscls") {

@@ -3,7 +3,8 @@
         <div class="pannelPaddingBg-10">
             <tableLayout>
                 <section slot="top">
-                    <filterCondition :placeholder="'请输入问题标题 / 版本号'" @handleChangeFilter="handleChangeFilter"></filterCondition>
+                    <filterCondition :placeholder="'请输入问题标题 / 版本号'" @handleChangeFilter="handleChangeFilter"
+                    ></filterCondition>
                 </section>
                 <section slot="bottom">
                     <div text-right>
@@ -11,20 +12,27 @@
                     </div>
                     <div style="margin:10px 0">
                         <el-table :data="tableData" border style="width: 100%">
-                            <el-table-column fixed="left" label="操作" width="220">
+                            <el-table-column fixed="left" label="操作" width="180">
                                 <template slot-scope="scope">
-                                    <el-button type="success" size="mini" @click="handleRelease(scope.row)">发布</el-button>
-                                    <el-button type="primary" size="mini" @click="handlePlnrjh(scope.row)" >批量纳入计划</el-button>
+                                    <el-button v-if="scope.row.zt != 2" type="text" size="mini" @click="handleRelease(scope.row)">发布</el-button>
+                                    <el-button type="text" size="mini" @click="handlePlnrjh(scope.row)" >批量纳入计划</el-button>
+                                    <el-button style="color:#f00" type="text" size="mini" @click="handleDeljh(scope.row)" >删除</el-button>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="cpmc" label="产品" min-width="180"></el-table-column>
                             <el-table-column prop="wtfx" label="问题分析" min-width="200" show-overflow-tooltip></el-table-column>
                             <el-table-column prop="xybjh" label="下一步计划" min-width="200" show-overflow-tooltip></el-table-column>
+                            <el-table-column prop="fbsm" label="发布说明" min-width="200" show-overflow-tooltip></el-table-column>
                             <el-table-column prop="jhwcsj" label="计划完成日期" width="110"></el-table-column>
+                            <el-table-column  label="计划状态" width="110">
+                              <template slot-scope="scope">
+                                <el-tag size="mini" :type="scope.row.zt == 1?'danger':'success'">{{scope.row.zt == 1?'未完成':'已完成'}}</el-tag>
+                              </template>
+                            </el-table-column>
                             <el-table-column prop="zrrxm" label="责任人" width="110"></el-table-column>
                             <el-table-column prop="jjbbh" label="解决版本号" width="110"></el-table-column>
                             <el-table-column prop="fbsj" label="发版日期" width="150"></el-table-column>
-                            <el-table-column prop="cjsj" label="创建日期" width="150"></el-table-column>
+                            <el-table-column prop="cjsj" label="创建日期" width="155"></el-table-column>
                             <el-table-column prop="cjrxm" label="创建人" width="110"></el-table-column>
                             <el-table-column  label="纳入计划问题数" width="130">
                               <template slot-scope="scope">
@@ -66,7 +74,7 @@ export default {
         cpmc: "",
         bbh:"",
         jhcjrq: [],
-        fbrq: [],
+        jhpxrq: [],
         jhzt: "",
         sfyq: 0
       },
@@ -101,7 +109,9 @@ export default {
       this.currentPage = data;
       this.pageProductPlan();
     },
+    // 筛选条件
     handleChangeFilter(data) {
+      this.currentPage = 1;
       this.filterWord = data;
       this.pageProductPlan();
     },
@@ -113,6 +123,32 @@ export default {
     handlePlnrjh(data){
       this.jhData = data;
       this.wtfpShow = !this.wtfpShow
+    },
+    // 删除计划
+    handleDeljh(data){
+      this.$confirm("是否确定将此计划删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+          this.$post(this.API.deleteProductPlan, {
+            wid: data.wid
+          }).then(res => {
+            if (res.state == "success") {
+              this.$alert("删除成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success"
+              });
+              this.pageProductPlan();
+            } else {
+              this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          });
+        })
+        .catch(() => {});
     },
     handleExport() {
       window.open(
@@ -130,9 +166,9 @@ export default {
           "&cjsjEnd=" +
           this.filterWord.jhcjrq[1] +
           "&fbsjStart=" +
-          this.filterWord.fbrq[0] +
+          this.filterWord.jhpxrq[0] +
           "&fbsjEnd=" +
-          this.filterWord.fbrq[1] +
+          this.filterWord.jhpxrq[1] +
           "&sfyq=" +
           this.filterWord.sfyq +
           "&keyword=" +
@@ -149,8 +185,8 @@ export default {
         zt: this.filterWord.jhzt,
         cjsjStart: this.filterWord.jhcjrq[0],
         cjsjEnd: this.filterWord.jhcjrq[1],
-        fbsjStart: this.filterWord.fbrq[0],
-        fbsjEnd: this.filterWord.fbrq[1],
+        fbsjStart: this.filterWord.jhpxrq[0],
+        fbsjEnd: this.filterWord.jhpxrq[1],
         sfyq: this.filterWord.sfyq,
         keyword: this.filterWord.keyword
       })

@@ -1,6 +1,7 @@
 <template>
   <div style="width:80%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
     <section text-right>
+      <el-button size="small" @click="handleUpload">上传文件</el-button>
       <el-button :type="catalogue == 'file'?'primary':''" size="small" @click="catalogue = 'file'">文件目录</el-button>
       <el-button :type="catalogue == 'record'?'primary':''" size="small" @click="catalogue = 'record'">操作记录</el-button>
     </section>
@@ -70,6 +71,7 @@
       </section>
     </el-collapse-transition>
     <pjsmDialog :show.sync="pjsmShow" @handleClickSure="handleClickSure" :title="dialogTitle"></pjsmDialog>
+    <uploadDialog :show.sync="uploadShow" :lx="resourceType" :filePath="logsFjpath" @handleCommit="handleCommitUpload"></uploadDialog>
   </div>
 </template>
 
@@ -77,10 +79,12 @@
 <script>
 import pjsmDialog from "@/components/dialog/resource/pjsm-dialog";
 import oprateRecord from "@/components/resource/record.vue";
+import uploadDialog from '@/components/dialog/resource/upload-dialog';
 export default {
   data() {
     return {
       pjsmShow: false,
+      uploadShow:false, // 上传显示
       fileList: {},
       fileBread: [],
       fjbh: "",
@@ -116,6 +120,14 @@ export default {
     this.openFolder();
   },
   methods: {
+    // 上传成功
+    handleCommitUpload(){
+       this.openFolder(this.logsFjpath); 
+    } ,
+    // 上传附件 
+    handleUpload(){
+      this.uploadShow =  !this.uploadShow
+    },
     handleCommit(){
       if(this.catalogue == 'file'){
         this.openFolder(); 
@@ -179,9 +191,9 @@ export default {
       }
       this.pjsmShow = !this.pjsmShow;
     },
-    openFolder() {
+    openFolder(path) {
       this.$get(this.API.openTemplateFolder, {
-        path: "",
+        path:path||"",
         lx: this.resourceType
       }).then(res => {
         if (res.state == "success") {
@@ -251,6 +263,10 @@ export default {
         }
       });
     },
+
+
+
+
     //  获取记录
     getLogs(){
         this.$get(this.API.logs,{
@@ -297,7 +313,7 @@ export default {
       }
     }
   },
-  components: { pjsmDialog, oprateRecord }
+  components: { pjsmDialog, oprateRecord,uploadDialog }
 };
 </script>
 

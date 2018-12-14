@@ -117,7 +117,6 @@
           </el-form-item>
           <el-form-item label="产品" style="margin-bottom:15px;">
             <el-select v-model="form.cp" placeholder="请选择产品 / 搜索产品名称" size="mini" filterable style="width:100%">
-              <el-option label="无" value="&"></el-option>
               <el-option v-for="(cp,index) in cpList" :key="index" :label="cp.mc" :value="cp.mc+'&'+cp.label"></el-option>
             </el-select>
           </el-form-item>
@@ -150,7 +149,7 @@ import {
   editComplain,
   deleteComplain
 } from "@/api/complain.js";
-import { showQuestionCondition } from "@/api/xmkb.js";
+import { showQuestionCondition,queryResponsibleProduct } from "@/api/xmkb.js";
 import { queryProjectParticipant, queryZjCpData } from "@/api/personal.js";
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import { getMenu, getSession } from "@/utils/util.js";
@@ -190,6 +189,7 @@ export default {
       tsdxList: [],
       gczdList: [],
       cpList: [],
+      xmcpList:[],
       showCondition: "",
       queryLJshow: true
     };
@@ -211,7 +211,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.xmkbInfo);
     this.windowUnitType = sessionStorage.getItem("isJZuser");
     showQuestionCondition().then(({ data }) => {
       //提问展示
@@ -230,6 +229,7 @@ export default {
       this.cpList = getSession("kycp");
       this.gczdList = getSession("gczd");
     }
+    this.queryResponsibleProduct(this.xmbh); // 获取项目对应产品
     this.complaintList(1);
   },
   computed: {},
@@ -512,7 +512,29 @@ export default {
           this.total = data.data.records;
         }
       });
-    }
+    },
+     // 获取项目对应的产品
+      queryResponsibleProduct(xmbh){
+        this.xmcpList = [];
+        queryResponsibleProduct({
+          xmbh: xmbh
+        }).then(res => {
+          if (res.data.state == "success") {
+            if (JSON.stringify(res.data.data) == "{}") {
+              this.xmcpList = this.cpList;
+            } else {
+              let Arr = Object.keys(res.data.data);
+              let McArr = Object.values(res.data.data);
+              for (var i = 0; i < Arr.length; i++) {
+                this.xmcpList.push({
+                  label: Arr[i],
+                  mc: McArr[i]
+                });
+              }
+            }
+          }
+        })
+    },
   },
   watch: {},
   activated() {

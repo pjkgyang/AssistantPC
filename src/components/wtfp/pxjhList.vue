@@ -52,11 +52,13 @@
                   <a href="javaScript:;;" @click="handleCehckwts(scope.row.wid)">{{scope.row.jhwtzs}}</a>
                </template>
               </el-table-column>
-              <el-table-column label="附件" min-width="260">
+              <el-table-column label="附件" min-width="260" >
                 <template slot-scope="scope">
                   <div slot="reference" class="name-wrapper">
                     <div @click="handleDownFile(scope.$index,scope.row,$event)">
-                      <a href="javaScript:;;" title="点击下载" v-for="(fj,index) in scope.row.fjList" :key="index" :data-fj="fj.fjbh">{{fj.fjmc}}</a>
+                     <p v-for="(fj,index) in scope.row.fjList">
+                       <a href="javaScript:;;" title="点击下载"  :key="index" :data-fj="fj.fjbh">{{fj.fjmc}}</a>
+                     </p>
                     </div>
                   </div>
                 </template>
@@ -290,8 +292,8 @@ export default {
 
 <style lang="scss" scoped>
 .name-wrapper {
-  a {
-    margin-right: 10px;
+  a:hover{
+    text-decoration: underline !important;
   }
 }
 </style>

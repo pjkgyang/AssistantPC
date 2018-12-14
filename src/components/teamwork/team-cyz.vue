@@ -3,8 +3,8 @@
     <div style="text-align:right;padding-bottom:10px;">
       <!--2018-12-04 甲方责任人不可见修改中标人和团队成员。
          经营管理 添加中标人 -->
-      <el-button size="small" type="primary" @click="handleChangeZbr" v-if="GroupTag.includes('JYGL')">修改中标人</el-button>
-      <el-button size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
+      <el-button v-if="GroupTag.includes('JYGL')" size="small" type="primary" @click="handleChangeZbr" >修改中标人</el-button>
+      <el-button v-if="isJzuser != 1" size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
     </div>
     <div class="item-user-outTable">
       <table class="item-user-table">
@@ -184,7 +184,7 @@
           <el-radio v-model="yhlb" label="1">学校老师</el-radio>
           <el-radio v-model="yhlb" label="2">学校领导</el-radio>
         </el-form-item><br>
-        <el-form-item label="用户类别" required v-if="userInfo.unitType == 1">
+        <el-form-item label="用户性别" required v-if="userInfo.unitType == 1">
           <el-select v-model="editInfo.sex" placeholder="请选择" style="width:450px">
             <el-option label="保密" value="0"></el-option>
             <el-option label="男" value="1"></el-option>
@@ -367,11 +367,13 @@ export default {
       this.cpxData = [];
       this.userInfo = data;
       // 2018.12.10 改为可以用产品
+
       if (!getSession("kycp")) {
         getMenu("kycp", this.cpxData, true); //获取产品
       } else {
         this.cpxData = getSession("kycp");
       }
+
       if (data.unitType == 0) {
         this.getRyCpx(data.userId, this.xmbh);
       }else {
@@ -381,6 +383,7 @@ export default {
           this.getDepts();
         }
       }
+
       this.editInfo.bm = data.dept;
       this.editInfo.sex = data.sex;
       this.editdialogVisible = !this.editdialogVisible;
@@ -626,14 +629,12 @@ export default {
         }).then(res => {
           if(res.state == 'success'){
             if(!res.data.isAllCpx){
-              let Arr = Object.keys(res.data.cpx);
-              let McArr = Object.values(res.data.cpx)
-              for(var i = 0;i< Arr.length;i++){
-                  Arrlist.push({
-                    label:Arr[i],
-                    mc:McArr[i]
-                  })
-                }
+              res.data.cpx.forEach(ele=>{
+                 Arrlist.push({
+                 label:ele.cpxbh,
+                 mc:ele.cpxmc
+                })
+              })
               this.cpxData = Arrlist
             }else{
               this.cpxData = getSession("kycp");

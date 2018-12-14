@@ -27,7 +27,7 @@
               <el-table-column prop="zrrxm" label="责任人" width="110"></el-table-column>
               <el-table-column prop="jjbbh" label="解决版本号" width="110"></el-table-column>
               <el-table-column prop="fbsj" label="发版日期" width="150"></el-table-column>
-              <el-table-column prop="cjsj" label="创建日期" width="150"></el-table-column>
+              <el-table-column prop="cjsj" label="创建日期" width="155"></el-table-column>
               <el-table-column prop="cjrxm" label="创建人" width="110"></el-table-column>
               <el-table-column label="纳入计划问题数" width="130">
                 <template slot-scope="scope">
@@ -178,8 +178,7 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
+      }).then(() => {
           this.$post(this.API.deleteProductPlan, {
             wid: params.wid
           }).then(res => {
@@ -206,9 +205,11 @@ export default {
     handleSizeChange(data) {
       this.pageSize = data;
       this.currentPage = 1;
+      this.pageProductPlan();
     },
     handleCurrentChange(data) {
       this.currentPage = data;
+      this.pageProductPlan();
     },
     handleSearchEnter() {
       this.currentPage = 1;

@@ -6,7 +6,7 @@
                     <p class="query-title">
                         <span @click="handleExpand" :title="this.sfzk?'点击收起筛选条件':'点击展开筛选条件'" :class="{'expandIcon':true,'el-icon-arrow-up':this.sfzk==true,'el-icon-arrow-down':this.sfzk == false}"></span>&#x3000;高级搜索:</p>
                     <el-input v-model="filterWord.keyword" size="mini" style="width:348px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
-                    <el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button>
+                    <el-button size="mini" type="primary" @click="handleSearch">查询</el-button>
                 </p>
             </div>
             <transition name="el-zoom-in-top">
@@ -146,9 +146,6 @@ export default {
   methods: {
     handleExpand() {
       this.sfzk = !this.sfzk;
-    },
-    handleSearchBtn() {
-      this.$emit("handleChangeFilter", this.filterWord);
     },
     handleSearch() {
       this.$emit("handleChangeFilter", this.filterWord);

@@ -69,8 +69,8 @@
           </el-form-item><br>
           <el-form-item style="float:right">
             <div>
-              <el-button type="primary" @click="handleCommit">保存</el-button>
-              <el-button @click="handleClose">取消</el-button>
+              <el-button size="mini" type="primary" @click="handleCommit">保存</el-button>
+              <el-button size="mini" @click="handleClose">取消</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -208,9 +208,12 @@ export default {
         this.form.sjwcsj = "";
         this.form.pxsp = "";
         this.files = [];
-        this.form.ry = "";
         this.tableData = [];
         this.form.fileList = '';
+        this.form.pxsc = '';
+        this.uploadForm = new FormData();
+
+
       } else {
         this.form.cpmc = this.itemData.cpmc;
         this.form.pxzt = this.itemData.pxzt;
@@ -220,6 +223,10 @@ export default {
             : this.itemData.pxxs == 2 ? "线下培训" : "线上加线下";
         this.form.jhpxsj = this.itemData.jhpxsj;
         this.form.fxrxm = this.itemData.fxrxm;
+
+        this.form.sjwcsj = this.itemData.sjpxsj=='-'?'':this.itemData.sjpxsj;
+        this.form.pxsp = this.itemData.pxsp=='-'?'':this.itemData.pxsp;
+        this.form.pxsc = this.itemData.pxsc=='-'?'':this.itemData.pxsc;
       }
     }
   },

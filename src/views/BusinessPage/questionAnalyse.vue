@@ -264,6 +264,8 @@ export default {
           this.cpxbg +
           "&zt=" +
           this.cxzt +
+          "&wtfbq=" +
+          this.wtfbq +
           "&wtbq=" +
           this.wtbq +
           "&sqgb=" +
@@ -280,6 +282,7 @@ export default {
           this.endDay +
           "&isAnalyse=true" +
           "&xmbh=" +
+
           "&wtfl=" +
           this.wtfl +
           "&bqly=" +

@@ -141,7 +141,7 @@ export default {
     // 问题复盘 改进计划
     pageProductPlan:window.baseurl+'wtgj/pageProductPlan.do',//获取产品改进计划列表
     pageCapacityPlan:window.baseurl+'wtgj/pageCapacityPlan.do',//获取能力改进计划列表
-    deleteProductPlan:window.baseurl+'wtgj/pageCapacityPlan.do',//删除产品计划
+    deleteProductPlan:window.baseurl+'wtgj/deleteProductPlan.do',//删除产品计划
     deleteCapacityPlan:window.baseurl+'wtgj/deleteCapacityPlan.do',//删除能力改进计划
     removeFromPlan:window.baseurl+'wtgj/removeFromPlan.do',//剔除计划
     publishProduct:window.baseurl+'wtgj/publishProduct.do',//发布产品

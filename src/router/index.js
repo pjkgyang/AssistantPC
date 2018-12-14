@@ -26,7 +26,6 @@ function getAbsolutePath () {
           path: '/businesspage/home',
           name: 'BusinessPageHome',
           meta:{
-            title:'项目看板'
           },
           component: resolve => require(['@/views/BusinessPage/home.vue'], resolve),
         },
@@ -34,7 +33,6 @@ function getAbsolutePath () {
           path: '/businesspage/projects',
           name: 'Projects',
           meta:{
-            title:'我的项目'
           },
           component: resolve => require(['@/views/BusinessPage/Projects.vue'], resolve),
         },
@@ -47,7 +45,6 @@ function getAbsolutePath () {
           path: '/businesspage/task',
           name: 'Task',
           meta:{
-            title:'项目详情'
           },
           component: resolve => require(['@/views/BusinessPage/projectsTask.vue'], resolve),
         },
@@ -55,7 +52,6 @@ function getAbsolutePath () {
           path: '/businesspage/milestone',
           name: 'Milestone',
           meta:{
-            title:'里程碑'
           },
           component: resolve => require(['@/views/BusinessPage/milestoneCommit.vue'], resolve),
         },
@@ -63,7 +59,6 @@ function getAbsolutePath () {
           path: '/businesspage/fbdetail',
           name: 'FBdetail',
           meta:{
-            title:'投标详情'
           },
           component: resolve => require(['@/views/BusinessPage/fbdetail.vue'], resolve)
         },
@@ -71,7 +66,6 @@ function getAbsolutePath () {
           path: '/businesspage/dailypaper',
           name: 'DailyPaper',
           meta:{
-            title:'日报'
           },
           component: resolve => require(['@/views/BusinessPage/taskLog.vue'], resolve)
         },
@@ -79,7 +73,6 @@ function getAbsolutePath () {
           path: '/businesspage/complain',
           name: 'Complaint',
           meta:{
-            title:'投诉'
           },
           component: resolve => require(['@/views/BusinessPage/complain.vue'], resolve)
         },
@@ -87,28 +80,24 @@ function getAbsolutePath () {
           path: '/businesspage/systemMsg',
           name: 'systemMsg',
           meta:{
-            title:'系统消息'
           },
           component: resolve => require(['@/views/BusinessPage/systemMsg.vue'], resolve)
         },{
           path: '/businesspage/question',
           name: 'Question',
           meta:{
-            title:'问题'
           },
           component: resolve => require(['@/views/BusinessPage/question.vue'], resolve)
         }, {
           path: '/businesspage/qut-analyse',
           name: 'QutAnalyse',
           meta:{
-            title:'问题复盘'
           },
           component: resolve => require(['@/views/BusinessPage/questionAnalyse.vue'], resolve)
         },{
           path: '/questionDetail',
           name: 'questionDetail',
           meta:{
-            title:'问题详情'
           },
           component: resolve => require(['@/components/BusinessPage/questionDetail.vue'], resolve),
         },
@@ -116,7 +105,6 @@ function getAbsolutePath () {
           path: '/zdsfwxmlb',
           name: 'zdsfwXmlb',
           meta:{
-            title:'主动式服务项目列表'
           },
           component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwList.vue'], resolve),
         },
@@ -124,7 +112,6 @@ function getAbsolutePath () {
           path: '/zdsfwlb',
           name: 'zdsfwLb',
           meta:{
-            title:'主动式服务'
           },
           component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwMenu.vue'], resolve),
         },
@@ -132,7 +119,6 @@ function getAbsolutePath () {
           path: '/zdsfw',
           name: 'Zdsfw',
           meta:{
-            title:'主动式服务'
           },
           component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwPannel.vue'], resolve),
         },
@@ -140,7 +126,6 @@ function getAbsolutePath () {
           path: '/template',
           name: 'Template',
           meta:{
-            title:'模板'
           },
           component: resolve => require(['@/views/BusinessPage/resource/templateTabel.vue'], resolve),
         },
@@ -148,7 +133,6 @@ function getAbsolutePath () {
           path: '/courseware',
           name: 'Courseware',
           meta:{
-            title:'课件'
           },
           component: resolve => require(['@/views/BusinessPage/resource/courseware.vue'], resolve),
         },
@@ -156,7 +140,6 @@ function getAbsolutePath () {
           path: '/expertlist',
           name: 'Expertlist',
           meta:{
-            title:'专家列表'
           },
           component: resolve => require(['@/views/BusinessPage/resource/expertlist.vue'], resolve),
         },
@@ -164,7 +147,6 @@ function getAbsolutePath () {
           path: '/newspecial',
           name: 'newSpecial',
           meta:{
-            title:'新人专用'
           },
           component: resolve => require(['@/views/BusinessPage/resource/newspecial.vue'], resolve),
         },
@@ -172,7 +154,6 @@ function getAbsolutePath () {
           path: '/cpjh',
           name: 'Cpjh',
           meta:{
-            title:'产品计划'
           },
           component: resolve => require(['@/components/wtfp/cpjhList.vue'], resolve),
         },
@@ -180,7 +161,6 @@ function getAbsolutePath () {
           path: '/pxjh',
           name: 'Pxjh',
           meta:{
-            title:'培训计划'
           },
           component: resolve => require(['@/components/wtfp/pxjhList.vue'], resolve),
         },
@@ -188,7 +168,6 @@ function getAbsolutePath () {
           path: '/cpgjjhlist',
           name: 'cpjhList',
           meta:{
-            title:'改进计划产品列表'
           },
           component: resolve => require(['@/components/wtfp/cpjhList.vue'], resolve),
         },
@@ -196,7 +175,6 @@ function getAbsolutePath () {
           path: '/ssgjjhlist',
           name: 'ssjhList',
           meta:{
-            title:'改进计划能力列表'
           },
           component: resolve => require(['@/components/wtfp/pxjhList.vue'], resolve),
         },
@@ -471,7 +449,6 @@ function getAbsolutePath () {
       path: '/report-list/:id.html',
       name: 'reportList',
       meta:{
-        title:'问题列表'
       },
       component: resolve => require(['@/views/BusinessPage/report/report-list.vue'], resolve),
     },
@@ -512,7 +489,6 @@ function getAbsolutePath () {
       path: '/xxtsql',
       name: 'Xxtsql',
       meta:{
-        title:'学校潜力提升'
       },
       component: resolve => require(['@/views/BusinessPage/report/xxtsqlPannel.vue'], resolve),
     },
@@ -520,7 +496,6 @@ function getAbsolutePath () {
       path: '/zdsfwDetail',
       name: 'ZdsfwDetail',
       meta:{
-        title:'服务计划详情'
       },
       component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwDetail.vue'], resolve),
     },
@@ -528,21 +503,18 @@ function getAbsolutePath () {
       path: '/rbdetail',
       name: 'Rbdetial',
       meta:{
-        title:'日报批注详情'
       },
       component: resolve => require(['@/views/BusinessPage/taskpzDetail/rbDetail.vue'], resolve),
     },{
       path: '/zbdetail',
       name: 'Zbdetial',
       meta:{
-        title:'周报批注详情'
       },
       component: resolve => require(['@/views/BusinessPage/taskpzDetail/zbDetail.vue'], resolve),
     },{
       path: '/ybdetail',
       name: 'Ybdetial',
       meta:{
-        title:'月报批注详情'
       },
       component: resolve => require(['@/views/BusinessPage/taskpzDetail/ybDetail.vue'], resolve),
     },
@@ -550,7 +522,6 @@ function getAbsolutePath () {
       path: '/yswgdetail',
       name: 'Yswgdetail',
       meta:{
-        title:'验收完工详情'
       },
       component: resolve => require(['@/views/BusinessPage/report/yswgphb/detail.vue'], resolve),
     },
@@ -558,7 +529,6 @@ function getAbsolutePath () {
       path: '/jdgzDetail',
       name: 'JdgzDetail',
       meta:{
-        title:'进度跟踪详情'
       },
       component: resolve => require(['@/views/BusinessPage/jdgzDetail.vue'], resolve),
     },
@@ -574,7 +544,6 @@ function getAbsolutePath () {
       path: '/gjjhcpl',
       name: 'Gjjhcpl',
       meta:{
-        title:'产品类改进计划'
       },
       component: resolve => require(['@/components/wtfp/gjjhcpl.vue'], resolve),
     },
@@ -582,7 +551,6 @@ function getAbsolutePath () {
       path: '/gjjhssl',
       name: 'Gjjhssl',
       meta:{
-        title:'实施类改进计划'
       },
       component: resolve => require(['@/components/wtfp/gjjhssl.vue'], resolve),
     },
@@ -590,7 +558,6 @@ function getAbsolutePath () {
       path: '/stafflist',
       name: 'staffList',
       meta:{
-        title:'员工列表'
       },
       component: resolve => require(['@/components/wtfp/yglist.vue'], resolve),
     },
@@ -598,7 +565,6 @@ function getAbsolutePath () {
       path: '/khbbdetail/:id',
       name: 'Khbbdetail',
       meta:{
-        title:'考核报表'
       },
       component: resolve => require(['@/views/BusinessPage/report/khbb/khbbdetail.vue'], resolve),
     },
@@ -606,7 +572,6 @@ function getAbsolutePath () {
       path: '/userDetail',
       name: 'UserDetail',
       meta:{
-        title:'用户登录详情'
       },
       component: resolve => require(['@/views/BusinessPage/report/useReport/userDetail.vue'], resolve),
     },

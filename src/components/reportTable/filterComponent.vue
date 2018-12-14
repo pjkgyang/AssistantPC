@@ -21,6 +21,16 @@
           <el-date-picker @change="handleChangeYf" size="mini" v-model="filterWord.yf" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
         </p>
       </div>
+
+      <div v-if="filterList.includes('yfDate')">
+        <p class="query-title">区间月份:</p>
+        <p>
+          <el-date-picker  size="mini" v-model="filterWord.startMonth" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
+          至
+          <el-date-picker  size="mini" v-model="filterWord.endMonth" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
+        </p>
+      </div>
+
       <div v-if="filterList.includes('zdsfwzt')">
         <p class="query-title">状态:</p>
         <p class="query-list" @click="handleZt">
@@ -181,6 +191,8 @@ export default {
         lb: 2,
         lcbxmlx: "",
         yf:'',
+        startMonth:"",
+        endMonth:"",
         rylx:[],
         zdsfwzt:'',
         fbxz:''
@@ -216,6 +228,9 @@ export default {
     handleChangeYf(){
       this.$emit("handleChangeFilter", this.filterWord,'yf');
     },
+    // handleChangeYfDate(){
+    //   this.$emit("handleChangeFilter", this.filterWord);
+    // },
     handleDWLX(e) {
       // 单位类型
       let dwlx = e.target.getAttribute("data-type");
