@@ -133,7 +133,14 @@
           <el-table-column prop="xmbh" min-width="100" label="项目编号" show-overflow-tooltip></el-table-column>
           <el-table-column prop="xmmc" min-width="200" label="项目名称" show-overflow-tooltip></el-table-column>
           <el-table-column prop="xmnr_display" min-width="260" label="项目内容" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="lcbms_display" min-width="260" style="text-align:left" label="里程碑描述" show-overflow-tooltip> </el-table-column>
+          <el-table-column min-width="260" label="里程碑描述" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <div class="name-wrapper">
+                <a v-if="scope.row.xmnr_display == '项目备忘'" href="javaScript:;;" @click="handleCheckList(scope.row)">{{scope.row.lcbms_display}}</a>
+                <span v-else>{{scope.row.lcbms_display}}</span>
+              </div>
+            </template>
+           </el-table-column>
           <el-table-column prop="nrxmlb" min-width="90" label="项目类别" show-overflow-tooltip></el-table-column>
           <el-table-column sortable label="里程碑状态" width="120" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -162,10 +169,13 @@
       </div>
     </section>
 
-    <el-dialog title="提报里程碑" :close-on-click-modal="false" :visible.sync="milestoneVisible" width="600px" top="50px">
-      <commitMilestone :shown="milestoneVisible" :xmbh="xmbh" @handleCommitMilestone="handleCommitMilestone" :taskLcbbhArr="lcbbhArr"></commitMilestone>
+    <el-dialog title="提报里程碑" :close-on-click-modal="false" :visible.sync="milestoneVisible" width="700px" top="50px">
+      <commitMilestone :shown="milestoneVisible" :xmbh="xmbh" @handleCommitMilestone="handleCommitMilestone" :taskLcbbhArr="lcbbhArr"
+      @handleClose="handleCloseMile"></commitMilestone>
     </el-dialog>
     <lcbjlDialog :show.sync="lcbjlShow" :lcbbh="lcbbh"></lcbjlDialog>
+
+    <cplistDialog :show.sync="cplistShow" :tableData="cplistData"></cplistDialog>
   </div>
 </template>
 <script>
@@ -181,10 +191,13 @@ import commitMilestone from "@/components/BusinessPage/commitMilestone.vue";
 import filterComponent from "@/components/reportTable/filterComponent.vue";
 import { returnFloat } from "../../utils/util.js";
 import lcbjlDialog from "@/components/dialog/lcbjl-dialog.vue";
+import cplistDialog from '@/components/dialog/milestone/cplist-dialog.vue'
+
 export default {
   data() {
     return {
       lcbjlShow: false,
+      cplistShow:false,
       lcbbh: "",
       gczdList: [],
       checkList: [],
@@ -225,11 +238,31 @@ export default {
       xmnrKeyword: "",
       lcbmsKeyword: "",
       xmjlKeyword: "",
-      zrrKeyword: ""
+      zrrKeyword: "",
+
+      cplistData:[]
     };
   },
 
   methods: {
+
+    handleCloseMile(){
+      this.milestoneVisible = false;
+    },
+    // 查看备忘
+    handleCheckList(data){
+      this.$get(this.API.listMemoProduct,{
+        lcbbh:data.lcbbh 
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.cplistData = res.data
+        }else{
+         this.$alert(res.msg, "提示", {confirmButtonText: "确定",e: "error"}); 
+        }
+      })
+      this.cplistShow = !this.cplistShow
+    },
+
     handleOpenfilter() {
       this.filterShow = !this.filterShow;
     },
@@ -516,7 +549,7 @@ export default {
     }
     this.queryMilestoneData();
   },
-  components: { pagination, commitMilestone, filterComponent, lcbjlDialog }
+  components: { pagination, commitMilestone, filterComponent, lcbjlDialog ,cplistDialog}
 };
 </script>
 <style scoped>

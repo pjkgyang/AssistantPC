@@ -1,7 +1,7 @@
 <template>
   <div style="width:80%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
     <section text-right>
-      <el-button size="small" @click="handleUpload">上传文件</el-button>
+      <!-- <el-button v-if="userTag.includes('NLPXZJ')" size="small" @click="handleUpload">上传文件</el-button> -->
       <el-button :type="catalogue == 'file'?'primary':''" size="small" @click="catalogue = 'file'">文件目录</el-button>
       <el-button :type="catalogue == 'record'?'primary':''" size="small" @click="catalogue = 'record'">操作记录</el-button>
     </section>
@@ -53,7 +53,8 @@
               <div flex colcenter v-if="fileIndex == index && file.sfwjml == '0'">
                 <span @click="handlePraise($event,'1',file.fjbh)"><span class="appraise-hp"></span> ({{file.good}})</span>&nbsp;
                 <span @click="handlePraise($event,'0',file.fjbh)"><span class="appraise-cp"></span> ({{file.bad}})</span>&#x3000;
-                <a href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>
+                <a href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>&#x3000;
+                <!-- <a v-if="userTag.includes('NLPXZJ')" href="javaScript:;;" style="color:#f00" @click="handleDelete(file.fjbh)">删除</a> -->
               </div>
             </div>
           </li>
@@ -102,7 +103,9 @@ export default {
       logsFjpath:'',
       oldFjpath:'',//记录根目录路径
       fileCounts:{},
-      dialogTitle:''
+      dialogTitle:'',
+      
+      userTag:""
     };
   },
   props: {
@@ -118,6 +121,8 @@ export default {
   mounted() {
     this.baseUrl = window.baseurl;
     this.openFolder();
+    this.userTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag
+
   },
   methods: {
     // 上传成功
@@ -191,6 +196,11 @@ export default {
       }
       this.pjsmShow = !this.pjsmShow;
     },
+    // 删除文件
+    handleDelete(data){
+      console.log(data);
+    },
+    // 打开文件
     openFolder(path) {
       this.$get(this.API.openTemplateFolder, {
         path:path||"",
@@ -309,7 +319,8 @@ export default {
         this.getLogs();
         this.getCount();
       }else{
-        this.logsFjpath = this.oldFjpath
+        this.logsFjpath = this.oldFjpath;
+
       }
     }
   },
@@ -371,11 +382,11 @@ export default {
   text-align: center;
 }
 .file-cjsj {
-  width: 30%;
+  width: 25%;
   text-align: right;
 }
 .file-evaluate {
-  width: 15%;
+  width: 20%;
   text-align: right;
   justify-content: flex-end;
   div {
@@ -403,10 +414,5 @@ export default {
   .appraise-cp:hover{
     background-position:0 -32px;
   }
-  // img {
-  //   width: 16px;
-  //   height: 16px;
-  //   margin: 0 0 0 5px !important;
-  // }
 }
 </style>

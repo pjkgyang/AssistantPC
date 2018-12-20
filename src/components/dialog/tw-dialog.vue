@@ -1,128 +1,96 @@
 <template>
-    <div class="dialog-container">
-        <el-dialog
-            :title="questionTitle"
-            width="800px"
-            top="30px"
-            :visible.sync="visible"
-            :close-on-click-modal="false"
-            @close="$emit('update:show', false)"
-            :show="show">
-            <div class="Question">
-            <el-form  style="width:750px;margin:0 auto"  class="demo-ruleForm"  :model="question" :inline="true" label-width="125px">
-                <el-form-item label="项目名称" required v-if="chooseableItem">
-                    <el-input size="mini" type="text" style="width:520px;" v-model="xmmc" readonly placeholder="请选择项目">
-                        <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
-                    </el-input>
-                </el-form-item>
-                 <el-form-item label="项目名称" required v-if="!chooseableItem">
-                     <el-input size="mini" type="text" style="width:520px" v-model="xmmc" readonly></el-input>
-                </el-form-item>
-                <el-form-item label="问题类别"  required v-if="(showCondition==1||showCondition==2)">
-                    <el-select v-model="question.wtlb" size="mini" placeholder="请选择问题类别" style="width:192px">
-                    <el-option
-                        v-for="(item,index) in wtlb"
-                        :key="index"
-                        :label="item.mc"
-                        :value="item.label">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="是否紧急" required >
-                    <el-select v-model="question.sfjj" size="mini" placeholder="请选择是否紧急" style="width:192px">
-                        <el-option label="是" value="1"></el-option>
-                        <el-option label="否" value="0"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="问题级别" required v-if="(showCondition==1||showCondition==2)"> 
-                    <el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:192px">
-                        <el-option label="不严重" value="不严重"></el-option>
-                        <el-option label="一般" value="一般"></el-option>
-                        <el-option label="严重" value="严重"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="产品" required>
-                    <el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:192px" @change="handleChangeCp">
-                        <el-option 
-                        v-for="(cp,index) in xmcpList"
-                        :key="index"
-                        :label="cp.mc"
-                        :value="cp.label">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="影响范围" required v-if="(showCondition==1||showCondition==2)">
-                    <el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:192px">
-                        <el-option label="影响局部" value="影响局部"></el-option>
-                        <el-option label="影响整体" value="影响整体"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="是否bug" required v-if="(showCondition==1||showCondition==2)">
-                    <el-select v-model="question.sfbug" size="mini" placeholder="请选择是否bug" style="width:192px">
-                        <el-option label="是" value="1"></el-option>
-                        <el-option label="否" value="0"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="版本号" required v-if="(showCondition==1||showCondition==2)">
-                <el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:193px;"></el-input>
-                </el-form-item>
+  <div class="dialog-container">
+    <el-dialog :title="questionTitle" width="800px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
+      <div class="Question">
+        <el-form style="width:750px;margin:0 auto" class="demo-ruleForm" :model="question" :inline="true" label-width="125px">
+          <el-form-item label="项目名称" required v-if="chooseableItem">
+            <el-input size="mini" type="text" style="width:520px;" v-model="xmmc" readonly placeholder="请选择项目">
+              <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="项目名称" required v-if="!chooseableItem">
+            <el-input size="mini" type="text" style="width:520px" v-model="xmmc" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="问题类别" required v-if="(showCondition==1||showCondition==2)">
+            <el-select v-model="question.wtlb" size="mini" placeholder="请选择问题类别" style="width:192px">
+              <el-option v-for="(item,index) in wtlb" :key="index" :label="item.mc" :value="item.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否紧急" required>
+            <el-select v-model="question.sfjj" size="mini" placeholder="请选择是否紧急" style="width:192px">
+              <el-option label="是" value="1"></el-option>
+              <el-option label="否" value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="问题级别" required v-if="(showCondition==1||showCondition==2)">
+            <el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:192px">
+              <el-option label="不严重" value="不严重"></el-option>
+              <el-option label="一般" value="一般"></el-option>
+              <el-option label="严重" value="严重"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="产品" required>
+            <el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:192px" @change="handleChangeCp">
+              <el-option v-for="(cp,index) in xmcpList" :key="index" :label="cp.mc" :value="cp.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="影响范围" required v-if="(showCondition==1||showCondition==2)">
+            <el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:192px">
+              <el-option label="影响局部" value="影响局部"></el-option>
+              <el-option label="影响整体" value="影响整体"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否bug" required v-if="(showCondition==1||showCondition==2)">
+            <el-select v-model="question.sfbug" size="mini" placeholder="请选择是否bug" style="width:192px">
+              <el-option label="是" value="1"></el-option>
+              <el-option label="否" value="0"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="版本号" required v-if="(showCondition==1||showCondition==2)">
+            <el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:193px;"></el-input>
+          </el-form-item>
 
-                <el-form-item label="期望解决日期" required v-if="!accreditShow">
-                    <el-date-picker  :picker-options="pickerBeginDateQw"   :clearable="false" size="mini" v-model="question.qwjjrq" type="date"  placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
-                </el-form-item>
-                <el-form-item label="期望解决日期" required v-if="accreditShow">
-                    <el-input size="mini"  style="width:193px;" readonly v-model="question.qwjjrqO"></el-input>
-                </el-form-item>
+          <el-form-item label="期望解决日期" required v-if="!accreditShow">
+            <el-date-picker :picker-options="pickerBeginDateQw" :clearable="false" size="mini" v-model="question.qwjjrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="期望解决日期" required v-if="accreditShow">
+            <el-input size="mini" style="width:193px;" readonly v-model="question.qwjjrqO"></el-input>
+          </el-form-item>
 
-            <el-form-item  label="环境信息" v-if="isJZuser != 1"> 
-                    <el-upload
-                        style="width:510px;"
-                        class="upload-demo"
-                        ref="upload"
-                        :limit='1'
-                        :action="uploadAction"
-                        :before-upload="beforeUpload"
-                        :on-remove="handleRemove"
-                        :on-change="handleChange"
-                        :file-list="fileList"
-                        :show-file-list="true"
-                        :auto-upload="false">
-                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="承诺解决日期" required v-if="accreditShow">
-                    <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="question.cnjsrq" type="date"  placeholder="选择日期" format="yyyy-MM-dd"  value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
-                </el-form-item>
+          <el-form-item label="环境信息" v-if="isJZuser != 1">
+            <el-upload style="width:510px;" class="upload-demo" ref="upload" :limit='1' :action="uploadAction" :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" :file-list="fileList" :show-file-list="true" :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="承诺解决日期" required v-if="accreditShow">
+            <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="question.cnjsrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
+          </el-form-item>
 
-                <el-form-item label="标题" required v-if="!accreditShow">
-                <el-input size="mini" v-model="question.title" type="text" placeholder="标题" style="width:520px;"></el-input>
-                </el-form-item>
-                </el-form>
-                <div class="question-textarea" v-if="!accreditShow">
-                    <p>详情</p>
-                    <div id="summernote"> </div>         
-                </div>   
-                
-                <div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
-                    <el-button size="small" type="primary" @click="handleCommit"  v-if="!accreditShow">确认提交</el-button>
-                    <el-button size="small" type="primary" @click="handleAccredit"  v-if="accreditShow">确认受理</el-button>
-                    <el-button size="small" type="info" @click="handleCancel">取消</el-button>  
-                </div>
-            </div>
-        </el-dialog>
+          <el-form-item label="标题" required v-if="!accreditShow">
+            <el-input size="mini" v-model="question.title" type="text" placeholder="标题" style="width:520px;"></el-input>
+          </el-form-item>
+        </el-form>
+        <div class="question-textarea" v-if="!accreditShow">
+          <p>详情</p>
+          <div id="summernote"> </div>
+        </div>
 
-        <el-dialog
-            title="选择项目"
-            :visible.sync="dialogQuestionVisible"
-            :close-on-click-modal="false"
-            width="800px"
-            top="30px"
-            append-to-body>
-            <div style="padding:10px;">
-                <itemChoose @handleEdit="handleEdit"></itemChoose>
-            </div>
-        </el-dialog> 
-    </div>
+        <div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
+          <el-button size="small" type="primary" @click="handleCommit" v-if="!accreditShow">确认提交</el-button>
+          <el-button size="small" type="primary" @click="handleAccredit" v-if="accreditShow">确认受理</el-button>
+          <el-button size="small" type="info" @click="handleCancel">取消</el-button>
+        </div>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="选择项目" :visible.sync="dialogQuestionVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
+      <div style="padding:10px;">
+        <itemChoose @handleEdit="handleEdit"></itemChoose>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -183,7 +151,8 @@ export default {
         }
       },
       isJZuser: null,
-      xmcpList: []
+      xmcpList: [],
+      xmData:[] //选择项目信息
     };
   },
   props: {
@@ -244,6 +213,7 @@ export default {
       };
     },
     handleEdit(data) {
+      this.xmData = data;
       // //选择项目（）
       // if(data.gcfwzt == '0'){
       //   this.$alert(data.gcfwztsm,'提示',{type:'warning',confirmButtonText: '确定'});
@@ -252,11 +222,12 @@ export default {
       if (this.questionTitle == "我要提问") {
         this.queryResponsibleProduct(data.xmbh);
       }
-      (this.xmbh = data.xmbh), (this.xmmc = data.xmmc);
+      this.xmbh = data.xmbh;
+      this.xmmc = data.xmmc;
       this.dialogQuestionVisible = false;
     },
+     //选择项目
     addQuestiontItem() {
-      //选择项目
       this.dialogQuestionVisible = true;
     },
     handleCancel() {
@@ -266,12 +237,32 @@ export default {
 
     // 根据产品切换承诺结束日期范围（9.26）
     handleChangeCp(val) {
+      this.$get(this.API.questionLimitProduct, {
+        xmbh: this.xmbh,
+        cpbh: val
+      }).then(res => {
+        if (res.state == "success") {
+          let cpmc = "";
+          this.xmcpList.forEach(ele => {
+            if (ele.label == val) cpmc = ele.mc;
+          });
+          if (!res.data) {
+            this.$alert("该项目未采购 " + cpmc + " 专项基础环境运维服务,请联系销售采购对应的服务",
+            "提示",
+              {
+                confirmButtonText: "确定",
+                type: "warning"
+              }
+            );
+          }
+        }
+      });
       if (!!this.accreditShow) {
         queryProductSolutionTime({ cpbh: val }).then(({ data }) => {
           if (data.state == "success") {
             // this.question.cnjsrq = GetDateStr(data.data);
             this.questionInfo.cphs = data.data;
-            this.question.cnjsrq = ''
+            this.question.cnjsrq = "";
           }
         });
       }
@@ -506,8 +497,13 @@ export default {
         xmbh: xmbh
       }).then(res => {
         if (res.data.state == "success") {
+          // 2018.12.18 修改
           if (JSON.stringify(res.data.data) == "{}") {
-            this.xmcpList = this.cplist;
+            let xmjlxm = !this.itemInfo.yfzrrxm?this.xmData.yfzrrxm:this.itemInfo.yfzrrxm
+            this.$alert(" 您选择的项目没有可提问产品，请联系项目经理 ( " + xmjlxm +")添加负责业务。", "提示", {
+              confirmButtonText: "确定",
+              type: "warning"
+            });
           } else {
             let Arr = Object.keys(res.data.data);
             let McArr = Object.values(res.data.data);
@@ -552,7 +548,7 @@ export default {
           //提问展示
           this.showCondition = data.data;
         });
-        if (!getSession("ProblemType") ||　!getSession("kycp")) {
+        if (!getSession("ProblemType") || !getSession("kycp")) {
           getMenu("ProblemType", this.wtlb, "");
           getMenu("kycp", this.cplist, true);
         } else {
@@ -595,9 +591,7 @@ export default {
           this.question.bbh = this.questionInfo.bbh;
           this.question.qwjjrqO = this.questionInfo.qwjjrqO;
           this.question.cnjsrq =
-            this.questionInfo.cnjsrq == ""
-              ? this.questionInfo.qwjjrqO
-              : this.questionInfo.cnjsrqO;
+          this.questionInfo.cnjsrq == ""? this.questionInfo.qwjjrqO: this.questionInfo.cnjsrqO;
           this.question.qwjjrq = this.questionInfo.qwjjrq;
           this.question.wid = this.questionInfo.wid;
           this.xmmc = this.questionInfo.xmmc;

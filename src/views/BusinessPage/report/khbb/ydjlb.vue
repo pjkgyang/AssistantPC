@@ -68,6 +68,8 @@ export default {
       });
     },
     exportTable() {
+      this.filterData.yf = !this.filterData.yf?'':this.filterData.yf
+
       window.open(
         window.baseurl +
           "assessment/exportydjlbb.do?bm=" +

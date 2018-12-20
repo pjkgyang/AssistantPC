@@ -1,10 +1,9 @@
 <template>
   <div class="item-addUser">
     <div style="text-align:right;padding-bottom:10px;">
-      <!--2018-12-04 甲方责任人不可见修改中标人和团队成员。
-         经营管理 添加中标人 -->
+      <!--2018-12-18 （项目甲方责任人）不可见修改中标人和团队成员。经营管理 添加中标人 -->
       <el-button v-if="GroupTag.includes('JYGL')" size="small" type="primary" @click="handleChangeZbr" >修改中标人</el-button>
-      <el-button v-if="isJzuser != 1" size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
+      <el-button v-if="isJzuser != 1 || jsJf" size="small" type="primary" icon="el-icon-circle-plus-outline" @click="handleNewAdd">添加参与者</el-button>
     </div>
     <div class="item-user-outTable">
       <table class="item-user-table">
@@ -25,13 +24,14 @@
             <el-tag v-if="!itemJfzrr.roleName" size="mini">甲方</el-tag>
           </td>
           <td>{{!itemJfzrr.userName?'暂无':itemJfzrr.userName}}</td>
-          <td>{{itemJfzrr.userCode}}</td>
-          <td>{{itemJfzrr.unitType == 0?'金智':itemJfzrr.unitType == 2?'合作伙伴':!itemJfzrr.unitType?'':'学校成员'}}</td>
-          <td>{{!itemJfzrr.dept?'':itemJfzrr.dept}}</td>
-          <td>{{itemJfzrr.cjsj}}</td>
+          <td>{{!itemJfzrr.userCode?'-':itemJfzrr.userCode}}</td>
+          <td>{{itemJfzrr.unitType == 0?'金智':itemJfzrr.unitType == 2?'合作伙伴':!itemJfzrr.unitType?'-':'学校成员'}}</td>
+          <td>{{!itemJfzrr.dept?'-':itemJfzrr.dept}}</td>
+          <td>{{!itemJfzrr.cjsj?'-':itemJfzrr.cjsj}}</td>
           <td>
-            <el-button v-if="itemJfzrr.userName !== username && itemJfzrr.unitType != 1" size="mini" @click="changeJfZrr">修改</el-button>
-            <el-button v-if="itemJfzrr.edit" plain size="mini" @click="editUser($event,itemJfzrr)">编辑</el-button>
+            <!-- v-if="itemJfzrr.userName == username || itemJfzrr.unitType == 0 ||itemYfzrr.userName == username " -->
+            <el-button  size="mini" @click="changeJfZrr">修改</el-button>
+            <el-button v-if="itemJfzrr.edit " plain size="mini" @click="editUser(itemJfzrr)">编辑</el-button>
             <el-button v-if="itemJfzrr.del" type="danger" plain size="mini" @click="deleteJfZrr">删除</el-button>
           </td>
         </tr>
@@ -41,13 +41,13 @@
             <el-tag v-if="!itemYfzrr.roleName" size="mini">乙方</el-tag>
           </td>
           <td>{{!itemYfzrr.userName?'暂无':itemYfzrr.userName}}</td>
-          <td>{{itemYfzrr.userCode}}</td>
+          <td>{{itemYfzrr.userCode}} / {{!itemYfzrr.mobile?'-':itemYfzrr.mobile}}</td>
           <td>{{!itemYfzrr.userName?'':itemYfzrr.unitType == 0?'金智':itemYfzrr.unitType == 1?'学校成员':'合作伙伴'}}</td>
           <td>{{!itemYfzrr.dept?'':itemYfzrr.dept}}</td>
           <td>{{itemYfzrr.cjsj}}</td>
           <td>
             <el-button v-if="!!GroupTag.includes('JYGL')" plain size="mini" @click="changeUser($event,itemYfzrr)">修改</el-button>
-            <el-button v-if="itemYfzrr.edit" plain size="mini" @click="editUser($event,itemYfzrr)">编辑</el-button>
+            <el-button v-if="itemYfzrr.edit" plain size="mini" @click="editUser(itemYfzrr)">编辑</el-button>
           </td>
         </tr>
         <tr v-for="(cyz,index) in itemCyz" v-if="itemCyz.length">
@@ -55,14 +55,14 @@
             <el-tag style="margin-right:5px;" size="mini" v-for="(roleName,index) in cyz.roleName" :key="index">{{roleName}}</el-tag>
           </td>
           <td>{{cyz.userName}}</td>
-          <td>{{cyz.userCode}}</td>
+          <td>{{cyz.userCode}}{{cyz.unitType == 0 && cyz.mobile?' / '+cyz.mobile:cyz.unitType == 0 && !cyz.mobile?' / -':''}}</td>
           <td>{{cyz.unitType == 0?'金智':cyz.unitType == 2?'合作伙伴':'学校成员'}}</td>
           <td>{{cyz.dept}}</td>
           <td>{{cyz.cjsj}}</td>
 
           <td>
             <el-button v-if="cyz.roleName.indexOf('销售') != -1 &&　(userTag || itemYfzrr.userName == username)" plain size="mini" plain @click="changeXsr(cyz)">修改</el-button>
-            <el-button v-if="cyz.edit" plain size="mini" :data-wid="cyz.userId" plain @click="editUser($event,cyz)">编辑</el-button>
+            <el-button v-if="cyz.edit" plain size="mini" :data-wid="cyz.userId" plain @click="editUser(cyz)">编辑</el-button>
             <el-button v-if="cyz.del" type="danger" size="mini" :data-wid="cyz.userId" plain @click="delectUser($event,cyz.userId)">删除</el-button>
           </td>
         </tr>
@@ -172,7 +172,7 @@
     <el-dialog title="编辑人员信息" :visible.sync="editdialogVisible" width="660px" :close-on-click-modal="false" :append-to-body=true>
       <el-form style="margin:10px 0 80px;padding:0 50px;" size="mini" label-width="80px" :inline="true">
         <el-form-item label="负责业务" required>
-          <el-select v-model="fzywList" placeholder="请选择" multiple :style="{width:userInfo.unitType != 1?'400px':'470px'}" :disabled='userInfo.unitType == 1?false:isAllCpx'>
+          <el-select v-model="fzywList" placeholder="请选择" multiple :style="{width:userInfo.unitType != 1?'400px':'450px'}" :disabled='userInfo.unitType == 1?false:isAllCpx'>
             <el-option v-for="(yw,index) in cpxData" :label="yw.mc" :value="yw.label + String.fromCharCode(2) + yw.mc" :key="index"></el-option>
           </el-select>
         </el-form-item>
@@ -346,8 +346,8 @@ export default {
     chooseEditBm(bm) {
       this.editInfo.bm = bm;
     },
+    // 选择人员类别
     chooseRylb(val) {
-      // 选择人员类别
       if (this.isAddCyz) {
         this.queryUser(1, false);
       } else {
@@ -363,11 +363,11 @@ export default {
       this.dialogVisible = !this.dialogVisible;
     },
     //编辑参与者
-    editUser(e, data) {
+    editUser( data) {
       this.cpxData = [];
       this.userInfo = data;
-      // 2018.12.10 改为可以用产品
 
+      // 2018.12.10 改为可以用产品
       if (!getSession("kycp")) {
         getMenu("kycp", this.cpxData, true); //获取产品
       } else {
@@ -549,6 +549,7 @@ export default {
     },
     //   添加参与者
     addItemCyz(data, param) {
+      let userData = data;
       if (this.mark) {
         this.$post(this.API.modifySale, {
           xmbh: this.xmbh,
@@ -569,7 +570,7 @@ export default {
           }).then(({ data }) => {
             if (data.state == "success") {
               this.$emit("addItemuser", "");
-              this.queryProjectParticipantMap();
+              this.queryProjectParticipantMap(userData);
               this.UserList[param].state = "ytj";
             } else {
               this.BtnDisabled = "";
@@ -775,7 +776,7 @@ export default {
       });
     },
     //   获取项目相关人员
-    queryProjectParticipantMap() {
+    queryProjectParticipantMap(userData) {
       queryProjectParticipantMap({
         xmbh: this.xmbh
       }).then(({ data }) => {
@@ -806,6 +807,16 @@ export default {
           } else {
             this.itemCyz = data.data.qt;
           }
+        }
+
+        if(!!userData){
+          let user = '';
+          this.itemCyz.forEach(ele=>{
+            if(userData.uid == ele.userId){
+              user = ele;
+            }
+          })
+         this.editUser(user); 
         }
       });
     },

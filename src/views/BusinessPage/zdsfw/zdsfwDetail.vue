@@ -5,48 +5,85 @@
              <section slot="top">
                  <h5>产品内容</h5>
                  <div class="contentMark">
-                    <div flex  class="contetnWord">
-                        <p>
-                            <span class="contenTitle">产品:</span>
-                            <span>{{cpData.cpmc}}</span>
-                        </p>
-                        <p>
-                            <span class="contenTitle">服务内容:</span>
-                            <span>{{cpData.fwnr}}</span>
-                        </p>
+                     <table>
+                         <tr>
+                             <td class="contenTitle">产品</td>
+                             <td>{{cpData.cpmc}}</td>
+                             <td class="contenTitle">服务内容</td>
+                             <td>{{cpData.fwnr}}</td>
+                         </tr>
+                         <tr>
+                             <td class="contenTitle">责任人</td>
+                             <td>{{cpData.zrrxm}}</td>
+                             <td class="contenTitle">状态</td>
+                             <td>{{cpData.zt_display}}</td>
+                         </tr> 
+                         <tr>
+                             <td class="contenTitle">计划完成时间</td>
+                             <td>{{cpData.jhjsrq}}</td>
+                             <td class="contenTitle">实际完成时间</td>
+                             <td>{{!cpData.sjjsrq?'无':cpData.sjjsrq}}</td>
+                         </tr>
+                         <tr>
+                             <td class="contenTitle">相关材料</td>
+                             <td colspan="3">
+                                 <a style="margin-right:30px;" v-if="!!cpData.fjList" v-for="fj in cpData.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 
+                             </td>
+                        
+                         </tr>
+                     </table>
+                 </div>
+                 <div v-if="!!cpData.problems && cpData.problems.length>0">
+                    <h5>问题项</h5>
+                    <div class="contentMark" >
+                        <section class="option-list" v-for="wt in cpData.problems" > 
+                                <p class="filter-weight">{{wt.cpmc}}&#x3000;{{wt.fwnr}}</p>
+                                <p>
+                                    <span>处理结果：</span>
+                                    <span style="color:green">{{wt.cljg}}</span>
+                                </p>
+                                <p><span>是否处理：</span>
+                                    <span style="color:green">{{wt.zt==0?'未解决':'已解决'}} &#x3000;
+                                    <span v-if="wt.zt==1" >{{wt.cljg}}</span>
+                                    </span>
+                                </p>
+                                
+                        </section>
                     </div>
-                    <div flex  class="contetnWord">
-                        <p>
-                            <span class="contenTitle">责任人:</span>
-                            <span>{{cpData.zrrxm}}</span>
-                        </p>
-                        <p>
-                            <span class="contenTitle">状态:</span>
-                            <span>{{cpData.zt_display}}</span>
-                        </p>
-                    </div>
-                    <div flex  class="contetnWord">
-                        <p>
-                            <span class="contenTitle">计划完成时间:</span>
-                            <span>{{cpData.jhjsrq}}</span>
-                        </p>
-                        <p>
-                            <span class="contenTitle">实际完成时间:</span>
-                            <span>{{!cpData.sjjsrq?'无':cpData.sjjsrq}}</span>
-                        </p>
-                    </div>
-                    <div>
-                        <span class="contenTitle">相关材料:</span>
-                        <a style="margin-right:30px;" v-if="!!cpData.fjList" v-for="fj in cpData.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 
-                        <span class="filter-weight" v-if="!cpData.fjList">无</span>
+                 </div>
+                 <div v-if="!!cpData.risks && cpData.risks.length > 0">
+                    <h5>风险项</h5>
+                    <div class="contentMark" >
+                        <section class="option-list" v-for="fx in cpData.risks"> 
+                            <p class="filter-weight">
+                                {{fx.cpmc}}&#x3000;{{fx.fwnr}}&#x3000;
+                                <el-tag size="mini" :class="{'zdsfw-fxdj-s1':fx.fxdj==1,'zdsfw-fxdj-s2':fx.fxdj==2,'zdsfw-fxdj-s3':fx.fxdj==3}" >{{fx.fxdj==1?'S1':fx.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
+                            </p>
+                            <p>
+                                <span >风险描述：</span>
+                                <span style="color:#f00">{{fx.fxms}}</span>
+                            </p>
+                            <p>
+                                <span >处理建议：</span>
+                                <span style="color:green">{{fx.cljy}}</span>
+                            </p>
+                            <p><span>是否处理：</span>
+                                <span style="color:green">{{fx.zt==0?'未解决':'已解决'}} &#x3000;
+                                <span v-if="fx.zt==1" >{{fx.cljg}}</span>
+                                </span>
+                            </p>
+                            <p v-if="!!fx.fjList"><span>相关附件：</span>
+                                <a style="margin-right:30px;"  v-for="fj in fx.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 
+                            </p>
+                        </section>
                     </div>
                  </div>
              </section>
              <section slot="bottom">
                  <div class="contetnProgress">
-                      <h5>日志明细</h5>
+                      <h5>计划进度</h5>
                       <div class="contentMark">
-                        <el-scrollbar style="height:calc(100vh - 300px);">
+                        <!-- <el-scrollbar style="height:calc(100vh - 300px);"> -->
                             <div v-if="jdList.length" v-for="(jd,index) in jdList" :class="{'progress-dot':true,'progress-dot-last':index == (jdList.length-1)}">
                                 <div>
                                     <span>{{jd.cjsj}}&#x3000;<span style="color:rgb(21, 145, 202)">{{!jd.czrxm?'':jd.czrxm}}</span>&#x3000;{{jd.czlxmc}}</span>
@@ -57,7 +94,7 @@
                                 <img src="static/img/empty.png" alt="">
                                 <p>暂无日志记录</p>
                             </div>
-                         </el-scrollbar>
+                         <!-- </el-scrollbar> -->
                       </div>
                   </div>
              </section>
@@ -77,6 +114,9 @@ import tableLayout from '@/components/layout/tableLayout.vue'
              {con:'2018-08-08 张三2 提报了惹怒',sm:'驳回驳回驳回驳回驳回驳回',zt:1},
              {con:'2018-08-08 张三3 提报了惹怒',sm:'驳回驳回驳回驳回驳回驳回',zt:''},
              {con:'2018-08-08 张三4 提报了惹怒',sm:'驳回驳回驳回驳回驳回驳回',zt:''},
+         ],
+         fxList:[
+             {cpmc:'asdasd',fwnr:'adasdas',fxms:'123123123',cljy:'12312312'}
          ],
          cpData:{}
      }
@@ -115,14 +155,16 @@ import tableLayout from '@/components/layout/tableLayout.vue'
        border-radius: 5px;
        margin: 0 auto;
        padding: 10px 20px;
-       height:calc(100vh - 40px);
        box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
-       h5 {
+       h5,h6 {
           font-weight: 700;
           font-size: 15px;
           margin-bottom:10px !important;
           padding-left:5px;
           border-left: 4px solid rgb(177, 55, 214);
+       }
+       h6{
+           font-size: 12px;
        }
    }
    .contentMark{
@@ -139,31 +181,27 @@ import tableLayout from '@/components/layout/tableLayout.vue'
                margin: 5px 0 !important;
            }
        }
+       table{
+           margin: 15px 0;
+           width: 100%;
+           border-color: #ccc;
+           td{
+               text-align: center;
+               border:1px solid rgb(233, 230, 230);
+               padding: 5px 0;
+           }
+           tr>td:nth-child(even){
+             width: 35%;  
+           }
+       }
    }
 }
-.contetnWord{
-    margin:10px 0;
-    p{
-      width:50%;
-       span{
-           font-weight: 700;
-       }
-       span:nth-of-type(2){
-           display: inline-block;
-           width: calc(100% - 150px);
-           text-overflow: ellipsis;
-           white-space: nowrap;
-           overflow: hidden;
-           vertical-align:bottom;
-       }
-    }
-}
+
 .contenTitle{
-    display: inline-block;
-    width: 100px;
+    width:15% !important;
     font-weight: 700;
     color: #807e7e;
-    text-align: right;
+    background: rgb(247, 244, 244);
 }
 .progress-dot{
     padding: 0 30px 10px;
@@ -174,10 +212,7 @@ import tableLayout from '@/components/layout/tableLayout.vue'
         font-size: 13px;
     }
 }
-.contetnProgress{
-    padding: 20px 0;
-    max-height:calc(100vh - 260px);
-}
+
 .progress-dot:before{
     content: '';
     display: block;
@@ -207,5 +242,10 @@ import tableLayout from '@/components/layout/tableLayout.vue'
 .progress-dot-last:after{
     display: none;
 }
-
+.option-list{
+    border-bottom: 1px dashed #999;
+    margin: 10px 0px;
+    font-size:12px;
+    padding:0 10px 5px;
+}
 </style>

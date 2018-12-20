@@ -74,6 +74,16 @@ export default {
     generateActiveService:window.baseurl+'activeservice/generateActiveService.do',//生成主动式服务（新增）
     publishActiveService:window.baseurl+'activeservice/publishActiveService.do',//发布主动式服务（新增）
     updateZrr:window.baseurl+'activeservice/updateZrr.do',//批量修改责任人
+    addActiveServiceProblem:window.baseurl+'activeservice/addActiveServiceProblem.do',  //添加主动式服务问题
+    deleteActiveServiceProblem:window.baseurl+'activeservice/deleteActiveServiceProblem.do',//删除主动式服务问题
+    pageActiveServiceProblem:window.baseurl+'activeservice/pageActiveServiceProblem.do',//主动式服务问题分页列表
+    addActiveServiceRisk:window.baseurl+'activeservice/addActiveServiceRisk.do',//添加主动式服务风险
+    deleteActiveServiceRisk:window.baseurl+'activeservice/deleteActiveServiceRisk.do',//删除主动式服务风险
+    pageActiveServiceRisk:window.baseurl+'activeservice/pageActiveServiceRisk.do',// 主动式服务风险分页列表
+    submitActiveServiceRisk:window.baseurl+'activeservice/submitActiveServiceRisk.do',//提交主动式服务风险
+    pageProblemSets:window.baseurl+'activeservice/pageProblemSets.do',//问题库查询
+    pageRiskSets:window.baseurl+'activeservice/pageRiskSets.do',//风险库查询
+
 
     // 修改参与者 中标人
     listZbxx:window.baseurl+'project/listZbxx.do', // 获取中标人列表
@@ -115,6 +125,10 @@ export default {
     addProjectProcess:window.baseurl+'project/addProjectProcess.do',//添加项目催办
     pageProjectReminder:window.baseurl+'project/pageProjectReminder.do',
 
+    // 项目备忘
+    listHtnrApp:window.baseurl+'project/listHtnrApp.do', //合同APP
+    listMemoProduct:window.baseurl+'milestone/listMemoProduct.do', //备忘产品列表
+
     
 
      // 资源中心
@@ -153,5 +167,12 @@ export default {
     planImprovementProblemList:window.baseurl+'question/planImprovementProblemList.do',//计划改进问题列表
     
     // 更新项目签订类型
-    updateProjectSignType:window.baseurl+'project/updateProjectSignType.do'
+    updateProjectSignType:window.baseurl+'project/updateProjectSignType.do',
+
+    //  问题限制产品
+    questionLimitProduct:window.baseurl+'question/questionLimitProduct.do',
+
+
+    
+   
 }

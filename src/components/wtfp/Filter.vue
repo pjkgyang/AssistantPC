@@ -47,7 +47,7 @@
                     </div>
 
                     <div v-if="filterList.includes('jhpxrq')">
-                        <p class="query-title">计划培训日期:</p>
+                        <p class="query-title">{{filterList.includes('pxxs')?'计划培训日期':'计划发版日期'}}:</p>
                         <p class="query-list">
                             <el-date-picker @change="changeDateFbrq" value-format="yyyy-MM-dd" size="mini" v-model="filterWord.jhpxrq" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                             </el-date-picker>

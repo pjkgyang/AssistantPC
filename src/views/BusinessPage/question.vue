@@ -20,7 +20,7 @@
           <p class="query-title">问题分类:</p>
           <p class="query-list" @click="handleZXR">
             <span data-type="" :class="{'bg-active':wtfl == ''}">全部</span>
-            <span v-for="(zxr,index) in zzrList" :data-type="zxr.label" :key="index" :class="{'bg-active':wtfl == zxr.label}">{{zxr.mc}}</span>
+            <span v-for="(wtflx,index) in wtflList" :data-type="wtflx.label" :key="index" :class="{'bg-active':wtfl == wtflx.label}">{{wtflx.mc}}</span>
           </p>
         </div>
         <div>
@@ -39,14 +39,7 @@
             <span data-type="0" :class="{'bg-active':sqgb == '0'}">否</span>
           </p>
         </div>
-        <!-- <div>
-               <p class="query-title">是否紧急:</p>
-               <p class="query-list" @click="handleSFJJ">
-                   <span data-type="" :class="{'bg-active':sfjj == ''}">全部</span>
-                   <span data-type="1" :class="{'bg-active':sfjj == '1'}">是</span>
-                   <span data-type="0" :class="{'bg-active':sfjj == '0'}">否</span>
-                </p>    
-            </div> -->
+  
         <div>
           <p class="query-title">是否催办:</p>
           <p class="query-list" @click="handleSFCB">
@@ -55,6 +48,17 @@
             <span data-type="0" :class="{'bg-active':sfcb == '0'}">否</span>
           </p>
         </div>
+
+        <div>
+          <p class="query-title">提交开发:</p>
+          <p class="query-list" @click="handleTJKF">
+            <span data-type="" :class="{'bg-active':tjkf == ''}">全部</span>
+            <span data-type="1" :class="{'bg-active':tjkf == '1'}">是</span>
+            <span data-type="0" :class="{'bg-active':tjkf == '0'}">否</span>
+          </p>
+        </div>
+
+
         <div v-if="showCondition==1||showCondition==2">
           <p class="query-title">产品线:</p>
           <p class="query-list" @click="handleCPX">
@@ -186,11 +190,12 @@ export default {
       total: null,
       wxyztlist: [],
       gczdList: [],
-      zzrList: [
+      wtflList: [
         { label: "1", mc: "待我解决问题" },
         { label: "0", mc: "我的提问" },
         { label: "3", mc: "我受理过的问题" },
-        { label: "2", mc: "我相关的问题" }
+        { label: "2", mc: "我相关的问题" },
+        { label: "4", mc: "待我受理的问题" },
       ],
       dwlxList: [
         { label: "1", mc: "学校" },
@@ -220,6 +225,7 @@ export default {
       wid: "",
       xmbh: "",
       xmmc: "",
+      tjkf:"",
       accreditShow: false,
       showCondition: "",
       isJZuser: "",
@@ -465,27 +471,21 @@ export default {
     searchQuestion() {
       //查询问题
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handlequeryQuestion() {
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
-
+     // 分页切换
     handleCurrentChange(data) {
-      // 分页切换
-      this.CurrentPage = data;
       this.queryAllQuestions(data);
     },
     changeStarDay(val) {
       // 选择开始时间
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     changeEndDay(val) {
       // 选择结束时间
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleSFJJ(e) {
       //是否紧急
@@ -493,15 +493,19 @@ export default {
       if (sfjj == null) return;
       this.sfjj = sfjj;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
+    // 是否催办
     handleSFCB(e) {
-      // 是否催办
       let sfcb = e.target.getAttribute("data-type");
       if (sfcb == null) return;
       this.sfcb = sfcb;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
+    },
+    handleTJKF(e){
+      let tjkf = e.target.getAttribute("data-type");
+      if (tjkf == null) return;
+      this.tjkf = tjkf;
+      this.queryAllQuestions(1);
     },
     handleCPX(e) {
       //产品线
@@ -509,7 +513,6 @@ export default {
       if (cpx == null) return;
       this.cpxbg = cpx;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleCP(e) {
       //产品
@@ -517,7 +520,6 @@ export default {
       if (cp == null) return;
       this.cpbg = cp;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleWTLB(e) {
       // 问题类别
@@ -525,7 +527,6 @@ export default {
       if (wtlb == null) return;
       this.wtlbbg = wtlb;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleSFBUG(e) {
       //是否bug
@@ -533,7 +534,6 @@ export default {
       if (sfbug == null) return;
       this.sfbug = sfbug;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleCXZT(e) {
       //查询状态
@@ -541,7 +541,6 @@ export default {
       if (cxzt == null) return;
       this.cxzt = cxzt;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleSQGB(e) {
       //申请关闭
@@ -549,7 +548,6 @@ export default {
       if (sqgb == null) return;
       this.sqgb = sqgb;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleWXYZT(e) {
       //未响应状态
@@ -557,7 +555,6 @@ export default {
       if (wxyzt == null) return;
       this.wxyztbg = wxyzt;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleWJJZT(e) {
       // 为解决问题
@@ -565,14 +562,12 @@ export default {
       if (wjjzt == null) return;
       this.wjjztbg = wjjzt;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleCNQX(e) {
       let cnqx = e.target.getAttribute("data-type");
       if (cnqx == null) return;
       this.cnqx = cnqx;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleGCZD(e) {
       // 工程战队
@@ -580,7 +575,6 @@ export default {
       if (gczd == null) return;
       this.gczd = gczd;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleDWLX(e) {
       // 单位类型
@@ -588,15 +582,13 @@ export default {
       if (dwlx == null) return;
       this.dwlx = dwlx;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
     handleZXR(e) {
       //待解决问题
-      let zxr = e.target.getAttribute("data-type");
-      if (zxr == null) return;
-      this.wtfl = zxr;
+      let wtflx = e.target.getAttribute("data-type");
+      if (wtflx == null) return;
+      this.wtfl = wtflx;
       this.queryAllQuestions(1);
-      this.CurrentPage = 1;
     },
 
     // 获取所有问题
@@ -621,7 +613,8 @@ export default {
         sqgb: this.sqgb,
         deadline: this.cnqx,
         starDay: this.starDay,
-        endDay: this.endDay
+        endDay: this.endDay,
+        tjkf:this.tjkf
       }).then(({ data }) => {
         if (data.state == "success") {
           if (!!data.data && data.data.rows.length != 0) {

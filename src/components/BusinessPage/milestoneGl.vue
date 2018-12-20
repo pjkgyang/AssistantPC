@@ -63,7 +63,14 @@
         <el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" @selection-change="handleSelectionChange">
           <el-table-column type="selection" max-width="80" :selectable='checkboxInit' v-if="ishow"></el-table-column>
           <el-table-column prop="xmnr_display" min-width="160" label="项目内容" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="lcbms_display" min-width="180" style="text-align:left" label="里程碑描述" show-overflow-tooltip> </el-table-column>
+          <el-table-column  min-width="180" style="text-align:left" label="里程碑描述" show-overflow-tooltip>
+             <template slot-scope="scope">
+              <div class="name-wrapper">
+                <a v-if="scope.row.xmnr_display == '项目备忘'" href="javaScript:;;" @click="handleCheckList(scope.row)">{{scope.row.lcbms_display}}</a>
+                <span v-else>{{scope.row.lcbms_display}}</span>
+              </div>
+            </template>
+           </el-table-column>
           <el-table-column prop="nrxmlb" min-width="90" label="项目类别" show-overflow-tooltip></el-table-column>
           <el-table-column sortable label="里程碑状态" width="120" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -107,11 +114,15 @@
       </el-form>
     </el-dialog>
     <el-dialog title="提报里程碑" :close-on-click-modal="false" :visible.sync="milestoneVisible" width="600px" top="50px">
-      <commitMilestone :shown="milestoneVisible" @handleCommitMilestone="handleCommitMilestone" :xmbh="xmbh" :taskLcbbhArr="lcbbhArr"></commitMilestone>
+      <commitMilestone :shown="milestoneVisible" @handleCommitMilestone="handleCommitMilestone" :xmbh="xmbh" :taskLcbbhArr="lcbbhArr"
+      @handleClose="handleCloseMile"></commitMilestone>
     </el-dialog>
+
+
     <lcbjlDialog :show.sync="lcbjlShow" :lcbbh="lcbbh"></lcbjlDialog>
     <cpListDialog :show.sync="cplistShow" :xmbh="xmbh"></cpListDialog>
-    <xmbw-dialog :show.sync="xmbwShow" @handleCommitXmbw="handleCommitXmbw"></xmbw-dialog>
+    <xmbw-dialog :show.sync="xmbwShow" :xmbh="xmbh" @handleCommitXmbw="handleCommitXmbw"></xmbw-dialog>
+    <cplistDialog :show.sync="cpShow" :tableData="cplistData"></cplistDialog>
   </div>
 </template>
 <script>
@@ -127,11 +138,13 @@ import { returnFloat } from "../../utils/util.js";
 import lcbjlDialog from "@/components/dialog/lcbjl-dialog.vue";
 import cpListDialog from "@/components/dialog/cpList-dialog.vue";
 import xmbwDialog from "@/components/dialog/milestone/xmbw-dialog.vue";
+import cplistDialog from '@/components/dialog/milestone/cplist-dialog.vue'
 export default {
   data() {
     return {
       lcbjlShow: false,
       cplistShow: false,
+      cpShow:false,
       xmbwShow: false,
       lcbbh: "",
       checkList: [],
@@ -158,7 +171,9 @@ export default {
       lcbbhArr: [],
       groupTag: "",
       ishow: true,
-      zrrShow: true
+      zrrShow: true,
+
+      cplistData:[]
     };
   },
   props: {
@@ -172,8 +187,23 @@ export default {
     }
   },
   methods: {
+    handleCloseMile(){
+      this.milestoneVisible = false;
+    },
+    handleCheckList(data){
+      this.$get(this.API.listMemoProduct,{
+        lcbbh:data.lcbbh 
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.cplistData = res.data
+        }else{
+         this.$alert(res.msg, "提示", {confirmButtonText: "确定",e: "error"}); 
+        }
+      })
+      this.cpShow = !this.cpShow  
+    },
+    // 查看里程碑操作记录
     handleCheckRrecord(data) {
-      // 查看里程碑操作记录
       this.lcbbh = data.lcbbh;
       this.lcbjlShow = !this.lcbjlShow;
     },
@@ -182,12 +212,13 @@ export default {
       this.queryMilestoneData(this.currentPage);
     },
     // 项目备忘
-    handleCommitXmbw(params) {
+    handleCommitXmbw(params,data) {
+      if(!data) return;
       this.$post(this.API.addMemo, {
         xmbh: this.xmbh,
-        // fj: params.fileList,
         bwcnwcsj: params.cnwcrq,
         sm:params.sm,
+        cps:params.cps     
       }).then(res => {
         if (res.state == "success") {
           this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
@@ -201,9 +232,10 @@ export default {
             }) .then(() => {
               this.$post(this.API.addMemo, {
                 xmbh: this.xmbh,
-                fj: params.fileList,
+                // fj: params.fileList,
                 bwcnwcsj: params.cnwcrq,
-                sffg:1
+                sffg:1,
+                cps:cps
               }).then(res => {
                   if (res.state == "success") {
                     this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
@@ -444,7 +476,8 @@ export default {
     commitMilestone,
     lcbjlDialog,
     cpListDialog,
-    xmbwDialog
+    xmbwDialog,
+    cplistDialog
   }
 };
 </script>

@@ -108,7 +108,6 @@ export default {
       if (!n) {
          this.uploadForm = new FormData();
          this.files = [];
-         console.log(this.files)
       } else {
 
       }

@@ -114,8 +114,8 @@
             </el-input>
           </el-form-item>
           <el-form-item label="产品" style="margin-bottom:15px;">
-            <el-select v-model="form.cp" placeholder="请选择产品 / 搜索产品名称" size="mini" filterable style="width:100%">
-              <el-option v-for="(cp,index) in xmcpList" :key="index" :label="cp.mc" :value="cp.mc+'&'+cp.label"></el-option>
+            <el-select ref="selects" v-model="form.cp" placeholder="请选择产品 / 搜索产品名称" size="mini" filterable style="width:100%" @change="handleChoose">
+              <el-option v-for="(cp,index) in xmcpList" :key="index" :label="cp.mc" :value="cp.mc+'&'+cp.label" ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="投诉对象" style="margin-bottom:15px;">
@@ -261,6 +261,25 @@ export default {
       this.complaintList(1);
       this.currentPage = 1;
     },
+
+    //  产品
+    handleChoose(val){
+      this.$get(this.API.questionLimitProduct, {
+        xmbh:this.form.xmbh,
+        cpbh: val.split('&')[1]
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data) {
+            this.$alert(
+              "该项目未采购 " + val.split('&')[0] + " 专项基础环境运维服务,请联系销售采购对应的服务",
+              "提示",
+              {confirmButtonText: "确定",type: "warning"}
+            );
+            this.$refs.selects.blur();
+          }
+        }
+      });
+    },
     // 分页
     handleCurrentChange(data) {
       this.complaintList(data);
@@ -333,7 +352,7 @@ export default {
       this.form.cpbh = "";
       this.form.object = [];
       // this.getMenu('cp',this.cpList,true);//获取产品
-      this.queryResponsibleProduct(data.xmbh);
+      this.queryResponsibleProduct(data.xmbh,data);
 
       queryProjectParticipant({
         xmbh: data.xmbh
@@ -355,14 +374,18 @@ export default {
     },
 
      // 获取项目对应的产品
-      queryResponsibleProduct(xmbh){
+      queryResponsibleProduct(xmbh,data){
         this.xmcpList = [];
         queryResponsibleProduct({
           xmbh: xmbh
         }).then(res => {
           if (res.data.state == "success") {
             if (JSON.stringify(res.data.data) == "{}") {
-              this.xmcpList = this.cpList;
+              // this.xmcpList = this.cpList;
+              this.$alert(" 您选择的项目没有可提问产品，请联系项目经理 ( " + data.yfzrrxm  +")添加负责业务。", "提示", {
+                confirmButtonText: "确定",
+                type: "warning"
+              });
             } else {
               let Arr = Object.keys(res.data.data);
               let McArr = Object.values(res.data.data);

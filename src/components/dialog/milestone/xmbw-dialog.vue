@@ -1,29 +1,50 @@
 
 <template>
-  <div>
+  <div class="xmbw-dialog">
     <el-dialog title="项目备忘" width="800px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
-      <div style="padding:20px;">
-        <!-- <div flex class="mg-12">
-                    <span class="filter-weight before-require" text-right style="display:inline-block;width:140px;">附件：</span>
-                    <div>
-                        <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" :on-change="handleChangeFile" :before-upload="newFiles" :on-remove="handleRemove" multiple>
-                            <el-button size="mini" type="primary">点击上传</el-button>
-                        </el-upload>
-                    </div>
-                </div> -->
-        <p>
-          <span class="filter-weight before-require" text-right style="display:inline-block;width:140px">备忘承诺完成时间：</span>
-          <el-date-picker size="mini" v-model="form.cnwcrq" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
-        </p><br>
-        <p flex>
-          <span class="filter-weight before-require" text-right style="display:inline-block;width:140px;">说明：</span>
-          <el-input style="width:600px" type="textarea" :rows="3" placeholder="请输入说明内容" v-model="form.sm">
-          </el-input>
-        </p>
-      </div>
+      <el-form ref="form" :model="form" label-width="140px" size="mini" style="padding:20px;" label-position="top" 
+      :inline="true">
+          <el-form-item label="承诺完成时间" required>
+              <el-date-picker style="width:750px" v-model="form.cnwcrq" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
+          </el-form-item>
+          <div>
+            <div class="cpList-option" v-for="(item,index) in cpDataList" flex>
+              <div flex colcenter style="padding:0 10px;"> 
+                <el-form-item label="产品" required >
+                    <el-select v-model="item.cp"  placeholder="请选择" >
+                    <el-option
+                      v-for="(cp,index) in cpList"
+                      :key="index"
+                      :label="cp.cpmc"
+                      :value="cp.cpdm+'&'+cp.cpmc">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="实施工作量(人/月)" required>
+                <el-input  placeholder="请输入实施工作量" v-model="item.ssgzl"></el-input>
+                </el-form-item>
+                <el-form-item label="二开工作量(人/月)" required>
+                <el-input   placeholder="请输入二开工作量" v-model="item.ekgzl"></el-input>
+                </el-form-item>
+                <el-form-item label="可变工作量(元)">
+                <el-input   placeholder="请输入说明内容变工作量" v-model="item.kbgzl"></el-input>
+                </el-form-item>
+              </div>
+              <div class="cpList-delete"  v-if="index !== 0">
+                  <span  @click="handleDelete(index)" title="删除"  class="el-icon-error"></span>
+              </div>
+            </div>
+            <div>
+              <a href="jvaScript:;;" @click="handleAddcp"><span class="el-icon-circle-plus"></span>新增选择产品</a>
+            </div>
+          </div>
+          <el-form-item label="说明" required>
+           <el-input style="width:750px" type="textarea" :rows="3" placeholder="请输入说明内容" v-model="form.sm"></el-input>
+          </el-form-item>
+        </el-form>  
       <div text-right class="pd-10">
         <el-button type="primary" size="mini" @click="handleCommitMilestone">提交</el-button>
-        <el-button size="mini" type="danger" @click="handleCloseDialog">关闭</el-button>
+        <el-button size="mini" type="" @click="handleCloseDialog">关闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -31,20 +52,30 @@
 
 <script>
 import { queryMilestoneOperationrecords } from "@/api/milestone.js";
+import { getMenu, getSession } from "@/utils/util.js";
+
 import axios from "axios";
 import Qs from "qs";
 export default {
   data() {
     return {
       visible: this.show,
-      upload_url: "123",
-      uploadForm: new FormData(),
       form: {
-        // fileList: "",
         cnwcrq: "",
-        sm: ""
+        sm: "",
+        cps:""
       },
-      files: []
+      cpDataList:[{
+        cp:'',
+        cpbh:'',
+        cpmc:'',
+        ssgzl:0,
+        ekgzl:0,
+        kbgzl:0
+      }],
+
+      cpList:[],
+      isValid:true
     };
   },
   methods: {
@@ -52,75 +83,124 @@ export default {
       this.visible = false;
     },
     handleCommitMilestone() {
-      // if (!this.files.length) {
-      //   this.$alert("请选择文件上传", "提示", {
-      //     confirmButtonText: "确定",
-      //     type: "warning"
-      //   });
-      //   return;
-      // }
+      if(!this.validate()) return;
+      this.$emit("handleCommitXmbw", this.form,this.isValid);
+    },
+    // 添加列
+    handleAddcp(){
+      this.cpDataList.push({
+        cp:'',
+        cpbh:'',
+        cpmc:'',
+        ssgzl:0,
+        ekgzl:0,
+        kbgzl:0
+      })
+    },
+    // 删除
+    handleDelete(index){
+      this.cpDataList.splice(index,1);
+    },
+    validate(){
+      this.form.cps = '';
+      this.cpDataList.forEach(ele=>{
+        ele.cpmc = ele.cp.split('&')[1];
+        ele.cpbh = ele.cp.split('&')[0];
+        if(!ele.cp){
+          this.$alert("请选择产品", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+         this.isValid = false;
+         return;
+        }
+        if(!/^[0-9]+\d*$/.test(ele.ssgzl)){
+          this.$alert("请输入正确实施工作量", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+         this.isValid = false;
+         return;
+        }
+        if(!/^[0-9]+\d*$/.test(ele.ekgzl)){
+          this.$alert("请输入正确二开工作量", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+          this.isValid = false;
+          return;
+        }
+        if(ele.kbgzl == ''){
+           ele.kbgzl = 0;
+          }else if (!/^\d+(\.\d+)?$/.test(ele.kbgzl)) {
+          this.$alert("请输入正确可变工作量", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+          this.isValid = false;
+          return;
+        }
+        this.isValid = true;
+        this.form.cps += ele.cpbh + String.fromCharCode(1) + ele.cpmc + String.fromCharCode(1) + ele.ssgzl + String.fromCharCode(1)
+        + ele.ekgzl + String.fromCharCode(1) + ele.kbgzl + String.fromCharCode(2)
+      })
+
       if (!this.form.cnwcrq) {
         this.$alert("请选择承诺完成日期", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-        return;
+        return false;
       }
       if (!this.form.sm) {
         this.$alert("请填写备忘说明", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-        return;
+        return false;
       }
-      this.$emit("handleCommitXmbw", this.form);
+      return true;
+    },
 
-      // this.$refs.uploadfile.submit();
-      // axios
-      //   .post(window.baseurl + "attachment/uploadAttach.do", this.uploadForm, {
-      //     headers: { "Content-Type": "multipart/form-data" }
-      //   })
-      //   .then(res => {
-      //     if (res.data.state == "success") {
-      //       this.form.fileList = res.data.data;
-      //       this.$emit('handleCommitXmbw',this.form);
-      //     } else {
-      //       this.$alert(res.data.msg, "提示", {
-      //         confirmButtonText: "确定",
-      //         type: "error"
-      //       });
-      //     }
-      //   })
-      //   .catch(error => {});
+    // 获取合同产品
+    listHtnrApp(){
+      this.$get(this.API.listHtnrApp,{
+       xmbh:this.xmbh
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.cpList = res.data
+        }else{
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "warning"});
+        }
+      })
     }
-    // handleRemove(file, fileList) {
-    //   this.files = fileList;
-    //   this.uploadForm.append("fileUpload", "");
-    // },
-    // handleChangeFile(file, fileList) {
-    //   this.files = fileList;
-    // },
-    // newFiles(file) {
-    //   this.files = [];
-    //   this.files.push(file);
-    //   this.uploadForm.append("fileUpload", file);
-    //   return true;
-    // }
   },
   props: {
     show: {
       type: Boolean,
       default: false
+    },
+    xmbh:{
+      type:String,
+      default:""
     }
   },
   watch: {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
-        this.form.cnwcrq = "";
-        this.files = [];
-        this.uploadForm = new FormData();
+        this.form.cnwcrq = this.form.sm = "";
+        this.form.ssgzl =  this.form.ekgzl = this.form.kbgzl =  0;
+        this.cpDataList = [{
+                  cp:'',
+                  cpbh:'',
+                  cpmc:'',
+                  ssgzl:0,
+                  ekgzl:0,
+                  kbgzl:0
+                }]
       } else {
+        this.listHtnrApp();
       }
     }
   },
@@ -128,5 +208,17 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.cpList-option{
+  border-bottom:1px dashed #999;
+}
+.cpList-delete{
+  line-height: 80px;
+  span{
+    color: #f00;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+}
 </style>

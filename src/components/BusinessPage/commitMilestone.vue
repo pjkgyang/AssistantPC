@@ -32,18 +32,45 @@
           <p>
             <el-checkbox v-model="sfbwValue">是否备忘</el-checkbox>
           </p>
-          <!-- <div flex v-if="sfbwValue">
-            <span style="display:inline-block;width:120px;margin-right:20px">附件：</span>
+          <div v-if="sfbwValue">
             <div>
-              <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" :on-change="handleChangeFile" :before-upload="newFiles" :on-remove="handleRemove" multiple>
-                <el-button size="mini" type="primary">点击上传</el-button>
-              </el-upload>
+                <span style="display:inline-block;width:120px">备忘承诺完成时间: </span>
+                <el-date-picker size="mini" v-model="cnwcrq" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
             </div>
-          </div> -->
-          <p v-if="sfbwValue">
-            <span style="display:inline-block;width:120px">备忘承诺完成时间: </span>
-            <el-date-picker size="mini" v-model="cnwcrq" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
-          </p>
+            <div class="cpList-option" v-for="(item,index) in cpDataList" flex>
+              <div flex>
+                <p>
+                   <span class="before-require filter-weight">选择产品</span>
+                    <el-select size="mini" v-model="item.cp"  placeholder="请选择" >
+                    <el-option
+                      v-for="(cp,index) in cpList"
+                      :key="index"
+                      :label="cp.cpmc"
+                      :value="cp.cpdm+'&'+cp.cpmc">
+                    </el-option>
+                  </el-select>
+                 </p>
+                  <p>
+                   <span class="before-require filter-weight">实施工作量(人/月)</span>
+                   <el-input  size="mini"  placeholder="请输入实施工作量" v-model="item.ssgzl"></el-input>
+                 </p>
+                  <p>
+                   <span class="before-require filter-weight">二开工作量(人/月)</span>
+                   <el-input size="mini" placeholder="请输入二开工作量" v-model="item.ekgzl"></el-input>
+                 </p>
+                  <p>
+                   <span class="before-require filter-weight">可变工作量(元)</span>
+                   <el-input size="mini" placeholder="请输入可变工作量" v-model="item.kbgzl"></el-input>
+                 </p>
+              </div>
+               <div class="cpList-delete" >
+                  <span v-if="index > 0" @click="handleDelete(index)" title="删除"  class="el-icon-error"></span>
+              </div>
+            </div>
+            <div>
+              <a href="jvaScript:;;" @click="handleAddcp"><span class="el-icon-circle-plus"></span>新增选择产品</a>
+            </div>
+          </div>
         </div>
       </div>
       <div style="padding:20px">
@@ -52,8 +79,10 @@
           </el-input>
         </p>
       </div>
+
       <div class="activity-creator">
-        <el-button type="primary" size="small" @click="handleCommitMilestone">提交</el-button>
+        <el-button type="primary" size="mini" @click="handleCommitMilestone">提交</el-button>
+        <el-button size="mini" @click="handleClose">取消</el-button>
       </div>
     </div>
   </div>
@@ -84,12 +113,18 @@ export default {
 
       sfbwValue: false,
       cnwcrq: "",
-      upload_url: "123",
-      uploadForm: new FormData(),
-      form: {
-        fileList: ""
-      },
-      files: []
+
+      isValid:false,
+      cpList:[],
+      cps:"",
+      cpDataList:[{
+        cp:'',
+        cpbh:'',
+        cpmc:'',
+        ssgzl:0,
+        ekgzl:0,
+        kbgzl:0
+      }],
     };
   },
   props: {
@@ -115,6 +150,8 @@ export default {
     }
   },
   mounted() {
+
+
     // 获取里程碑类型
     getMilestoneSubmitType({
       xmbh: this.xmbh,
@@ -141,28 +178,37 @@ export default {
             }
           });
         }
+        this.listHtnrApp(this.xmbh ? this.xmbh : data.data.xmbh);
       }
     });
   },
   methods: {
-    // handleRemove(file, fileList) {
-    //   this.files = fileList;
-    //   this.uploadForm.append("fileUpload", "");
-    // },
-    // handleChangeFile(file, fileList) {
-    //   this.files = fileList;
-    // },
-    // newFiles(file) {
-    //   this.files = [];
-    //   this.files.push(file);
-    //   this.uploadForm.append("fileUpload", file);
-    //   return true;
-    // },
+    handleClose(){
+      this.$emit('handleClose','')
+    },
+    // 添加列
+    handleAddcp(){
+      this.cpDataList.push({
+        cp:'',
+        cpbh:'',
+        cpmc:'',
+        ssgzl:0,
+        ekgzl:0,
+        kbgzl:0
+      })
+    },
+     // 删除
+    handleDelete(index){
+      this.cpDataList.splice(index,1);
+    },
+
     chooseLCBscml(val) {
       this.getChildren(val.split("&")[1]);
     },
 
     handleCommitMilestone() {
+      this.valiaDate();
+      if(!this.isValid && this.sfbwValue) return;
       if (this.lcblx != 3 && this.lcblx != 2 && !this.valueXSQRR) {
         this.$alert("请选择销售确认人", "提示", {
           confirmButtonText: "确定",
@@ -170,13 +216,6 @@ export default {
         });
         return;
       }
-      // if (this.sfbwValue && !this.files.length) {
-      //   this.$alert("请务必上传备忘附件", "提示", {
-      //     confirmButtonText: "确定",
-      //     type: "warning"
-      //   });
-      //   return;
-      // }
       if (this.sfbwValue && !this.cnwcrq) {
         this.$alert("请选择备忘承诺日期", "提示", {
           confirmButtonText: "确定",
@@ -185,32 +224,6 @@ export default {
         return;
       }
       this.submitMilestone();
-      // if (this.sfbwValue) {
-      //   this.$refs.uploadfile.submit();
-      // }else{
-      //   this.submitMilestone();
-      // }
-      // if (!!this.files.length) {
-      //   axios.post(
-      //       window.baseurl + "attachment/uploadAttach.do",
-      //       this.uploadForm,
-      //       {
-      //         headers: { "Content-Type": "multipart/form-data" }
-      //       }
-      //     )
-      //     .then(res => {
-      //       if (res.data.state == "success") {
-      //         this.form.fileList = res.data.data;
-      //        this.submitMilestone();
-      //       } else {
-      //         this.$alert(res.data.msg, "提示", {
-      //           confirmButtonText: "确定",
-      //           type: "error"
-      //         });
-      //       }
-      //     })
-      //     .catch(error => {});
-      // } 
     },
     // 获取子模板
     getChildren(wid) {
@@ -222,8 +235,8 @@ export default {
         }
       });
     },
+    //提交里程碑
     submitMilestone(){
-      //提交里程碑
       submitMilestone({
         xmbh: this.xmbh,
         lcbbh: this.taskLcbbhArr.join(","),
@@ -233,8 +246,9 @@ export default {
         fwsj: this.startDate,
         yhbh: !this.valueXSQRR ? "" : this.valueXSQRR.split("&")[0],
         yhxm: !this.valueXSQRR ? "" : this.valueXSQRR.split("&")[1],
-        fj: this.form.fileList,
-        bwcnwcsj: this.cnwcrq
+        fj:'',
+        bwcnwcsj: this.cnwcrq,
+        cps:this.sfbwValue?this.cps:''
       }).then(({ data }) => {
         if (data.state == "success") {
           this.$alert("提报成功", "提示", {
@@ -244,8 +258,70 @@ export default {
               this.$emit("handleCommitMilestone", "");
             }
           });
+        }else{
+           this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
       });
+    },
+    valiaDate(){
+      this.cps = '';
+      this.cpDataList.forEach(ele=>{
+        ele.cpmc = ele.cp.split('&')[1];
+        ele.cpbh = ele.cp.split('&')[0];
+        if(!ele.cp){
+          this.$alert("请选择产品", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+         this.isValid = false;
+         return;
+        }
+        if(!/^[0-9]+\d*$/.test(ele.ssgzl)){
+          this.$alert("请输入正确实施工作量", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+         this.isValid = false;
+         return;
+        }
+        if(!/^[0-9]+\d*$/.test(ele.ekgzl)){
+          this.$alert("请输入正确二开工作量", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+          this.isValid = false;
+          return;
+        }
+        if(ele.kbgzl == ''){
+           ele.kbgzl = 0;
+          }else if (!/^\d+(\.\d+)?$/.test(ele.kbgzl)) {
+          this.$alert("请输入正确可变工作量", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
+          this.isValid = false;
+          return;
+        }
+        this.isValid = true;
+        this.cps += ele.cpbh + String.fromCharCode(1) + ele.cpmc + String.fromCharCode(1) + ele.ssgzl + String.fromCharCode(1)
+        + ele.ekgzl + String.fromCharCode(1) + ele.kbgzl + String.fromCharCode(2)
+      })
+    },
+
+    // 获取合同产品
+    listHtnrApp(xmbh){
+      this.$get(this.API.listHtnrApp,{
+       xmbh:xmbh
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.cpList = res.data
+        }else{
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "warning"});
+        }
+      })
     }
   },
   watch: {
@@ -275,19 +351,30 @@ export default {
                 }
               });
             }
+             this.listHtnrApp(this.xmbh ? this.xmbh : data.data.xmbh);
           }
         });
+      }else{
+        this.cpDataList = [{
+            cp:'',
+            cpbh:'',
+            cpmc:'',
+            ssgzl:0,
+            ekgzl:0,
+            kbgzl:0
+        }]
       }
     },
     sfbwValue(n,o){
       if(!n){
         this.cnwcrq = '';
+        
       }
     }
   }
 };
 </script>
-<style  scoped>
+<style   scoped>
 .task-detail-dialog-header {
   border-bottom: 1px solid #ccc;
   padding: 0 20px;
@@ -328,5 +415,18 @@ export default {
 }
 .lcb-wdmb:hover {
   text-decoration: underline;
+}
+.cpList-option{
+  border-bottom:1px dashed #999;
+}
+.cpList-delete{
+  width: 30px !important;
+  line-height: 72px;
+}
+.cpList-delete span{
+    color: #f00;
+ }
+.cpList-delete span:hover{
+  cursor: pointer;
 }
 </style>

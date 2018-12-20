@@ -8,6 +8,7 @@
         <section>
           <div flex spacebetween class="mb-12">
             <div>
+              <!--  -->
               <el-button v-if="isJzuser == '0'" :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('tbfw')">提报服务</el-button>
               <el-button :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('qrfw')">确认服务</el-button>
               <el-button :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('bhfw')">驳回服务</el-button>
@@ -32,6 +33,15 @@
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
             <el-table-column prop="cpmc" label="产品" min-width="240" show-overflow-tooltip></el-table-column>
             <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column label="风险等级(解决情况)" width="150">
+              <template slot-scope="scope">
+                  <a href="javaScript:;;" v-if="scope.row.fxdj != '-'" @click="handleCheck(scope.row)">
+                    <el-tag size="mini" :class="{'zdsfw-fxdj-s1':scope.row.fxdj==1,'zdsfw-fxdj-s2':scope.row.fxdj==2,'zdsfw-fxdj-s3':scope.row.fxdj==3}" >{{scope.row.fxdj==1?'S1':scope.row.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
+                  </a>
+                  <span v-if="scope.row.fxdj == '-'">{{scope.row.fxdj}}</span>
+                  <span style="font-size:12px">{{scope.row.fxsfcl==0?'(未处理)':scope.row.fxsfcl==1?'(已处理)':scope.row.fxsfcl}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
                 <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
@@ -65,8 +75,9 @@
       </section>
     </tableLayout>
 
-    <tbfwDialog :show.sync='tbfwShow' @handleCommitTB="handleCommitTB" :wids="wids"></tbfwDialog>
+    <tbfwDialog :show.sync='tbfwShow' @handleCommitTB="handleCommitTB" :wids="wids" :isMultiple="isMultiple" :rowData="rowData"></tbfwDialog>
     <qrbhfwDialog :show.sync='qrbhfwShow' :title="title" @handleCommitQR="handleCommitQR"></qrbhfwDialog>
+    <fxdjDialog :show.sync='fxdjShow' :rowData="rowData" @handleSave="handleSave"></fxdjDialog>
   </div>
 </template>
 
@@ -76,14 +87,15 @@ import tableLayout from "@/components/layout/tableLayout.vue";
 import { getProjectCatalog } from "@/api/xmfz.js";
 import tbfwDialog from "@/components/dialog/zdsfw/tbfw-dialog.vue";
 import qrbhfwDialog from "@/components/dialog/zdsfw/qrbhfw-dialog.vue";
+import fxdjDialog from "@/components/dialog/zdsfw/fxdjcommit.vue";
 import { getLastMonthDay } from "@/utils/util.js";
-
 
 export default {
   data() {
     return {
       tbfwShow: false,
       qrbhfwShow: false,
+      fxdjShow:false,
       title: "",
       currentPage: 1,
       pageSize: 15,
@@ -104,54 +116,64 @@ export default {
         xmzt: "",
         jhksrq:"",
         jhjsrq:"",
-        // date: [
-        //   this.getFirstDay(),
-        //   getLastMonthDay(
-        //     new Date().getFullYear(),
-        //     new Date().getMonth() + 1 < 10
-        //       ? "0" + (new Date().getMonth() + 1)
-        //       : new Date().getMonth() + 1
-        //   )
-        // ],
         sfgq:""
       },
       isJzuser:"",
       userGroupTag:'',
-      username:""
+      username:"",
+
+      rowData:{},
+      isMultiple:false
+
     };
   },
   methods: {
+    // 点击风险等级列
+    handleCheck(data){
+      this.rowData = data;
+      this.fxdjShow = !this.fxdjShow
+    },  
+    // 风险等级列保存
+    handleSave(data){
+      this.$post(this.API.submitActiveServiceRisk,{
+        wid:this.rowData.wid,
+        cljg:data.cljg,
+        sfcl:data.sfcl,
+        fjData:data.fileList
+      }).then(res=>{
+        if(res.state == 'success'){
+           this.$message({message: "保存成功~",type: 'success'});
+           this.fxdjShow = false;
+           this.pageActiveService();
+        }else{
+           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+        }
+      })
+    },
+    // 筛选条件
     handleChangeFilter(data) {
       this.filterData = data;
       this.currentPage = 1;
       this.pageActiveService();
     },
+    //提报
     handleCommitTB(data) {
-      //提报
       this.$post(this.API.submitActiveService, {
         wids: this.wids,
         sm: data.sm,
         fjData: data.fileList
       }).then(res => {
         if (res.state == "success") {
-          this.$alert("提报成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.tbfwShow = false;
-              this.pageActiveService();
-            }
-          });
+          this.$message({message: "提报成功~",type: 'success'});
+          this.tbfwShow = false;
+          this.pageActiveService();
         } else {
-          this.$alert(res.msg, "提示", {
-            confirmButtonText: "确定",
-            type: "error"
-          });
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
         }
       });
     },
+    //驳回,确认
     handleCommitQR(data) {
-      //驳回,确认
       let obj = {
         wids: this.wids,
         sm: data.sm
@@ -166,31 +188,23 @@ export default {
         obj
       ).then(res => {
         if (res.state == "success") {
-          this.$alert(
-            this.title == "确认服务" ? "确认成功" : "驳回成功",
-            "提示",
-            {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.qrbhfwShow = false;
-                this.pageActiveService();
-              }
-            }
-          );
+          this.$message({message: this.title == "确认服务~" ? "确认成功~" : "驳回成功~",type: 'success'});
+          this.qrbhfwShow = false;
+          this.pageActiveService();
         } else {
-          this.$alert(res.msg, "提示", {
-            confirmButtonText: "确定",
-            type: "success"
-          });
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
         }
       });
     },
-
+    //复选
     handleSelectionChange(val) {
-      //复选
       this.widsArr = [];
       this.multipleSelection = val;
+      if(val.length == 1){
+        this.isMultiple = true;
+      }else{
+        this.isMultiple = false; 
+      }
       val.forEach(ele => {
         this.widsArr.push(ele.wid);
       });
@@ -201,6 +215,10 @@ export default {
       let tbArr = [];
       switch (data) {
         case "tbfw":
+          this.rowData  = !params ? this.multipleSelection[0] : params;
+          if(params){
+            this.isMultiple = true;
+          }
           this.multipleSelection.forEach(ele => {
             if (ele.zt == "1") {
               tbArr.push(ele.zt);
@@ -258,13 +276,8 @@ export default {
                 wids: this.wids
               }).then(res => {
                 if (res.state == "success") {
-                  this.$alert("删除成功", "提示", {
-                    confirmButtonText: "确定",
-                    type: "success",
-                    callback: action => {
-                      this.pageActiveService();
-                    }
-                  });
+                  this.$message({message: "删除成功~",type: 'success'});
+                  this.pageActiveService();
                 }
               });
             }).catch(() => {});
@@ -392,7 +405,7 @@ export default {
     this.username = JSON.parse(sessionStorage.userInfo).nickName
   },
   props: {},
-  components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter }
+  components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter ,fxdjDialog}
 };
 </script>
 

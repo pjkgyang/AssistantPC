@@ -40,6 +40,17 @@
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
             <el-table-column prop="cpmc" label="产品" min-width="240" show-overflow-tooltip></el-table-column>
             <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column label="风险等级" width="150">
+              <template slot-scope="scope">
+                <template slot-scope="scope">
+                  <a href="javaScript:;;" v-if="scope.row.fxdj != '-'" @click="handleCheck(scope.row)">
+                    <el-tag size="mini" :class="{'zdsfw-fxdj-s1':scope.row.fxdj==1,'zdsfw-fxdj-s2':scope.row.fxdj==2,'zdsfw-fxdj-s3':scope.row.fxdj==3}" >{{scope.row.fxdj==1?'S1':scope.row.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
+                  </a>
+                  <span v-if="scope.row.fxdj == '-'">{{scope.row.fxdj}}</span>
+                  <span style="font-size:12px">{{scope.row.fxsfcl==0?'(未处理)':scope.row.fxsfcl==1?'(已处理)':scope.row.fxsfcl}}</span>
+              </template>
+              </template>
+            </el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
                 <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
@@ -72,11 +83,13 @@
         </div>
       </section>
     </tableLayout>
-    <tbfwDialog :show.sync='tbfwShow' @handleCommitTB="handleCommitTB" :wids="wids"></tbfwDialog>
+
+    <tbfwDialog :show.sync='tbfwShow' @handleCommitTB="handleCommitTB" :wids="wids" :isMultiple="isMultiple" :rowData="rowData"></tbfwDialog>
     <editDialog :show.sync='editShow' :data="rowsData" @handleEdit="handleEdit" :plxgZrr="plxgZrr" :xmbh="xmbh"></editDialog>
     <qrbhfwDialog :show.sync='qrbhfwShow' :title="title" @handleCommitQR="handleCommitQR"></qrbhfwDialog>
     <fwjhDialog :show.sync='fwjhShow' :xmbh="xmbh" @handleCommitFWJH="handleCommitFWJH"></fwjhDialog>
     <sc-dialog :show.sync='scShow' :xmData="xmData" @handleScSuccess="handleScSuccess"></sc-dialog>
+    <fxdjDialog :show.sync='fxdjShow' :rowData="rowData" @handleSave="handleSave"></fxdjDialog>
   </div>
 </template>
 
@@ -89,6 +102,7 @@ import qrbhfwDialog from "@/components/dialog/zdsfw/qrbhfw-dialog.vue";
 import fwjhDialog from "@/components/dialog/zdsfw/fwjh-dialog.vue";
 import zdsfwFilter from "@/components/zdsfw/zdsfwFilter.vue";
 import scDialog from "@/components/dialog/zdsfw/sc-dailog.vue";
+import fxdjDialog from "@/components/dialog/zdsfw/fxdjcommit.vue";
 
 import { getLastMonthDay } from "@/utils/util.js";
 import { getProject } from "@/api/xmkb.js";
@@ -100,6 +114,7 @@ export default {
       editShow: false,
       qrbhfwShow: false,
       fwjhShow: false,
+      fxdjShow:false, //风险等级处理
       scShow: false,
       title: "",
       currentPage: 1,
@@ -138,36 +153,52 @@ export default {
         sfgq: ""
       },
       xmbh: this.nxmbh,
-      plxgZrr: false
+      plxgZrr: false,
+      rowData:{},
+      isMultiple:false
     };
   },
   methods: {
+    // 点击风险等级列
+    handleCheck(data){
+      this.fxdjDialog = !this.fxdjDialog
+    },  
+    // 风险等级列保存
+    handleSave(data){
+      this.$post(this.API.submitActiveServiceRisk,{
+        wid:this.rowData.wid,
+        cljg:data.cljg,
+        sfcl:data.sfcl,
+        fjData:data.fileList
+      }).then(res=>{
+        if(res.state == 'success'){
+           this.$message({message: "保存成功~",type: 'success'});
+           this.fxdjShow = false;
+           this.pageActiveService();
+        }else{
+           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+        }
+      })
+    },
+
     handleChangeFilter(data) {
       this.filterData = data;
       this.currentPage = 1;
       this.pageActiveService();
     },
+    //提报
     handleCommitTB(data) {
-      //提报
       this.$post(this.API.submitActiveService, {
         wids: this.wids,
         sm: data.sm,
         fjData: data.fileList
       }).then(res => {
         if (res.state == "success") {
-          this.$alert("提报成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.tbfwShow = false;
-              this.pageActiveService();
-            }
-          });
+          this.$message({message: '提报成功~',type: 'success'});
+          this.tbfwShow = false;
+          this.pageActiveService();
         } else {
-          this.$alert(res.msg, "提示", {
-            confirmButtonText: "确定",
-            type: "error"
-          });
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
         }
       });
     },
@@ -200,28 +231,20 @@ export default {
             }
           );
         } else {
-          this.$alert(res.msg, "提示", {
-            confirmButtonText: "确定",
-            type: "success"
-          });
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
         }
       });
     },
+    //服务计划确认
     handleCommitFWJH(data) {
-      //服务计划确认
       data.xmbh = this.xmbh;
       data.xmmc = this.xmData.xmmc;
       this.$post(this.API.generateActiveService, data).then(res => {
         if (res.state == "success") {
-          this.$alert("保存成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.fwjhShow = false;
-              this.currentPage = 1;
-              this.pageActiveService();
-            }
-          });
+          this.$message({message: '确认成功~',type: 'success'});
+          this.fwjhShow = false;
+          this.currentPage = 1;
+          this.pageActiveService();
         }
       });
     },
@@ -235,36 +258,31 @@ export default {
           wids: this.wids
         }).then(res => {
           if (res.state == "success") {
-            this.$alert("修改成功", "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.editShow = false;
-                this.pageActiveService();
-              }
-            });
+            this.$message({message: '保存成功~',type: 'success'});
+            this.editShow = false;
+            this.pageActiveService();
           }
         });
       } else {
         data.wid = this.rowsData.wid;
         this.$post(this.API.saveActiveService, data).then(res => {
           if (res.state == "success") {
-            this.$alert("保存成功", "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.editShow = false;
-                this.pageActiveService();
-              }
-            });
+             this.$message({message: '保存成功~',type: 'success'});
+             this.editShow = false;
+             this.pageActiveService();
           }
         });
       }
     },
+    //复选
     handleSelectionChange(val) {
-      //复选
       this.widsArr = [];
       this.multipleSelection = val;
+      if(val.length == 1){
+        this.isMultiple = true;
+      }else{
+        this.isMultiple = false; 
+      }
       val.forEach(ele => {
         this.widsArr.push(ele.wid);
       });
@@ -275,6 +293,10 @@ export default {
       let tbArr = [];
       switch (data) {
         case "tbfw":
+          this.rowData  = !params ? this.multipleSelection[0] : params;
+          if(params){
+            this.isMultiple = true;
+          }
           this.multipleSelection.forEach(ele => {
             if (ele.zt == "1") {
               tbArr.push(ele.zt);
@@ -335,13 +357,8 @@ export default {
                 wids: this.wids
               }).then(res => {
                 if (res.state == "success") {
-                  this.$alert("删除成功", "提示", {
-                    confirmButtonText: "确定",
-                    type: "success",
-                    callback: action => {
-                      this.pageActiveService();
-                    }
-                  });
+                  this.$message({message: '删除成功~',type: 'success'});
+                  this.pageActiveService();
                 }
               });
             })
@@ -395,14 +412,9 @@ export default {
         fwqx: data.fwqx
       }).then(res => {
         if (res.state == "success") {
-          this.$alert("服务生成成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.scShow = !this.scShow;
-              this.pageActiveService();
-            }
-          });
+          this.$message({message: '服务生成成功~',type: 'success'});
+          this.scShow = !this.scShow;
+          this.pageActiveService();
         }
       });
     },
@@ -430,13 +442,8 @@ export default {
             }
           ).then(res => {
             if (res.state == "success") {
-              this.$alert(data == "sc" ? "服务生成成功" : "发布成功", "提示", {
-                confirmButtonText: "确定",
-                type: "success",
-                callback: action => {
-                  this.pageActiveService();
-                }
-              });
+              this.$message({message:data == "sc" ? "服务生成成功" : "发布成功",type: 'success'});
+              this.pageActiveService();
             }
           });
         })
@@ -570,7 +577,8 @@ export default {
     qrbhfwDialog,
     fwjhDialog,
     zdsfwFilter,
-    scDialog
+    scDialog,
+    fxdjDialog
   }
 };
 </script>

@@ -47,6 +47,14 @@
               <span v-for="(ztl,index) in ztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.fwzt == ztl.lable}">{{ztl.mc}}</span>
             </p>
           </div>
+
+          <div v-if="filterList.includes('fx')">
+            <p class="query-title">风险:</p>
+            <p class="query-list" @click="handleFx">
+              <span v-for="(fx,index) in fxList" :data-type="fx.lable" :key="index" :class="{'bg-active':filterWord.fx == fx.lable}">{{fx.mc}}</span>
+            </p>
+          </div>
+
           <div v-if="filterList.includes('xmzt')">
             <p class="query-title">项目状态:</p>
             <p class="query-list" @click="handleXmzt">
@@ -86,6 +94,13 @@ export default {
         { lable: "1", mc: "完成待确认" },
         { lable: "2", mc: "关闭" }
       ],
+      fxList:[
+        { lable: "", mc: "全部" },
+        { lable: "0", mc: "有风险" },
+        { lable: "1", mc: "S1" },
+        { lable: "2", mc: "S2" },
+        { lable: "3", mc: "S3" }
+      ],
       lbList: [
         { lable: "", mc: "全部" },
         { lable: "1", mc: "标准服务计划" },
@@ -124,7 +139,8 @@ export default {
         //       : new Date().getMonth() + 1
         //   )
         // ],
-        sfgq: ""
+        sfgq: "",
+        fx:""
       },
       groupTag: "",
       sfzk: true
@@ -134,7 +150,7 @@ export default {
     filterList: {
       type: Array,
       default: () => {
-        return ["keyword", "cp", "fwnr", "fwzt", "xmzt", "lb", "date", "sfgq"];
+        return ["keyword", "cp", "fwnr", "fwzt",'fx', "xmzt", "lb", "date", "sfgq"];
       }
     },
     placeholder: {
@@ -190,6 +206,12 @@ export default {
       let zt = e.target.getAttribute("data-type");
       if (zt == null) return;
       this.filterWord.fwzt = zt;
+      this.$emit("handleChangeFilter", this.filterWord);
+    },
+  handleFx(e) {
+      let fx = e.target.getAttribute("data-type");
+      if (fx == null) return;
+      this.filterWord.fx = fx;
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleXmzt(e) {

@@ -3,8 +3,7 @@
         <div class="pannelPaddingBg-10">
             <tableLayout>
                 <section slot="top">
-                    <filterCondition :placeholder="'请输入问题标题 / 版本号'" @handleChangeFilter="handleChangeFilter"
-                    ></filterCondition>
+                    <filterCondition :placeholder="'请输入问题标题 / 版本号'" @handleChangeFilter="handleChangeFilter"></filterCondition>
                 </section>
                 <section slot="bottom">
                     <div text-right>

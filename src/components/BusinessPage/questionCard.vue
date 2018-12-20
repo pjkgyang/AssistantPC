@@ -17,7 +17,8 @@
                       <span style="color:#363748;font-size:12px;">问题编号：{{question.wtbh}}</span>&#x3000;
                       <span v-if="gjjhShow && (wtfbq=='W03' || wtfbq=='W05')" class="question-gjjhzt question-tag-ysqgb">{{question.gjzt==0?'未纳入计划':question.gjzt==1?'计划中':'计划已改进'}}</span>
                   </span>&#x3000;
-                  <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;&#x3000;
+                  <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;
+                  <span v-if="question.tjkfs > 0" style="color:#363748;font-size:12px;" class="question-tag-ysqgb">已提交开发</span>&#x3000;
                   <p>
                       <span><span class="question-info-front"></span>发布人 : {{question.fbrxm}}</span>
                       <span><span class="question-info-front">所属单位 : </span>{{question.ssbm == null?'无':question.ssbm}}</span>

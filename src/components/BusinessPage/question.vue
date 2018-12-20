@@ -19,7 +19,7 @@
           <p class="query-title">问题分类:</p>
           <p class="query-list" @click="handleZXR">
             <span data-type="" :class="{'bg-active':wtfl == ''}">全部</span>
-            <span v-for="(zxr,index) in zzrList" :data-type="zxr.label" :key="index" :class="{'bg-active':wtfl == zxr.label}">{{zxr.mc}}</span>
+            <span v-for="(wtflx,index) in wtflList" :data-type="wtflx.label" :key="index" :class="{'bg-active':wtfl == wtflx.label}">{{wtflx.mc}}</span>
           </p>
         </div>
         <div>
@@ -54,6 +54,16 @@
             <span data-type="0" :class="{'bg-active':sfcb == '0'}">否</span>
           </p>
         </div>
+
+        <div>
+          <p class="query-title">提交开发:</p>
+          <p class="query-list" @click="handleTJKF">
+            <span data-type="" :class="{'bg-active':tjkf == ''}">全部</span>
+            <span data-type="1" :class="{'bg-active':tjkf == '1'}">是</span>
+            <span data-type="0" :class="{'bg-active':tjkf == '0'}">否</span>
+          </p>
+        </div>
+
         <div v-if="showCondition==1||showCondition==2">
           <p class="query-title">产品线:</p>
           <p class="query-list" @click="handleCPX">
@@ -134,7 +144,7 @@
       </div>
     </div>
 
-    <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" :chooseableItem="chooseableItem" :itemInfo="itemInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
+    <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" :chooseableItem="chooseableItem" :itemInfo="xmkbInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
     <gxrDialog :show.sync="gxrShow" :wtInfo="wtInfo" @closeQuestion="closeQuestion"></gxrDialog>
     <sqgbwtDialog :show.sync="sqgbShow"></sqgbwtDialog>
   </div>
@@ -189,11 +199,12 @@ export default {
       total: null,
       wxyztlist: [],
       gczdList: [],
-      zzrList: [
+      wtflList: [
         { label: "1", mc: "待我解决问题" },
         { label: "0", mc: "我的提问" },
         { label: "3", mc: "我受理过的问题" },
-        { label: "2", mc: "我相关的问题" }
+        { label: "2", mc: "我相关的问题" },
+        { label: "4", mc: "待我受理的问题" },
       ],
       dwlxList: [
         { label: "1", mc: "学校" },
@@ -219,6 +230,7 @@ export default {
       gczd: "",
       wtfl: "",
       dwlx: "",
+      tjkf:"",//提交开发
       qusetionInfo: {},
       wid: "",
       accreditShow: false,
@@ -271,6 +283,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.xmkbInfo)
     this.username = window.userName;
     this.baseUrl = window.baseurl;
     getProject({
@@ -591,13 +604,20 @@ export default {
       let sfjj = e.target.getAttribute("data-type");
       if (sfjj == null) return;
       this.sfjj = sfjj;
+
       this.queryAllQuestions(1);
     },
+    // 是否催办
     handleSFCB(e) {
-      // 是否催办
       let sfcb = e.target.getAttribute("data-type");
       if (sfcb == null) return;
       this.sfcb = sfcb;
+      this.queryAllQuestions(1);
+    },
+    handleTJKF(){
+      let tjkf = e.target.getAttribute("data-type");
+      if (tjkf == null) return;
+      this.tjkf = tjkf;
       this.queryAllQuestions(1);
     },
     handleCPX(e) {
@@ -675,9 +695,9 @@ export default {
       this.queryAllQuestions(1);
     },
     handleZXR(e) {
-      let zxr = e.target.getAttribute("data-type");
-      if (zxr == null) return;
-      this.wtfl = zxr;
+      let wtflx = e.target.getAttribute("data-type");
+      if (wtflx == null) return;
+      this.wtfl = wtflx;
       this.queryAllQuestions(1);
     },
 
@@ -703,7 +723,8 @@ export default {
         sqgb: this.sqgb,
         deadline: this.cnqx,
         starDay: this.starDay,
-        endDay: this.endDay
+        endDay: this.endDay,
+        tjkf:this.tjkf
       }).then(({ data }) => {
         if (data.state == "success") {
           if (data.data.rows != null) {

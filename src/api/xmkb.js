@@ -182,7 +182,8 @@ export function queryAllQuestions(obj){
 			isAnalyse:obj.isAnalyse||"",
 			bqly:obj.bqly||"",
 			wtfbq:obj.wtfbq||"",
-			wtgjzt:obj.wtgjzt||""
+			wtgjzt:obj.wtgjzt||"",
+			tjkf:obj.tjkf||""
 		}
 	})
 }

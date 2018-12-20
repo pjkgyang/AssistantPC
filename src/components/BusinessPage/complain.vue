@@ -116,7 +116,7 @@
             <el-input size="mini" placeholder="请选择项目" v-model="xmmc" readonly></el-input>
           </el-form-item>
           <el-form-item label="产品" style="margin-bottom:15px;">
-            <el-select v-model="form.cp" placeholder="请选择产品 / 搜索产品名称" size="mini" filterable style="width:100%">
+            <el-select ref="selects" v-model="form.cp" placeholder="请选择产品 / 搜索产品名称" size="mini" filterable style="width:100%"  @change="handleChoose">
               <el-option v-for="(cp,index) in cpList" :key="index" :label="cp.mc" :value="cp.mc+'&'+cp.label"></el-option>
             </el-select>
           </el-form-item>
@@ -273,6 +273,28 @@ export default {
       this.complaintList(1);
       this.currentPage = 1;
     },
+   //  产品
+    handleChoose(val){
+      this.$get(this.API.questionLimitProduct, {
+        xmbh:this.xmbh,
+        cpbh:val.split('&')[1]
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data) {
+            this.$alert(
+              "该项目未采购 " +  val.split('&')[0] + " 专项基础环境运维服务,请联系销售采购对应的服务",
+              "提示",
+              {
+                confirmButtonText: "确定",
+                type: "warning"
+              }
+            );
+            this.$refs.selects.blur();
+          }
+        }
+      });
+    },
+
     // 分页
     handleCurrentChange(data) {
       this.currentPage = data;

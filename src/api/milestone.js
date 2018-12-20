@@ -84,7 +84,8 @@ export function submitMilestone(obj){
 			yhbh:obj.yhbh,
 			yhxm:obj.yhxm,
 			bwcnwcsj:obj.bwcnwcsj,
-			fj:obj.fj||""
+			fj:obj.fj||"",
+			cps:obj.cps
 
 	},{
 		transformRequest: [function (data) {

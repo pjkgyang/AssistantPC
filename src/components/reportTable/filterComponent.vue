@@ -25,9 +25,9 @@
       <div v-if="filterList.includes('yfDate')">
         <p class="query-title">区间月份:</p>
         <p>
-          <el-date-picker  size="mini" v-model="filterWord.startMonth" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
+          <el-date-picker @change="handleChangeYfstartDate" size="mini" v-model="filterWord.startMonth" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
           至
-          <el-date-picker  size="mini" v-model="filterWord.endMonth" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
+          <el-date-picker @change="handleChangeYfendDate" size="mini" v-model="filterWord.endMonth" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
         </p>
       </div>
 
@@ -222,15 +222,22 @@ export default {
     handleSearch() {
       this.$emit("handleChangeFilter", this.filterWord);
     },
-    handleDatepick() {
+    handleDatepick(val) {
+      if(!val) this.filterWord.date = '';
       this.$emit("handleChangeFilter", this.filterWord);
     },
-    handleChangeYf(){
+    handleChangeYf(val){
+      if(!val){
+          this.filterWord.yf = '';
+      }
       this.$emit("handleChangeFilter", this.filterWord,'yf');
     },
-    // handleChangeYfDate(){
-    //   this.$emit("handleChangeFilter", this.filterWord);
-    // },
+    handleChangeYfstartDate(val){
+      if(!val) this.filterWord.startMonth = '';
+    },
+    handleChangeYfendDate(val){
+      if(!val) this.filterWord.endMonth = '';
+    },
     handleDWLX(e) {
       // 单位类型
       let dwlx = e.target.getAttribute("data-type");
