@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-dialog title="风险等级" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
+        <el-dialog title="风险处理" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
             <div class="dialog-fxdj">
-                <div class="option-list" v-for="fx in fxList" @click="handleCommitfxdj(fx)" title="点击添加风险等级">
+                <div class="option-list" v-for="fx in fxList" @click="handleCommitfxdj(fx)" title="点击处理风险">
                     <p>
                        <span  class="filter-weight">
                          {{fx.cpmc}}&#x3000;{{fx.fwnr}}

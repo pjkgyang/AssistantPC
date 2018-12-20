@@ -150,7 +150,8 @@ export default {
         //       : new Date().getMonth() + 1
         //   )
         // ],
-        sfgq: ""
+        sfgq: "",
+        fxdj:''
       },
       xmbh: this.nxmbh,
       plxgZrr: false,
@@ -388,7 +389,9 @@ export default {
               "&keyword=" +
               this.filterData.keyword +
               "&lb=" +
-              this.filterData.lb
+              this.filterData.lb,
+              "&fxdj=" +
+              this.filterData.fxdj
           );
           break;
         case "edit": //编辑
@@ -497,6 +500,7 @@ export default {
         jhksrq: this.filterData.jhksrq,
         jhjsrq: this.filterData.jhjsrq,
         sfgq: this.filterData.sfgq,
+        fxdj:this.filterData.fxdj,
         keyword: this.filterData.keyword
       }).then(res => {
         if (res.state == "success") {

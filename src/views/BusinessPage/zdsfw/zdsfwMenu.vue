@@ -116,7 +116,8 @@ export default {
         xmzt: "",
         jhksrq:"",
         jhjsrq:"",
-        sfgq:""
+        sfgq:"",
+        fxdj:""
       },
       isJzuser:"",
       userGroupTag:'',
@@ -305,7 +306,9 @@ export default {
               this.filterData.keyword +
               "&lb=" +
               this.filterData.lb + 
-              "&sffb=1"
+              "&sffb=1" +
+              "&fxdj=" +
+              this.filterData.fxdj
           );
           break;
         case "sc": //生成
@@ -382,7 +385,8 @@ export default {
         jhjsrq: this.filterData.jhjsrq,
         sfgq: this.filterData.sfgq,
         keyword: this.filterData.keyword,
-        sffb:1
+        sffb:1,
+        fxdj:this.filterData.fxdj,
       }).then(res => {
         if (res.state == "success") {
           this.tableData = res.data.rows;

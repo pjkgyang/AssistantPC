@@ -48,10 +48,10 @@
             </p>
           </div>
 
-          <div v-if="filterList.includes('fx')">
+          <div v-if="filterList.includes('fxdj')">
             <p class="query-title">风险:</p>
             <p class="query-list" @click="handleFx">
-              <span v-for="(fx,index) in fxList" :data-type="fx.lable" :key="index" :class="{'bg-active':filterWord.fx == fx.lable}">{{fx.mc}}</span>
+              <span v-for="(fxdj,index) in fxList" :data-type="fxdj.lable" :key="index" :class="{'bg-active':filterWord.fxdj == fxdj.lable}">{{fxdj.mc}}</span>
             </p>
           </div>
 
@@ -140,7 +140,7 @@ export default {
         //   )
         // ],
         sfgq: "",
-        fx:""
+        fxdj:""
       },
       groupTag: "",
       sfzk: true
@@ -150,7 +150,7 @@ export default {
     filterList: {
       type: Array,
       default: () => {
-        return ["keyword", "cp", "fwnr", "fwzt",'fx', "xmzt", "lb", "date", "sfgq"];
+        return ["keyword", "cp", "fwnr", "fwzt",'fxdj', "xmzt", "lb", "date", "sfgq"];
       }
     },
     placeholder: {
@@ -209,9 +209,9 @@ export default {
       this.$emit("handleChangeFilter", this.filterWord);
     },
   handleFx(e) {
-      let fx = e.target.getAttribute("data-type");
-      if (fx == null) return;
-      this.filterWord.fx = fx;
+      let fxdj = e.target.getAttribute("data-type");
+      if (fxdj == null) return;
+      this.filterWord.fxdj = fxdj;
       this.$emit("handleChangeFilter", this.filterWord);
     },
     handleXmzt(e) {
