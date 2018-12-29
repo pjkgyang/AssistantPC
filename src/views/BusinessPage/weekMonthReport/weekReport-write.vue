@@ -471,6 +471,7 @@ export default {
         this.multipleBzLcb = val 
     },
     handleSelectionXzlcb(val){              //  下周里程碑 复选
+        console.log(val)
         this.multipleXzLcb = val;
     },
     handleEnterSearch(){
@@ -491,12 +492,12 @@ export default {
         this.Wid = ''
         this.isPlan = true;
         this.isCljh =  false;
-        if(data=='bz'){
+        if(data == 'bz'){
             this.gznrShow = false;           // 显示工作内容
             this.yycsShow = true;
             this.isNextWeek = false;            
         }else{
-            this.gznrShow = false;          // 显示工作内容
+            this.gznrShow = true;          // 显示工作内容
             this.yycsShow = false;
             this.isNextWeek = true;            
         }

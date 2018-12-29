@@ -11,7 +11,7 @@
                     </div>
                     <div style="margin:10px 0">
                         <el-table :data="tableData" border style="width: 100%">
-                            <el-table-column fixed="left" label="操作" width="180">
+                            <el-table-column fixed="left" label="操作" width="180" v-if="userGroupTag.includes('ZJ')">
                                 <template slot-scope="scope">
                                     <el-button v-if="scope.row.zt != 2" type="text" size="mini" @click="handleRelease(scope.row)">发布</el-button>
                                     <el-button type="text" size="mini" @click="handlePlnrjh(scope.row)" >批量纳入计划</el-button>
@@ -77,7 +77,8 @@ export default {
         jhzt: "",
         sfyq: 0
       },
-      planData: {}
+      planData: {},
+      userGroupTag:''
     };
   },
   methods: {
@@ -150,6 +151,10 @@ export default {
         .catch(() => {});
     },
     handleExport() {
+      this.filterWord.jhcjrq[0] = !this.filterWord.jhcjrq[0]?'':this.filterWord.jhcjrq[0]
+      this.filterWord.jhcjrq[1] = !this.filterWord.jhcjrq[1]?'':this.filterWord.jhcjrq[1]
+      this.filterWord.jhpxrq[0] = !this.filterWord.jhpxrq[0]?'':this.filterWord.jhpxrq[0]
+      this.filterWord.jhpxrq[1] = !this.filterWord.jhpxrq[1]?'':this.filterWord.jhpxrq[1]
       window.open(
         window.baseurl +
           "wtgj/exportProductPlan.do?cpbh=" +
@@ -209,6 +214,7 @@ export default {
   },
   mounted() {
     this.pageProductPlan();
+    this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
   },
   components: { filterCondition, tableLayout, cpfbDialog ,wtfplistDialog}
 };

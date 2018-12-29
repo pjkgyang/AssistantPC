@@ -69,7 +69,7 @@
           </el-table>
         </section>
         <div text-right style="margin-top:2px">
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[15, 30, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 30, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
           </el-pagination>
         </div>
       </section>
@@ -98,7 +98,7 @@ export default {
       fxdjShow:false,
       title: "",
       currentPage: 1,
-      pageSize: 15,
+      pageSize: 10,
       total: 0,
       tableData: [],
       multipleSelection: [],

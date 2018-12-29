@@ -1,7 +1,7 @@
 <template>
   <div style="width:80%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
     <section text-right>
-      <!-- <el-button v-if="userTag.includes('NLPXZJ')" size="small" @click="handleUpload">上传文件</el-button> -->
+      <el-button v-if="userTag.includes('NLPXZJ')" size="small" @click="handleUpload">上传文件</el-button>
       <el-button :type="catalogue == 'file'?'primary':''" size="small" @click="catalogue = 'file'">文件目录</el-button>
       <el-button :type="catalogue == 'record'?'primary':''" size="small" @click="catalogue = 'record'">操作记录</el-button>
     </section>
@@ -54,7 +54,8 @@
                 <span @click="handlePraise($event,'1',file.fjbh)"><span class="appraise-hp"></span> ({{file.good}})</span>&nbsp;
                 <span @click="handlePraise($event,'0',file.fjbh)"><span class="appraise-cp"></span> ({{file.bad}})</span>&#x3000;
                 <a href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>&#x3000;
-                <!-- <a v-if="userTag.includes('NLPXZJ')" href="javaScript:;;" style="color:#f00" @click="handleDelete(file.fjbh)">删除</a> -->
+                <a  href="javaScript:;;" style="color:#f00" @click="handleDelete(file.fjbh,index)">删除</a>
+                <!-- v-if="userTag.includes('NLPXZJ')" -->
               </div>
             </div>
           </li>
@@ -122,7 +123,6 @@ export default {
     this.baseUrl = window.baseurl;
     this.openFolder();
     this.userTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag
-
   },
   methods: {
     // 上传成功
@@ -197,8 +197,27 @@ export default {
       this.pjsmShow = !this.pjsmShow;
     },
     // 删除文件
-    handleDelete(data){
-      console.log(data);
+    handleDelete(data,index){
+      this.$confirm('您确定要删除该文件吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$post(this.API.deleteFile,{
+            path:data,
+            lx:this.resourceType
+          }).then(res=>{
+            if(res.state == 'success'){
+              this.$alert('删除成功', '提示', {
+                confirmButtonText: '确定',
+                type:'success'
+              });
+            this.fileList.files.splice(index,1);
+            }else{
+              this.$alert(res.msg, '提示', {confirmButtonText: '确定',type:'error'});
+            }
+          })
+        }).catch(() => {});
     },
     // 打开文件
     openFolder(path) {

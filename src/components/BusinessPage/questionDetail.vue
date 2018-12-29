@@ -310,6 +310,8 @@
           <zdfzrChoose :lchjList="lchjList" :visible="zdfzrVisible" :tableData="tableData" :zdTitle="zdTitle" :jkrTotal="jkrTotal" @handleYYRYLX="handleYYRYLX" @handleClose="handleClose" @handleCommitZdr="handleCommitZdr" @queryComplainZRR="queryComplainZRR" @queryComplainUser="queryComplainUser" @handleCurrentChange="handleZrrChange"></zdfzrChoose>
         </div>
       </el-dialog>
+
+
       <el-dialog title="申请关闭" :visible.sync="sqjsVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
         <div style="padding:10px;">
           <sqjsForm :gs="sqgbgs" @submitForm="submitForm" @closeForm="closeForm"></sqjsForm>
@@ -1281,14 +1283,16 @@ export default {
         }).then(({ data }) => {
           this.zdfzrVisible = false;
           if (data.state == "success") {
-            this.$alert("提交成功！", "提示", {
+            let keysArr = Object.keys(data.data);
+            if(keysArr[0] == 'true'){
+              this.zdfzrVisible = false;
+              this.queryAnswers(this.wid);
+              this.queryProcess(this.wid);
+              this.queryQuestion(this.wid);
+            }
+            this.$alert(keysArr[0]=='true'?data.data.true:data.data.false, "提示", {
               confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.queryAnswers(this.wid);
-                this.queryProcess(this.wid);
-                this.queryQuestion(this.wid);
-              }
+              type:keysArr[0]=='true'?"success":"error"
             });
           } else {
             this.$alert("提交失败", "提示", {
@@ -1306,15 +1310,16 @@ export default {
           qwjjrq: data.qwjjrq
         }).then(({ data }) => {
           if (data.state == "success") {
-            this.zdfzrVisible = false;
-            this.$alert("转发成功！", "提示", {
+            let keysArr = Object.keys(data.data);
+            if(keysArr[0] == 'true'){
+              this.zdfzrVisible = false;
+              this.queryAnswers(this.wid);
+              this.queryProcess(this.wid);
+              this.queryQuestion(this.wid);
+            }
+            this.$alert(keysArr[0] == 'true'?data.data.true:data.data.false, "提示", {
               confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.queryAnswers(this.wid);
-                this.queryProcess(this.wid);
-                this.queryQuestion(this.wid);
-              }
+              type:keysArr[0]=='true'?"success":"error"  
             });
           } else {
             this.$alert("提交失败", "提示", {
@@ -1482,14 +1487,17 @@ export default {
         qwjjrq: this.qwjjrqZf
       }).then(({ data }) => {
         if (data.state == "success") {
-          this.innerZFWTisible = false;
-          this.queryAnswers(this.wid);
-          this.queryBtnAuth(this.wid);
-          this.queryProcess(this.wid);
-          this.queryQuestion(this.wid);
-          this.$alert("转发成功！", "提示", {
+          let keysArr = Object.keys(data.data);
+          if(keysArr[0]=='true'){
+              this.innerZFWTisible = false;
+              this.queryAnswers(this.wid);
+              this.queryBtnAuth(this.wid);
+              this.queryProcess(this.wid);
+              this.queryQuestion(this.wid); 
+          }
+          this.$alert(keysArr[0]=='true'?data.data.true:data.data.false, "提示", {
             confirmButtonText: "确定",
-            type: "success"
+            type:keysArr[0]=='true'?"success":"error"
           });
         }
       });

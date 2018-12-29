@@ -1,6 +1,6 @@
 <template>
   <div class="milestone-manage">
-    <section style="border-radius:5px;padding:8px 0;background:#fff;box-shadow:0 0 5px #ccc">
+    <section style="border-radius:5px;padding:8px 20px;background:#fff;box-shadow:0 0 5px #ccc">
       <div class="filter">
         <span class="filter-title">高级查询: </span>
         <el-input size="mini" style="width:50%" placeholder="请输入项目内容/里程碑描述" suffix-icon="el-icon-search" v-model="keyword" @change="searchLcbContent"> </el-input>
@@ -55,14 +55,16 @@
           <el-button size="mini" type="primary" @click="handleAddbw">添加备忘</el-button>
           <span style="float:right;margin-top:5px" v-if="ishow">
             <span class="filter-weight">合计完工量 : </span>
-            <span style="color:#f00;font-size:18px">{{totalWgl
-              <10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} </span>{{totalWgl
-                <10000? '元':totalWgl<100000000? '万元': '亿'}}</span>
+            <span style="color:#f00;font-size:18px">
+              {{totalWgl==''?0:totalWgl<0?totalWgl:totalWgl<10000?totalWgl.toFixed(2):totalWgl<100000000?(totalWgl/10000).toFixed(2):(totalWgl/100000000).toFixed(2)}} </span>
+              {{totalWgl<0?'元':totalWgl<10000? '元':totalWgl<100000000? '万元': '亿'}}</span>
                   <p style="color:#aaa;font-size:12px;" v-if="ishow">说明：整体里程碑不允许调整计划，里程碑调整需要工程总确认后才生效。</p>
         </p>
-        <el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" max-width="80" :selectable='checkboxInit' v-if="ishow"></el-table-column>
-          <el-table-column prop="xmnr_display" min-width="160" label="项目内容" show-overflow-tooltip></el-table-column>
+        <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark" @selection-change="handleSelectionChange">
+
+          <el-table-column  type="selection" width="55" :selectable='checkboxInit'></el-table-column>
+
+          <el-table-column prop="xmnr" min-width="160" label="项目内容" show-overflow-tooltip></el-table-column>
           <el-table-column  min-width="180" style="text-align:left" label="里程碑描述" show-overflow-tooltip>
              <template slot-scope="scope">
               <div class="name-wrapper">
@@ -71,6 +73,7 @@
               </div>
             </template>
            </el-table-column>
+
           <el-table-column prop="nrxmlb" min-width="90" label="项目类别" show-overflow-tooltip></el-table-column>
           <el-table-column sortable label="里程碑状态" width="120" show-overflow-tooltip>
             <template slot-scope="scope">
@@ -87,8 +90,16 @@
           <el-table-column prop="zzrxm" label="责任人" width="100"> </el-table-column>
         </el-table>
       </div>
-      <div style="padding:5px 0;text-align:right">
-        <pagination v-if="total > 12" :currentPage="currentPage" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
+      <div style="padding:5px 0;text-align:right" v-if="total > pageSize">
+        <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[20, 50, 100, 200]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+    </el-pagination>
       </div>
     </section>
 
@@ -115,13 +126,13 @@
     </el-dialog>
     <el-dialog title="提报里程碑" :close-on-click-modal="false" :visible.sync="milestoneVisible" width="600px" top="50px">
       <commitMilestone :shown="milestoneVisible" @handleCommitMilestone="handleCommitMilestone" :xmbh="xmbh" :taskLcbbhArr="lcbbhArr"
-      @handleClose="handleCloseMile"></commitMilestone>
+      @handleClose="handleCloseMile" :lcbType="lcbType"></commitMilestone>
     </el-dialog>
 
 
     <lcbjlDialog :show.sync="lcbjlShow" :lcbbh="lcbbh"></lcbjlDialog>
     <cpListDialog :show.sync="cplistShow" :xmbh="xmbh"></cpListDialog>
-    <xmbw-dialog :show.sync="xmbwShow" :xmbh="xmbh" @handleCommitXmbw="handleCommitXmbw"></xmbw-dialog>
+    <xmbw-dialog :show.sync="xmbwShow" :isEdit="isEdit" :xmbh="xmbh" @handleCommitXmbw="handleCommitXmbw" :lcbData="lcbData"></xmbw-dialog>
     <cplistDialog :show.sync="cpShow" :tableData="cplistData"></cplistDialog>
   </div>
 </template>
@@ -155,9 +166,9 @@ export default {
       sjkssj: "",
       sjjssj: "",
       total: null,
-      pageSize: 12,
+      pageSize: 20,
       currentPage: 1,
-      tableData3: [],
+      tableData: [],
       totalWgl: "",
       multipleSelection: [],
       planVisible: false,
@@ -173,7 +184,11 @@ export default {
       ishow: true,
       zrrShow: true,
 
-      cplistData:[]
+      cplistData:[],
+      lcbData:{},// 备忘信息
+      isEdit:false,
+      colData:{}, //里程碑行信息
+      lcbType:""
     };
   },
   props: {
@@ -190,17 +205,23 @@ export default {
     handleCloseMile(){
       this.milestoneVisible = false;
     },
+    // 获取产品列表
     handleCheckList(data){
-      this.$get(this.API.listMemoProduct,{
-        lcbbh:data.lcbbh 
-      }).then(res=>{
-        if(res.state == 'success'){
-          this.cplistData = res.data
-        }else{
-         this.$alert(res.msg, "提示", {confirmButtonText: "确定",e: "error"}); 
-        }
-      })
-      this.cpShow = !this.cpShow  
+       this.isEdit = true;
+       this.colData = data;
+       this.$get(this.API.isCanEditMemoMilestone,{
+         lcbbh:data.lcbbh 
+       }).then(res=>{
+         if(res.state == 'success'){
+           this.lcbData = res.data
+           if(res.data.canEdit){
+             this.xmbwShow = !this.xmbwShow
+           }else{
+             this.cplistData = !res.data.cps?[]:res.data.cps
+             this.cpShow = !this.cpShow
+           }
+         }
+       })
     },
     // 查看里程碑操作记录
     handleCheckRrecord(data) {
@@ -214,6 +235,7 @@ export default {
     // 项目备忘
     handleCommitXmbw(params,data) {
       if(!data) return;
+      if(!this.isEdit){
       this.$post(this.API.addMemo, {
         xmbh: this.xmbh,
         bwcnwcsj: params.cnwcrq,
@@ -232,7 +254,6 @@ export default {
             }) .then(() => {
               this.$post(this.API.addMemo, {
                 xmbh: this.xmbh,
-                // fj: params.fileList,
                 bwcnwcsj: params.cnwcrq,
                 sffg:1,
                 cps:cps
@@ -254,12 +275,33 @@ export default {
           }
         }
       });
+      }else{
+        this.$post(this.API.editMemo, {
+        lcbbh:this.colData.lcbbh,
+        cnwcsj: params.cnwcrq,
+        sm:params.sm,
+        cps:params.cps     
+       }).then(res => { 
+         if (res.state == "success") {
+            this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
+            this.xmbwShow = false;
+          }else{
+            this.$alert(res.msg, "提示", { confirmButtonText: "确定",type: "success"});
+          }
+        }) 
+      }
     },
     checkboxInit(row, index) {
-      if (row.zt != "计划中" && row.zt != "处理中")
+      if(this.ishow){
+        if (row.zt != "计划中" && row.zt != "处理中" ){
+          return false;
+        }else{
+          return true;
+        }
+      }else{
+         return false;
+      }
         // && row.zt != '处理中'
-        return 0;
-      else return 1;
     },
     handleClose() {
       //取消
@@ -290,6 +332,7 @@ export default {
     },
     // 提报里程碑
     commitLcb() {
+      this.isEdit = false
       if (this.multipleSelection.length == 0) {
         this.$alert("请选择里程碑", "提示", {
           confirmButtonText: "确定",
@@ -301,6 +344,7 @@ export default {
           lcbbh: this.lcbbhArr.join(",")
         }).then(({ data }) => {
           if (data.state == "success") {
+              this.lcbType = data.data.lcbType
             if (data.data.lcbType == -1) {
               this.$alert("不允许同时提交多个项目的整体验收里程碑！", "提示", {
                 confirmButtonText: "确定",
@@ -318,6 +362,7 @@ export default {
       this.cplistShow = !this.cplistShow;
     },
     handleAddbw() {
+      this.isEdit = false;
       this.xmbwShow = !this.xmbwShow;
     },
     exportLcb() {
@@ -345,17 +390,6 @@ export default {
           this.xmlbList.join(",")
       );
     },
-    // 调整计划
-    //   adjustmentPlan(){
-    //       if(this.multipleSelection.length == 0){
-    //           this.$alert('请选择里程碑', '提示', {
-    //              confirmButtonText: '确定',
-    //              type:'warning',
-    //           });
-    //         return;
-    //       }
-    //       this.planVisible = !this.planVisible
-    //   },
     handleSearchLcb() {
       //查询里程碑
       this.queryMilestoneData(1);
@@ -364,12 +398,16 @@ export default {
       //支持回车
       this.queryMilestoneData(1);
     },
-    handleCurrentChange(data) {
       // 切换分页
-      this.queryMilestoneData(data);
+    handleCurrentChange(data) {
       this.currentPage = data;
+      this.queryMilestoneData(data);
     },
-
+    // 分页条数
+    handleSizeChange(data){
+      this.pageSize = data;
+      this.queryMilestoneData(1);
+    },
     handleCheckbox(val) {
       //选择里程碑状态
       this.queryMilestoneData(1);
@@ -446,11 +484,24 @@ export default {
                           ? "取消"
                           : val.zt == "7" ? "待定" : "完成待确认";
           });
-          this.tableData3 = milestone;
+          this.tableData = milestone;
           this.total = data.data.data.records;
         }
       });
-    }
+    },
+
+    // // 获取产品
+    // listMemoProduct(lcbbh){
+    //   this.$get(this.API.listMemoProduct,{
+    //     lcbbh:lcbbh 
+    //   }).then(res=>{
+    //     if(res.state == 'success'){
+    //       this.cplistData = res.data
+    //     }else{
+    //      this.$alert(res.msg, "提示", {confirmButtonText: "确定",e: "error"}); 
+    //     }
+    //   })
+    // }
   },
   mounted() {
     this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;

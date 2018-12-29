@@ -5,7 +5,7 @@
                 <div class="dialog-tbfw-option">
                   <!-- rowData.length == 1 -->
                   <!-- isMultiple -->
-                  <div v-if="">
+                  <div v-if="isMultiple">
                     <div>
                         <span class="filter-weight before-require">问题：</span>
                         <span>
@@ -169,8 +169,7 @@ export default {
         this.$refs.uploadfile.submit();
       }
       if (!!this.files.length) {
-        axios
-          .post(
+        axios.post(
             window.baseurl + "attachment/uploadAttach.do",
             this.uploadForm,
             {
@@ -182,6 +181,9 @@ export default {
               this.form.fileList = res.data.data;
               this.$emit("handleCommitTB", this.form);
             } else {
+              this.form.fileList = [];
+              this.files = [];
+              this.uploadForm = new FormData();
               this.$alert(res.data.msg, "提示", {
                 confirmButtonText: "确定",
                 type: "error"
@@ -205,7 +207,7 @@ export default {
         curPage:1,
         pageSize:9999,
         cpbh:this.rowData.cpbh,
-        zbwid:this.rowDatawid
+        zbwid:this.rowData.wid
       }).then(res=>{
         if(res.state=='success'){
           if(!res.data.rows){
@@ -230,6 +232,18 @@ export default {
           }else[
             this.fxList = res.data.rows
           ]
+        }
+      })
+    },
+    //获取最后一次提报说明
+    getLatestSubmitDescription(){
+      this.$get(this.API.getLatestSubmitDescription,{
+        zbwid:this.rowData.wid
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.form.sm = res.data;
+        }else{
+          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "warning"});
         }
       })
     },
@@ -271,10 +285,11 @@ export default {
         this.form.sm = "";
         this.form.fileList = [];
         this.files = [];
-        this.uploadForm.append("fileUpload", "");
+        this.uploadForm = new FormData();
       } else {
         this.pageActiveServiceProblem();
         this.pageActiveServiceRisk();
+        this.getLatestSubmitDescription();
       }
     }
   },

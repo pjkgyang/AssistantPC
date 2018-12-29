@@ -9,16 +9,16 @@
                     </p>
                  </div>
                  <div v-if="lshjShown" flex>
-                    <p class="query-title">流程环节:</p>&#x3000;&#x3000;
-                    <el-select v-model="lchj" placeholder="请选择" size="mini">
+                    <p class="query-title" style="width:110px;">流程环节:</p>
+                    <el-select v-model="lchj" placeholder="请选择" size="mini" style="width:223px;">
                       <el-option v-for="lcbj in lchjList" :key="lcbj.value" :label="lcbj.mc" :value="lcbj.bh"></el-option>
                     </el-select>
                  </div>&#x3000;
                   <el-button type="info" size="mini" plain @click="chooseLchj">{{!lshjShown?'选择流程环节':'选择类型'}}</el-button>
               </div>
-              <div  flex class="yyryzf-rwjjrq" v-if="zdTitle == '运营人员转发' || zdTitle == '指定解决人'">
-                    <p class="query-title" style="width:110px;">期望解决日期:</p>
-                    <p class="query-list">
+              <div  flex class="mg-12" v-if="zdTitle == '运营人员转发' || zdTitle == '指定解决人'">
+                    <p>
+                       <span class="query-title before-require" style="width:110px;">期望解决日期:</span>
                        <el-date-picker size="mini" v-model="qwjjrqZf"  type="date" placeholder="选择期望解决日期"  value-format="yyyy-MM-dd"></el-date-picker> 
                     </p>
               </div>
@@ -41,7 +41,9 @@
                     <el-table-column  prop="cybh" label="编号" width="180"></el-table-column>
                     <el-table-column  prop="cpxmc" label="产品线名称"></el-table-column>
                   </el-table>
-                <pagination v-if="jkrTotal>8 && jkrTotal != null" :total="jkrTotal" :pageSize="10" @handleCurrentChange="handleCurrentChange"></pagination>
+                  <div text-right>
+                   <pagination v-if="jkrTotal>8 && jkrTotal != null" :total="jkrTotal" :pageSize="10" @handleCurrentChange="handleCurrentChange"></pagination>
+                  </div>   
               </div>
               
               <div v-if="zdTitle === '指定解决人'">
@@ -60,7 +62,9 @@
                     <el-table-column  prop="nickName" label="姓名" ></el-table-column>
                     <el-table-column  prop="userName" label="编号" ></el-table-column>
                   </el-table>
+                  <div text-right>
                 <pagination v-if="jkrTotal>8 && jkrTotal != null" :total="jkrTotal" :pageSize="10" @handleCurrentChange="handleCurrentChange"></pagination>
+                </div> 
               </div>
               
               <div v-if="zdTitle === '运营人员转发' && !lshjShown" class="choose-yyryzf">
@@ -78,7 +82,9 @@
                     <el-table-column  prop="cybh" label="编号" width="180"></el-table-column>
                     <el-table-column  prop="cpxmc" label="产品线名称"></el-table-column>
                   </el-table>
+                  <div text-right>
                 <pagination v-if="jkrTotal>8 && jkrTotal != null" :total="jkrTotal" :pageSize="10" @handleCurrentChange="handleCurrentChange"></pagination>      
+                </div> 
               </div>
 
               <div v-if="zdTitle === '选择催办人'" class="choose_cbr">
@@ -125,6 +131,10 @@ export default {
         {
           label: "1",
           mc: "总部产品专家"
+        },
+        {
+          label: "2",
+          mc: "产品经理"
         }
       ],
       lshjShown: false,
@@ -224,7 +234,7 @@ export default {
       this.ryData = row;
     },
     handleCommitZdr() {
-      this.ryData.nr =$("#summernoteZrr").summernote("code") == "<p><br></p>"? "": $("#summernoteZrr").summernote("code");
+      this.ryData.nr = $("#summernoteZrr").summernote("code") == "<p><br></p>"? "": $("#summernoteZrr").summernote("code");
       let yyry = [];
       this.multipleSelection.forEach((ele, i, arr) => {
         if (this.zdTitle == "选择催办人") {
@@ -313,6 +323,7 @@ export default {
         this.ryData = {};
         this.multipleSelection = [];
         this.cpKeyword = "";
+        $("#summernoteZrr").summernote("code",'');
       }
     },
     zdTitle(n, o) {
@@ -358,11 +369,5 @@ export default {
   background: #1997d7;
   color: #fff !important;
 }
-.yyryzf-rwjjrq{
-  padding: 8px 0;
-}
-.yyryzf-rwjjrq:before{
-  content: '*';
-  color:#f00;
-}
+
 </style>

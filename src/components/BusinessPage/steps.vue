@@ -6,7 +6,7 @@
           <span class="filter-weight">{{process.czrxm}}</span> &#x3000;
           <span>{{process.cjsj}}</span> &#x3000;
           <span>
-            <el-tag v-if="!zjlbShow" size="mini" :type="process.czlx == 0||process.czlx == 1||process.czlx == 4||process.czlx == 5 ? 'primary':process.czlx == 3 ? 'danger':'success'" disable-transitions>{{process.czlxmc}}</el-tag>
+            <el-tag v-if="!zjlbShow" size="mini" :type="process.czlx == 0||process.czlx == 1||process.czlx == 4||process.czlx == 5 ? 'primary':process.czlx == 3||process.czlx == 6 ? 'danger':'success'" disable-transitions>{{process.czlxmc}}</el-tag>
             <el-tag v-if="zjlbShow"  size="mini" :type="process.czlx == 2 ? 'danger':'success'" disable-transitions>{{process.czlxmc}}</el-tag>&#x3000;
             <el-tag size="mini" v-if="process.czlx == '3'" :type="process.gjzt==1?'':process.gjzt==2?'success':'info'">{{process.gjzt==1?'改进中':process.gjzt=='2'?'改进完成':'未改进'}}</el-tag>&#x3000;
           </span>&#x3000;

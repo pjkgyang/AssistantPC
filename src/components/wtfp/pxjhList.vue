@@ -3,7 +3,7 @@
     <div class="pannelPaddingBg-10">
       <tableLayout>
         <section slot="top">
-          <filterCondition :filterList="filterList" :placeholder="'请输入问题标题 / 版本号'" @handleChangeFilter="handleChangeFilter"></filterCondition>
+          <filterCondition :filterList="filterList" :placeholder="'请输入问题标题 / 培训主题'" @handleChangeFilter="handleChangeFilter"></filterCondition>
         </section>
         <section slot="bottom">
           <div text-right>
@@ -11,7 +11,7 @@
           </div>
           <div style="margin:10px 0">
             <el-table :data="tableData" border style="width: 100%">
-              <el-table-column fixed="left" label="操作" width="180">
+              <el-table-column fixed="left" label="操作" width="180" v-if="userGroupTag.includes('NLPXZJ')">
                 <template slot-scope="scope">
                   <!-- v-if="scope.row.zt != 2" -->
                   <el-button type="text" size="mini" @click="handleTrain(scope.row)" >培训</el-button>
@@ -111,7 +111,8 @@ export default {
         pxxs: "",
         pxsc:""
       },
-      itemData: {}
+      itemData: {},
+      userGroupTag:''
     };
   },
   methods: {
@@ -190,6 +191,12 @@ export default {
       this.pageCapacityPlan();
     },
     handleExport() {
+      this.filterWord.jhcjrq[0] = !this.filterWord.jhcjrq[0]?'':this.filterWord.jhcjrq[0]
+      this.filterWord.jhcjrq[1] = !this.filterWord.jhcjrq[1]?'':this.filterWord.jhcjrq[1]
+      this.filterWord.jhpxrq[0] = !this.filterWord.jhpxrq[0]?'':this.filterWord.jhpxrq[0]
+      this.filterWord.jhpxrq[1] = !this.filterWord.jhpxrq[1]?'':this.filterWord.jhpxrq[1]
+      this.filterWord.sjpxrq[0] = !this.filterWord.sjpxrq[0]?'':this.filterWord.sjpxrq[0]
+      this.filterWord.sjpxrq[1] = !this.filterWord.sjpxrq[1]?'':this.filterWord.sjpxrq[1]  
       window.open(
         window.baseurl +
           "wtgj/exportCapacityPlan.do?cpbh=" +
@@ -285,6 +292,7 @@ export default {
   },
   mounted() {
     this.pageCapacityPlan();
+    this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
   },
   components: { filterCondition, tableLayout, sspxDialog,wtfplistDialog }
 };

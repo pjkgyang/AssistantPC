@@ -1,7 +1,11 @@
 
-import axios from 'axios'
-import { Loading, Message, MessageBox } from 'element-ui'
-import Qs from 'qs'
+import axios from 'axios';
+import { Loading, Message, MessageBox } from 'element-ui';
+import Qs from 'qs';
+
+// axios.defaults.headers.common['token'] = ''
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
 /**
  * @method get
  * @param url

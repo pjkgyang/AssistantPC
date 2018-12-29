@@ -12,15 +12,6 @@ export function queryTdcy(){
 	})
 }
 
-// 	获取项目相关人员
-export function queryprojectParticipant(obj){
-	let url =  window.baseurl + suburl + 'queryprojectParticipant.do'
-	return axios.get(url,{
-		params:{
-			xmbh:obj.xmbh
-  		}	
-	})
-}
 
 // 	获取项目相关人员
 export function queryProjectParticipant(obj){

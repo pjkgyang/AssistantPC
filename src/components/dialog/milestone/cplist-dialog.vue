@@ -21,7 +21,7 @@
                         <el-table-column  prop="cpmc" label="产品名称" min-width="160" ></el-table-column>
                         <el-table-column  prop="ssgzl" label="实施工作量(人/月)"  width="140"></el-table-column>
                         <el-table-column  prop="ekgzl" label="二开工作量(人/月)" width="140"  ></el-table-column>
-                        <el-table-column  prop="kbgzl" label="可变工作量(元)"   width="120"></el-table-column>
+                        <el-table-column  prop="kbgzl" label="可变费用(元)"   width="120"></el-table-column>
                     </el-table> 
                 </div>
       </el-dialog>

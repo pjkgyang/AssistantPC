@@ -22,12 +22,13 @@
               <span style="margin-left: 10px">{{!scope.row.sfcpfzr?'否':'是'}}</span>
             </template>
         </el-table-column>
-        <el-table-column prop="jhfpfy" label="费用" width="110" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="ydgznr" label="工作内容"  show-overflow-tooltip></el-table-column>
+        <el-table-column prop="jhfpfy" label="总费用" width="110" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="ssry" label="实施人月" width="110"></el-table-column>
+        <el-table-column prop="ekry" label="二开人月" width="110"></el-table-column>
+        <el-table-column prop="kbfy" label="可变费用（元）" width="120"></el-table-column>
+        <el-table-column prop="ydgznr" label="工作内容" min-width="140" show-overflow-tooltip></el-table-column>
         <el-table-column prop="ydkssj" label="开始日期" width="110"></el-table-column>
         <el-table-column prop="ydjssj" label="结束日期" width="110"></el-table-column>
-        <!-- <el-table-column prop="fbbh" label="分包编号" width="130"></el-table-column> -->
-        <!-- <el-table-column prop="cpbh" label="产品编号" width="130"></el-table-column> -->
       </el-table>
     </div>
 
@@ -94,14 +95,23 @@
             <el-form-item label="计划结束日期" required>
               <el-date-picker type="date" placeholder="选择日期" v-model="tdcyInfo.ydjssj" value-format="yyyy-MM-dd" style="width:193px"></el-date-picker>
             </el-form-item>
-            <el-form-item label="金额" required>
-              <el-input v-model="tdcyInfo.jhfpfy" style="width:193px"></el-input>
+            <el-form-item label="总费用" required>
+              <el-input v-model="tdcyInfo.jhfpfy" style="width:193px" placeholder="请输入总费用"></el-input>
             </el-form-item>
              <el-form-item label="产品负责人" >
                <el-radio-group v-model="sfcpfzr" :disabled='iscpzrr && wid != ""'>
                     <el-radio :label="true">是</el-radio>
                     <el-radio :label="false">否</el-radio>
                 </el-radio-group>
+            </el-form-item><br>
+            <el-form-item label="实施人月" required>
+                 <el-input v-model="tdcyInfo.ssry" style="width:193px" placeholder="请输入实施人月" ></el-input>
+            </el-form-item>
+            <el-form-item label="二开人月" required>
+                 <el-input v-model="tdcyInfo.ekry" style="width:193px" placeholder="请输入二开人月" ></el-input>
+            </el-form-item><br>
+            <el-form-item label="可变费用(元)" required>
+                 <el-input v-model="tdcyInfo.kbfy" style="width:510px" placeholder="请输入可变费用（仅限正整数）"></el-input>
             </el-form-item>
             <el-form-item label="工作内容">
               <el-input type="textarea" v-model="tdcyInfo.ydgznr" :rows="5" :cols="88"></el-input>
@@ -109,6 +119,7 @@
           </el-form>
             <div style="text-align:right;padding:8px 20px;">
                   <el-button type="primary" @click="handleSaveinfo" size="mini">保存</el-button>
+                  <el-button type="" @click="innerVisible = false" size="mini">取消</el-button>
             </div>
       </el-dialog>    
 
@@ -142,6 +153,9 @@ import { getMenu,getSession} from '@/utils/util.js'
              ydkssj:"",
              ydjssj:"",
              ydgznr:"",
+             ssry:"",
+             ekry:"",
+             kbfy:""
            },
             sfcpfzr:true,
             userId:'',
@@ -196,6 +210,11 @@ import { getMenu,getSession} from '@/utils/util.js'
             this.tdcyInfo.ydjssj = data.ydjssj;
             this.tdcyInfo.jhfpfy = data.jhfpfy;
             this.tdcyInfo.ydgznr = data.ydgznr;
+
+            this.tdcyInfo.ssry = data.ssry;
+            this.tdcyInfo.ekry = data.ekry;
+            this.tdcyInfo.kbfy = data.kbfy;
+
             this.sfcpfzr = data.sfcpfzr
             this.iscpzrr = data.sfcpfzr
             this.userId = data.userId
@@ -291,6 +310,9 @@ import { getMenu,getSession} from '@/utils/util.js'
               ydjssj:this.tdcyInfo.ydjssj,
               jhfpfy:this.tdcyInfo.jhfpfy,
               ydgznr:this.tdcyInfo.ydgznr,
+              ssry:this.tdcyInfo.ssry,
+              ekry:this.tdcyInfo.ekry,
+              kbfy:this.tdcyInfo.kbfy,
               sfcpfzr:this.sfcpfzr,
               cpxdata:this.isAllCpx?'':this.cpxdata.join('|'),
               isAllCpx:this.isAllCpx
@@ -328,6 +350,15 @@ import { getMenu,getSession} from '@/utils/util.js'
            return false;
          }else if(!this.tdcyInfo.ydjssj){
            this.$alert('请选择计划结束日期', '提示', {confirmButtonText: '确定', type:'warning',callback: action => {}});
+           return false;
+         }else if(!/^\d+(\.\d+)?$/.test(this.tdcyInfo.ssry)){
+           this.$alert('请输入正确实施人月', '提示', {confirmButtonText: '确定', type:'warning',callback: action => {}});
+           return false;
+         }else if(!/^\d+(\.\d+)?$/.test(this.tdcyInfo.ekry)){
+           this.$alert('请输入正确二开人月', '提示', {confirmButtonText: '确定', type:'warning',callback: action => {}});
+           return false;
+         }else if(!/^[0-9]+\d*$/.test(this.tdcyInfo.kbfy)){
+           this.$alert('请输入正确可变费用', '提示', {confirmButtonText: '确定', type:'warning',callback: action => {}});
            return false;
          }else{
            return true;

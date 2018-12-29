@@ -62,13 +62,13 @@
               <span v-for="(xmzt,index) in xmztList" :data-type="xmzt.lable" :key="index" :class="{'bg-active':filterWord.xmzt == xmzt.lable}">{{xmzt.mc}}</span>
             </p>
           </div>
-
+<!-- 
           <div v-if="filterList.includes('lb')">
             <p class="query-title">类别:</p>
             <p class="query-list" @click="handleLb">
               <span v-for="(lbl,index) in lbList" :data-type="lbl.lable" :key="index" :class="{'bg-active':filterWord.lb == lbl.lable}">{{lbl.mc}}</span>
             </p>
-          </div>
+          </div> -->
 
           <div v-if="filterList.includes('sfgq')">
             <p class="query-title">是否过期:</p>

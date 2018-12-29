@@ -100,6 +100,9 @@ export function saveTeamMember(obj){
 			ydgznr:obj.ydgznr,
 			sfcpfzr:obj.sfcpfzr,
 			cpxdata:obj.cpxdata,
+			ssry:obj.ssry,
+			ekry:obj.ekry,
+			kbfy:obj.kbfy,
 			isAllCpx:obj.isAllCpx
 	},{
 		transformRequest: [function (data) {

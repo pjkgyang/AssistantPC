@@ -89,7 +89,7 @@
           <span>{{user.userName}}</span>
           <span :title="user.unit">{{user.unit}}</span>
           <span>
-            <el-button :disabled="user.state == 'ytj'" size="mini" v-if="isAddCyz && jszbr" @click="addItemCyz(user,index)">{{user.state == 'ytj'?'已添加':'添加'}}</el-button>
+            <el-button :disabled="user.state == 'ytj'" size="mini" v-if="(isAddCyz && jszbr) || mark" @click="addItemCyz(user,index)">{{user.state == 'ytj'?'已添加':'添加'}}</el-button>
             <el-button size="mini" v-if="!isAddCyz && isJF" @click="addItemJfzrr(user)">修改为(甲方责任人)</el-button>
             <el-button size="mini" v-if="!isAddCyz && !isJF" @click="addItemYfzrr(user)">修改为(乙方责任人)</el-button>
           </span>

@@ -11,12 +11,12 @@
           <span>结束日期</span> <span class="el-icon-date"></span> {{taskDetail.jhjsrq==null?taskDetail.cnjssj:taskDetail.jhjsrq}}
         </p>
       </div>
-      <div class="task-detail-scenario-infos-wrap" v-if="lcblx != 3">
+      <div class="task-detail-scenario-infos-wrap" v-if="lcbType != 3">
         <p><span style="display:inline-block;width:120px" class="el-icon-date"> 签字日期</span><span>
-            <el-date-picker v-if="lcblx != 3" size="small" v-model="signDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
+            <el-date-picker v-if="lcbType != 3" size="small" v-model="signDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
           </span>
         </p>
-        <div v-if="lcblx != 3 && lcblx != 2">
+        <div v-if="lcbType != 3 && lcbType != 2">
           <p><span style="display:inline-block;width:120px" class="el-icon-date"> 服务开始时间</span><span>
               <el-date-picker size="small" v-model="startDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
             </span>
@@ -59,8 +59,8 @@
                    <el-input size="mini" placeholder="请输入二开工作量" v-model="item.ekgzl"></el-input>
                  </p>
                   <p>
-                   <span class="before-require filter-weight">可变工作量(元)</span>
-                   <el-input size="mini" placeholder="请输入可变工作量" v-model="item.kbgzl"></el-input>
+                   <span class="before-require filter-weight">可变费用(元)</span>
+                   <el-input size="mini" placeholder="请输入可变费用" v-model="item.kbgzl"></el-input>
                  </p>
               </div>
                <div class="cpList-delete" >
@@ -106,7 +106,6 @@ export default {
       lcbWDMB: [],
       fileList: [],
       baseUrl: "",
-      lcblx: "",
       lcbbhArr: [],
       textarea: "",
       lcbtaskDetail: {},
@@ -147,40 +146,22 @@ export default {
       default: function() {
         return [];
       }
+    },
+    lcbType:{
+      type: String,
+      default: ''
     }
   },
   mounted() {
-
-
     // 获取里程碑类型
-    getMilestoneSubmitType({
-      xmbh: this.xmbh,
-      lcbbh: this.taskLcbbhArr.join(",")
-    }).then(({ data }) => {
-      if (data.state == "success") {
-        this.lcblx = data.data.lcbType;
         this.valueXSQRR = "";
         this.startDate = "";
         this.signDate = "";
         this.textarea = "";
-        if (data.data.lcbType != 2 && data.data.lcbType != 3) {
-          //  获取项目相关人员
-          queryProjectParticipant({
-            xmbh: this.xmbh ? this.xmbh : data.data.xmbh
-          }).then(({ data }) => {
-            if (data.state == "success") {
-              this.options = data.data;
-              this.options.forEach((ele, i, arr) => {
-                if (ele.userName == "") {
-                  this.options.splice(i, 1);
-                }
-              });
-            }
-          });
+        if(this.lcbType == 1){
+          this.listHtnrApp(this.xmbh ? this.xmbh : '');
+          this.queryProjectParticipant();
         }
-        this.listHtnrApp(this.xmbh ? this.xmbh : data.data.xmbh);
-      }
-    });
   },
   methods: {
     handleClose(){
@@ -209,7 +190,7 @@ export default {
     handleCommitMilestone() {
       this.valiaDate();
       if(!this.isValid && this.sfbwValue) return;
-      if (this.lcblx != 3 && this.lcblx != 2 && !this.valueXSQRR) {
+      if (this.lcbType != 3 && this.lcbType != 2 && !this.valueXSQRR) {
         this.$alert("请选择销售确认人", "提示", {
           confirmButtonText: "确定",
           type: "warning"
@@ -271,7 +252,7 @@ export default {
       this.cpDataList.forEach(ele=>{
         ele.cpmc = ele.cp.split('&')[1];
         ele.cpbh = ele.cp.split('&')[0];
-        if(!ele.cp){
+        if(this.sfbwValue && !ele.cp){//解决bug 未选择备忘时，不需要校验备忘产品 -huang  2018-12-21 13:40:46
           this.$alert("请选择产品", "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -322,39 +303,37 @@ export default {
           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "warning"});
         }
       })
+    },
+     //  获取项目相关人员
+    queryProjectParticipant(){
+        queryProjectParticipant({
+            xmbh: this.xmbh ? this.xmbh : ''
+        }).then(({ data }) => {
+          if (data.state == "success") {
+            this.options = data.data;
+            this.options.forEach((ele, i, arr) => {
+              if (ele.userName == "") {
+                this.options.splice(i, 1);
+              }
+            });
+          }
+        });
     }
+     
   },
   watch: {
     shown(n, o) {
       if (n) {
         this.baseUrl = window.baseurl;
-        // 获取里程碑类型
-        getMilestoneSubmitType({
-          xmbh: this.xmbh,
-          lcbbh: this.taskLcbbhArr.join(",")
-        }).then(({ data }) => {
-          if (data.state == "success") {
-            this.lcblx = data.data.lcbType;
-
-            if (data.data.lcbType != 2 && data.data.lcbType != 3) {
-              //  获取项目相关人员
-              queryProjectParticipant({
-                xmbh: this.xmbh ? this.xmbh : data.data.xmbh
-              }).then(({ data }) => {
-                if (data.state == "success") {
-                  this.options = data.data;
-                  this.options.forEach((ele, i, arr) => {
-                    if (ele.userName == "") {
-                      this.options.splice(i, 1);
-                    }
-                  });
-                }
-              });
-            }
-             this.listHtnrApp(this.xmbh ? this.xmbh : data.data.xmbh);
-          }
-        });
+        if(this.lcbType == 1){
+          this.queryProjectParticipant();
+          this.listHtnrApp(this.xmbh ? this.xmbh : '');
+        }
       }else{
+        this.valueXSQRR = "";
+        this.startDate = "";
+        this.signDate = "";
+        this.textarea = "";
         this.cpDataList = [{
             cp:'',
             cpbh:'',
@@ -368,7 +347,6 @@ export default {
     sfbwValue(n,o){
       if(!n){
         this.cnwcrq = '';
-        
       }
     }
   }

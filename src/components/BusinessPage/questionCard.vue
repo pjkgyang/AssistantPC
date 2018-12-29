@@ -18,7 +18,7 @@
                       <span v-if="gjjhShow && (wtfbq=='W03' || wtfbq=='W05')" class="question-gjjhzt question-tag-ysqgb">{{question.gjzt==0?'未纳入计划':question.gjzt==1?'计划中':'计划已改进'}}</span>
                   </span>&#x3000;
                   <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;
-                  <span v-if="question.tjkfs > 0" style="color:#363748;font-size:12px;" class="question-tag-ysqgb">已提交开发</span>&#x3000;
+                  <span v-if="question.tjkfs > 0" style="color:#363748;font-size:12px;" class="question-tag-green">已提交开发</span>&#x3000;
                   <p>
                       <span><span class="question-info-front"></span>发布人 : {{question.fbrxm}}</span>
                       <span><span class="question-info-front">所属单位 : </span>{{question.ssbm == null?'无':question.ssbm}}</span>
@@ -53,7 +53,7 @@
                           question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.ceil(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq+' 23:59:59').getTime())/(1000 * 60 * 60 * 24))+' 天'}}
                     </span>
                   </span><br>
-                  <span v-if="!bjscShow && gjjhShow">
+                  <span v-if="!bjscShow && gjjhShow && ((wtfbq=='W03' &&  groupTag.includes('NLPXZJ')) || (wtfbq=='W05' &&  groupTag.includes('ZJ')))">
                      <el-button size="mini" type='primary' @click="handleImprovementPlan(question)">改进计划</el-button>
                   </span>
               </div>     
@@ -76,6 +76,7 @@ export default {
   data() {
     return {
         username:'',
+        groupTag:''
     };
   },
   props: {
@@ -108,6 +109,7 @@ export default {
   },
   mounted(){
       this.username = sessionStorage.username;
+      this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
   },
   methods:{
       handleImprovementPlan(params){

@@ -36,45 +36,53 @@
                  <div v-if="!!cpData.problems && cpData.problems.length>0">
                     <h5>问题项</h5>
                     <div class="contentMark" >
-                        <section class="option-list" v-for="wt in cpData.problems" > 
+                        <section class="option-list" v-for="(wt,index) in cpData.problems" flex>
+                            <div class="filter-weight option-list-index" flex colcenter> 
+                               <span>{{index+1}}</span>
+                            </div>
+                            <div> 
                                 <p class="filter-weight">{{wt.cpmc}}&#x3000;{{wt.fwnr}}</p>
+                                <p>
+                                    <span>问题描述：</span>
+                                    <span style="color:#f00">{{wt.wtms}}</span>
+                                </p>
                                 <p>
                                     <span>处理结果：</span>
                                     <span style="color:green">{{wt.cljg}}</span>
                                 </p>
-                                <p><span>是否处理：</span>
-                                    <span style="color:green">{{wt.zt==0?'未解决':'已解决'}} &#x3000;
-                                    <span v-if="wt.zt==1" >{{wt.cljg}}</span>
-                                    </span>
-                                </p>
-                                
+                            </div>    
                         </section>
                     </div>
                  </div>
                  <div v-if="!!cpData.risks && cpData.risks.length > 0">
                     <h5>风险项</h5>
                     <div class="contentMark" >
-                        <section class="option-list" v-for="fx in cpData.risks"> 
-                            <p class="filter-weight">
-                                {{fx.cpmc}}&#x3000;{{fx.fwnr}}&#x3000;
-                                <el-tag size="mini" :class="{'zdsfw-fxdj-s1':fx.fxdj==1,'zdsfw-fxdj-s2':fx.fxdj==2,'zdsfw-fxdj-s3':fx.fxdj==3}" >{{fx.fxdj==1?'S1':fx.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
-                            </p>
-                            <p>
-                                <span >风险描述：</span>
-                                <span style="color:#f00">{{fx.fxms}}</span>
-                            </p>
-                            <p>
-                                <span >处理建议：</span>
-                                <span style="color:green">{{fx.cljy}}</span>
-                            </p>
-                            <p><span>是否处理：</span>
-                                <span style="color:green">{{fx.zt==0?'未解决':'已解决'}} &#x3000;
-                                <span v-if="fx.zt==1" >{{fx.cljg}}</span>
-                                </span>
-                            </p>
-                            <p v-if="!!fx.fjList"><span>相关附件：</span>
-                                <a style="margin-right:30px;"  v-for="fj in fx.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 
-                            </p>
+                        <section class="option-list" v-for="(fx,index) in cpData.risks" flex> 
+                            <div  class="filter-weight option-list-index"  flex colcenter> 
+                               <span>{{index+1}}</span>
+                            </div>
+                            <div>
+                                <p class="filter-weight">
+                                    {{fx.cpmc}}&#x3000;{{fx.fwnr}}&#x3000;
+                                    <el-tag size="mini" :class="{'zdsfw-fxdj-s1':fx.fxdj==1,'zdsfw-fxdj-s2':fx.fxdj==2,'zdsfw-fxdj-s3':fx.fxdj==3}" >{{fx.fxdj==1?'S1':fx.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
+                                </p>
+                                <p>
+                                    <span >风险描述：</span>
+                                    <span style="color:#f00">{{fx.fxms}}</span>
+                                </p>
+                                <p>
+                                    <span >处理建议：</span>
+                                    <span style="color:green">{{fx.cljy}}</span>
+                                </p>
+                                <p><span>是否处理：</span>
+                                    <span style="color:green">{{fx.zt==0?'未解决':'已解决'}} &#x3000;
+                                    <span v-if="fx.zt==1" >{{fx.cljg}}</span>
+                                    </span>
+                                </p>
+                                <p v-if="!!fx.fjList"><span>相关附件：</span>
+                                    <a style="margin-right:30px;"  v-for="fj in fx.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 
+                                </p>
+                            </div>
                         </section>
                     </div>
                  </div>
@@ -87,7 +95,7 @@
                             <div v-if="jdList.length" v-for="(jd,index) in jdList" :class="{'progress-dot':true,'progress-dot-last':index == (jdList.length-1)}">
                                 <div>
                                     <span>{{jd.cjsj}}&#x3000;<span style="color:rgb(21, 145, 202)">{{!jd.czrxm?'':jd.czrxm}}</span>&#x3000;{{jd.czlxmc}}</span>
-                                    <div v-html="jd.cznr"></div>
+                                    <div :class="{'jd-content':jd.czlx == 4}" v-html="jd.cznr"></div>
                                 </div>
                             </div>
                             <div v-else class="emptyContent">
@@ -109,12 +117,7 @@ import tableLayout from '@/components/layout/tableLayout.vue'
    data () {
      return {
          baseUrl:'',
-         jdList:[
-             {con:'2018-08-08 张三1 提报了惹怒',sm:'驳回驳回驳回<br/>驳回驳回驳回',zt:1},
-             {con:'2018-08-08 张三2 提报了惹怒',sm:'驳回驳回驳回驳回驳回驳回',zt:1},
-             {con:'2018-08-08 张三3 提报了惹怒',sm:'驳回驳回驳回驳回驳回驳回',zt:''},
-             {con:'2018-08-08 张三4 提报了惹怒',sm:'驳回驳回驳回驳回驳回驳回',zt:''},
-         ],
+         jdList:[],
          fxList:[
              {cpmc:'asdasd',fwnr:'adasdas',fxms:'123123123',cljy:'12312312'}
          ],
@@ -247,5 +250,22 @@ import tableLayout from '@/components/layout/tableLayout.vue'
     margin: 10px 0px;
     font-size:12px;
     padding:0 10px 5px;
+    .option-list-index{
+        margin-right:10px;
+        span{
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          border: 1px solid rgb(54, 54, 54);
+          text-align: center;
+          line-height: 20px;
+          border-radius: 50%;  
+        }
+    }
+}
+
+.jd-content{
+    // font-weight: 700;
+    color:rgb(21, 145, 202) !important;
 }
 </style>

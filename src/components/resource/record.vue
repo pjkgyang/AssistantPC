@@ -7,6 +7,7 @@
                 <el-tab-pane :label="'下载 ( '+fileCounts.download+' ) '" name="0"></el-tab-pane>
                 <el-tab-pane :label="'好评 ( '+fileCounts.good+' ) '" name="2"></el-tab-pane>
                 <el-tab-pane :label="'差评 ( '+fileCounts.bad+' ) '" name="3"></el-tab-pane>
+                <el-tab-pane :label="'删除 ( '+fileCounts.delete+' ) '" name="6"></el-tab-pane>
                 <el-tab-pane v-if="isSvn" :label="'检出SVN ( '+fileCounts.checkout+' ) '" name="4"></el-tab-pane>
                 <el-tab-pane v-if="isSvn" :label="'更新SVN ( '+fileCounts.updatesvn+' ) '" name="5"></el-tab-pane>
             </el-tabs>

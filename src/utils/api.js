@@ -83,6 +83,7 @@ export default {
     submitActiveServiceRisk:window.baseurl+'activeservice/submitActiveServiceRisk.do',//提交主动式服务风险
     pageProblemSets:window.baseurl+'activeservice/pageProblemSets.do',//问题库查询
     pageRiskSets:window.baseurl+'activeservice/pageRiskSets.do',//风险库查询
+    getLatestSubmitDescription:window.baseurl+'activeservice/getLatestSubmitDescription.do',//获取最近一次提交的说明
 
 
     // 修改参与者 中标人
@@ -97,6 +98,7 @@ export default {
     // 项目看板里程碑明细(首页)
     pageProjectPanelMilestoneDetail:window.baseurl+'milestone/pageProjectPanelMilestoneDetail.do',
     addMemo:window.baseurl+'milestone/addMemo.do',//提交项目备忘（里程碑）
+    editMemo:window.baseurl+'milestone/editMemo.do',//编辑
 
     //  首页跳转日报数据列表
     pageProjectPanelWorkLogs:window.baseurl+'process/pageProjectPanelWorkLogs.do',
@@ -128,8 +130,8 @@ export default {
     // 项目备忘
     listHtnrApp:window.baseurl+'project/listHtnrApp.do', //合同APP
     listMemoProduct:window.baseurl+'milestone/listMemoProduct.do', //备忘产品列表
-
-    
+    isCanEditMemoMilestone:window.baseurl+'milestone/isCanEditMemoMilestone.do', //是否可编辑备忘里程碑
+    addMemo:window.baseurl+'milestone/addMemo.do',//编辑备忘里程碑
 
      // 资源中心
     openTemplateFolder:window.baseurl+'attachment/openTemplateFolder.do',//模板
@@ -147,7 +149,8 @@ export default {
     experts:window.baseurl+'personnel/listExperts.do',//专家列表
     addFjGjjh:window.baseurl+'attachment/addFjGjjh.do',//添加改进状态
     pageFjGjjh:window.baseurl+'attachment/pageFjGjjh.do',//附件改进计划分页列表
-
+    deleteFile:window.baseurl+'attachment/deleteFile.do',//删除
+    
 
     // 获取学校产品线
     getXxCpx:window.baseurl+'personnel/getXxCpx.do',

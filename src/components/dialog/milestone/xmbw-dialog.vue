@@ -9,14 +9,14 @@
           </el-form-item>
           <div>
             <div class="cpList-option" v-for="(item,index) in cpDataList" flex>
-              <div flex colcenter style="padding:0 10px;"> 
+              <div flex colcenter > 
                 <el-form-item label="产品" required >
-                    <el-select v-model="item.cp"  placeholder="请选择" >
+                    <el-select v-model="item.cpbh"  placeholder="请选择" @change="handleChange">
                     <el-option
                       v-for="(cp,index) in cpList"
                       :key="index"
                       :label="cp.cpmc"
-                      :value="cp.cpdm+'&'+cp.cpmc">
+                      :value="cp.cpdm">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -26,8 +26,8 @@
                 <el-form-item label="二开工作量(人/月)" required>
                 <el-input   placeholder="请输入二开工作量" v-model="item.ekgzl"></el-input>
                 </el-form-item>
-                <el-form-item label="可变工作量(元)">
-                <el-input   placeholder="请输入说明内容变工作量" v-model="item.kbgzl"></el-input>
+                <el-form-item label="可变费用(元)">
+                <el-input   placeholder="请输入可变费用" v-model="item.kbgzl"></el-input>
                 </el-form-item>
               </div>
               <div class="cpList-delete"  v-if="index !== 0">
@@ -75,10 +75,26 @@ export default {
       }],
 
       cpList:[],
-      isValid:true
+      isValid:true,
+      count:0
     };
   },
   methods: {
+    handleChange(val){
+      this.count = 0;
+      let cpObj = this.cpList.find(ele=>{
+          return val == ele.cpdm
+      })
+      this.cpDataList.forEach((ele,i,arr)=>{
+        if(val == ele.cpbh){
+          this.count += 1
+          ele.cpmc = cpObj.cpmc;
+          if(this.count != 1){
+            this.$alert("该产品已选择,请确定~", "提示", {confirmButtonText: "确定",type: "warning"});
+          }
+        }
+      })
+    },
     handleCloseDialog() {
       this.visible = false;
     },
@@ -104,9 +120,9 @@ export default {
     validate(){
       this.form.cps = '';
       this.cpDataList.forEach(ele=>{
-        ele.cpmc = ele.cp.split('&')[1];
-        ele.cpbh = ele.cp.split('&')[0];
-        if(!ele.cp){
+        // ele.cpmc = ele.cp.split('&')[1];
+        // ele.cpbh = ele.cp.split('&')[0];
+        if(!ele.cpmc || !ele.cpbh){
           this.$alert("请选择产品", "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -114,7 +130,8 @@ export default {
          this.isValid = false;
          return;
         }
-        if(!/^[0-9]+\d*$/.test(ele.ssgzl)){
+        // /^[0-9]+\d*$/
+        if(!/^\d+(\.\d+)?$/.test(ele.ssgzl)){
           this.$alert("请输入正确实施工作量", "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -122,7 +139,7 @@ export default {
          this.isValid = false;
          return;
         }
-        if(!/^[0-9]+\d*$/.test(ele.ekgzl)){
+        if(!/^\d+(\.\d+)?$/.test(ele.ekgzl)){
           this.$alert("请输入正确二开工作量", "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -183,6 +200,16 @@ export default {
     xmbh:{
       type:String,
       default:""
+    },
+    lcbData:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
+    },
+    isEdit:{
+      type:Boolean,
+      default:false
     }
   },
   watch: {
@@ -200,6 +227,12 @@ export default {
                   kbgzl:0
                 }]
       } else {
+        if(this.isEdit){
+          this.form.cnwcrq = this.lcbData.lcb.cnjssj
+          if(!!this.lcbData.cps){
+            this.cpDataList = this.lcbData.cps
+          }
+        }
         this.listHtnrApp();
       }
     }
