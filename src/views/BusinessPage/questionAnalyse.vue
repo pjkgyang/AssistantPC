@@ -266,6 +266,8 @@ export default {
           this.cxzt +
           "&wtfbq=" +
           this.wtfbq +
+          "&gjzt=" +
+          this.gjzt +
           "&wtbq=" +
           this.wtbq +
           "&sqgb=" +

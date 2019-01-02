@@ -113,7 +113,7 @@ import zdzjhDialog from "@/components/dialog/zdjh-dialog.vue";
 import lcbztSelect from '@/components/monthReport/lcbzt-select.vue'
 import weekReportFill from '@/views/BusinessPage/weekMonthReport/weekReport-write.vue'
 import { getProjects} from '@/api/xmkb.js'
-import { EventBus,getMenu, getSession,getWeeks,getLastMonth,GetNextDate,getNowFormatDate,weekIndexInMonth,getPreMonth } from '@/utils/util.js'
+import { EventBus,getMenu, getSession,getWeeks,getLastMonth,GetNextDate,getNowFormatDate,weekIndexInMonth,getPreMonth,GetDateStr } from '@/utils/util.js'
 import { pageWeekWork,pageWeekQuestion,pageWeeklyReport,listComments,addComment,saveWeekWork,
 refreshWeekWork,isWeekPlanBlocked,batchUpdateWeekQuestion,batchUpdateWeekWork,listWeekPlanPerson} from '@/api/weekMonthReport.js'
 
@@ -124,7 +124,7 @@ const yfcContent = "<h5 style='font-weight:700'>本周计划 <span style='color:
 export default {
   data() {
     return {
-      textTitle:'本周工作总结',
+      textTitle:'本周工作计划',
       itemList:[],  //项目列表
       itemValue:'',
       groupTag:'',
@@ -262,7 +262,7 @@ export default {
       },
      handleChooseMonth(val){
       let chooseDate = this.NewYear+'-'+((this.NewMonth+1) < 10?'0'+(this.NewMonth+1):(this.NewMonth+1));
-      if(new Date(this.monthValue).getTime() > new Date(chooseDate).getTime()){
+      if(new Date(this.monthValue).getTime() >= new Date(chooseDate).getTime()){
           this.textTitle = '本周工作计划'
           this.wordShow = false
           this.othShow = false
@@ -302,7 +302,7 @@ export default {
       }
       this.listWeekPlanPerson();
       this.isWeekPlanBlocked(this.monthValue,this.weekValue);
-      if(new Date(this.monthValue).getTime() > new Date(chooseDate).getTime()){
+      if(new Date(this.monthValue).getTime() >= new Date(chooseDate).getTime()){
           this.textTitle = '本周工作计划'
           this.wordShow = false
           this.othShow = false
@@ -311,7 +311,7 @@ export default {
           this.wordShow = true
           this.othShow = true
       } else{
-          if(this.weekValue > this.curWeek){
+          if(this.weekValue >= this.curWeek){
               this.textTitle = '本周工作计划'
               this.wordShow = false
               this.othShow = false
@@ -571,17 +571,21 @@ export default {
        let week = getWeeks(Year,Month+1);  //获取上月周数
        let weekStartDate = GetNextDate(getLastMonth(Year,Month),(week-1)*7);
        let weekEndDate = GetNextDate(weekStartDate,6);
-       let NowDate = getNowFormatDate();  
-       if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && new Date(NowDate).getTime() <= new Date(weekEndDate).getTime()){
+       let NowDate = getNowFormatDate();
+       if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
+          new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
+          this.weekValue == week &&
+          new Date(GetDateStr(0)).getDay() >= 4){
             this.weekValue = this.curWeek =  this.weeksNum = getWeeks(Year,Month+1);
-            this.weekDay  = weekStartDate+' 至 '+weekEndDate
+            this.weekDay  = weekStartDate+' 至 '+weekEndDate;
             this.monthValue = lastMonth;
        }else{
             this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
             this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
             this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
-            this.monthValue = this.year+'-'+((this.month+1)>=10?(this.month+1):'0'+(this.month));  
+            this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);  
        } 
+        // this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1); 
     },
     getListComments(oid){  // 获取批注列表
           listComments({

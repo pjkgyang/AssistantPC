@@ -122,7 +122,7 @@ export default {
         }) 
      $('.main_page').scroll(function() {  
          _this.handleScroll();
-    });
+     });
   },
 
   components:{headerUser}

@@ -277,53 +277,20 @@ export default {
   mounted(){
         EventBus.$on("handleClickAddzb", param => {
             this.paramObj = param;
-            let year = this.paramObj.month.split('-')[0];
-            let month =  this.paramObj.month.split('-')[1];
-            this.monthly = year+'-'+month
-            this.yhbh = JSON.parse(getSession('userInfo').uid);
             this.weeksNum = this.paramObj.weeksNum
             this.zcValue = this.paramObj.weekValue
-            this.weekDay = this.getWeekDate(year,month-1,this.zcValue); //当前周日期
-            if(this.zcValue == this.weeksNum){
-                    this.NextweekValue = 1
-                    this.NextMonth =  getNextMonth(this.monthly);  //下个月
-            }else{
-                this.NextweekValue = this.zcValue+1;
-                this.NextMonth = this.monthly
-            }
-                this.bzJssj = this.getWeekDate(year,month-1,this.weeksNum).split('至')[1]; 
-                this.nextWeeksNum = getWeeks(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]);
-                this.nextWeekDay = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1==0?this.NextMonth.split('-')[1]:this.NextMonth.split('-')[1]-1,this.NextweekValue);
-                this.isWeekPlanBlocked(this.monthly,this.zcValue,false);         // 本周
-                this.isWeekPlanBlocked(this.NextMonth,this.NextweekValue,true);  // 下周
-                this.promise().then((value)=>{
-                   this.getWeekPlanData();             // 获取周计划填写
-                })
+            let year = this.paramObj.month.split('-')[0];
+            let month =  this.paramObj.month.split('-')[1];
+            this.intelizeDate(year,month);    
+            
         });
       
       this.groupTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
-      let year = this.dateObj.month.split('-')[0];
-      let month =  this.dateObj.month.split('-')[1];
-      this.monthly = year+'-'+month
-      this.yhbh = JSON.parse(getSession('userInfo').uid);
       this.weeksNum = this.dateObj.weeksNum
       this.zcValue = this.dateObj.weekValue
-      this.weekDay = this.getWeekDate(year,month-1,this.zcValue); //当前周日期
-      if(this.zcValue == this.weeksNum){
-            this.NextweekValue = 1
-            this.NextMonth =  getNextMonth(this.monthly);  //下个月
-       }else{
-           this.NextweekValue = this.zcValue+1;
-           this.NextMonth = this.monthly
-       }
-        this.bzJssj = this.getWeekDate(year,month-1,this.weeksNum).split('至')[1]; 
-        this.nextWeeksNum = getWeeks(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]);
-        this.nextWeekDay = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1==0?this.NextMonth.split('-')[1]:this.NextMonth.split('-')[1]-1,this.NextweekValue);
-        this.isWeekPlanBlocked(this.monthly,this.zcValue,false);         // 本周
-        this.isWeekPlanBlocked(this.NextMonth,this.NextweekValue,true);  // 下周
-        this.promise().then((value)=>{
-           this.getWeekPlanData();             // 获取周计划填写
-      })
+      let year = this.dateObj.month.split('-')[0];
+      let month =  this.dateObj.month.split('-')[1];
+      this.intelizeDate(year,month);
   },
     watch:{
         gznrShow(n,o){
@@ -1077,6 +1044,28 @@ export default {
         this.currentNextJdPage = 1;
         this.currentNowWtPage = 1;
         this.currentNextWtPage = 1;
+    },
+
+    // 初始化日期
+    intelizeDate(year,month){
+      this.monthly = year+'-'+month
+      this.yhbh = JSON.parse(getSession('userInfo').uid);
+      this.weekDay = this.getWeekDate(year,month-1,this.zcValue); //当前周日期
+      if(this.zcValue == this.weeksNum){
+            this.NextweekValue = 1
+            this.NextMonth =  getNextMonth(this.monthly);  //下个月
+       }else{
+           this.NextweekValue = this.zcValue+1;
+           this.NextMonth = this.monthly
+       }
+        this.bzJssj = this.getWeekDate(year,month-1,this.weeksNum).split('至')[1]; 
+        this.nextWeeksNum = getWeeks(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]);
+        this.nextWeekDay = this.getWeekDate(this.NextMonth.split('-')[0],this.NextMonth.split('-')[1]-1==0?0:this.NextMonth.split('-')[1]-1,this.NextweekValue);
+        this.isWeekPlanBlocked(this.monthly,this.zcValue,false);         // 本周
+        this.isWeekPlanBlocked(this.NextMonth,this.NextweekValue,true);  // 下周
+        this.promise().then((value)=>{
+           this.getWeekPlanData();             // 获取周计划填写
+      })
     }
   },
   components: {
