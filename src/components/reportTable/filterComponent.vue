@@ -271,7 +271,7 @@ export default {
       let bm = e.target.getAttribute("data-type");
       if (bm == null) return;
       this.filterWord.bm = bm;
-      this.$emit("handleChangeFilter", this.filterWord);
+      this.$emit("handleChangeFilter", this.filterWord,'bm');
     },
     handleCP(e) {
       // 产品

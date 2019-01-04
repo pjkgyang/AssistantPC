@@ -73,6 +73,7 @@
                         <p class="query-title">是否延期:</p>
                         <p style="padding:5px 0">
                             <el-radio-group v-model="filterWord.sfyq" @change="handleSfyq">
+                                <el-radio :label="2">全部</el-radio>
                                 <el-radio :label="1">是</el-radio>
                                 <el-radio :label="0">否</el-radio>
                             </el-radio-group>

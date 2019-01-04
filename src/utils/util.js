@@ -173,7 +173,7 @@ function delCookie(name){
 } 
 
 export function getSession(name) {
-        return JSON.parse(sessionStorage.getItem(name));
+     return JSON.parse(sessionStorage.getItem(name));
 } 
 
 //  排序

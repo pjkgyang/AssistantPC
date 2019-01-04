@@ -90,7 +90,8 @@ export default {
     hasDepositData() {
       this.$get(this.API.hasDepositData, {
         yf: this.filterData.yf,
-        khlx: "3"
+        khlx: "3",
+        qygc:this.filterData.bm
       }).then(res => {
         if (res.state == "success") {
           this.archiveShow = !res.data;

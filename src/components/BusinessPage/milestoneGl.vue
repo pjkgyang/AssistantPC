@@ -56,9 +56,10 @@
           <span style="float:right;margin-top:5px" v-if="ishow">
             <span class="filter-weight">合计完工量 : </span>
             <span style="color:#f00;font-size:18px">
-              {{totalWgl==''?0:totalWgl<0?totalWgl:totalWgl<10000?totalWgl.toFixed(2):totalWgl<100000000?(totalWgl/10000).toFixed(2):(totalWgl/100000000).toFixed(2)}} </span>
-              {{totalWgl<0?'元':totalWgl<10000? '元':totalWgl<100000000? '万元': '亿'}}</span>
-                  <p style="color:#aaa;font-size:12px;" v-if="ishow">说明：整体里程碑不允许调整计划，里程碑调整需要工程总确认后才生效。</p>
+              {{totalWgl==''?0:totalWgl<0?totalWgl:totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(2):(totalWgl/100000000).toFixed(2)}} </span>
+              {{totalWgl<0?'元':totalWgl<10000? '元':totalWgl<100000000? '万元':'亿'}}</span>
+
+            <p style="color:#aaa;font-size:12px;" v-if="ishow">说明：整体里程碑不允许调整计划，里程碑调整需要工程总确认后才生效。</p>
         </p>
         <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark" @selection-change="handleSelectionChange">
 
@@ -464,6 +465,7 @@ export default {
         nrxmlb: this.xmlbList.length == 0 ? "" : this.xmlbList.join(",")
       }).then(({ data }) => {
         if (data.state == "success") {
+          console.log(data.data.totalWgl);
           this.totalWgl = data.data.totalWgl;
           let milestone = data.data.data.rows;
           milestone.forEach((val, index, arr) => {

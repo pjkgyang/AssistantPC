@@ -191,7 +191,7 @@ export default {
         cjsjEnd: this.filterWord.jhcjrq[1],
         fbsjStart: this.filterWord.jhpxrq[0],
         fbsjEnd: this.filterWord.jhpxrq[1],
-        sfyq: this.filterWord.sfyq,
+        sfyq: this.filterWord.sfyq==2?'':this.filterWord.sfyq,
         keyword: this.filterWord.keyword
       })
         .then(res => {

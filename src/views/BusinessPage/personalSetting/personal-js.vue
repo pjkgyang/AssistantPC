@@ -136,26 +136,27 @@ export default {
       title: "",
       sm:"",
       queryObj:{},
-      type:''
+      type:'',
+
+      lastMonth:"",
+      nowData:""
     };
   },
   mounted() {
-    this.markYear = new Date().getFullYear();
     let month = new Date().getMonth() + 1;
-    let yf = this.markYear + "-" + (month < 10 ? "0" + month : month);
+    this.nowData = new Date().getFullYear() + "-" + (month < 10 ? "0" + month : month);
+    this.year =  getPreMonth(this.nowData).split('-')[0];
+    this.month =  getPreMonth(this.nowData).split('-')[1];
     this.username = sessionStorage.username;
-    this.month = getPreMonth(yf).split("-")[1];
-    this.year = getPreMonth(yf).split("-")[0];
-    let oldyf = this.markYear + "-" + this.month;
-    this.personalSettlement(oldyf);
+    this.lastMonth = getPreMonth(this.nowData);//获取上一个月
+    this.personalSettlement();
   },
   methods: {
     handleCurrentChange(data){
       this.queryObj.curPage = data;
-       this.getDetail(this.type);
+      this.getDetail(this.type);
     },
     handleCheckJs(params) {
-      let yf = this.markYear + "-" + this.month;
       this.type = params;
       this.queryObj.curPage = 1;
       this.queryObj.pageSize = 15;
@@ -163,42 +164,40 @@ export default {
         case "ekjs":
           this.title = "Crowd结算";
           this.sm = '';
-          this.queryObj.yf = yf;
+          this.queryObj.yf = this.lastMonth;
           delete this.queryObj.startDt;
           delete this.queryObj.endDt;
           break;
         case "xmjs":
           this.title = "项目结算";
           this.sm = '说明：团队收入为正数是表示收入，负数表示支出给团队成员费用';
-          this.queryObj.yf = yf;
+          this.queryObj.yf = this.lastMonth;
           delete this.queryObj.startDt;
           delete this.queryObj.endDt;
           break;
         case "sqdy":
           this.title = "售前调用结算";
           this.sm = '说明：售前调用按500/800结算个人收入';
-          this.queryObj.startDt = yf+'-01';
-          this.queryObj.endDt = getNextMonth(yf)+'-01';
+          this.queryObj.startDt = this.lastMonth+'-01';
+          this.queryObj.endDt = getNextMonth(this.lastMonth)+'-01';
           delete this.queryObj.yf;
-
         break;
       }
       this.getDetail(params);
       this.show = !this.show;
     },
     handleChangeDate(val) {
-      this.markYear = val;
-      let yf = val + "-" + this.month;
-      this.personalSettlement(yf);
+      this.lastMonth = val +'-'+this.month
+      this.personalSettlement();
     },
     handleCheckJS(data) {
-      this.month = data.val;
-      let yf = this.markYear + "-" + this.month;
-      this.personalSettlement(yf);
+      this.month = data.val
+      this.lastMonth = this.year +'-'+ this.month
+      this.personalSettlement();
     },
-    personalSettlement(yf) {
+    personalSettlement() {
       this.$get(this.API.personalSettlement, {
-        yf: yf
+        yf: this.lastMonth
       }).then(res => {
         if (res.state == "success") {
           this.data = res.data;
