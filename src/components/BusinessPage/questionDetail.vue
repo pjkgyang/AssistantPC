@@ -988,6 +988,7 @@ export default {
       this.crowdVisible = !this.crowdVisible;
       // this.getCrowdId(false);
     },
+    // 查看开发任务进度
     handleJDGZ(data) {
       this.crowdId = data;
       this.getCrowdId(data);
@@ -1032,8 +1033,8 @@ export default {
         }
       });
     },
+    //受理
     accreditQuestion() {
-      //受理
       if (this.isgcXmtdbyWt) {
         this.questionTitle = "受理";
         this.accreditShow = true;
@@ -1048,7 +1049,7 @@ export default {
         this.isSltitle = "受理";
         this.isSLvisible = true;
         this.question.xgcnjsrq =
-          this.qusetionInfo.cnjsrq == ""
+        this.qusetionInfo.cnjsrq == ""
             ? this.qusetionInfo.qwjjrq
             : this.qusetionInfo.cnjsrq;
         this.innerCNRQVisible = !this.innerCNRQVisible;
@@ -1507,11 +1508,11 @@ export default {
       this.innerZFWTisible = false;
     },
 
+    //催办
     remindsQuestion() {
-      //催办
       this.zdTitle = "选择催办人";
+      //是否显示催办人
       showCbCondition({
-        //是否显示催办人
         wid: this.wid
       }).then(({ data }) => {
         if (data.state == "success") {

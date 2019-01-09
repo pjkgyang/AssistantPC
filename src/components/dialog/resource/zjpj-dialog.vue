@@ -16,9 +16,10 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="操作" min-width="180" v-if="userGroupTag.includes('JYGL')">
+          <el-table-column label="操作" min-width="180" >
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleClick(scope.row)">查看记录</el-button>
+              <el-button size="mini" @click="handleClick(scope.row)" v-if="userGroupTag.includes('JYGL')">查看记录</el-button>
+              <span v-else>暂无操作权限</span>
             </template>
           </el-table-column>
         </el-table>
@@ -110,7 +111,7 @@ export default {
         keyword: this.keyword,
         czlx: this.czlx == 0 ? "" : this.czlx,
         rybh: this.ryInfo.bh,
-        cpxbh: this.ryInfo.cpxbh,
+        cpbh: this.ryInfo.cpbh,
         rylx: this.rylx
       }).then(res => {
         if (res.state == "success") {

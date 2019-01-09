@@ -137,7 +137,7 @@ export default {
     openTemplateFolder:window.baseurl+'attachment/openTemplateFolder.do',//模板
     openCoursewareFolder:window.baseurl+'attachment/openCoursewareFolder.do',//课件
     applyDismiss:window.baseurl+'question/applyDismiss.do',
-    queryCpxZjData:window.baseurl+'personnel/queryCpxZjData.do',
+    queryCpZjData:window.baseurl+'personnel/queryCpZjData.do',//获取专家列表 产品
     openNewcomerFolder:window.baseurl+'attachment/openNewcomerFolder.do', //新人专用
     good:window.baseurl+'attachment/good.do', //好评
     bad:window.baseurl+'attachment/bad.do', //差评
@@ -150,6 +150,8 @@ export default {
     addFjGjjh:window.baseurl+'attachment/addFjGjjh.do',//添加改进状态
     pageFjGjjh:window.baseurl+'attachment/pageFjGjjh.do',//附件改进计划分页列表
     deleteFile:window.baseurl+'attachment/deleteFile.do',//删除
+    addDir:window.baseurl+'attachment/addDir.do',//增加文件夹
+    deleteDir:window.baseurl+'attachment/deleteDir.do',//删除文件夹
     
 
     // 获取学校产品线

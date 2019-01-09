@@ -22,13 +22,13 @@
                    <el-form-item label="是否bug">
                       <el-switch v-model="form.sfbg"></el-switch>
                   </el-form-item>  
-                   <el-form-item label="关闭说明">
+                  <el-form-item label="关闭说明">
                         <el-input type="textarea" v-model="form.gbsm" resize="none" rows="4"></el-input>
-                    </el-form-item>
-                     <el-form-item style="text-align:right">
+                  </el-form-item>
+                  <el-form-item style="text-align:right">
                         <el-button type="primary" @click="submitForm">提交</el-button>
                         <el-button type="info" @click="closeForm">取消</el-button>
-                    </el-form-item>
+                   </el-form-item>
         </el-form> 
   </div>
 </template>

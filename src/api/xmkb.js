@@ -438,7 +438,7 @@ export function saveYyzfData(obj){
 }
 
 
-// 获取问题问题（权限）
+// 获取问题（权限）
 export function showQuestionCondition(obj){
 	let url =  window.baseurl + quesurl + 'showQuestionCondition.do'
 	return axios.get(url,{

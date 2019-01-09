@@ -302,12 +302,12 @@ export default {
       }
       this.listWeekPlanPerson();
       this.isWeekPlanBlocked(this.monthValue,this.weekValue);
-      if(new Date(this.monthValue).getTime() >= new Date(chooseDate).getTime()){
+      if(new Date(this.monthValue).getTime() > new Date(chooseDate).getTime()){
           this.textTitle = '本周工作计划'
           this.wordShow = false
           this.othShow = false
       }else if(new Date(this.monthValue).getTime() < new Date(chooseDate).getTime()){
-           this.textTitle = '本周工作总结'
+         this.textTitle = '本周工作总结'
           this.wordShow = true
           this.othShow = true
       } else{

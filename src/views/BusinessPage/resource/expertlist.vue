@@ -1,20 +1,25 @@
 <template>
-  <div style="width:80%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
+  <div style="width:90%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
     <ul class="item-list">
       <div class="item-header" flex spacebetween>
-        <p class="item-name">产品线</p>
+        <p class="item-name">产品</p>
         <p class="item-size">工程专家</p>
         <p class="item-cpzj">产品专家</p>
+        <p class="item-cpjl">产品经理</p>
       </div>
       <div class="list_content" v-if="itemList.length">
         <li v-for="(item,index) in itemList" flex spacebetween @mouseover="listIndex = index">
-          <p class="item-name textellipsis" :title="item.cpx">{{item.cpxmc}}</p>
+          <p class="item-name textellipsis" :title="item.cpx">{{item.cpmc}}</p>
           <p class="item-size textellipsis" :title="item.gczj">{{item.gczj}}
-            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'2')" v-if="listIndex == index && item.gczj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+            <a href="javaScript:;;" @click="handleCheckDetail(item.cpbh,'0')" v-if="listIndex == index && item.gczj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
           </p>
           <p class="item-cpzj textellipsis" :title="item.cpzj">
             {{item.cpzj}}
-            <a href="javaScript:;;" @click="handleCheckDetail(item.cpxbh,'1')" v-if="listIndex == index && item.cpzj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+            <a href="javaScript:;;" @click="handleCheckDetail(item.cpbh,'1')" v-if="listIndex == index && item.cpzj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+          </p>
+          <p class="item-cpjl textellipsis" :title="item.cpjl">
+            {{item.cpjl}}
+            <a href="javaScript:;;" @click="handleCheckDetail(item.cpbh,'2')" v-if="listIndex == index && item.cpjl != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
           </p>
         </li>
       </div>
@@ -60,12 +65,12 @@ export default {
   },
   mounted() {
     this.baseUrl = window.baseurl;
-    this.queryCpxZjData();
+    this.queryCpZjData();
   },
 
   methods: {
-    queryCpxZjData(path) {
-      this.$get(this.API.queryCpxZjData, {
+    queryCpZjData() {
+      this.$get(this.API.queryCpZjData, {
         curPage: 1,
         pageSize: 99
       }).then(res => {
@@ -78,9 +83,9 @@ export default {
         }
       });
     },
-    getExperts(cpxbh){
+    getExperts(cpbh){
       this.$get(this.API.experts,{
-        cpxbh:cpxbh,
+        cpbh:cpbh,
         rylx:this.rylx
       }).then(res=>{
         if(res.state == 'success'){
@@ -112,13 +117,13 @@ export default {
         sm:sm,
         rybh:this.xminfo.bh,
         ryxm:this.xminfo.xm,
-        cpxbh:this.xminfo.cpxbh,
-        cpxmc:this.xminfo.cpx
+        cpbh:this.xminfo.cpbh,
+        cpmc:this.xminfo.cpx
       }).then(res=>{
         if(res.state == 'success'){
           this.pjsmShow = !this.pjsmShow
           this.$alert('评价成功', "提示", {confirmButtonText: "确定",type:'success',callback:action=>{
-             this.getExperts(this.xminfo.cpxbh);
+             this.getExperts(this.xminfo.cpbh);
           }});
         }else{
           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
@@ -165,7 +170,7 @@ export default {
     text-align: center;
   }
   .item-size {
-    width: 37%;
+    width: 32%;
     text-align: center;
   }
   .textellipsis {
@@ -180,8 +185,12 @@ export default {
     }
   }
   .item-cpzj {
-    width: 37%;
+    width: 32%;
     text-align: center;
+  }
+  .item-cpjl{
+   width: 16%; 
+   text-align: center;
   }
 }
 </style>

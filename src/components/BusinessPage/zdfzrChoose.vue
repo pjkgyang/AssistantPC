@@ -22,7 +22,7 @@
                        <el-date-picker size="mini" v-model="qwjjrqZf"  type="date" placeholder="选择期望解决日期"  value-format="yyyy-MM-dd"></el-date-picker> 
                     </p>
               </div>
-              <el-input v-if="zdTitle !== '运营人员转发' || !lshjShown" size="mini" v-model="cpKeyword" :placeholder="zdTitle === '运营人员转发'?'请输入责任人姓名/编号/产品线':'请输入责任人姓名/编号'" style="width:80%;margin:0 0 5px 0" @change="queryComplainUser"></el-input> &#x3000;
+              <el-input v-if="zdTitle !== '运营人员转发' || !lshjShown" size="mini" v-model="cpKeyword" :placeholder="zdTitle === '运营人员转发'?'请输入责任人姓名/编号/产品名称':'请输入责任人姓名/编号'" style="width:80%;margin:0 0 5px 0" @change="queryComplainUser"></el-input> &#x3000;
               <el-button v-if="zdTitle !== '运营人员转发' || !lshjShown" size="mini" type="primary" @click="queryComplainZRR">查询</el-button>
               <div v-if="zdTitle === '指定产品接口人'">
                   <el-table
@@ -80,7 +80,7 @@
                     </el-table-column>
                     <el-table-column  prop="cymc" label="姓名" width="180"></el-table-column>
                     <el-table-column  prop="cybh" label="编号" width="180"></el-table-column>
-                    <el-table-column  prop="cpxmc" label="产品线名称"></el-table-column>
+                    <el-table-column  prop="cpmc" label="产品名称"></el-table-column>
                   </el-table>
                   <div text-right>
                 <pagination v-if="jkrTotal>8 && jkrTotal != null" :total="jkrTotal" :pageSize="10" @handleCurrentChange="handleCurrentChange"></pagination>      
@@ -105,7 +105,7 @@
               <div v-if="zdTitle != '选择催办人'" class="zdfzr-note">
                     <div id="summernoteZrr"> </div>
               </div>
-              <div style="text-align:right">
+              <div style="text-align:right" class="msg-12">
                 <el-button size="mini" type="primary" @click="handleCommitZdr">提交</el-button>
                 <el-button size="mini" type="info" @click="handleClose">取消</el-button>
               </div>

@@ -1,6 +1,8 @@
 <template>
-  <div style="width:80%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
+  <div style="width:90%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
     <section text-right>
+      <!-- v-if="userTag.includes('NLPXZJ')" -->
+      <el-button v-if="userTag.includes('NLPXZJ')" size="small" @click="handledir">新建文件夹</el-button>
       <el-button v-if="userTag.includes('NLPXZJ')" size="small" @click="handleUpload">上传文件</el-button>
       <el-button :type="catalogue == 'file'?'primary':''" size="small" @click="catalogue = 'file'">文件目录</el-button>
       <el-button :type="catalogue == 'record'?'primary':''" size="small" @click="catalogue = 'record'">操作记录</el-button>
@@ -50,11 +52,11 @@
               {{file.xgsj == null?'--':file.xgsj}}
             </div>
             <div class="file-evaluate">
-              <div flex colcenter v-if="fileIndex == index && file.sfwjml == '0'">
-                <span @click="handlePraise($event,'1',file.fjbh)"><span class="appraise-hp"></span> ({{file.good}})</span>&nbsp;
-                <span @click="handlePraise($event,'0',file.fjbh)"><span class="appraise-cp"></span> ({{file.bad}})</span>&#x3000;
-                <a href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>&#x3000;
-                <a  href="javaScript:;;" style="color:#f00" @click="handleDelete(file.fjbh,index)">删除</a>
+              <div flex colcenter v-if="fileIndex == index">
+                <span v-if="file.sfwjml == '0'" @click="handlePraise($event,'1',file.fjbh)"><span class="appraise-hp"></span> ({{file.good}})</span>&nbsp;
+                <span v-if="file.sfwjml == '0'" @click="handlePraise($event,'0',file.fjbh)"><span class="appraise-cp"></span> ({{file.bad}})</span>&#x3000;
+                <a v-if="file.sfwjml == '0'" href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>&#x3000;
+                <a  href="javaScript:;;" style="color:#f00" @click.stop="handleDelete(file.fjbh,index,file.sfwjml)">删除</a>
                 <!-- v-if="userTag.includes('NLPXZJ')" -->
               </div>
             </div>
@@ -73,7 +75,7 @@
       </section>
     </el-collapse-transition>
     <pjsmDialog :show.sync="pjsmShow" @handleClickSure="handleClickSure" :title="dialogTitle"></pjsmDialog>
-    <uploadDialog :show.sync="uploadShow" :lx="resourceType" :filePath="logsFjpath" @handleCommit="handleCommitUpload"></uploadDialog>
+    <uploadDialog :show.sync="uploadShow" :lx="resourceType" :filePath="oldFjpath" @handleCommit="handleCommitUpload"></uploadDialog>
   </div>
 </template>
 
@@ -93,7 +95,7 @@ export default {
       fjobj: {},
       baseUrl: null,
       catalogue: "file",
-      fileIndex: "",
+      fileIndex:null,
       appraiseType: "", //评价类型
       fjPath:'',
       currentPage:1,
@@ -127,11 +129,33 @@ export default {
   methods: {
     // 上传成功
     handleCommitUpload(){
-       this.openFolder(this.logsFjpath); 
+       this.openFolder(this.oldFjpath); 
     } ,
     // 上传附件 
     handleUpload(){
       this.uploadShow =  !this.uploadShow
+    },
+    // 新建文件夹
+    handledir(){
+      this.$prompt('请输入文件夹名称', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern:/\S/,
+          inputErrorMessage: '请输入文件夹名称'
+        }).then(({ value }) => {
+          this.$post(this.API.addDir,{
+            path:this.oldFjpath,
+            lx:this.resourceType,
+            name:value
+          }).then(res=>{
+            if(res.state == 'success'){
+              this.$alert("创建成功", "提示", {confirmButtonText: "确定",type:'success',});
+              this.openFolder(this.oldFjpath); 
+            }else{
+               this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error',});
+            }
+          })
+        }).catch(() => {});
     },
     handleCommit(){
       if(this.catalogue == 'file'){
@@ -197,13 +221,13 @@ export default {
       this.pjsmShow = !this.pjsmShow;
     },
     // 删除文件
-    handleDelete(data,index){
+    handleDelete(data,index,params){
       this.$confirm('您确定要删除该文件吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$post(this.API.deleteFile,{
+          this.$post(params==0?this.API.deleteFile:this.API.deleteDir,{
             path:data,
             lx:this.resourceType
           }).then(res=>{
@@ -212,7 +236,7 @@ export default {
                 confirmButtonText: '确定',
                 type:'success'
               });
-            this.fileList.files.splice(index,1);
+             this.fileList.files.splice(index,1);
             }else{
               this.$alert(res.msg, '提示', {confirmButtonText: '确定',type:'error'});
             }
@@ -238,7 +262,7 @@ export default {
     handleAllfile() {
       this.openFolder();
       this.fileBread = [];
-      this.logsFjpath = '';
+      this.logsFjpath =  this.oldFjpath = '';
     },
 
     // 面包屑导航
@@ -251,6 +275,7 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           this.fileList = res.data;
+          this.oldFjpath = this.fileList.wid;
           this.fileBread.forEach((ele, i, arr) => {
             if (ele.fjbh.includes(fjbh)) {
               this.fileBread.splice(i + 1, 9999);
@@ -264,7 +289,7 @@ export default {
       let type = e.currentTarget.getAttribute("data-type");
       let fjbh = e.currentTarget.getAttribute("data-fjbh");
       let fj = e.currentTarget.getAttribute("data-fj");
-      // 获取记录需要的附件路径
+      // 获取记录需要的附件路径 
       this.logsFjpath = fjbh;
       if (fj != null && fj.split("&")[1] == 0) return;
       if (type == null) {
@@ -274,7 +299,6 @@ export default {
           fjbh: fjbh
         };
       }
-
       this.$get(this.API.openTemplateFolder, {
         path: fjbh,
         lx: this.resourceType
@@ -333,13 +357,13 @@ export default {
   },
   watch:{
     catalogue(n,o){
+      console.log(this.logsFjpath);
       if(n == 'record'){
         this.logTabName = '';
         this.getLogs();
         this.getCount();
       }else{
         this.logsFjpath = this.oldFjpath;
-
       }
     }
   },
