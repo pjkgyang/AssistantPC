@@ -18,10 +18,11 @@
             <span>状态变更说明:</span>
             <span>{{xmDetail.gcfwztsm}}</span>
           </p>
-          <p class="mg-12" v-if="!fwqxShow && value">
+          <!-- 未过保不显示 -->
+          <p class="mg-12" v-if="fwqxShow && value">
             <span class="filter-weight before-require">项目服务期限：</span>
             <span>
-              <el-date-picker v-model="ycfwqx" type="date" size="mini" style="width:220px" placeholder="选择日期" format="yyyy年MM月dd日" value-format="yyyy-MM-dd">
+              <el-date-picker :picker-options="pickerBeginDateBefore" v-model="ycfwqx" type="date" size="mini" style="width:220px" placeholder="选择日期" format="yyyy年MM月dd日" value-format="yyyy-MM-dd">
               </el-date-picker>
             </span>
           </p>
@@ -48,6 +49,14 @@ export default {
   data() {
     return {
       visible: this.show,
+      pickerBeginDateBefore:{
+          disabledDate(time) {
+            let curDate = (new Date()).getTime();
+            let three = 90 * 24 * 3600 * 1000;
+            let threeMonths = curDate + three;
+            return time.getTime() < Date.now() || time.getTime() > threeMonths;;
+          }
+      },  
       xmData:{},
       value: false,
       textarea: "",
@@ -64,7 +73,7 @@ export default {
         });
         return;
       }
-      if (!this.ycfwqx && !this.fwqxShow && this.value) {
+      if (!this.ycfwqx && this.fwqxShow && this.value) {
         this.$alert("请填写服务期限", "提示", {
           confirmButtonText: "确定",
           type: "warning"
@@ -138,19 +147,26 @@ export default {
         this.textarea = "";
       } else {
         this.xmData = this.xmDetail;
+        
         if (this.xmData.gcfwzt == "0") {
           this.value = false;
-          this.fwqxShow = false;
         } else {
           this.value = true;
-          this.fwqxShow = true;
         }
+        // 过保显示
+        if(this.xmData.ztztmc == '已过保'){
+          this.fwqxShow = true;
+        }else{
+          this.fwqxShow = false;
+        }
+
         if(!!this.xmDetail.fwksrq){
            this.ycfwqx = GetMonthBefore(this.xmDetail.fwksrq,Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+1);
         }else{
            this.ycfwqx = GetMonthBefore(GetDateStr(0),Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+1);
         }
       }
+      console.log(this.xmData);
     }
   },
   components: {}

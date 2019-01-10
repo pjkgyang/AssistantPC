@@ -143,7 +143,7 @@ export default {
     this.baseUrl = window.baseurl;
     this.getMessages();
     EventBus.$on("changeNoticeNum", param => {
-      this.getMessages();
+      // this.getMessages();
     });
     EventBus.$on("readAllMessages", param => {
       this.noticNum = 0;
@@ -186,8 +186,7 @@ export default {
   watch: {
     $route(from, to) {
       //切换header title
-      this.getMessages();
-
+      // this.getMessages();
       this.navActive = window.location.hash.split("#")[1];
       if (window.location.hash.includes("/businesspage/report")) {
         this.title = "/businesspage/report";

@@ -96,7 +96,7 @@ export default {
             wid:wid
         }).then(({data})=>{
             if(data.state == 'success'){
-                EventBus.$emit('changeNoticeNum','');
+                // EventBus.$emit('changeNoticeNum','');
                 if(data.data != null){
                     this.noticeDeatil = data.data
                 }else{
@@ -114,7 +114,6 @@ export default {
         this.isread = ''
       }
       this.getMessage(1,true);
-
     }, 
     handleNext(){       //上一页
         this.curPage += 1
