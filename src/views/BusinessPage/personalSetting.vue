@@ -62,6 +62,12 @@ import layout from "@/components/layout/navitem.vue";
           icon:'el-icon-erp-baobiaoguanli',
           childNodes: [],
         },
+        {
+          privname: "任职等级",
+          url:'/businesspage/personalSetting/grrzdj',
+          icon:'el-icon-erp-baobiaoguanli',
+          childNodes: [],
+        },
       ],
       navContent:'个人信息',
       tagGroup:''

@@ -39,7 +39,7 @@
                 </span>
               </div>
               <div v-if="file.sfwjml == 0">
-                <a :href="baseUrl+'attachment/downloadTemplateFile.do?path='+file.fjbh+'&lx='+resourceType" target="blank">
+                <a href="javaScript:;;" @click.stop="handleDownload(file.fjbh)">
                   <span class="el-icon-document" style="font-size:32px;margin: 0 10px 0 0;"></span>
                   <span style="margin-top:10px">{{file.fjmc}}</span>
                 </a>
@@ -93,7 +93,6 @@ export default {
       fileBread: [],
       fjbh: "",
       fjobj: {},
-      baseUrl: null,
       catalogue: "file",
       fileIndex:null,
       appraiseType: "", //评价类型
@@ -122,11 +121,15 @@ export default {
     }
   },
   mounted() {
-    this.baseUrl = window.baseurl;
     this.openFolder();
     this.userTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag
   },
   methods: {
+    handleDownload(fjbh){
+      let str = fjbh.replace(/&/g,encodeURIComponent('&'));
+      let newstr = str.replace(/\+/g,encodeURIComponent('+'));
+      window.open(window.baseurl+"attachment/downloadTemplateFile.do?path="+newstr+'&lx=' + this.resourceType)
+    },
     // 上传成功
     handleCommitUpload(){
        this.openFolder(this.oldFjpath); 

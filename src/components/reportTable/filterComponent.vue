@@ -129,12 +129,17 @@
           </el-checkbox-group>
         <!-- </p> -->
       </div>
-
        <div v-if="filterList.includes('fbxz')">
         <p class="query-title">分包性质:</p>
         <p class="query-list" @click="handleFBXZ">
           <span data-type="" :class="{'bg-active':filterWord.fbxz == ''}">全部</span>
           <span v-for="(fbxzx,index) in fbxzList" :data-type="fbxzx.label" :class="{'bg-active':filterWord.fbxz == fbxzx.label}">{{fbxzx.mc}}</span>
+        </p>
+      </div>
+      <div v-if="filterList.includes('rzdj')">
+        <p class="query-title">任职等级:</p>
+        <p class="query-list" @click="handleRZDJ">
+          <span v-for="(rzdj,index) in rzdjList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzdj == rzdj.label}">{{rzdj.mc}}</span>
         </p>
       </div>
     </div>
@@ -172,6 +177,13 @@ export default {
         { label: '1', mc: "待发布" },
         { label: '2', mc: "已发布" }
       ],
+      rzdjList: [
+        { label: '', mc: "全部" },
+        { label: '1', mc: "资格" },
+        { label: '2', mc: "初级" },
+        { label: '3', mc: "中级" },
+        { label: '4', mc: "高级" }
+      ],
       rylxList:[],
       bmList: [],
       filterWord: {
@@ -195,7 +207,8 @@ export default {
         endMonth:"",
         rylx:[],
         zdsfwzt:'',
-        fbxz:''
+        fbxz:'',
+        rzdj:''
       }
     };
   },
@@ -333,6 +346,12 @@ export default {
       let fbxz = e.target.getAttribute("data-type");
       if (fbxz == null) return;
       this.filterWord.fbxz = fbxz;
+      this.$emit("handleChangeFilter", this.filterWord); 
+    },
+    handleRZDJ(e){
+      let rzdj = e.target.getAttribute("data-type");
+      if (rzdj == null) return;
+      this.filterWord.rzdj = rzdj;
       this.$emit("handleChangeFilter", this.filterWord); 
     }
 

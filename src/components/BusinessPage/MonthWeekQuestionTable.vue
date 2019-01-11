@@ -30,6 +30,7 @@
     <el-table-column prop="hxcs" label="后续措施" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>   
     <el-table-column prop="yhmc" label="创建人" width="100" show-overflow-tooltip></el-table-column> 
     <el-table-column prop="cjsj" label="创建时间" width="155" ></el-table-column>
+    <el-table-column prop="zhxgsj" label="操作时间" width="155" ></el-table-column>
     <el-table-column  label="添加阶段" width="120" v-if="tjjd">
         <template slot-scope="scope">
           <el-tag size="mini" :type="!scope.row.tjjd?'danger':''">

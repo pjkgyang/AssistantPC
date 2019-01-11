@@ -121,7 +121,7 @@ export default {
     tableData(n, o) {
       let data = n.body;
       if (!!data.rows) {
-        this.bodyData = data.rows;
+        this.bodyData = !data.rows?[]:data.rows;
         this.total = data.records;
       } else {
         this.bodyData = data;

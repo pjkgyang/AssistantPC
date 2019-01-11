@@ -287,6 +287,11 @@ function getAbsolutePath () {
                 name: 'BusinessReportUserlogin',
                 component: resolve => require(['@/views/BusinessPage/report/useReport/userlogin.vue'], resolve),
               },
+              {
+                path: '/businesspage/report/khbb/grrzdj',
+                name: 'BusinessReportGrrzdj',
+                component: resolve => require(['@/views/BusinessPage/report/khbb/grrzdj.vue'], resolve),
+              },
            ]
         },
         {
@@ -420,6 +425,11 @@ function getAbsolutePath () {
               path: '/businesspage/personalSetting/xmjs',
               name: 'personalSetting-xmjs',
               component: resolve => require(['@/views/BusinessPage/personalSetting/item-js.vue'], resolve),
+            },
+            {
+              path: '/businesspage/personalSetting/grrzdj',
+              name: 'personalSetting-grrzdj',
+              component: resolve => require(['@/views/BusinessPage/personalSetting/grrzdj.vue'], resolve),
             },
           ]
         },

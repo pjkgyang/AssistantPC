@@ -177,7 +177,8 @@ export default {
     //  问题限制产品
     questionLimitProduct:window.baseurl+'question/questionLimitProduct.do',
 
-
-    
+    // 个人任职等级
+    listPersonalPositionLevel:window.baseurl+'personnel/listPersonalPositionLevel.do',//个人任职等级列表
+    pagePositionLevel:window.baseurl+'personnel/pagePositionLevel.do',//任职等级分页列表
    
 }

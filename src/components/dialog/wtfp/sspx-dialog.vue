@@ -7,16 +7,18 @@
             <el-input :disabled="true" v-model="form.cpmc" placeholder="" style="width:550px"></el-input>
           </el-form-item><br>
           <el-form-item label="培训主题" required>
-            <el-input :disabled="true" v-model="form.pxzt" placeholder="" style="width:550px"></el-input>
+            <el-input  v-model="form.pxzt" placeholder="" style="width:550px"></el-input>
           </el-form-item><br>
           <el-form-item label="培训形式" required>
-            <el-input :disabled="true" v-model="form.pxxs" placeholder="" style="width:550px"></el-input>
+            <el-select v-model="form.pxxs" placeholder="请选择" style="width:550px">
+                <el-option v-for="item in pxxsList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </el-form-item><br>
           <el-form-item label="计划培训日期" required>
-            <el-input :disabled="true" v-model="form.jhpxsj" placeholder="" style="width:213px"></el-input>
+            <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.jhpxsj" style="width:210px"></el-date-picker>
           </el-form-item>
           <el-form-item label="分享人" required>
-            <el-input :disabled="true" v-model="form.fxrxm" placeholder="" style="width:213px"></el-input>
+            <el-input  v-model="form.fxrxm" placeholder="" style="width:213px" @focus="handleChooseZrr"></el-input>
           </el-form-item><br>
           <el-form-item label="实际完成时间" required>
             <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.sjwcsj" style="width:550px"></el-date-picker>
@@ -76,6 +78,8 @@
         </el-form>
       </div>
     </el-dialog>
+
+    <zrrDialog :show.sync="zrrShow" @handleAddZrr="handleAddZrr"></zrrDialog>
     <cjryDialog :show.sync="tjryDialog" :wid="itemData.wid" @handleUploadSuccess="handleUploadSuccess"></cjryDialog>
   </div>
 </template>
@@ -83,12 +87,13 @@
 <script>
 import axios from "axios";
 import Qs from "qs";
-
+import zrrDialog from "@/components/dialog/wtfp/zrr-dialog.vue";
 import cjryDialog from "@/components/dialog/wtfp/cjry-dialog.vue";
 export default {
   data() {
     return {
       visible: this.show,
+      zrrShow:false,
       form: {
         cpmc: "",
         pxzt: "",
@@ -96,11 +101,26 @@ export default {
         jhpxsj: "",
         sjwcsj: "",
         fxrxm: "",
+        fxrbh:"",
         pxsp: "",
         fileList: "",
         pxsc:"",
         ry: ""
       },
+      pxxsList: [
+        {
+          value: "1",
+          label: "线上直播"
+        },
+        {
+          value: "2",
+          label: "线下培训"
+        },
+        {
+          value: "3",
+          label: "线上加线下"
+        },
+      ],
       upload_url: "123",
       uploadForm: new FormData(),
       files: [],
@@ -110,6 +130,14 @@ export default {
     };
   },
   methods: {
+    handleChooseZrr(){
+      this.zrrShow = !this.zrrShow
+    },
+    handleAddZrr(data){
+      this.form.fxrbh = data.userid;
+      this.form.fxrxm = data.username;
+      this.zrrShow = !this.zrrShow;
+    },
     // 人员列表
     handleUploadSuccess(data) {
       this.tableData = data.data;
@@ -165,6 +193,34 @@ export default {
     },
 
     validate() {
+      if (!this.form.pxzt) {
+        this.$alert("请选择培训主题", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
+      if (!this.form.pxxs) {
+        this.$alert("请选择培训形式", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
+      if (!this.form.jhpxsj) {
+        this.$alert("请选择计划培训时间", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
+      if (!this.form.fxrbh) {
+        this.$alert("请选择分享人编号", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
       if (!this.form.sjwcsj) {
         this.$alert("请选择计划完成日期", "提示", {
           confirmButtonText: "确定",
@@ -172,13 +228,6 @@ export default {
         });
         return false;
       }
-      // if (!this.form.ry) {
-      //   this.$alert("请填写参加人员", "提示", {
-      //     confirmButtonText: "确定",
-      //     type: "warning"
-      //   });
-      //   return false;
-      // }
       if (!/^\d+(\.\d+)?$/.test(this.form.pxsc)) {
         this.$alert("请输入正确培训时长", "提示", {
           confirmButtonText: "确定",
@@ -213,14 +262,10 @@ export default {
         this.form.pxsc = '';
         this.uploadForm = new FormData();
 
-
       } else {
         this.form.cpmc = this.itemData.cpmc;
         this.form.pxzt = this.itemData.pxzt;
-        this.form.pxxs =
-          this.itemData.pxxs == 1
-            ? "线上直播"
-            : this.itemData.pxxs == 2 ? "线下培训" : "线上加线下";
+        this.form.pxxs = this.itemData.pxxs == 1? "线上直播": this.itemData.pxxs == 2 ? "线下培训" : "线上加线下";
         this.form.jhpxsj = this.itemData.jhpxsj;
         this.form.fxrxm = this.itemData.fxrxm;
 
@@ -230,7 +275,7 @@ export default {
       }
     }
   },
-  components: { cjryDialog }
+  components: { cjryDialog,zrrDialog }
 };
 </script>
 

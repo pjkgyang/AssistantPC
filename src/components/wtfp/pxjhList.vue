@@ -147,6 +147,11 @@ export default {
     handleCommitSave(data) {
           this.$post(this.API.abilityTraining, {
             wid: this.itemData.wid,
+            pxzt:data.pxzt,
+            pxxs:data.pxxs,
+            jhpxsj:data.jhpxsj,
+            fxrxm:data.fxrxm,
+            fxrbh:data.fxrbh,
             sjwcsj: data.sjwcsj,
             pxsp: data.pxsp,
             fjData: data.fileList,
