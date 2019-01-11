@@ -25,7 +25,7 @@
       <el-table-column prop="hxcs" label="后续措施" min-width="200" v-if="wordShow" show-overflow-tooltip></el-table-column>
       <el-table-column prop="cjrxm" label="创建人" width="100"></el-table-column>
       <el-table-column prop="cjsj" label="创建时间" width="155"></el-table-column>
-      <el-table-column prop="zhxgsj" label="操作时间" width="155" ></el-table-column>
+      <el-table-column prop="xgsj" label="修改时间" width="155" ></el-table-column>
       <el-table-column  label="添加阶段" width="120" v-if="isPz">
         <template slot-scope="scope">
           <el-tag size="mini" :type="!scope.row.tjjd?'danger':''">

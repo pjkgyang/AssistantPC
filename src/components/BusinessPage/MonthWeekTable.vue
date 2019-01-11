@@ -31,7 +31,7 @@
       <el-table-column prop="yhmc" label="创建人" width="100" ></el-table-column>
       <el-table-column prop="cjsj" label="创建时间" width="155" ></el-table-column>
       <!-- 2019.1.11 xiugai -->
-      <el-table-column prop="zhxgsj" label="操作时间" width="155" ></el-table-column> 
+      <el-table-column prop="zhxgsj" label="最后修改时间" width="155" ></el-table-column> 
       <el-table-column prop="xmjlxm" label="项目经理" width="100"></el-table-column>
       <el-table-column prop="zddzxm" label="战队队长" width="100"></el-table-column>
       <el-table-column prop="zrrxm" label="责任人" width="100" ></el-table-column>

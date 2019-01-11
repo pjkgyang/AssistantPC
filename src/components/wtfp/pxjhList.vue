@@ -32,8 +32,8 @@
                   <span>{{scope.row.pxxs==1?'线上直播':scope.row.pxxs==2?'线下培训':'线上加线下'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="jhpxsj" label="计划培训日期" width="110"></el-table-column>
-              <el-table-column prop="sjpxsj" label="实际培训日期" width="110"></el-table-column>
+              <el-table-column prop="jhpxsj" label="计划培训日期" width="130" sortable></el-table-column>
+              <el-table-column prop="sjpxsj" label="实际培训日期" width="130" sortable></el-table-column>
               <el-table-column prop="fxrxm" label="分享人" width="110"></el-table-column>
                <el-table-column  label="推荐参与人数" width="110">
                 <template slot-scope="scope">
@@ -45,7 +45,7 @@
                   <a href="javaScript:;;" @click="handleCehckCyrs(scope.row,'1')">{{scope.row.cyrs}}</a>
                </template>
               </el-table-column>
-              <el-table-column prop="cjsj" label="创建日期" width="160"></el-table-column>
+              <el-table-column prop="cjsj" label="创建日期" width="160" sortable></el-table-column>
               <el-table-column prop="cjrxm" label="创建人" width="110"></el-table-column>
               <el-table-column label="纳入计划问题数" width="130">
                 <template slot-scope="scope">

@@ -56,7 +56,7 @@
                 <span v-if="file.sfwjml == '0'" @click="handlePraise($event,'1',file.fjbh)"><span class="appraise-hp"></span> ({{file.good}})</span>&nbsp;
                 <span v-if="file.sfwjml == '0'" @click="handlePraise($event,'0',file.fjbh)"><span class="appraise-cp"></span> ({{file.bad}})</span>&#x3000;
                 <a v-if="file.sfwjml == '0'" href="javaScript:;;" @click="handlePraise($event,'2',file.fjbh)">查看记录</a>&#x3000;
-                <a  href="javaScript:;;" style="color:#f00" @click.stop="handleDelete(file.fjbh,index,file.sfwjml)">删除</a>
+                <a v-if="userTag.includes('NLPXZJ')" href="javaScript:;;" style="color:#f00" @click.stop="handleDelete(file.fjbh,index,file.sfwjml)">删除</a>
                 <!-- v-if="userTag.includes('NLPXZJ')" -->
               </div>
             </div>

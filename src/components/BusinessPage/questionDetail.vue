@@ -1203,7 +1203,7 @@ export default {
           } else {
             this.$alert(
               "不可重复申请关闭，可驳回已有的再重新申请!",
-              "标题名称",
+              "提示",
               { confirmButtonText: "确定", type: "warning" }
             );
           }

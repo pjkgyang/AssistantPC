@@ -303,8 +303,8 @@ export default {
       this.index = index;
       this.gxrShow = !this.gxrShow;
     },
+    //关闭问题成功
     closeQuestion() {
-      //关闭问题成功
       this.gxrShow = !this.gxrShow;
       this.questionList[this.index].fbzt = 1;
       this.questionList[this.index].sqgbCount = 0;

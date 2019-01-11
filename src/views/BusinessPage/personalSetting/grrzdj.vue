@@ -26,17 +26,11 @@
  export default {
    data () {
      return {
-         grrzdjList:[{
-             gh:123121,
-             xm:'姓名',
-             cpx:"cpx654564654",
-             rzdj:1,
-             rzrq:"2108-08-08"
-         }]
+         grrzdjList:[]
      }
    },
    mounted(){
-    //  this.getPersonalPositionLevel();  
+     this.getPersonalPositionLevel();  
    },
    methods:{
       // 获取个人任职等级

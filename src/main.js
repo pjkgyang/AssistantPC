@@ -12,7 +12,7 @@ import $ from 'jquery'
 import './utils/http.js'
 import global from './utils/global.js'
 Vue.prototype.globals = global
-import './utils/icon/iconfont.css'
+import './utils/icon/iconfont.css';
 import { get , post} from './utils/http'
 import API from './utils/api'
 import Util from './utils/title';

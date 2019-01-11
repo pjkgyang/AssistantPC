@@ -10,7 +10,7 @@
         <el-table :data="dataList" style="width: 100%" border :max-height="tableHeight">
           <el-table-column prop="gh" label="工号" ></el-table-column>
           <el-table-column prop="xm" label="姓名" ></el-table-column>
-          <el-table-column prop="cpx" label="产品线"></el-table-column>
+          <el-table-column prop="cpx" label="产品"></el-table-column>
           <el-table-column prop="rzdj" label="任职等级"></el-table-column>
           <el-table-column prop="rzrq" label="任职日期"></el-table-column>
         </el-table> 

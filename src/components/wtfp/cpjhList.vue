@@ -22,7 +22,7 @@
                             <el-table-column prop="wtfx" label="问题分析" min-width="200" show-overflow-tooltip></el-table-column>
                             <el-table-column prop="xybjh" label="下一步计划" min-width="200" show-overflow-tooltip></el-table-column>
                             <el-table-column prop="fbsm" label="发布说明" min-width="200" show-overflow-tooltip></el-table-column>
-                            <el-table-column prop="jhwcsj" label="计划完成日期" width="110"></el-table-column>
+                            <el-table-column prop="jhwcsj" label="计划完成日期" width="130" sortable></el-table-column>
                             <el-table-column  label="计划状态" width="110">
                               <template slot-scope="scope">
                                 <el-tag size="mini" :type="scope.row.zt == 1?'danger':'success'">{{scope.row.zt == 1?'未完成':'已完成'}}</el-tag>
@@ -30,8 +30,8 @@
                             </el-table-column>
                             <el-table-column prop="zrrxm" label="责任人" width="110"></el-table-column>
                             <el-table-column prop="jjbbh" label="解决版本号" width="110"></el-table-column>
-                            <el-table-column prop="fbsj" label="发版日期" width="150"></el-table-column>
-                            <el-table-column prop="cjsj" label="创建日期" width="155"></el-table-column>
+                            <el-table-column prop="fbsj" label="发版日期" width="150" sortable></el-table-column>
+                            <el-table-column prop="cjsj" label="创建日期" width="155" sortable></el-table-column>
                             <el-table-column prop="cjrxm" label="创建人" width="110"></el-table-column>
                             <el-table-column  label="纳入计划问题数" width="130">
                               <template slot-scope="scope">

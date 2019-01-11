@@ -86,6 +86,7 @@ export default {
         }
       });
     },
+    
     commitQuestion() {
       //关闭问题（提交）
       let gxrArr = [];

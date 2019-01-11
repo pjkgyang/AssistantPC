@@ -179,7 +179,7 @@ export default {
       ],
       rzdjList: [
         { label: '', mc: "全部" },
-        { label: '1', mc: "资格" },
+        { label: '1', mc: "入门级" },
         { label: '2', mc: "初级" },
         { label: '3', mc: "中级" },
         { label: '4', mc: "高级" }
