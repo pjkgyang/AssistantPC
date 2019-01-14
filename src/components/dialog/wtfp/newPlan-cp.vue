@@ -24,6 +24,9 @@
                     <el-form-item label="责任人" required>
                         <el-input v-model="form.zrrxm" placeholder="请选择责任人" style="width:213px" @focus="handleChooseZrr"></el-input>
                     </el-form-item><br>
+                    <el-form-item label="关联JIRA">
+                        <el-input type="textarea" v-model="form.jira" placeholder="请输入" style="width:550px"></el-input>
+                    </el-form-item><br>
                     <el-form-item style="float:right">
                         <div>
                             <el-button type="primary" @click="handleCommit">保存</el-button>
@@ -72,7 +75,8 @@ export default {
             xybjh:this.form.xybjh,
             jhwcsj:this.form.jhwcsj,
             zrrbh:this.form.zrrbh,
-            zrrxm:this.form.zrrxm
+            zrrxm:this.form.zrrxm,
+            jira:this.form.jira,
         }).then(res=>{
             if(res.state == 'success'){
                 this.visible = false;

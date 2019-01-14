@@ -339,9 +339,9 @@ export default {
         })
         .catch(() => {});
     },
-
+    
+    //提交问题
     handleCommit() {
-      //提交问题
       this.question.nr = $("#summernote").summernote("code");
       if (this.showCondition == 1 || this.showCondition == 2) {
         if (this.xmmc == "") {

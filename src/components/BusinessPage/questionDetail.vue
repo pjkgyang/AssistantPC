@@ -1074,8 +1074,8 @@ export default {
           });
           return;
         }
+        //修改承诺结束时间
         changeCommitmentDate({
-          //修改承诺结束时间
           wid: this.wid,
           cnjsrq: this.xgcnjsrq,
           sm: this.cnjssm

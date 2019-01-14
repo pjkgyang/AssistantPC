@@ -20,6 +20,7 @@ export default {
     pageEktbDetail:window.baseurl+'report/pageEktbDetail.do', //二开提报明细分页列表
     pageBxDetail:window.baseurl+'report/pageBxDetail.do',//报销明细分页列表
     
+    
     // 使用报表
     problemsameIPStat:window.baseurl+'usageReport/problemsameIPStat.do',//提问受理IP相同统计报表
     userLoginStat:window.baseurl+'usageReport/userLoginStat.do',//用户登录统计报表
@@ -180,5 +181,8 @@ export default {
     // 个人任职等级
     listPersonalPositionLevel:window.baseurl+'personnel/listPersonalPositionLevel.do',//个人任职等级列表
     pagePositionLevel:window.baseurl+'personnel/pagePositionLevel.do',//任职等级分页列表
+    
+    // 周报返回创建时间以及总结时间
+    mapWeekReportDate:window.baseurl+'plan/mapWeekReportDate.do',//周报返回创建时间以及总结时间
    
 }

@@ -49,7 +49,11 @@
       </header>    
         <article slot="content">
             <div>
-                <h4 class="filter-weight">{{textTitle}}</h4>
+              <div flex> 
+                <h4 class="filter-weight">{{textTitle}}</h4>&#x3000;
+                <span v-if="textTitle == '本周工作计划'">创建时间：{{maxminDate.mincjsj}}</span>
+                <span v-if="textTitle == '本周工作总结'">总结时间：{{maxminDate.maxzjsj}}</span>
+              </div>
                 <hr class="weekly-hr">
             </div>
                <tableLayout :title="'里程碑工作'">
@@ -201,7 +205,9 @@ export default {
       dateObj:{},
       shownn:true,
       lastMonth:'',
-      isZd:true
+      isZd:true,
+
+      maxminDate:{} //周报返回创建时间以及总结时间
     };
   },
   props: {},
@@ -260,6 +266,7 @@ export default {
           this.currentProcessPage = 1;
           this.currentQuestionPage = 1;
       },
+     // 选择月
      handleChooseMonth(val){
       let chooseDate = this.NewYear+'-'+((this.NewMonth+1) < 10?'0'+(this.NewMonth+1):(this.NewMonth+1));
       if(new Date(this.monthValue).getTime() >= new Date(chooseDate).getTime()){
@@ -289,7 +296,9 @@ export default {
       this.dateObj.weeksNum = this.weeksNum
       this.listWeekPlanPerson();
       this.isWeekPlanBlocked(this.monthValue,this.weekValue);
+      this.mapWeekReportDate();
     },
+    // 选择周
     handleChooseWeek(val){
       let chooseDate = this.NewYear+'-'+((this.NewMonth+1) < 10?'0'+(this.NewMonth+1):(this.NewMonth+1));
       this.weekDay  = this.getWeekDate(this.year,this.monthValue.split('-')[1]-1,val);
@@ -321,13 +330,16 @@ export default {
               this.othShow = true
           }
       }
+      this.mapWeekReportDate();
     },
     handleChooseArea(val){                              // 选择区域
       // this.getWeekReportData(1);
       this.listWeekPlanPerson();
+      this.mapWeekReportDate();
     },
     handleChoosePreson(val){                            // 选择人员
       this.getWeekReportData(1);
+      this.mapWeekReportDate();
     },
     handleLcbCurrentChange(data) {                      // (里程碑) 分页
         this.pageWeekWork(data,this.monthValue,this.weekValue);
@@ -586,6 +598,7 @@ export default {
             this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);  
        } 
         // this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1); 
+       this.mapWeekReportDate();
     },
     getListComments(oid){  // 获取批注列表
           listComments({
@@ -780,6 +793,22 @@ export default {
                 type: 'warning',
                 message: content
             });
+        },
+
+        // 获取周报返回创建时间以及总结时间
+        mapWeekReportDate(){
+          this.$get(this.API.mapWeekReportDate,{
+            yf:this.monthValue,
+            zxh:this.weekValue,
+            yhbh:this.ryValue,
+            qygc:this.qyValue
+          }).then(res=>{
+            if(!res.data){
+                this.maxminDate = {}
+            }else{
+               this.maxminDate = res.data
+            }
+          })
         }
   },
   components: {

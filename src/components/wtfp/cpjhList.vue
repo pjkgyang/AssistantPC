@@ -20,6 +20,7 @@
                             </el-table-column>
                             <el-table-column prop="cpmc" label="产品" min-width="180"></el-table-column>
                             <el-table-column prop="wtfx" label="问题分析" min-width="200" show-overflow-tooltip></el-table-column>
+                            <el-table-column prop="jira" label="关联JIRA" min-width="150" show-overflow-tooltip></el-table-column>
                             <el-table-column prop="xybjh" label="下一步计划" min-width="200" show-overflow-tooltip></el-table-column>
                             <el-table-column prop="fbsm" label="发布说明" min-width="200" show-overflow-tooltip></el-table-column>
                             <el-table-column prop="jhwcsj" label="计划完成日期" width="130" sortable></el-table-column>
