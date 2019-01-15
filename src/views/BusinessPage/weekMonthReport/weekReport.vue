@@ -51,8 +51,8 @@
             <div>
               <div flex> 
                 <h4 class="filter-weight">{{textTitle}}</h4>&#x3000;
-                <span v-if="textTitle == '本周工作计划'">创建时间：{{maxminDate.mincjsj}}</span>
-                <span v-if="textTitle == '本周工作总结'">总结时间：{{maxminDate.maxzjsj}}</span>
+                <span v-if="textTitle == '本周工作计划'">创建时间：{{!maxminDate.mincjsj?'无':maxminDate.mincjsj}}</span>
+                <span v-if="textTitle == '本周工作总结'">总结时间：{{!maxminDate.maxzjsj?'无':maxminDate.maxzjsj}}</span>
               </div>
                 <hr class="weekly-hr">
             </div>
