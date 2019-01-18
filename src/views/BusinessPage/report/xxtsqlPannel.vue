@@ -1,207 +1,205 @@
 <template>
- <div class="xxts-pannel">
-     <section flex spacearound>
-            <h4>学校名称：<span class="fontRed">{{detailData.dw}}</span></h4>
-            <h4>问题总数：<a href="javaScript:;;" class="fontRed" @click="handleCheckDetail('wtzs',detailData.wtzs)">{{detailData.wtzs}}</a></h4>
-            <h4>消耗工时总计：<span class="fontRed">{{detailData.hjgs}}</span></h4>
-     </section><br>
-     <tableLayout>
-         <section slot="top">
-              <div flex>
-                  <h5>改进学校环境问题总数/占比: <span class="fontRed">{{detailData.w02}}/{{detailData.w02zb}}</span></h5>&#x3000;&#x3000;
-                  <h5>改进学校环境问题处理工时: <span class="fontRed">{{detailData.w02gs}}</span></h5>
-              </div>
-         </section>
-         <section slot="bottom">
-             <table border width="100%" class="table">
-                 <tr>
-                    <th>改进学校服务器环境</th>
-                    <th>改进学校数据库环境</th>
-                    <th>改进学校网络环境</th>
-                    <th>改进学校中间件环境</th>
-                 </tr>
-                 <tr>
-                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','50')">{{detailData.bq50}}</a></td>
-                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','51')">{{detailData.bq51}}</a></td>
-                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','52')">{{detailData.bq52}}</a></td>
-                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','53')">{{detailData.bq53}}</a></td>
-                 </tr>
-             </table>
-         </section>
-     </tableLayout>
-     <tableLayout>
-         <section slot="top">
-              <div flex>
-                  <h5>加强学校培训问题总数/占比: <span class="fontRed">{{detailData.w04}}/{{detailData.w04zb}}</span></h5>&#x3000;&#x3000;
-                  <h5>加强学校培训问题处理工时: <span class="fontRed">{{detailData.w04gs}}</span></h5>
-              </div>
-         </section>
-         <section slot="bottom">
-             <table border width="100%" class="table">
-                 <tr>
-                    <th>帮用户导数据</th>
-                    <th>帮用户开权限</th>
-                    <th>加强用户培训</th>
-                 </tr>
-                 <tr>
-                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','61')">{{detailData.bq61}}</a></td>
-                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','62')">{{detailData.bq62}}</a></td>
-                     <td><a href="javaScript:;;" @click="handleCheckDetail('wtbq','63')">{{detailData.bq63}}</a></td>
-                 </tr>
-             </table>
-         </section>
-     </tableLayout>
-          <tableLayout>
-         <section slot="top">
-              <div flex>
-                  <h5>过保阶段问题数/占比: <span class="fontRed">{{detailData.gbxmwt}}/{{detailData.gbxmwtzb}}</span></h5>&#x3000;&#x3000;
-                  <h5>过保阶段问题处理工时: <span class="fontRed">{{detailData.gbxmwtgs}}</span></h5>
-              </div>
-         </section>
-         <section slot="bottom">
-            <el-table
-                :data="gbData"
-                border
-                style="width: 100%"
-                :max-height="500">
-                <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
-                <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="sxrq" label="合同签订年份" width="150"></el-table-column>
-                <el-table-column prop="ysrq" label="验收日期" width="120"></el-table-column>
-                <el-table-column prop="gbts" label="在保天数" width="100"></el-table-column>
-                <el-table-column label="问题数" width="100">
-                   <template slot-scope="scope">
-                      <a href="javaScript:;;" @click="handleCheckDetail('wtzs',scope.row.wtzs,scope.row,'gb')">{{scope.row.wtzs}}</a>
-                   </template>
-                </el-table-column>
-            </el-table>
-            <div text-right>
-                 <el-pagination
-                    @size-change="handleGbSizeChange"
-                    @current-change="handleGbCurrentChange"
-                    :current-page="gbPage"
-                    :page-sizes="[10, 20, 35, 50]"
-                    :page-size="gbPageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="gbTotal">
-                   </el-pagination>
-            </div>
-         </section>
-     </tableLayout>
-          <tableLayout>
-         <section slot="top">
-              <div flex>
-                  <h5>售后阶段问题数/占比: <span class="fontRed">{{detailData.shxmwt}}/{{detailData.shxmwtzb}}</span></h5>&#x3000;&#x3000;
-                  <h5>售后阶段问题处理工时: <span class="fontRed">{{detailData.shxmwtgs}}</span></h5>
-              </div>
-         </section>
-         <section slot="bottom">
-             <el-table
-                :data="shData"
-                border
-                style="width: 100%"
-                :max-height="500">
-                <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
-                <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="sxrq" label="合同签订年份" width="150"></el-table-column>
-                <el-table-column prop="ysrq" label="验收日期" width="120"></el-table-column>
-                <el-table-column prop="gbrq" label="过保日期" width="120"></el-table-column>
-                <el-table-column prop="zbts" label="在保天数" width="100"></el-table-column>
-                <el-table-column label="问题数" width="100">
-                    <template slot-scope="scope">
-                      <a href="javaScript:;;" @click="handleCheckDetail('wtzs',scope.row.wtzs,scope.row,'sh')">{{scope.row.wtzs}}</a>
-                   </template>
-                </el-table-column>
-            </el-table>
-            <div text-right>
-                 <el-pagination
-                    @size-change="handleShSizeChange"
-                    @current-change="handleShCurrentChange"
-                    :current-page="shPage"
-                    :page-sizes="[10, 20, 35, 50]"
-                    :page-size="shPageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="shTotal">
-                   </el-pagination>
-            </div>
-         </section>
-     </tableLayout>
-      <tableLayout>
-         <section slot="top">
-              <div flex>
-                  <h5>在建阶段问题数/占比: <span class="fontRed">{{detailData.zjxmwt}}/{{detailData.zjxmwtzb}}</span></h5>&#x3000;&#x3000;
-                  <h5>在建阶段问题处理工时: <span class="fontRed">{{detailData.zjxmwtgs}}</span></h5>
-              </div>
-         </section>
-         <section slot="bottom">
-            <el-table
-                :data="zjData"
-                border
-                style="width: 100%"
-                :max-height="500">
-                <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
-                <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="sxrq" label="合同签订年份" width="200"></el-table-column>
-                <el-table-column prop="ztztmc" label="当前状态" width="200"></el-table-column>
-                <el-table-column label="问题数" width="100">
-                    <template slot-scope="scope">
-                      <a href="javaScript:;;" @click="handleCheckDetail('wtzs',scope.row.wtzs,scope.row,'zj')">{{scope.row.wtzs}}</a>
-                   </template>
-                </el-table-column>
-            </el-table>
-            <div text-right>
-                 <el-pagination
-                    @size-change="handleZjSizeChange"
-                    @current-change="handleZjCurrentChange"
-                    :current-page="zjPage"
-                    :page-sizes="[10, 20, 35, 50]"
-                    :page-size="zjPageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="zjTotal">
-                   </el-pagination>
-            </div>
-         </section>
-      </tableLayout>
-      <tableLayout>
-         <section slot="top">
-              <div>
-                  <h5>延期任务数: <span class="fontRed">{{detailData.yqrws}}</span></h5>
-              </div>
-         </section>
-         <section slot="bottom">
-            <el-table
-                :data="yqData"
-                border
-                style="width: 100%"
-                :max-height="500">
-                <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
-                <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="sxrq" label="合同签订年份" width="200"></el-table-column>
-                <el-table-column prop="ztztmc" label="当前状态" width="200"></el-table-column>
-            </el-table>
-            <div text-right>
-                 <el-pagination
-                    @size-change="handleYqSizeChange"
-                    @current-change="handleYqCurrentChange"
-                    :current-page="yqPage"
-                    :page-sizes="[10, 20, 35, 50]"
-                    :page-size="yqPageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="yqTotal">
-                   </el-pagination>
-            </div>
-         </section>
-     </tableLayout>
- </div>
+  <div class="xxts-pannel">
+    <h4>{{dwmc}}</h4>
+    <section class="xxts-pannel_sort">
+      <h5>统计情况</h5>
+      <div flex spacearound class="mg-12">
+        <section v-for="item in sortList" center :class="{'sort_circle':true,'circle_xms':item.mc=='项目数','circle_wts':item.mc=='问题数','circle_zgs':item.mc=='总工时','circle_yqs':item.mc=='延期任务'}">
+          <p>
+            <span>{{item.value}}
+              <span class="units">{{item.mc=='总工时'?'(小时)':'(个)'}}</span>
+            </span><br>
+            <span>{{item.mc}}</span>
+          </p>
+        </section>
+      </div>
+    </section>
+    <section class="xxts-pannel_wtfbqk">
+      <h5>问题分布情况</h5>
+      <div flex spacearound class="pannel_wtfbqk-type">
+        <barChart></barChart>
+        <circleChart></circleChart>
+      </div>
+
+      <div flex spacearound class="pannel_wtfbqk-type" >  
+        <section class="wtfbqk-detail" flex-column>
+          <p col="1">
+            <span class="font17">改进学校环境</span>&#x3000;&#x3000;
+            <span>问题个数/占比：
+              <span class="fontRed">11/50%</span>
+            </span> &#x3000;&#x3000;工时：
+            <span class="fontRed">11</span>(小时)</p>
+          <div col="5" flex-column spacearound>
+            <p>
+              <span>改进学校服务器环境</span>
+              <span>
+                <span class="fontRed">10</span> 个
+              </span>
+            </p>
+            <p>
+              <span>改进学校数据库环境</span>
+              <span>
+                 <span class="fontRed">10</span> 个
+               </span>
+              </p>
+            <p>
+              <span>改进学校网络环境</span>
+              <span>
+                 <span class="fontRed">10</span> 个
+              </span>
+              </p>
+            <p>
+              <span>改进学校中间件环境</span>
+              <span>
+                <span class="fontRed">10</span> 个
+              </span>
+              </p>
+          </div>
+        </section>
+        <section class="wtfbqk-pie">
+          <pieChart :pieData="gjhjData" :pieIndex="0"></pieChart>
+        </section>
+      </div>
+
+      <div flex spacearound class="pannel_wtfbqk-type" >  
+        <section class="wtfbqk-detail" flex-column>
+          <p col="1">
+            <span class="font17">加强学校培训</span>&#x3000;&#x3000;
+            <span>问题个数/占比：
+              <span class="fontRed">11/50%</span>
+            </span> &#x3000;&#x3000;工时：
+            <span class="fontRed">11</span>(小时)</p>
+          <div col="5" flex-column spacearound>
+            <p>
+              <span>改进学校服务器环境</span>
+              <span>
+                <span class="fontRed">10</span> 个
+              </span>
+            </p>
+            <p>
+              <span>改进学校数据库环境</span>
+              <span>
+                 <span class="fontRed">10</span> 个
+               </span>
+              </p>
+            <p>
+              <span>改进学校网络环境</span>
+              <span>
+                 <span class="fontRed">10</span> 个
+              </span>
+              </p>
+            <p>
+              <span>改进学校中间件环境</span>
+              <span>
+                <span class="fontRed">10</span> 个
+              </span>
+              </p>
+          </div>
+        </section>
+        <section class="wtfbqk-pie">
+          <pieChart :pieData="gjhjData" :pieIndex="1"></pieChart>
+        </section>
+      </div>
+
+      <div flex spacearound class="pannel_wtfbqk-type" >  
+        <section class="wtfbqk-detail" flex-column>
+          <p col="1">
+            <span class="font17">纳入产品改进</span>&#x3000;&#x3000;
+            <span>问题个数/占比：
+              <span class="fontRed">11/50%</span>
+            </span> &#x3000;&#x3000;工时：
+            <span class="fontRed">11</span>(小时)</p>
+          <div col="5" flex-column spacearound>
+             <p>
+              <span>改进学校服务器环境</span>
+              <span>
+                <span class="fontRed">10</span> 个
+              </span>
+            </p>
+            <p>
+              <span>改进学校数据库环境</span>
+              <span>
+                 <span class="fontRed">10</span> 个
+               </span>
+              </p>
+            <p>
+              <span>改进学校网络环境</span>
+              <span>
+                 <span class="fontRed">10</span> 个
+              </span>
+              </p>
+            <p>
+              <span>改进学校中间件环境</span>
+              <span>
+                <span class="fontRed">10</span> 个
+              </span>
+              </p>
+          </div>
+        </section>
+        <section class="wtfbqk-pie">
+          <pieChart :pieData="gjhjData" :pieIndex="2"></pieChart>
+        </section>
+      </div>
+
+      <div flex spacearound class="pannel_wtfbqk-type" >  
+        <section class="wtfbqk-detail" flex-column>
+          <p col="1">
+            <span class="font17">项目分类统计</span>&#x3000;&#x3000;
+           </p>
+          <div col="5" flex-column spacearound>
+            <p>
+              <span>在建阶段</span>
+              <span>
+                个数 / 占比：<span class="fontRed">{{detailData.zjxmwt}} / {{detailData.zjxmwtzb}}</span>&#x3000;<span class="fontRed">{{detailData.zjxmwtgs}}</span> 小时
+                 </span>
+              </p>
+            <p>
+              <span>售后阶段</span>
+              <span>
+                 个数 / 占比：<span class="fontRed">{{detailData.shxmwt}} / {{detailData.shxmwtzb}}</span>个 &#x3000;<span class="fontRed">{{detailData.shxmwtgs}}</span> 小时
+             </span>
+            </p>
+             
+            <p>
+              <span>过保阶段</span>
+              <span>
+                 个数 / 占比：<span class="fontRed">{{detailData.gbxmwt}} / {{detailData.gbxmwtzb}}</span>个 &#x3000;<span class="fontRed">{{detailData.gbxmwtgs}}</span> 小时
+              </span>
+            </p>
+          </div>
+        </section>
+        <section class="wtfbqk-pie">
+          <pieChart :pieData="gjhjData" :pieIndex="3"></pieChart>
+        </section>
+      </div>
+
+
+    </section>
+  </div>
 </template>
 
 <script>
-import tableLayout from "@/components/layout/tableLayout.vue";
+import circleChart from "@/components/chart/circleChart.vue";
+import barChart from "@/components/chart/barChart.vue";
+import pieChart from "@/components/chart/pieChart.vue";
+
 export default {
   data() {
     return {
       dwmc: "",
       detailData: {},
+      sortList: [
+        { mc: "项目数", value: 10 },
+        { mc: "问题数", value: 10 },
+        { mc: "总工时", value: 10 },
+        { mc: "延期任务", value: 10 }
+      ],
+      gjhjData: [
+        { value: 100, name: "服务器环境" },
+        { value: 200, name: "数据库环境" },
+        { value: 300, name: "网络环境" },
+        { value: 400, name: "中间件环境" }
+      ], //改进学校环境饼图数据
       gbData: [],
       gbPage: 1,
       gbPageSize: 10,
@@ -224,17 +222,17 @@ export default {
     };
   },
   methods: {
-    handleCheckDetail(key,value,params,type) {
-        let obj = {};
-        obj['dwmc'] = this.detailData.dw;
-        if(!!params){
-          obj['xmbh'] = params.xmbh;
-          obj['wtxmlx'] = type=='gb'?3:type=='sh'?2:1
-        }
-        obj[key] = value;
-       let { href } = this.$router.resolve({
-        path:"/report-list/questionlist.html",
-        query:obj
+    handleCheckDetail(key, value, params, type) {
+      let obj = {};
+      obj["dwmc"] = this.detailData.dw;
+      if (!!params) {
+        obj["xmbh"] = params.xmbh;
+        obj["wtxmlx"] = type == "gb" ? 3 : type == "sh" ? 2 : 1;
+      }
+      obj[key] = value;
+      let { href } = this.$router.resolve({
+        path: "/report-list/questionlist.html",
+        query: obj
       });
       window.open(href, "_blank");
     },
@@ -279,14 +277,21 @@ export default {
     handleYqCurrentChange(data) {
       this.yqPage = data;
       this.pageYqRwxm();
-    },
-
+    }, 
+    // 
     dwtsqlmxReport() {
       this.$get(this.API.dwtsqlmxReport, {
         dwmc: this.dwmc
       }).then(res => {
         if (res.state == "success") {
           this.detailData = res.data;
+          this.sortList[0].value = !res.data.wtzs?0:res.data.xmzs;
+          this.sortList[1].value = !res.data.wtzs?0:res.data.wtzs;
+          this.sortList[2].value = !res.data.hjgs?0:res.data.hjgs;
+          this.sortList[3].value = !res.data.yqrws?0:res.data.yqrws;
+
+
+          console.log(this.detailData);
         } else {
           this.$alert(res.msg, "提示", {
             confirmButtonText: "确定",
@@ -375,12 +380,12 @@ export default {
       this.dwmc = JSON.parse(sessionStorage.userInfo).unit;
     }
     this.dwtsqlmxReport();
-    this.pageGbWtxm(); //过保
-    this.pageShWtxm(); //售后
-    this.pageZjWtxm(); //在建
-    this.pageYqRwxm(); //延期
+    // this.pageGbWtxm(); //过保
+    // this.pageShWtxm(); //售后
+    // this.pageZjWtxm(); //在建
+    // this.pageYqRwxm(); //延期
   },
-  components: { tableLayout }
+  components: { circleChart, barChart, pieChart }
 };
 </script>
 
@@ -391,24 +396,95 @@ export default {
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1);
-  h4,
-  h5 {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  h4 {
+    font-size: 25px !important;
     font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px !important;
   }
-  .fontRed {
-    color: rgb(182, 74, 74);
-  }
-  .table {
-    border: none;
-    tr {
-      height: 37px;
-      text-align: center;
+  .xxts-pannel_sort {
+    .sort_circle {
+      width: 9vw;
+      height: 9vw;
+      border-radius: 50%;
+      font-size: 22px;
+      box-shadow: -5px -5px 15px rgb(190, 190, 190);
+      .units {
+        font-size: 16px;
+      }
+      &:hover{
+        cursor: pointer;
+        color: #3a9494;
+      }
     }
-    th {
-      background: #f5f7fa;
-      text-align: center;
+  }
+  h5 {
+    font-size: 16px !important;
+    font-weight: 700;
+    margin: 20px 0 !important;
+    color: #999999;
+    border-left: 4px solid rgb(141, 75, 158);
+    padding-left: 10px;
+  }
+  .xxts-pannel_wtfbqk {
+    .wtfbqk-detail {
+      width: 42%;
+      font-weight: 700;
+      > p {
+        font-size: 15px !important;
+        color: rgb(179, 116, 34);
+        .font17 {
+          font-size: 17px;
+        }
+      }
+      div {
+        text-align: center;
+        padding: 15px 0;
+        font-size: 14px;
+        color: rgb(179, 116, 34);
+        p{
+            >span {
+            display: inline-block;
+            width: 150px;
+          }
+            >span:nth-child(2) {
+              white-space: nowrap;
+            display: inline-block;
+            width: 100px;
+          }
+        }
+      }
+      .fontRed {
+        color: #f00;
+      }
+    }
+    .wtfbqk-pie {
+      width: 53%;
+    }
+
+    .pannel_wtfbqk-type {
+      margin: 20px 0;
+      padding: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(104, 114, 114, 0.2);
     }
   }
+}
+.circle_xms {
+  border: 2px solid rgb(168, 190, 218);
+  background: rgba(189, 210, 236, 0.3);
+}
+.circle_wts {
+  border: 2px solid #f5dac3;
+  background: rgba(245, 218, 195, 0.3);
+}
+.circle_zgs {
+  border: 2px solid #fae492;
+  background: rgba(250, 228, 146, 0.3);
+}
+.circle_yqs {
+  border: 2px solid #98c070;
+  background: rgba(152, 192, 112, 0.3);
 }
 </style>

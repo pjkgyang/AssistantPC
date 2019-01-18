@@ -11,7 +11,7 @@
       <section v-if="catalogue == 'file'">
         <ul class="file-list">
           <div style="padding-bottom:10px;border-bottom:1px solid #ccc">
-            <span class="file-breadcrumb" @click="handleAllfile">全部目录</span>
+            <span class="file-breadcrumb" @click="handleAllfile">全部目录（{{resourceType==1?'模板':resourceType==2?'课件':'新人专区'}}）</span>
             <span v-for="(file,index) in fileBread" class="file-breadcrumb" :data-fjbh="file.fjbh" @click="handleBreadFile">
               <span class="el-icon-arrow-right"></span>
               <span>{{file.fjmc}}</span>
@@ -270,15 +270,19 @@ export default {
 
     // 面包屑导航
     handleBreadFile(e) {
-      let fjbh = e.currentTarget.getAttribute("data-fjbh");
+      let fjbh = e.currentTarget.getAttribute("data-fjbh"),
+          str = fjbh.replace(/&/g,encodeURIComponent('&')),
+          newstr = str.replace(/\+/g,encodeURIComponent('+')),
+          formatstr = '';
       if (fjbh == this.fjbh) return;
       this.$get(this.API.openTemplateFolder, {
-        path: fjbh,
+        path: newstr,
         lx: this.resourceType
       }).then(res => {
         if (res.state == "success") {
+          formatstr = this.fileList.wid.replace(/&/g,encodeURIComponent('&')).replace(/\+/g,encodeURIComponent('+'));
           this.fileList = res.data;
-          this.oldFjpath = this.fileList.wid;
+          this.oldFjpath = formatstr;
           this.fileBread.forEach((ele, i, arr) => {
             if (ele.fjbh.includes(fjbh)) {
               this.fileBread.splice(i + 1, 9999);
@@ -292,18 +296,20 @@ export default {
       let type = e.currentTarget.getAttribute("data-type");
       let fjbh = e.currentTarget.getAttribute("data-fjbh");
       let fj = e.currentTarget.getAttribute("data-fj");
+      let str = fjbh.replace(/&/g,encodeURIComponent('&'));
+      let newstr = str.replace(/\+/g,encodeURIComponent('+'));
       // 获取记录需要的附件路径 
-      this.logsFjpath = fjbh;
+      this.logsFjpath = newstr;
       if (fj != null && fj.split("&")[1] == 0) return;
       if (type == null) {
-        this.fjbh = fjbh;
+        this.fjbh = newstr;
         this.fjobj = {
           fjmc: fj.split("&")[0],
-          fjbh: fjbh
+          fjbh: newstr
         };
       }
       this.$get(this.API.openTemplateFolder, {
-        path: fjbh,
+        path: newstr,
         lx: this.resourceType
       }).then(res => {
         if (res.state == "success") {

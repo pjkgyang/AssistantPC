@@ -948,7 +948,7 @@ export default {
                 callback: action => {
                   this.questionReply[param].sfbh = 1;
                   this.questionReply[param].nr =
-                    this.questionReply[param].nr + "<br>说明 : " + this.bhsm;
+                  this.questionReply[param].nr + "<br>说明 : " + this.bhsm;
                 }
               });
             } else {
@@ -1210,8 +1210,8 @@ export default {
         }
       });
     },
+    //申请结算
     submitForm(data) {
-      //申请结算
       saveAnswer({
         zbwid: this.wid,
         nr: data.gbsm == "" ? "申请关闭" : data.gbsm,
@@ -1415,9 +1415,8 @@ export default {
         }
       });
     },
-
+    //转发问题
     forwardingProblem() {
-      //转发问题
       this.innerZFWTisible = true;
       forwardLabel({
         wid: this.wid
@@ -1480,8 +1479,7 @@ export default {
       saveForward({
         wid: this.wid,
         bh: this.radio,
-        nr:
-          $("#summernoteZF").summernote("code") == "<p><br></p>"
+        nr: $("#summernoteZF").summernote("code") == "<p><br></p>"
             ? ""
             : $("#summernoteZF").summernote("code"),
         cpbh: this.radio == 11 ? this.zfcp : "",

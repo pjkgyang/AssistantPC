@@ -24,7 +24,7 @@
          </div>
 
          <div class="task-log-tabel">
-              <el-table :data="tableData" border style="width: 100%" height="calc(100vh - 185px)"> 
+              <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight"> 
                  <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
                       <div flex spacearound> 
@@ -118,6 +118,7 @@ import { queryTdcy,queryVisiblePerson } from '@/api/personal.js'
 export default {
   data(){
       return {
+          tableHeight:window.innerHeight - 185,
           fwList:[{ label:'全部', value:''},
                   { label:'战队（组织结构）', value:'0'},
                   { label:'学校成员', value:'2'},

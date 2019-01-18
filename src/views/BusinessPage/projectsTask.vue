@@ -301,7 +301,7 @@
         </div>
       </el-collapse-transition>
 
-      <!-- 文件 -->
+      <!-- 配置库 -->
       <el-collapse-transition>
         <div v-if="tabsLabel == 'files'">
           <fileTable :xmbh="xmbh"></fileTable>
