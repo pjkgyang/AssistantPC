@@ -7,11 +7,12 @@ import echarts from "echarts";
 export default {
   data() {
     return {
-      titleData:[]
+      titleData:[],
+      pieData:[]
     };
   },
   props:{
-    pieData:{
+    piedata:{
       type:Array,
       default:()=>{
         return [
@@ -19,7 +20,6 @@ export default {
               { value: 310, name: "邮件营销" },
               { value: 234, name: "联盟广告" },
               { value: 135, name: "视频广告" },
-              { value: 1548, name: "搜索引擎" }
           ]
       }
     },
@@ -28,13 +28,15 @@ export default {
       default:0
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart();
-    });
-    this.pieData.forEach(ele=>{
-      this.titleData.push(ele.name);
-    })
+  mounted() {},
+  watch:{
+      piedata:function(val){
+        val.forEach(ele=>{
+          this.titleData.push(ele.name);
+        })
+        this.pieData = val;
+        this.initChart();
+      }
   },
   methods: {
     initChart() {
@@ -47,15 +49,16 @@ export default {
           formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
         legend: {
-          orient: "horizontal",
-          x:"center",
+          orient: "vertitle",
+          // horizontal
+          x:"right",
           data:this.titleData
         },
         calculable: true,
         series: [
           {
           //  color:['#D1D1D1','#0f0','#d2sd1s','#00f'],
-            name: "访问来源",
+            name: "分布情况",
             type: "pie",
             radius: ["40%", "55%"],
             itemStyle: {
@@ -78,7 +81,7 @@ export default {
                 }
               }
             },
-            data: this.pieData
+            data: this.piedata
           }
         ]
       };

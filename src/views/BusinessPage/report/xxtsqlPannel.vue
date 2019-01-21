@@ -4,7 +4,7 @@
     <section class="xxts-pannel_sort">
       <h5>统计情况</h5>
       <div flex spacearound class="mg-12">
-        <section v-for="item in sortList" center :class="{'sort_circle':true,'circle_xms':item.mc=='项目数','circle_wts':item.mc=='问题数','circle_zgs':item.mc=='总工时','circle_yqs':item.mc=='延期任务'}">
+        <section @click="handleCheckDetail(item.type,item.value)" v-for="item in sortList" center :class="{'sort_circle':true,'active-hover':item.mc=='问题数' , 'circle_xms':item.mc=='项目数','circle_wts':item.mc=='问题数','circle_zgs':item.mc=='总工时','circle_yqs':item.mc=='延期任务'}">
           <p>
             <span>{{item.value}}
               <span class="units">{{item.mc=='总工时'?'(小时)':'(个)'}}</span>
@@ -17,8 +17,9 @@
     <section class="xxts-pannel_wtfbqk">
       <h5>问题分布情况</h5>
       <div flex spacearound class="pannel_wtfbqk-type">
-        <barChart></barChart>
-        <circleChart></circleChart>
+        <barChart :barData="barXmdata"></barChart>
+        <barChart :barIndex="1" :barTitle="'问题分类'" :barData="barWtdata"></barChart>
+        <circleChart :circledata="circledata" :circleinnerdata="circleinnerdata"></circleChart>
       </div>
 
       <div flex spacearound class="pannel_wtfbqk-type" >  
@@ -26,38 +27,38 @@
           <p col="1">
             <span class="font17">改进学校环境</span>&#x3000;&#x3000;
             <span>问题个数/占比：
-              <span class="fontRed">11/50%</span>
+              <span class="fontRed">{{detailData.w02}} / {{detailData.w02zb}}</span>
             </span> &#x3000;&#x3000;工时：
-            <span class="fontRed">11</span>(小时)</p>
+            <span class="fontRed">{{!detailData.w02gs?0:detailData.w02gs}}</span>(小时)</p>
           <div col="5" flex-column spacearound>
             <p>
               <span>改进学校服务器环境</span>
               <span>
-                <span class="fontRed">10</span> 个
+                <span class="fontRed"  @click="handleCheckDetail('wtbq','50')">{{!detailData.bq50?0:detailData.bq50}}</span> 个
               </span>
             </p>
             <p>
               <span>改进学校数据库环境</span>
               <span>
-                 <span class="fontRed">10</span> 个
+                 <span class="fontRed"  @click="handleCheckDetail('wtbq','51')">{{!detailData.bq51?0:detailData.bq51}}</span> 个
                </span>
               </p>
             <p>
               <span>改进学校网络环境</span>
               <span>
-                 <span class="fontRed">10</span> 个
+                 <span class="fontRed"  @click="handleCheckDetail('wtbq','52')">{{!detailData.bq52?0:detailData.bq52}}</span> 个
               </span>
               </p>
             <p>
               <span>改进学校中间件环境</span>
               <span>
-                <span class="fontRed">10</span> 个
+                <span class="fontRed"  @click="handleCheckDetail('wtbq','53')">{{!detailData.bq53?0:detailData.bq53}}</span> 个
               </span>
               </p>
           </div>
         </section>
         <section class="wtfbqk-pie">
-          <pieChart :pieData="gjhjData" :pieIndex="0"></pieChart>
+          <pieChart :piedata="gjxxhjData" :pieIndex="0"></pieChart>
         </section>
       </div>
 
@@ -66,38 +67,32 @@
           <p col="1">
             <span class="font17">加强学校培训</span>&#x3000;&#x3000;
             <span>问题个数/占比：
-              <span class="fontRed">11/50%</span>
+              <span class="fontRed">{{detailData.w04}} / {{detailData.w04zb}}</span>
             </span> &#x3000;&#x3000;工时：
-            <span class="fontRed">11</span>(小时)</p>
+            <span class="fontRed">{{!detailData.w04gs?0:detailData.w04gs}}</span>(小时)</p>
           <div col="5" flex-column spacearound>
             <p>
-              <span>改进学校服务器环境</span>
+              <span>开权限</span>
               <span>
-                <span class="fontRed">10</span> 个
+                <span class="fontRed" @click="handleCheckDetail('wtbq','62')">{{!detailData.bq62?0:detailData.bq62}}</span> 个
               </span>
             </p>
             <p>
-              <span>改进学校数据库环境</span>
+              <span>导数据</span>
               <span>
-                 <span class="fontRed">10</span> 个
+                 <span class="fontRed" @click="handleCheckDetail('wtbq','61')">{{!detailData.bq61?0:detailData.bq61}}</span> 个
                </span>
               </p>
             <p>
-              <span>改进学校网络环境</span>
+              <span>加强培训</span>
               <span>
-                 <span class="fontRed">10</span> 个
-              </span>
-              </p>
-            <p>
-              <span>改进学校中间件环境</span>
-              <span>
-                <span class="fontRed">10</span> 个
+                 <span class="fontRed" @click="handleCheckDetail('wtbq','63')">{{!detailData.bq63?0:detailData.bq63}}</span> 个
               </span>
               </p>
           </div>
         </section>
         <section class="wtfbqk-pie">
-          <pieChart :pieData="gjhjData" :pieIndex="1"></pieChart>
+          <pieChart :piedata="jqxxpxData" :pieIndex="1"></pieChart>
         </section>
       </div>
 
@@ -106,38 +101,50 @@
           <p col="1">
             <span class="font17">纳入产品改进</span>&#x3000;&#x3000;
             <span>问题个数/占比：
-              <span class="fontRed">11/50%</span>
+              <span class="fontRed">{{detailData.w05}} / {{detailData.w05zb}}</span>
             </span> &#x3000;&#x3000;工时：
-            <span class="fontRed">11</span>(小时)</p>
+            <span class="fontRed">{{detailData.w05gs}}</span>(小时)</p>
           <div col="5" flex-column spacearound>
              <p>
-              <span>改进学校服务器环境</span>
+              <span>产品bug修复</span>
               <span>
-                <span class="fontRed">10</span> 个
+                <span class="fontRed">{{detailData.bq11}}</span> 个
               </span>
             </p>
             <p>
-              <span>改进学校数据库环境</span>
+              <span>改进前端组件</span>
               <span>
-                 <span class="fontRed">10</span> 个
+                 <span class="fontRed">{{detailData.bq12}}</span> 个
                </span>
               </p>
             <p>
-              <span>改进学校网络环境</span>
+              <span>异常数据处理</span>
               <span>
-                 <span class="fontRed">10</span> 个
+                 <span class="fontRed">{{detailData.bq6}}</span> 个
               </span>
               </p>
             <p>
-              <span>改进学校中间件环境</span>
+              <span>自助硬件问题</span>
               <span>
-                <span class="fontRed">10</span> 个
+                <span class="fontRed">{{detailData.bq16}}</span> 个
+              </span>
+              </p>
+            <p>
+              <span>纳入产品改进</span>
+              <span>
+                <span class="fontRed">{{detailData.bq15}}</span> 个
+              </span>
+              </p>
+            <p>
+              <span>改进报表组件</span>
+              <span>
+                <span class="fontRed">{{detailData.bq13}}</span> 个
               </span>
               </p>
           </div>
         </section>
         <section class="wtfbqk-pie">
-          <pieChart :pieData="gjhjData" :pieIndex="2"></pieChart>
+          <pieChart :piedata="nrcpgjData" :pieIndex="2"></pieChart>
         </section>
       </div>
 
@@ -150,7 +157,7 @@
             <p>
               <span>在建阶段</span>
               <span>
-                个数 / 占比：<span class="fontRed">{{detailData.zjxmwt}} / {{detailData.zjxmwtzb}}</span>&#x3000;<span class="fontRed">{{detailData.zjxmwtgs}}</span> 小时
+                个数 / 占比：<span class="fontRed" @click="">{{detailData.zjxmwt}} / {{detailData.zjxmwtzb}}</span>&#x3000;<span class="fontRed">{{detailData.zjxmwtgs}}</span> 小时
                  </span>
               </p>
             <p>
@@ -169,10 +176,30 @@
           </div>
         </section>
         <section class="wtfbqk-pie">
-          <pieChart :pieData="gjhjData" :pieIndex="3"></pieChart>
+          <pieChart :piedata="xmfltjData" :pieIndex="3"></pieChart>
         </section>
       </div>
-
+      
+       <div flex spacearound class="pannel_wtfbqk-type" >  
+        <section class="wtfbqk-detail">
+          <p col="1">
+            <span class="font17">产品个性化需求</span>&#x3000;&#x3000;
+            <span>问题个数/占比：
+              <span class="fontRed">{{detailData.w01}} / {{detailData.w01zb}}</span>
+            </span> &#x3000;&#x3000;工时：
+            <span class="fontRed">{{detailData.w01gs}}</span>(小时)
+          </p>
+          <div col="5" flex-column spacearound>
+            <p>
+              <span>个性化需求定制</span>
+              <span>
+                <span class="fontRed">{{!detailData.bq21?0:detailData.bq21}}</span> 个
+              </span>
+            </p>
+          </div>
+        </section>
+        <section class="wtfbqk-pie"></section>
+      </div>
 
     </section>
   </div>
@@ -189,8 +216,8 @@ export default {
       dwmc: "",
       detailData: {},
       sortList: [
-        { mc: "项目数", value: 10 },
-        { mc: "问题数", value: 10 },
+        { mc: "项目数", value: 10  },
+        { mc: "问题数", value: 10 ,type:'wtzs'},
         { mc: "总工时", value: 10 },
         { mc: "延期任务", value: 10 }
       ],
@@ -200,31 +227,23 @@ export default {
         { value: 300, name: "网络环境" },
         { value: 400, name: "中间件环境" }
       ], //改进学校环境饼图数据
-      gbData: [],
-      gbPage: 1,
-      gbPageSize: 10,
-      gbTotal: 0,
-
-      shData: [],
-      shPage: 1,
-      shPageSize: 10,
-      shTotal: 0,
-
-      zjData: [],
-      zjPage: 1,
-      zjPageSize: 10,
-      zjTotal: 0,
-
-      yqData: [],
-      yqPage: 1,
-      yqPageSize: 10,
-      yqTotal: 0
+      
+      gjxxhjData:[],//改进学校环境
+      jqxxpxData:[],//加强学校培训
+      nrcpgjData:[],//纳入产品改进
+      xmfltjData:[],//项目分类
+      circledata:[],
+      circleinnerdata:[],
+      barData:[],
+      barXmdata:[],
+      barWtdata:[]
     };
   },
   methods: {
     handleCheckDetail(key, value, params, type) {
+      if(!key) return;
       let obj = {};
-      obj["dwmc"] = this.detailData.dw;
+      obj["dwmc"] = !this.detailData.dw?this.dwmc:this.detailData.dw;
       if (!!params) {
         obj["xmbh"] = params.xmbh;
         obj["wtxmlx"] = type == "gb" ? 3 : type == "sh" ? 2 : 1;
@@ -236,49 +255,8 @@ export default {
       });
       window.open(href, "_blank");
     },
-    //   过保 每页条数
-    handleGbSizeChange(data) {
-      this.gbPageSize = data;
-      this.gbPage = 1;
-      this.pageGbWtxm();
-    },
-    //   过保 分页
-    handleGbCurrentChange(data) {
-      this.gbPage = data;
-      this.pageGbWtxm();
-    },
-    //   售后 每页条数
-    handleShSizeChange(data) {
-      this.shPageSize = data;
-      this.shPage = 1;
-      this.pageShWtxm();
-    },
-    //   售后 分页
-    handleShCurrentChange(data) {
-      this.shPage = data;
-      this.pageShWtxm();
-    },
-    //   在建
-    handleZjSizeChange(data) {
-      this.zjPageSize = data;
-      this.zjPage = 1;
-      this.pageZjWtxm();
-    },
-    handleZjCurrentChange(data) {
-      this.zjPage = data;
-      this.pageZjWtxm();
-    },
-    //  延期
-    handleYqSizeChange(data) {
-      this.yqPageSize = data;
-      this.yqPage = 1;
-      this.pageYqRwxm();
-    },
-    handleYqCurrentChange(data) {
-      this.yqPage = data;
-      this.pageYqRwxm();
-    }, 
-    // 
+
+    // 明细
     dwtsqlmxReport() {
       this.$get(this.API.dwtsqlmxReport, {
         dwmc: this.dwmc
@@ -289,9 +267,62 @@ export default {
           this.sortList[1].value = !res.data.wtzs?0:res.data.wtzs;
           this.sortList[2].value = !res.data.hjgs?0:res.data.hjgs;
           this.sortList[3].value = !res.data.yqrws?0:res.data.yqrws;
+          // 改进环境组件
+          this.gjxxhjData = [
+            {value:res.data.bq50,name:'服务器环境'},
+            {value:res.data.bq51,name:'数据库环境'},
+            {value:res.data.bq52,name:'网络环境'},
+            {value:res.data.bq53,name:'中间件环境'}
+          ];
+          // 加强学校培训
+          this.jqxxpxData = [
+            {value:res.data.bq62,name:'开权限'},
+            {value:res.data.bq61,name:'导数据'},
+            {value:res.data.bq63,name:'加强培训'},
+          ];
+          // 纳入产品改进
+          this.nrcpgjData = [
+            {value:res.data.bq11,name:'产品bug修复'},
+            {value:res.data.bq12,name:'改进前端组件'},
+            {value:res.data.bq6,name:'异常数据处理'},
+            {value:res.data.bq16,name:'自助硬件问题'},
+            {value:res.data.bq15,name:'纳入产品改进'},
+            {value:res.data.bq13,name:'改进报表组件'},
+          ];
+          //项目分类统计
+          this.xmfltjData = [
+            {value:res.data.zjxmwt,name:'在建阶段'},
+            {value:res.data.shxmwt,name:'售后阶段'},
+            {value:res.data.gbxmwt,name:'过保阶段'},
+          ];
+          // 总计
+          this.circledata = [
+            {value:res.data.w01,name:'产品个性化需求'},
+            {value:res.data.w02,name:'改进学校环境'},
+            {value:res.data.w04,name:'加强学校培训'},
+            {value:res.data.w05,name:'纳入产品改进计划'},
+          ];
+           
+          this.circleinnerdata = [
+            {value:!res.data.zjxmwt?0:res.data.zjxmwt,name:'在建'},
+            {value:!res.data.shxmwt?0:res.data.shxmwt,name:'售后'},
+            {value:!res.data.gbxmwt?0:res.data.gbxmwt,name:'过保'},
+          ];
+          
+          
+          this.barXmdata = [
+            {value:res.data.zjxmwt,name:'在建阶段'},
+            {value:res.data.shxmwt,name:'售后阶段'},
+            {value:res.data.gbxmwt,name:'过保阶段'},
+          ];
 
+          this.barWtdata = [
+            {value:res.data.w02,name:'改进学校环境'},
+            {value:res.data.w04,name:'加强学校培训'},
+            {value:res.data.w05,name:'纳入产品改进'},
+            {value:res.data.w01,name:'产品个性化需求'},
+          ]
 
-          console.log(this.detailData);
         } else {
           this.$alert(res.msg, "提示", {
             confirmButtonText: "确定",
@@ -413,6 +444,8 @@ export default {
       .units {
         font-size: 16px;
       }
+    }
+    .active-hover{
       &:hover{
         cursor: pointer;
         color: #3a9494;

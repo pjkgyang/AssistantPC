@@ -42,7 +42,7 @@
           <div class="card-body card-body__syqk" slot="body" flex>
             <top5-app :items="top5List"></top5-app>
           </div>
-           <div slot="body" v-if="top5List.length == 0||top5List==null" style="text-align:center;padding:10px 0;">
+           <div slot="body" v-if="!top5List.length" style="text-align:center;padding:10px 0;">
                 <img src="static/img/none.png" alt="">
                 <p class="empty_content">暂无内容</p>
             </div>
@@ -268,7 +268,11 @@ export default {
         dwzsdm:zsdm
       }).then(({ data }) => {
         if (data.state == "success") {
-             this.top5List = data.data;
+          if(!data.data){
+             this.top5List = [];
+          }else{
+            this.top5List = data.data
+          }
         }
       });
     },

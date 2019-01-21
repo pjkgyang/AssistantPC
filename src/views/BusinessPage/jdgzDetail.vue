@@ -13,7 +13,7 @@
         <el-table-column prop="rwmc_display" label="任务名称" width="160" show-overflow-tooltip></el-table-column>
         <el-table-column prop="zt_display" label="状态" width="100"></el-table-column>
         <el-table-column prop="cjrxm" label="创建人" width="90"></el-table-column>
-        <el-table-column prop="cjsj" label="创建人" width="160"></el-table-column>
+        <el-table-column prop="cjsj" label="创建时间" width="160"></el-table-column>
         <el-table-column prop="ssrxm" label="责任人" width="90"></el-table-column>
       </el-table>
 

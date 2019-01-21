@@ -6,24 +6,49 @@ import echarts from "echarts";
 export default {
   data() {
     return {
-      chart: {}
+      chart: {},
+      titleData:[],
+      outerData:[],
+      innerData:[]
     };
   },
   props: {
-    mys: {
-      type: Number,
-      default: 10
+    circledata:{
+      type:Array,
+      default:()=>{
+        return [
+              { value: 335, name: "产品化个性需求" },
+              { value: 310, name: "改进学校环境" },
+              { value: 234, name: "纳入产品改进" },
+              { value: 135, name: "加强学校培训" },
+          ]
+      }
     },
-    bmys: {
-      type: Number,
-      default: 20
+    circleinnerdata:{
+      type:Array,
+      default:()=>{
+        return [
+               { value: 335, name: "过保", selected: true },
+              { value: 679, name: "在建" },
+              { value: 1548, name: "售后" }
+          ]
+      }
     }
   },
-
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart();
-    });
+  mounted() { },
+  watch:{
+      // circledata:function(val){
+      //   this.outerData = val;
+      //   this.initChart();
+      // },
+      circleinnerdata:function(val){
+         this.circledata.forEach(ele=>{
+          this.titleData.push(ele.name);
+        })
+        this.outerData = this.circledata;
+        this.innerData = val;
+        this.initChart();
+      }
   },
   methods: {
     initChart() {
@@ -38,12 +63,7 @@ export default {
         legend: {
           orient: "horizontal",
           x: "center",
-          data: [
-            "产品化个性需求",
-            "改进学校环境",
-            "纳入产品改进",
-            "加强学校培训",
-          ]
+          data: this.titleData
         },
         series: [
           {
@@ -61,11 +81,7 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 335, name: "过保", selected: true },
-              { value: 679, name: "在建" },
-              { value: 1548, name: "售后" }
-            ]
+            data:this.innerData
           },
           {
             name: "分布情况",
@@ -115,12 +131,7 @@ export default {
                 }
               }
             },
-            data: [
-              { value: 335, name: "产品化个性需求" },
-              { value: 310, name: "改进学校环境" },
-              { value: 234, name: "纳入产品改进" },
-              { value: 135, name: "加强学校培训" },
-            ]
+            data: this.outerData
           }
         ]
       };
