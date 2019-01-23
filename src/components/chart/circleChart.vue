@@ -35,7 +35,7 @@ export default {
       }
     }
   },
-  mounted() { },
+  mounted() {},
   watch:{
       // circledata:function(val){
       //   this.outerData = val;
@@ -61,8 +61,8 @@ export default {
           formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
         legend: {
-          orient: "horizontal",
-          x: "center",
+          orient: "vertitle",
+          x: "right",
           data: this.titleData
         },
         series: [
@@ -86,10 +86,12 @@ export default {
           {
             name: "分布情况",
             type: "pie",
-            radius: ["40%", "55%"],
+            center:["50%","50%"],
+            radius: ["50%", "65%"],
             label: {
               normal: {
-                formatter: "{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ",
+                // {a|{a}}{abg|}\n{hr|}\n
+                formatter: "  {b|{b}：}{c}  {per|{d}%}  ",
                 backgroundColor: "#eee",
                 borderColor: "#aaa",
                 borderWidth: 1,
@@ -103,7 +105,8 @@ export default {
                   a: {
                     color: "#999",
                     lineHeight: 22,
-                    align: "center"
+                    align: "center",
+                    show:false
                   },
                   // abg: {
                   //     backgroundColor: '#333',
@@ -131,6 +134,12 @@ export default {
                 }
               }
             },
+             labelLine: {
+              normal: {
+                show: true,
+                length:40
+              }
+            },
             data: this.outerData
           }
         ]
@@ -144,7 +153,7 @@ export default {
 </script>
 <style lang="scss" scope>
 #circleChart {
-  width: 53%;
-  height: 300px;
+  width:100%;
+  height: 330px;
 }
 </style>

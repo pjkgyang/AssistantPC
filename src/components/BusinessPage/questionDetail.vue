@@ -1523,9 +1523,9 @@ export default {
         }
       });
     },
-
+    
+    //回复
     replyQuestion(param) {
-      //回复
       let reg = /^\d+(\.\d+)?$/;
       let hfnr = $("#summernoteT").summernote("code");
       if (!reg.test(this.gsValue) || this.gsValue > 8) {

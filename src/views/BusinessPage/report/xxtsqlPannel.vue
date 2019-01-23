@@ -4,11 +4,10 @@
     <section class="xxts-pannel_sort">
       <h5>统计情况</h5>
       <div flex spacearound class="mg-12">
-        <section @click="handleCheckDetail(item.type,item.value)" v-for="item in sortList" center :class="{'sort_circle':true,'active-hover':item.mc=='问题数' , 'circle_xms':item.mc=='项目数','circle_wts':item.mc=='问题数','circle_zgs':item.mc=='总工时','circle_yqs':item.mc=='延期任务'}">
+        <section @click="handleCheckDetail(item.type,item.value)" v-for="item in sortList" center :class="{'sort_circle':true,'active-hover':item.mc=='问题数'||item.mc=='延期任务' , 'circle_xms':item.mc=='项目数','circle_wts':item.mc=='问题数','circle_zgs':item.mc=='总工时','circle_yqs':item.mc=='延期任务'}">
           <p>
-            <span>{{item.value}}
-              <span class="units">{{item.mc=='总工时'?'(小时)':'(个)'}}</span>
-            </span><br>
+            <span class="nums">{{item.value}}</span>
+            <span>{{item.mc=='总工时'?'(小时)':'(个)'}}</span><br>
             <span>{{item.mc}}</span>
           </p>
         </section>
@@ -17,8 +16,8 @@
     <section class="xxts-pannel_wtfbqk">
       <h5>问题分布情况</h5>
       <div flex spacearound class="pannel_wtfbqk-type">
-        <barChart :barData="barXmdata"></barChart>
-        <barChart :barIndex="1" :barTitle="'问题分类'" :barData="barWtdata"></barChart>
+        <!-- <barChart :barData="barXmdata"></barChart> -->
+        <!-- <barChart :barIndex="1" :barTitle="'问题分类'" :barData="barWtdata"></barChart> -->
         <circleChart :circledata="circledata" :circleinnerdata="circleinnerdata"></circleChart>
       </div>
 
@@ -34,25 +33,25 @@
             <p>
               <span>改进学校服务器环境</span>
               <span>
-                <span class="fontRed"  @click="handleCheckDetail('wtbq','50')">{{!detailData.bq50?0:detailData.bq50}}</span> 个
+                <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','50')">{{!detailData.bq50?0:detailData.bq50}}</span> 个
               </span>
             </p>
             <p>
               <span>改进学校数据库环境</span>
               <span>
-                 <span class="fontRed"  @click="handleCheckDetail('wtbq','51')">{{!detailData.bq51?0:detailData.bq51}}</span> 个
+                 <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','51')">{{!detailData.bq51?0:detailData.bq51}}</span> 个
                </span>
               </p>
             <p>
               <span>改进学校网络环境</span>
               <span>
-                 <span class="fontRed"  @click="handleCheckDetail('wtbq','52')">{{!detailData.bq52?0:detailData.bq52}}</span> 个
+                 <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','52')">{{!detailData.bq52?0:detailData.bq52}}</span> 个
               </span>
               </p>
             <p>
               <span>改进学校中间件环境</span>
               <span>
-                <span class="fontRed"  @click="handleCheckDetail('wtbq','53')">{{!detailData.bq53?0:detailData.bq53}}</span> 个
+                <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','53')">{{!detailData.bq53?0:detailData.bq53}}</span> 个
               </span>
               </p>
           </div>
@@ -74,19 +73,19 @@
             <p>
               <span>开权限</span>
               <span>
-                <span class="fontRed" @click="handleCheckDetail('wtbq','62')">{{!detailData.bq62?0:detailData.bq62}}</span> 个
+                <span title="查看详情" class="fontRed active" @click="handleCheckDetail('wtbq','62')">{{!detailData.bq62?0:detailData.bq62}}</span> 个
               </span>
             </p>
             <p>
               <span>导数据</span>
               <span>
-                 <span class="fontRed" @click="handleCheckDetail('wtbq','61')">{{!detailData.bq61?0:detailData.bq61}}</span> 个
+                 <span title="查看详情" class="fontRed active" @click="handleCheckDetail('wtbq','61')">{{!detailData.bq61?0:detailData.bq61}}</span> 个
                </span>
               </p>
             <p>
               <span>加强培训</span>
               <span>
-                 <span class="fontRed" @click="handleCheckDetail('wtbq','63')">{{!detailData.bq63?0:detailData.bq63}}</span> 个
+                 <span title="查看详情" class="fontRed active" @click="handleCheckDetail('wtbq','63')">{{!detailData.bq63?0:detailData.bq63}}</span> 个
               </span>
               </p>
           </div>
@@ -114,31 +113,31 @@
             <p>
               <span>改进前端组件</span>
               <span>
-                 <span class="fontRed">{{detailData.bq12}}</span> 个
+                 <span class="fontRed">{{!detailData.bq12?0:detailData.bq12}}</span> 个
                </span>
               </p>
             <p>
               <span>异常数据处理</span>
               <span>
-                 <span class="fontRed">{{detailData.bq6}}</span> 个
+                 <span class="fontRed">{{!detailData.bq6?0:detailData.bq6}}</span> 个
               </span>
               </p>
             <p>
               <span>自助硬件问题</span>
               <span>
-                <span class="fontRed">{{detailData.bq16}}</span> 个
+                <span class="fontRed">{{!detailData.bq16?0:detailData.bq16}}</span> 个
               </span>
               </p>
             <p>
               <span>纳入产品改进</span>
               <span>
-                <span class="fontRed">{{detailData.bq15}}</span> 个
+                <span class="fontRed">{{!detailData.bq15?0:detailData.bq15}}</span> 个
               </span>
               </p>
             <p>
               <span>改进报表组件</span>
               <span>
-                <span class="fontRed">{{detailData.bq13}}</span> 个
+                <span class="fontRed">{{!detailData.bq13?0:detailData.bq13}}</span> 个
               </span>
               </p>
           </div>
@@ -153,24 +152,24 @@
           <p col="1">
             <span class="font17">项目分类统计</span>&#x3000;&#x3000;
            </p>
-          <div col="5" flex-column spacearound>
-            <p>
+          <div col="5" flex-column spacearound >
+            <p >
               <span>在建阶段</span>
               <span>
-                个数 / 占比：<span class="fontRed" @click="">{{detailData.zjxmwt}} / {{detailData.zjxmwtzb}}</span>&#x3000;<span class="fontRed">{{detailData.zjxmwtgs}}</span> 小时
+                个数 / 占比：<span title="查看详情" @click="handleCheckXmDetail('zj')" class="active fontRed" >{{detailData.zjxmwt}} / {{detailData.zjxmwtzb}}</span>&#x3000;<span class="fontRed">{{detailData.zjxmwtgs}}</span> 小时
                  </span>
               </p>
-            <p>
+            <p >
               <span>售后阶段</span>
               <span>
-                 个数 / 占比：<span class="fontRed">{{detailData.shxmwt}} / {{detailData.shxmwtzb}}</span>个 &#x3000;<span class="fontRed">{{detailData.shxmwtgs}}</span> 小时
+                 个数 / 占比：<span title="查看详情" @click="handleCheckXmDetail('sh')" class="active fontRed" >{{detailData.shxmwt}} / {{detailData.shxmwtzb}}</span>个 &#x3000;<span class="fontRed">{{detailData.shxmwtgs}}</span> 小时
              </span>
             </p>
              
-            <p>
+            <p >
               <span>过保阶段</span>
               <span>
-                 个数 / 占比：<span class="fontRed">{{detailData.gbxmwt}} / {{detailData.gbxmwtzb}}</span>个 &#x3000;<span class="fontRed">{{detailData.gbxmwtgs}}</span> 小时
+                 个数 / 占比：<span title="查看详情" @click="handleCheckXmDetail('gb')" class="active fontRed">{{detailData.gbxmwt}} / {{detailData.gbxmwtzb}}</span>个 &#x3000;<span class="fontRed">{{detailData.gbxmwtgs}}</span> 小时
               </span>
             </p>
           </div>
@@ -219,7 +218,7 @@ export default {
         { mc: "项目数", value: 10  },
         { mc: "问题数", value: 10 ,type:'wtzs'},
         { mc: "总工时", value: 10 },
-        { mc: "延期任务", value: 10 }
+        { mc: "延期任务", value: 10 ,type:'yqrw'}
       ],
       gjhjData: [
         { value: 100, name: "服务器环境" },
@@ -242,6 +241,10 @@ export default {
   methods: {
     handleCheckDetail(key, value, params, type) {
       if(!key) return;
+      if(key == 'yqrw'){
+         this.$router.push({path:'/xxtsqlDetail',query:{lx:'yq',dwmc:this.dwmc}});
+         return;
+      }
       let obj = {};
       obj["dwmc"] = !this.detailData.dw?this.dwmc:this.detailData.dw;
       if (!!params) {
@@ -255,7 +258,11 @@ export default {
       });
       window.open(href, "_blank");
     },
-
+    
+    // 查看项目明细
+    handleCheckXmDetail(data){
+      this.$router.push({path:'/xxtsqlDetail',query:{lx:data,dwmc:this.dwmc}})
+    },
     // 明细
     dwtsqlmxReport() {
       this.$get(this.API.dwtsqlmxReport, {
@@ -308,7 +315,6 @@ export default {
             {value:!res.data.shxmwt?0:res.data.shxmwt,name:'售后'},
             {value:!res.data.gbxmwt?0:res.data.gbxmwt,name:'过保'},
           ];
-          
           
           this.barXmdata = [
             {value:res.data.zjxmwt,name:'在建阶段'},
@@ -436,19 +442,21 @@ export default {
   }
   .xxts-pannel_sort {
     .sort_circle {
-      width: 9vw;
-      height: 9vw;
+      width: 10vw;
+      height: 10vw;
       border-radius: 50%;
       font-size: 22px;
       box-shadow: -5px -5px 15px rgb(190, 190, 190);
-      .units {
-        font-size: 16px;
+      font-size: 15px;
+      .nums {
+        font-size: 22px;
+        color: #f00;
       }
     }
     .active-hover{
       &:hover{
         cursor: pointer;
-        color: #3a9494;
+        color: #12468a;
       }
     }
   }
@@ -490,6 +498,13 @@ export default {
       }
       .fontRed {
         color: #f00;
+      }
+      .active{
+        text-decoration: underline;
+        &:hover{
+          color: #12468a;
+          cursor: pointer;
+        }
       }
     }
     .wtfbqk-pie {

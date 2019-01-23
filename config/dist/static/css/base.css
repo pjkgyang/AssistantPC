@@ -32,6 +32,7 @@ a{
 h1,h2,h3,h4,h5,h6{
     margin: 0 !important;
 }
+
 .header-navmenu .el-menu--horizontal{
     border-bottom: none;
     background: none;
@@ -95,6 +96,7 @@ h1,h2,h3,h4,h5,h6{
 .header .el-input__inner::placeholder{
     color: #999;
 }
+
 
 /* 分包状态 */
 .card-state{

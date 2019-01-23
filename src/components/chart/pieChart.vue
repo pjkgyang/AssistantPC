@@ -64,10 +64,11 @@ export default {
             itemStyle: {
               normal: {
                 label: {
-                  show: false
+                  show: true,
+                   formatter: "{b} : {c} ({d}%)"
                 },
                 labelLine: {
-                  show: false
+                  show: true
                 }
               },
               emphasis: {
@@ -81,7 +82,7 @@ export default {
                 }
               }
             },
-            data: this.piedata
+            data: this.piedata,
           }
         ]
       };

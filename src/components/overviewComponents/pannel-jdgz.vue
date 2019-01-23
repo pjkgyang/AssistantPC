@@ -235,7 +235,6 @@ export default {
       this.queryData.xmbh = this.xmbh;
       this.queryData.isAll = this.isAll;
 
-
       let routeData = this.$router.resolve({
         path:'/jdgzDetail',
         query:this.queryData

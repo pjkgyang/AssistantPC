@@ -585,6 +585,12 @@ function getAbsolutePath () {
       },
       component: resolve => require(['@/views/BusinessPage/report/useReport/userDetail.vue'], resolve),
     },
-    
+    {
+      path: '/xxtsqlDetail',
+      name: 'xxtsqlDetail',
+      meta:{
+      },
+      component: resolve => require(['@/views/BusinessPage/xxtsqlDetail.vue'], resolve),
+    },
   ]
 })
