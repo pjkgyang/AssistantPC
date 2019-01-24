@@ -292,6 +292,11 @@ function getAbsolutePath () {
                 name: 'BusinessReportGrrzdj',
                 component: resolve => require(['@/views/BusinessPage/report/khbb/grrzdj.vue'], resolve),
               },
+              {
+                path: '/businesspage/report/khbb/grrzsj', 
+                name: 'BusinessReportGrrzdj',
+                component: resolve => require(['@/views/BusinessPage/report/khbb/rzsjcx.vue'], resolve),
+              },
            ]
         },
         {

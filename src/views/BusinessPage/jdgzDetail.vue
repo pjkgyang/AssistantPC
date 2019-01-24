@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       visible: this.show,
-      tableHeight: window.innerHeight - 200,
+      tableHeight: window.innerHeight - 30,
       currentPage: 1,
       pageSize: 20,
       total: 0,

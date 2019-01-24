@@ -61,6 +61,7 @@
           </el-radio-group>
         </span>
       </div>
+
       <!-- </div> -->
       <div flex class="filter">
         <span class="filter-title">里程碑状态:</span>
@@ -75,6 +76,7 @@
           <el-checkbox label="9">完成待确认</el-checkbox>
         </el-checkbox-group>
       </div>
+
       <div flex class="filter">
         <span class="filter-title">项目类别:</span>
         <el-checkbox-group v-model="xmlbList" @change="handleXMlb">
@@ -84,6 +86,18 @@
           <el-checkbox label="集成服务">集成服务</el-checkbox>
         </el-checkbox-group>
       </div>
+
+      <div flex class="filter">
+        <span class="filter-title">项目状态:</span>
+        <el-checkbox-group v-model="xmztList" @change="handleXMZT">
+           <el-checkbox label="1">在建</el-checkbox>
+          <el-checkbox label="2">售后</el-checkbox>
+          <el-checkbox label="3">过保</el-checkbox>
+          <el-checkbox label="4">关闭</el-checkbox>
+        </el-checkbox-group>
+      </div>
+      
+
       <div flex class="filter milestone-filter">
         <span class="filter-title">合同性质:</span>
         <el-checkbox-group v-model="htxzList" @change="handleHtxz">
@@ -206,8 +220,9 @@ export default {
       lcbbh: "",
       gczdList: [],
       checkList: [],
-      xmlbList: [],
-      htxzList: [],
+      xmlbList: [],//项目类别
+      xmztList:[],//项目状态
+      htxzList: [],//合同性质
       keyword: "",
       cnkssj: "",
       cnjssj: "",
@@ -507,6 +522,10 @@ export default {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
+    handleXMZT(val){
+      this.currentPage = 1;
+      this.queryMilestoneData();
+    },
     handleHtxz(val) {
       this.currentPage = 1;
       this.queryMilestoneData();
@@ -562,6 +581,7 @@ export default {
         startSjjssj: !this.sjkssj ? "" : this.sjkssj,
         endSjjssj: !this.sjjssj ? "" : this.sjjssj,
         nrxmlb: this.xmlbList.length == 0 ? "" : this.xmlbList.join(","),
+        xmzt:this.xmztList.length == 0 ? "" : this.xmztList.join(","),
         yxmjl: this.sfxmjl,
         yzrr: this.sfzrr,
 

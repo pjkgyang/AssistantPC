@@ -19,6 +19,7 @@ export default {
     yswgphb:window.baseurl+'report/yswgphb.do', // 完工验收排行榜    
     pageEktbDetail:window.baseurl+'report/pageEktbDetail.do', //二开提报明细分页列表
     pageBxDetail:window.baseurl+'report/pageBxDetail.do',//报销明细分页列表
+
     
     
     // 使用报表
@@ -180,7 +181,9 @@ export default {
 
     // 个人任职等级
     listPersonalPositionLevel:window.baseurl+'personnel/listPersonalPositionLevel.do',//个人任职等级列表
-    pagePositionLevel:window.baseurl+'personnel/pagePositionLevel.do',//任职等级分页列表
+    pagePositionLevel:window.baseurl+'personnel/pagePositionLevel.do',// 任职等级分页列表
+    pageXrzz:window.baseurl+'training/pageXrzz.do',// 培训数据记录分页列表
+
     
     // 周报返回创建时间以及总结时间
     mapWeekReportDate:window.baseurl+'plan/mapWeekReportDate.do',//周报返回创建时间以及总结时间

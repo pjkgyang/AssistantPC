@@ -66,7 +66,7 @@
             <span v-for="(cpx,index) in cpline" :data-type="cpx.label" :class="{'bg-active':cpxbg === cpx.label}">{{cpx.mc}}</span>
           </p>
         </div>
-        <div v-if="showCondition==1||showCondition==2">
+        <div>
           <p class="query-title">产品:</p>
           <p class="query-list" @click="handleCP">
             <span data-type="" :class="{'bg-active':cpbg == ''}">全部</span>
