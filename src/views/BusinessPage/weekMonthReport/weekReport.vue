@@ -584,6 +584,7 @@ export default {
        let weekStartDate = GetNextDate(getLastMonth(Year,Month),(week-1)*7);
        let weekEndDate = GetNextDate(weekStartDate,6);
        let NowDate = getNowFormatDate();
+       
        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
           new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
           this.weekValue == week &&

@@ -152,7 +152,7 @@ export default {
             jhpxsj:data.jhpxsj,
             fxrxm:data.fxrxm,
             fxrbh:data.fxrbh,
-            sjwcsj: data.sjwcsj,
+            sjwcsj: !data.sjwcsj?"":data.sjwcsj,
             pxsp: data.pxsp,
             fjData: data.fileList,
             pxsc:data.pxsc

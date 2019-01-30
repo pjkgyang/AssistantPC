@@ -20,16 +20,16 @@
           <el-form-item label="分享人" required>
             <el-input  v-model="form.fxrxm" placeholder="" style="width:213px" @focus="handleChooseZrr"></el-input>
           </el-form-item><br>
-          <el-form-item label="实际完成时间" required>
+          <el-form-item label="实际完成时间">
             <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.sjwcsj" style="width:550px"></el-date-picker>
           </el-form-item><br>
-          <el-form-item label="培训视频" required>
+          <el-form-item label="培训视频" >
             <el-input type="textarea" v-model="form.pxsp" placeholder='请输入视频地址(用英文逗号 " , " 隔开)' style="width:550px"></el-input>
           </el-form-item><br>
-          <el-form-item label="培训课时(小时)" required>
+          <el-form-item label="培训课时(小时)" >
             <el-input  v-model="form.pxsc" placeholder="请输入培训时长" style="width:550px"></el-input>
           </el-form-item><br>
-          <el-form-item label="培训课件" required>
+          <el-form-item label="培训课件" >
             <div>
               <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" :before-upload="newFiles" :on-remove="handleRemove" multiple>
                 <el-button size="small" type="primary">点击上传</el-button>
@@ -221,20 +221,20 @@ export default {
         });
         return false;
       }
-      if (!this.form.sjwcsj) {
-        this.$alert("请选择计划完成日期", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
-        return false;
-      }
-      if (!/^\d+(\.\d+)?$/.test(this.form.pxsc)) {
-        this.$alert("请输入正确培训时长", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
-        return false;
-      }
+      // if (!this.form.sjwcsj) {
+      //   this.$alert("请选择实际完成日期", "提示", {
+      //     confirmButtonText: "确定",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // }
+      // if (!/^\d+(\.\d+)?$/.test(this.form.pxsc)) {
+      //   this.$alert("请输入正确培训时长", "提示", {
+      //     confirmButtonText: "确定",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // }
       return true;
     }
   },
@@ -261,14 +261,15 @@ export default {
         this.form.fileList = '';
         this.form.pxsc = '';
         this.uploadForm = new FormData();
-
+        this.form.jhpxsj = "";
       } else {
         this.form.cpmc = this.itemData.cpmc;
         this.form.pxzt = this.itemData.pxzt;
-        this.form.pxxs = this.itemData.pxxs == 1? "线上直播": this.itemData.pxxs == 2 ? "线下培训" : "线上加线下";
+        this.form.pxxs = this.itemData.pxxs
         this.form.jhpxsj = this.itemData.jhpxsj;
         this.form.fxrxm = this.itemData.fxrxm;
-
+        this.form.fxrbh = this.itemData.fxrbh;
+        
         this.form.sjwcsj = this.itemData.sjpxsj=='-'?'':this.itemData.sjpxsj;
         this.form.pxsp = this.itemData.pxsp=='-'?'':this.itemData.pxsp;
         this.form.pxsc = this.itemData.pxsc=='-'?'':this.itemData.pxsc;
