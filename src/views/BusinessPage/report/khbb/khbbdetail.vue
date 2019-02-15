@@ -6,7 +6,7 @@
       <div text-right>
         <el-button size="mini" type="primary" @click="handleExport">导出</el-button>
       </div>
-      <reportTable :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" :exportShow="false" :indexArr='[]' :widthArr="$route.params.id == 'shgs'?[3]:$route.params.id == 'wt'||$route.params.id == 'ydjlwtxq'||$route.params.id == 'ts'?[1,3]:[2,6]" :rowWidth="$route.params.id == 'shgs'?'300':'300'" :Width="'140'" :Height="140" @handleXxwt="handleXxwt"></reportTable>
+      <reportTable :type="$route.params.id" :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" :exportShow="false" :indexArr='[]' :widthArr="$route.params.id == 'shgs'?[3]:$route.params.id == 'wt'||$route.params.id == 'ydjlwtxq'||$route.params.id == 'ts'?[1,3]:[2,6]" :rowWidth="$route.params.id == 'shgs'?'300':'300'" :Width="'140'" :Height="180" @handleXxwt="handleXxwt"></reportTable>
     </div>
   </div>
 </template>

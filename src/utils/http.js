@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Loading, Message, MessageBox } from 'element-ui';
 import Qs from 'qs';
 
-// axios.defaults.headers.common['token'] = ''
+// axios.defaults.headers.common['access_token'] = ''
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 /**

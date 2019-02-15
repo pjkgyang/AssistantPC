@@ -10,8 +10,8 @@
             @close="$emit('update:show', false)"
             :show="show">
             <div class="dialog-pj">
-                <section >
-                    <p class="pj-title">{{title}}:</span>
+                <section> 
+                    <p class="pj-title">{{title}}:</p>
                     <p class="pj-content">
                        <el-input type="textarea" :rows="5" :maxlength="500" style="width:670px"  placeholder="请输入内容" v-model="sm"></el-input>
                     </p>

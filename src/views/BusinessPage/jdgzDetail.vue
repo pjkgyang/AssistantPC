@@ -21,6 +21,7 @@
         <div text-right class="mg-12">
           <el-button type="primary" size="mini" v-if="this.$route.query.sfqr == '0' &&　lcbShow" @click="handleLcbqr">里程碑确认</el-button>
         </div>
+        
         <el-table :data="tableData" border style="width: 100%" :min-height="500" :max-height="tableHeight" key="jdqr-table" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" 　v-if="this.$route.query.sfqr == '0' &&　lcbShow"></el-table-column>
           <el-table-column prop="xmbh" label="项目编号" width="140"></el-table-column>
@@ -37,11 +38,11 @@
             </template>
           </el-table-column>
         </el-table>
-        <div text-right class="mg-12">
+      </div>
+        <div text-right class="mg-12" v-if="total > 20">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 35, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
           </el-pagination>
         </div>
-      </div>
     </div>
   </div>
 </template>

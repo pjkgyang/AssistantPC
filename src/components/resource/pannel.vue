@@ -6,6 +6,7 @@
       <el-button v-if="userTag.includes('NLPXZJ')" size="small" @click="handleUpload">上传文件</el-button>
       <el-button :type="catalogue == 'file'?'primary':''" size="small" @click="catalogue = 'file'">文件目录</el-button>
       <el-button :type="catalogue == 'record'?'primary':''" size="small" @click="catalogue = 'record'">操作记录</el-button>
+      <el-button  :type="catalogue == 'suggest'?'primary':''" size="small" @click="catalogue = 'suggest'">补充建议</el-button>
     </section>
     <el-collapse-transition>
       <section v-if="catalogue == 'file'">
@@ -23,6 +24,7 @@
             <p class="file-cjsj" style="padding-right:30px">修改时间</p>
             <p class="file-evaluate"></p>
           </div>
+
           <li :data-fjbh="fileList.parentwid" data-type="back" @click="handleFile($event,fileList.wid)" class="file-back" v-if="fileList.parentwid != '-1' && JSON.stringify(fileList)!='{}'">
             <div style="padding:10px 20px">
               <span><img src="static/img/back.png" alt="" style="float:left;">
@@ -74,6 +76,14 @@
         :pageSize="pageSize" :total="total" @handleCommit="handleCommit"></oprateRecord>
       </section>
     </el-collapse-transition>
+
+    <el-collapse-transition>
+      <section v-if="catalogue == 'suggest'">
+        <suggest :jdList="suggestList" @hadnleChange="handleChangejy" :currentPage="currentPage"
+        :pageSize="pageSize" :total="totaljy" @handleSucess="handleSucess" @handleAddyj="handleAddyj"></suggest>
+      </section>
+    </el-collapse-transition>
+
     <pjsmDialog :show.sync="pjsmShow" @handleClickSure="handleClickSure" :title="dialogTitle"></pjsmDialog>
     <uploadDialog :show.sync="uploadShow" :lx="resourceType" :filePath="oldFjpath" @handleCommit="handleCommitUpload"></uploadDialog>
   </div>
@@ -84,6 +94,7 @@
 import pjsmDialog from "@/components/dialog/resource/pjsm-dialog";
 import oprateRecord from "@/components/resource/record.vue";
 import uploadDialog from '@/components/dialog/resource/upload-dialog';
+import suggest from '@/components/resource/suggest.vue'
 export default {
   data() {
     return {
@@ -100,7 +111,13 @@ export default {
       currentPage:1,
       pageSize:15,
       total:0,
+
+      currentPagejy:1,
+      pageSizejy:15,
+      totaljy:0,
+
       jdList:[],
+      suggestList:[],//补充建议列表
       logTabName:'',
       logsFjpath:'',
       oldFjpath:'',//记录根目录路径
@@ -163,11 +180,11 @@ export default {
     handleCommit(){
       if(this.catalogue == 'file'){
         this.openFolder(); 
-      }else{
+      }else if(this.catalogue == 'record'){
         this.getLogs();
       }
     },
-    // 分页切换
+    // 分页切换(记录)
     hadnleChange(data, type) {
       if(type == 'size'){
         this.currentPage = 1;
@@ -177,6 +194,32 @@ export default {
       }
       this.getLogs();
     },
+    /**
+     * 
+     * 添加补充意见
+     */
+
+    // 分页切换(建议)
+    handleChangejy(data, type){
+       if(type == 'size'){
+        this.currentPagejy = 1;
+        this.pageSizejy = data;
+      }else{
+        this.currentPagejy = data;
+      }
+      this.pageFeedback();
+    },
+
+    // 添加建议
+    handleAddyj(){
+      this.dialogTitle = '添加补充建议';
+      this.pjsmShow = true;
+    },
+    // 提交成功
+    handleSucess(){
+      this.pageFeedback();
+    },
+
     // 切换tab
     hadnleChangeTab(data) {
       if(data == 9){
@@ -187,24 +230,42 @@ export default {
       this.currentPage = 1;
       this.getLogs();
     },
+
     // 评价提交
     handleClickSure(data) {
-      this.$post(this.appraiseType == 1 ? this.API.good : this.API.bad, {
-        path: this.fjPath,
-        lx: this.resourceType,
-        sm: data
-      }).then(res => {
-        if (res.state == "success") {
-          this.pjsmShow = !this.pjsmShow;
-          this.$alert("评价成功", "提示", {
-            confirmButtonText: "确定",
-            type:'success',
-            callback: action => {}
-          });
-        }else{
-          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
-        }
-      });
+      if(this.dialogTitle == '添加补充建议'){
+        this.$post(this.API.feedback, {
+          lx: this.resourceType,
+          nr: data
+        }).then(res => {
+          if (res.state == "success") {
+            this.pjsmShow = !this.pjsmShow;
+            this.$message({
+              message: '添加成功~',
+              type: 'success'
+            });
+            this.pageFeedback();
+          }else{
+            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
+          }
+        });
+      }else{
+        this.$post(this.appraiseType == 1 ? this.API.good : this.API.bad, {
+          path: this.fjPath,
+          lx: this.resourceType,
+          sm: data
+        }).then(res => {
+          if (res.state == "success") {
+            this.pjsmShow = !this.pjsmShow;
+            this.$message({
+              message: '评价成功~',
+              type: 'success'
+            });
+          }else{
+            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
+          }
+        });
+      }
     },
     // 评价
     handlePraise(e, param,data) {
@@ -235,11 +296,11 @@ export default {
             lx:this.resourceType
           }).then(res=>{
             if(res.state == 'success'){
-              this.$alert('删除成功', '提示', {
-                confirmButtonText: '确定',
-                type:'success'
+              this.$message({
+                message: '删除成功~',
+                type: 'success'
               });
-             this.fileList.files.splice(index,1);
+              this.fileList.files.splice(index,1);
             }else{
               this.$alert(res.msg, '提示', {confirmButtonText: '确定',type:'error'});
             }
@@ -362,11 +423,34 @@ export default {
            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'}); 
         }
       })
+    },
+
+    // 获取反馈分页列表
+    pageFeedback(){
+      this.$get(this.API.pageFeedback,{
+        curPage:this.currentPagejy,
+        pageSize:this.pageSizejy,
+        path:this.logsFjpath,
+        lx:this.resourceType
+      }).then(res=>{
+        if(res.state == 'success'){
+           if(!res.data.rows){
+              this.suggestList = []
+            }else{
+              this.suggestList = res.data.rows
+            }
+            this.totaljy = res.data.records
+        }else{
+           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'}); 
+        }
+      })
     }
   },
   watch:{
     catalogue(n,o){
-      console.log(this.logsFjpath);
+      if(n == 'suggest'){
+        this.pageFeedback();
+      }
       if(n == 'record'){
         this.logTabName = '';
         this.getLogs();
@@ -376,7 +460,7 @@ export default {
       }
     }
   },
-  components: { pjsmDialog, oprateRecord,uploadDialog }
+  components: { pjsmDialog, oprateRecord,uploadDialog,suggest }
 };
 </script>
 

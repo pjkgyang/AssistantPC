@@ -2,7 +2,7 @@
     <div>
         <el-dialog title="文档改进记录" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
             <div class="dialog-pj">
-                <wdjlSteps :jdList="jlList" ></wdjlSteps>
+                <wdjlSteps :type="type" :jdList="jlList" ></wdjlSteps>
                 <div v-if="!total" text-center class="mg-12">
                     暂无数据
                 </div>
@@ -44,14 +44,23 @@ export default {
         this.pageSize = data;
         this.pageFjGjjh();
     },
+
     pageFjGjjh() {
-      this.$get(this.API.pageFjGjjh, {
+      let obj ={
         curPage: this.currentPage,
         pageSize: this.pageSize,
-        wid: this.wid
-      }).then(res => {
+        wid: this.wid,
+        zbwid:this.wid
+      }
+      if(this.type == 'jyjl'){
+        delete obj.wid;
+      }else{
+        delete obj.zbwid;
+      }
+
+      this.$get(this.type=='wdjl'?this.API.pageFjGjjh:this.API.pageReplyOfFeedback, obj).then(res => {
         if (res.state == "success") {
-          if (!res.data || !res.data.rows.length) {
+          if (!res.data.rows) {
             this.jlList = [];
           } else {
             this.jlList = res.data.rows;
@@ -59,7 +68,7 @@ export default {
           this.total = res.data.records;
         }
       });
-    }
+    },
   },
   props: {
     show: {
@@ -69,6 +78,10 @@ export default {
     wid: {
       type: String,
       default: ""
+    },
+    type:{
+      type:String,
+      default:'wdjl'
     }
   },
   watch: {

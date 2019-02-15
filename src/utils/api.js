@@ -154,6 +154,12 @@ export default {
     deleteFile:window.baseurl+'attachment/deleteFile.do',//删除
     addDir:window.baseurl+'attachment/addDir.do',//增加文件夹
     deleteDir:window.baseurl+'attachment/deleteDir.do',//删除文件夹
+    feedback:window.baseurl+'attachment/feedback.do', // 意见反馈
+    pageFeedback:window.baseurl+'attachment/pageFeedback.do',//反馈分页列表
+    replyFeedback:window.baseurl+'attachment/replyFeedback.do',//回复意见反馈
+    pageReplyOfFeedback:window.baseurl+'attachment/pageReplyOfFeedback.do',//反馈回复分页列表
+
+
     
 
     // 获取学校产品线

@@ -3,14 +3,17 @@
         <div class="vertical-steps" :style="{maxHeight:maxHeight+'px'}">
             <div :class="{'vertical-step__item':true,'done':true}" v-for="(process,index) in jdList" :key="index">
                 <p>
-                    <span class="filter-weight">{{process.czrxm}}</span> &#x3000;
+                    <span class="filter-weight">{{process.czrxm||process.cjrxm}}</span> &#x3000;
                     <span>{{process.cjsj}}</span> &#x3000;
-                    <span>
+                    <span v-if="!type">
                         <el-tag size="mini" :type="process.zt == 1 ? '':process.zt == 2?'success':'info'" disable-transitions>{{process.zt==1?'改进中':process.zt==2?'改进完成':'未改进'}}</el-tag>
+                    </span>
+                    <span v-else>
+                        <el-tag size="mini" :type="process.zt == 1|| process.zt == 2?'primary':'success'" disable-transitions>{{process.zt==1?'建议中':process.zt==2?'处理中':'已补充'}}</el-tag>
                     </span>
                     <p>
                         <span class="filter-weight">内容：</span>
-                        <span style="color:#999;" v-html="process.cznr"></span>
+                        <span style="color:#999;" v-html="process.cznr||process.clsm"></span>
                     </p>
             </div>
         </div>
@@ -31,6 +34,10 @@ export default {
       default: () => {
         return [];
       }
+    },
+    type:{
+      type:String,
+      default:''
     }
   },
   methods: {},
