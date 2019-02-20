@@ -50,9 +50,10 @@
             <div v-if="$route.query.lx == 'yq'">
                 <el-table :data="tableData" border style="width: 100%" :min-height="500" :max-height="tableHeight" key="jdqr-table" >
                     <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
-                    <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="sxrq" label="合同签订年份" width="200"></el-table-column>
-                    <el-table-column prop="ztztmc" label="当前状态" width="200"></el-table-column>
+                    <el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="rwmc" label="任务名称" min-width="260" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="cnjrsj" label="承诺完成时间" width="160" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="yqts" label="延期天数" width="100"></el-table-column>
                 </el-table>
             </div>
 

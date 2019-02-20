@@ -92,7 +92,8 @@ export default {
       noticeVisible: false,
       menuList: [],
       jf: "",
-      menuData: []
+      menuData: [],
+      routesArr:''
     };
   },
   computed: {
@@ -132,6 +133,7 @@ export default {
   },
 
   mounted() {
+    console.log('===')
     if (window.location.hash.includes("/businesspage/report")) {
       this.title = "/businesspage/report";
     } else if (window.location.hash.includes("/businesspage/task")) {
@@ -176,8 +178,8 @@ export default {
       }
     });
 
+    //获取积分
     queryIntegral().then(({ data }) => {
-      //获取积分
       if (data.state == "success") {
         this.jf = data.data;
       }
@@ -185,6 +187,7 @@ export default {
   },
   watch: {
     $route(from, to) {
+      this.routesArr = '';
       //切换header title
       // this.getMessages();
       this.navActive = window.location.hash.split("#")[1];
@@ -196,6 +199,15 @@ export default {
         this.title = window.location.hash.split("#")[1];
         // this.title = window.location.pathname
       }
+
+      //  JSON.parse(sessionStorage.getItem('menuList')).forEach(ele=>{
+      //    this.jugeRouter(ele);
+      //  })
+      //  if(!this.routesArr.includes(this.navActive)){
+      //     alert('对不起，您暂无权限访问该页面~');
+      //     window.location.href = 'http://localhost:9000/#'+to.path;
+      //   }
+
       // if (from.name != "MonthReportWrite") {
       //   document.title = "金智教育工程小助手";
       // } else {
@@ -257,6 +269,21 @@ export default {
           this.noticNum = data.data.records;
         }
       });
+    },
+
+    jugeRouter(obj,navActive){
+      if(!obj.childNodes.length){
+        //  if(obj.url == navActive){
+        //    return false;
+        //  }else{
+        //    return true;
+        //  }
+        this.routesArr += obj.url + ','
+      }else{
+        obj.childNodes.forEach(ele=>{
+          this.jugeRouter(ele);
+        })
+      }
     }
   },
   components: { NavBarItem, navItem }

@@ -106,9 +106,9 @@ export default {
         }
       });
     },
+      // 分页切换
 
     handleCurrentChange(data) {
-      // 分页切换
       this.CurrentPage = data;
       this.getReportQuestion(data);
     },
@@ -139,7 +139,6 @@ export default {
   border-radius: 4px;
   background: #fff;
   padding: 10px;
-  max-height: calc(100vh - 30px);
 }
 
 .question-type {

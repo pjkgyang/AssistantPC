@@ -242,8 +242,12 @@ export default {
     handleCheckDetail(key, value, params, type) {
       if(!key) return;
       if(key == 'yqrw'){
-         this.$router.push({path:'/xxtsqlDetail',query:{lx:'yq',dwmc:this.dwmc}});
-         return;
+        let { href } = this.$router.resolve({
+          path: "/xxtsqlDetail",
+          query:{lx:'yq',dwmc:this.dwmc}
+        });
+        window.open(href, "_blank");
+        return;
       }
       let obj = {};
       obj["dwmc"] = !this.detailData.dw?this.dwmc:this.detailData.dw;

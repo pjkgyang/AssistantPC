@@ -116,8 +116,8 @@
     <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
 
     <el-dialog title="改进计划" :visible.sync="dialogTableVisible" :width="'80vw'">
-      <gjjhcpl v-if="wtfbq =='W05'" :questionData="quesData" :show="dialogTableVisible" ></gjjhcpl>
-      <gjjhssl v-if="wtfbq =='W03'" :questionData="quesData" :show="dialogTableVisible" ></gjjhssl>
+      <gjjhcpl v-if="wtfbq =='W05' || this.wtfbqO == 'W05'" :questionData="quesData" :show="dialogTableVisible" ></gjjhcpl>
+      <gjjhssl v-if="wtfbq =='W03' || this.wtfbqO == 'W03'" :questionData="quesData" :show="dialogTableVisible" ></gjjhssl>
     </el-dialog>
   </div>
 </template>
@@ -177,7 +177,8 @@ export default {
       ],
       wtfbqlist: [],
       wtgjztlist: [],
-      wtfbq: "",
+      wtfbq: "", //问题父标签
+      wtfbqO:"",//问题父标签
       gjzt: "",
       bqly: "",
       wtfl: "",
@@ -252,6 +253,28 @@ export default {
   methods: {
     handleImprovementPlan(data) {
       this.quesData = data;
+      let dataArr = data.fbqdm.split(',');
+      let w03i = '',
+          w05i = '';
+      if(data.fbqdm.includes('W05') && !data.fbqdm.includes('W03')){
+         this.wtfbqO = 'W05'
+      }else if(data.fbqdm.includes('W03') && !data.fbqdm.includes('W05')){
+         this.wtfbqO = 'W03'
+      }else if(data.fbqdm.includes('W03') && data.fbqdm.includes('W05')){
+       dataArr.forEach((ele,i,arr)=>{
+         if(ele == 'W03'){
+           w03i = i
+         }
+         if(ele == 'W05'){
+           w05i = i
+         }
+       })
+       if(w03i > w05i){
+         this.wtfbqO = 'W03';
+       }else if(w03i < w05i){
+         this.wtfbqO = 'W05';
+       }
+      }
       this.dialogTableVisible = !this.dialogTableVisible;
     },
     handleExport() {
@@ -445,11 +468,11 @@ export default {
       let wtfbq = e.target.getAttribute("data-type");
       if (wtfbq == null) return;
       this.wtfbq = wtfbq;
-      if(wtfbq == 'W03' || wtfbq == 'W05'){
-        this.gjjhShow = true;
-      }else{
-         this.gjjhShow = false;
-      }
+      // if(wtfbq == 'W03' || wtfbq == 'W05'){
+      //   this.gjjhShow = true;
+      // }else{
+      //    this.gjjhShow = false;
+      // }
       this.CurrentPage = 1;
       this.queryAllQuestions(1);
     },
@@ -527,7 +550,7 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           if (data.data.rows != null) {
-            this.questionList = data.data.rows;
+              this.questionList = data.data.rows;
           }
           this.total = data.data.records;
         }

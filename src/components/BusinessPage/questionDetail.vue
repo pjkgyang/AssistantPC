@@ -532,11 +532,11 @@ export default {
     this.baseUrl = window.baseurl;
     this.wid = this.$route.query.wid;
     this.isCjwt = this.$route.query.f;
-    if (window.location.hash.includes("h=1")) {
-      sessionStorage.setItem("Detailpannel", window.location.hash);
-    } else {
-      sessionStorage.removeItem("Detailpannel");
-    }
+    // if (window.location.hash.includes("h=1")) {
+    //   sessionStorage.setItem("Detailpannel", window.location.hash);
+    // } else {
+    //   sessionStorage.removeItem("Detailpannel");
+    // }
     getLoginUser().then(res => {
       if (res.status == 200) {
         if (res.data.state == "success") {

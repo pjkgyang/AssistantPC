@@ -38,6 +38,9 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
+  // 存储路径
+  sessionStorage.setItem("Detailpannel",to.fullPath);
+
   if(!to.meta.title){
     document.title = '金智教育工程小助手'
   }else{

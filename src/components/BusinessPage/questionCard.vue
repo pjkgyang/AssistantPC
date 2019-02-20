@@ -32,8 +32,8 @@
                   <div v-if="wtbqShow">
                     <span>
                       <span class="question-info-front">标签 : </span>
-                      <span v-if="!!question.bqMc" v-for="bq in question.bqMc.split(',')" class="question-info-wtbq">{{bq}}&nbsp; </span>
-                      <span v-else v-for="bq in question.bqMc.split(',')" >无</span>
+                      <span v-if="!!question.bqMc" v-for="bq in question.bqMc.split(',')" class="question-info-wtbq">{{bq}}</span>
+                      <span v-if="!question.bqMc" v-for="bq in question.bqMc.split(',')" >无</span>
                       </span>
                   </div>
               </div>
@@ -53,7 +53,8 @@
                           question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()))/(1000 * 60 * 60 * 24))+' 天到期':'过期 '+Math.ceil(((question.sqgbsj?new Date(question.sqgbsj).getTime():question.gbsj?new Date(question.gbsj).getTime():new Date().getTime()) - new Date(question.cnjsrq+' 23:59:59').getTime())/(1000 * 60 * 60 * 24))+' 天'}}
                     </span>
                   </span><br>
-                  <span v-if="!bjscShow && gjjhShow && ((wtfbq=='W03' &&  groupTag.includes('NLPXZJ')) || (wtfbq=='W05' &&  groupTag.includes('ZJ')))">
+                  <!-- !bjscShow && gjjhShow &&  -->
+                  <span v-if="((question.fbqdm.includes('W03') &&  groupTag.includes('NLPXZJ')) || (question.fbqdm.includes('W05') &&  groupTag.includes('ZJ')))">
                      <el-button size="mini" type='primary' @click="handleImprovementPlan(question)">改进计划</el-button>
                   </span>
               </div>     
@@ -244,6 +245,7 @@ export default {
    color: #fff;
    padding: 1px 2px;
    border-radius: 2px;
+   margin-right:10px;
 }
 .question-gjjhzt{
    background: rgb(55, 146, 82) !important;

@@ -521,12 +521,11 @@ export default {
     }
   },
   mounted() {
-    if (window.location.hash.includes("h=1")) {
-      sessionStorage.setItem("Detailpannel", window.location.hash);
-    } else {
-      sessionStorage.removeItem("Detailpannel");
-    }
-
+    // if (window.location.hash.includes("h=1")) {
+    //   sessionStorage.setItem("Detailpannel", window.location.hash);
+    // } else {
+    //   sessionStorage.removeItem("Detailpannel");
+    // }
     if (!sessionStorage.userInfo) {
       getLoginUser().then(res => {
         if (res.status == 200) {

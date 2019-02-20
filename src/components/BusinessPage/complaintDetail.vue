@@ -134,11 +134,11 @@ export default {
   },
   mounted() {
     this.wid = this.$route.query.wid
-    if(window.location.hash.includes('h=1')){
-        sessionStorage.setItem('Detailpannel',window.location.hash)
-    }else{
-        sessionStorage.removeItem('Detailpannel');
-    }
+    // if(window.location.hash.includes('h=1')){
+    //     sessionStorage.setItem('Detailpannel',window.location.hash)
+    // }else{
+    //     sessionStorage.removeItem('Detailpannel');
+    // }
 
     this.windowUnitType = sessionStorage.getItem("isJZuser");
     

@@ -44,7 +44,7 @@
             </el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
-                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
+                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>  
             <el-table-column prop="jhksrq" label="计划开始日期" width="140"></el-table-column>
