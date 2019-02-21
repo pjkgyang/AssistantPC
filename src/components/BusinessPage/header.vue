@@ -17,6 +17,7 @@
         <div class="header-navmenu-elmenu">
           <el-menu text-color="#708087" :active-text-color="'#CD3333'" ref="navbar" :router='true' :default-active="onRoutes" @select="handleSelect" mode="horizontal" menu-trigger="hover" unique-opened>
             <nav-item :routes="menuList" navIndex=""></nav-item>
+            
           </el-menu>
         </div>
       </div>
@@ -133,7 +134,6 @@ export default {
   },
 
   mounted() {
-    console.log('===')
     if (window.location.hash.includes("/businesspage/report")) {
       this.title = "/businesspage/report";
     } else if (window.location.hash.includes("/businesspage/task")) {

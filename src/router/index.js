@@ -2,10 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-import monthReport from '@/views/BusinessPage/weekMonthReport/monthReport.vue'
-import weekReport from '@/views/BusinessPage/weekMonthReport/weekReport.vue'
-import weekReportWrite from '@/views/BusinessPage/weekMonthReport/weekReport-write.vue'
-import monthReportWrite from '@/views/BusinessPage/weekMonthReport/monthReport-write.vue'
+import monthReport from '@/views/BusinessPage/weekMonthReport/monthReport.vue';
+import weekReport from '@/views/BusinessPage/weekMonthReport/weekReport.vue';
+import weekReportWrite from '@/views/BusinessPage/weekMonthReport/weekReport-write.vue';
+import monthReportWrite from '@/views/BusinessPage/weekMonthReport/monthReport-write.vue';
 // import monthReportDetail from '@/views/BusinessPage/weekMonthReport/ReportDetail.vue'
 
 function getAbsolutePath () {
@@ -297,6 +297,11 @@ function getAbsolutePath () {
                 name: 'BusinessReportGrrzdj',
                 component: resolve => require(['@/views/BusinessPage/report/khbb/rzsjcx.vue'], resolve),
               },
+              {
+                path: '/businesspage/report/common/:id', 
+                name: 'ReportCommon',
+                component: resolve => require(['@/views/BusinessPage/public/common.vue'], resolve),
+              },
            ]
         },
         {
@@ -457,6 +462,11 @@ function getAbsolutePath () {
           path: '/businesspage/monthplanfill',
           name: 'MonthReportWrite',
           component:monthReportWrite,
+        },
+        {
+          path: '/common',
+          name: 'Common',
+          component: resolve => require(['@/views/BusinessPage/public/common.vue'], resolve),
         },
       ]
     },

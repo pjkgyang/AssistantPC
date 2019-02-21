@@ -16,10 +16,13 @@
           </p>
           <p style="color:#999;font-size:12px;padding:0 7px" >
             <span>状态变更说明:</span>
-            <span>{{xmDetail.gcfwztsm}}</span>
+            <span>{{!xmDetail.gcfwztsm?'无':xmDetail.gcfwztsm}}</span>
           </p>
           <!-- 未过保不显示 -->
           <p class="mg-12" v-if="fwqxShow && value">
+            <span style="color:#999;font-size:12px;padding:0 7px" >
+            注：当前服务期限：{{xmDetail.fwqx}}月&#x3000;服务开始日期：{{xmDetail.fwksrq}}&#x3000;当前到期时间: {{!xmDetail.ycfwqx?'无':xmDetail.ycfwqx}}&#x3000;最大延长时间：3个月
+            </span><br>
             <span class="filter-weight before-require">项目服务期限：</span>
             <span>
               <el-date-picker :picker-options="pickerBeginDateBefore" v-model="ycfwqx" type="date" size="mini" style="width:220px" placeholder="选择日期" format="yyyy年MM月dd日" value-format="yyyy-MM-dd">
@@ -49,22 +52,38 @@ export default {
   data() {
     return {
       visible: this.show,
-      pickerBeginDateBefore:{
-          disabledDate(time) {
-            let curDate = (new Date()).getTime();
-            let three = 90 * 24 * 3600 * 1000;
-            let threeMonths = curDate + three;
-            return time.getTime() < Date.now() || time.getTime() > threeMonths;;
-          }
-      },  
+      pickerBeginDateBefore:this.handleFormatDate(),
+      // {
+      //     disabledDate(time) {
+      //       let curDate = (new Data()).getTime();
+      //       let three = 90 * 24 * 3600 * 1000;
+      //       let threeMonths = curDate + three;
+      //       return time.getTime() < Date.now() || time.getTime() > threeMonths;
+      //     }
+      // },  
       xmData:{},
       value: false,
       textarea: "",
       ycfwqx: '',
-      fwqxShow: false
+      fwqxShow: false,
+      times:''
     };
   },
   methods: {
+    // 格式化日期
+    handleFormatDate() {
+      let self = this;
+      return {
+        disabledDate(time) {
+            let curDate = (new Date(self.ycfwqx)).getTime();
+            let three = 90 * 24 * 3600 * 1000;
+            let threeMonths = curDate + three;
+          return (
+            time.getTime() <  Date.now() || time.getTime() > curDate
+          )
+        }
+      };
+    },
     handleCommit() {
       if (/^[\s]*$/.test(this.textarea)) {
         this.$alert("请填写停止说明", "提示", {
@@ -160,13 +179,15 @@ export default {
           this.fwqxShow = false;
         }
 
-        if(!!this.xmDetail.fwksrq){
-           this.ycfwqx = GetMonthBefore(this.xmDetail.fwksrq,Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+1);
+        // 项目服务状态延长日期（2.21）;
+        if(!!this.xmDetail.ycfwqx){
+           this.ycfwqx = GetMonthBefore(this.xmDetail.ycfwqx,3);
+        }else if(!!this.xmDetail.fwksrq && !this.xmDetail.ycfwqx){
+           this.ycfwqx = GetMonthBefore(this.xmDetail.fwksrq,Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+3);
         }else{
-           this.ycfwqx = GetMonthBefore(GetDateStr(0),Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+1);
+           this.ycfwqx = GetMonthBefore(GetDateStr(0),Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+3);
         }
       }
-      console.log(this.xmData);
     }
   },
   components: {}
