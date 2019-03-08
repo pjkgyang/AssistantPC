@@ -42,6 +42,7 @@
       <div class="filter colcenter milestone-filter">
         <span class="filter-title">区域工程:</span>
         <el-select v-model="qygc" placeholder="请选择" size="mini" @change="handleChangeFilter">
+          <el-option label="全部" value=""> </el-option>
           <el-option v-for="item in gczdList" :key="item.label" :label="item.mc" :value="item.label"> </el-option>
         </el-select>&#x3000;&#x3000;
         <span>
@@ -137,8 +138,12 @@
         <p style="margin:10px 0 !important;" v-if="ishow">
           <el-button size="mini" type="success" @click="commitLcb">提报里程碑</el-button>
           <el-button size="mini" type="primary" @click="exportLcb">导出</el-button>
-          <span style="float:right;margin-top:5px"><span class="filter-weight">合计完工量 : </span><span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} </span>{{totalWgl <10000?'元':totalWgl<100000000?'万元':'亿'}}</span> <p style="color:#aaa;font-size:12px;">说明：整体验收里程碑不允许调整，非整体验收里程碑里程碑调整需要用户确认后才生效
-        </p>
+          <span style="float:right;margin-top:5px">
+            <span class="filter-weight">合计经营完工量 : 
+            <span style="color:#f00;font-size:18px">{{totaljyWgl<10000?totaljyWgl:totaljyWgl<100000000?(totaljyWgl/10000).toFixed(4):(totaljyWgl/100000000).toFixed(4)}} </span>{{totaljyWgl <10000?'元':totaljyWgl<100000000?'万元':'亿'}}</span>&#x3000;
+            <span class="filter-weight">合计完工量 : <span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} </span>{{totalWgl <10000?'元':totalWgl<100000000?'万元':'亿'}}</span> 
+            </span>
+            <p style="color:#aaa;font-size:12px;">说明：整体验收里程碑不允许调整，非整体验收里程碑里程碑调整需要用户确认后才生效</p>
         </p>
         <el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" :selectable='checkboxInit'>
@@ -167,6 +172,9 @@
           </el-table-column>
           <el-table-column prop="wglv" label="完工率(%)" width="100" v-if="ishow" show-overflow-tooltip> </el-table-column>
           <el-table-column prop="wglg" label="完工量(元)" width="100" v-if="ishow"> </el-table-column>
+          <el-table-column prop="jywglv" label="经营完工率(%)" width="130" v-if="ishow" show-overflow-tooltip> </el-table-column>
+          <el-table-column prop="jywglg" label="经营完工量(元)" width="130" v-if="ishow"> </el-table-column>
+
           <el-table-column prop="cnjssj" sortable label="承诺结束时间" width="150"> </el-table-column>
           <el-table-column prop="sjjssj" sortable label="实际结束时间" width="150"> </el-table-column>
           <el-table-column prop="dwmc" min-width="200" label="学校名称" show-overflow-tooltip></el-table-column>
@@ -234,6 +242,7 @@ export default {
       currentPage: 1,
       tableData3: [],
       totalWgl: "",
+      totaljyWgl:"",//经营完工量
       multipleSelection: [],
       planVisible: false,
       milestoneVisible: false,
@@ -597,10 +606,13 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           this.totalWgl = data.data.totalWgl;
+          this.totaljyWgl = !data.data.totaljyWgl?0:data.data.totaljyWgl;
           let milestone = data.data.data.rows;
           milestone.forEach((val, index, arr) => {
-            arr[index].wglv = returnFloat(val.wglv);
-            arr[index].wglg = returnFloat(val.wglg);
+            arr[index].wglv =  !arr[index].wglv?0:returnFloat(val.wglv);
+            arr[index].wglg =  !arr[index].wglg?0:returnFloat(val.wglg);
+            arr[index].jywglv =  !arr[index].jywglv?0:returnFloat(val.jywglv);
+            arr[index].jywglg =  !arr[index].jywglg?0:returnFloat(val.jywglg);
             val.zt =
               val.zt == "1"
                 ? "计划中"

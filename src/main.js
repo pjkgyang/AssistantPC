@@ -1,6 +1,5 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -21,8 +20,8 @@ Vue.prototype.$get = get;
 Vue.prototype.$post = post;
 
 // import 'babel-polyfill';
-// import es6Promise from "babel-polyfill";
-// es6Promise .polyfill();
+// import es6Promise from "es6-promise";
+// es6Promise.polyfill();
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'summernote/dist/summernote.js'
@@ -42,7 +41,7 @@ router.beforeEach((to, from, next) => {
   sessionStorage.setItem("Detailpannel",to.fullPath);
 
   if(!to.meta.title){
-    document.title = '金智教育工程小助手'
+    document.title = '金智教育工程小助手';
   }else{
     document.title = to.meta.title
   }

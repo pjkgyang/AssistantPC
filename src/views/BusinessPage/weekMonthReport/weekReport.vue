@@ -585,19 +585,21 @@ export default {
        let weekEndDate = GetNextDate(weekStartDate,6);
        let NowDate = getNowFormatDate();
        
+      //  this.weekValue == week &&
        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
           new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
-          this.weekValue == week &&
-          new Date(GetDateStr(0)).getDay() >= 4){
+            new Date(GetDateStr(0)).getDay() >= 4){
             this.weekValue = this.curWeek =  this.weeksNum = getWeeks(Year,Month+1);
             this.weekDay  = weekStartDate+' 至 '+weekEndDate;
             this.monthValue = lastMonth;
+ 
        }else{
             this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
             this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
             this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
             this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);  
        } 
+      
         // this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1); 
        this.mapWeekReportDate();
     },

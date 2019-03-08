@@ -268,12 +268,12 @@ function getAbsolutePath () {
               },
               {
                 path: '/businesspage/report/khbb/ydjlb',
-                name: 'BusinessReportYdkhbb',
+                name: 'BusinessReportYdjlb',
                 component: resolve => require(['@/views/BusinessPage/report/khbb/ydjlb.vue'], resolve),
               },
               {
                 path: '/businesspage/report/khbb/shgsb',
-                name: 'BusinessReportYdkhbb',
+                name: 'BusinessReportShgsb',
                 component: resolve => require(['@/views/BusinessPage/report/khbb/shgsb.vue'], resolve),
               },
               // 使用报表
@@ -294,7 +294,7 @@ function getAbsolutePath () {
               },
               {
                 path: '/businesspage/report/khbb/grrzsj', 
-                name: 'BusinessReportGrrzdj',
+                name: 'BusinessReportGrrzsj',
                 component: resolve => require(['@/views/BusinessPage/report/khbb/rzsjcx.vue'], resolve),
               },
               {

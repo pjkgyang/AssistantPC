@@ -39,145 +39,164 @@
     </div>    
 </template>
 <script>
-import { getResponsibleTaskList } from '@/api/common.js'
-import { wtztqkReport,ylWtReportByCpx } from '@/api/report.js'
-import {getMenu,getSession} from '@/utils/util.js'
+import { getResponsibleTaskList } from "@/api/common.js";
+import { wtztqkReport, ylWtReportByCpx } from "@/api/report.js";
+import { getMenu, getSession } from "@/utils/util.js";
 import reportYlwt from "@/components/reportTable/report-ylwt.vue";
 export default {
-    data(){
-        return{
-             gczdList:[],
-             cpxline:[],
-             dwlxList:[{
-              label:'1',
-              mc:'学校'
-              },{
-                label:'0',
-                mc:'金智'
-              },{
-                label:'2',
-                mc:'合作伙伴'
-              }],
-             gczd:'',
-             dwlx:'',
-             cpx:'',
-             cpxmc:"",
-             sjlb:'0',
-             ylwtList:[],
+  data() {
+    return {
+      gczdList: [],
+      cpxline: [],
+      dwlxList: [
+        {
+          label: "1",
+          mc: "学校"
+        },
+        {
+          label: "0",
+          mc: "金智"
+        },
+        {
+          label: "2",
+          mc: "合作伙伴"
         }
+      ],
+      gczd: "",
+      dwlx: "",
+      cpx: "",
+      cpxmc: "",
+      sjlb: "0",
+      ylwtList: []
+    };
+  },
+  methods: {
+    handleWtslrgz(param) {
+      //问题受理人报表
+      param["qyzd"] = this.gczd;
+      param["dwlx"] = this.dwlx;
+      param["cpxbh"] = this.cpx;
+      param["sjlb"] = this.sjlb;
+      param["lx"] = 1;
+      let routeData = this.$router.resolve({
+        path: "/report-list/questionlist.html",
+        query: param
+      });
+      window.open(routeData.href, "_blank");
     },
-    methods:{
-        handleWtslrgz(param){ //问题受理人报表
-           param['qyzd'] = this.gczd;
-           param['dwlx'] = this.dwlx;
-           param['cpxbh'] = this.cpx;
-           param['sjlb'] =  this.sjlb;
-           param['lx'] = 1;
-           let routeData = this.$router.resolve({
-                path: "/report-list/questionlist.html",
-                query:param
-           });
-          window.open(routeData.href, "_blank");    
-        }, 
-        exportTable(){  // 导出
-           window.open(window.baseurl+'report/exportylWtReportByCpx.do?dwlx='+this.dwlx+'&qyzd='+this.gczd+'&cpxbh='+this.cpxbh+'&cpxmc='+this.cpxmc+'&sjlb='+this.sjlb+'&lx=1');
-        },
-        handleDWLX(e){
-            let dwlx = e.target.getAttribute('data-type');  
-            if(dwlx==null) return;
-            this.dwlx = dwlx
-            this.ylWtReportByCpx();   
-        },
-        handleGCZD(e){
-            let gczd = e.target.getAttribute('data-type');  
-            if(gczd==null) return;
-            this.gczd = gczd
-            this.ylWtReportByCpx(); 
-        },
-        handleCPX(e){
-            let cpx = e.target.getAttribute('data-type');  
-            this.cpxmc = e.target.getAttribute('data-mc')  
-            if(cpx==null) return;
-            this.cpx = cpx
-            this.ylWtReportByCpx(); 
-        },
-        handleSJLB(e){
-            let sjlb = e.target.getAttribute('data-type'); 
-            if(sjlb==null) return;
-            this.sjlb = sjlb
-           this.ylWtReportByCpx(); 
-        },
+    exportTable() {
+      // 导出
+      window.open(
+        window.baseurl +
+          "report/exportylWtReportByCpx.do?dwlx=" +
+          this.dwlx +
+          "&qyzd=" +
+          this.gczd +
+          "&cpxbh=" +
+          this.cpx +
+          "&cpxmc=" +
+          this.cpxmc +
+          "&sjlb=" +
+          this.sjlb +
+          "&lx=1"
+      );
+    },
+    handleDWLX(e) {
+      let dwlx = e.target.getAttribute("data-type");
+      if (dwlx == null) return;
+      this.dwlx = dwlx;
+      this.ylWtReportByCpx();
+    },
+    handleGCZD(e) {
+      let gczd = e.target.getAttribute("data-type");
+      if (gczd == null) return;
+      this.gczd = gczd;
+      this.ylWtReportByCpx();
+    },
+    handleCPX(e) {
+      let cpx = e.target.getAttribute("data-type");
+      this.cpxmc = e.target.getAttribute("data-mc");
+      if (cpx == null) return;
+      this.cpx = cpx;
+      this.ylWtReportByCpx();
+    },
+    handleSJLB(e) {
+      let sjlb = e.target.getAttribute("data-type");
+      if (sjlb == null) return;
+      this.sjlb = sjlb;
+      this.ylWtReportByCpx();
+    },
 
-      //    遗留问题报表  //问题跟踪报表
-      ylWtReportByCpx(){
-          ylWtReportByCpx({
-            curPage:1,
-            pageSize:99999,
-            qyzd:this.gczd,
-            dwlx:this.dwlx,
-            cpxbh:this.cpx,
-            sjlb:this.sjlb,
-            lx:1,
-            keyword:''
-          }).then(({data})=>{
-            if(data.state == 'success'){
-                this.ylwtList = data.data
-            }else{
-               this.$alert(data.msg, '提示', {
-                confirmButtonText: '确定',
-                type:'error',
-                callback: action => {}
-                }); 
-            }
-          })
-      },
-    },
-      mounted(){
-        if(getSession('cpx') == null){
-                 getMenu('cpx',this.cpxline,true);//获取产品线
-                 getMenu('gczd',this.gczdList,true);//获取工程战队    
-        }else{
-                this.cpxline = getSession('cpx');
-                this.gczdList = getSession('gczd');      
+    //    遗留问题报表  //问题跟踪报表
+    ylWtReportByCpx() {
+      ylWtReportByCpx({
+        curPage: 1,
+        pageSize: 99999,
+        qyzd: this.gczd,
+        dwlx: this.dwlx,
+        cpxbh: this.cpx,
+        sjlb: this.sjlb,
+        lx: 1,
+        keyword: ""
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.ylwtList = data.data;
+        } else {
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error",
+            callback: action => {}
+          });
         }
-        this.ylWtReportByCpx();      
-      },
-      activated(){},
-      watch:{},
-      components: {reportYlwt}
-}
+      });
+    }
+  },
+  mounted() {
+    if (getSession("cpx") == null) {
+      getMenu("cpx", this.cpxline, true); //获取产品线
+      getMenu("gczd", this.gczdList, true); //获取工程战队
+    } else {
+      this.cpxline = getSession("cpx");
+      this.gczdList = getSession("gczd");
+    }
+    this.ylWtReportByCpx();
+  },
+  activated() {},
+  watch: {},
+  components: { reportYlwt }
+};
 </script>
 <style scope>
-.query-condition>div{
-    display: flex;
-    align-items: flex-start;
-    margin:10px 0;
-    font-size: 13px;
-}  
-.query-title{
-    font-size: 14px;
-    width: 100px;
-    white-space: nowrap;
-    text-align:left;
-    padding: 3px 10px 0;
-    font-weight: 700;
+.query-condition > div {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
+  font-size: 13px;
 }
-.query-list{
-    width: 95%;
+.query-title {
+  font-size: 14px;
+  width: 100px;
+  white-space: nowrap;
+  text-align: left;
+  padding: 3px 10px 0;
+  font-weight: 700;
 }
-.query-list span:hover{
-    cursor: pointer;
+.query-list {
+  width: 95%;
 }
-.query-list span{
-    display: inline-block;
-    padding: 0px 5px;
-    color: #637D8A;
-    border-radius: 3px;
-    margin:5px 10px 0 0;
+.query-list span:hover {
+  cursor: pointer;
+}
+.query-list span {
+  display: inline-block;
+  padding: 0px 5px;
+  color: #637d8a;
+  border-radius: 3px;
+  margin: 5px 10px 0 0;
 }
 
-.bg-active{
-    background: #1997D7;
-    color: #fff !important;
+.bg-active {
+  background: #1997d7;
+  color: #fff !important;
 }
 </style>

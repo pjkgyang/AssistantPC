@@ -193,5 +193,10 @@ export default {
     
     // 周报返回创建时间以及总结时间
     mapWeekReportDate:window.baseurl+'plan/mapWeekReportDate.do',//周报返回创建时间以及总结时间
+
+
+    // 支持中心 搜索
+    searchFiles:window.baseurl+'search/searchFiles.do',
+    refreshFileIndex:window.baseurl+'search/refreshFileIndex.do'
    
 }

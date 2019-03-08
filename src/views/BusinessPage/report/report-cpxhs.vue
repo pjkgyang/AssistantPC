@@ -21,7 +21,11 @@ export default {
   data() {
     return {
       filterList: ["qygc", "date", "dwlx", "jjzt"],
-      filterDate: {},
+      filterDate: {
+        dwlx :'',
+        gczd:'',
+        jjzt:''
+      },
       title: "区域所属学校",
       cpxhsbList: []
     };

@@ -120,8 +120,8 @@ axios.interceptors.response.use(
         if (error.response) {
             switch (error.response.status) {
                 case 401:
-                    if (sessionStorage.getItem('Detailpannel')) {
-                        window.location.href = 'http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=' + encodeURIComponent('http://careful.wisedu.com/' + sessionStorage.getItem('Detailpannel'));
+                    if (sessionStorage.getItem('Detailpannel') && sessionStorage.getItem('Detailpannel') != '/') {
+                        window.location.href = 'http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=' + encodeURIComponent('http://careful.wisedu.com/#' + sessionStorage.getItem('Detailpannel'));
                     } else {
                         window.location.href = 'http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=' + encodeURIComponent('http://careful.wisedu.com/#/');
                     }

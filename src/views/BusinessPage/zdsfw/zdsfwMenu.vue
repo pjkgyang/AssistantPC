@@ -9,7 +9,7 @@
           <div flex spacebetween class="mb-12">
             <div>
               <!--  -->
-              <el-button v-if="isJzuser == '0'" :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('tbfw')">提报服务</el-button>
+              <!-- <el-button v-if="isJzuser == '0'" :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('tbfw')">提报服务</el-button> -->
               <el-button :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('qrfw')">确认服务</el-button>
               <el-button :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('bhfw')">驳回服务</el-button>
             </div>
@@ -21,8 +21,8 @@
             <el-table-column fixed="left" type="selection" width="55"></el-table-column>
             <el-table-column fixed="left" label="操作" width="150">
               <template slot-scope="scope">
-                <el-button v-if="scope.row.zt != '1' && isJzuser == '0'" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
-                <el-button v-if="scope.row.zt == '1' && scope.row.jffzrxm == username" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
+                <el-button v-if="scope.row.zt != '1' && isJzuser == '0' && username == scope.row.zrrxm" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
+                <el-button v-if="scope.row.zt == '1' && isJzuser == '1'" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
                 <el-button v-if="scope.row.zt == '1' && (userGroupTag.includes('ZDSFWGLY') || scope.row.jffzrxm == username)" type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
                 <el-button type="text" size="mini" @click="handleCheckDetail(scope.row)">详情</el-button>
               </template>

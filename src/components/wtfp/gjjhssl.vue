@@ -56,7 +56,7 @@
       </div>
     </div>
     <xjjh-dialog :show.sync="xjjhShow"  :isEdit="isEdit" :questionData="wtData" @handleSavesuccess="handleSavesuccess"></xjjh-dialog>
-    <sspx-dialog :show.sync="sspxShow"></sspx-dialog>
+    <sspx-dialog :show.sync="sspxShow" ></sspx-dialog>
   </div>
 </template>
 
@@ -99,8 +99,8 @@ export default {
   watch: {
     show(n, o) {
       if (n) {
-
         this.pageCapacityPlan();
+        this.wtData = this.questionData;
       }
     }
   },
@@ -192,7 +192,8 @@ export default {
       this.currentPage = data;
       this.pageCapacityPlan();
     },
-    handleSearchEnter() {
+    handleSearchEnter(val) {
+      this.keyword = val;
       this.currentPage = 1;
       this.pageCapacityPlan();
     },  
@@ -223,7 +224,7 @@ export default {
       this.$get(this.API.pageCapacityPlan, {
         curPage: this.currentPage,
         pageSize: this.pageSize,
-        cpbh:this.questionData.cpbh,
+        cpbh:'',
         keyword: this.keyword,
         wtwid:this.questionData.wid
       }).then(res => {

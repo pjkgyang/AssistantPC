@@ -116,8 +116,8 @@
     <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
 
     <el-dialog title="改进计划" :visible.sync="dialogTableVisible" :width="'80vw'">
-      <gjjhcpl v-if="wtfbq =='W05' || this.wtfbqO == 'W05'" :questionData="quesData" :show="dialogTableVisible" ></gjjhcpl>
-      <gjjhssl v-if="wtfbq =='W03' || this.wtfbqO == 'W03'" :questionData="quesData" :show="dialogTableVisible" ></gjjhssl>
+      <gjjhcpl v-if="wtfbq =='W05' || this.wtfbqO == 'W05'" :questionData="quesData" :show.sync="dialogTableVisible" ></gjjhcpl>
+      <gjjhssl v-if="wtfbq =='W03' || this.wtfbqO == 'W03'" :questionData="quesData" :show.sync="dialogTableVisible" ></gjjhssl>
     </el-dialog>
   </div>
 </template>
@@ -252,6 +252,7 @@ export default {
   },
   methods: {
     handleImprovementPlan(data) {
+      // console.log(data);
       this.quesData = data;
       let dataArr = data.fbqdm.split(',');
       let w03i = '',

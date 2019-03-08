@@ -65,6 +65,7 @@ export default {
       value: false,
       textarea: "",
       ycfwqx: '',
+      fwqx:'',//可选日期范围
       fwqxShow: false,
       times:''
     };
@@ -75,11 +76,11 @@ export default {
       let self = this;
       return {
         disabledDate(time) {
-            let curDate = (new Date(self.ycfwqx)).getTime();
-            let three = 90 * 24 * 3600 * 1000;
+            let curDate = (new Date(self.fwqx)).getTime();
+            let three = 92 * 24 * 3600 * 1000;
             let threeMonths = curDate + three;
           return (
-            time.getTime() <  Date.now() || time.getTime() > curDate
+            time.getTime() <  Date.now() || time.getTime() > threeMonths
           )
         }
       };
@@ -181,12 +182,19 @@ export default {
 
         // 项目服务状态延长日期（2.21）;
         if(!!this.xmDetail.ycfwqx){
-           this.ycfwqx = GetMonthBefore(this.xmDetail.ycfwqx,3);
-        }else if(!!this.xmDetail.fwksrq && !this.xmDetail.ycfwqx){
-           this.ycfwqx = GetMonthBefore(this.xmDetail.fwksrq,Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+3);
+          this.ycfwqx = GetMonthBefore(this.xmDetail.ycfwqx,3);
+          this.fwqx = GetMonthBefore(this.xmDetail.ycfwqx,0); // 日期
         }else{
-           this.ycfwqx = GetMonthBefore(GetDateStr(0),Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+3);
+          this.ycfwqx = GetMonthBefore(GetDateStr(0),3);
+          this.fwqx = GetMonthBefore(GetDateStr(0),0); // 日期
         }
+        // else if(!!this.xmDetail.fwksrq && !this.xmDetail.ycfwqx){
+        //   this.ycfwqx = GetMonthBefore(GetDateStr(0),3);
+        //   this.fwqx = GetMonthBefore(GetDateStr(0),0); // 日期
+        // }else{
+        //   this.ycfwqx = GetMonthBefore(GetDateStr(0),Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)+3);
+        //   this.fwqx = GetMonthBefore(GetDateStr(0),Number(!this.xmDetail.fwqx?0:this.xmDetail.fwqx)); // 日期
+        // }
       }
     }
   },

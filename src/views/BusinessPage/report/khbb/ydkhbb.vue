@@ -176,12 +176,8 @@ export default {
     }
   },
   mounted() {
-    let date =
-      new Date().getFullYear() +
-      "-" +
-      (new Date().getMonth() + 1 < 10
-        ? "0" + new Date().getMonth() + 1
-        : new Date().getMonth() + 1);
+    let date = new Date().getFullYear() + "-" +
+      (new Date().getMonth() + 1 < 10 ? "0" + (new Date().getMonth() + 1) : (new Date().getMonth() + 1));
     this.filterData.yf = getPreMonth(date);
     this.$nextTick(() => {
       this.ydkhb();

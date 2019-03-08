@@ -85,12 +85,12 @@
                                         <el-option v-for="(xmlb,i) in xmlbList" :key="i" :label="xmlb" :value="xmlb"></el-option>
                                     </el-select>
                                 </div>&#x3000;
-                                <div>
+                                <!-- <div>
                                     <span class="filter-weight">产品线:</span>
                                     <el-select v-model="cpxValue" size="small" placeholder="请选择" collapse-tags multiple @change="handleSelectCpx">
                                         <el-option v-for="cpx in cpxList" :key="cpx.id" :label="cpx.name" :value="cpx.id"></el-option>
                                     </el-select>
-                                </div>&#x3000;
+                                </div>&#x3000; -->
                                     <div class="colcenter">
                                         <span class="filter-weight">里程碑状态:&nbsp;</span>
                                         <lcbztSelect :multipleLcbztList="XzlcbztList" @handleChangeLcbzt="handleChangeXzLcbzt"></lcbztSelect>&#x3000;

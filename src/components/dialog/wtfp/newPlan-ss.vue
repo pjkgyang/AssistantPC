@@ -40,15 +40,15 @@ export default {
   data() {
     return {
       visible: this.show,
-      title:'新建计划',
-      zrrShow:false,
+      title: "新建计划",
+      zrrShow: false,
       form: {
         cpmc: "",
         pxzt: "",
         pxxs: "",
         jhpxsj: "",
         fxrxm: "",
-        fxrbh:""
+        fxrbh: ""
       },
       pxxsList: [
         {
@@ -62,8 +62,9 @@ export default {
         {
           value: "3",
           label: "线上加线下"
-        },
-      ]
+        }
+      ],
+
     };
   },
   methods: {
@@ -71,32 +72,39 @@ export default {
       this.visible = false;
     },
     handleCommit() {
-        if(!this.validate()) return;
-        this.$post(this.API.addOrUpdateCapacityPlan,{
-            wid:this.isEdit?this.questionData.wid:'',
-            wtwid:!this.questionData.wtwid?this.questionData.wid:this.questionData.wtwid,
-            cpbh:this.questionData.cpbh,
-            cpmc:this.questionData.cpmc,
-            pxzt:this.form.pxzt,
-            pxxs:this.form.pxxs,
-            jhpxsj:this.form.jhpxsj,
-            fxrbh:this.form.fxrbh,
-            fxrxm:this.form.fxrxm
-        }).then(res=>{
-            if(res.state == 'success'){
-                this.visible = false;
-                this.$alert(this.isEdit?"编辑成功":"新建成功", "提示", {confirmButtonText: "确定",type:'success',
-                callback:action=>{
-                     this.$emit('handleSavesuccess','')
-                   }
-                });
-            }else{
-                this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
+      if (!this.validate()) return;
+      this.$post(this.API.addOrUpdateCapacityPlan, {
+        wid: this.isEdit ? this.questionData.wid : "",
+        wtwid: !this.questionData.wtwid
+          ? this.questionData.wid
+          : this.questionData.wtwid,
+        cpbh: this.questionData.cpbh,
+        cpmc: this.questionData.cpmc,
+        pxzt: this.form.pxzt,
+        pxxs: this.form.pxxs,
+        jhpxsj: this.form.jhpxsj,
+        fxrbh: this.form.fxrbh,
+        fxrxm: this.form.fxrxm
+      }).then(res => {
+        if (res.state == "success") {
+          this.visible = false;
+          this.$alert(this.isEdit ? "编辑成功" : "新建成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: action => {
+              this.$emit("handleSavesuccess", "");
             }
-        })
+          });
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
+        }
+      });
     },
-    handleChooseZrr(){
-      this.zrrShow = !this.zrrShow
+    handleChooseZrr() {
+      this.zrrShow = !this.zrrShow;
     },
     handleAddZrr(data) {
       this.form.fxrbh = data.userid;
@@ -106,47 +114,56 @@ export default {
 
     validate() {
       if (!this.form.pxxs) {
-        this.$alert("请选择培训形式", "提示", {confirmButtonText: "确定",type:'warning'});
+        this.$alert("请选择培训形式", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
         return false;
       }
       if (!this.form.jhpxsj) {
-        this.$alert("请选择计划培训日期", "提示", {confirmButtonText: "确定",type:'warning'});
+        this.$alert("请选择计划培训日期", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
         return false;
       }
       if (!this.form.fxrxm) {
-        this.$alert("请输入分享人工号", "提示", {confirmButtonText: "确定",type:'warning'});
+        this.$alert("请输入分享人工号", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
         return false;
       }
       return true;
     }
   },
   props: {
-    questionData:{
-      type:Object,
-      default:()=>{
-        return {}
+    questionData: {
+      type: Object,
+      default: () => {
+        return {};
       }
     },
     show: {
       type: Boolean,
       default: false
     },
-    isEdit:{
+    isEdit: {
       type: Boolean,
       default: false
-    },
+    }
   },
   watch: {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
-         this.form.pxzt = '';
-         this.form.pxxs = '';
-         this.form.jhpxsj = '';
-         this.form.fxrxm = this.form.fxrbh = '';
+        this.form.pxzt = "";
+        this.form.pxxs = "";
+        this.form.jhpxsj = "";
+        this.form.fxrxm = this.form.fxrbh = "";
       } else {
         this.form.cpmc = this.questionData.cpmc;
-        if(!!this.isEdit){
+        if (!!this.isEdit) {
           this.form.pxzt = this.questionData.pxzt;
           this.form.pxxs = this.questionData.pxxs;
           this.form.jhpxsj = this.questionData.jhpxsj;
@@ -155,15 +172,25 @@ export default {
         }
       }
     },
-    isEdit(n,o){
-      if(n){
-        this.title = '编辑计划'
-      }else{
-        this.title = '新建计划'
+    questionData: {
+      handler: function(val, oldval) {
+        if (!!val.cpmc) {
+          this.form.cpmc = this.questionData.cpmc;
+        }
+      },
+      immediate: true, //关键
+      deep: true
+    },
+
+    isEdit(n, o) {
+      if (n) {
+        this.title = "编辑计划";
+      } else {
+        this.title = "新建计划";
       }
     }
   },
-  components: {zrrDialog}
+  components: { zrrDialog }
 };
 </script>
 

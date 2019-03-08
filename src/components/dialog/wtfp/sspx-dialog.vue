@@ -183,11 +183,15 @@ export default {
     },
     newFiles(file) {
       this.files = [];
-      if (file.size / 1024 / 1024 < 10) {
+      if (file.size / 1024 / 1024 < 100) {
         this.files.push(file);
         this.uploadForm.append("fileUpload", file);
         return true;
       } else {
+        this.$message({
+          message: '上传文件大小不能超过100MB',
+          type: 'warning'
+        });
         return false;
       }
     },

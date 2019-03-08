@@ -2,14 +2,14 @@
     <div>
         <div>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane :label="'全部 ( '+fileCounts.all+' ) '" name="9"></el-tab-pane>
-                <el-tab-pane :label="'上传 ( '+fileCounts.upload+' ) '" name="1"></el-tab-pane>
-                <el-tab-pane :label="'下载 ( '+fileCounts.download+' ) '" name="0"></el-tab-pane>
-                <el-tab-pane :label="'好评 ( '+fileCounts.good+' ) '" name="2"></el-tab-pane>
-                <el-tab-pane :label="'差评 ( '+fileCounts.bad+' ) '" name="3"></el-tab-pane>
-                <el-tab-pane :label="'删除 ( '+fileCounts.delete+' ) '" name="6"></el-tab-pane>
-                <el-tab-pane v-if="isSvn" :label="'检出SVN ( '+fileCounts.checkout+' ) '" name="4"></el-tab-pane>
-                <el-tab-pane v-if="isSvn" :label="'更新SVN ( '+fileCounts.updatesvn+' ) '" name="5"></el-tab-pane>
+                <el-tab-pane :label="'全部 ( '+ ( !fileCounts.all?0:fileCounts.all ) + ' ) '" name="9"></el-tab-pane>
+                <el-tab-pane :label="'上传 ( '+ (!fileCounts.upload?0:fileCounts.upload) +' ) '" name="1"></el-tab-pane>
+                <el-tab-pane :label="'下载 ( '+ (!fileCounts.download?0:fileCounts.download)+' ) '" name="0"></el-tab-pane>
+                <el-tab-pane :label="'好评 ( '+ (!fileCounts.good?0:fileCounts.good)+' ) '" name="2"></el-tab-pane>
+                <el-tab-pane :label="'差评 ( '+ (!fileCounts.bad?0:fileCounts.bad)+' ) '" name="3"></el-tab-pane>
+                <el-tab-pane :label="'删除 ( '+ (!fileCounts.delete?0:fileCounts.delete)+' ) '" name="6"></el-tab-pane>
+                <el-tab-pane v-if="isSvn" :label="'检出SVN ( '+(!fileCounts.checkout?0:fileCounts.checkout)+' ) '" name="4"></el-tab-pane>
+                <el-tab-pane v-if="isSvn" :label="'更新SVN ( '+(!fileCounts.updatesvn?0:fileCounts.updatesvn)+' ) '" name="5"></el-tab-pane>
             </el-tabs>
         </div>
         <div >
@@ -78,11 +78,15 @@ export default {
         default:false
     }
   },
+  mounted(){
+    console.log(this.fileCounts.all)
+  },
   methods: {
     handleCommit(){
       this.$emit('handleCommit','')
     },
     handleClick(tab, event) {
+      console.log(this.activeName)
       this.$emit("hadnleChangeTab", this.activeName);
     },
     handleSizeChange(data) {

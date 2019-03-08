@@ -22,7 +22,11 @@ export default {
   data() {
     return {
       filterList: ["cpx", "date", "dwlx", "jjzt"],
-      filterDate: {},
+      filterDate: {
+        dwlx:'',
+        cpx:'',
+        jjzt:''
+      },
       qyjjqkList: []
     };
   },
