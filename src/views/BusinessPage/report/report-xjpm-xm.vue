@@ -10,10 +10,11 @@
            </div>
            <div>
                  <p class="query-title">关闭时间:</p>
-                 <p class="query-list">
+                 <p>
                     <el-date-picker size="mini" v-model="ksrqValue" type="date" placeholder="选择日期"  value-format="yyyy-MM-dd"></el-date-picker>&#x3000;  
                     至&#x3000; <el-date-picker size="mini" v-model="jsrqValue" type="date" placeholder="选择日期"  value-format="yyyy-MM-dd"></el-date-picker> 
-                 </p>
+                 </p>&#x3000; 
+                 <el-button type="primary" size="mini" @click="handleCheckDate">查询</el-button>
            </div>
             <div>
             <p class="query-title">区域工程:</p>
@@ -90,6 +91,11 @@ export default {
         }
     },
     methods:{
+        // 查询日期
+        handleCheckDate(){
+            this.nowPage = 0
+            this.WtReportOrderStar(1); 
+        },
         handleCurrentChange(data){  // 切换分页
             this.WtReportOrderStar(data); 
             this.nowPage = data - 1
@@ -101,7 +107,6 @@ export default {
         handleSearchBtn(){
             this.nowPage = 0
             this.WtReportOrderStar(1);    //学校报表
-            
         },
         handleWtpfXm(param){ //问题受理人报表
            param['gbsjStart'] =  this.ksrqValue;

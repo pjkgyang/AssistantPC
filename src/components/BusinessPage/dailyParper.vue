@@ -3,7 +3,7 @@
     <el-form ref="formData" label-width="80px" class="demo-formData" :inline="true">
       <el-form-item label="日志日期" required>
         <el-form-item>
-          <el-date-picker type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="date" style="width:172px;"></el-date-picker>
+          <el-date-picker :picker-options="pickerOptions" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="date" style="width:172px;"></el-date-picker>
         </el-form-item>
       </el-form-item>
       <el-form-item label="工时" required>
@@ -54,7 +54,12 @@ export default {
       filesArr: [],
       taskname: this.taskName,
       glxmbh: "",
-      glrwbh: ""
+      glrwbh: "",
+      pickerOptions:{
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          }
+        },  
     };
   },
   props: {

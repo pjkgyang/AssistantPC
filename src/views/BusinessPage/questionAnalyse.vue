@@ -10,9 +10,11 @@
       <div class="query-condition" v-if="queryLJshow">
         <div>
           <p class="query-title">提问时间:</p>
-          <p class="query-list">
-            <el-date-picker @change="changeStarDay" v-model="starDay" size="mini" type="date" placeholder="选择开始日期" value-format="yyyy-MM-dd"></el-date-picker> &#x3000; 至&#x3000;
-            <el-date-picker @change="changeEndDay" v-model="endDay" size="mini" type="date" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+          <p>
+            <el-date-picker  v-model="date" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" @change="handleDatepick">
+          </el-date-picker>
+            <!-- <el-date-picker @change="changeStarDay" v-model="starDay" size="mini" type="date" placeholder="选择开始日期" value-format="yyyy-MM-dd"></el-date-picker> &#x3000; 至&#x3000;
+            <el-date-picker @change="changeEndDay" v-model="endDay" size="mini" type="date" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
           </p>
         </div>
         <div>
@@ -182,7 +184,7 @@ export default {
       gjzt: "",
       bqly: "",
       wtfl: "",
-      cxzt: "0",
+      cxzt: "",
       sqgb: "",
       cpline: [],
       cplist: [],
@@ -204,7 +206,8 @@ export default {
       username: null,
       baseUrl: "",
       starDay: "",
-      endDay: ""
+      endDay: "",
+      date:[]
     };
   },
   props: {},
@@ -422,16 +425,26 @@ export default {
       this.CurrentPage = data;
       this.queryAllQuestions(data);
     },
-    changeStarDay(val) {
-      // 选择开始时间
-      this.CurrentPage = 1;
+        // 时间选择
+    handleDatepick(){
+      if(this.date.length){
+        this.starDay = !this.date[0]?"":this.date[0];
+        this.endDay = !this.date[1]?"":this.date[1];
+      }else{
+        this.starDay = this.endDay = "";
+      }
       this.queryAllQuestions(1);
     },
-    changeEndDay(val) {
-      // 选择结束时间
-      this.CurrentPage = 1;
-      this.queryAllQuestions(1);
-    },
+    // changeStarDay(val) {
+    //   // 选择开始时间
+    //   this.CurrentPage = 1;
+    //   this.queryAllQuestions(1);
+    // },
+    // changeEndDay(val) {
+    //   // 选择结束时间
+    //   this.CurrentPage = 1;
+    //   this.queryAllQuestions(1);
+    // },
     handleCXZT(e) {
       //查询状态
       let cxzt = e.target.getAttribute("data-type");

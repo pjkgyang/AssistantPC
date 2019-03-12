@@ -197,6 +197,9 @@ export default {
 
     // 支持中心 搜索
     searchFiles:window.baseurl+'search/searchFiles.do',
-    refreshFileIndex:window.baseurl+'search/refreshFileIndex.do'
+    refreshFileIndex:window.baseurl+'search/refreshFileIndex.do',
+
+    // 日志
+    log:window.baseurl+'sys/log.do',
    
 }

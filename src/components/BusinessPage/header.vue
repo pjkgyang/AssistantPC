@@ -186,6 +186,10 @@ export default {
   },
   watch: {
     $route(from, to) {
+      // 路由日志
+      this.$post(this.API.log,{
+        route:from.path
+      }).then(res=>{})
       this.routesArr = '';
       //切换header title
       // this.getMessages();
