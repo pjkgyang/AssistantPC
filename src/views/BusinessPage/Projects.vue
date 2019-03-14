@@ -64,6 +64,21 @@
                     min-width="1000"
                     height="523"
                     >
+                     <el-table-column
+                    fixed="left"
+                    label="操作"
+                    width="160"
+                    v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')"
+                    >
+                    <template slot-scope="scope">
+                      <el-button @click.native.prevent="handleCommand('1',scope.row.xmbh)" type="text" size="mini">
+                        过保提醒
+                      </el-button>
+                      <el-button @click.native.prevent="handleCommand('2',scope.row.xmbh)" type="text" size="mini">
+                        提醒记录
+                      </el-button>
+                    </template>
+                   </el-table-column> 
                     <el-table-column prop="htbh" label="合同编号" show-overflow-tooltip width="150"></el-table-column>
                     <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip width="100"></el-table-column>
                     <el-table-column label="项目名称" width="320">
@@ -83,7 +98,7 @@
                     <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
                     <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
                     <el-table-column prop="yfzrrxm" label="项目经理" width="100"></el-table-column>
-                    <el-table-column prop="jfzrrxm" label="甲方责任人" width="100"></el-table-column>
+                    <el-table-column prop="jfzrrxm" label="甲方责任人" width="100" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="yssj" label="整体验收时间" width="120"></el-table-column>
                     <el-table-column prop="lxrq" label="立项日期" width="100"></el-table-column>
                     <el-table-column prop="qdrq" label="启动日期" width="100"></el-table-column>
@@ -97,10 +112,16 @@
         </div>
     </div>
   </section>
+
+    <gbtxDialog :xmbh="xmbh" :show.sync="gbtxShow"></gbtxDialog>
+    <gbtxjlDialog :xmbh="xmbh" :show.sync="gbtxjlShow"></gbtxjlDialog>
   </div>
 </template>
 <script>
 import itemListCard from "@/components/BusinessPage/itemListCard.vue";
+import gbtxDialog from '@/components/dialog/xxkbxmlb/gbtxDialog';
+import gbtxjlDialog from '@/components/dialog/xxkbxmlb/gbtxjlDialog';
+
 import {
   exportXmData,
   changeXbZt,
@@ -151,9 +172,24 @@ export default {
       myItemData:{},
       emptyArray:[],
       urlData:{},
+
+      gbtxShow:false,  //过保提醒
+      gbtxjlShow:false,//过保提醒记录
+      userGroup:'',
+      xmbh:''
     };
   },
   methods: {
+    // 过保提醒
+    handleCommand(params,data){
+      this.xmbh = data;
+      if(params==1){
+        this.gbtxShow = true;
+      }else{
+        this.gbtxjlShow = true;
+      }
+    },
+
     // 跳转到详情（进度）
     handlePage(data) {
       let xbxm = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
@@ -289,6 +325,7 @@ export default {
   mounted() {
     this.baseUrl = window.baseurl;
     let shown = JSON.parse(sessionStorage.getItem("shown"));
+    this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
     if (shown != null) {
       this.show = shown;
     }
@@ -306,7 +343,7 @@ export default {
   },
 
   activated() {},
-  components: { itemListCard, pagination, UserBanner }
+  components: { itemListCard, pagination, UserBanner,gbtxDialog,gbtxjlDialog }
 };
 </script>
 <style scoped>

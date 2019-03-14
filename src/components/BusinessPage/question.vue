@@ -283,7 +283,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.xmkbInfo)
     this.username = window.userName;
     this.baseUrl = window.baseurl;
     getProject({

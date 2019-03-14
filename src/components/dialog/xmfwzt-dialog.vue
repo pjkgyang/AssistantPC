@@ -11,17 +11,17 @@
             </span>&#x3000;&#x3000;&#x3000;
             <span v-if="xmData.gcfwzt != '0'">
                 <span class="filter-weight">到期时间:</span>
-                <span>{{!xmDetail.ycfwqx?'无':xmDetail.ycfwqx}}</span>
+                <span>{{!xmData.ycfwqx?'无':xmData.ycfwqx}}</span>
             </span>
           </p>
           <p style="color:#999;font-size:12px;padding:0 7px" >
             <span>状态变更说明:</span>
-            <span>{{!xmDetail.gcfwztsm?'无':xmDetail.gcfwztsm}}</span>
+            <span>{{!xmData.gcfwztsm?'无':xmData.gcfwztsm}}</span>
           </p>
           <!-- 未过保不显示 -->
           <p class="mg-12" v-if="fwqxShow && value">
             <span style="color:#999;font-size:12px;padding:0 7px" >
-            注：当前服务期限：{{xmDetail.fwqx}}月&#x3000;服务开始日期：{{xmDetail.fwksrq}}&#x3000;当前到期时间: {{!xmDetail.ycfwqx?'无':xmDetail.ycfwqx}}&#x3000;最大延长时间：3个月
+            注：当前服务期限：{{xmDetail.fwqx}}月&#x3000;服务开始日期：{{xmDetail.fwksrq}}&#x3000;当前到期时间: {{!xmData.ycfwqx?'无':xmDetail.ycfwqx}}&#x3000;最大延长时间：3个月
             </span><br>
             <span class="filter-weight before-require">项目服务期限：</span>
             <span>
@@ -67,7 +67,10 @@ export default {
       ycfwqx: '',
       fwqx:'',//可选日期范围
       fwqxShow: false,
-      times:''
+      times:'',
+
+      // 记录更新
+      fwztObj:{}
     };
   },
   methods: {
@@ -76,11 +79,12 @@ export default {
       let self = this;
       return {
         disabledDate(time) {
-            let curDate = (new Date(self.fwqx)).getTime();
+            let curDate = new Date().getTime();
             let three = 92 * 24 * 3600 * 1000;
             let threeMonths = curDate + three;
           return (
-            time.getTime() <  Date.now() || time.getTime() > threeMonths
+            // time.getTime() <  Date.now() || 
+            time.getTime() > threeMonths
           )
         }
       };
@@ -100,6 +104,9 @@ export default {
         });
         return;
       }
+      this.fwztObj.ycfwqx = this.ycfwqx;
+      this.fwztObj.sm = this.textarea;
+
       this.$confirm(
         this.value ? "您是否确定启动服务？" : "您是否确定停止服务？",
         "提示",
@@ -163,11 +170,20 @@ export default {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
-        this.ycfwqx = ''
+        // this.ycfwqx = ''
         this.textarea = "";
       } else {
         this.xmData = this.xmDetail;
         
+
+        if(this.fwztObj.ycfwqx){
+          this.xmData.ycfwqx = this.fwztObj.ycfwqx
+        }
+        if(this.fwztObj.sm){
+          this.xmData.gcfwztsm = this.fwztObj.sm
+        }
+
+
         if (this.xmData.gcfwzt == "0") {
           this.value = false;
         } else {
@@ -180,14 +196,16 @@ export default {
           this.fwqxShow = false;
         }
 
+        
+
         // 项目服务状态延长日期（2.21）;
-        if(!!this.xmDetail.ycfwqx){
-          this.ycfwqx = GetMonthBefore(this.xmDetail.ycfwqx,3);
-          this.fwqx = GetMonthBefore(this.xmDetail.ycfwqx,0); // 日期
-        }else{
+        // if(!!this.xmDetail.ycfwqx){
+        //   this.ycfwqx = GetMonthBefore(this.xmDetail.ycfwqx,3);
+        //   this.fwqx = GetMonthBefore(this.xmDetail.ycfwqx,0); // 日期
+        // }else{
           this.ycfwqx = GetMonthBefore(GetDateStr(0),3);
           this.fwqx = GetMonthBefore(GetDateStr(0),0); // 日期
-        }
+        // }
         // else if(!!this.xmDetail.fwksrq && !this.xmDetail.ycfwqx){
         //   this.ycfwqx = GetMonthBefore(GetDateStr(0),3);
         //   this.fwqx = GetMonthBefore(GetDateStr(0),0); // 日期

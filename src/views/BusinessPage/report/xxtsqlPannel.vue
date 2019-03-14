@@ -4,13 +4,26 @@
     <section class="xxts-pannel_sort">
       <h5>统计情况</h5>
       <div flex spacearound class="mg-12">
-        <section @click="handleCheckDetail(item.type,item.value)" v-for="item in sortList" center :class="{'sort_circle':true,'active-hover':item.mc=='问题数'||item.mc=='延期任务' , 'circle_xms':item.mc=='项目数','circle_wts':item.mc=='问题数','circle_zgs':item.mc=='总工时','circle_yqs':item.mc=='延期任务'}">
-          <p>
+        <section @click="handleCheckDetail(item.type,item.value)" v-for="item in sortList" center 
+        :class="{'sort_circle':true,'active-hover':item.mc!='总工时' , 'circle_xms':item.mc=='项目数','circle_wts':item.mc=='问题数','circle_zgs':item.mc=='总工时','circle_yqs':item.mc=='延期任务','circle_fk':item.type=='fk'}">
+          <p v-if="item.type != 'fk'">
             <span class="nums">{{item.value}}</span>
             <span>{{item.mc=='总工时'?'(小时)':'(个)'}}</span><br>
             <span>{{item.mc}}</span>
           </p>
+          <p v-if="item.type == 'fk'" style="font-size:12px">
+            <span>{{item.mcyfk}}</span><br>
+            <span class="nums" style="font-size:14px">
+              {{item.yfk<10000?item.yfk:item.yfk<100000000?(item.yfk/10000).toFixed(2):(item.yfk/100000000).toFixed(2)}} </span>{{item.yfk <10000?'元':item.yfk<100000000?'万元':'亿'}}
+            </span>
+            <br>
+            <span>{{item.mcdfk}}</span><br>
+            <span class="nums" style="font-size:14px">
+              {{item.dfk<10000?item.dfk:item.dfk<100000000?(item.dfk/10000).toFixed(2):(item.dfk/100000000).toFixed(2)}} </span>{{item.dfk <10000?'元':item.dfk<100000000?'万元':'亿'}}
+            </span>
+          </p>
         </section>
+
       </div>
     </section>
     <section class="xxts-pannel_wtfbqk">
@@ -139,7 +152,19 @@
               <span>
                 <span class="fontRed">{{!detailData.bq13?0:detailData.bq13}}</span> 个
               </span>
-              </p>
+            </p>
+            <p>
+              <span>缓存问题</span>
+              <span>
+                <span class="fontRed">{{!detailData.bq18?0:detailData.bq18}}</span> 个
+              </span>
+            </p>
+            <p>
+              <span>浏览器兼容问题</span>
+              <span>
+                <span class="fontRed">{{!detailData.bq17?0:detailData.bq17}}</span> 个
+              </span>
+            </p>
           </div>
         </section>
         <section class="wtfbqk-pie">
@@ -215,16 +240,18 @@ export default {
       dwmc: "",
       detailData: {},
       sortList: [
-        { mc: "项目数", value: 10  },
-        { mc: "问题数", value: 10 ,type:'wtzs'},
-        { mc: "总工时", value: 10 },
-        { mc: "延期任务", value: 10 ,type:'yqrw'}
+        { mc: "项目数", value: 0  ,type:'xms'},
+        { mcyfk: "已付款", yfk: 0 ,mcdfk: "待付款", dfk: 0 ,type:'fk'},
+        { mc: "问题数", value: 0 ,type:'wtzs'},
+        { mc: "总工时", value: 0 },
+        { mc: "延期任务", value: 0 ,type:'yq'}
       ],
+      fkData:{},//欠款 带欠款
       gjhjData: [
-        { value: 100, name: "服务器环境" },
-        { value: 200, name: "数据库环境" },
-        { value: 300, name: "网络环境" },
-        { value: 400, name: "中间件环境" }
+        { value: 0, name: "服务器环境" },
+        { value: 0, name: "数据库环境" },
+        { value: 0, name: "网络环境" },
+        { value: 0, name: "中间件环境" }
       ], //改进学校环境饼图数据
       
       gjxxhjData:[],//改进学校环境
@@ -241,10 +268,10 @@ export default {
   methods: {
     handleCheckDetail(key, value, params, type) {
       if(!key) return;
-      if(key == 'yqrw'){
+      if(key == 'yq' || key == 'xms'|| key == 'fk'){
         let { href } = this.$router.resolve({
           path: "/xxtsqlDetail",
-          query:{lx:'yq',dwmc:this.dwmc}
+          query:{lx:key,dwmc:this.dwmc}
         });
         window.open(href, "_blank");
         return;
@@ -275,9 +302,14 @@ export default {
         if (res.state == "success") {
           this.detailData = res.data;
           this.sortList[0].value = !res.data.wtzs?0:res.data.xmzs;
-          this.sortList[1].value = !res.data.wtzs?0:res.data.wtzs;
-          this.sortList[2].value = !res.data.hjgs?0:res.data.hjgs;
-          this.sortList[3].value = !res.data.yqrws?0:res.data.yqrws;
+          this.sortList[1].yfk = !res.data.yfk?0:res.data.yfk;
+          this.sortList[1].dfk = !res.data.dfk?0:res.data.dfk;
+
+          this.sortList[2].value = !res.data.wtzs?0:res.data.wtzs;
+          this.sortList[3].value = !res.data.hjgs?0:res.data.hjgs;
+          this.sortList[4].value = !res.data.yqrws?0:res.data.yqrws;
+      
+
           // 改进环境组件
           this.gjxxhjData = [
             {value:res.data.bq50,name:'服务器环境'},
@@ -538,5 +570,9 @@ export default {
 .circle_yqs {
   border: 2px solid #98c070;
   background: rgba(152, 192, 112, 0.3);
+}
+.circle_fk{
+  border: 2px solid #bba49f;
+  background: rgba(180, 79, 54, 0.3)
 }
 </style>

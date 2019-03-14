@@ -19,9 +19,9 @@ export default {
     yswgphb:window.baseurl+'report/yswgphb.do', // 完工验收排行榜    
     pageEktbDetail:window.baseurl+'report/pageEktbDetail.do', //二开提报明细分页列表
     pageBxDetail:window.baseurl+'report/pageBxDetail.do',//报销明细分页列表
+    listXxdk:window.baseurl+'project/listXxdk.do', //获取学校到款明细
 
-    
-    
+
     // 使用报表
     problemsameIPStat:window.baseurl+'usageReport/problemsameIPStat.do',//提问受理IP相同统计报表
     userLoginStat:window.baseurl+'usageReport/userLoginStat.do',//用户登录统计报表
@@ -201,5 +201,16 @@ export default {
 
     // 日志
     log:window.baseurl+'sys/log.do',
-   
+    
+
+    // 获取项目列表
+    pageUnitProjects:window.baseurl+'project/pageUnitProjects.do', //获取单位项目
+    listHtnrApp:window.baseurl+'project/listHtnrApp.do', // 获取合同内容App
+    sendServiceExpired:window.baseurl+'project/sendServiceExpired.do', //发送服务过期提醒
+    listServiceExpired:window.baseurl+'project/listServiceExpired.do', //获取服务提醒列表
+    queryProjectParticipantMap:window.baseurl+'personnel/queryProjectParticipantMap.do', //获取项目参与者
+    
+
+
+    
 }
