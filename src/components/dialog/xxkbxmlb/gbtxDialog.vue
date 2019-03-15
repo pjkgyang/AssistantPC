@@ -78,6 +78,7 @@ export default {
             message: "发送成功~",
             type: "success"
           });
+          this.idArr = this.multipleSelection =  [];
         } else {
           this.$message({
             message: res.msg,

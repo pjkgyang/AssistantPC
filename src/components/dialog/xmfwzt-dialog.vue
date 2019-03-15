@@ -6,8 +6,7 @@
           <p>
             <span class="filter-weight before-require">项目服务状态：{{value?'启动':'停止'}}</span>
             <span>
-              <el-switch v-model="value" active-color="#13ce66" inactive-color="#dcdfe6">
-              </el-switch>
+              <el-switch v-model="value" active-color="#13ce66" inactive-color="#dcdfe6"></el-switch>
             </span>&#x3000;&#x3000;&#x3000;
             <span v-if="xmData.gcfwzt != '0'">
                 <span class="filter-weight">到期时间:</span>

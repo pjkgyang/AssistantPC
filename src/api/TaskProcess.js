@@ -40,6 +40,7 @@ export function queryLogTaskProcess(obj){
 			cybh:obj.cybh || "",
 			isRead:obj.isRead,
 			keyword:obj.keyword,
+			qygc:obj.qygc||"",
 			fw:obj.fw
 		}
 	})

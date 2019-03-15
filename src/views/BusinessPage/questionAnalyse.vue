@@ -141,7 +141,7 @@ export default {
   data() {
     return {
       dialogTableVisible: false,
-      gjjhShow:false,//改进计划显示
+      gjjhShow:true,//改进计划显示
       quesData: {},
       questionTitle: "提交问题",
       show: false,

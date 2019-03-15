@@ -159,7 +159,7 @@
                     <el-table-column prop="htje" label="合同金额(元)" min-width="130"></el-table-column>
                     <el-table-column prop="ysje" label="应收金额(元)" min-width="130"></el-table-column>
                     <el-table-column prop="dkje" label="到款金额(元)" min-width="130"></el-table-column>
-                    <el-table-column prop="dsk" label="待收款(元)" min-width="130"></el-table-column>
+                    <el-table-column prop="dsk" label="待付款(元)" min-width="130"></el-table-column>
                     <el-table-column prop="ye" label="余额(元)" min-width="130"></el-table-column>
                 </el-table>  
             </div>

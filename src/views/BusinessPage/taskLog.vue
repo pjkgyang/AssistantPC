@@ -10,8 +10,12 @@
               <span style="font-size:14px;">阅读状态 :</span>
               <el-select v-model="ydztValue"   style="width:100px" @change="changeTaskydzt">
                  <el-option label="全部" value=""></el-option>
-                 <el-option label="未阅" value="0"></el-option>
-                 <el-option label="已阅" value="1"></el-option>
+              </el-select>
+              &nbsp;
+              <span style="font-size:14px;" v-if="isJzuser == 0">区域 :</span>
+              <el-select v-if="isJzuser == 0" v-model="gcqyValue" style="width:130px" @change="changeTaskgcqy">
+                 <el-option label="全部" value=""></el-option>
+                 <el-option v-for="(qy,index) in gczdList" :key="index" :label="qy.mc" :value="qy.label"></el-option>
               </el-select>
               &nbsp;
                <span style="font-size:14px;">范围 :</span>
@@ -20,7 +24,7 @@
               </el-select>
               <el-input v-model="keyword" size="small" placeholder="项目编号/项目名称/填写人姓名" style="width:230px;" @change="handleEnterlog"></el-input>
               <el-button type="info" @click="checkTaskLog">查询</el-button>&nbsp;&nbsp;
-              <a :href="baseUrl+'process/exportPersonnelLog.do?startDay='+startDate+'&endDay='+endDate+'&isRead='+ydztValue+'&cybh='+value+'&fw='+fwValue" target="blank">导出</a>
+              <a :href="baseUrl+'process/exportPersonnelLog.do?startDay='+startDate+'&endDay='+endDate+'&isRead='+ydztValue+'&gcqy='+this.gcqyValue+'&cybh='+value+'&fw='+fwValue" target="blank">导出</a>
          </div>
 
          <div class="task-log-tabel">
@@ -113,7 +117,7 @@ import pagination from '@/components/BusinessPage/pagination.vue'
 import { addOrUpdateTaskProcess , queryLogTaskProcess ,exportPersonnelLog ,readLog,getLogComment,commentLog,deleteTaskProcess,
 getLogComments} from '@/api/TaskProcess.js'
 import { queryTdcy,queryVisiblePerson } from '@/api/personal.js'
-
+import { getMenu, getSession ,getPreMonth} from "@/utils/util.js";
 
 export default {
   data(){
@@ -137,7 +141,9 @@ export default {
           records:null  ,
           options: [],
           value: '',
-          ydztValue:'',
+          ydztValue:'', //阅读状态
+          gcqyValue:'', //工程区域
+          gczdList:[],//区域
           fwValue:'',
           TaskRelevance:{},
           rwgc:{},
@@ -203,6 +209,10 @@ export default {
     },
     //  切换阅读状态
     changeTaskydzt(){
+      this.queryLogTaskProcess(1);
+    },
+    // 工程区域
+    changeTaskgcqy(){
       this.queryLogTaskProcess(1);
     },
     //  范围
@@ -309,9 +319,7 @@ export default {
       this.dialogTaskVisible = !this.dialogTaskVisible
     }, 
     
-    handleCloseDialy(){
-      
-    },
+    handleCloseDialy(){},
  
     //查询
     checkTaskLog(){  
@@ -357,6 +365,7 @@ export default {
         endDay:this.endDate,
         cybh:this.value,
         isRead:this.ydztValue,
+        qygc:this.gcqyValue,
         keyword:this.keyword,
         fw:this.fwValue
       }).then(({data})=>{
@@ -431,6 +440,12 @@ export default {
               ("0" + (new Date().getMonth() + 1)).slice(-2)+'-'+ ("0" + new Date().getDate()).slice(-2);
         this.startDate = this.GetDateStr(-7);
         this.queryLogTaskProcess(1);
+
+        if (!getSession("gczd")) {
+          getMenu("gczd", this.gczdList, true); //获取工程战队
+        } else {
+          this.gczdList = getSession("gczd");
+        }
   },
   components:{dailyParper,dialogTask,pagination}
 }

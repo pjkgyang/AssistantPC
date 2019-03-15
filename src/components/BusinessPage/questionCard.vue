@@ -15,7 +15,7 @@
                   <span>
                       <span style="color:#363748;font-size:12px;">{{question.fbrq}}</span>&#x3000;
                       <span style="color:#363748;font-size:12px;">问题编号：{{question.wtbh}}</span>&#x3000;
-                      <span v-if="gjjhShow && (wtfbq=='W03' || wtfbq=='W05')" class="question-gjjhzt question-tag-ysqgb">{{question.gjzt==0?'未纳入计划':question.gjzt==1?'计划中':'计划已改进'}}</span>
+                      <span v-if="gjjhShow && (wtfbq=='W03' || wtfbq=='W05')" :class="{'question-tag-ysqgb':true,'question-gjjhzt-wnr':question.gjzt==0,'question-gjjhzt-jhz':question.gjzt==1,'question-gjjhzt-ynr':question.gjzt!=1&&question.gjzt!=0}">{{question.gjzt==0?'未纳入计划':question.gjzt==1?'计划中':'计划已改进'}}</span>
                   </span>&#x3000;
                   <span class="question-tag-ysqgb" v-if="question.sqgbCount > 0 && question.fbzt != 1">已申请关闭</span>&#x3000;
                   <span v-if="question.tjkfs > 0" style="color:#363748;font-size:12px;" class="question-tag-green">已提交开发</span>&#x3000;
@@ -247,7 +247,13 @@ export default {
    border-radius: 2px;
    margin-right:10px;
 }
-.question-gjjhzt{
-   background: rgb(55, 146, 82) !important;
+.question-gjjhzt-ynr{
+   background: rgb(69, 170, 100) !important;
 }
+.question-gjjhzt-wnr{
+   background: #f56c6c !important;
+}
+.question-gjjhzt-jhz{
+    background:rgb(81, 133, 230) !important;
+} 
 </style>
