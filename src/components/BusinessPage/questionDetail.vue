@@ -270,7 +270,7 @@
           </div>
         </div>
       </el-dialog>
-
+        <!-- 转发问题 -->
       <el-dialog width="1000px" title="转发问题" :visible.sync="innerZFWTisible" :close-on-click-modal="false" append-to-body>
         <div style="padding:10px;" class="question_transmit">
           <span class="filter-weight span_label before-require">转发对象: &nbsp;&nbsp;</span>
@@ -278,13 +278,20 @@
           <el-radio-group v-model="radio">
             <el-radio v-for="zfdx in zfDx" :key="zfdx.bh" :label="zfdx.bh">{{zfdx.mc}}</el-radio>
           </el-radio-group>
+
           <div style="margin:10px 0;" v-if="radio == 11">
             <span class="filter-weight span_label before-require">选择产品:</span>
             <el-select v-model="zfcp" size="mini" placeholder="选择产品" style="width:400px">
-              <el-option v-for="(cp,index) in cplist" :key="index" :label="cp.mc" :value="cp.label">
-              </el-option>
+              <el-option v-for="(cp,index) in cplist" :key="index" :label="cp.mc" :value="cp.label"></el-option>
             </el-select>
           </div>
+          <!-- 转发对象 -->
+          <div style="margin:10px 0;" v-if="radio == 66">
+            <span class="filter-weight span_label before-require">转发成员:</span>
+            <el-input size="mini"  placeholder="请选择转发对象" v-model="forwordUser" :disabled="true" style="width:400px"></el-input>&nbsp;
+            <el-button size="mini" type="primary" @click="handleChooseXmtdcy">选择转发成员</el-button>
+          </div>        
+
           <div style="margin-top:10px;">
             <span class="question-sqdyz-title filter-weight span_label">期望解决日期:</span>
             <el-date-picker size="mini" v-model="qwjjrqZf" type="date" placeholder="选择期望解决日期" value-format="yyyy-MM-dd"></el-date-picker>
@@ -299,6 +306,8 @@
           </div>
         </div>
       </el-dialog>
+
+
 
       <el-dialog title="选择项目" :visible.sync="dialogQuestionVisible" :close-on-click-modal="false" width="1000px" top="30px" append-to-body>
         <div style="padding:10px;">
@@ -370,6 +379,9 @@
       <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :wid="wid" :slContent="slContent" :questionInfo="qusetionInfo" :guid="gsValue" @handleSLsuccess="handleSLsuccess"></twDialog>
       <!-- 发送运维消息 -->
       <xxDialog :show.sync="ywxxShow" :tableData="userList" @handleSure="handleSure"></xxDialog>
+      <!-- 项目团队成员 -->
+      <xmtdcylog :show.sync="xmtdcyShow" :xmbh="qusetionInfo.xmbh" @hanldeCommitUser="hanldeCommitUser" ></xmtdcylog>
+
     </div>
   </div>
 </template>
@@ -380,6 +392,7 @@ import pagination from "@/components/BusinessPage/pagination.vue";
 import { getResponsibleTaskList } from "@/api/common.js";
 import twDialog from "@/components/dialog/tw-dialog.vue";
 import xxDialog from "@/components/dialog/sendxx-dialog.vue";
+import xmtdcylog from "@/components/dialog/xmtdcy.vue";
 import { getLoginUser } from "@/api/system.js";
 import {
   queryQuestion,
@@ -510,6 +523,7 @@ export default {
       lchjList: [], //流程环节（转发人员）
       show: false,
       ywxxShow: false, // 运维消息弹窗
+      xmtdcyShow:false,// 项目团队成员
       slContent: "", // 受理内容
       isEditReplyIndex: null,
       replygs: "",
@@ -524,7 +538,11 @@ export default {
       bhsm: "",
       cnjssm: "",
       hfwid: "",
-      crowdId: ""
+      crowdId: "",
+
+      // 项目团队转发 成员
+      forwordUser:'',
+      userIds:''
     };
   },
   props: {},
@@ -594,6 +612,18 @@ export default {
   },
 
   methods: {
+    // 选择团队成员
+    hanldeCommitUser(userids,usernames){
+      this.userIds = userids.join(',');
+      this.forwordUser = usernames.join(',');
+      this.xmtdcyShow = false;
+    },
+
+    // 选择团队成员 转发
+    handleChooseXmtdcy(){
+        this.xmtdcyShow = true;
+    },
+    // 日期格式化
     handleFocusDate() {
       let self = this;
       return {
@@ -1451,11 +1481,17 @@ export default {
         });
       });
     },
-
+    //转发问题(提交)
     CommitZFWT() {
-      //转发问题(提交)
       if (this.radio == 11 && this.zfcp == "") {
         this.$alert("请选择产品", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
+      if (this.radio == 66 && this.userIds == "") {
+        this.$alert("请选择转发成员", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
@@ -1483,7 +1519,8 @@ export default {
             ? ""
             : $("#summernoteZF").summernote("code"),
         cpbh: this.radio == 11 ? this.zfcp : "",
-        qwjjrq: this.qwjjrqZf
+        qwjjrq: this.qwjjrqZf,
+        userIds:this.radio == 66?this.userIds:'',
       }).then(({ data }) => {
         if (data.state == "success") {
           let keysArr = Object.keys(data.data);
@@ -1827,7 +1864,8 @@ export default {
     zdfzrChoose,
     sqjsForm,
     twDialog,
-    xxDialog
+    xxDialog,
+    xmtdcylog
   }
 };
 </script>

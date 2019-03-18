@@ -4,12 +4,14 @@
               <el-button type="primary"  @click="handleDailyPaper"><span class="el-icon-circle-plus"></span> 添加日报</el-button>
          </div>
          <div class="task-log-date">
-             <el-date-picker v-model="startDate"  type="date" size="small" placeholder="选择开始日期" value-format="yyyy-MM-dd"> </el-date-picker>
+             <el-date-picker style="width:130px" v-model="startDate"  type="date" size="small" placeholder="选择开始日期" value-format="yyyy-MM-dd"> </el-date-picker>
             至
-             <el-date-picker v-model="endDate" type="date" size="small" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker>&nbsp;
+             <el-date-picker style="width:130px" v-model="endDate" type="date" size="small" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker>&nbsp;
               <span style="font-size:14px;">阅读状态 :</span>
-              <el-select v-model="ydztValue"   style="width:100px" @change="changeTaskydzt">
+              <el-select v-model="ydztValue"   style="width:80px" @change="changeTaskydzt">
                  <el-option label="全部" value=""></el-option>
+                 <el-option label="已读" value="1"></el-option>
+                 <el-option label="未读" value="0"></el-option>
               </el-select>
               &nbsp;
               <span style="font-size:14px;" v-if="isJzuser == 0">区域 :</span>
@@ -19,10 +21,10 @@
               </el-select>
               &nbsp;
                <span style="font-size:14px;">范围 :</span>
-              <el-select v-model="fwValue"   style="width:120px" @change="changeTaskscope">
+              <el-select v-model="fwValue"   style="width:100px" @change="changeTaskscope">
                  <el-option v-for="(fw,index) in fwList" :label="fw.label" :value="fw.value" :key="index"></el-option>
               </el-select>
-              <el-input v-model="keyword" size="small" placeholder="项目编号/项目名称/填写人姓名" style="width:230px;" @change="handleEnterlog"></el-input>
+              <el-input v-model="keyword" size="small" placeholder="项目编号/项目名称/填写人姓名" style="width:200px;" @change="handleEnterlog"></el-input>
               <el-button type="info" @click="checkTaskLog">查询</el-button>&nbsp;&nbsp;
               <a :href="baseUrl+'process/exportPersonnelLog.do?startDay='+startDate+'&endDay='+endDate+'&isRead='+ydztValue+'&gcqy='+this.gcqyValue+'&cybh='+value+'&fw='+fwValue" target="blank">导出</a>
          </div>
@@ -122,7 +124,7 @@ import { getMenu, getSession ,getPreMonth} from "@/utils/util.js";
 export default {
   data(){
       return {
-          tableHeight:window.innerHeight - 185,
+          tableHeight:window.innerHeight - 200,
           fwList:[{ label:'全部', value:''},
                   { label:'战队（组织结构）', value:'0'},
                   { label:'学校成员', value:'2'},

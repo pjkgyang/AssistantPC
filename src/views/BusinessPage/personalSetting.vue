@@ -63,6 +63,12 @@ import layout from "@/components/layout/navitem.vue";
           childNodes: [],
         },
         {
+          privname: "售后工时查询",
+          url:'/businesspage/personalSetting/shgs',
+          icon:'el-icon-erp-baobiaoguanli',
+          childNodes: [],
+        },
+        {
           privname: "任职等级",
           url:'/businesspage/personalSetting/grrzdj',
           icon:'el-icon-erp-baobiaoguanli',

@@ -454,7 +454,8 @@ export function saveForward(obj){
 			 bh:obj.bh,
 			 nr:obj.nr,
 			 cpbh:obj.cpbh,
-			 qwjjrq:obj.qwjjrq
+			 qwjjrq:obj.qwjjrq,
+			 userIds:obj.userIds||""
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);

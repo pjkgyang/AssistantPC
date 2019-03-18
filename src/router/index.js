@@ -437,6 +437,11 @@ function getAbsolutePath () {
               component: resolve => require(['@/views/BusinessPage/personalSetting/item-js.vue'], resolve),
             },
             {
+              path: '/businesspage/personalSetting/shgs',
+              name: 'personalSetting-xmjs',
+              component: resolve => require(['@/views/BusinessPage/personalSetting/shgscx.vue'], resolve),
+            },
+            {
               path: '/businesspage/personalSetting/grrzdj',
               name: 'personalSetting-grrzdj',
               component: resolve => require(['@/views/BusinessPage/personalSetting/grrzdj.vue'], resolve),
