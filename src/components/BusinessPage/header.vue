@@ -65,7 +65,7 @@
   </div>
 </template>
 <script>
-import { encryptByDES,EventBus } from '@/utils/util.js'
+import { encryptByDES, EventBus } from "@/utils/util.js";
 import { getMessages } from "@/api/notice.js";
 import { queryHomePage, querySysPrivs } from "@/api/system.js";
 import { queryIntegral } from "@/api/personal.js";
@@ -93,7 +93,7 @@ export default {
       menuList: [],
       jf: "",
       menuData: [],
-      routesArr:''
+      routesArr: ""
     };
   },
   computed: {
@@ -187,10 +187,10 @@ export default {
   watch: {
     $route(from, to) {
       // 路由日志
-      this.$post(this.API.log,{
-        route:from.path
-      }).then(res=>{})
-      this.routesArr = '';
+      this.$post(this.API.log, {
+        route: from.path
+      }).then(res => {});
+      this.routesArr = "";
       //切换header title
       // this.getMessages();
       this.navActive = window.location.hash.split("#")[1];
@@ -221,8 +221,10 @@ export default {
   methods: {
     handleSelect(index, indexPath) {
       if (index.indexOf("http://") != -1 || index.indexOf("https://") != -1) {
-         let des = encryptByDES('assistant'+window.userId,'WISEDUUSER');
-         window.open(index.includes('?')?(index+'&sign='+des):(index+'?sign='+des));
+        let des = encryptByDES("assistant" + window.userId, "WISEDUUSER");
+        window.open(
+          index.includes("?") ? index + "&sign=" + des : index + "?sign=" + des
+        );
         return;
       }
       window.menu = null;
@@ -274,18 +276,18 @@ export default {
       });
     },
 
-    jugeRouter(obj,navActive){
-      if(!obj.childNodes.length){
+    jugeRouter(obj, navActive) {
+      if (!obj.childNodes.length) {
         //  if(obj.url == navActive){
         //    return false;
         //  }else{
         //    return true;
         //  }
-        this.routesArr += obj.url + ','
-      }else{
-        obj.childNodes.forEach(ele=>{
+        this.routesArr += obj.url + ",";
+      } else {
+        obj.childNodes.forEach(ele => {
           this.jugeRouter(ele);
-        })
+        });
       }
     }
   },

@@ -60,13 +60,6 @@
                     <el-table-column prop="hxcs" label="后续措施" width="200" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="yhmc" label="创建人" width="100" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="cjsj" label="创建时间" width="155"></el-table-column>
-                    <!-- <el-table-column label="添加阶段" width="120" v-if="tjjd">
-                        <template slot-scope="scope">
-                            <el-tag size="mini" :type="!scope.row.tjjd?'danger':''">
-                                {{scope.row.tjjd == 1?'计划中':scope.row.tjjd == 2?'总结时':scope.row.tjjd == 3?'增补':'未知'}}
-                            </el-tag>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="cljh" label="处理计划" width="200" show-overflow-tooltip></el-table-column>
                 </el-table>
                 <div text-right>
@@ -81,35 +74,33 @@
 </template>
 
 <script>
-import pzxqDialog from '@/components/dialog/pzdetail/pzxq-dialog.vue'
+import pzxqDialog from "@/components/dialog/pzdetail/pzxq-dialog.vue";
 import tableLayout from "@/components/layout/tableLayout.vue";
 export default {
   data() {
     return {
-      show:false,
+      show: false,
       currentPageLcb: 1,
-      pageSizeLcb:15,
+      pageSizeLcb: 15,
       totalLcb: 0,
 
       currentPageWt: 1,
-      pageSizeWt:15,
+      pageSizeWt: 15,
       totalWt: 0,
 
       tableDataLcb: [],
       tableDataWt: [],
 
-      pzxqData:[],
-      xmbh:'',
-      isAll:''
-
+      pzxqData: [],
+      xmbh: "",
+      isAll: ""
     };
   },
-  mounted(){
-     this.pageHomePageMonthWorkDetail();
-     this.pageHomePageMonthQuestionDetail();
+  mounted() {
+    this.pageHomePageMonthWorkDetail();
+    this.pageHomePageMonthQuestionDetail();
   },
   methods: {
-
     handleSizeChangeLcb(data) {
       this.pageSizeLcb = data;
       this.currentPageLcb = 1;
@@ -131,77 +122,77 @@ export default {
     },
 
     // 周工作
-    pageHomePageMonthWorkDetail(){
-        this.$get(this.API.pageHomePageMonthWorkDetail,{
-            curPage:this.currentPageLcb,
-            pageSize:this.pageSizeLcb,
-            xmbh:this.$route.query.xmbh,
-            isAll:this.$route.query.isAll
-        }).then((res)=>{
-            if(res.state == 'success'){
-                if(!res.data.rows){
-                   this.tableDataLcb = []; 
-                }else{
-                   this.tableDataLcb = res.data.rows
-                }
-                this.totalLcb = res.data.records
-            }
-        })
+    pageHomePageMonthWorkDetail() {
+      this.$get(this.API.pageHomePageMonthWorkDetail, {
+        curPage: this.currentPageLcb,
+        pageSize: this.pageSizeLcb,
+        xmbh: this.$route.query.xmbh,
+        isAll: this.$route.query.isAll
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data.rows) {
+            this.tableDataLcb = [];
+          } else {
+            this.tableDataLcb = res.data.rows;
+          }
+          this.totalLcb = res.data.records;
+        }
+      });
     },
     // 周问题
-    pageHomePageMonthQuestionDetail(){
-        this.$get(this.API.pageHomePageMonthQuestionDetail,{
-            curPage:this.currentPageWt,
-            pageSize:this.pageSizeWt,
-            xmbh:this.$route.query.xmbh,
-            isAll:this.$route.query.isAll
-        }).then((res)=>{
-            if(res.state == 'success'){
-                if(!res.data.rows){
-                   this.tableDataWt = []; 
-                }else{
-                   this.tableDataWt = res.data.rows
-                }
-                this.totalWt = res.data.records
-            }
-        })
+    pageHomePageMonthQuestionDetail() {
+      this.$get(this.API.pageHomePageMonthQuestionDetail, {
+        curPage: this.currentPageWt,
+        pageSize: this.pageSizeWt,
+        xmbh: this.$route.query.xmbh,
+        isAll: this.$route.query.isAll
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data.rows) {
+            this.tableDataWt = [];
+          } else {
+            this.tableDataWt = res.data.rows;
+          }
+          this.totalWt = res.data.records;
+        }
+      });
     },
 
-    getLogCommentsForHomePageDetail(wid){
-        this.$get(this.API.getLogCommentsForHomePageDetail,{
-            wid:wid,
-            isAll:this.$route.query.isAll
-        }).then((res)=>{
-            if(res.state == 'success'){
-               if(!res.data){
-                  this.pzxqData = []
-               }else{
-                  this.pzxqData = res.data
-               }
-            }
-        })
+    getLogCommentsForHomePageDetail(wid) {
+      this.$get(this.API.getLogCommentsForHomePageDetail, {
+        wid: wid,
+        isAll: this.$route.query.isAll
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data) {
+            this.pzxqData = [];
+          } else {
+            this.pzxqData = res.data;
+          }
+        }
+      });
     },
-    handleCheckpzDetail(data){
-        this.getLogCommentsForHomePageDetail(data);
-        this.show = !this.show
+    handleCheckpzDetail(data) {
+      this.getLogCommentsForHomePageDetail(data);
+      this.show = !this.show;
     }
   },
-  components: { tableLayout,pzxqDialog }
+  components: { tableLayout, pzxqDialog }
 };
 </script>
 
 <style lang="scss" scoped>
 .rbpzDetail {
   padding: 15px;
-  >div{
-      background: #fff;
-      padding: 10px;
-      border-radius: 4px;
+  > div {
+    background: #fff;
+    padding: 10px;
+    border-radius: 4px;
   }
-  h4{
-      font-size: 15px;
-      font-weight: 700;
-      margin: 10px 0 !important;
+  h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 10px 0 !important;
   }
 }
 </style>

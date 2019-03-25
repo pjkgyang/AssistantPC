@@ -135,7 +135,7 @@
       </div>
       <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
       <questionCard :questionList="questionList" @handleQuestionDetail="handleQuestionDetail" @handleReject="handleReject" @handleClose="handleClose" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion"></questionCard>
-      <div style="margin-top:10px;text-align:right" v-if="total > 10">
+      <div style="margin-top:10px;text-align:left" v-if="total > 10">
         <pagination :currentPage="CurrentPage" :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
       </div>
     </div>
@@ -198,7 +198,7 @@ export default {
         { label: "0", mc: "我的提问" },
         { label: "3", mc: "我受理过的问题" },
         { label: "2", mc: "我相关的问题" },
-        { label: "4", mc: "待我受理的问题" },
+        { label: "4", mc: "待我受理的问题" }
       ],
       dwlxList: [
         { label: "1", mc: "学校" },
@@ -228,14 +228,14 @@ export default {
       wid: "",
       xmbh: "",
       xmmc: "",
-      tjkf:"",
+      tjkf: "",
       accreditShow: false,
       showCondition: "",
       isJZuser: "",
       baseUrl: "",
       starDay: "",
       endDay: "",
-      date:[],
+      date: [],
       userGroupTag: "",
       fwzl: 1, // 质量评分
       wtInfo: {}, // 问题详情
@@ -284,20 +284,23 @@ export default {
   methods: {
     handleReject(params, index, sm) {
       applyDismiss({
-        wid:'',
+        wid: "",
         zbwid: params.wid,
-        sm:sm
+        sm: sm
       }).then(({ data }) => {
         if (data.state == "success") {
           this.$alert("已成功驳回！", "提示", {
             confirmButtonText: "确定",
             type: "success",
             callback: action => {
-              this.questionList[index].sqgbCount = 0
+              this.questionList[index].sqgbCount = 0;
             }
           });
         } else {
-          this.$alert(data.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
       });
     },
@@ -479,16 +482,16 @@ export default {
     handlequeryQuestion() {
       this.queryAllQuestions(1);
     },
-     // 分页切换
+    // 分页切换
     handleCurrentChange(data) {
       this.queryAllQuestions(data);
     },
     // 时间选择
-    handleDatepick(){
-      if(this.date.length){
-        this.starDay = !this.date[0]?"":this.date[0];
-        this.endDay = !this.date[1]?"":this.date[1];
-      }else{
+    handleDatepick() {
+      if (this.date.length) {
+        this.starDay = !this.date[0] ? "" : this.date[0];
+        this.endDay = !this.date[1] ? "" : this.date[1];
+      } else {
         this.starDay = this.endDay = "";
       }
       this.queryAllQuestions(1);
@@ -515,7 +518,7 @@ export default {
       this.sfcb = sfcb;
       this.queryAllQuestions(1);
     },
-    handleTJKF(e){
+    handleTJKF(e) {
       let tjkf = e.target.getAttribute("data-type");
       if (tjkf == null) return;
       this.tjkf = tjkf;
@@ -628,7 +631,7 @@ export default {
         deadline: this.cnqx,
         starDay: this.starDay,
         endDay: this.endDay,
-        tjkf:this.tjkf
+        tjkf: this.tjkf
       }).then(({ data }) => {
         if (data.state == "success") {
           if (!!data.data && data.data.rows.length != 0) {

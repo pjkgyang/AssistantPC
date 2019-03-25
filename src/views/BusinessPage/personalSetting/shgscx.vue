@@ -4,8 +4,14 @@
         <div flex>
             <p class="query-title">高级查询:</p>
             <p>
-                <el-input v-model="keyword" style="width:493px;" size="mini" placeholder="请输入项目编号/项目名称/合同编号/甲方负责人/乙方负责人" @change="handleSearch"></el-input>&#x3000;
+                <el-input v-model="keyword" style="width:493px;" size="mini" placeholder="请输入问题标题/问题编号/发布人" @change="handleSearch"></el-input>&#x3000;
                 <el-button size="mini" type="primary" @click="handleSearch">查询</el-button>
+            </p>
+        </div>
+        <div flex style="margin:10px 0">
+            <p class="query-title">月份:</p>
+            <p>
+              <el-date-picker @change="handleChangeYf" size="mini" v-model="yf" value-format="yyyy-MM" type="month" placeholder="选择月"> </el-date-picker>
             </p>
         </div>
         <!-- 结算状态 -->
@@ -13,95 +19,167 @@
             <p class="query-title">结算状态:</p>
             <p class="query-list">
             <span  :class="{'bg-active':jszts == ''}" @click="handleFilterJSZT('')">全部</span>
-            <span  v-for="jszt in jsztMenu"  :class="{'bg-active':jszts == jszt.id}"
-                    :key="jszt.id" @click="handleFilterJSZT(jszt.id)">{{jszt.mc}}</span>
+            <span  v-for="jszt in jsztMenu"  :class="{'bg-active':jszts == jszt.label}"
+                    :key="jszt.id" @click="handleFilterJSZT(jszt.label)">{{jszt.mc}}</span>
             </p>
        </div>
       <div text-right>
         <el-button size="mini" type="primary" @click="handleExport">导出</el-button>
       </div>
-      <reportTable :type="$route.params.id" :tableData="dataList" :pageShow="true" :currentPage="currentPage" 
+      <reportTable :type='"shgs"' :tableData="dataList" :pageShow="true" :currentPage="currentPage" 
       :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" :exportShow="false" :indexArr='[]' 
-      :widthArr="[3]" :rowWidth="'300'" :Width="'140'" :Height="180" ></reportTable>
+      :widthArr="[3]" :rowWidth="'300'" :Width="'140'" :Height="320" @handleXxwt="handleXxwt"></reportTable>
     </div>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="500px"
+      >
+          <div class="jszt-dialog">
+              <h4>请选择结算标志:</h4>
+              <el-radio-group v-model="jsztRadio">
+                  <el-radio v-for="(zt,index) in jsztMenu" :key="index" :label="zt.label">{{zt.mc}}</el-radio>
+              </el-radio-group>
+          </div>
+          
+      <span slot="footer" class="dialog-footer">
+            <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+            <el-button size="mini" type="primary" @click="handleCommit">确 定</el-button>
+         </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import reportTable from "@/components/reportTable/tableComponents.vue";
+import { getMenu, getSession, getPreMonth } from "@/utils/util.js";
 export default {
   data() {
     return {
+      dialogVisible:false,
       currentPage: 1,
       pageSize: 25,
       dataList: {},
-      queryData: {},
       routePath: "",
       queryMark: "",
 
-      jsztMenu: [
-        { id: 1, mc: "结算" },
-        { id: 2, mc: "不结算" },
-        { id: 3, mc: "后续结算" }
-      ],
+      jsztRadio:"0",//结算状态 单选
+      jsztMenu: [],
       keyword: "",
-      jszts: "" //结算状态
+      jszts: "", //结算状态
+      yf:'',
+
+      wid:'',//问题wid
+      rygh:'',//人员工号
+      index:''
     };
   },
   methods: {
     handleSearch() {
-
+      this.ydwtshgsxqb();
     },
+    // 结算状态
     handleFilterJSZT(data) {
       this.jszts = data;
-     
+      this.ydwtshgsxqb();
     },
-    handleExport() {
-      let url = "";
-      let param = "";
-      // 考核报表详情
-      if (this.$route.params.id == "lcbxq") {
-        // 里程碑(奖励，考核)
-        url = "assessment/exportYdkhlcbxqb.do";
-        param = window.location.hash.split("?")[1];
-        if (param.indexOf("&ydjl=1") != -1) {
-          param = param.replace("&ydjl=1", "");
+    handleCommit(){
+      this.xgjszt();
+    },
+    handleXxwt(data, i, params) {
+      this.wid = data[0];
+      this.rygh = data[1];
+      this.index = i;
+      let url;
+      if (params[i].zh == '问题标题') {
+        url = "/questionDetail";
+        let routeData = this.$router.resolve({
+          path: url,
+          query:{wid:data[0]}
+        });
+        window.open(routeData.href, "_blank");
+      }
+      if(params[i].zh == '结算状态'){
+        this.$get(this.API.nfxgjszt,{
+          yf:this.yf,
+          rygh:data[1]
+        }).then(res=>{
+          if(res.state == 'success'){
+            if(!!res.data){
+              this.dialogVisible = true;
+            }else{
+               this.$message({
+                showClose: true,
+                message:res.msg,
+                type: 'warning'
+              });
+            }
+          }
+        })
+      }
+    },
+    // 修改结算状态
+    xgjszt(){
+      this.$get(this.API.xgjszt,{
+        yf:this.yf,
+        wid:this.wid,
+        rygh:this.rygh,
+        jszt:this.jsztRadio
+      }).then(res=>{
+        if(res.state == 'success'){
+          // 当选择不结算和后续结算后，自动修改核准工时为0；
+          if(this.jsztRadio != '0'){
+            this.ydwtshgsxqb();
+          }
+          this.$message({
+                showClose: true,
+                message:'保存成功~',
+                type: 'success'
+          });
+          this.dialogVisible = false;
         }
-      }
-      if (this.$route.params.id == "wt") {
-        // 问题
-        url = "assessment/exportYdkhwtxqb.do";
-        param = window.location.hash.split("?")[1];
-      }
-      if (this.$route.params.id == "ts") {
-        // 投诉
-        url = "assessment/exportYdkhtsxqb.do";
-        param = "yf=" + this.queryData.yf + "&rygh=" + this.queryData.rygh;
-      }
-      // 售后工时详情
-      if (this.$route.params.id == "shgs") {
-        //售后工时
-        url = "assessment/exportYdwtshgsxqb.do";
-        param = window.location.hash.split("?")[1];
-      }
-      // 月度奖励详情
-      if (this.$route.params.id == "ydjlwtxq") {
-        //问题
-        url = "assessment/exportYdjlwtxqb.do";
-        param = window.location.hash.split("?")[1];
-      }
-      window.open(window.baseurl + url + "?" + param);
+      })
     },
-    handleCurrentChange() {},
+    // 导出
+    handleExport() {
+      window.open(window.baseurl + 'assessment/exportYdwtshgsxqb.do?yf='+this.yf+'&keyword='+this.keyword+'&jszt='+this.jszts);
+    },
+    handleCurrentChange(data) {
+        this.currentPage = data;
+        this.ydwtshgsxqb();
+    },
+    handleChangeYf(){
+      this.ydwtshgsxqb();
+    },
+    // 售后个人工时详情
     ydwtshgsxqb() {
-      this.$get(this.API.ydwtshgsxqb, this.queryData).then(res => {
+      this.$get(this.API.ydwtshgsxqb,{
+        curPage:this.currentPage,
+        pageSize:this.pageSize,
+        isPersonal:true,
+        yf:this.yf,
+        jszt:this.jszts,
+        keyword:this.keyword
+      }).then(res => {
         if (res.state == "success") {
           this.dataList = res.data;
         }
       });
     }
   },
-  mounted() {},
+  mounted() {
+     if (!getSession("wtgsjszt")) {
+      getMenu("wtgsjszt", this.jsztMenu, true); //获取产品线
+    } else {
+      this.jsztMenu = getSession("wtgsjszt");
+    }
+
+    let date = new Date().getFullYear() + "-" +
+      (new Date().getMonth() + 1 < 10 ? "0" + (new Date().getMonth() + 1) : (new Date().getMonth() + 1));
+    this.yf = getPreMonth(date);
+    this.ydwtshgsxqb();
+  },
   components: { reportTable }
 };
 </script>
@@ -114,6 +192,14 @@ export default {
   h4 {
     margin: 10px 0 !important;
     font-weight: 700;
+  }
+}
+.jszt-dialog{
+  padding:20px;
+  h4{
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:10px !important;
   }
 }
 </style>

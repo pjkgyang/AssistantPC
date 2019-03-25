@@ -11,8 +11,6 @@
         <el-table-column type="selection" width="55" fixed="left" :selectable='checkboxInit' v-if="!!rwzt"></el-table-column>
         <el-table-column label="操作"  fixed="left" width="150">
         <template slot-scope="scope" >
-            <!-- <el-button v-if="scope.row.lx != 1 && scope.row.zt === '2' && scope.row.lx == 3?userName == scope.row.jfzrrxm:scope.row.lx == 5?userName == scope.row.yfzrrxm:userName == scope.row.cjrxm"
-             size="mini" type="text" @click="handlejfqr(scope.row)">{{scope.row.lx == 3||scope.row.lx == 1?'甲方确认':scope.row.lx == 5?'乙方确认':'创建人确认'}}</el-button> -->
 
             <el-button size="mini" type="text" v-if="scope.row.lx == 9 && scope.row.zt == '2' && userName == scope.row.cjrxm" @click="handlejfqr(scope.row)">创建人确认</el-button>
             <el-button size="mini" type="text" v-if="scope.row.lx == 5 && scope.row.zt == '2' && userName == scope.row.yfzrrxm" @click="handlejfqr(scope.row)">乙方确认</el-button>
@@ -52,45 +50,44 @@
 export default {
   data() {
     return {
-        tableHeight:window.innerHeight - 220,
-        userName:''
+      tableHeight: window.innerHeight - 220,
+      userName: ""
     };
   },
-  props:{
-    tableData:{
-      type:Array,
-      default:()=>{
-        return []
+  props: {
+    tableData: {
+      type: Array,
+      default: () => {
+        return [];
       }
     },
-    rwzt:{
-      type:String,
-      default:''
+    rwzt: {
+      type: String,
+      default: ""
     }
   },
-  mounted(){
+  mounted() {
     this.userName = window.userName;
   },
-  methods:{
-      checkboxInit(row, index) {
-        if (row.lx == '1' && this.rwzt == '1'){
-          return 0;
-        }else if(row.lx == '1' && this.rwzt == '2' && row.sfjfqr != 0)
-          return 0; 
-        else return 1;
-      },
-      handlejfqr(data){
-        data.type = 'jfqr';
-        // console.log(data)
-        this.$emit('handlejfqr',data)  
-      },
-      handletask(data){
-        data.type = 'daily';
-        this.$emit('handletask',data)   
-      },
-      handleSelectionChange(val) {
-        this.$emit('handleSelectionChange',val);
-      }  
+  methods: {
+    checkboxInit(row, index) {
+      if (row.lx == "1" && this.rwzt == "1") {
+        return 0;
+      } else if (row.lx == "1" && this.rwzt == "2" && row.sfjfqr != 0) return 0;
+      else return 1;
+    },
+    handlejfqr(data) {
+      data.type = "jfqr";
+      // console.log(data)
+      this.$emit("handlejfqr", data);
+    },
+    handletask(data) {
+      data.type = "daily";
+      this.$emit("handletask", data);
+    },
+    handleSelectionChange(val) {
+      this.$emit("handleSelectionChange", val);
+    }
   },
   components: {}
 };

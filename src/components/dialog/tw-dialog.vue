@@ -8,8 +8,17 @@
               <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
             </el-input>
           </el-form-item>
-          <el-form-item label="项目名称" required v-if="!chooseableItem">
+          <el-form-item label="项目名称"  v-if="!chooseableItem">
             <el-input size="mini" type="text" style="width:520px" v-model="xmmc" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="项目状态" required >
+             <el-input size="mini" type="text" style="width:192px" v-model="xmzt" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="问题来源" required >
+            <el-select v-model="question.wtly" size="mini" placeholder="请选择问题来源" style="width:192px">
+              <el-option v-for="(item,index) in wtly" :key="index" :label="item.mc" :value="item.label">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="问题类别" required v-if="(showCondition==1||showCondition==2)">
             <el-select v-model="question.wtlb" size="mini" placeholder="请选择问题类别" style="width:192px">
@@ -120,6 +129,8 @@ export default {
       showCondition: "",
       question: {
         wtlb: "",
+        xmzt:"",//项目状态
+        wtly:"",//问题来源
         sfjj: "",
         wtjb: "",
         cp: "",
@@ -135,6 +146,7 @@ export default {
       },
       cplist: [],
       wtlb: [],
+      wtly:[],//问题来源
       uploadAction: "https://jsonplaceholder.typicode.com/posts/",
       fileList: [],
       fileData: [],
@@ -152,7 +164,8 @@ export default {
       },
       isJZuser: null,
       xmcpList: [],
-      xmData:[] //选择项目信息
+      xmData:{}, //选择项目信息
+      xmzt:'' //项目状态
     };
   },
   props: {
@@ -213,12 +226,8 @@ export default {
       };
     },
     handleEdit(data) {
+      this.xmzt = data.xmzt;
       this.xmData = data;
-      // //选择项目（）
-      // if(data.gcfwzt == '0'){
-      //   this.$alert(data.gcfwztsm,'提示',{type:'warning',confirmButtonText: '确定'});
-      //   return;
-      // }
       if (this.questionTitle == "我要提问") {
         this.queryResponsibleProduct(data.xmbh);
       }
@@ -274,6 +283,7 @@ export default {
         !this.question.wtlb ||
         !this.question.sfjj ||
         !this.question.wtjb ||
+        !this.question.wtly||
         !this.question.cp ||
         !this.question.yxfw ||
         !this.question.sfbug ||
@@ -302,6 +312,7 @@ export default {
       )
         .then(() => {
           customerQuestion({
+            wtly:this.question.wtly,
             wtlb: this.question.wtlb,
             jjyf: this.question.sfjj,
             wtjb: this.question.wtjb,
@@ -344,23 +355,24 @@ export default {
     handleCommit() {
       this.question.nr = $("#summernote").summernote("code");
       if (this.showCondition == 1 || this.showCondition == 2) {
-        if (this.xmmc == "") {
+        if (!this.xmmc) {
           this.$alert("请先选择关联项目", "提示", {
             confirmButtonText: "确定",
             type: "warning"
           });
           return;
         } else if (
-          this.question.wtlb == "" ||
-          this.question.sfjj == "" ||
-          this.question.wtjb == "" ||
-          this.question.cp == "" ||
-          this.question.yxfw == "" ||
-          this.question.sfbug == "" ||
-          this.question.bbh == "" ||
-          this.question.qwjjrq == "" ||
-          this.question.title == "" ||
-          this.question.nr == "" ||
+          !this.question.wtlb ||
+          !this.question.sfjj||
+          !this.question.wtjb||
+          !this.question.wtly ||
+          !this.question.cp||
+          !this.question.yxfw||
+          !this.question.sfbug||
+          !this.question.bbh||
+          !this.question.qwjjrq||
+          !this.question.title||
+          !this.question.nr||
           this.question.nr == "<p><br></p>"
         ) {
           this.$alert("问题选项全部为必填项，请填写完整", "提示", {
@@ -369,7 +381,10 @@ export default {
           });
           return;
         }
+         console.log(this.question.wtly);
+         return;
         saveQuestion({
+          wtly: this.question.wtly,
           wtlb: this.question.wtlb,
           jjyf: this.question.sfjj,
           wtjb: this.question.wtjb,
@@ -408,6 +423,7 @@ export default {
       } else if (this.showCondition == 0) {
         // 老师提问
         if (
+          this.question.wtly == ""||
           this.question.title == "" ||
           this.question.nr == "" ||
           this.question.cp == "" ||
@@ -422,6 +438,7 @@ export default {
           return;
         }
         customerQuestion({
+          wtly:this.question.wtly,
           bt: this.question.title,
           nr: this.question.nr,
           wid: this.question.wid,
@@ -522,6 +539,8 @@ export default {
     show() {
       this.visible = this.show;
       if (this.show) {
+        this.isJZuser = sessionStorage.getItem('isJZuser');
+        this.question.wtly = sessionStorage.getItem('isJZuser') == '0'?'2':'1';
         this.$nextTick(() => {
           $("#summernote").summernote({
             dialogsInBody: true,
@@ -555,6 +574,13 @@ export default {
           this.wtlb = getSession("ProblemType");
           this.cplist = getSession("kycp");
         }
+
+        if (!getSession("ProblemSource")) {
+          getMenu("ProblemSource", this.wtly, "");
+        } else {
+          this.wtly = getSession("ProblemSource");
+        }
+
         this.fileList = [];
         this.fileData = [];
         this.filesData = [];
@@ -570,6 +596,7 @@ export default {
           this.question.title = "";
           this.question.wid = "";
           this.question.nr = "";
+          this.xmzt = "";
           $("#summernote").summernote("code", "");
           if (this.chooseableItem) {
             this.xmmc = "";
@@ -577,6 +604,7 @@ export default {
           } else {
             this.xmmc = this.itemInfo.xmmc;
             this.xmbh = this.itemInfo.xmbh;
+            this.xmzt = this.itemInfo.xmzt;
             this.queryResponsibleProduct(this.xmbh);
           }
         } else {
@@ -596,6 +624,9 @@ export default {
           this.question.wid = this.questionInfo.wid;
           this.xmmc = this.questionInfo.xmmc;
           this.xmbh = this.questionInfo.xmbh;
+          this.xmzt = this.questionInfo.xmzt;
+          this.question.wtly = this.questionInfo.wtly;
+          
           this.$nextTick(() => {
             $("#summernote").summernote("code", this.questionInfo.nr);
           });

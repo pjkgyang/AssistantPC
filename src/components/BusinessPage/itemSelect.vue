@@ -12,30 +12,25 @@
 </template>
 <script>
 export default {
-  data(){
-      return{
-        value:1,        
-      }
+  data() {
+    return {
+      value: 1
+    };
   },
-  props:{
-      options:{
-          type:Array,
-          default:function(){
-              return []
-          }
-      },
-    //   value:{
-    //        type:Number,
-    //        default:1
-    //   }
-  },
-  methods:{
-      handleSelect(data){
-            this.$emit("handleSelect",data)
+  props: {
+    options: {
+      type: Array,
+      default: function() {
+        return [];
       }
+    }
+  },
+  methods: {
+    handleSelect(data) {
+      this.$emit("handleSelect", data);
+    }
   }
-}
+};
 </script>
 <style scoped>
-
 </style>

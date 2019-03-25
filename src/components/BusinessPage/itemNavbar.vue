@@ -14,27 +14,25 @@
 </template>
 <script>
 export default {
-data(){
-    return{
-        
-    }
-},
-props:{
+  data() {
+    return {};
+  },
+  props: {
     droTitle: {
-            type: String,
-            default:'所有业务11'
-     },
-     options:{
-         type:Array,
-         default: function() {
-         return [];
-        }
-     }
-},
-methods:{
-    handleCommand(command){
-       this.$emit('handle',command)
+      type: String,
+      default: "所有业务11"
     },
+    options: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    }
+  },
+  methods: {
+    handleCommand(command) {
+      this.$emit("handle", command);
+    }
   }
 };
 </script>
@@ -66,7 +64,7 @@ methods:{
   padding: 2px;
   background-color: #ccc;
 }
-.el-dropdown-menu{
+.el-dropdown-menu {
   max-height: 480px;
   overflow-y: auto;
   overflow-x: hidden;

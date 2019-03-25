@@ -1492,7 +1492,10 @@ export default {
             this.fbcpbh = this.fbcpbh == "" ? data.data[0].cpbh : this.fbcpbh;
             this.cpData = data.data[0];
             // 获取里程碑目录
-            if(!!localStorage.getItem('jdst') && localStorage.getItem('jdst') == 'bgst'){
+            if (
+              !!localStorage.getItem("jdst") &&
+              localStorage.getItem("jdst") == "bgst"
+            ) {
               this.getProductTasks();
             }
             this.getMilestone(this.fbcpmc, this.fbcpbh);
@@ -1607,7 +1610,10 @@ export default {
         this.isAll = this.xmkbInfo.isAll;
       }
     } else {
-      sessionStorage.setItem("xmbh", JSON.stringify(this.$route.params.data.xmbh));
+      sessionStorage.setItem(
+        "xmbh",
+        JSON.stringify(this.$route.params.data.xmbh)
+      );
       sessionStorage.setItem("xmData", JSON.stringify(this.$route.params.data));
       this.xmbh = this.$route.params.data.xmbh || this.xmbh;
       this.xmkbInfo = this.$route.params.data;
@@ -1634,7 +1640,6 @@ export default {
     }
 
     this.getItemUserNum(); // 获取项目人员总数
-
   },
   components: {
     itemTask,

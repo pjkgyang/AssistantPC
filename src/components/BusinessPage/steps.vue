@@ -28,63 +28,61 @@
 </template>
 
 <script>
-import wdgjDialog from '@/components/dialog/resource/filegj-dialog.vue';
-import gjjlDialog from '@/components/dialog/resource/gjjl-dialog.vue';
+import wdgjDialog from "@/components/dialog/resource/filegj-dialog.vue";
+import gjjlDialog from "@/components/dialog/resource/gjjl-dialog.vue";
 export default {
   data() {
     return {
-       cpShow:false,
-       wdgjShow:false,
-       gjjlShow:false,
-       data:{},
-       maxHeight:window.innerHeight - 280
+      cpShow: false,
+      wdgjShow: false,
+      gjjlShow: false,
+      data: {},
+      maxHeight: window.innerHeight - 280
     };
   },
-  props:{
+  props: {
     jdList: {
       type: Array,
       default: () => {
         return [];
       }
     },
-    zjlbShow:{
-      type:Boolean,
-      default:false
-    },
+    zjlbShow: {
+      type: Boolean,
+      default: false
+    }
   },
-  methods:{
+  methods: {
     // 文档改进提交
-    handleCommit(data){
-      this.$post(this.API.addFjGjjh,{
-        wid:this.data.wid,
-        zt:data.gjzt,
-        gjsm:data.sm,
-      }).then(res=>{
-        if(res.state == 'success'){
-          this.wdgjShow = !this.wdgjShow
+    handleCommit(data) {
+      this.$post(this.API.addFjGjjh, {
+        wid: this.data.wid,
+        zt: data.gjzt,
+        gjsm: data.sm
+      }).then(res => {
+        if (res.state == "success") {
+          this.wdgjShow = !this.wdgjShow;
           this.$alert("保存成功", "提示", {
             confirmButtonText: "确定",
             type: "success",
-            callback:action=>{
-              this.$emit('handleCommit','')
+            callback: action => {
+              this.$emit("handleCommit", "");
             }
           });
         }
-      })
+      });
     },
-    handleCpgj(data,params){
-        this.data = data;
-        if(params == 'gj'){
-          this.wdgjShow = !this.wdgjShow
-        }else{
-          this.gjjlShow = !this.gjjlShow
-        }
+    handleCpgj(data, params) {
+      this.data = data;
+      if (params == "gj") {
+        this.wdgjShow = !this.wdgjShow;
+      } else {
+        this.gjjlShow = !this.gjjlShow;
+      }
     }
   },
-  watch:{
-
-  },
-  components: {wdgjDialog,gjjlDialog}
+  watch: {},
+  components: { wdgjDialog, gjjlDialog }
 };
 </script>
 
@@ -131,11 +129,11 @@ export default {
 .vertical-step__item.todo:after {
   background: #c0c4cc;
 }
-.vertical-step__item >p{
+.vertical-step__item > p {
   vertical-align: top;
   display: flex;
 }
-.oprate-btn button{
-    padding: 4px 10px;
+.oprate-btn button {
+  padding: 4px 10px;
 }
 </style>

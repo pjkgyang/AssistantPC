@@ -113,7 +113,7 @@ import {
 import { updateSvnUrl, getXmFileUrl } from "@/api/xmfz.js";
 import pjsmDialog from "@/components/dialog/resource/pjsm-dialog";
 import oprateRecord from "@/components/resource/record.vue";
-import suggest from '@/components/resource/suggest.vue'
+import suggest from "@/components/resource/suggest.vue";
 import axios from "axios";
 import Qs from "qs";
 export default {
@@ -128,7 +128,7 @@ export default {
       fileData: [],
       filesData: [],
       filesArr: [],
-      suggestList:[],//建议列表
+      suggestList: [], //建议列表
       dialogVisible: false,
       pjsmShow: false,
       SVNValue: "",
@@ -139,10 +139,10 @@ export default {
       appraiseType: "",
       currentPage: 1,
       pageSize: 15,
-      currentPagejy:1,//建议分页
-      pageSizejy:15,//建议分页数
+      currentPagejy: 1, //建议分页
+      pageSizejy: 15, //建议分页数
       total: 0,
-      totaljy:0,
+      totaljy: 0,
       jdList: [],
       logTabName: "",
       logsFjpath: "",
@@ -173,27 +173,26 @@ export default {
   },
 
   methods: {
-        // 分页切换(建议)
-    handleChangejy(data, type){
-       if(type == 'size'){
+    // 分页切换(建议)
+    handleChangejy(data, type) {
+      if (type == "size") {
         this.currentPagejy = 1;
         this.pageSizejy = data;
-      }else{
+      } else {
         this.currentPagejy = data;
       }
       this.pageFeedback();
     },
 
     // 添加建议
-    handleAddyj(){
-      this.dialogTitle = '添加补充建议';
+    handleAddyj() {
+      this.dialogTitle = "添加补充建议";
       this.pjsmShow = true;
     },
     // 提交成功
-    handleSucess(){
+    handleSucess() {
       this.pageFeedback();
     },
-
 
     // 分页切换
     hadnleChange(data, type) {
@@ -217,46 +216,49 @@ export default {
     },
     // 评价提交
     handleClickSure(data) {
-      if(this.dialogTitle == '添加补充建议'){
+      if (this.dialogTitle == "添加补充建议") {
         this.$post(this.API.feedback, {
           lx: 4,
           nr: data,
-          xmbh:this.xmbh
+          xmbh: this.xmbh
         }).then(res => {
           if (res.state == "success") {
             this.pjsmShow = !this.pjsmShow;
             this.$message({
-              message: '添加成功~',
-              type: 'success'
+              message: "添加成功~",
+              type: "success"
             });
             this.pageFeedback();
-          }else{
-            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
         });
-      }else{
+      } else {
         this.$post(this.appraiseType == 1 ? this.API.good : this.API.bad, {
-        xmbh: this.xmbh,
-        path: this.fjPath,
-        lx: 4,
-        sm: data
-      }).then(res => {
-        if (res.state == "success") {
-          this.pjsmShow = !this.pjsmShow;
-          this.$alert("评价成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.openRealFolder();
-            }
-          });
-        } else {
-          this.$alert(res.msg, "提示", {
-            confirmButtonText: "确定",
-            type: "error"
-          });
-        }
-      });
+          xmbh: this.xmbh,
+          path: this.fjPath,
+          lx: 4,
+          sm: data
+        }).then(res => {
+          if (res.state == "success") {
+            this.pjsmShow = !this.pjsmShow;
+            this.$alert("评价成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.openRealFolder();
+              }
+            });
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
+          }
+        });
       }
     },
     // 评价
@@ -395,20 +397,20 @@ export default {
         xmbh: this.xmbh
       }).then(({ data }) => {
         if (data.state == "success") {
-            if(!data.data){
-              this.fileList = [] 
-            }else{
-              this.fileList = data.data;
-              this.oldFjpath = this.fileList.wid;
-              if (type == "back") {
-                this.fileBread.pop();
-              } else {
-                if (fj.split("&")[1] == 1) {
-                  this.fileBread.push(this.fjobj);
-                }
+          if (!data.data) {
+            this.fileList = [];
+          } else {
+            this.fileList = data.data;
+            this.oldFjpath = this.fileList.wid;
+            if (type == "back") {
+              this.fileBread.pop();
+            } else {
+              if (fj.split("&")[1] == 1) {
+                this.fileBread.push(this.fjobj);
               }
             }
-         }
+          }
+        }
       });
     },
 
@@ -438,9 +440,9 @@ export default {
                     xmbh: this.xmbh
                   }).then(({ data }) => {
                     if (data.state == "success") {
-                      if(!data.data){
-                        this.fileList = []
-                      }else{
+                      if (!data.data) {
+                        this.fileList = [];
+                      } else {
                         this.fileList = data.data;
                       }
                     }
@@ -478,17 +480,19 @@ export default {
       fd.append("xmbh", this.xmbh);
       fd.append("path", this.fjbh);
 
-      axios.post(window.baseurl + "attachment/uploadXmFile.do", fd, {
+      axios
+        .post(window.baseurl + "attachment/uploadXmFile.do", fd, {
           headers: { "Content-Type": "multipart/form-data" }
-        }).then(res => {
-          if(res.state == 'success'){
+        })
+        .then(res => {
+          if (res.state == "success") {
             openRealFolder({
-                path: this.fjbh,
-                xmbh: this.xmbh
+              path: this.fjbh,
+              xmbh: this.xmbh
             }).then(({ data }) => {
-                if (data.state == "success") {
-                  this.fileList = data.data;
-                }
+              if (data.state == "success") {
+                this.fileList = data.data;
+              }
             });
           }
           // this.$alert("上传成功", "提示", {
@@ -551,31 +555,34 @@ export default {
         }
       });
     },
-   // 获取反馈分页列表
-    pageFeedback(){
-      this.$get(this.API.pageFeedback,{
-        curPage:this.currentPagejy,
-        pageSize:this.pageSizejy,
-        path:this.logsFjpath,
-        lx:4,
-        xmbh:this.xmbh
-      }).then(res=>{
-        if(res.state == 'success'){
-           if(!res.data.rows){
-              this.suggestList = []
-            }else{
-              this.suggestList = res.data.rows
-            }
-            this.totaljy = res.data.records
-        }else{
-           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'}); 
+    // 获取反馈分页列表
+    pageFeedback() {
+      this.$get(this.API.pageFeedback, {
+        curPage: this.currentPagejy,
+        pageSize: this.pageSizejy,
+        path: this.logsFjpath,
+        lx: 4,
+        xmbh: this.xmbh
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data.rows) {
+            this.suggestList = [];
+          } else {
+            this.suggestList = res.data.rows;
+          }
+          this.totaljy = res.data.records;
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
-      })
+      });
     }
   },
   watch: {
     catalogue(n, o) {
-      if(n == 'suggest'){
+      if (n == "suggest") {
         this.pageFeedback();
       }
       if (n == "record") {
@@ -587,7 +594,7 @@ export default {
       }
     }
   },
-  components: { oprateRecord, pjsmDialog,suggest}
+  components: { oprateRecord, pjsmDialog, suggest }
 };
 </script>
 
@@ -673,26 +680,26 @@ export default {
     height: 100%;
     justify-content: flex-end;
   }
-  .appraise-hp{
-    display:inline-block;
+  .appraise-hp {
+    display: inline-block;
     margin-bottom: -3px;
-    width:16px;
-    height:16px;
-    background:url('../../../static/img/appraiseImg.png');
-    background-position:0 -16px;
+    width: 16px;
+    height: 16px;
+    background: url("../../../static/img/appraiseImg.png");
+    background-position: 0 -16px;
   }
-  .appraise-hp:hover{
-    background-position:0 -48px;
+  .appraise-hp:hover {
+    background-position: 0 -48px;
   }
-  .appraise-cp{
-    display:inline-block;
+  .appraise-cp {
+    display: inline-block;
     margin-bottom: -3px;
-    width:16px;
-    height:16px;
-    background:url('../../../static/img/appraiseImg.png');
+    width: 16px;
+    height: 16px;
+    background: url("../../../static/img/appraiseImg.png");
   }
-  .appraise-cp:hover{
-    background-position:0 -32px;
+  .appraise-cp:hover {
+    background-position: 0 -32px;
   }
   // img {
   //   width: 16px;

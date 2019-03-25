@@ -23,14 +23,12 @@ export default {
     return {
       activeName: "first",
       tabName: "",
-      jsJf:false
+      jsJf: false
     };
   },
   mounted() {
-    // console.log(this.xmInfo);
-    // console.log(sessionStorage.username);
-    if(sessionStorage.username == this.xmInfo.jfzrrxm){
-      this.jsJf = true
+    if (sessionStorage.username == this.xmInfo.jfzrrxm) {
+      this.jsJf = true;
     }
   },
   props: {
@@ -38,10 +36,10 @@ export default {
       type: String,
       default: ""
     },
-    xmInfo:{
-      type:Object,
-      default:()=>{
-        return {}
+    xmInfo: {
+      type: Object,
+      default: () => {
+        return {};
       }
     }
   },

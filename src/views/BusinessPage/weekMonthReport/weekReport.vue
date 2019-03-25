@@ -42,8 +42,9 @@
                 </span>
             </div>
             <!-- 2018-9-25 修改 !isBlocked &&-->
-           <div v-if="isZd &&  isJzyh != 1" class="pull-right">
-                <el-button size="small" type="danger" @click="handleClickAddzb">制订项目周报</el-button>
+           <div class="pull-right">
+                <el-button size="small" type="primary" @click="handleExport">导出</el-button>
+                <el-button v-if="isZd &&  isJzyh != 1" size="small" type="danger" @click="handleClickAddzb">制订项目周报</el-button>
            </div>
          </section>
       </header>    
@@ -211,12 +212,11 @@ export default {
     };
   },
   props: {},
-  beforeMount(){
-      
-   },
+  beforeMount(){},
   mounted(){
+     //获取工程战队
      if (getSession("gczd") == null) {
-          getMenu("gczd",this.gczdList,true); //获取工程战队))
+          getMenu("gczd",this.gczdList,true);
         } else {
           this.gczdList = getSession("gczd");
        }
@@ -226,7 +226,6 @@ export default {
       }else{
           this.qyValue = ''
     }
-    // console.log(new Date().getFullYear()+'-'+(new Date().getMonth()+1))
     this.isJzyh = sessionStorage.isJZuser
     this.userId = JSON.parse(sessionStorage.userInfo).uid;
     this.NewYear = new Date().getFullYear();
@@ -552,8 +551,12 @@ export default {
            })  
         }
     },
-
-    handleClickAddzb() {  // 新增项目周报
+    // 导出
+    handleExport(){
+       window.open(window.baseurl+'plan/exportWeekPlan.do?qygc='+this.qyValue+'&month='+this.monthValue+'&zxh='+this.weekValue+'&yhbh='+this.ryValue) 
+    },
+    // 新增项目周报
+    handleClickAddzb() {  
       this.jhzdShow = true
       EventBus.$emit("handleClickAddzb", this.dateObj);
     },

@@ -307,7 +307,7 @@ export default {
         lcbbh: this.taskForm.lcbbh,
         xmbh: this.taskForm.xmbh,
         rwmc: this.taskForm.rwmc,
-        rwbh:this.taskForm.rwbh,
+        rwbh: this.taskForm.rwbh,
         jhksrq: this.taskForm.jhksrq,
         jhjsrq: this.taskForm.jhjsrq,
         ssrxm: this.taskForm.ssrxm,

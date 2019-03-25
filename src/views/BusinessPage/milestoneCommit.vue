@@ -216,21 +216,21 @@ import commitMilestone from "@/components/BusinessPage/commitMilestone.vue";
 import filterComponent from "@/components/reportTable/filterComponent.vue";
 import { returnFloat } from "../../utils/util.js";
 import lcbjlDialog from "@/components/dialog/lcbjl-dialog.vue";
-import cplistDialog from '@/components/dialog/milestone/cplist-dialog.vue'
+import cplistDialog from "@/components/dialog/milestone/cplist-dialog.vue";
 import xmbwDialog from "@/components/dialog/milestone/xmbw-dialog.vue";
 
 export default {
   data() {
     return {
       lcbjlShow: false,
-      cplistShow:false,
-      xmbwShow:false,
+      cplistShow: false,
+      xmbwShow: false,
       lcbbh: "",
       gczdList: [],
       checkList: [],
-      xmlbList: [],//项目类别
-      xmztList:[],//项目状态
-      htxzList: [],//合同性质
+      xmlbList: [], //项目类别
+      xmztList: [], //项目状态
+      htxzList: [], //合同性质
       keyword: "",
       cnkssj: "",
       cnjssj: "",
@@ -242,7 +242,7 @@ export default {
       currentPage: 1,
       tableData3: [],
       totalWgl: "",
-      totaljyWgl:"",//经营完工量
+      totaljyWgl: "", //经营完工量
       multipleSelection: [],
       planVisible: false,
       milestoneVisible: false,
@@ -268,94 +268,114 @@ export default {
       xmjlKeyword: "",
       zrrKeyword: "",
 
-      cplistData:[],
-      lcbData:{},
-      isEdit:false,
-      colData:{},
-      lcbType:'',
+      cplistData: [],
+      lcbData: {},
+      isEdit: false,
+      colData: {},
+      lcbType: ""
     };
   },
 
   methods: {
-    handleCloseMile(){
+    handleCloseMile() {
       this.milestoneVisible = false;
     },
     // 查看备忘
-    handleCheckList(data){
+    handleCheckList(data) {
       this.xmbh = data.xmbh;
       this.isEdit = true;
       this.colData = data;
-      this.$get(this.API.isCanEditMemoMilestone,{
-         lcbbh:data.lcbbh 
-       }).then(res=>{
-         if(res.state == 'success'){
-           this.lcbData = res.data
-           if(res.data.canEdit){
-             this.xmbwShow = !this.xmbwShow
-           }else{
-             this.cplistData = !res.data.cps?[]:res.data.cps
-             this.cplistShow = !this.cplistShow
-           }
-         }
-       })
-    },
-    // 项目备忘
-    handleCommitXmbw(params,data) {
-      if(!data) return;
-      if(!this.isEdit){
-      this.$post(this.API.addMemo, {
-        xmbh: this.xmbh,
-        bwcnwcsj: params.cnwcrq,
-        sm:params.sm,
-        cps:params.cps     
+      this.$get(this.API.isCanEditMemoMilestone, {
+        lcbbh: data.lcbbh
       }).then(res => {
         if (res.state == "success") {
-          this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
-          this.xmbwShow = false;
-        } else {
-          if (res.errcode == 1) {
-            this.$confirm("备忘已存在，是否覆盖?", "提示", {
-              confirmButtonText: "确定",
-              cancelButtonText: "取消",
-              type: "warning"
-            }) .then(() => {
-              this.$post(this.API.addMemo, {
-                xmbh: this.xmbh,
-                bwcnwcsj: params.cnwcrq,
-                sffg:1,
-                cps:cps
-              }).then(res => {
-                  if (res.state == "success") {
-                    this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
-                    this.xmbwShow = false;
-                  }else{
-                    this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"}); 
-                    this.xmbwShow = false;
-                  }
-                })
-              }) .catch(() => {
-                this.xmbwShow = false;
-              });
-          }else{
-             this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"}); 
-             this.xmbwShow = false;
+          this.lcbData = res.data;
+          if (res.data.canEdit) {
+            this.xmbwShow = !this.xmbwShow;
+          } else {
+            this.cplistData = !res.data.cps ? [] : res.data.cps;
+            this.cplistShow = !this.cplistShow;
           }
         }
       });
-      }else{
-       this.$post(this.API.editMemo, {
-        lcbbh:this.colData.lcbbh,
-        cnwcsj : params.cnwcrq,
-        sm:params.sm,
-        cps:params.cps     
-       }).then(res => { 
-         if (res.state == "success") {
-            this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
+    },
+    // 项目备忘
+    handleCommitXmbw(params, data) {
+      if (!data) return;
+      if (!this.isEdit) {
+        this.$post(this.API.addMemo, {
+          xmbh: this.xmbh,
+          bwcnwcsj: params.cnwcrq,
+          sm: params.sm,
+          cps: params.cps
+        }).then(res => {
+          if (res.state == "success") {
+            this.$alert("添加成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success"
+            });
             this.xmbwShow = false;
-          }else{
-            this.$alert(res.msg, "提示", { confirmButtonText: "确定",type: "error"});
+          } else {
+            if (res.errcode == 1) {
+              this.$confirm("备忘已存在，是否覆盖?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+              })
+                .then(() => {
+                  this.$post(this.API.addMemo, {
+                    xmbh: this.xmbh,
+                    bwcnwcsj: params.cnwcrq,
+                    sffg: 1,
+                    cps: cps
+                  }).then(res => {
+                    if (res.state == "success") {
+                      this.$alert("添加成功", "提示", {
+                        confirmButtonText: "确定",
+                        type: "success"
+                      });
+                      this.xmbwShow = false;
+                    } else {
+                      this.$alert(res.msg, "提示", {
+                        confirmButtonText: "确定",
+                        type: "error"
+                      });
+                      this.xmbwShow = false;
+                    }
+                  });
+                })
+                .catch(() => {
+                  this.xmbwShow = false;
+                });
+            } else {
+              this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+              this.xmbwShow = false;
+            }
           }
-        })
+        });
+      } else {
+        this.$post(this.API.editMemo, {
+          lcbbh: this.colData.lcbbh,
+          cnwcsj: params.cnwcrq,
+          sm: params.sm,
+          cps: params.cps
+        }).then(res => {
+          if (res.state == "success") {
+            this.$alert("添加成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success"
+            });
+            this.xmbwShow = false;
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
+          }
+        });
       }
     },
     handleOpenfilter() {
@@ -374,31 +394,31 @@ export default {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
-      // 查看里程碑操作记录
+    // 查看里程碑操作记录
     handleCheckRrecord(data) {
       this.lcbbh = data.lcbbh;
       this.lcbjlShow = !this.lcbjlShow;
     },
-      // 区域工程
+    // 区域工程
     handleChangeFilter(val) {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
-      // 提报里程碑
+    // 提报里程碑
     handleCommitMilestone() {
       this.milestoneVisible = false;
       this.queryMilestoneData();
     },
-   // && row.zt != '处理中'
+    // && row.zt != '处理中'
     checkboxInit(row, index) {
-      if(this.ishow){
-        if (row.zt != "计划中" && row.zt != "处理中" ){
+      if (this.ishow) {
+        if (row.zt != "计划中" && row.zt != "处理中") {
           return false;
-        }else{
+        } else {
           return true;
         }
-      }else{
-         return false;
+      } else {
+        return false;
       }
     },
     //取消
@@ -442,8 +462,8 @@ export default {
           lcbbh: this.lcbbhArr.join(",")
         }).then(({ data }) => {
           if (data.state == "success") {
-            this.lcbType = data.data.lcbType
-            this.xmbh = data.data.xmbh? data.data.xmbh:''
+            this.lcbType = data.data.lcbType;
+            this.xmbh = data.data.xmbh ? data.data.xmbh : "";
             if (data.data.lcbType == -1) {
               this.$alert("不允许同时提交多个项目的整体验收里程碑！", "提示", {
                 confirmButtonText: "确定",
@@ -531,7 +551,7 @@ export default {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
-    handleXMZT(val){
+    handleXMZT(val) {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
@@ -590,7 +610,7 @@ export default {
         startSjjssj: !this.sjkssj ? "" : this.sjkssj,
         endSjjssj: !this.sjjssj ? "" : this.sjjssj,
         nrxmlb: this.xmlbList.length == 0 ? "" : this.xmlbList.join(","),
-        xmzt:this.xmztList.length == 0 ? "" : this.xmztList.join(","),
+        xmzt: this.xmztList.length == 0 ? "" : this.xmztList.join(","),
         yxmjl: this.sfxmjl,
         yzrr: this.sfzrr,
 
@@ -606,13 +626,17 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           this.totalWgl = data.data.totalWgl;
-          this.totaljyWgl = !data.data.totaljyWgl?0:data.data.totaljyWgl;
+          this.totaljyWgl = !data.data.totaljyWgl ? 0 : data.data.totaljyWgl;
           let milestone = data.data.data.rows;
           milestone.forEach((val, index, arr) => {
-            arr[index].wglv =  !arr[index].wglv?0:returnFloat(val.wglv);
-            arr[index].wglg =  !arr[index].wglg?0:returnFloat(val.wglg);
-            arr[index].jywglv =  !arr[index].jywglv?0:returnFloat(val.jywglv);
-            arr[index].jywglg =  !arr[index].jywglg?0:returnFloat(val.jywglg);
+            arr[index].wglv = !arr[index].wglv ? 0 : returnFloat(val.wglv);
+            arr[index].wglg = !arr[index].wglg ? 0 : returnFloat(val.wglg);
+            arr[index].jywglv = !arr[index].jywglv
+              ? 0
+              : returnFloat(val.jywglv);
+            arr[index].jywglg = !arr[index].jywglg
+              ? 0
+              : returnFloat(val.jywglg);
             val.zt =
               val.zt == "1"
                 ? "计划中"
@@ -626,9 +650,7 @@ export default {
                         ? "关闭"
                         : val.zt == "6"
                           ? "取消"
-                          : val.zt == "7"
-                            ? "待定"
-                            : "完成待确认";
+                          : val.zt == "7" ? "待定" : "完成待确认";
           });
           this.tableData3 = milestone;
           this.total = data.data.data.records;
@@ -640,7 +662,7 @@ export default {
     filterShow(n, o) {
       if (!n) {
         this.htbhKeyword = this.xmbhKeyword = this.xmmcKeyword = this.xmnrKeyword = this.lcbmsKeyword = this.xmjlKeyword = this.zrrKeyword =
-        "";
+          "";
         this.currentPage = 1;
         this.queryMilestoneData();
       }
@@ -660,7 +682,14 @@ export default {
     }
     this.queryMilestoneData();
   },
-  components: { pagination, commitMilestone, filterComponent, lcbjlDialog ,cplistDialog ,xmbwDialog}
+  components: {
+    pagination,
+    commitMilestone,
+    filterComponent,
+    lcbjlDialog,
+    cplistDialog,
+    xmbwDialog
+  }
 };
 </script>
 <style scoped>
@@ -689,7 +718,7 @@ export default {
 .name-wrapper .el-tag:hover {
   cursor: pointer;
 }
-.filterFlex{
+.filterFlex {
   width: 30%;
 }
 </style>

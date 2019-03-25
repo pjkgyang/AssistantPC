@@ -27,6 +27,7 @@ export function  decryptByDES(ciphertext, key){
     });
     return decrypted.toString(CryptoJS.enc.Utf8);
   }
+  
 //  保留两位小数1
 export function returnFloat(value) {
     var value = Math.round(parseFloat(value) * 100) / 100;

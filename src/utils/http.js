@@ -5,7 +5,7 @@ import Qs from 'qs';
 
 // axios.defaults.headers.common['intranetIp'] = !!sessionStorage.getItem('ip')?sessionStorage.getItem('ip'):'';
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
+// axios.defaults.withCredentials = true; //跨域携带cookie
 /**
  * @method get
  * @param url

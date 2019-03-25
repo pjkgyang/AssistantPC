@@ -34,237 +34,243 @@
   </div>
 </template>
 <script>
-import { getTasksByCatalog ,deleteTask ,addOrUpdateTask} from '@/api/task.js'
-import {  ModifyMilestoneCommitmentDate } from '@/api/milestone.js'
-import addItemTask from '@/components/BusinessPage/addItemTask.vue'
-import TaskLabel from '@/components/BusinessPage/itemTasklabel.vue'
-import Scrollbar from 'smooth-scrollbar';
+import { getTasksByCatalog, deleteTask, addOrUpdateTask } from "@/api/task.js";
+import { ModifyMilestoneCommitmentDate } from "@/api/milestone.js";
+import addItemTask from "@/components/BusinessPage/addItemTask.vue";
+import TaskLabel from "@/components/BusinessPage/itemTasklabel.vue";
+import Scrollbar from "smooth-scrollbar";
 export default {
-  data(){
-    return{
-      dialogAddTaskVisible:false,
-      dialogchangeDateVisible:false,
-      form:{
-          startDate:"",
-          endDate:"",
-          sm:""
+  data() {
+    return {
+      dialogAddTaskVisible: false,
+      dialogchangeDateVisible: false,
+      form: {
+        startDate: "",
+        endDate: "",
+        sm: ""
       },
-      lcbTask:{},
-      data:[],
-      indexArr:[],
-      LcbArr:[],
-      LcbTaskDatas:this.TaskDatas,
-      commitSuccess:false
-
+      lcbTask: {},
+      data: [],
+      indexArr: [],
+      LcbArr: [],
+      LcbTaskDatas: this.TaskDatas,
+      commitSuccess: false
+    };
+  },
+  props: {
+    milestone: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    },
+    index: {
+      type: Number,
+      default: ""
+    },
+    TaskDatas: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
+    rwlx: {
+      type: String,
+      default: ""
+    },
+    rwzt: {
+      type: String,
+      default: ""
     }
   },
-  props:{
-      milestone:{
-          type:Object,
-          default:function(){
-            return {}
-          }
-      },
-      index:{
-        type:Number,
-        default:""
-      },
-      TaskDatas:{
-          type:Array,
-          default:function(){
-            return []
-          }
-      },
-      rwlx:{
-        type:String,
-        default:""
-      },
-      rwzt:{
-        type:String,
-        default:""
-      }
+  mounted() {
+    Scrollbar.init(document.querySelector("#my-scrollbar" + this.index));
   },
-  mounted(){
-         Scrollbar.init(document.querySelector('#my-scrollbar'+this.index));
-  },
-  methods:{
-     handleTaskDialog(data){    //提交任务 日志对话框
-      if(typeof(data) == 'object'){ 
-        data.catalogId =  this.milestone.catalogId
-        data.catalog =  this.milestone.catalog
-        data.cpmc = this.milestone.cpmc
-        data.catalogType = this.milestone.catalogType
-        if(data.type == 'delete'){
-              this.$confirm('是否删除该任务?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-                deleteTask({
-                rwbh:data.rwbh
-              }).then(({data})=>{
-                  if(data.state == 'success'){
-                    this.$alert('删除成功', '提示', {
-                        confirmButtonText: '确定',
-                        type:'success',
-                        callback: action => {
-                            this.getTasksByCatalog(this.rwlx);
-                        }
-                    })
-                  }
-              })
-            }).catch(() => {});
-          }else if(data.type == 'changeDate'){
-            this.form.startDate = data.jhksrq
-            this.form.endDate = data.jhjsrq
-            this.dialogchangeDateVisible = !this.dialogchangeDateVisible
-            this.lcbTask = data  //获取任务信息
-          }
-          // else if(data.type == 'jfqy'){
-          //   console.log(data)
-          // }
-       }
-      this.$emit('handleDialog',data);
-    },
-    //新增任务
-    AddTaskCommit(data){    
-        addOrUpdateTask(JSON.parse(data)).then(({data})=>{
-              if(data.state == 'success'){
-                 this.dialogAddTaskVisible = false         
-                 this.$alert('添加任务成功', '提示', {
-                    confirmButtonText: '确定',
-                    type:'success',
+  methods: {
+    handleTaskDialog(data) {
+      //提交任务 日志对话框
+      if (typeof data == "object") {
+        data.catalogId = this.milestone.catalogId;
+        data.catalog = this.milestone.catalog;
+        data.cpmc = this.milestone.cpmc;
+        data.catalogType = this.milestone.catalogType;
+        if (data.type == "delete") {
+          this.$confirm("是否删除该任务?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          })
+            .then(() => {
+              deleteTask({
+                rwbh: data.rwbh
+              }).then(({ data }) => {
+                if (data.state == "success") {
+                  this.$alert("删除成功", "提示", {
+                    confirmButtonText: "确定",
+                    type: "success",
                     callback: action => {
-                       this.getTasksByCatalog(this.rwlx);
-                       this.commitSuccess = !this.commitSuccess
+                      this.getTasksByCatalog(this.rwlx);
                     }
                   });
-              }else{
-                this.$alert(data.msg, '提示', {
-                    confirmButtonText: '确定',
-                    type:'error',
-                  });
-              }
-         })
+                }
+              });
+            })
+            .catch(() => {});
+        } else if (data.type == "changeDate") {
+          this.form.startDate = data.jhksrq;
+          this.form.endDate = data.jhjsrq;
+          this.dialogchangeDateVisible = !this.dialogchangeDateVisible;
+          this.lcbTask = data; //获取任务信息
+        }
+        // else if(data.type == 'jfqy'){
+        //   console.log(data)
+        // }
+      }
+      this.$emit("handleDialog", data);
+    },
+    //新增任务
+    AddTaskCommit(data) {
+      addOrUpdateTask(JSON.parse(data)).then(({ data }) => {
+        if (data.state == "success") {
+          this.dialogAddTaskVisible = false;
+          this.$alert("添加任务成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: action => {
+              this.getTasksByCatalog(this.rwlx);
+              this.commitSuccess = !this.commitSuccess;
+            }
+          });
+        } else {
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
+        }
+      });
     },
     // 修改承诺时间
-    handleCommitTZJH(){
-       this.$confirm('请慎重修改此日期', '提示', {
-          confirmButtonText: '确定修改',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+    handleCommitTZJH() {
+      this.$confirm("请慎重修改此日期", "提示", {
+        confirmButtonText: "确定修改",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
           ModifyMilestoneCommitmentDate({
-            xmbh:this.lcbTask.xmbh,
-            lcbbh:this.lcbTask.lcbbh,
-            startDate:this.form.startDate,
-            endDate:this.form.endDate,
-            sm:this.form.sm
-          }).then(({data})=>{
-          if(data.state == 'success'){
-                this.dialogchangeDateVisible = false
-                this.getTasksByCatalog(this.rwlx);                
-                this.$alert('修改成功', '提示', {
-                 confirmButtonText: '确定',
-                 type:'success',
-                 callback: action => {
-                   this.form.sm = ''
-                 }
-              });      
+            xmbh: this.lcbTask.xmbh,
+            lcbbh: this.lcbTask.lcbbh,
+            startDate: this.form.startDate,
+            endDate: this.form.endDate,
+            sm: this.form.sm
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.dialogchangeDateVisible = false;
+              this.getTasksByCatalog(this.rwlx);
+              this.$alert("修改成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success",
+                callback: action => {
+                  this.form.sm = "";
+                }
+              });
             }
-          })
-      }).catch(() => {}); 
+          });
+        })
+        .catch(() => {});
     },
-    handleCloseTZJH(){
-          this.dialogchangeDateVisible = !this.dialogchangeDateVisible
+    handleCloseTZJH() {
+      this.dialogchangeDateVisible = !this.dialogchangeDateVisible;
     },
-    handleTaskinfo(data){      //任务详情模态框
-       data.lcbindex = this.index
-       this.$emit('handleTaskinfo',data)
+    handleTaskinfo(data) {
+      //任务详情模态框
+      data.lcbindex = this.index;
+      this.$emit("handleTaskinfo", data);
     },
-    addItemTask(e){
-      let index = e.target.getAttribute('data-indx')
-      this.data = this.milestone
-      this.dialogAddTaskVisible = !this.dialogAddTaskVisible
-      this.getTasksByCatalog("1",true);
+    addItemTask(e) {
+      let index = e.target.getAttribute("data-indx");
+      this.data = this.milestone;
+      this.dialogAddTaskVisible = !this.dialogAddTaskVisible;
+      this.getTasksByCatalog("1", true);
       // this.$emit('addItemTask',this.data)
     },
-    changeTaskstate(data){  //改变任务状态
+    changeTaskstate(data) {
+      //改变任务状态
       this.getTasksByCatalog(this.rwlx);
     },
 
-    getTasksByCatalog(taskType,type){
+    getTasksByCatalog(taskType, type) {
       getTasksByCatalog({
-            xmbh:this.milestone.xmbh,
-            catalog:this.milestone.catalog,
-            catalogId:this.milestone.catalogId,
-            cpmc:this.milestone.cpmc,
-            cpbh:this.milestone.cpbh,
-            catalogType:this.milestone.catalogType,
-            curPage:1,
-            pageSize:99999,
-            taskType:taskType||"",
-            rwzt:this.rwzt||"",
-            keyword:""
-          }).then(({data})=>{
-            if(data.state == 'success'){
-                  if(!type){
-                    this.LcbTaskDatas = data.data.rows
-                  }
-                 if(taskType == '1'){
-                   this.LcbArr = data.data.rows
-                 }
-            }
-        })
-    },
+        xmbh: this.milestone.xmbh,
+        catalog: this.milestone.catalog,
+        catalogId: this.milestone.catalogId,
+        cpmc: this.milestone.cpmc,
+        cpbh: this.milestone.cpbh,
+        catalogType: this.milestone.catalogType,
+        curPage: 1,
+        pageSize: 99999,
+        taskType: taskType || "",
+        rwzt: this.rwzt || "",
+        keyword: ""
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          if (!type) {
+            this.LcbTaskDatas = data.data.rows;
+          }
+          if (taskType == "1") {
+            this.LcbArr = data.data.rows;
+          }
+        }
+      });
+    }
   },
- watch:{
-   TaskDatas(n,o){
-    this.LcbTaskDatas = n
-   }
- },
-  components:{TaskLabel,addItemTask}
-}
+  watch: {
+    TaskDatas(n, o) {
+      this.LcbTaskDatas = n;
+    }
+  },
+  components: { TaskLabel, addItemTask }
+};
 </script>
 <style scoped>
-.milestone_stage{
-    width: 360px;
-    height: 99%;
-    /* min-height: 99%; */
-    background: #dddddd;;
-    border-radius: 5px;
-    margin:0 10px;
-    overflow-y: hidden;
+.milestone_stage {
+  width: 360px;
+  height: 99%;
+  /* min-height: 99%; */
+  background: #dddddd;
+  border-radius: 5px;
+  margin: 0 10px;
+  overflow-y: hidden;
 }
-.milestone_stage .milestone_stage_top{
+.milestone_stage .milestone_stage_top {
   padding: 0 10px;
 }
-.milestone_stage .milestone_stage_top:after{
+.milestone_stage .milestone_stage_top:after {
   content: "";
   display: block;
   clear: both;
 }
-.milestone_stage .milestone_stage_top h4{
-  margin:10px 0 !important; 
+.milestone_stage .milestone_stage_top h4 {
+  margin: 10px 0 !important;
   font-size: 15px;
   color: #666;
   height: 3%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width:85%;
+  width: 85%;
   float: left;
-  font-weight:700;
+  font-weight: 700;
   font-size: 14px;
 }
-.milestone_stage .milestone_stage_top>span{
- float: right;
- margin-top: 10px;
- font-weight: 700;
+.milestone_stage .milestone_stage_top > span {
+  float: right;
+  margin-top: 10px;
+  font-weight: 700;
 }
-.milestone_stage .milestone_stage_top>span:hover{
+.milestone_stage .milestone_stage_top > span:hover {
   cursor: pointer;
-  color: #409EFF;
+  color: #409eff;
 }
 .milestone_stage ul {
   padding: 0 4px;

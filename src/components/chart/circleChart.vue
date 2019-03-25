@@ -7,48 +7,48 @@ export default {
   data() {
     return {
       chart: {},
-      titleData:[],
-      outerData:[],
-      innerData:[]
+      titleData: [],
+      outerData: [],
+      innerData: []
     };
   },
   props: {
-    circledata:{
-      type:Array,
-      default:()=>{
+    circledata: {
+      type: Array,
+      default: () => {
         return [
-              { value: 335, name: "产品化个性需求" },
-              { value: 310, name: "改进学校环境" },
-              { value: 234, name: "纳入产品改进" },
-              { value: 135, name: "加强学校培训" },
-          ]
+          { value: 335, name: "产品化个性需求" },
+          { value: 310, name: "改进学校环境" },
+          { value: 234, name: "纳入产品改进" },
+          { value: 135, name: "加强学校培训" }
+        ];
       }
     },
-    circleinnerdata:{
-      type:Array,
-      default:()=>{
+    circleinnerdata: {
+      type: Array,
+      default: () => {
         return [
-               { value: 335, name: "过保", selected: true },
-              { value: 679, name: "在建" },
-              { value: 1548, name: "售后" }
-          ]
+          { value: 335, name: "过保", selected: true },
+          { value: 679, name: "在建" },
+          { value: 1548, name: "售后" }
+        ];
       }
     }
   },
   mounted() {},
-  watch:{
-      // circledata:function(val){
-      //   this.outerData = val;
-      //   this.initChart();
-      // },
-      circleinnerdata:function(val){
-         this.circledata.forEach(ele=>{
-          this.titleData.push(ele.name);
-        })
-        this.outerData = this.circledata;
-        this.innerData = val;
-        this.initChart();
-      }
+  watch: {
+    // circledata:function(val){
+    //   this.outerData = val;
+    //   this.initChart();
+    // },
+    circleinnerdata: function(val) {
+      this.circledata.forEach(ele => {
+        this.titleData.push(ele.name);
+      });
+      this.outerData = this.circledata;
+      this.innerData = val;
+      this.initChart();
+    }
   },
   methods: {
     initChart() {
@@ -81,12 +81,12 @@ export default {
                 show: false
               }
             },
-            data:this.innerData
+            data: this.innerData
           },
           {
             name: "分布情况",
             type: "pie",
-            center:["50%","50%"],
+            center: ["50%", "50%"],
             radius: ["50%", "65%"],
             label: {
               normal: {
@@ -106,7 +106,7 @@ export default {
                     color: "#999",
                     lineHeight: 22,
                     align: "center",
-                    show:false
+                    show: false
                   },
                   // abg: {
                   //     backgroundColor: '#333',
@@ -134,10 +134,10 @@ export default {
                 }
               }
             },
-             labelLine: {
+            labelLine: {
               normal: {
                 show: true,
-                length:40
+                length: 40
               }
             },
             data: this.outerData
@@ -153,7 +153,7 @@ export default {
 </script>
 <style lang="scss" scope>
 #circleChart {
-  width:100%;
+  width: 100%;
   height: 330px;
 }
 </style>

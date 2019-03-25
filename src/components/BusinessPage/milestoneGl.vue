@@ -150,13 +150,13 @@ import { returnFloat } from "../../utils/util.js";
 import lcbjlDialog from "@/components/dialog/lcbjl-dialog.vue";
 import cpListDialog from "@/components/dialog/cpList-dialog.vue";
 import xmbwDialog from "@/components/dialog/milestone/xmbw-dialog.vue";
-import cplistDialog from '@/components/dialog/milestone/cplist-dialog.vue'
+import cplistDialog from "@/components/dialog/milestone/cplist-dialog.vue";
 export default {
   data() {
     return {
       lcbjlShow: false,
       cplistShow: false,
-      cpShow:false,
+      cpShow: false,
       xmbwShow: false,
       lcbbh: "",
       checkList: [],
@@ -185,11 +185,11 @@ export default {
       ishow: true,
       zrrShow: true,
 
-      cplistData:[],
-      lcbData:{},// 备忘信息
-      isEdit:false,
-      colData:{}, //里程碑行信息
-      lcbType:""
+      cplistData: [],
+      lcbData: {}, // 备忘信息
+      isEdit: false,
+      colData: {}, //里程碑行信息
+      lcbType: ""
     };
   },
   props: {
@@ -203,26 +203,26 @@ export default {
     }
   },
   methods: {
-    handleCloseMile(){
+    handleCloseMile() {
       this.milestoneVisible = false;
     },
     // 获取产品列表
-    handleCheckList(data){
-       this.isEdit = true;
-       this.colData = data;
-       this.$get(this.API.isCanEditMemoMilestone,{
-         lcbbh:data.lcbbh 
-       }).then(res=>{
-         if(res.state == 'success'){
-           this.lcbData = res.data
-           if(res.data.canEdit){
-             this.xmbwShow = !this.xmbwShow
-           }else{
-             this.cplistData = !res.data.cps?[]:res.data.cps
-             this.cpShow = !this.cpShow
-           }
-         }
-       })
+    handleCheckList(data) {
+      this.isEdit = true;
+      this.colData = data;
+      this.$get(this.API.isCanEditMemoMilestone, {
+        lcbbh: data.lcbbh
+      }).then(res => {
+        if (res.state == "success") {
+          this.lcbData = res.data;
+          if (res.data.canEdit) {
+            this.xmbwShow = !this.xmbwShow;
+          } else {
+            this.cplistData = !res.data.cps ? [] : res.data.cps;
+            this.cpShow = !this.cpShow;
+          }
+        }
+      });
     },
     // 查看里程碑操作记录
     handleCheckRrecord(data) {
@@ -234,75 +234,95 @@ export default {
       this.queryMilestoneData(this.currentPage);
     },
     // 项目备忘
-    handleCommitXmbw(params,data) {
-      if(!data) return;
-      if(!this.isEdit){
-      this.$post(this.API.addMemo, {
-        xmbh: this.xmbh,
-        bwcnwcsj: params.cnwcrq,
-        sm:params.sm,
-        cps:params.cps     
-      }).then(res => {
-        if (res.state == "success") {
-          this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
-          this.xmbwShow = false;
-        } else {
-          if (res.errcode == 1) {
-            this.$confirm("备忘已存在，是否覆盖?", "提示", {
+    handleCommitXmbw(params, data) {
+      if (!data) return;
+      if (!this.isEdit) {
+        this.$post(this.API.addMemo, {
+          xmbh: this.xmbh,
+          bwcnwcsj: params.cnwcrq,
+          sm: params.sm,
+          cps: params.cps
+        }).then(res => {
+          if (res.state == "success") {
+            this.$alert("添加成功", "提示", {
               confirmButtonText: "确定",
-              cancelButtonText: "取消",
-              type: "warning"
-            }) .then(() => {
-              this.$post(this.API.addMemo, {
-                xmbh: this.xmbh,
-                bwcnwcsj: params.cnwcrq,
-                sffg:1,
-                cps:cps
-              }).then(res => {
-                  if (res.state == "success") {
-                    this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
-                    this.xmbwShow = false;
-                  }else{
-                    this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"}); 
-                    this.xmbwShow = false;
-                  }
-                })
-              }) .catch(() => {
-                this.xmbwShow = false;
-              });
-          }else{
-             this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"}); 
-             this.xmbwShow = false;
-          }
-        }
-      });
-      }else{
-        this.$post(this.API.editMemo, {
-        lcbbh:this.colData.lcbbh,
-        cnwcsj: params.cnwcrq,
-        sm:params.sm,
-        cps:params.cps     
-       }).then(res => { 
-         if (res.state == "success") {
-            this.$alert("添加成功", "提示", { confirmButtonText: "确定",type: "success"});
+              type: "success"
+            });
             this.xmbwShow = false;
-          }else{
-            this.$alert(res.msg, "提示", { confirmButtonText: "确定",type: "success"});
+          } else {
+            if (res.errcode == 1) {
+              this.$confirm("备忘已存在，是否覆盖?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+              })
+                .then(() => {
+                  this.$post(this.API.addMemo, {
+                    xmbh: this.xmbh,
+                    bwcnwcsj: params.cnwcrq,
+                    sffg: 1,
+                    cps: cps
+                  }).then(res => {
+                    if (res.state == "success") {
+                      this.$alert("添加成功", "提示", {
+                        confirmButtonText: "确定",
+                        type: "success"
+                      });
+                      this.xmbwShow = false;
+                    } else {
+                      this.$alert(res.msg, "提示", {
+                        confirmButtonText: "确定",
+                        type: "error"
+                      });
+                      this.xmbwShow = false;
+                    }
+                  });
+                })
+                .catch(() => {
+                  this.xmbwShow = false;
+                });
+            } else {
+              this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+              this.xmbwShow = false;
+            }
           }
-        }) 
+        });
+      } else {
+        this.$post(this.API.editMemo, {
+          lcbbh: this.colData.lcbbh,
+          cnwcsj: params.cnwcrq,
+          sm: params.sm,
+          cps: params.cps
+        }).then(res => {
+          if (res.state == "success") {
+            this.$alert("添加成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success"
+            });
+            this.xmbwShow = false;
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "success"
+            });
+          }
+        });
       }
     },
     checkboxInit(row, index) {
-      if(this.ishow){
-        if (row.zt != "计划中" && row.zt != "处理中" ){
+      if (this.ishow) {
+        if (row.zt != "计划中" && row.zt != "处理中") {
           return false;
-        }else{
+        } else {
           return true;
         }
-      }else{
-         return false;
+      } else {
+        return false;
       }
-        // && row.zt != '处理中'
+      // && row.zt != '处理中'
     },
     handleClose() {
       //取消
@@ -333,7 +353,7 @@ export default {
     },
     // 提报里程碑
     commitLcb() {
-      this.isEdit = false
+      this.isEdit = false;
       if (this.multipleSelection.length == 0) {
         this.$alert("请选择里程碑", "提示", {
           confirmButtonText: "确定",
@@ -345,7 +365,7 @@ export default {
           lcbbh: this.lcbbhArr.join(",")
         }).then(({ data }) => {
           if (data.state == "success") {
-              this.lcbType = data.data.lcbType
+            this.lcbType = data.data.lcbType;
             if (data.data.lcbType == -1) {
               this.$alert("不允许同时提交多个项目的整体验收里程碑！", "提示", {
                 confirmButtonText: "确定",
@@ -399,13 +419,13 @@ export default {
       //支持回车
       this.queryMilestoneData(1);
     },
-      // 切换分页
+    // 切换分页
     handleCurrentChange(data) {
       this.currentPage = data;
       this.queryMilestoneData(data);
     },
     // 分页条数
-    handleSizeChange(data){
+    handleSizeChange(data) {
       this.pageSize = data;
       this.queryMilestoneData(1);
     },
@@ -490,17 +510,17 @@ export default {
           this.total = data.data.data.records;
         }
       });
-    },
+    }
 
     // // 获取产品
     // listMemoProduct(lcbbh){
     //   this.$get(this.API.listMemoProduct,{
-    //     lcbbh:lcbbh 
+    //     lcbbh:lcbbh
     //   }).then(res=>{
     //     if(res.state == 'success'){
     //       this.cplistData = res.data
     //     }else{
-    //      this.$alert(res.msg, "提示", {confirmButtonText: "确定",e: "error"}); 
+    //      this.$alert(res.msg, "提示", {confirmButtonText: "确定",e: "error"});
     //     }
     //   })
     // }

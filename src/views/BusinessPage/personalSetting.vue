@@ -22,101 +22,100 @@
 <script>
 import NavBarItem from "@/components/layout/navMenu.vue";
 import layout from "@/components/layout/navitem.vue";
- export default {
+export default {
   data() {
     return {
-      defActive:'1',
-      openeds:['1'],
+      defActive: "1",
+      openeds: ["1"],
       navList: [
         {
           privname: "个人信息",
-          url:'/businesspage/personalSetting/grzx',
-          icon:'el-icon-erp-yonghu',
+          url: "/businesspage/personalSetting/grzx",
+          icon: "el-icon-erp-yonghu",
           childNodes: [],
-          tag:''
+          tag: ""
         },
         {
           privname: "修改密码",
-          url:'/businesspage/personalSetting/xgmm',
-          icon:'el-icon-erp-mimaicon',
+          url: "/businesspage/personalSetting/xgmm",
+          icon: "el-icon-erp-mimaicon",
           childNodes: [],
-          tag:''
+          tag: ""
         },
         {
           privname: "消息设置",
-          url:'/businesspage/personalSetting/xxsz',
-          icon:'el-icon-erp-btnMsg',
+          url: "/businesspage/personalSetting/xxsz",
+          icon: "el-icon-erp-btnMsg",
           childNodes: [],
-          tag:''
+          tag: ""
         },
         {
           privname: "个人结算",
-          url:'/businesspage/personalSetting/grjs',
-          icon:'el-icon-erp-baobiaoguanli',
+          url: "/businesspage/personalSetting/grjs",
+          icon: "el-icon-erp-baobiaoguanli",
           childNodes: [],
-          tag:'JZGCRY'
+          tag: "JZGCRY"
         },
         {
           privname: "项目结算",
-          url:'/businesspage/personalSetting/xmjs',
-          icon:'el-icon-erp-baobiaoguanli',
-          childNodes: [],
+          url: "/businesspage/personalSetting/xmjs",
+          icon: "el-icon-erp-baobiaoguanli",
+          childNodes: []
         },
         {
           privname: "售后工时查询",
-          url:'/businesspage/personalSetting/shgs',
-          icon:'el-icon-erp-baobiaoguanli',
-          childNodes: [],
+          url: "/businesspage/personalSetting/shgs",
+          icon: "el-icon-erp-baobiaoguanli",
+          childNodes: []
         },
         {
           privname: "任职等级",
-          url:'/businesspage/personalSetting/grrzdj',
-          icon:'el-icon-erp-baobiaoguanli',
-          childNodes: [],
-        },
+          url: "/businesspage/personalSetting/grrzdj",
+          icon: "el-icon-erp-baobiaoguanli",
+          childNodes: []
+        }
       ],
-      navContent:'个人信息',
-      tagGroup:''
+      navContent: "个人信息",
+      tagGroup: ""
+    };
+  },
+  methods: {
+    hanldeSelete(index, indexPath) {
+      switch (index) {
+        case "1":
+          this.navContent = "个人信息";
+          break;
+        case "2":
+          this.navContent = "修改密码";
+          break;
+        case "3":
+          this.navContent = "消息设置";
+          break;
+        case "4":
+          this.navContent = "个人结算";
+          break;
+      }
     }
   },
-  methods:{
-   hanldeSelete(index,indexPath){
-      switch(index){
-        case '1':
-        this.navContent = '个人信息';
-        break;
-        case '2':
-        this.navContent = '修改密码';
-        break;
-        case '3':
-        this.navContent = '消息设置';
-        break;
-        case '4':
-        this.navContent = '个人结算';
-        break;
-      }
-   }
+  computed: {},
+  activated() {
+    this.tagGroup = JSON.parse(sessionStorage.userInfo).userGroupTag;
+    this.navContent = "个人信息";
+    // $('.el-menu-item:eq(0)').css('color','rgb(64, 158, 255)').siblings('.el-menu-item').css('color','rgb(112, 128, 135)');
   },
-  computed:{},
-  activated(){
-      this.tagGroup = JSON.parse(sessionStorage.userInfo).userGroupTag
-      this.navContent = '个人信息'
-      // $('.el-menu-item:eq(0)').css('color','rgb(64, 158, 255)').siblings('.el-menu-item').css('color','rgb(112, 128, 135)');
-  },
-   components: {layout,NavBarItem}
- }
+  components: { layout, NavBarItem }
+};
 </script>
 
 <style scoped>
-.personal-setting-content{
+.personal-setting-content {
   padding: 10px 20px;
 }
-.personal-setting-content h4{
+.personal-setting-content h4 {
   font-size: 16px;
   font-weight: 700;
-  border-left:3px solid rgb(153, 50, 236);
+  border-left: 3px solid rgb(153, 50, 236);
   padding-left: 5px;
   color: #555;
 }
-
 </style>

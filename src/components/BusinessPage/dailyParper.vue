@@ -19,7 +19,6 @@
       </el-form-item>
       <div flex>
         <p style="min-width:80px;text-align:right;font-weight:700;padding-right:12px;white-space:nowrap">
-          <!-- <span class="el-icon-question" title="注 : 项目任务必须关联任务，非项目任务无须关联任务"></span> 关联任务 -->
           <span class="before-require">关联任务</span>
         </p>
         <p>
@@ -55,11 +54,11 @@ export default {
       taskname: this.taskName,
       glxmbh: "",
       glrwbh: "",
-      pickerOptions:{
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          }
-        },  
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        }
+      }
     };
   },
   props: {

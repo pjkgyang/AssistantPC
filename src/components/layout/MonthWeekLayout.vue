@@ -25,42 +25,38 @@
 </template>
 
 <script>
- export default {
-   data () {
-     return {
-            
-      }
-   },
-   props:{
-     title:{
-       type:String,
-       default:''
-     },
-     shown:{
-       type:Boolean,
-       default:false
-     }
-   },
-   components: {}
- }
+export default {
+  data() {
+    return {};
+  },
+  props: {
+    title: {
+      type: String,
+      default: ""
+    },
+    shown: {
+      type: Boolean,
+      default: false
+    }
+  },
+  components: {}
+};
 </script>
 
 <style scoped>
-.month-plan-overview{
-    width: 95%;
-    margin: 0 auto 0;
-    padding-top:10px; 
+.month-plan-overview {
+  width: 95%;
+  margin: 0 auto 0;
+  padding-top: 10px;
 }
-.month-workplan{
-    background: #fff;
-    padding: 20px 15px 0;
-    box-shadow: 0 4px 12px 0 rgba(73,80,96,0.08);
-    border-radius: 4px;
+.month-workplan {
+  background: #fff;
+  padding: 20px 15px 0;
+  box-shadow: 0 4px 12px 0 rgba(73, 80, 96, 0.08);
+  border-radius: 4px;
 }
-.month-plan-filter{
-   margin:10px 0 10px;
+.month-plan-filter {
+  margin: 10px 0 10px;
 }
-
- 
 </style>
 

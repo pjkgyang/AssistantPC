@@ -76,17 +76,6 @@
               </div>
             </div>
           </div>
-          <!-- <el-button  class="button-new-tag" type="primary" @click="addUser">+</el-button>
-                      <ul class="task_participant" v-if="selectShow">
-                            <li><el-input v-model="name" placeholder="搜索姓名"></el-input></li>
-                            <ul style="height:180px;overflow-y:auto">
-                              <li v-for="(list,index) in listt0" class="cyz-list" :data-label="list.userName+'&'+list.userId+'&'+index" :key="index" @click="addTaskParty">
-                                <span class="cyz-list" style="display:inline-block;width:50px;">{{list.userName}} </span>
-                                <span class="cyz-list">{{list.userCode}}</span>
-                                <span class="el-icon-check cyz-list" style="float:right;margin-top:5px" v-if="partyArr.indexOf(index) != -1"></span>
-                              </li>
-                            </ul>
-                      </ul> -->
         </div>
       </div>
 
@@ -373,8 +362,8 @@ export default {
 };
 </script>
 <style scoped>
-.detail\-content .el-form-item{
- margin-bottom: 8px !important;
+.detail\-content .el-form-item {
+  margin-bottom: 8px !important;
 }
 .task-detail-dialog-header {
   padding: 0 20px;

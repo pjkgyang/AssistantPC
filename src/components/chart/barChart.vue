@@ -7,16 +7,16 @@ import echarts from "echarts";
 export default {
   data() {
     return {
-       firstName:'',
-       firstValue:'',
-       secondName:'',
-       secondValue:'',
-       thirdName:'',
-       thirdValue:'',
-       fourName:'',
-       fourValue:'',
+      firstName: "",
+      firstValue: "",
+      secondName: "",
+      secondValue: "",
+      thirdName: "",
+      thirdValue: "",
+      fourName: "",
+      fourValue: "",
 
-       titleData:[]
+      titleData: []
     };
   },
   props: {
@@ -24,15 +24,15 @@ export default {
       type: Number,
       default: 0
     },
-    barTitle:{
-      type:String,
-      default:'项目分类'
+    barTitle: {
+      type: String,
+      default: "项目分类"
     },
-    barData:{
-        type:Array,
-        default:()=>{
-            return []
-        }
+    barData: {
+      type: Array,
+      default: () => {
+        return [];
+      }
     }
   },
   mounted() {
@@ -40,8 +40,8 @@ export default {
       this.initChart();
     });
   },
-  watch:{
-     barData:function(val){
+  watch: {
+    barData: function(val) {
       this.firstName = val[0].name;
       this.secondName = val[1].name;
       this.thirdName = val[2].name;
@@ -49,21 +49,23 @@ export default {
       this.firstValue = val[0].value;
       this.secondValue = val[1].value;
       this.thirdValue = val[2].value;
-      if(this.barTitle == '问题分类'){
-        this.fourName =  val[3].name;
-        this.fourValue =  val[3].value;
+      if (this.barTitle == "问题分类") {
+        this.fourName = val[3].name;
+        this.fourValue = val[3].value;
       }
       this.bardata = val;
-       val.forEach(ele=>{
-          this.titleData.push(ele.name);
-        })
-      this.initChart(); 
-     }
+      val.forEach(ele => {
+        this.titleData.push(ele.name);
+      });
+      this.initChart();
+    }
   },
   methods: {
     initChart() {
       // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementsByClassName("barChart")[this.barIndex]);
+      var myChart = echarts.init(
+        document.getElementsByClassName("barChart")[this.barIndex]
+      );
       var option = {
         tooltip: {
           trigger: "axis",
@@ -73,7 +75,7 @@ export default {
           }
         },
         legend: {
-          data:this.titleData
+          data: this.titleData
         },
         grid: {
           left: "3%",
@@ -90,7 +92,7 @@ export default {
         },
         series: [
           {
-            name:this.firstName,
+            name: this.firstName,
             type: "bar",
             stack: "总量",
             barWidth: 80,
@@ -137,11 +139,11 @@ export default {
               }
             },
             data: [this.fourValue]
-          },
+          }
         ]
       };
-      
-      if(this.barTitle == '问题分类'){
+
+      if (this.barTitle == "问题分类") {
         delete option[3];
       }
       myChart.setOption(option);
@@ -153,7 +155,7 @@ export default {
 
 <style scoped>
 .barChart {
-  width:25%;
+  width: 25%;
   height: 300px;
 }
 </style>

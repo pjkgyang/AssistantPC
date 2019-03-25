@@ -149,7 +149,7 @@ import {
   editComplain,
   deleteComplain
 } from "@/api/complain.js";
-import { showQuestionCondition,queryResponsibleProduct } from "@/api/xmkb.js";
+import { showQuestionCondition, queryResponsibleProduct } from "@/api/xmkb.js";
 import { queryProjectParticipant, queryZjCpData } from "@/api/personal.js";
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import { getMenu, getSession } from "@/utils/util.js";
@@ -189,7 +189,7 @@ export default {
       tsdxList: [],
       gczdList: [],
       cpList: [],
-      xmcpList:[],
+      xmcpList: [],
       showCondition: "",
       queryLJshow: true
     };
@@ -273,16 +273,18 @@ export default {
       this.complaintList(1);
       this.currentPage = 1;
     },
-   //  产品
-    handleChoose(val){
+    //  产品
+    handleChoose(val) {
       this.$get(this.API.questionLimitProduct, {
-        xmbh:this.xmbh,
-        cpbh:val.split('&')[1]
+        xmbh: this.xmbh,
+        cpbh: val.split("&")[1]
       }).then(res => {
         if (res.state == "success") {
           if (!res.data) {
             this.$alert(
-              "该项目未采购 " +  val.split('&')[0] + " 专项基础环境运维服务,请联系销售采购对应的服务",
+              "该项目未采购 " +
+                val.split("&")[0] +
+                " 专项基础环境运维服务,请联系销售采购对应的服务",
               "提示",
               {
                 confirmButtonText: "确定",
@@ -535,28 +537,28 @@ export default {
         }
       });
     },
-     // 获取项目对应的产品
-      queryResponsibleProduct(xmbh){
-        this.xmcpList = [];
-        queryResponsibleProduct({
-          xmbh: xmbh
-        }).then(res => {
-          if (res.data.state == "success") {
-            if (JSON.stringify(res.data.data) == "{}") {
-              this.xmcpList = this.cpList;
-            } else {
-              let Arr = Object.keys(res.data.data);
-              let McArr = Object.values(res.data.data);
-              for (var i = 0; i < Arr.length; i++) {
-                this.xmcpList.push({
-                  label: Arr[i],
-                  mc: McArr[i]
-                });
-              }
+    // 获取项目对应的产品
+    queryResponsibleProduct(xmbh) {
+      this.xmcpList = [];
+      queryResponsibleProduct({
+        xmbh: xmbh
+      }).then(res => {
+        if (res.data.state == "success") {
+          if (JSON.stringify(res.data.data) == "{}") {
+            this.xmcpList = this.cpList;
+          } else {
+            let Arr = Object.keys(res.data.data);
+            let McArr = Object.values(res.data.data);
+            for (var i = 0; i < Arr.length; i++) {
+              this.xmcpList.push({
+                label: Arr[i],
+                mc: McArr[i]
+              });
             }
           }
-        })
-    },
+        }
+      });
+    }
   },
   watch: {},
   activated() {

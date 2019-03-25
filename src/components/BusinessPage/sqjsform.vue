@@ -34,42 +34,41 @@
 </template>
 <script>
 export default {
-  data(){
-      return {
-            form:{
-             nycd:'4',
-             sfjj:'0',
-             gs:0,
-             sfbg:false,
-             gbsm:""
-          },
+  data() {
+    return {
+      form: {
+        nycd: "4",
+        sfjj: "0",
+        gs: 0,
+        sfbg: false,
+        gbsm: ""
       }
+    };
   },
-  props:{
-      gs:{
-        type:Number,
-        default:0
-      }  
+  props: {
+    gs: {
+      type: Number,
+      default: 0
+    }
   },
-  methods:{
-    submitForm(){
-         let reg = /^\d+(\.\d+)?$/;
-            if(!reg.test(this.form.gs)){
-                this.$alert('请填写正确工时', '提示', {
-                confirmButtonText: '确定',
-                type:'warning'
-            });
-            return;
-        }
-        this.form.gs = this.gs
-       this.$emit('submitForm',this.form);
+  methods: {
+    submitForm() {
+      let reg = /^\d+(\.\d+)?$/;
+      if (!reg.test(this.form.gs)) {
+        this.$alert("请填写正确工时", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
+      this.form.gs = this.gs;
+      this.$emit("submitForm", this.form);
     },
-    closeForm(){
-       this.$emit('closeForm','');
-    },
+    closeForm() {
+      this.$emit("closeForm", "");
+    }
   }
-}
+};
 </script>
 <style scoped>
-
 </style>

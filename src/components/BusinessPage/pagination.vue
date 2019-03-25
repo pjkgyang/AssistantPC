@@ -12,37 +12,30 @@
 </template>
 <script>
 export default {
-  data(){
-    return{
-     
+  data() {
+    return {};
+  },
+  props: {
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    total: {
+      type: Number,
+      default: 100
+    },
+    currentPage: {
+      type: Number,
+      default: 1
     }
   },
-    props:{
-        pageSize:{
-            type:Number,
-            default:10
-        } ,
-        total:{
-            type:Number,
-            default:100
-        } ,
-        currentPage:{
-            type:Number,
-            default:1
-        } ,
-
+  methods: {
+    handleCurrentChange(val) {
+      this.$emit("handleCurrentChange", val);
     },
-    methods: {
-      handleCurrentChange(val) {
-        this.$emit('handleCurrentChange',val)
-      },
-      handleSizeChange(val){
-
-      }
-    },
-
+    handleSizeChange(val) {}
   }
+};
 </script>
 <style scoped>
-
 </style>

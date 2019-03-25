@@ -34,38 +34,34 @@
 </template>
 <script>
 export default {
-  data(){
-      return{
-
-      }
+  data() {
+    return {};
   },
-  props:{
-      htnrData:{
-          type:Array,
-          default:function(){
-              return  []
-          }
-      },
-      show:{
-          type:Boolean,
-          default:true
-      },
-      fbnrData:{
-        type:Array,
-          default:function(){
-              return  []
-          }
-      },
-      allfbData:{
-         type:Array,
-         default:function(){
-             return []
-         }
-      },
-
+  props: {
+    htnrData: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
+    show: {
+      type: Boolean,
+      default: true
+    },
+    fbnrData: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
+    allfbData: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    }
   }
-}
+};
 </script>
 <style scoped>
-
 </style>

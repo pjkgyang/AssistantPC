@@ -21,14 +21,15 @@
             </span>
             <span>
               <span class="filter-weight">项目:&nbsp;</span>
-              <el-select style="width:370px" v-model="itemValue" clearable filterable remote :remote-method="remoteMethod" @change="changeProject" placeholder="请选择/搜索项目名称/项目编号" size="small">
+              <el-select style="width:300px" v-model="itemValue" clearable filterable remote :remote-method="remoteMethod" @change="changeProject" placeholder="请选择/搜索项目名称/项目编号" size="small">
                 <el-option v-for="item in itemList" :key="item.xmbh" :label="'['+item.xmbh+'] '+item.xmmc" :value="item.xmmc"></el-option>
               </el-select>
             </span>
           </div>
           <!-- 2018-9-25 修改 !isBlocked &&-->
-          <div v-if="otherShow &&  groupTag.indexOf('QYZ') != -1">
-            <el-button size="small" type="danger" @click="handleClickYdjh">制订月度计划</el-button>
+          <div>
+            <el-button type="primary" size="mini" @click="exportMonth">导出</el-button>
+            <el-button v-if="otherShow &&  groupTag.indexOf('QYZ') != -1" size="small" type="danger" @click="handleClickYdjh">制订月度计划</el-button>
           </div>
         </section>
       </header>
@@ -38,11 +39,6 @@
           <div slot="bottom">
             <section class="month-plan-condition month-hwys">
               <div flex colcenter>
-                <!-- <el-input style="width:300px" @change="handleEnterSearch"  size="small" v-model="keyword" placeholder="请输入项目编号/项目名称/姓名"></el-input>&#x3000;
-                            <div class="colcenter">
-                                <span class="filter-weight">里程碑状态:&nbsp;</span>
-                                <lcbztSelect  :multipleLcbztList="lcbztList" @handleChangeLcbzt="handleChangeLcbzt"></lcbztSelect>&#x3000;
-                            </div> -->
                 <section v-if="isJzuser != 1">
                   <span class="filter-weight">( 合计完工:
                     <span style="color:#f00">{{workTotal.hjwg}}</span>
@@ -66,32 +62,14 @@
             </section>
             <section class="month-plan-condition" flex spacebetween>
               <el-button :disabled="!multipleSelection.length" size="mini" @click="handlePzofBatch">批量批注</el-button>
-              <!-- <el-button v-if="!isBlocked && groupTag.indexOf('JYGL') == -1" :disabled="!multipleSelection.length" size="mini" @click="handleEditofBatch">批量批注</el-button> -->
-              <el-button type="primary" size="mini" @click="exportMonth">导出</el-button>
             </section>
             <MonthTable :tableData="monthWorkList" :otherShow="otherShow && isJzuser != 1" :ispz="true" :isEdit="false" @handleClickPz="handleYdjhPz" @handleClickEdit="handleYdjhEdit" @handleCurrentChange="handleYdjhChange" @handleSizeChange="handleSizeChange" @handleClickCheck="handleYdjhCheck" @handleSelectionChange="handleSelectionChange" :isSelect="true" :pageSize="workPageSize" :records="records" :currentPage="currentPage"></MonthTable>
           </div>
         </tableLayout>
         <tableLayout :title="'月度问题处理'+textTitle">
           <div slot="bottom">
-            <!-- <div>
-                     <el-input style="width:300px" @change="handleEnterWtSearch"  size="small" v-model="Wtkeyword" placeholder="请输入项目编号/项目名称/问题标题/提问人"></el-input>&#x3000;
-                     <span>
-                        <span class="filter-weight">问题状态：</span>
-                        <el-select v-model="wtztValue" size="small" placeholder="请选择" @change="handleSelectWtzt">
-                            <el-option v-for="item in wtztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </span>
-                     <span>
-                        <span class="filter-weight">异常状态：</span>
-                        <el-select v-model="ycztValue" size="small" placeholder="请选择" @change="handleSelectYczt">
-                            <el-option v-for="item in ycztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </span>
-                 </div> -->
             <div style="margin:12px 0">
               <el-button :disabled="!multipleSelectionWt.length" size="mini" @click="handlePzofBatchWt">批量批注</el-button>
-              <!-- <el-button   :disabled="!multipleSelectionWt.length"  size="mini" @click="handleEditofBatchWt">批量批注</el-button> -->
             </div>
             <MonthWeekQuestionTable :tableData="monthQuestionList" @handleClickPz="handleQuestionPz" @handleClickEdit="handleQuestionEdit" @handleClickCheck="handleQuestionCheck" @handleSizeChange="handleSizeWtChange" @handleSelectionChange="handleSelectWtChange" @handleCurrentChange="handleQuestionPageChange" :isSelect="true" :ideleteShow="!isBlocked" :othShow="otherShow" :isEdit="!isBlocked && groupTag.indexOf('JYGL') == -1" :pageSize="questionPageSize" :records="QuestionRecords" :currentPage="questionPage"></MonthWeekQuestionTable>
           </div>
@@ -237,15 +215,10 @@ export default {
     exportMonth() {
       window.open(
         window.baseurl +
-          "plan/exportMonthWork.do?qygc=" +
+          "plan/exportMonthPlan.do?qygc=" +
           this.qyValue +
           "&month=" +
-          this.monthValue +
-          "&planType=" +
-          this.ztValue +
-          "&keyword=" +
-          this.itemValue +
-          "&zts="
+          this.monthValue
       );
     },
     changeProject(val) {
@@ -656,7 +629,6 @@ export default {
         month: month
       }).then(({ data }) => {
         if (data.state == "success") {
-          // this.isBlocked = false;
           this.isBlocked = data.data;
           let _this = this;
           // setTimeout(function(){

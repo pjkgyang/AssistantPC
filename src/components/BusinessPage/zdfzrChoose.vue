@@ -138,7 +138,7 @@ export default {
         }
       ],
       lshjShown: false,
-      qwjjrqZf:""
+      qwjjrqZf: ""
     };
   },
   props: {
@@ -209,7 +209,7 @@ export default {
         this.multipleSelection = [];
       }
     },
-    
+
     queryComplainUser() {
       this.$emit("queryComplainUser", this.cpKeyword);
       this.radio = "";
@@ -234,7 +234,10 @@ export default {
       this.ryData = row;
     },
     handleCommitZdr() {
-      this.ryData.nr = $("#summernoteZrr").summernote("code") == "<p><br></p>"? "": $("#summernoteZrr").summernote("code");
+      this.ryData.nr =
+        $("#summernoteZrr").summernote("code") == "<p><br></p>"
+          ? ""
+          : $("#summernoteZrr").summernote("code");
       let yyry = [];
       this.multipleSelection.forEach((ele, i, arr) => {
         if (this.zdTitle == "选择催办人") {
@@ -252,27 +255,42 @@ export default {
         });
         return;
       } else if (this.zdTitle == "指定解决人") {
-        if(!this.ryData.nickName){
-          this.$alert("请选择" + this.zdTitle, "提示", {confirmButtonText: "确定",type: "warning"});
+        if (!this.ryData.nickName) {
+          this.$alert("请选择" + this.zdTitle, "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
           return;
         }
-        if(!this.qwjjrqZf){
-          this.$alert("请选择期望解决日期", "提示", { confirmButtonText: "确定", type: "warning"});
+        if (!this.qwjjrqZf) {
+          this.$alert("请选择期望解决日期", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
           return;
         }
-        this.ryData.qwjjrq = this.qwjjrqZf
+        this.ryData.qwjjrq = this.qwjjrqZf;
       } else if (this.zdTitle == "运营人员转发") {
         if (!this.lshjShown && this.multipleSelection.length == 0) {
-          this.$alert("请选择" + this.zdTitle, "提示", {confirmButtonText: "确定",type: "warning"});
+          this.$alert("请选择" + this.zdTitle, "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
           return;
         } else if (this.lshjShown && this.lchj == "") {
-          this.$alert("请选择流程环节", "提示", {confirmButtonText: "确定",type: "warning"});
+          this.$alert("请选择流程环节", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
           return;
-        }else if(!this.qwjjrqZf){
-          this.$alert("请选择期望解决日期", "提示", { confirmButtonText: "确定", type: "warning"});
+        } else if (!this.qwjjrqZf) {
+          this.$alert("请选择期望解决日期", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
           return;
         }
-        this.ryData.qwjjrq = this.qwjjrqZf
+        this.ryData.qwjjrq = this.qwjjrqZf;
       } else if (
         this.zdTitle == "选择催办人" &&
         this.multipleSelection.length == 0
@@ -323,7 +341,7 @@ export default {
         this.ryData = {};
         this.multipleSelection = [];
         this.cpKeyword = "";
-        $("#summernoteZrr").summernote("code",'');
+        $("#summernoteZrr").summernote("code", "");
       }
     },
     zdTitle(n, o) {
@@ -369,5 +387,4 @@ export default {
   background: #1997d7;
   color: #fff !important;
 }
-
 </style>

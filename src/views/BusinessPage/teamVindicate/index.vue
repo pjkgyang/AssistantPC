@@ -42,115 +42,130 @@
 </template>
 
 <script>
- import filterComponent from "@/components/reportTable/filterComponent.vue";
- import zdwhDialog from "@/components/dialog/zdwh-dialog.vue";
- import addzdDialog from "@/components/dialog/addzd-dialog.vue";
- export default {
-   data () {
-     return {
-         show:false,
-         userShow:false,
-         addzdShow:false,
-         filterList:['keyword'],
-         tableHeight:window.innerHeight - 300,
-         currentPage:1,
-         pageSize:15,   
-         total:0,
-         filterData:'',
-         qyzdwid:'',      //区域战队wid
-         userGroupTag:'',
-         limitShow:true,
-         zdData:{},
-         tableData: [],
-         title:""
-     }
-   },
-   mounted(){
-     this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag
-     if((this.userGroupTag.indexOf('JYGL') != -1 ||this.userGroupTag.indexOf('ZDDZ') != -1) && this.userGroupTag.indexOf('QYZ') == -1){
-        this.limitShow = false;
-     }
-     if(this.userGroupTag.indexOf('JYGL') != -1){
-        this.filterList.push('qygc');
-     }
-     this.getPageQyzd();
-   },
-   methods: {
-      handleAddSuccess(){     //添加 战队成功
-          this.currentPage = 1;   
-          this.getPageQyzd(); 
-      },
-      handleAddzd(){          //添加 战队
-          this.zdData = {};
-          this.title = '添加战队'
-          this.addzdShow = !this.addzdShow
-      },
-      handleChangeFilter(data){      
-          this.filterData = data;
-          this.getPageQyzd();
-      },
-      handleClickEdit(row) {         // 编辑
-          this.zdData = row
-          this.title = '编辑战队'
-          this.addzdShow = !this.addzdShow
-      },
-      handleClickMaintain(row){      // 维护
-          this.qyzdwid = row.wid;
-          this.show = !this.show;
-      },
-      handleClickDelete(row){        //删除
-       this.$confirm('请确定是否删除该战队?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$post(this.API.deleteQyzd,{
-            wid:row.wid
-          }).then((res)=>{
-            if(res.state == 'success'){
-              this.$alert('删除成功', '提示', {confirmButtonText: '确定', type:'success',
-                callback: action => {
-                  this.getPageQyzd(); 
-                }
-              }); 
-             }else{
-               this.$alert(res.msg, '提示', {confirmButtonText: '确定',type:'error',}); 
-             }
-          })
-        }).catch(() => {});
-      },
-    
-      handleCurrentChange(data){
-        this.currentPage = data;
-        this.getPageQyzd();
-      },
-      handleSizeChange(data){
-        this.pageSize = data;
-        this.currentPage = 1;
-        this.getPageQyzd();
-      },
-      getPageQyzd(){
-        this.$get(this.API.pageQyzd,{
-          curPage:this.currentPage,
-          pageSize:this.pageSize,
-          qygc:this.filterData.gczd?this.filterData.gczd:'',
-          keyword:this.filterData.keyword?this.filterData.keyword:''
-        }).then((res)=>{
-          if(res.state == 'success'){
-            this.tableData = res.data.rows
-            this.total = res.data.records
-          }
-        })
-      }
+import filterComponent from "@/components/reportTable/filterComponent.vue";
+import zdwhDialog from "@/components/dialog/zdwh-dialog.vue";
+import addzdDialog from "@/components/dialog/addzd-dialog.vue";
+export default {
+  data() {
+    return {
+      show: false,
+      userShow: false,
+      addzdShow: false,
+      filterList: ["keyword"],
+      tableHeight: window.innerHeight - 300,
+      currentPage: 1,
+      pageSize: 15,
+      total: 0,
+      filterData: "",
+      qyzdwid: "", //区域战队wid
+      userGroupTag: "",
+      limitShow: true,
+      zdData: {},
+      tableData: [],
+      title: ""
+    };
+  },
+  mounted() {
+    this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+    if (
+      (this.userGroupTag.indexOf("JYGL") != -1 ||
+        this.userGroupTag.indexOf("ZDDZ") != -1) &&
+      this.userGroupTag.indexOf("QYZ") == -1
+    ) {
+      this.limitShow = false;
+    }
+    if (this.userGroupTag.indexOf("JYGL") != -1) {
+      this.filterList.push("qygc");
+    }
+    this.getPageQyzd();
+  },
+  methods: {
+    handleAddSuccess() {
+      //添加 战队成功
+      this.currentPage = 1;
+      this.getPageQyzd();
     },
-   components: { filterComponent,zdwhDialog,addzdDialog }
- }
+    handleAddzd() {
+      //添加 战队
+      this.zdData = {};
+      this.title = "添加战队";
+      this.addzdShow = !this.addzdShow;
+    },
+    handleChangeFilter(data) {
+      this.filterData = data;
+      this.getPageQyzd();
+    },
+    handleClickEdit(row) {
+      // 编辑
+      this.zdData = row;
+      this.title = "编辑战队";
+      this.addzdShow = !this.addzdShow;
+    },
+    handleClickMaintain(row) {
+      // 维护
+      this.qyzdwid = row.wid;
+      this.show = !this.show;
+    },
+    handleClickDelete(row) {
+      //删除
+      this.$confirm("请确定是否删除该战队?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$post(this.API.deleteQyzd, {
+            wid: row.wid
+          }).then(res => {
+            if (res.state == "success") {
+              this.$alert("删除成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success",
+                callback: action => {
+                  this.getPageQyzd();
+                }
+              });
+            } else {
+              this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "error"
+              });
+            }
+          });
+        })
+        .catch(() => {});
+    },
+
+    handleCurrentChange(data) {
+      this.currentPage = data;
+      this.getPageQyzd();
+    },
+    handleSizeChange(data) {
+      this.pageSize = data;
+      this.currentPage = 1;
+      this.getPageQyzd();
+    },
+    getPageQyzd() {
+      this.$get(this.API.pageQyzd, {
+        curPage: this.currentPage,
+        pageSize: this.pageSize,
+        qygc: this.filterData.gczd ? this.filterData.gczd : "",
+        keyword: this.filterData.keyword ? this.filterData.keyword : ""
+      }).then(res => {
+        if (res.state == "success") {
+          this.tableData = res.data.rows;
+          this.total = res.data.records;
+        }
+      });
+    }
+  },
+  components: { filterComponent, zdwhDialog, addzdDialog }
+};
 </script>
 
 <style scoped>
-.layout-bgf{
-    width: 95%;
-    margin:10px auto;
+.layout-bgf {
+  width: 95%;
+  margin: 10px auto;
 }
- 
 </style>

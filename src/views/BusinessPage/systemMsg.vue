@@ -58,232 +58,216 @@
   </div>
 </template>
 <script>
-import { getMessages,readMessage,readAllMessages } from '@/api/notice.js'
-import Scrollbar from 'smooth-scrollbar';
-import { EventBus } from '../../utils/util.js'; 
+import { getMessages, readMessage, readAllMessages } from "@/api/notice.js";
+import Scrollbar from "smooth-scrollbar";
+import { EventBus } from "../../utils/util.js";
 
 export default {
-  data(){
-      return{
-        noticeList:[],
-        showIndex:0,
-        noticeDeatil:{},
-        wid:'',
-        isread:0,
-        curPage:1,
-        total:""
-      }
+  data() {
+    return {
+      noticeList: [],
+      showIndex: 0,
+      noticeDeatil: {},
+      wid: "",
+      isread: 0,
+      curPage: 1,
+      total: ""
+    };
   },
-  mounted(){
-        Scrollbar.init(document.querySelector('#scrollbar'));
+  mounted() {
+    Scrollbar.init(document.querySelector("#scrollbar"));
   },
-  methods:{
-    handleReadAllMsg(){     // 全部为已读
-         readAllMessages().then(({data})=>{
-             if(data.state == 'success'){
-                 this.getMessage(1,true);
-                 EventBus.$emit('readAllMessages','');
-             }
-         })       
+  methods: {
+    handleReadAllMsg() {
+      // 全部为已读
+      readAllMessages().then(({ data }) => {
+        if (data.state == "success") {
+          this.getMessage(1, true);
+          EventBus.$emit("readAllMessages", "");
+        }
+      });
     },
-    handleNoticeDetail(e){  // 查看通知详情
-      let wid = e.currentTarget.getAttribute('data-wid');
+    handleNoticeDetail(e) {
+      // 查看通知详情
+      let wid = e.currentTarget.getAttribute("data-wid");
       this.readMessage(wid);
     },
 
-    readMessage(wid){
-        readMessage({
-            wid:wid
-        }).then(({data})=>{
-            if(data.state == 'success'){
-                // EventBus.$emit('changeNoticeNum','');
-                if(data.data != null){
-                    this.noticeDeatil = data.data
-                }else{
-                    this.noticeDeatil = {};        
-                }
-                this.wid = wid             
-            }
-        })
+    readMessage(wid) {
+      readMessage({
+        wid: wid
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          // EventBus.$emit('changeNoticeNum','');
+          if (data.data != null) {
+            this.noticeDeatil = data.data;
+          } else {
+            this.noticeDeatil = {};
+          }
+          this.wid = wid;
+        }
+      });
     },
-    handleNoticeType(e){
-      let type = e.target.getAttribute('data-type');
-      this.isread = type
-      this.showIndex = type
-      if(type == 2){
-        this.isread = ''
+    handleNoticeType(e) {
+      let type = e.target.getAttribute("data-type");
+      this.isread = type;
+      this.showIndex = type;
+      if (type == 2) {
+        this.isread = "";
       }
-      this.getMessage(1,true);
-    }, 
-    handleNext(){       //上一页
-        this.curPage += 1
-        this.getMessage(this.curPage);
+      this.getMessage(1, true);
     },
-    handlePrev(){       //下一页
-        this.curPage -= 1
-        this.getMessage(this.curPage);
+    handleNext() {
+      //上一页
+      this.curPage += 1;
+      this.getMessage(this.curPage);
     },
-    getMessage(curPage,type){
+    handlePrev() {
+      //下一页
+      this.curPage -= 1;
+      this.getMessage(this.curPage);
+    },
+    getMessage(curPage, type) {
       getMessages({
-        curPage:curPage,
-        pageSize:12,
-        keyword:'',
-        isread:this.isread
-      }).then(({data})=>{
-        if(data.state == 'success'){
-         this.noticeList = data.data.rows
-         this.total = data.data.total
-         if(type && data.data.rows.length != 0){
-             this.readMessage(this.noticeList[0].wid); 
+        curPage: curPage,
+        pageSize: 12,
+        keyword: "",
+        isread: this.isread
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.noticeList = data.data.rows;
+          this.total = data.data.total;
+          if (type && data.data.rows.length != 0) {
+            this.readMessage(this.noticeList[0].wid);
           }
         }
-      })
+      });
     },
-    closeNotice(){
-        this.$router.go(-1);
+    closeNotice() {
+      this.$router.go(-1);
     }
   },
-  activated(){
-    this.getMessage(1,true);    
+  activated() {
+    this.getMessage(1, true);
   },
-  components:{}
-}
+  components: {}
+};
 </script>
 <style scoped>
-.sys-notice{
-    width: 90%;
-    margin:0 auto ;
-    height: calc(100vh - 50px);
-    padding: 10px 0;
-    display: flex;
-    flex-wrap: nowrap;
+.sys-notice {
+  width: 90%;
+  margin: 0 auto;
+  height: calc(100vh - 50px);
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
-.sys-notice-list{
-    width: 370px;
-    height: 100%;
-    background: #fff;
-    position: relative;
-    overflow: hidden;
-    box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
-    border-radius: 4px;
-    border: 1px solid #ebeef5;
+.sys-notice-list {
+  width: 370px;
+  height: 100%;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  border: 1px solid #ebeef5;
 }
-.sys-notice-detail{
-    margin:0 20px;
-    padding: 20px;
-    height: 100%;
-    width: 70%;
-    box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
-    border-radius: 4px;
-    border: 1px solid #ebeef5;
-    background: #fff;
-    position: relative;
+.sys-notice-detail {
+  margin: 0 20px;
+  padding: 20px;
+  height: 100%;
+  width: 70%;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  border: 1px solid #ebeef5;
+  background: #fff;
+  position: relative;
 }
-.sys-notice-detail .sys-notice-detail-head{
+.sys-notice-detail .sys-notice-detail-head {
   border-bottom: 1px dotted #999;
   padding: 10px 0;
 }
-.sys-notice-detail .sys-notice-detail-head p{
-    font-size: 14px;
-    margin: 5px 0;
-    color: #666;
+.sys-notice-detail .sys-notice-detail-head p {
+  font-size: 14px;
+  margin: 5px 0;
+  color: #666;
 }
-.sys-notice-detail .sys-notice-detail-head p span{
-    color: #000;
+.sys-notice-detail .sys-notice-detail-head p span {
+  color: #000;
 }
-.sys-notice-detail .sys-notice-detail-content{
-    padding: 10px 0;
-    font-size: 14px;
-    color: #666;
+.sys-notice-detail .sys-notice-detail-content {
+  padding: 10px 0;
+  font-size: 14px;
+  color: #666;
 }
 
-.sys-notice-detail .sys-notice-detail-content p{
-    margin: 5px 0;
+.sys-notice-detail .sys-notice-detail-content p {
+  margin: 5px 0;
 }
-.sys-notice-detail .sys-notice-detail-content p span{
-    color: #000;
+.sys-notice-detail .sys-notice-detail-content p span {
+  color: #000;
 }
-.notice-list{
-  width:100%;
-  height:88%;
+.notice-list {
+  width: 100%;
+  height: 88%;
   overflow-y: auto;
 }
-.notice-list section{
+.notice-list section {
   border-bottom: 1px dotted #ccc;
   width: 100%;
   padding: 10px 8px 5px;
 }
-.notice-list section:hover{
-    cursor: pointer;
-    background: #eee;
+.notice-list section:hover {
+  cursor: pointer;
+  background: #eee;
 }
-.notice-list-top>span:nth-of-type(1){
+.notice-list-top > span:nth-of-type(1) {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.notice-list-top:after{
-    content: "";
-    display: block;
-    clear: both;
+.notice-list-top:after {
+  content: "";
+  display: block;
+  clear: both;
 }
-.sys-notice-operate{
-    padding:10px;
-    border-bottom:1px dotted #ccc;
-    font-size: 14px;
-    color:#000;
-    height:50px;
-    line-height: 30px;
+.sys-notice-operate {
+  padding: 10px;
+  border-bottom: 1px dotted #ccc;
+  font-size: 14px;
+  color: #000;
+  height: 50px;
+  line-height: 30px;
 }
-.sys-notice-operate>span:hover{
-    cursor: pointer;
+.sys-notice-operate > span:hover {
+  cursor: pointer;
 }
-.btn-active{
-    color: #409EFF;
+.btn-active {
+  color: #409eff;
 }
-.paginate-btn{
-    text-align: center;
-    padding: 15px 0 10px;
-    position: fixed;
-    bottom:10px;
-    left:180px;
+.paginate-btn {
+  text-align: center;
+  padding: 15px 0 10px;
+  position: fixed;
+  bottom: 10px;
+  left: 180px;
 }
-/* .paginate-btn button:hover{
-    background: #ccc !important;
-    color: #fff;
-} */
-/* .paginate-btn button:nth-of-type(1){
-    border-radius:14px 0 0 14px;
-    line-height: 20px;
-    background: #eee;
-    border: 1px solid #999;
-    padding:2px 15px;
-    border-right: none;
+.list-bg {
+  background: #eee;
 }
-.paginate-btn button:nth-of-type(2){
-    border-radius:0 14px 14px 0;
-    line-height: 20px;
-    background: #eee;
-    border: 1px solid #999;
-    padding:2px 15px;
-    margin-left: 0 !important;
-} */
-.list-bg{
-   background: #eee;
+.sysNotice-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #eee;
+  padding: 0 10px;
 }
-.sysNotice-close{
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: #eee;
-    padding: 0 10px;
+.sysNotice-close:hover {
+  cursor: pointer;
 }
-.sysNotice-close:hover{
-    cursor: pointer;
-}
-.sys-notice-tip{
-    font-size:14px;
+.sys-notice-tip {
+  font-size: 14px;
 }
 </style>

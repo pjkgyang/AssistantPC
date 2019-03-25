@@ -8,7 +8,6 @@
         <section>
           <div flex spacebetween class="mb-12">
             <div>
-              <!--  -->
               <!-- <el-button v-if="isJzuser == '0'" :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('tbfw')">提报服务</el-button> -->
               <el-button :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('qrfw')">确认服务</el-button>
               <el-button :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('bhfw')">驳回服务</el-button>
@@ -95,7 +94,7 @@ export default {
     return {
       tbfwShow: false,
       qrbhfwShow: false,
-      fxdjShow:false,
+      fxdjShow: false,
       title: "",
       currentPage: 1,
       pageSize: 10,
@@ -114,42 +113,44 @@ export default {
         fwzt: "",
         lb: "",
         xmzt: "",
-        jhksrq:"",
-        jhjsrq:"",
-        sfgq:"",
-        fxdj:""
+        jhksrq: "",
+        jhjsrq: "",
+        sfgq: "",
+        fxdj: ""
       },
-      isJzuser:"",
-      userGroupTag:'',
-      username:"",
+      isJzuser: "",
+      userGroupTag: "",
+      username: "",
 
-      rowData:{},
-      isMultiple:false
-
+      rowData: {},
+      isMultiple: false
     };
   },
   methods: {
     // 点击风险等级列
-    handleCheck(data){
+    handleCheck(data) {
       this.rowData = data;
-      this.fxdjShow = !this.fxdjShow
-    },  
+      this.fxdjShow = !this.fxdjShow;
+    },
     // 风险等级列保存
-    handleSave(data){
-      this.$post(this.API.submitActiveServiceRisk,{
-        wid:this.rowData.wid,
-        cljg:data.cljg,
-        sfcl:data.sfcl,
-        fjData:data.fileList
-      }).then(res=>{
-        if(res.state == 'success'){
-           this.$message({message: "保存成功~",type: 'success'});
-           this.fxdjShow = false;
-           this.pageActiveService();
-        }else{
-           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+    handleSave(data) {
+      this.$post(this.API.submitActiveServiceRisk, {
+        wid: this.rowData.wid,
+        cljg: data.cljg,
+        sfcl: data.sfcl,
+        fjData: data.fileList
+      }).then(res => {
+        if (res.state == "success") {
+          this.$message({ message: "保存成功~", type: "success" });
+          this.fxdjShow = false;
+          this.pageActiveService();
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
-      })
+      });
     },
     // 筛选条件
     handleChangeFilter(data) {
@@ -165,11 +166,14 @@ export default {
         fjData: data.fileList
       }).then(res => {
         if (res.state == "success") {
-          this.$message({message: "提报成功~",type: 'success'});
+          this.$message({ message: "提报成功~", type: "success" });
           this.tbfwShow = false;
           this.pageActiveService();
         } else {
-          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
       });
     },
@@ -189,11 +193,17 @@ export default {
         obj
       ).then(res => {
         if (res.state == "success") {
-          this.$message({message: this.title == "确认服务~" ? "确认成功~" : "驳回成功~",type: 'success'});
+          this.$message({
+            message: this.title == "确认服务~" ? "确认成功~" : "驳回成功~",
+            type: "success"
+          });
           this.qrbhfwShow = false;
           this.pageActiveService();
         } else {
-          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
       });
     },
@@ -201,10 +211,10 @@ export default {
     handleSelectionChange(val) {
       this.widsArr = [];
       this.multipleSelection = val;
-      if(val.length == 1){
+      if (val.length == 1) {
         this.isMultiple = true;
-      }else{
-        this.isMultiple = false; 
+      } else {
+        this.isMultiple = false;
       }
       val.forEach(ele => {
         this.widsArr.push(ele.wid);
@@ -216,8 +226,8 @@ export default {
       let tbArr = [];
       switch (data) {
         case "tbfw":
-          this.rowData  = !params ? this.multipleSelection[0] : params;
-          if(params){
+          this.rowData = !params ? this.multipleSelection[0] : params;
+          if (params) {
             this.isMultiple = true;
           }
           this.multipleSelection.forEach(ele => {
@@ -277,11 +287,12 @@ export default {
                 wids: this.wids
               }).then(res => {
                 if (res.state == "success") {
-                  this.$message({message: "删除成功~",type: 'success'});
+                  this.$message({ message: "删除成功~", type: "success" });
                   this.pageActiveService();
                 }
               });
-            }).catch(() => {});
+            })
+            .catch(() => {});
           break;
         case "export":
           window.open(
@@ -305,7 +316,7 @@ export default {
               "&keyword=" +
               this.filterData.keyword +
               "&lb=" +
-              this.filterData.lb + 
+              this.filterData.lb +
               "&sffb=1" +
               "&fxdj=" +
               this.filterData.fxdj
@@ -385,8 +396,8 @@ export default {
         jhjsrq: this.filterData.jhjsrq,
         sfgq: this.filterData.sfgq,
         keyword: this.filterData.keyword,
-        sffb:1,
-        fxdj:this.filterData.fxdj,
+        sffb: 1,
+        fxdj: this.filterData.fxdj
       }).then(res => {
         if (res.state == "success") {
           this.tableData = res.data.rows;
@@ -406,10 +417,10 @@ export default {
     this.pageActiveService();
     this.isJzuser = sessionStorage.isJZuser;
     this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
-    this.username = JSON.parse(sessionStorage.userInfo).nickName
+    this.username = JSON.parse(sessionStorage.userInfo).nickName;
   },
   props: {},
-  components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter ,fxdjDialog}
+  components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter, fxdjDialog }
 };
 </script>
 

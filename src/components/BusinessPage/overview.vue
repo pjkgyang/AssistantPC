@@ -67,172 +67,191 @@
   </div>
 </template>
 <script type="text/javascript">
-import Card from '@/components/overviewComponents/card.vue'
-import CircleBar from '@/components/overviewComponents/circle.vue'
-import PannelJdgz from '@/components/overviewComponents/pannel-jdgz.vue'
-import PannelWtgz from '@/components/overviewComponents/pannel-wtgz.vue'
-import PannelXmcb from '@/components/overviewComponents/pannel-xmcb.vue'
-import { getMonthLcb,getXmTj ,getDwTj,getYwy,getXmTjRT} from '@/api/home.js'
+import Card from "@/components/overviewComponents/card.vue";
+import CircleBar from "@/components/overviewComponents/circle.vue";
+import PannelJdgz from "@/components/overviewComponents/pannel-jdgz.vue";
+import PannelWtgz from "@/components/overviewComponents/pannel-wtgz.vue";
+import PannelXmcb from "@/components/overviewComponents/pannel-xmcb.vue";
+import {
+  getMonthLcb,
+  getXmTj,
+  getDwTj,
+  getYwy,
+  getXmTjRT
+} from "@/api/home.js";
 import { EventBus } from "../../utils/util.js"; //事件总
 
 export default {
   data() {
     return {
-      dialogVisible:false,
-      syqkLis:[],
-      syqkIndex:0,
+      dialogVisible: false,
+      syqkLis: [],
+      syqkIndex: 0,
       schoolNames: "",
-      xmpzkItems:[{
-        name:'会议纪要',
-        value:10,
-      },{
-        name:'会议纪要',
-        value:10,
-      },{
-        name:'会议纪要',
-        value:10,
-      },{
-        name:'会议纪要',
-        value:10,
-      },{
-        name:'会议纪要',
-        value:10,
-      },{
-        name:'会议纪要',
-        value:10,
-      },{
-        name:'会议纪要',
-        value:10,
-      },{
-        name:'会议纪要',
-        value:10,
-      }],
-      syqkItems:[{
-        name:'应用总量',
-        value:10,
-      },{
-        name:'访问总量',
-        value:10,
-      },{
-        name:'用户总量',
-        value:10,
-      },{
-        name:'本月访问量',
-        value:10,
-      },{
-        name:'本月用户量',
-        value:10,
-      }],
+      xmpzkItems: [
+        {
+          name: "会议纪要",
+          value: 10
+        },
+        {
+          name: "会议纪要",
+          value: 10
+        },
+        {
+          name: "会议纪要",
+          value: 10
+        },
+        {
+          name: "会议纪要",
+          value: 10
+        },
+        {
+          name: "会议纪要",
+          value: 10
+        },
+        {
+          name: "会议纪要",
+          value: 10
+        },
+        {
+          name: "会议纪要",
+          value: 10
+        },
+        {
+          name: "会议纪要",
+          value: 10
+        }
+      ],
+      syqkItems: [
+        {
+          name: "应用总量",
+          value: 10
+        },
+        {
+          name: "访问总量",
+          value: 10
+        },
+        {
+          name: "用户总量",
+          value: 10
+        },
+        {
+          name: "本月访问量",
+          value: 10
+        },
+        {
+          name: "本月用户量",
+          value: 10
+        }
+      ],
       schoolNamesOptions: [],
-      xmtj:{},
-      ywxdm:"",
+      xmtj: {},
+      ywxdm: ""
+    };
+  },
+  props: {
+    xmbh: {
+      type: String,
+      default: ""
+    },
+    label: {
+      type: String,
+      default: "overview"
+    },
+    isAll: {
+      type: Boolean,
+      default: true
     }
   },
-  props:{
-     xmbh:{
-       type:String,
-       default:''
-     },
-     label:{
-       type:String,
-       default:'overview'
-     },
-     isAll:{
-       type:Boolean,
-       default:true
-     }
-  },
-  mounted(){
+  mounted() {
+    this.getXmTjInfo();
+    EventBus.$on("handleCommitSuccess", param => {
       this.getXmTjInfo();
-     EventBus.$on("handleCommitSuccess", param => {
-         this.getXmTjInfo();
     });
   },
-  computed:{
-     isAllxm(){
-       return this.isAll
-     }
+  computed: {
+    isAllxm() {
+      return this.isAll;
+    }
   },
   methods: {
-    chexkTaskQuestionDetail(){
-      this.$emit('checkSkipDetail','question')
+    chexkTaskQuestionDetail() {
+      this.$emit("checkSkipDetail", "question");
     },
-    chexkTaskProcessDetail(){
-      this.$emit('checkSkipDetail','process')
+    chexkTaskProcessDetail() {
+      this.$emit("checkSkipDetail", "process");
     },
-    chexkTaskConfigDetail(){
-      this.$emit('checkSkipDetail','files')
+    chexkTaskConfigDetail() {
+      this.$emit("checkSkipDetail", "files");
     },
-    selectSyqk(index){
-      this.syqkIndex=index
-      this.ywxdm = this.syqkLis[index].YWYDM
+    selectSyqk(index) {
+      this.syqkIndex = index;
+      this.ywxdm = this.syqkLis[index].YWYDM;
       this.getDwTj(this.ywxdm);
     },
-   
-   //  获取（使用情况）
-    getDwTj(ywxdm){
+
+    //  获取（使用情况）
+    getDwTj(ywxdm) {
       getDwTj({
-        xmbh:this.xmbh,
-        ywxdm:ywxdm
-      }).then(({data})=>{
-          if(data.state == 'success'){
-            this.syqkItems[0].value = data.data.yyzs
-            this.syqkItems[1].value = data.data.fwzs
-            this.syqkItems[2].value = data.data.yhzs
-            this.syqkItems[3].value = data.data.byfwzs
-            this.syqkItems[4].value = data.data.byyhzs
+        xmbh: this.xmbh,
+        ywxdm: ywxdm
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.syqkItems[0].value = data.data.yyzs;
+          this.syqkItems[1].value = data.data.fwzs;
+          this.syqkItems[2].value = data.data.yhzs;
+          this.syqkItems[3].value = data.data.byfwzs;
+          this.syqkItems[4].value = data.data.byyhzs;
+        }
+      });
+    },
+    chooseItem() {
+      this.dialogVisible = !this.dialogVisible;
+    },
+    handleEdit(data) {
+      (this.xmbh = data.xmbh), (this.xmmc = data.xmmc);
+      this.dialogVisible = false;
+    },
+    getXmTjInfo() {
+      getXmTjRT({
+        xmbh: this.xmbh,
+        isAll: this.isAll
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.xmtj = data.data;
+          this.xmpzkItems = data.data.pzkList;
+          if (this.xmpzkItems && this.xmpzkItems.length) {
+            this.xmpzkItems.forEach((ele, i, arr) => {
+              this.xmpzkItems[i].wjjmc = this.xmpzkItems[i].wjjmc.substring(2);
+            });
+          } else {
+            this.xmpzkItems = [];
           }
-      })
-    },
-    chooseItem(){
-      this.dialogVisible = !this.dialogVisible
-    },
-    handleEdit(data){
-          this.xmbh = data.xmbh,
-          this.xmmc = data.xmmc
-          this.dialogVisible = false;
-    },
-    getXmTjInfo(){
-          getXmTjRT({
-                  xmbh:this.xmbh,
-                  isAll:this.isAll
-                }).then(({data})=>{
-                  if(data.state == 'success'){
-                    this.xmtj = data.data
-                    this.xmpzkItems = data.data.pzkList
-                    if(this.xmpzkItems  && this.xmpzkItems.length ){
-                      this.xmpzkItems.forEach((ele,i,arr)=>{
-                        this.xmpzkItems[i].wjjmc = this.xmpzkItems[i].wjjmc.substring(2);
-                      })
-                    }else{
-                      this.xmpzkItems = []
-                    }
-                  }else{
-                    
-                  }
-                })
-                // 获取业务线
-                getYwy({
-                  xmbh:this.xmbh
-                }).then(({data})=>{
-                  if(data.state == 'success'){
-                    if(data.data){
-                      this.syqkLis = data.data
-                      this.getDwTj(this.syqkLis[0].YWYDM);
-                    }else{
-                      this.syqkLis = []
-                    }
-                  }
-            })
-      }
+        } else {
+        }
+      });
+      // 获取业务线
+      getYwy({
+        xmbh: this.xmbh
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          if (data.data) {
+            this.syqkLis = data.data;
+            this.getDwTj(this.syqkLis[0].YWYDM);
+          } else {
+            this.syqkLis = [];
+          }
+        }
+      });
+    }
   },
-  watch:{
-    xmbh(){
+  watch: {
+    xmbh() {
       this.getXmTjInfo();
     },
-    isAllxm(){
+    isAllxm() {
       //切换整体 和 我的
-      this.getXmTjInfo(); 
+      this.getXmTjInfo();
     }
   },
   components: {
@@ -240,20 +259,19 @@ export default {
     CircleBar,
     PannelJdgz,
     PannelWtgz,
-    PannelXmcb,
-  },
-}
-
+    PannelXmcb
+  }
+};
 </script>
 <style lang="scss" scoped>
 .view-pannel1 {
-    // min-height: 1130px;
-    min-height: 845px;
-    font-size: 12px; 
+  // min-height: 1130px;
+  min-height: 845px;
+  font-size: 12px;
 }
 
 .card-head__more {
-  color: #1989FA;
+  color: #1989fa;
   position: relative;
   top: 8px;
   cursor: pointer;
@@ -282,38 +300,42 @@ export default {
   justify-content: space-between;
   margin-left: 5%;
   margin-top: 2%;
-  background: #F8FAFB;
-  flex-wrap: wrap
+  background: #f8fafb;
+  flex-wrap: wrap;
 }
 
 .card-body__xmpzk,
 .card-body__syqk {
-  flex-wrap: wrap
+  flex-wrap: wrap;
 }
-.card-body__xmpzk .nums{
-    color: #464C5B;font-size:20px;font-weight: bold;
+.card-body__xmpzk .nums {
+  color: #464c5b;
+  font-size: 20px;
+  font-weight: bold;
 }
-.card-body__syqk .nums{
-    font-size: 25px;font-weight: bold;color: #409EFF;
+.card-body__syqk .nums {
+  font-size: 25px;
+  font-weight: bold;
+  color: #409eff;
 }
-.card-body__syqk ul.syqk{
+.card-body__syqk ul.syqk {
   margin-right: 10px;
   overflow: hidden;
 }
-.card-body__syqk ul.syqk li{
-   float:left;
-   width:100px;
-   font-size: 14px;
-   cursor:pointer;
-   border-right: 1px solid #DCDFE6;
-   text-align: center;
-   list-style: none;
+.card-body__syqk ul.syqk li {
+  float: left;
+  width: 100px;
+  font-size: 14px;
+  cursor: pointer;
+  border-right: 1px solid #dcdfe6;
+  text-align: center;
+  list-style: none;
 }
-.card-body__syqk ul.syqk li:last-child{
-  border-right:none;
+.card-body__syqk ul.syqk li:last-child {
+  border-right: none;
 }
-.card-body__syqk ul.syqk li.active{
-  color:#1989FA;
+.card-body__syqk ul.syqk li.active {
+  color: #1989fa;
 }
 .horizenl-card__xmpzk {
   width: 30%;
@@ -323,29 +345,29 @@ export default {
   justify-content: space-between;
   margin-left: 5%;
   margin-top: 2%;
-  background: #F8FAFB;
+  background: #f8fafb;
 }
 
 .xmpzk-card {
-  background: url('../../../static/img/file.png') 0 center no-repeat;
+  background: url("../../../static/img/file.png") 0 center no-repeat;
   background-size: 20px;
   font-size: 14px;
-  text-indent:26px;
+  text-indent: 26px;
 }
 
 .el-table tr th {
-  background-color: #F8FAFB!important;
+  background-color: #f8fafb !important;
 }
 
 .el-table td,
 .el-table th {
-  padding: 4px 0!important;
+  padding: 4px 0 !important;
 }
 
 .card-head h3 {
   font-size: 1.5em;
   font-weight: 700;
-  color: #464C5B;
+  color: #464c5b;
   letter-spacing: 0;
   text-align: left;
   line-height: 30px;
@@ -356,25 +378,24 @@ export default {
 }
 
 .right-split:after {
-  content: '';
+  content: "";
   position: absolute;
   right: -8px;
   top: 0;
   width: 1px;
   height: 100%;
-  background: #EBEEF5;
+  background: #ebeef5;
 }
 .horizenl-card__items {
   padding: 0 6px;
-  background: #F8FAFB !important;
+  background: #f8fafb !important;
   margin-left: 10px;
   line-height: 2.5;
 }
 
 .money {
-  color: #F67A7A;
+  color: #f67a7a;
   font-weight: bold;
 }
-
 </style>
 

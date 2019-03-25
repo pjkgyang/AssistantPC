@@ -7,41 +7,43 @@ import echarts from "echarts";
 export default {
   data() {
     return {
-      titleData:[],
-      pieData:[]
+      titleData: [],
+      pieData: []
     };
   },
-  props:{
-    piedata:{
-      type:Array,
-      default:()=>{
+  props: {
+    piedata: {
+      type: Array,
+      default: () => {
         return [
-              { value: 335, name: "直接访问" },
-              { value: 310, name: "邮件营销" },
-              { value: 234, name: "联盟广告" },
-              { value: 135, name: "视频广告" },
-          ]
+          { value: 335, name: "直接访问" },
+          { value: 310, name: "邮件营销" },
+          { value: 234, name: "联盟广告" },
+          { value: 135, name: "视频广告" }
+        ];
       }
     },
-    pieIndex:{
-      type:Number,
-      default:0
+    pieIndex: {
+      type: Number,
+      default: 0
     }
   },
   mounted() {},
-  watch:{
-      piedata:function(val){
-        val.forEach(ele=>{
-          this.titleData.push(ele.name);
-        })
-        this.pieData = val;
-        this.initChart();
-      }
+  watch: {
+    piedata: function(val) {
+      val.forEach(ele => {
+        this.titleData.push(ele.name);
+      });
+      this.pieData = val;
+      this.initChart();
+    }
   },
   methods: {
     initChart() {
       // 基于准备好的dom，初始化echarts实例;
-      var myChart = echarts.init(document.getElementsByClassName("pieChart")[this.pieIndex]);
+      var myChart = echarts.init(
+        document.getElementsByClassName("pieChart")[this.pieIndex]
+      );
 
       var option = {
         tooltip: {
@@ -51,13 +53,13 @@ export default {
         legend: {
           orient: "vertitle",
           // horizontal
-          x:"right",
-          data:this.titleData
+          x: "right",
+          data: this.titleData
         },
         calculable: true,
         series: [
           {
-          //  color:['#D1D1D1','#0f0','#d2sd1s','#00f'],
+            //  color:['#D1D1D1','#0f0','#d2sd1s','#00f'],
             name: "分布情况",
             type: "pie",
             radius: ["40%", "55%"],
@@ -65,7 +67,7 @@ export default {
               normal: {
                 label: {
                   show: true,
-                   formatter: "{b} : {c} ({d}%)"
+                  formatter: "{b} : {c} ({d}%)"
                 },
                 labelLine: {
                   show: true
@@ -82,7 +84,7 @@ export default {
                 }
               }
             },
-            data: this.piedata,
+            data: this.piedata
           }
         ]
       };

@@ -180,16 +180,20 @@ export default {
       let fjbh = e.target.getAttribute("data-fj");
       window.open(window.baseurl + "attachment/downloadFile.do?fjId=" + fjbh);
     },
+
+
     // 分页
     handleCurrentChange(data) {
-      this.currentPage = 1;
+      this.currentPage = data;
       this.pageCapacityPlan();
     },
+    
     handleSizeChange(data) {
       this.currentPage = 1;
       this.pageSize = data;
       this.pageCapacityPlan();
     },
+
     // 筛选
     handleChangeFilter(data) {
       this.filterWord = data;

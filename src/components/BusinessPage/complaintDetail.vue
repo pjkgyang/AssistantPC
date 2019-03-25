@@ -91,12 +91,9 @@ import {
   deleteComplain,
   tsBtnAuth
 } from "@/api/complain.js";
-import {  queryProcess, showQuestionCondition } from "@/api/xmkb.js";
+import { queryProcess, showQuestionCondition } from "@/api/xmkb.js";
 import { getProjectCatalog } from "@/api/xmfz.js";
-import {
-  queryZjCpData,
-  queryUser
-} from "@/api/personal.js";
+import { queryZjCpData, queryUser } from "@/api/personal.js";
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import zdfzrChoose from "@/components/BusinessPage/zdfzrChoose.vue";
 import { getMenu, getSession } from "@/utils/util.js";
@@ -133,7 +130,7 @@ export default {
     };
   },
   mounted() {
-    this.wid = this.$route.query.wid
+    this.wid = this.$route.query.wid;
     // if(window.location.hash.includes('h=1')){
     //     sessionStorage.setItem('Detailpannel',window.location.hash)
     // }else{
@@ -141,38 +138,37 @@ export default {
     // }
 
     this.windowUnitType = sessionStorage.getItem("isJZuser");
-    
+
     showQuestionCondition().then(({ data }) => {
       //提问展示
       this.showCondition = data.data;
     });
 
-     $("#summernoteT").summernote({
-              dialogsInBody: true,
-              placeholder: "请输入投诉内容",
-              height: 200,
-              width: 100 + "%",
-              minHeight: 250,
-              maxHeight:'',
-              lang: "zh-CN",
-              focus: true,
-              toolbar: [
-                ["style", ["bold", "italic", "underline", "clear"]],
-                ["font", ["strikethrough", "superscript", "subscript"]],
-                ["fontsize", ["fontsize"]],
-                ["color", ["color"]],
-                ["para", ["ul", "ol", "paragraph"]],
-                ["height", ["height"]],
-                ["picture"],
-                ["link", ["linkDialogShow", "unlink"]]
-        ]
+    $("#summernoteT").summernote({
+      dialogsInBody: true,
+      placeholder: "请输入投诉内容",
+      height: 200,
+      width: 100 + "%",
+      minHeight: 250,
+      maxHeight: "",
+      lang: "zh-CN",
+      focus: true,
+      toolbar: [
+        ["style", ["bold", "italic", "underline", "clear"]],
+        ["font", ["strikethrough", "superscript", "subscript"]],
+        ["fontsize", ["fontsize"]],
+        ["color", ["color"]],
+        ["para", ["ul", "ol", "paragraph"]],
+        ["height", ["height"]],
+        ["picture"],
+        ["link", ["linkDialogShow", "unlink"]]
+      ]
     });
 
-      this.queryProcess(this.wid);
-      this.complantBtnAuth(this.wid);
-      this.getComplaint(this.wid);
-      document.title =  '投诉详情'
-
+    this.queryProcess(this.wid);
+    this.complantBtnAuth(this.wid);
+    this.getComplaint(this.wid);
+    document.title = "投诉详情";
   },
   computed: {},
   methods: {
@@ -194,10 +190,13 @@ export default {
     },
     // 受理
     handleCommitSL() {
-      if($('#summernoteT').summernote('code') == '<p><br></p>' || $('#summernoteT').summernote('code') == ''){
-          this.$alert('请填写受理内容', '提示', {
-          confirmButtonText: '确定',
-          type:'warning',
+      if (
+        $("#summernoteT").summernote("code") == "<p><br></p>" ||
+        $("#summernoteT").summernote("code") == ""
+      ) {
+        this.$alert("请填写受理内容", "提示", {
+          confirmButtonText: "确定",
+          type: "warning",
           callback: action => {}
         });
         return;
@@ -273,39 +272,40 @@ export default {
         }
       });
     },
-    handleCommitReply(){  // 回复
-      this.replyContent = $('#summernoteT').summernote('code');
-      if(this.replyContent=="<p><br></p>" || this.replyContent==""){
-          this.$alert('请输入回复内容', '提示', {
-            confirmButtonText: '确定',
-            type:'warning',
-          });
-      }else{
-        this.HFbtnDisabled = true
+    handleCommitReply() {
+      // 回复
+      this.replyContent = $("#summernoteT").summernote("code");
+      if (this.replyContent == "<p><br></p>" || this.replyContent == "") {
+        this.$alert("请输入回复内容", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+      } else {
+        this.HFbtnDisabled = true;
         reply({
-          tswid:this.wid,
-          tslx:1,
-          content:this.replyContent
-        }).then(({data})=>{
-          if(data.state == 'success'){
-            this.HFbtnDisabled = false
-              this.$alert('回复成功', '提示', {
-              confirmButtonText: '确定',
-              type:'success',
+          tswid: this.wid,
+          tslx: 1,
+          content: this.replyContent
+        }).then(({ data }) => {
+          if (data.state == "success") {
+            this.HFbtnDisabled = false;
+            this.$alert("回复成功", "提示", {
+              confirmButtonText: "确定",
+              type: "success",
               callback: action => {
                 this.queryProcess(this.wid);
-                $('#summernoteT').summernote('code','');
+                $("#summernoteT").summernote("code", "");
                 this.getComments();
               }
             });
-          }else{
-              this.$alert(data.msg, '提示', {
-                confirmButtonText: '确定',
-                type:'error',
-              })
-            this.HFbtnDisabled = false
+          } else {
+            this.$alert(data.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
+            this.HFbtnDisabled = false;
           }
-        })
+        });
       }
     },
     // 关闭投诉
@@ -326,7 +326,10 @@ export default {
         tswid: this.wid,
         tslx: tslx,
         ryData: ryData,
-        content:tslx == 3 || tslx == 4? content: $("#summernoteT").summernote("code")
+        content:
+          tslx == 3 || tslx == 4
+            ? content
+            : $("#summernoteT").summernote("code")
       }).then(({ data }) => {
         if (data.state == "success") {
           this.$alert(msg, "提示", {
@@ -350,7 +353,7 @@ export default {
         }
       });
     },
-    
+
     // 获取投诉
     getComplaint(wid) {
       getComplaint({
@@ -360,8 +363,8 @@ export default {
           this.complain = data.data;
           this.getComments();
           if (this.complain.zt == 3) {
-               $("#summernoteT").summernote("destroy");
-          } 
+            $("#summernoteT").summernote("destroy");
+          }
         }
       });
     },
@@ -422,8 +425,7 @@ export default {
               this.$alert("投诉已经关闭，感谢您的支持！", "提示", {
                 confirmButtonText: "确定",
                 type: "success",
-                callback: action => {
-                }
+                callback: action => {}
               });
             }
           });
@@ -433,8 +435,7 @@ export default {
     //  获取枚举
   },
   watch: {},
-  activated() {
-  },
+  activated() {},
   components: {
     pagination,
     itemChoose,
@@ -444,10 +445,10 @@ export default {
 </script>
 <style scoped>
 .complain-detail {
-    width: 95%;
-    margin: 0px auto;
-    padding: 10px;
-    background: #fff;
+  width: 95%;
+  margin: 0px auto;
+  padding: 10px;
+  background: #fff;
 }
 .complain-detail-cont {
   display: flex;

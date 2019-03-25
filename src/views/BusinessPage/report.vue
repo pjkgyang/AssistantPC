@@ -22,8 +22,6 @@
                   <el-menu-item index="8-4" :route="{path:'/businesspage/toplist/qareport/gryswg'}"><i class="el-icon-menu"></i> <span slot="title">个人验收</span></el-menu-item> 
                 </el-submenu> -->
             </el-menu>
-            <!-- item.url.split('qareport/')[1] -->
-        <!-- <div v-if="this.navMode == 'horizontal'" v-s.how="navBgShow" class="full-screen-navBg" @click.self="closeAll"></div> -->
         </div>
           <div slot="content" class="layout-content">
             <keep-alive>
@@ -41,89 +39,92 @@ import { EventBus } from "@/utils/util.js"; //事件总线
 export default {
   data() {
     return {
-      defActive:'1-1',
-      openeds:['1'],
-      navList:[],
+      defActive: "1-1",
+      openeds: ["1"],
+      navList: []
+    };
+  },
+  mounted() {
+    try {
+      if (this.$route.path.includes("/businesspage/toplist")) {
+        //  this.navList = window.menuTop.childNodes
+        this.navList = window.menu.childNodes;
+        this.getUrl(this.navList);
+      } else if (this.$route.path.includes("/businesspage/report")) {
+        this.navList = window.menu.childNodes;
+        this.getUrl(this.navList);
+      } else if (this.$route.path.includes("/businesspage/wtfp")) {
+        this.navList = window.menu.childNodes;
+        this.getUrl(this.navList);
+      }
+    } catch (err) {
+      JSON.parse(sessionStorage.getItem("menuList")).forEach((ele, i, arr) => {
+        if (
+          ele.url == "/businesspage/toplist" &&
+          this.$route.path.includes("/businesspage/toplist")
+        ) {
+          this.navList = ele.childNodes;
+          this.getUrl(this.navList);
+        } else if (
+          ele.url == "/businesspage/report" &&
+          this.$route.path.includes("/businesspage/report")
+        ) {
+          this.navList = ele.childNodes;
+          this.getUrl(this.navList);
+        } else if (ele.url == "/businesspage/wtfp") {
+        }
+      });
     }
   },
-  mounted(){
-      try{
-        if(this.$route.path.includes('/businesspage/toplist')){
-          //  this.navList = window.menuTop.childNodes
-           this.navList = window.menu.childNodes
-           this.getUrl(this.navList);
-        }else if(this.$route.path.includes('/businesspage/report')){
-           this.navList = window.menu.childNodes
-            this.getUrl(this.navList);
-        }else if(this.$route.path.includes('/businesspage/wtfp')){
-           this.navList = window.menu.childNodes
-            this.getUrl(this.navList);
-        }
-      }catch(err){
-          JSON.parse(sessionStorage.getItem('menuList')).forEach((ele,i,arr)=>{
-             if(ele.url== '/businesspage/toplist' && this.$route.path.includes('/businesspage/toplist')){
-               this.navList = ele.childNodes
-               this.getUrl(this.navList);
-             }else if(ele.url == '/businesspage/report' && this.$route.path.includes('/businesspage/report')){
-               this.navList = ele.childNodes
-               this.getUrl(this.navList);   
-             }else if(ele.url == '/businesspage/wtfp'){
-             }
-          })
-      } 
-
-    
-
-  },
-  beforeMount(){},
-  activated(){},
+  beforeMount() {},
+  activated() {},
   methods: {
-    selectMenu(index,indexPath,e) {
-      if(e.route.path.includes('/businesspage/toplist')){
+    selectMenu(index, indexPath, e) {
+      if (e.route.path.includes("/businesspage/toplist")) {
       }
     },
-    getUrl(obj){
-      if(obj[0].url){
-        this.$router.push({path:obj[0].url});
-        this.defActive = '1'
+    getUrl(obj) {
+      if (obj[0].url) {
+        this.$router.push({ path: obj[0].url });
+        this.defActive = "1";
         return;
       }
-      if(obj[0].childNodes.length){
-         obj.forEach((ele,i,arr)=>{
-          if(ele.isexpand == 'true'){
-            this.openeds = [JSON.stringify(i+1)];
-            this.defActive = i+1+'-1'
-            this.$router.push({path:obj[i].childNodes[0].url});
-          }else{
-            this.openeds =  ['1'];
-            this.$router.push({path:obj[0].childNodes[0].url}); 
+      if (obj[0].childNodes.length) {
+        obj.forEach((ele, i, arr) => {
+          if (ele.isexpand == "true") {
+            this.openeds = [JSON.stringify(i + 1)];
+            this.defActive = i + 1 + "-1";
+            this.$router.push({ path: obj[i].childNodes[0].url });
+          } else {
+            this.openeds = ["1"];
+            this.$router.push({ path: obj[0].childNodes[0].url });
           }
-         })
-      }else{
+        });
+      } else {
         this.getUrl(obj[0].childNodes);
       }
     },
-    getExpand(arrList){
-      arrList.forEach((ele,i,arr)=>{
-          if(ele.isexpand){
-            this.openeds = ['1'];
-          }else{
-            this.openeds =  ['1'];
-          }
-      })
+    getExpand(arrList) {
+      arrList.forEach((ele, i, arr) => {
+        if (ele.isexpand) {
+          this.openeds = ["1"];
+        } else {
+          this.openeds = ["1"];
+        }
+      });
     }
   },
-  watch:{
-       $route(from,to){
-          if(from.redirectedFrom == '/businesspage/toplist'){
-            // this.navList = window.menuTop.childNodes
-            this.navList = window.menu.childNodes  
-            this.defActive = '1'
-          }else if(from.redirectedFrom == '/businesspage/report'){
-            this.navList = window.menu.childNodes
-            this.getUrl(this.navList);
-          }
-       }
+  watch: {
+    $route(from, to) {
+      if (from.redirectedFrom == "/businesspage/toplist") {
+        // this.navList = window.menuTop.childNodes
+        this.navList = window.menu.childNodes;
+        this.defActive = "1";
+      } else if (from.redirectedFrom == "/businesspage/report") {
+        this.navList = window.menu.childNodes;
+        this.getUrl(this.navList);
+      }
+    }
   },
   computed: {
     // 首次进入页面时展开当前页面所属的菜单
@@ -131,18 +132,17 @@ export default {
     //   // return this.$route.params.id;
     //   return this.$route.path;
     // }
-    menu(){
-       return window.menu;
+    menu() {
+      return window.menu;
     }
   },
 
-  components: { NavBarItem, layout,reportTable }
+  components: { NavBarItem, layout, reportTable }
 };
 </script>
 <style>
-
-.layout-content{
-  padding:5px 10px; 
+.layout-content {
+  padding: 5px 10px;
   border-radius: 5px;
 }
 </style>

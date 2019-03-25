@@ -37,6 +37,13 @@ function getAbsolutePath () {
           component: resolve => require(['@/views/BusinessPage/Projects.vue'], resolve),
         },
         {
+          path: '/businesspage/xmlb',
+          name: 'Xmlb',
+          meta:{
+          },
+          component: resolve => require(['@/views/BusinessPage/projectList.vue'], resolve),
+        },
+        {
           path: '/businesspage/dataTab',
           name: 'DataTab',
           component: resolve => require(['@/views/BusinessPage/dataTab.vue'], resolve)

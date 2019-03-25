@@ -178,9 +178,9 @@
 
 <script>
 import { getProject } from "@/api/xmkb.js";
-import { getMenu, getSession ,getPreMonth} from "@/utils/util.js";
+import { getMenu, getSession, getPreMonth } from "@/utils/util.js";
 import { confirmMilestone } from "@/api/task.js";
-import cgcpDialog from '@/components/dialog/xxkbxmlb/cgcpDialog';
+import cgcpDialog from "@/components/dialog/xxkbxmlb/cgcpDialog";
 
 export default {
   data() {
@@ -203,38 +203,35 @@ export default {
         { mc: "集成", id: "集成" },
         { mc: "服务", id: "服务" }
       ],
-      qkztList:[
-        { mc: "全部", id: "" },
-        { mc: "欠款", id: "1" },
-      ],
-      gczdList:[], //工程战队
-      xmbh:'',
+      qkztList: [{ mc: "全部", id: "" }, { mc: "欠款", id: "1" }],
+      gczdList: [], //工程战队
+      xmbh: "",
       filter: {
         keyword: "",
         xmzt: "",
         xmlb: "",
-        qygc:"",
+        qygc: "",
         qsDate: [],
         gbDate: [],
-        qkzt:""
+        qkzt: ""
       },
-      cgcpShow:false, //采购产品列表
-      isJZuser:''
+      cgcpShow: false, //采购产品列表
+      isJZuser: ""
     };
   },
   props: {},
   mounted() {
-    this.isJZuser = sessionStorage.getItem('isJZuser')
-    if(this.$route.query.lx == 'xms'){
+    this.isJZuser = sessionStorage.getItem("isJZuser");
+    if (this.$route.query.lx == "xms") {
       if (!getSession("gczd")) {
         getMenu("gczd", this.gczdList, true); //获取工程战队
       } else {
         this.gczdList = getSession("gczd");
       }
       this.pageUnitProjects();
-    }else if(this.$route.query.lx == 'fk'){
+    } else if (this.$route.query.lx == "fk") {
       this.listXxdk();
-    }else{
+    } else {
       this.getDetail();
     }
   },
@@ -256,13 +253,13 @@ export default {
       this.pageUnitProjects();
     },
     // 付款
-    handleFilterQk(data){
-      this.filter.qkzt = data
+    handleFilterQk(data) {
+      this.filter.qkzt = data;
       this.currentPage = 1;
       this.pageUnitProjects();
     },
     // 区域
-    handleFilterQy(data){
+    handleFilterQy(data) {
       this.filter.qygc = data;
       this.currentPage = 1;
       this.pageUnitProjects();
@@ -275,8 +272,8 @@ export default {
       this.filter.qsDate[1] = !this.filter.qsDate[1]
         ? ""
         : this.filter.qsDate[1];
-        this.currentPage = 1;
-      this.pageUnitProjects()
+      this.currentPage = 1;
+      this.pageUnitProjects();
     },
     handlePickGbDate(date) {
       this.filter.gbDate = !date ? [] : date;
@@ -287,15 +284,13 @@ export default {
         ? ""
         : this.filter.gbDate[1];
       this.currentPage = 1;
-      this.pageUnitProjects()
+      this.pageUnitProjects();
     },
     // 查看采购产品列表
-    handleCheckCgcp(data){
+    handleCheckCgcp(data) {
       this.xmbh = data;
       this.cgcpShow = true;
     },
-
-
 
     handleCheckDetail(key, value, params, type) {
       let obj = {};
@@ -314,17 +309,17 @@ export default {
     handleSizeChange(data) {
       this.currentPage = 1;
       this.pageSize = data;
-      if(this.$route.query.lx == 'xms'){
-        this.pageUnitProjects()
-      }else{
+      if (this.$route.query.lx == "xms") {
+        this.pageUnitProjects();
+      } else {
         this.getDetail();
       }
     },
     handleCurrentChange(data) {
       this.currentPage = data;
-      if(this.$route.query.lx == 'xms'){
-        this.pageUnitProjects()
-      }else{
+      if (this.$route.query.lx == "xms") {
+        this.pageUnitProjects();
+      } else {
         this.getDetail();
       }
     },
@@ -348,72 +343,70 @@ export default {
           this.tableData = res.data.rows;
           this.total = res.data.records;
         } else {
-          this.$alert(res.msg, '提示', {
-          confirmButtonText: '确定',
-          type:'error'
-         });
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
       });
     },
 
     // 付款明细
-    listXxdk(){
-      this.$get(this.API.listXxdk,{
+    listXxdk() {
+      this.$get(this.API.listXxdk, {
         dwmc: this.$route.query.dwmc
-      }).then(res=>{
-        if(res.state == 'success'){
-          if(!res.data){
-            this.tableData = []
-          }else{
-            this.tableData = res.data
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data) {
+            this.tableData = [];
+          } else {
+            this.tableData = res.data;
           }
-        }else{
-          this.$alert(res.msg, '提示', {
-          confirmButtonText: '确定',
-          type:'error'
-         });
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
-      })
+      });
     },
 
-    pageUnitProjects(){
-      this.$get(this.API.pageUnitProjects,{
-        curPage:this.currentPage,
+    pageUnitProjects() {
+      this.$get(this.API.pageUnitProjects, {
+        curPage: this.currentPage,
         pageSize: this.pageSize,
         dwmc: this.$route.query.dwmc,
-        gczt :this.filter.xmzt,
-        xmlb:this.filter.xmlb,
-        qssjStart:!this.filter.qsDate[0]?'':this.filter.qsDate[0],
-        qssjEnd:!this.filter.qsDate[1]?'':this.filter.qsDate[1],
-        gbsjStart :!this.filter.gbDate[0]?'':this.filter.gbDate[0],
-        gbsjEnd :!this.filter.gbDate[1]?'':this.filter.gbDate[1],
-        qygc :this.filter.qygc,
-        qkzt :this.filter.qkzt,
-        keyword :this.filter.keyword
-      }).then(res=>{
-        if(res.state == 'success'){
-          if(!res.data.rows){
-            this.tableData = []
-          }else{
+        gczt: this.filter.xmzt,
+        xmlb: this.filter.xmlb,
+        qssjStart: !this.filter.qsDate[0] ? "" : this.filter.qsDate[0],
+        qssjEnd: !this.filter.qsDate[1] ? "" : this.filter.qsDate[1],
+        gbsjStart: !this.filter.gbDate[0] ? "" : this.filter.gbDate[0],
+        gbsjEnd: !this.filter.gbDate[1] ? "" : this.filter.gbDate[1],
+        qygc: this.filter.qygc,
+        qkzt: this.filter.qkzt,
+        keyword: this.filter.keyword
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data.rows) {
+            this.tableData = [];
+          } else {
             this.tableData = res.data.rows;
           }
           this.total = res.data.records;
-        }else{
-          this.$alert(res.msg, '提示', {
-          confirmButtonText: '确定',
-          type:'error'
-         });
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
-      })
+      });
     }
-
-
   },
 
   watch: {
     show(n, o) {}
   },
-  components: {cgcpDialog}
+  components: { cgcpDialog }
 };
 </script>
 

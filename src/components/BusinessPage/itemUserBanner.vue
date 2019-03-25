@@ -139,15 +139,15 @@ export default {
     }
   },
   methods: {
-    handleSuccess(data){
-      this.xmDetail.sfzq = data?1:0;
+    handleSuccess(data) {
+      this.xmDetail.sfzq = data ? 1 : 0;
       sessionStorage.setItem("xmData", JSON.stringify(this.xmDetail));
     },
     handleCommand(command) {
-      if(command == 'fwzt'){
+      if (command == "fwzt") {
         this.showDialog = !this.showDialog;
-      }else{
-        this.xmszShow = !this.xmszShow
+      } else {
+        this.xmszShow = !this.xmszShow;
       }
     },
     handleItemUser(e) {
@@ -182,7 +182,7 @@ export default {
       });
     }
   },
-  components: { breadcrumb, xmfwztDialog,xmszDialog }
+  components: { breadcrumb, xmfwztDialog, xmszDialog }
 };
 </script>
 <style scoped>

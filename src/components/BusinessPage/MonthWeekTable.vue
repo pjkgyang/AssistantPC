@@ -11,17 +11,14 @@
         <template slot-scope="scope">
           <span v-if="ispz"><el-button @click="handleClickPz(scope.row)" type="text" size="small">批注 丨 </el-button></span>
           <span v-if="isDelete"><el-button style="color:red"  type="text" size="small"  @click="handleClickDelete(scope.row,scope.$index)">删除 丨 </el-button></span>
-          <!-- <span v-if="!bjWordShow"><span class="table-hr" v-if="isDelete || ispz"> 丨 </span><el-button  type="text" size="small"  @click="handleClickEdit(scope.row,scope.$index)">编辑</el-button></span> -->
           <span v-if="bjWordShow"><el-button  type="text" size="small"  @click="handleClickEdit(scope.row,scope.$index)">{{isZj?'总结':'计划'}} 丨 </el-button></span>
           <span><el-button @click="handleClickCheck(scope.row)" type="text" size="small">查看</el-button></span>
         </template>
       </el-table-column>
       <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
       <el-table-column prop="xmmc" label="项目名称" width="350" show-overflow-tooltip></el-table-column>
-      <!-- <el-table-column prop="lcbbh" label="里程碑编号" width="150" show-overflow-tooltip></el-table-column> -->
       <el-table-column prop="xmnr_display" label="项目内容" min-width="300" show-overflow-tooltip></el-table-column>
       <el-table-column prop="lcbms_display" label="里程碑描述"  width="180" show-overflow-tooltip></el-table-column>
-      <!-- <el-table-column prop="gznr" label="工作内容"  width="180" show-overflow-tooltip v-if="gznrShow"></el-table-column> -->
       <el-table-column prop="cnjssj" label="承诺完成时间" width="120"></el-table-column>
       <el-table-column prop="jhjssj" label="计划完成时间" width="120"></el-table-column>
       <el-table-column prop="zt_display" label="完成状态" width="120"></el-table-column>
@@ -59,113 +56,112 @@
 </template>
 
 <script>
-  import pagination from '@/components/BusinessPage/pagination.vue'
-  export default {
-    data() {
-      return {
-          widArr:[]
+import pagination from "@/components/BusinessPage/pagination.vue";
+export default {
+  data() {
+    return {
+      widArr: []
+    };
+  },
+  props: {
+    tableData: {
+      type: Array,
+      default: function() {
+        return [];
       }
     },
-    props:{
-      tableData:{
-        type:Array,
-        default:function(){
-          return []
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    records: {
+      type: Number,
+      default: 20
+    },
+    currentPage: {
+      type: Number,
+      default: 1
+    },
+    ispz: {
+      type: Boolean,
+      default: true
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    isDelete: {
+      type: Boolean,
+      default: false
+    },
+    wordShow: {
+      type: Boolean,
+      default: true
+    },
+    isSelect: {
+      type: Boolean,
+      default: false
+    },
+    otherShow: {
+      type: Boolean,
+      default: false
+    },
+    gznrShow: {
+      type: Boolean,
+      default: false
+    },
+    selectShow: {
+      type: Boolean,
+      default: true
+    },
+    isZj: {
+      type: Boolean,
+      default: true
+    },
+    bjWordShow: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    handleSizeChange(val) {
+      this.$emit("handleSizeChange", val);
+    },
+    handleCurrentChange(data) {
+      this.$emit("handleCurrentChange", data);
+    },
+    handleClickCheck(row) {
+      this.$emit("handleClickCheck", row);
+    },
+    handleClickPz(row) {
+      this.$emit("handleClickPz", row);
+    },
+    handleClickEdit(row, index) {
+      this.$emit("handleClickEdit", row, index);
+    },
+    handleClickDelete(row, index) {
+      this.$emit("handleClickDelete", row, index);
+    },
+    handleSelectionChange(val) {
+      this.widArr = [];
+      val.forEach((ele, i, arr) => {
+        if (ele.ygzWid) {
+          this.widArr.push(ele.ygzWid);
+        } else if (ele.zgzWid) {
+          this.widArr.push(ele.zgzWid);
         }
-      },
-      pageSize:{
-        type:Number,
-        default:10
-      },
-      records:{
-        type:Number,
-        default:20
-      },
-      currentPage:{
-        type:Number,
-        default:1
-      },
-      ispz:{
-        type:Boolean,
-        default:true
-      },
-      isEdit:{
-        type:Boolean,
-        default:false
-      },
-      isDelete:{
-        type:Boolean,
-        default:false
-      },
-      wordShow:{
-         type:Boolean,
-         default:true
-      },
-      isSelect:{
-        type:Boolean,
-        default:false
-      },
-      otherShow:{
-        type:Boolean,
-        default:false
-      },
-      gznrShow:{
-        type:Boolean,
-        default:false
-      },
-      selectShow:{
-        type:Boolean,
-        default:true
-      },
-      isZj:{
-        type:Boolean,
-        default:true
-      },
-      bjWordShow:{
-        type:Boolean,
-        default:false
-      },
-    },
-    methods: {
-      handleSizeChange(val){
-         this.$emit('handleSizeChange',val);
-      },
-      handleCurrentChange(data){
-         this.$emit('handleCurrentChange',data)
-      },
-      handleClickCheck(row) {
-        this.$emit('handleClickCheck',row)
-      },
-      handleClickPz(row){
-        this.$emit('handleClickPz',row)
-      },
-      handleClickEdit(row,index){
-         this.$emit('handleClickEdit',row,index)
-      },
-      handleClickDelete(row,index){
-         this.$emit('handleClickDelete',row,index)
-      },
-      handleSelectionChange(val){
-         this.widArr = [];
-         val.forEach((ele,i,arr)=>{
-           if(ele.ygzWid){
-              this.widArr.push(ele.ygzWid)
-           }else if(ele.zgzWid){
-              this.widArr.push(ele.zgzWid)
-           }
-           
-         })
-         this.$emit('handleSelectionChange',this.widArr)
-      }
-    },
-    components:{pagination}
-  }
+      });
+      this.$emit("handleSelectionChange", this.widArr);
+    }
+  },
+  components: { pagination }
+};
 </script>
 <style>
-.table-first .el-button{
-    margin-left: 0px;
+.table-first .el-button {
+  margin-left: 0px;
 }
-.table-first .table-hr{
- color: #409EFF !important;
+.table-first .table-hr {
+  color: #409eff !important;
 }
 </style>

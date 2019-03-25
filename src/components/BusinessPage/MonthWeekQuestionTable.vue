@@ -62,113 +62,113 @@
 </template>
 
 <script>
-  import pagination from '@/components/BusinessPage/pagination.vue'
-  export default {
-    data() {
-      return {
-        
+import pagination from "@/components/BusinessPage/pagination.vue";
+export default {
+  data() {
+    return {};
+  },
+  props: {
+    tableData: {
+      type: Array,
+      default: function() {
+        return [];
       }
     },
-    props:{
-      tableData:{
-        type:Array,
-        default:function(){
-          return []
+    show: {
+      type: Boolean,
+      default: true
+    },
+    othShow: {
+      type: Boolean,
+      default: true
+    },
+    isEdit: {
+      type: Boolean,
+      default: true
+    },
+    deleteShow: {
+      type: Boolean,
+      default: false
+    },
+    isPz: {
+      type: Boolean,
+      default: true
+    },
+    isSelect: {
+      type: Boolean,
+      default: false
+    },
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    records: {
+      type: Number,
+      default: 20
+    },
+    currentPage: {
+      type: Number,
+      default: 1
+    },
+    bjWordShow: {
+      type: Boolean,
+      default: false
+    },
+    isZj: {
+      type: Boolean,
+      default: true
+    },
+    tjjd: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    handleSizeChange(val) {
+      this.$emit("handleSizeChange", val);
+    },
+    handleCurrentChange(data) {
+      this.$emit("handleCurrentChange", data);
+    },
+    handleClickCheck(row) {
+      // (问题) 查看
+      this.$emit("handleClickCheck", row);
+    },
+    handleClickPz(row) {
+      // (问题)  批注
+      this.$emit("handleClickPz", row);
+    },
+    handleClickDelete(row, index) {
+      this.$emit("handleClickDelete", row, index);
+    },
+    handleClickEdit(row, index) {
+      // (问题)  编辑
+      this.$emit("handleClickEdit", row, index);
+    },
+    handleSelectionChange(val) {
+      this.widArr = [];
+      let wtArr = [];
+      val.forEach((ele, i, arr) => {
+        if (ele.ywtWid) {
+          this.widArr.push(ele.ywtWid);
+        } else {
+          this.widArr.push(ele.zwtWid);
         }
-      },
-      show:{
-        type:Boolean,
-        default:true
-      },
-      othShow:{
-         type:Boolean,
-        default:true
-      },
-      isEdit:{
-        type:Boolean,
-        default:true
-      },
-      deleteShow:{
-        type:Boolean,
-        default:false
-      },
-      isPz:{
-        type:Boolean,
-        default:true
-      },
-      isSelect:{
-        type:Boolean,
-        default:false
-      },
-      pageSize:{
-        type:Number,
-        default:10  
-      },
-      records:{
-        type:Number,
-        default:20  
-      },
-      currentPage:{
-        type:Number,
-        default:1  
-      },
-      bjWordShow:{
-        type:Boolean,
-        default:false
-      },
-      isZj:{
-        type:Boolean,
-        default:true
-      },
-      tjjd:{
-         type:Boolean,
-         default:false
-      }
-    },
-    methods: {
-      handleSizeChange(val){
-         this.$emit('handleSizeChange',val);
-      },
-      handleCurrentChange(data){
-          this.$emit('handleCurrentChange',data);
-      },
-      handleClickCheck(row) { // (问题) 查看
-          this.$emit('handleClickCheck',row) 
-      },
-      handleClickPz(row){  // (问题)  批注
-          this.$emit('handleClickPz',row)
-      },
-      handleClickDelete(row,index){
-          this.$emit('handleClickDelete',row,index)
-      },
-      handleClickEdit(row,index){ // (问题)  编辑
-          this.$emit('handleClickEdit',row,index)
-      },
-      handleSelectionChange(val){
-        this.widArr = [];
-        let wtArr = [];
-        val.forEach((ele,i,arr)=>{
-          if(ele.ywtWid){
-              this.widArr.push(ele.ywtWid)
-           }else{
-              this.widArr.push(ele.zwtWid)
-           }
-           if(ele.wtwid){
-             wtArr.push(ele.wtwid)
-           }
-        })
-        this.$emit('handleSelectionChange',this.widArr,wtArr)
-      }
-    },
-    components:{pagination}
-  }
+        if (ele.wtwid) {
+          wtArr.push(ele.wtwid);
+        }
+      });
+      this.$emit("handleSelectionChange", this.widArr, wtArr);
+    }
+  },
+  components: { pagination }
+};
 </script>
 <style>
-.table-second .el-button{
+.table-second .el-button {
   margin-left: 0px;
 }
-.table-second .table-hr{
- color: #409EFF !important;
+.table-second .table-hr {
+  color: #409eff !important;
 }
-
 </style>

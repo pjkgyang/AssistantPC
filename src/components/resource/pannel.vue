@@ -561,11 +561,11 @@ export default {
     },
     // 查看文件
     handleFile(e, wid) {
-      let type = e.currentTarget.getAttribute("data-type");
-      let fjbh = e.currentTarget.getAttribute("data-fjbh");
-      let fj = e.currentTarget.getAttribute("data-fj");
-      let str = fjbh.replace(/&/g, encodeURIComponent("&"));
-      let newstr = str.replace(/\+/g, encodeURIComponent("+"));
+      let type = e.currentTarget.getAttribute("data-type"),
+          fjbh = e.currentTarget.getAttribute("data-fjbh"),
+          fj = e.currentTarget.getAttribute("data-fj"),
+          str = fjbh.replace(/&/g, encodeURIComponent("&")),
+          newstr = str.replace(/\+/g, encodeURIComponent("+"));
       // 获取记录需要的附件路径
       this.logsFjpath = newstr;
       if (fj != null && fj.split("&")[1] == 0) return;

@@ -223,7 +223,9 @@ export default {
               }
             });
           } else {
-            this.$alert("对不起,您没有操作权限！(如有问题，请联系管理员)", "提示",
+            this.$alert(
+              "对不起,您没有操作权限！(如有问题，请联系管理员)",
+              "提示",
               { confirmButtonText: "确定", type: "warning" }
             );
           }
@@ -238,7 +240,9 @@ export default {
               }
             });
           } else {
-            this.$alert("对不起,您没有操作权限！(如有问题，请联系管理员)","提示",
+            this.$alert(
+              "对不起,您没有操作权限！(如有问题，请联系管理员)",
+              "提示",
               { confirmButtonText: "确定", type: "warning" }
             );
           }

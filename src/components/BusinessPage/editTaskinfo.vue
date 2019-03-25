@@ -155,7 +155,8 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => {
+      })
+        .then(() => {
           deleteProductParticipant({
             xmbh: this.xmbh,
             cpbh: this.cpinfo.cpbh,
@@ -166,14 +167,15 @@ export default {
             if (data.state == "success") {
               this.$alert("删除成功", "提示", {
                 confirmButtonText: "确定",
-                type:'success',
+                type: "success",
                 callback: action => {
                   this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
                 }
               });
             }
           });
-        }).catch(() => {});
+        })
+        .catch(() => {});
     },
     addUser(e) {
       //添加按钮

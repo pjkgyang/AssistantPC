@@ -131,7 +131,7 @@ export default {
   methods: {
     handlePage(param) {
       //获取项目看板（项目）
-      this.$emit("handlePage",param);
+      this.$emit("handlePage", param);
     },
     handleMore() {
       this.$emit("handleMore", "");
@@ -265,14 +265,18 @@ export default {
   white-space: nowrap;
 }
 .project-grid-card,
-.project-grid-card-checkMore{
+.project-grid-card-checkMore {
   transition: all 0.218s linear;
 }
 .project-grid-card:hover,
 .project-grid-card-checkMore:hover {
   cursor: pointer;
-  transform: translate3d(0,-3px,0);
-  background:linear-gradient(to right bottom,rgb(222, 243, 243),rgb(255, 255, 255));
+  transform: translate3d(0, -3px, 0);
+  background: linear-gradient(
+    to right bottom,
+    rgb(222, 243, 243),
+    rgb(255, 255, 255)
+  );
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 .project-grid-card:hover .el-icon-star-off,

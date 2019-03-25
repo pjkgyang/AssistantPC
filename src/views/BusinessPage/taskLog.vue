@@ -113,411 +113,426 @@
   </div>
 </template>
 <script>
-import dailyParper from '@/components/BusinessPage/dailyParper.vue'
-import dialogTask from '@/components/BusinessPage/dialogTask.vue'
-import pagination from '@/components/BusinessPage/pagination.vue'
-import { addOrUpdateTaskProcess , queryLogTaskProcess ,exportPersonnelLog ,readLog,getLogComment,commentLog,deleteTaskProcess,
-getLogComments} from '@/api/TaskProcess.js'
-import { queryTdcy,queryVisiblePerson } from '@/api/personal.js'
-import { getMenu, getSession ,getPreMonth} from "@/utils/util.js";
+import dailyParper from "@/components/BusinessPage/dailyParper.vue";
+import dialogTask from "@/components/BusinessPage/dialogTask.vue";
+import pagination from "@/components/BusinessPage/pagination.vue";
+import {
+  addOrUpdateTaskProcess,
+  queryLogTaskProcess,
+  exportPersonnelLog,
+  readLog,
+  getLogComment,
+  commentLog,
+  deleteTaskProcess,
+  getLogComments
+} from "@/api/TaskProcess.js";
+import { queryTdcy, queryVisiblePerson } from "@/api/personal.js";
+import { getMenu, getSession, getPreMonth } from "@/utils/util.js";
 
 export default {
-  data(){
-      return {
-          tableHeight:window.innerHeight - 200,
-          fwList:[{ label:'全部', value:''},
-                  { label:'战队（组织结构）', value:'0'},
-                  { label:'学校成员', value:'2'},
-                  { label:'合作伙伴', value:'3'},
-                  { label:'项目', value:'1'}],
-          startDate:"",
-          endDate:"",
-          tableData: [],
-          dialogDialyVisible:false,
-          dialogTaskVisible:false,
-          tasklogDetailVisible:false,
-          taskName:"",
-          relevanceTask:false,
-          dailyValue:{},
-          pageSize:17,
-          records:null  ,
-          options: [],
-          value: '',
-          ydztValue:'', //阅读状态
-          gcqyValue:'', //工程区域
-          gczdList:[],//区域
-          fwValue:'',
-          TaskRelevance:{},
-          rwgc:{},
-          total:"",
-          baseUrl:"",
-          isRead:"",
-          keyword:"",
-          closeDialogNum:0,
-          taskDetail:{},
-          pzValue:"",
-          logDetail:{},
-          isedit:true,
-          rwbh:"",
-          xmbh:"",
-          sign:0,
-          nowPage:1,
-          pzList:[],
-          isJzuser:"",
-          isDisabled:0
-      }
+  data() {
+    return {
+      tableHeight: window.innerHeight - 200,
+      fwList: [
+        { label: "全部", value: "" },
+        { label: "战队（组织结构）", value: "0" },
+        { label: "学校成员", value: "2" },
+        { label: "合作伙伴", value: "3" },
+        { label: "项目", value: "1" }
+      ],
+      startDate: "",
+      endDate: "",
+      tableData: [],
+      dialogDialyVisible: false,
+      dialogTaskVisible: false,
+      tasklogDetailVisible: false,
+      taskName: "",
+      relevanceTask: false,
+      dailyValue: {},
+      pageSize: 17,
+      records: null,
+      options: [],
+      value: "",
+      ydztValue: "", //阅读状态
+      gcqyValue: "", //工程区域
+      gczdList: [], //区域
+      fwValue: "",
+      TaskRelevance: {},
+      rwgc: {},
+      total: "",
+      baseUrl: "",
+      isRead: "",
+      keyword: "",
+      closeDialogNum: 0,
+      taskDetail: {},
+      pzValue: "",
+      logDetail: {},
+      isedit: true,
+      rwbh: "",
+      xmbh: "",
+      sign: 0,
+      nowPage: 1,
+      pzList: [],
+      isJzuser: "",
+      isDisabled: 0
+    };
   },
-  mounted(){
-     
-  },
-  methods:{
-    handleReadlog(index,row){ // 阅读日志
-      if(row.ydzt == 0){
-         readLog({
-          wid:row.wid
-          }).then(({data})=>{
-            if(data.state == 'success'){
-               row.ydzt = 1
-            }else{
-              this.$alert(data.msg, '提示', {
-              confirmButtonText: '确定',
-              type:'error',
-             });
+  mounted() {},
+  methods: {
+    handleReadlog(index, row) {
+      // 阅读日志
+      if (row.ydzt == 0) {
+        readLog({
+          wid: row.wid
+        }).then(({ data }) => {
+          if (data.state == "success") {
+            row.ydzt = 1;
+          } else {
+            this.$alert(data.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
-        })
-       }
+        });
+      }
     },
-    handleCloseDetail(){
-       this.tasklogDetailVisible = false
+    handleCloseDetail() {
+      this.tasklogDetailVisible = false;
     },
     // 保存批注
-    handleSaveDetail(){
-          commentLog({
-            wid:this.taskDetail.wid,
-            bz:this.pzValue
-          }).then(({data})=>{
-             if(data.state == 'success'){
-                this.tasklogDetailVisible = false
-                this.$alert('保存成功', '提示', {
-                confirmButtonText: '确定',
-                type:'success'
-               });
-             }
-          })  
+    handleSaveDetail() {
+      commentLog({
+        wid: this.taskDetail.wid,
+        bz: this.pzValue
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.tasklogDetailVisible = false;
+          this.$alert("保存成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success"
+          });
+        }
+      });
     },
-     //  切换填写人
-    handleChoosetxr(){
-       this.queryLogTaskProcess(1);
+    //  切换填写人
+    handleChoosetxr() {
+      this.queryLogTaskProcess(1);
     },
     //  切换阅读状态
-    changeTaskydzt(){
+    changeTaskydzt() {
       this.queryLogTaskProcess(1);
     },
     // 工程区域
-    changeTaskgcqy(){
+    changeTaskgcqy() {
       this.queryLogTaskProcess(1);
     },
     //  范围
-    changeTaskscope(){
-        this.queryLogTaskProcess(1);
+    changeTaskscope() {
+      this.queryLogTaskProcess(1);
     },
-  // 查看日志详情
-    handleTasklogDetail(index,row){ 
-       this.tasklogDetailVisible = true
-       this.taskDetail = row
-       if(row.ydzt == 0){
-         readLog({
-          wid:row.wid
-          }).then(({data})=>{
-            if(data.state == 'success'){
-               row.ydzt = 1
-            }else{
-              this.$alert(data.msg, '提示', {
-              confirmButtonText: '确定',
-              type:'error',
-             });
+    // 查看日志详情
+    handleTasklogDetail(index, row) {
+      this.tasklogDetailVisible = true;
+      this.taskDetail = row;
+      if (row.ydzt == 0) {
+        readLog({
+          wid: row.wid
+        }).then(({ data }) => {
+          if (data.state == "success") {
+            row.ydzt = 1;
+          } else {
+            this.$alert(data.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
           }
-        })
-       }
-       if(row.ydzt == 2 || this.isJzuser == 0){
+        });
+      }
+      if (row.ydzt == 2 || this.isJzuser == 0) {
         this.getLogComments(this.taskDetail.wid);
-       }
-       this.getLogComment(this.taskDetail.wid);
-      
+      }
+      this.getLogComment(this.taskDetail.wid);
     },
     // 编辑日报
-    handleEditDetail(index,row){
-      this.logDetail = row
-      this.sign += 1
+    handleEditDetail(index, row) {
+      this.logDetail = row;
+      this.sign += 1;
       this.isedit = true;
-      this.dialogDialyVisible = true
+      this.dialogDialyVisible = true;
     },
     // 添加日报
-    handleDailyPaper(){   
-         this.dialogDialyVisible = !this.dialogDialyVisible
-         this.closeDialogNum += 1
-         this.sign -= 1         
-         this.isedit = false;
-         this.taskName = '';
+    handleDailyPaper() {
+      this.dialogDialyVisible = !this.dialogDialyVisible;
+      this.closeDialogNum += 1;
+      this.sign -= 1;
+      this.isedit = false;
+      this.taskName = "";
     },
-  //  删除日志
-    handleDeleteDetail(index,row){
-       this.$confirm('是否删除该条日志?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+    //  删除日志
+    handleDeleteDetail(index, row) {
+      this.$confirm("是否删除该条日志?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
           deleteTaskProcess({
-            wid:row.wid
-          }).then(({data})=>{
-              if(data.state == 'success'){
-                this.queryLogTaskProcess(this.nowPage);
-                this.$alert('删除成功', '提示', {
-                      confirmButtonText: '确定',
-                      type:'success'
-                });
-              }
-          })
-        }).catch(() => {});
+            wid: row.wid
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.queryLogTaskProcess(this.nowPage);
+              this.$alert("删除成功", "提示", {
+                confirmButtonText: "确定",
+                type: "success"
+              });
+            }
+          });
+        })
+        .catch(() => {});
     },
     //日报提交
-    handleSubmit(data){       
-          // this.rwgc.xmbh = this.TaskRelevance.xmbh
-          // this.rwgc.rwbh = this.TaskRelevance.rwbh
-          this.isDisabled = 1
-          this.rwgc.gclx = 2
-          this.rwgc.gcms = data.gcms
-          this.rwgc.gcrq = data.gcrq
-          this.rwgc.gs = data.gs
-          this.rwgc.fjdata = data.fjdata.join(',')
-          this.rwgc.wid = data.wid
-          if(this.isedit){
-            this.rwgc.xmbh = this.xmbh==''?data.xmbh:this.xmbh
-            this.rwgc.rwbh = this.rwbh==''?data.rwbh:this.rwbh
-            this.addOrUpdateTaskProcess(this.rwgc);
-          }else{
-            this.rwgc.wid = '';
-            this.rwgc.xmbh = this.xmbh
-            this.rwgc.rwbh = this.rwbh
-            this.addOrUpdateTaskProcess(this.rwgc);
-          }
+    handleSubmit(data) {
+      // this.rwgc.xmbh = this.TaskRelevance.xmbh
+      // this.rwgc.rwbh = this.TaskRelevance.rwbh
+      this.isDisabled = 1;
+      this.rwgc.gclx = 2;
+      this.rwgc.gcms = data.gcms;
+      this.rwgc.gcrq = data.gcrq;
+      this.rwgc.gs = data.gs;
+      this.rwgc.fjdata = data.fjdata.join(",");
+      this.rwgc.wid = data.wid;
+      if (this.isedit) {
+        this.rwgc.xmbh = this.xmbh == "" ? data.xmbh : this.xmbh;
+        this.rwgc.rwbh = this.rwbh == "" ? data.rwbh : this.rwbh;
+        this.addOrUpdateTaskProcess(this.rwgc);
+      } else {
+        this.rwgc.wid = "";
+        this.rwgc.xmbh = this.xmbh;
+        this.rwgc.rwbh = this.rwbh;
+        this.addOrUpdateTaskProcess(this.rwgc);
+      }
     },
     // 重置任务
-    resetForm(){
-        this.taskName = "";
-        this.rwgc.xmbh = '';
-        this.rwgc.rwbh = '';
+    resetForm() {
+      this.taskName = "";
+      this.rwgc.xmbh = "";
+      this.rwgc.rwbh = "";
     },
     // 添加日报（关联任务）
-    addDailyTasks(){
-       this.dialogTaskVisible = !this.dialogTaskVisible
+    addDailyTasks() {
+      this.dialogTaskVisible = !this.dialogTaskVisible;
     },
     // 选择关联任务
-    chooseRevelenceTask(data){
-      this.taskName = data.rwmc
+    chooseRevelenceTask(data) {
+      this.taskName = data.rwmc;
       // this.TaskRelevance = data
       this.xmbh = data.xmbh;
       this.rwbh = data.rwbh;
-      this.dialogTaskVisible = !this.dialogTaskVisible
-    }, 
-    
-    handleCloseDialy(){},
- 
-    //查询
-    checkTaskLog(){  
-            let oDate1 = new Date(this.startDate);
-            let oDate2 = new Date(this.endDate);
-            if(oDate1.getTime() > oDate2.getTime()){
-                this.$alert('开始时间必须大于结束时间!', '错误提示', {confirmButtonText: '确定',type:'error'});
-                return ;
-            } 
-           this.queryLogTaskProcess(1);
+      this.dialogTaskVisible = !this.dialogTaskVisible;
     },
-    handleEnterlog(){
-        this.checkTaskLog();
+
+    handleCloseDialy() {},
+
+    //查询
+    checkTaskLog() {
+      let oDate1 = new Date(this.startDate);
+      let oDate2 = new Date(this.endDate);
+      if (oDate1.getTime() > oDate2.getTime()) {
+        this.$alert("开始时间必须大于结束时间!", "错误提示", {
+          confirmButtonText: "确定",
+          type: "error"
+        });
+        return;
+      }
+      this.queryLogTaskProcess(1);
+    },
+    handleEnterlog() {
+      this.checkTaskLog();
     },
 
     //切换分页
-    handleCurrentChange(data){  
-       this.nowPage = data
-       this.queryLogTaskProcess(data);
+    handleCurrentChange(data) {
+      this.nowPage = data;
+      this.queryLogTaskProcess(data);
     },
 
-  //下载附件 
-   handleDownFile(index,row,e){
-       let fjbh = e.target.getAttribute('data-fj');
-       window.open(window.baseurl + 'attachment/downloadFile.do?fjId='+fjbh);   
-   },
-  // 格式日期
-    GetDateStr(DayCount) { 
-        var dd = new Date(); 
-        dd.setDate( dd.getDate() + DayCount);//获取DayCount天后的日期 
-        var y = dd.getFullYear(); 
-        var m = dd.getMonth()+1;
-        var d = dd.getDate(); 
-        var s = y+"-"+(m<10?('0'+m):m)+"-"+(d<10?('0'+d):d);
-        return  s;
+    //下载附件
+    handleDownFile(index, row, e) {
+      let fjbh = e.target.getAttribute("data-fj");
+      window.open(window.baseurl + "attachment/downloadFile.do?fjId=" + fjbh);
+    },
+    // 格式日期
+    GetDateStr(DayCount) {
+      var dd = new Date();
+      dd.setDate(dd.getDate() + DayCount); //获取DayCount天后的日期
+      var y = dd.getFullYear();
+      var m = dd.getMonth() + 1;
+      var d = dd.getDate();
+      var s = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
+      return s;
     },
     // 获取任务过程
-    queryLogTaskProcess(curPage){
+    queryLogTaskProcess(curPage) {
       queryLogTaskProcess({
-        curPage:curPage,
-        pageSize:this.pageSize,
-        startDay:this.startDate,
-        endDay:this.endDate,
-        cybh:this.value,
-        isRead:this.ydztValue,
-        qygc:this.gcqyValue,
-        keyword:this.keyword,
-        fw:this.fwValue
-      }).then(({data})=>{
-          if(data.state == 'success'){
-            this.tableData = data.data.rows
-            this.records = data.data.records
-            this.total = data.data.total
-          }else{
-            this.$alert(data.msg, '提示',{
-             confirmButtonText: '确定', 
-             type:'error',
-              callback: cancel => {}
-            });
-          }
-      })
+        curPage: curPage,
+        pageSize: this.pageSize,
+        startDay: this.startDate,
+        endDay: this.endDate,
+        cybh: this.value,
+        isRead: this.ydztValue,
+        qygc: this.gcqyValue,
+        keyword: this.keyword,
+        fw: this.fwValue
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.tableData = data.data.rows;
+          this.records = data.data.records;
+          this.total = data.data.total;
+        } else {
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error",
+            callback: cancel => {}
+          });
+        }
+      });
     },
-  //  获取批注
-    getLogComment(wid){
+    //  获取批注
+    getLogComment(wid) {
       getLogComment({
-        wid:wid,
-      }).then(({data})=>{
-        if(data.state == 'success'){
-          this.pzValue = data.data
+        wid: wid
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.pzValue = data.data;
         }
-      })
-    },  
-    // 获取所有批注
-    getLogComments(wid){
-      getLogComments({
-        wid:wid
-      }).then(({data})=>{
-         if(data.state == 'success'){
-           if(data.data!=null && data.data.length!=0){
-              this.pzList = data.data
-           }else{
-              this.pzList = [] 
-           }
-        }
-      })
+      });
     },
-    addOrUpdateTaskProcess(rwgc){
-          addOrUpdateTaskProcess(rwgc).then(({data})=>{
-            if(data.state == 'success'){
-              this.isDisabled = 0
-              this.$alert('添加成功', '提示', {
-                confirmButtonText: '确定',
-                type:'success',
-                callback: action => {
-                  this.taskName = '';
-                  this.xmbh = '';
-                  this.rwbh = '';
-                  this.closeDialogNum += 1
-                  this.queryLogTaskProcess(1);
-                  this.dialogDialyVisible = !this.dialogDialyVisible
-                }
-              });
-            }else{
-               this.isDisabled = 0
-               this.$alert(data.msg, '提示', {
-                confirmButtonText: '确定',
-                type:'error',
-                callback: action => {}
-              });
+    // 获取所有批注
+    getLogComments(wid) {
+      getLogComments({
+        wid: wid
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          if (data.data != null && data.data.length != 0) {
+            this.pzList = data.data;
+          } else {
+            this.pzList = [];
+          }
+        }
+      });
+    },
+    addOrUpdateTaskProcess(rwgc) {
+      addOrUpdateTaskProcess(rwgc).then(({ data }) => {
+        if (data.state == "success") {
+          this.isDisabled = 0;
+          this.$alert("添加成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: action => {
+              this.taskName = "";
+              this.xmbh = "";
+              this.rwbh = "";
+              this.closeDialogNum += 1;
+              this.queryLogTaskProcess(1);
+              this.dialogDialyVisible = !this.dialogDialyVisible;
             }
-          })
+          });
+        } else {
+          this.isDisabled = 0;
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error",
+            callback: action => {}
+          });
+        }
+      });
     }
   },
-  activated(){
-        this.isJzuser = sessionStorage.getItem('isJZuser')
-        this.baseUrl = window.baseurl
-        this.endDate = new Date().getFullYear()+ '-' + 
-              ("0" + (new Date().getMonth() + 1)).slice(-2)+'-'+ ("0" + new Date().getDate()).slice(-2);
-        this.startDate = this.GetDateStr(-7);
-        this.queryLogTaskProcess(1);
+  activated() {
+    this.isJzuser = sessionStorage.getItem("isJZuser");
+    this.baseUrl = window.baseurl;
+    this.endDate =
+      new Date().getFullYear() +
+      "-" +
+      ("0" + (new Date().getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + new Date().getDate()).slice(-2);
+    this.startDate = this.GetDateStr(-7);
+    this.queryLogTaskProcess(1);
 
-        if (!getSession("gczd")) {
-          getMenu("gczd", this.gczdList, true); //获取工程战队
-        } else {
-          this.gczdList = getSession("gczd");
-        }
+    if (!getSession("gczd")) {
+      getMenu("gczd", this.gczdList, true); //获取工程战队
+    } else {
+      this.gczdList = getSession("gczd");
+    }
   },
-  components:{dailyParper,dialogTask,pagination}
-}
+  components: { dailyParper, dialogTask, pagination }
+};
 </script>
 <style scoped>
-.task-log{
- min-width: 1280px;
- width: 90%;
- margin:10px auto 0;
- padding: 10px 10px 0;
- background: #fff;
- box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
- border-radius: 4px;
+.task-log {
+  min-width: 1280px;
+  width: 90%;
+  margin: 10px auto 0;
+  padding: 10px 10px 0;
+  background: #fff;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 .task-log-addDailyPaper {
   float: right;
   margin-top: 10px;
 }
-.task-log-addDailyPaper button{
+.task-log-addDailyPaper button {
   height: 35px;
   padding: 0 20px;
 }
-.task-log .task-log-date{
-    margin: 10px 0;
+.task-log .task-log-date {
+  margin: 10px 0;
 }
-.task-log .task-log-date button{
-    padding: 5px 10px;
-    border:1px solid #409EFF;
-    background: #409EFF;
+.task-log .task-log-date button {
+  padding: 5px 10px;
+  border: 1px solid #409eff;
+  background: #409eff;
 }
-.task-log-date .el-select{
+.task-log-date .el-select {
   width: 120px;
-  vertical-align: top;  
+  vertical-align: top;
 }
 
-.task-log-date .el-date-editor{
-   width:160px;
+.task-log-date .el-date-editor {
+  width: 160px;
 }
-.task-log-date a{
-    background: forestgreen;
-    color: #fff;
-    padding: 6px 13px;
-    font-size: 12px;
-    border-radius: 3px;
+.task-log-date a {
+  background: forestgreen;
+  color: #fff;
+  padding: 6px 13px;
+  font-size: 12px;
+  border-radius: 3px;
 }
-.name-wrapper span:hover{
+.name-wrapper span:hover {
   cursor: pointer;
   text-decoration: underline;
 }
-.name-wrapper span{
-  color: #409EFF !important;
-  margin-right:15px;
+.name-wrapper span {
+  color: #409eff !important;
+  margin-right: 15px;
 }
-.name-wrapper span:hover{
+.name-wrapper span:hover {
   cursor: pointer;
 }
-.tasklog-detail{
+.tasklog-detail {
   padding: 10px;
 }
-.tasklog-detail p{
+.tasklog-detail p {
   margin: 10px 0 !important;
   border-bottom: 1px dashed #ccc;
 }
-.tasklog-detail p>span:nth-child(1){
+.tasklog-detail p > span:nth-child(1) {
   display: inline-block;
-  width:80px;
+  width: 80px;
   font-weight: 700;
-  text-align:right;
-  margin-right:10px;
+  text-align: right;
+  margin-right: 10px;
 }
-
-
 </style>

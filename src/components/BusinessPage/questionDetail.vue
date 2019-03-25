@@ -186,7 +186,7 @@
             <el-button size="mini" type="primary" @click="handleSqdyz" v-if="btnShwon.sqdyz">申请待验证</el-button>
             <el-button size="mini" type="primary" @click="sendMsg" v-if="btnShwon.fsxx">发送消息</el-button>
             <el-button size="mini" type="primary" @click="replyQuestion('yyjl')" v-if="btnShwon.yyjl">添加运营记录</el-button>
-            <el-button size="mini" type="primary" @click="changeCrowdId" v-if="btnShwon.xgcrowId">关联开发任务</el-button>
+            <el-button size="mini" type="primary" @click="changeCrowdId" v-if="btnShwon.xgcrowId">提报crowd任务</el-button>
             <el-button size="mini" type="primary" @click="accreditQuestion" v-if="btnShwon.sl">受理</el-button>
             <el-button size="mini" type="info" @click="changeCNDate" v-if="btnShwon.cnsj">修改承诺时间</el-button>
             <el-button size="mini" type="primary" @click="forwardingProblem" v-if="btnShwon.zf">转发问题</el-button>
@@ -243,33 +243,45 @@
           </div>
         </div>
       </el-dialog>
-
+      <!-- 受理 -->
       <el-dialog width="600px" :title="isSltitle" :visible.sync="innerCNRQVisible" :close-on-click-modal="false" append-to-body>
-        <div style="padding:10px">
-          <span v-if="isSLvisible" style="display:inline-block;margin:15px 0;">
+        <div style="padding:10px;">
+          <span v-if="isSLvisible" class="filter-bt" style="display:inline-block;">
             期望解决日期 :
-            <el-date-picker v-model="xgqwjjrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" :clearable="false" size="mini" readonly></el-date-picker>
           </span>
+           <el-date-picker v-model="xgqwjjrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" :clearable="false" size="mini" readonly></el-date-picker>
           <div v-if="false" style="display:flex;margin-bottom:15px;">
             <span>环境信息 : </span>
             <el-upload style="width:510px;" class="upload-demo" ref="upload" :limit='1' :action="uploadAction" :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" :file-list="fileList" :show-file-list="true" :auto-upload="false">
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             </el-upload>
           </div>
-          <div>
+
+          <div style="margin:15px 0;">
             <span class="filter-bt">承诺结束日期 :</span>
             <el-date-picker :picker-options="pickerBeginDateBefore" v-model="xgcnjsrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
           </div>
+
+          <div v-if="isSLvisible" style="margin:15px 0">
+           <span class="filter-bt">问题来源 :</span>
+           <el-select v-model="wtly" size="mini" placeholder="请选择问题来源" style="width:220px">
+              <el-option v-for="(item,index) in wtlyList" :key="index" :label="item.mc" :value="item.label">
+              </el-option>
+          </el-select>
+          </div>
+
           <div v-if="!isSLvisible" style="margin:15px 0">
             <span class="filter-bt before-require">说明：</span>
             <el-input type="textarea" :rows="2" style="width:400px" placeholder="请输入说明内容" v-model="cnjssm"></el-input>
           </div>
+
           <div style="text-align:right">
             <el-button type="primary" size="mini" @click="CommitChangeCNjsrq">提交</el-button>
             <el-button type="info" size="mini" @click="CancelChangeCNjsrq">取消</el-button>
           </div>
         </div>
       </el-dialog>
+
         <!-- 转发问题 -->
       <el-dialog width="1000px" title="转发问题" :visible.sync="innerZFWTisible" :close-on-click-modal="false" append-to-body>
         <div style="padding:10px;" class="question_transmit">
@@ -326,17 +338,131 @@
           <sqjsForm :gs="sqgbgs" @submitForm="submitForm" @closeForm="closeForm"></sqjsForm>
         </div>
       </el-dialog>
-      <el-dialog title="关联开发任务" :visible.sync="crowdVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
+
+      <!-- 关联开发任务 -->
+      <el-dialog title="提报crowd任务" :visible.sync="crowdVisible" :close-on-click-modal="false" width="1000px" top="30px" append-to-body>
         <div style="padding:20px 10px ">
-          <p style="font-size:14px">开发任务编号:</p>
-          <el-input size="mini" v-model="Crowdvalue" placeholder="请输入开发任务编号"></el-input>
-          <p style="font-size:14px;margin-top:15px !important">开发工作量(人/天):</p>
-          <el-input size="mini" v-model="kfgzlValue" placeholder="请输入开发工作量 "></el-input>
-          <p style="text-align:right;padding:10px 0">
-            <el-button type="primary" size="small" @click="handleCommitCrowd">提交</el-button>
-          </p>
+          <div style="padding:10px 0;">
+              <el-radio-group v-model="crowdType">
+                  <el-radio :label="1">已经在Crowd发布了需求</el-radio>
+                  <el-radio :label="2">我要发布需求</el-radio>
+              </el-radio-group>
+          </div>
+          <div v-if="crowdType == 1">
+            <p style="font-size:14px;font-weight:700">开发任务编号:</p>
+            <el-input size="mini" v-model="Crowdvalue" placeholder="请输入开发任务编号"></el-input>
+            <p  style="font-size:14px;margin-top:15px !important;font-weight:700">开发工作量(人/天):</p>
+            <el-input size="mini" v-model="kfgzlValue" placeholder="请输入开发工作量 "></el-input>
+            <p  style="text-align:right;padding:10px 0">
+              <el-button type="primary" size="small" @click="handleCommitCrowd">提交</el-button>
+            </p>
+          </div>
+          <div v-if="crowdType == 2" class="send_crowd">
+            <el-form :model="crowdxqData" :rules="rules" ref="crowdxqData"  class="demo-ruleForm">
+                    <el-form-item label="" >
+                       <div class="send-crowd_topic">发布需求流程</div> 
+                    </el-form-item>
+                    <el-form-item label="" prop="rwfl">
+                       <el-select style="100%" size="mini" v-model="crowdxqData.rwfl" placeholder="请选择需求分类">
+                          <el-option
+                            v-for="item in CrowdDemandList"
+                            :key="item.label"
+                            :label="item.mc"
+                            :value="item.label">
+                          </el-option>
+                        </el-select> 
+                    </el-form-item>
+                <el-form-item>
+                  <div class="send-crowd_topic">请完善需求的基本信息</div> 
+                </el-form-item>
+                <el-form-item prop="rwmc">
+                  <el-input size="mini" v-model="crowdxqData.rwmc" placeholder="一个清晰的名字能帮助开发者快速的了解需求"></el-input> 
+                </el-form-item>
+                <el-form-item>
+                  <el-select  size="mini" v-model="crowdxqData.rwlx" placeholder="请选择需求类型">
+                    <el-option label="--- 请选择需求类型 ---" value=""></el-option>
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-select  size="mini" v-model="crowdxqData.sfjj" placeholder="请选择需求紧急类型">
+                    <el-option label="紧急" value="1"></el-option>
+                    <el-option label="不紧急" value="0"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-select  size="mini" v-model="crowdxqData.sfxyzc" placeholder="请选择是否需要驻场">
+                    <el-option label="需要驻场" value="1"></el-option>
+                    <el-option label="不需要驻场" value="0"></el-option>
+                  </el-select>
+                </el-form-item>
+                <!-- 预算金额 -->
+              <el-form-item prop="xmysje">
+                <el-input size="mini" v-model="crowdxqData.xmysje" placeholder="请输入预算金额(元),不能小于0"></el-input>
+              </el-form-item>
+              <!-- 机密信息 -->
+              <el-form-item >
+                  <el-input type="textarea" placeholder="请输入机密信息 , 可填写项目的账号、密码等信息,只对中标用户显示" v-model="crowdxqData.jmxx"></el-input>
+              </el-form-item>
+              <!-- 需求描述 -->
+              <el-form-item prop="xqms">
+                  <el-input type="textarea" placeholder="请输入需求描述" v-model="crowdxqData.xqms"></el-input>
+              </el-form-item>
+
+               <!-- <el-form-item >
+                 <uploadFile></uploadFile>
+              </el-form-item> -->
+
+              <el-form-item >
+                <div class="send-crowd_topic">请选择需求客户/学校/个人的期望交付日期，该日期仅作数据记录使用</div> 
+              </el-form-item>
+              <el-form-item >
+                <el-date-picker :picker-options="pickerJfrqDateBefore" value-format="yyyy-MM-dd"  size="mini" type="date" placeholder="请输入学校或个人期望交付日期，仅作数据记录使用 " v-model="crowdxqData.qwjfrq" style="width: 100%;"></el-date-picker>
+              </el-form-item> 
+              <el-form-item >
+                <div class="send-crowd_topic" flex spacebetween><span>请选择需求的招标/交付日期</span> <a href="javaScript:;;" @click="handleCheckDateRule">日期规则</a></div> 
+              </el-form-item>
+              <el-form-item >
+                <el-date-picker @change="handleChoosejfDate"  value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore" size="mini" type="date" placeholder="请输入需求招标截至日期，到达该日期后，如果没有投标或者选标，需求则会自动关闭" v-model="crowdxqData.zbjzrq " style="width: 100%;"></el-date-picker>
+              </el-form-item> 
+              <el-form-item >
+                <el-date-picker @change="handleChoosejfDate2"  value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore" size="mini" type="date" placeholder="请输入预期交付日期日期，中标者将严格按照该日期交付需求相关信息" v-model="crowdxqData.jfrq" style="width: 100%;"></el-date-picker>
+              </el-form-item> 
+              <el-form-item >
+                <div class="send-crowd_topic">请选择需求的相关项目信息</div> 
+              </el-form-item>
+              <el-form-item >
+                 <el-select
+                      size="mini"
+                      v-model="crowdxqData.cpxbh"
+                      filterable
+                       @change="handleSeleteYwx" 
+                      placeholder="请选择业务线信息(可搜索)">
+                      <el-option v-for="(item,index) in CrowdYwx" :key="index" :label="item.lbmc" :value="item.lbdm"></el-option>
+                    </el-select>
+               </el-form-item>
+               <el-form-item>
+                  <el-select  size="mini"  filterable v-model="crowdxqData.cpbh" placeholder="请选择产品信息(可搜索)">
+                    <el-option v-for="(item,index) in CrowdCp" :key="index" :label="item.lbmc" :value="item.lbdm">
+                    </el-option>
+                  </el-select>
+               </el-form-item>
+               <!-- <el-form-item>
+                  <el-select  size="mini"  v-model="crowdxqData.fbbh" placeholder="请选择分包信息">
+                   
+                  </el-select>
+               </el-form-item> -->
+
+              <el-form-item text-right>
+                   <el-button size="mini" type="primary" @click="sendSubmitForm('crowdxqData')">提交</el-button>
+              </el-form-item>
+            </el-form>      
+          </div>
         </div>
       </el-dialog>
+
+
       <el-dialog :title="'进度跟踪' +'['+ crowdId +']'" :visible.sync="jdgzVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
         <div style="padding:20px 10px ">
           <div class="CrowdRwxx">
@@ -375,6 +501,26 @@
           </div>
         </div>
       </el-dialog>
+       
+       <el-dialog title="日期规则" :visible.sync="dateruleVisible" :close-on-click-modal="false" width="600px" top="30px" append-to-body>
+        <div style="padding:20px 10px" class="crowd-rqgz">
+           <h4>第一条 名词解释</h4>
+           <p>1、招标截止日期：表示需求在该日期之前，允许开发者投标，过期自动关闭需求。</p>
+           <p>2、交付日期：要求开发者在这之前（包括本日）提交需求验收。</p>
+           <br>
+           <h4>第二条 招标截止日期要求</h4>
+           <p>1、针对需求类型，预算费用在1200元以内的需求默认预留2个工作日的审核时间，1200元及以上需求的审核时间不超过5个工作日,预算费用在1200元以内的需求默认预留2个工作日的投标周期，1200元及以上需求的审核时间不超过3个工作日的投标周期。</p>
+           <p>2、针对BUG类型，BUG类任务审核周期为1个工作日，审核后BUG责任人应在24小时内解决，遇到复杂问题或工作量大无法在24小时内解决时，责任人需要给出计划解决时间。</p>
+           <br>
+           <h4>第三条 交付日期约定</h4>
+           <p>从需求中标日期起，大于需求标准开发人天，小于两倍标准开发人天的日期区间为需求的合理交付日期区间。需求审核人员有权根据开发资源状况在合理交付日期区间内调整交付日期，对于不在合理交付日期区间内的交付时间要求，由需求方与需求审核人进行协商并达成一致，无法达成一致时，需求方可向平台进行申诉。。</p>
+           <br>
+           <h4>第四条 约定解释权</h4>
+           <p>1、该解释权归属平台所有，自发布日期开始，立即生效，无需和发包方确认。</p>
+           <p>2、若任务确认紧急，请在发布任务的时候，选择紧急任务，平台审核方会和发包方确认，并收取合理的加急费用。</p>
+        </div>
+      </el-dialog>
+       
 
       <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :wid="wid" :slContent="slContent" :questionInfo="qusetionInfo" :guid="gsValue" @handleSLsuccess="handleSLsuccess"></twDialog>
       <!-- 发送运维消息 -->
@@ -388,12 +534,14 @@
 
 <script>
 import axios from "axios";
+import { GetDateStr } from "@/utils/util";
 import pagination from "@/components/BusinessPage/pagination.vue";
 import { getResponsibleTaskList } from "@/api/common.js";
 import twDialog from "@/components/dialog/tw-dialog.vue";
 import xxDialog from "@/components/dialog/sendxx-dialog.vue";
 import xmtdcylog from "@/components/dialog/xmtdcy.vue";
 import { getLoginUser } from "@/api/system.js";
+import uploadFile from "@/components/BusinessPage/upload.vue";
 import {
   queryQuestion,
   queryAnswers,
@@ -447,7 +595,86 @@ import {
 } from "@/utils/util.js";
 export default {
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (!/^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/.test(value)) {
+        callback(new Error("请填写正确金额"));
+      } else {
+        callback();
+      }
+    };
     return {
+      pickerJfrqDateBefore: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        }
+      },
+      CrowdDemandList: [], //需求分类
+      CrowdYwx: [], //业务线
+      CrowdCp: [], //产品
+      options: [
+        {
+          value: "1",
+          label: "需求"
+        },
+        {
+          value: "2",
+          label: "BUG"
+        }
+      ],
+
+      rules: {
+        rwmc: [{ required: true, message: "请输入基本信息", trigger: "blur" }],
+        rwfl: [
+          { required: true, message: "请选择需求分类", trigger: "change" }
+        ],
+        xmysje: [{ validator: validatePass, trigger: "blur" }],
+        zbjzrq: [
+          {
+            type: "date",
+            required: true,
+            message: "请选择日期",
+            trigger: "change"
+          }
+        ],
+        jfrq: [
+          {
+            type: "date",
+            required: true,
+            message: "请选择日期",
+            trigger: "change"
+          }
+        ],
+        qwjfrq: [
+          {
+            type: "date",
+            required: true,
+            message: "请选择日期",
+            trigger: "change"
+          }
+        ],
+        xqms: [{ required: true, message: "请填写需求描述", trigger: "blur" }],
+      },
+
+      crowdxqData: {
+        rwfl: "", //需求分类
+        rwmc: "", //需求基本信息
+        rwlx: "", //需求类型
+        sfjj: "0", //需求紧急
+        sfxyzc: "0", //是否需要驻场
+        xmysje: "",
+        jmxx: "",
+        xqms: "", //需求描述
+        zbjzrq: "",
+        jfrq: "",
+        qwjfrq: "",
+        cpxbh: "", //业务线信息
+        cpbh: "",
+        xmbh: ""
+      },
+      wtlyList: [], //问题来源
+      wtly: "",
+
+      dateruleVisible: false, //日期规则
       userList: [],
       pickerBeginDateBefore: this.handleFocusDate(),
       questionTitle: "提交问题",
@@ -523,7 +750,7 @@ export default {
       lchjList: [], //流程环节（转发人员）
       show: false,
       ywxxShow: false, // 运维消息弹窗
-      xmtdcyShow:false,// 项目团队成员
+      xmtdcyShow: false, // 项目团队成员
       slContent: "", // 受理内容
       isEditReplyIndex: null,
       replygs: "",
@@ -541,8 +768,10 @@ export default {
       crowdId: "",
 
       // 项目团队转发 成员
-      forwordUser:'',
-      userIds:''
+      forwordUser: "",
+      userIds: "",
+
+      crowdType: 1
     };
   },
   props: {},
@@ -568,7 +797,11 @@ export default {
       }
     });
     this.queryLabel(this.wid);
-    if (!getSession("ProblemType") || !getSession("kycp") || !getSession("cpx")) {
+    if (
+      !getSession("ProblemType") ||
+      !getSession("kycp") ||
+      !getSession("cpx")
+    ) {
       getMenu("ProblemType", this.wtlb, "");
       getMenu("kycp", this.cplist, true);
       getMenu("cpx", this.cpline, true); //获取产品线
@@ -576,6 +809,12 @@ export default {
       this.wtlb = getSession("ProblemType");
       this.cplist = getSession("kycp");
       this.cpline = getSession("cpx");
+    }
+
+    if (!getSession("ProblemSource")) {
+      getMenu("ProblemSource", this.wtlyList, "");
+    } else {
+      this.wtlyList = getSession("ProblemSource");
     }
 
     $("#summernoteT").summernote({
@@ -612,16 +851,73 @@ export default {
   },
 
   methods: {
+    handleSeleteYwx(val) {
+      this.getCrowdCp(val);
+    },
+    // 截止日期（1）
+    handleChoosejfDate(val) {
+      if (val > this.crowdxqData.jfrq) {
+        this.$alert("招标截止日期不能大于交付日期，请重新选择", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        this.crowdxqData.zbjzrq = "";
+      }
+    },
+    // 交付日期
+    handleChoosejfDate2(val) {
+      if (val < this.crowdxqData.zbjzrq) {
+        this.$alert("招标截止日期不能大于交付日期，请重新选择", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        this.crowdxqData.jfrq = "";
+      }
+    },
+    // 查看日期规则
+    handleCheckDateRule() {
+      this.dateruleVisible = true;
+    },
+    // 提交需求
+    sendSubmitForm(formName) {
+      if (!this.crowdxqData.jfrq || !this.crowdxqData.zbjzrq) {
+        this.$alert("请填写招标日期/交付日期", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return;
+      }
+      this.crowdxqData.xmbh = this.qusetionInfo.xmbh; // 项目编号
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$post(this.API.crowdFbrw, this.crowdxqData).then(res => {
+            if (res.state == "success") {
+                this.addOrUpdateCrowdId('',res.data,'');
+                this.crowdVisible = false;
+            }else{
+              this.$alert(res.msg, "提示", {
+                  confirmButtonText: "确定",
+                  type: "warning"
+              })
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+
+
     // 选择团队成员
-    hanldeCommitUser(userids,usernames){
-      this.userIds = userids.join(',');
-      this.forwordUser = usernames.join(',');
+    hanldeCommitUser(userids, usernames) {
+      this.userIds = userids.join(",");
+      this.forwordUser = usernames.join(",");
       this.xmtdcyShow = false;
     },
 
     // 选择团队成员 转发
-    handleChooseXmtdcy(){
-        this.xmtdcyShow = true;
+    handleChooseXmtdcy() {
+      this.xmtdcyShow = true;
     },
     // 日期格式化
     handleFocusDate() {
@@ -637,8 +933,9 @@ export default {
         }
       };
     },
+
+    //删除标签
     handleCloseTag(i) {
-      //删除标签
       if (
         this.User.indexOf("ProblemAdmin") == -1 &&
         this.User.indexOf("ZJZBZ") == -1 &&
@@ -831,8 +1128,8 @@ export default {
         this.replygs
       );
     },
-    handleReplyDelete(e, param) {
       //删除回复
+    handleReplyDelete(e, param) {
       this.$confirm("是否删除该条回复?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -978,7 +1275,7 @@ export default {
                 callback: action => {
                   this.questionReply[param].sfbh = 1;
                   this.questionReply[param].nr =
-                  this.questionReply[param].nr + "<br>说明 : " + this.bhsm;
+                    this.questionReply[param].nr + "<br>说明 : " + this.bhsm;
                 }
               });
             } else {
@@ -1014,6 +1311,11 @@ export default {
     },
     // 添加开发任务
     changeCrowdId() {
+      if (!getSession("CrowdDemandType")) {
+        getMenu("CrowdDemandType", this.CrowdDemandList); //获取需求分类
+      } else {
+        this.CrowdDemandList = getSession("CrowdDemandType");
+      }
       this.hfwid = "";
       this.crowdVisible = !this.crowdVisible;
       // this.getCrowdId(false);
@@ -1043,11 +1345,15 @@ export default {
         });
         return;
       }
+      this.addOrUpdateCrowdId(this.hfwid,this.Crowdvalue,this.kfgzlValue);
+    },
+    
+    addOrUpdateCrowdId(hfwid,crowdId,kfgzlValue){
       addOrUpdateCrowdId({
         wid: this.wid,
-        hfwid: this.hfwid,
-        crowdId: this.Crowdvalue,
-        kfgzl: this.kfgzlValue
+        hfwid:hfwid, 
+        crowdId:crowdId ,
+        kfgzl:kfgzlValue 
       }).then(({ data }) => {
         if (data.state == "success") {
           this.crowdVisible = false;
@@ -1063,6 +1369,9 @@ export default {
         }
       });
     },
+
+
+
     //受理
     accreditQuestion() {
       if (this.isgcXmtdbyWt) {
@@ -1079,7 +1388,7 @@ export default {
         this.isSltitle = "受理";
         this.isSLvisible = true;
         this.question.xgcnjsrq =
-        this.qusetionInfo.cnjsrq == ""
+          this.qusetionInfo.cnjsrq == ""
             ? this.qusetionInfo.qwjjrq
             : this.qusetionInfo.cnjsrq;
         this.innerCNRQVisible = !this.innerCNRQVisible;
@@ -1126,6 +1435,10 @@ export default {
           }
         });
       } else if (this.isSltitle == "受理") {
+        if(!this.wtly){
+          this.$alert("请选择问题来源", "提示", {confirmButtonText: "确定",type: "warning"})
+          return;
+        }
         this.$confirm(
           "期望解决日期:" +
             this.xgqwjjrq +
@@ -1148,6 +1461,7 @@ export default {
                   : $("#summernoteT").summernote("code"),
               cnjsrq: this.xgcnjsrq,
               qwjjrq: this.xgqwjjrq,
+              wtly:this.wtly, //问题来源
               hjfjwid: "",
               Guid: this.gsValue
             }).then(({ data }) => {
@@ -1178,6 +1492,7 @@ export default {
     CancelChangeCNjsrq() {
       this.innerCNRQVisible = false;
     },
+
     getCrowdId(rwbh) {
       getCrowdRwzt({
         rwbh: rwbh //this.qusetionInfo.crowdid
@@ -1231,11 +1546,10 @@ export default {
             });
             this.sqjsVisible = true;
           } else {
-            this.$alert(
-              "不可重复申请关闭，可驳回已有的再重新申请!",
-              "提示",
-              { confirmButtonText: "确定", type: "warning" }
-            );
+            this.$alert("不可重复申请关闭，可驳回已有的再重新申请!", "提示", {
+              confirmButtonText: "确定",
+              type: "warning"
+            });
           }
         }
       });
@@ -1315,16 +1629,20 @@ export default {
           this.zdfzrVisible = false;
           if (data.state == "success") {
             let keysArr = Object.keys(data.data);
-            if(keysArr[0] == 'true'){
+            if (keysArr[0] == "true") {
               this.zdfzrVisible = false;
               this.queryAnswers(this.wid);
               this.queryProcess(this.wid);
               this.queryQuestion(this.wid);
             }
-            this.$alert(keysArr[0]=='true'?data.data.true:data.data.false, "提示", {
-              confirmButtonText: "确定",
-              type:keysArr[0]=='true'?"success":"error"
-            });
+            this.$alert(
+              keysArr[0] == "true" ? data.data.true : data.data.false,
+              "提示",
+              {
+                confirmButtonText: "确定",
+                type: keysArr[0] == "true" ? "success" : "error"
+              }
+            );
           } else {
             this.$alert("提交失败", "提示", {
               confirmButtonText: "确定",
@@ -1342,16 +1660,20 @@ export default {
         }).then(({ data }) => {
           if (data.state == "success") {
             let keysArr = Object.keys(data.data);
-            if(keysArr[0] == 'true'){
+            if (keysArr[0] == "true") {
               this.zdfzrVisible = false;
               this.queryAnswers(this.wid);
               this.queryProcess(this.wid);
               this.queryQuestion(this.wid);
             }
-            this.$alert(keysArr[0] == 'true'?data.data.true:data.data.false, "提示", {
-              confirmButtonText: "确定",
-              type:keysArr[0]=='true'?"success":"error"  
-            });
+            this.$alert(
+              keysArr[0] == "true" ? data.data.true : data.data.false,
+              "提示",
+              {
+                confirmButtonText: "确定",
+                type: keysArr[0] == "true" ? "success" : "error"
+              }
+            );
           } else {
             this.$alert("提交失败", "提示", {
               confirmButtonText: "确定",
@@ -1515,26 +1837,31 @@ export default {
       saveForward({
         wid: this.wid,
         bh: this.radio,
-        nr: $("#summernoteZF").summernote("code") == "<p><br></p>"
+        nr:
+          $("#summernoteZF").summernote("code") == "<p><br></p>"
             ? ""
             : $("#summernoteZF").summernote("code"),
         cpbh: this.radio == 11 ? this.zfcp : "",
         qwjjrq: this.qwjjrqZf,
-        userIds:this.radio == 66?this.userIds:'',
+        userIds: this.radio == 66 ? this.userIds : ""
       }).then(({ data }) => {
         if (data.state == "success") {
           let keysArr = Object.keys(data.data);
-          if(keysArr[0]=='true'){
-              this.innerZFWTisible = false;
-              this.queryAnswers(this.wid);
-              this.queryBtnAuth(this.wid);
-              this.queryProcess(this.wid);
-              this.queryQuestion(this.wid); 
+          if (keysArr[0] == "true") {
+            this.innerZFWTisible = false;
+            this.queryAnswers(this.wid);
+            this.queryBtnAuth(this.wid);
+            this.queryProcess(this.wid);
+            this.queryQuestion(this.wid);
           }
-          this.$alert(keysArr[0]=='true'?data.data.true:data.data.false, "提示", {
-            confirmButtonText: "确定",
-            type:keysArr[0]=='true'?"success":"error"
-          });
+          this.$alert(
+            keysArr[0] == "true" ? data.data.true : data.data.false,
+            "提示",
+            {
+              confirmButtonText: "确定",
+              type: keysArr[0] == "true" ? "success" : "error"
+            }
+          );
         }
       });
     },
@@ -1560,7 +1887,7 @@ export default {
         }
       });
     },
-    
+
     //回复
     replyQuestion(param) {
       let reg = /^\d+(\.\d+)?$/;
@@ -1744,6 +2071,7 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           this.qusetionInfo = data.data;
+          this.wtly = data.data.wtly;
           this.cnjsrq = data.data.qwjjrq;
           document.title = "问题详情-" + data.data.bt;
           if (this.qusetionInfo.fbzt == 1) {
@@ -1854,9 +2182,35 @@ export default {
           });
         }
       });
+    },
+
+    getCrowdYwx() {
+      this.$get(this.API.getCrowdYwx, {}).then(res => {
+        if (res.state == "success") {
+          this.CrowdYwx = res.data;
+        }
+      });
+    },
+    getCrowdCp(ywxbm) {
+      this.$get(this.API.getCrowdCp, { ywxbm: ywxbm }).then(res => {
+        if (res.state == "success") {
+          this.CrowdCp = res.data;
+        }
+      });
     }
   },
-  watch: {},
+  watch: {
+    crowdVisible(n, o) {
+      if (!!n) {
+        this.crowdxqData.zbjzrq = GetDateStr(7);
+      }
+    },
+    crowdType(n, o) {
+      if (n == 2) {
+        this.getCrowdYwx();
+      }
+    }
+  },
   activated() {},
   components: {
     pagination,
@@ -1865,7 +2219,8 @@ export default {
     sqjsForm,
     twDialog,
     xxDialog,
-    xmtdcylog
+    xmtdcylog,
+    uploadFile
   }
 };
 </script>
@@ -1904,7 +2259,9 @@ export default {
 div.el-form-item {
   margin-bottom: 8px !important;
 }
-
+.send_crowd div.el-form-item {
+  margin-bottom: 25px !important;
+}
 /*   detail*/
 .project-question-detail {
   padding: 5px 10px;
@@ -2082,8 +2439,30 @@ div.el-form-item {
   width: 110px;
 }
 
-.isRedColor{
+.isRedColor {
   color: #f00;
   font-weight: 700;
+}
+
+.send_crowd img {
+  width: 100%;
+}
+.send-crowd_topic {
+  border: 1px solid #e4eaec;
+  background: #f3f7f9;
+  border-radius: 3px;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 6px;
+}
+
+.crowd-rqgz h4 {
+  font-weight: 700;
+  font-size: 13px;
+  margin: 10px 0 !important;
+}
+.crowd-rqgz p {
+  font-size: 12px;
+  text-indent: 2em;
 }
 </style>

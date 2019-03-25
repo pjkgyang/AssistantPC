@@ -11,7 +11,7 @@
                     <template slot-scope="scope">
                         <span v-if="!th.canRedirect && th.zh != '状态'">{{scope.row[index]}}</span>
                         <a v-if="th.canRedirect" href="javaScript:void(0)" @click="handleRouter(scope.row,index)">{{scope.row[index]}}</a>
-                        <el-tag size="mini" v-if="!th.canRedirect && type == 'shgs' && th.zh == '状态'">{{scope.row[index]==1?'正常':'异常'}}</el-tag>
+                        <el-tag size="mini" v-if="!th.canRedirect && type == 'shgs' && th.zh == '状态'">{{scope.row[index]}}</el-tag>
                     </template>
                 </el-table-column>
             </el-table>

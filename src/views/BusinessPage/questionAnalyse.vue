@@ -141,7 +141,7 @@ export default {
   data() {
     return {
       dialogTableVisible: false,
-      gjjhShow:true,//改进计划显示
+      gjjhShow: true, //改进计划显示
       quesData: {},
       questionTitle: "提交问题",
       show: false,
@@ -180,7 +180,7 @@ export default {
       wtfbqlist: [],
       wtgjztlist: [],
       wtfbq: "", //问题父标签
-      wtfbqO:"",//问题父标签
+      wtfbqO: "", //问题父标签
       gjzt: "",
       bqly: "",
       wtfl: "",
@@ -207,7 +207,7 @@ export default {
       baseUrl: "",
       starDay: "",
       endDay: "",
-      date:[]
+      date: []
     };
   },
   props: {},
@@ -246,9 +246,9 @@ export default {
     } else {
       this.wtfbqlist = getSession("wtfbq");
     }
-    
+
     if (!getSession("WtGjjhZt")) {
-      getMenu("WtGjjhZt", this.wtgjztlist, '');
+      getMenu("WtGjjhZt", this.wtgjztlist, "");
     } else {
       this.wtgjztlist = getSession("WtGjjhZt");
     }
@@ -257,27 +257,27 @@ export default {
     handleImprovementPlan(data) {
       // console.log(data);
       this.quesData = data;
-      let dataArr = data.fbqdm.split(',');
-      let w03i = '',
-          w05i = '';
-      if(data.fbqdm.includes('W05') && !data.fbqdm.includes('W03')){
-         this.wtfbqO = 'W05'
-      }else if(data.fbqdm.includes('W03') && !data.fbqdm.includes('W05')){
-         this.wtfbqO = 'W03'
-      }else if(data.fbqdm.includes('W03') && data.fbqdm.includes('W05')){
-       dataArr.forEach((ele,i,arr)=>{
-         if(ele == 'W03'){
-           w03i = i
-         }
-         if(ele == 'W05'){
-           w05i = i
-         }
-       })
-       if(w03i > w05i){
-         this.wtfbqO = 'W03';
-       }else if(w03i < w05i){
-         this.wtfbqO = 'W05';
-       }
+      let dataArr = data.fbqdm.split(",");
+      let w03i = "",
+        w05i = "";
+      if (data.fbqdm.includes("W05") && !data.fbqdm.includes("W03")) {
+        this.wtfbqO = "W05";
+      } else if (data.fbqdm.includes("W03") && !data.fbqdm.includes("W05")) {
+        this.wtfbqO = "W03";
+      } else if (data.fbqdm.includes("W03") && data.fbqdm.includes("W05")) {
+        dataArr.forEach((ele, i, arr) => {
+          if (ele == "W03") {
+            w03i = i;
+          }
+          if (ele == "W05") {
+            w05i = i;
+          }
+        });
+        if (w03i > w05i) {
+          this.wtfbqO = "W03";
+        } else if (w03i < w05i) {
+          this.wtfbqO = "W05";
+        }
       }
       this.dialogTableVisible = !this.dialogTableVisible;
     },
@@ -311,7 +311,6 @@ export default {
           this.endDay +
           "&isAnalyse=true" +
           "&xmbh=" +
-
           "&wtfl=" +
           this.wtfl +
           "&bqly=" +
@@ -425,12 +424,12 @@ export default {
       this.CurrentPage = data;
       this.queryAllQuestions(data);
     },
-        // 时间选择
-    handleDatepick(){
-      if(this.date.length){
-        this.starDay = !this.date[0]?"":this.date[0];
-        this.endDay = !this.date[1]?"":this.date[1];
-      }else{
+    // 时间选择
+    handleDatepick() {
+      if (this.date.length) {
+        this.starDay = !this.date[0] ? "" : this.date[0];
+        this.endDay = !this.date[1] ? "" : this.date[1];
+      } else {
         this.starDay = this.endDay = "";
       }
       this.queryAllQuestions(1);
@@ -477,7 +476,7 @@ export default {
       this.CurrentPage = 1;
       this.queryAllQuestions(1);
     },
-     //问题标签分类
+    //问题标签分类
     handleWTFBQ(e) {
       let wtfbq = e.target.getAttribute("data-type");
       if (wtfbq == null) return;
@@ -559,12 +558,12 @@ export default {
         isAnalyse: true,
         wtfl: this.wtfl,
         bqly: this.bqly,
-        wtfbq:this.wtfbq,
-        wtgjzt:this.gjzt
+        wtfbq: this.wtfbq,
+        wtgjzt: this.gjzt
       }).then(({ data }) => {
         if (data.state == "success") {
           if (data.data.rows != null) {
-              this.questionList = data.data.rows;
+            this.questionList = data.data.rows;
           }
           this.total = data.data.records;
         }

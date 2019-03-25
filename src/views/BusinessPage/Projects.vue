@@ -20,15 +20,17 @@
   <section class="project_more_table" v-if="show">
       <div>
         <div class="project_more_choose">
-         <div>
+            <div>
                 <span class="table-menu-name">
                     <i class="el-icon-arrow-down arrow"  v-if="showList" @click="showList = !showList"></i>
                     <i class="el-icon-arrow-up arrow"  v-if="!showList" @click="showList = !showList"></i>
                   高级查询</span> 
-                <el-input placeholder="请输入项目编号/项目名称/合同编号/项目经理" prefix-icon="el-icon-search" size="small" v-model="keyword" @change="SearchItem"></el-input>&#x3000;
+                <el-input class="search-input" placeholder="请输入项目编号/项目名称/合同编号/项目经理" prefix-icon="el-icon-search" size="small" v-model="keyword" @change="SearchItem"></el-input>&#x3000;
                 <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
-                <a class="project_more_export" :href="baseUrl+'project/exportXmData.do?keyword='+this.keyword+'&xmzt='+this.xmztC+'&xmlb='+xmlbC+'&sfgx='+this.gxhtC+'&projectLabel='+xmbqC" target="blank">导出</a>
-        </div>
+                <a class="project_more_export" 
+                :href="baseUrl+'project/exportXmData.do?keyword='+this.keyword+'&xmzt='+this.xmztC+'&xmlb='+xmlbC+'&sfgx='+this.gxhtC+'&projectLabel='+xmbqC+'&gbsjStart='+this.gbksrqValue+'&gbsjEnd='+this.gbjsrqValue" 
+                 target="blank">导出</a>
+            </div>
             <div v-if="showList">
                 <p>
                     <span class="table-menu-name">项目标签:</span> 
@@ -54,6 +56,18 @@
                     <span v-for="gxht in gxhtMenu" :data-gxht="gxht.id" :class="{'bg-active':gxht.id == gxhtC}"
                     :key="gxht.id" @click="CheckGxht">{{gxht.mc}}</span>
                 </p>
+                <p>
+                  <span class="table-menu-name">过保开始日期:</span>   
+                  <span>
+                    <el-date-picker @change="handleChangeDate" size="mini" style="200px !important" value-format="yyyy-MM-dd" v-model="gbksrqValue" type="date" placeholder="选择过保开始日期"></el-date-picker>
+                  </span>
+                </p>
+                <p>
+                  <span class="table-menu-name">过保结束日期:</span>   
+                  <span>
+                    <el-date-picker @change="handleChangeDate" size="mini" style="200px !important"  value-format="yyyy-MM-dd" v-model="gbjsrqValue" type="date" placeholder="选择过保结束日期"></el-date-picker>
+                  </span>
+                </p>
             </div>
         </div>
         <div class="project-fbtable">
@@ -62,7 +76,7 @@
                     border
                     style="width:100%"
                     min-width="1000"
-                    height="523"
+                    :height="totalNum > 10?tableHeight:'100%'"
                     >
                      <el-table-column
                     fixed="left"
@@ -99,12 +113,14 @@
                     <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
                     <el-table-column prop="yfzrrxm" label="项目经理" width="100"></el-table-column>
                     <el-table-column prop="jfzrrxm" label="甲方责任人" width="100" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="yssj" label="整体验收时间" width="120"></el-table-column>
+                    <el-table-column prop="qssj" label="签署日期" width="100"></el-table-column>
                     <el-table-column prop="lxrq" label="立项日期" width="100"></el-table-column>
                     <el-table-column prop="qdrq" label="启动日期" width="100"></el-table-column>
-                    <el-table-column prop="qssj" label="签署日期" width="100"></el-table-column>
+                    <el-table-column prop="yssj" label="整体验收时间" width="120"></el-table-column>
+                    <el-table-column prop="fwksrq" label="服务开始日期" width="120"></el-table-column>
+                    <el-table-column prop="fwqx" label="服务期限" width="90"></el-table-column>
+                    <el-table-column prop="gbsj" label="过保日期" width="120"></el-table-column>
                     <el-table-column prop="htje" label="合同金额(元)" width="120"></el-table-column>
-                    <el-table-column prop="fwqx" label="服务期限" width="100"></el-table-column>
                     <!-- <el-table-column prop="wglv" label="完工率(%)" width="100"></el-table-column> -->
                     <!-- <el-table-column prop="wglg" label="完工量(元)" width="100"></el-table-column> -->
                 </el-table>
@@ -119,8 +135,8 @@
 </template>
 <script>
 import itemListCard from "@/components/BusinessPage/itemListCard.vue";
-import gbtxDialog from '@/components/dialog/xxkbxmlb/gbtxDialog';
-import gbtxjlDialog from '@/components/dialog/xxkbxmlb/gbtxjlDialog';
+import gbtxDialog from "@/components/dialog/xxkbxmlb/gbtxDialog";
+import gbtxjlDialog from "@/components/dialog/xxkbxmlb/gbtxjlDialog";
 
 import {
   exportXmData,
@@ -131,11 +147,12 @@ import {
 import pagination from "@/components/BusinessPage/pagination.vue";
 import UserBanner from "@/components/BusinessPage/itemUserBanner.vue";
 import { EventBus } from "../../utils/util.js";
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   data() {
     return {
+      tableHeight:window.innerHeight - 460,
       particeItem: [],
       show: false,
       showList: true,
@@ -152,14 +169,14 @@ export default {
         { mc: "我参与的项目", id: "4" },
         { mc: "已关闭的项目", id: "5" }
       ],
-      xmztMenu:[
+      xmztMenu: [
         { mc: "在建", id: "1" },
         { mc: "售后", id: "2" },
         { mc: "过保", id: "3" },
-        { mc: "已关闭", id: "4" },
+        { mc: "已关闭", id: "4" }
       ],
       keyword: "",
-      xmztC:"",
+      xmztC: "",
       xmlbC: "",
       gxhtC: "",
       xmbqC: 1,
@@ -168,84 +185,95 @@ export default {
       totalNum: null,
       baseUrl: null,
       xmkbkeyword: "",
-      isNone:false,
-      myItemData:{},
-      emptyArray:[],
-      urlData:{},
+      isNone: false,
+      myItemData: {},
+      emptyArray: [],
+      urlData: {},
 
-      gbtxShow:false,  //过保提醒
-      gbtxjlShow:false,//过保提醒记录
-      userGroup:'',
-      xmbh:''
+      gbtxShow: false, //过保提醒
+      gbtxjlShow: false, //过保提醒记录
+      userGroup: "",
+      xmbh: "",
+      gbrqValue:[],//过保日期Value
+      gbksrqValue:'',
+      gbjsrqValue:''
     };
   },
   methods: {
     // 过保提醒
-    handleCommand(params,data){
+    handleCommand(params, data) {
       this.xmbh = data;
-      if(params==1){
+      if (params == 1) {
         this.gbtxShow = true;
-      }else{
+      } else {
         this.gbtxjlShow = true;
       }
     },
 
     // 跳转到详情（进度）
     handlePage(data) {
-      let xbxm = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
+      let xbxm =
+        event.currentTarget.parentNode.parentNode.parentNode.parentNode;
       if (event.target.className.includes("el-icon-star")) {
         //添加星标
         changeXbZt({
           xmbh: data.xmbh
         }).then(({ data }) => {
           if (data.state == "success") {
-             this.getMyProjects(1);
-           }
+            this.getMyProjects(1);
+          }
         });
       } else {
-        data.isAll = false
+        data.isAll = false;
         this.$router.push({ name: "Task", params: { data: data } });
       }
     },
-  
-    getMyProjects(curPage){  // 获取我的项目
-      this.emptyArray = []
+    // 过保日期
+    handleChangeDate(){
+      this.getProjects(1);
+    },
+    getMyProjects(curPage) {
+      // 获取我的项目
+      this.emptyArray = [];
       getMyProjects({
-          curPage:curPage,
-          pageSize:11,
-          keyword: this.xmkbkeyword,
-          xmlb:'',
-          sfgx:'',
-          pl:''
-      }).then(({data})=>{
-        if(data.state == 'success'){
-          if(!!data.data){
-              this.myItemData = data.data
-          }else{
-              this.myItemData = {}
+        curPage: curPage,
+        pageSize: 11,
+        keyword: this.xmkbkeyword,
+        xmlb: "",
+        sfgx: "",
+        pl: ""
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          if (!!data.data) {
+            this.myItemData = data.data;
+          } else {
+            this.myItemData = {};
           }
-          Object.values(data.data).forEach((ele,i,arr)=>{
-            if(ele.rows.length == 0){
+          Object.values(data.data).forEach((ele, i, arr) => {
+            if (ele.rows.length == 0) {
               this.emptyArray.push(ele);
             }
-          })
-          if(this.emptyArray.length == Object.values(data.data).length){
-            this.isNone = true
-          }else{
-             this.isNone = false
+          });
+          if (this.emptyArray.length == Object.values(data.data).length) {
+            this.isNone = true;
+          } else {
+            this.isNone = false;
           }
         }
-      })
+      });
     },
-    getProjects(curPage){  // 获取所有项目
+    getProjects(curPage) {
+      // 获取所有项目
       getProjects({
         curPage: curPage,
         pageSize: this.pageSize,
         keyword: this.keyword,
-        xmzt:this.xmztC,
+        xmzt: this.xmztC,
         xmlb: this.xmlbC,
         sfgx: this.gxhtC,
-        pl: this.xmbqC
+        pl: this.xmbqC,
+        gbsjStart:this.gbksrqValue,
+        gbsjEnd:this.gbjsrqValue
       }).then(({ data }) => {
         if (data.state == "success") {
           this.allfbData = data.data.rows;
@@ -269,7 +297,7 @@ export default {
       this.getProjects(1);
     },
     // 项目状态
-    CheckXmzt(param){
+    CheckXmzt(param) {
       this.xmztC = param;
       this.getProjects(1);
     },
@@ -288,15 +316,16 @@ export default {
     handleCurrentChange(data) {
       this.getProjects(data);
     },
-    // 查看更多 
+    // 查看更多
     handleGFXMore(param) {
       this.show = !this.show;
       this.xmbqC = param;
       this.getProjects(1);
       sessionStorage.setItem("shown", JSON.stringify(this.show));
     },
-          
-    handleBack() {  // 返回项目看板
+
+    handleBack() {
+      // 返回项目看板
       this.show = !this.show;
       sessionStorage.setItem("shown", JSON.stringify(this.show));
       this.getMyProjects(1);
@@ -325,14 +354,16 @@ export default {
   mounted() {
     this.baseUrl = window.baseurl;
     let shown = JSON.parse(sessionStorage.getItem("shown"));
-    this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
+    this.userGroup = JSON.parse(
+      sessionStorage.getItem("userInfo")
+    ).userGroupTag;
     if (shown != null) {
       this.show = shown;
     }
     if (shown == null || !shown) {
-           this.getMyProjects(1);
+      this.getMyProjects(1);
     } else {
-           this.getProjects(1);
+      this.getProjects(1);
     }
 
     EventBus.$on("searchXMKB", param => {
@@ -343,7 +374,7 @@ export default {
   },
 
   activated() {},
-  components: { itemListCard, pagination, UserBanner,gbtxDialog,gbtxjlDialog }
+  components: { itemListCard, pagination, UserBanner, gbtxDialog, gbtxjlDialog }
 };
 </script>
 <style scoped>
@@ -362,7 +393,7 @@ export default {
   font-size: 15px;
   font-weight: 700;
   text-shadow: 0px 2px 5px #888;
-  background: linear-gradient( rgb(26, 150, 113), rgb(129, 143, 141));
+  background: linear-gradient(rgb(26, 150, 113), rgb(129, 143, 141));
   -webkit-background-clip: text;
   color: transparent;
 }
@@ -397,12 +428,12 @@ export default {
   padding: 10px;
   background: #fff;
   border-radius: 4px;
-  box-shadow:0 2px 12px 0 rgba(0,0,0,.1);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .project_more_table .project_more_choose .arrow:hover {
   cursor: pointer;
 }
-.project_more_table > div > div:nth-of-type(1) .el-input {
+.project_more_table > div .search-input {
   width: 450px;
 }
 .project_more_table .project_more_choose p {
@@ -433,21 +464,12 @@ export default {
   cursor: pointer;
 }
 
-.fa-angle-double-down,
-.fa-angle-double-up {
-  font-size: 18px;
-  padding: 0 2px;
-}
-.fa-angle-double-down:hover,
-.fa-angle-double-up:hover {
-  cursor: pointer;
-}
 .project-fbtable {
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   width: 100%;
-  margin: 10px 0;
-  padding: 10px;
-  height: 580px;
+  margin-top: 10px;
+  padding: 10px 10px 0;
+  height:calc(100vh - 410px);
   background: #fff;
   border-radius: 4px;
 }
@@ -460,31 +482,7 @@ export default {
   line-height: 25px;
   margin: 0 10px;
 }
-/* .project-fbtable >div a{
-    background: #409EFF;
-    color: #fff;
-    padding: 5px 13px;
-    font-size: 12px;
-    border-radius: 3px;
-} */
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.4s linear;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-30px);
-}
 
-.project_detail_checkMore {
-  width: 270px;
-  height: 150px;
-  border: 1px solid #000;
-  line-height: 150px;
-  text-align: center;
-  border-radius: 5px;
-}
 .name-wrapper {
   color: #409eff;
   cursor: pointer;

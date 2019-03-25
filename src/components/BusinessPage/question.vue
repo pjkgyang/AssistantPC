@@ -204,7 +204,7 @@ export default {
         { label: "0", mc: "我的提问" },
         { label: "3", mc: "我受理过的问题" },
         { label: "2", mc: "我相关的问题" },
-        { label: "4", mc: "待我受理的问题" },
+        { label: "4", mc: "待我受理的问题" }
       ],
       dwlxList: [
         { label: "1", mc: "学校" },
@@ -230,7 +230,7 @@ export default {
       gczd: "",
       wtfl: "",
       dwlx: "",
-      tjkf:"",//提交开发
+      tjkf: "", //提交开发
       qusetionInfo: {},
       wid: "",
       accreditShow: false,
@@ -613,7 +613,7 @@ export default {
       this.sfcb = sfcb;
       this.queryAllQuestions(1);
     },
-    handleTJKF(){
+    handleTJKF() {
       let tjkf = e.target.getAttribute("data-type");
       if (tjkf == null) return;
       this.tjkf = tjkf;
@@ -723,7 +723,7 @@ export default {
         deadline: this.cnqx,
         starDay: this.starDay,
         endDay: this.endDay,
-        tjkf:this.tjkf
+        tjkf: this.tjkf
       }).then(({ data }) => {
         if (data.state == "success") {
           if (data.data.rows != null) {

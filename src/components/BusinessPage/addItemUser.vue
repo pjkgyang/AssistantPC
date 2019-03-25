@@ -8,11 +8,9 @@
                  <el-tag  v-if="JSON.stringify(itemJfzrr) != '{}'" style="margin-right:5px;"  size="mini"  v-for="(roleName,index) in itemJfzrr.roleName" :key="index">{{index==2?roleName+'...':roleName}}</el-tag>
                  <el-tag  v-if="JSON.stringify(itemJfzrr) == '{}'" size="mini" >甲方</el-tag>
                </p> 
-               <!-- <el-button size="mini" type="info" plain :data-wid="itemJfzrr.userId"  @click="changeJfZrr">修改</el-button>  -->
            </li>
            <li>
                <p class="item-zrrname">{{JSON.stringify(itemYfzrr) == "{}"?'暂无':itemYfzrr.userName}}&#x3000;</p>
-               <!-- <span class="item-user-delect" :data-wid="itemYfzrr.userId"></span> -->
                <p class="item-user-role" :title="itemYfzrr.roleName">
                  <el-tag  v-if="JSON.stringify(itemYfzrr) != '{}'" style="margin-right:5px;" size="mini" v-for="(roleName,index) in itemYfzrr.roleName" :key="index">{{index==2?roleName+'...':roleName}}</el-tag>
                  <el-tag  v-if="JSON.stringify(itemYfzrr) == '{}'" size="mini" >乙方</el-tag>
@@ -23,18 +21,9 @@
                <p class="item-user-role" :title="itemQt.roleName">
                  <el-tag style="margin-right:5px;" size="mini" v-for="(item,index) in itemQt.roleName.split(',')" :key="index">{{item}}</el-tag>&#x3000;
                </p>
-               <!-- <span v-if="itemQt.del" class="item-user-delect" :data-wid="itemQt.userId" title="删除"  @click="delectUser($event,index)">
-                 <span class="el-icon-close"></span>
-               </span> -->
            </li>
       </ul>
     </div>    
-      <!-- <div>
-            <div class="newAdd-cyz">
-                <span class="el-icon-circle-plus-outline" @click="handleNewAdd"> 新增(参与者)</span>
-            </div>
-      </div> -->
-
         <el-dialog
             title="人员列表"
             :visible.sync="dialogVisible"
@@ -142,8 +131,8 @@ import pagination from "@/components/BusinessPage/pagination.vue";
 import { getResponsibleTaskList } from "@/api/common.js";
 import { getUnits, getDepts } from "@/api/system.js";
 import { EventBus } from "../../utils/util.js";
-import { getMenu,getSession} from '@/utils/util.js'
-import Scrollbar from 'smooth-scrollbar';
+import { getMenu, getSession } from "@/utils/util.js";
+import Scrollbar from "smooth-scrollbar";
 export default {
   data() {
     return {
@@ -176,16 +165,16 @@ export default {
         yhdw: "",
         dw: "",
         bm: "",
-        sex:'1'
+        sex: "1"
       },
       cpxData: [],
-      sexList:[],
+      sexList: [],
       keyword: "",
       BtnDisabled: "",
       rylb: "",
       dwList: [],
-      bmList: [{mc:'1'},{mc:'2'},{mc:'3'},{mc:'4'}],
-      selectVisible:false
+      bmList: [{ mc: "1" }, { mc: "2" }, { mc: "3" }, { mc: "4" }],
+      selectVisible: false
     };
   },
   props: {
@@ -207,17 +196,19 @@ export default {
     }
   },
   methods: {
-    handleBMfocus(){
-        this.selectVisible = true
+    handleBMfocus() {
+      this.selectVisible = true;
     },
-    handleBMblur(){
-        this.selectVisible = false
+    handleBMblur() {
+      this.selectVisible = false;
     },
-    chooseBm(e){        // 选择部门
-        let bm = e.target.getAttribute('data-bm');
-        this.form.bm = bm
+    chooseBm(e) {
+      // 选择部门
+      let bm = e.target.getAttribute("data-bm");
+      this.form.bm = bm;
     },
-    chooseRylb(val) {  // 选择人员类别
+    chooseRylb(val) {
+      // 选择人员类别
       if (this.isAddCyz) {
         this.queryUser(1, false);
       } else {
@@ -275,7 +266,10 @@ export default {
           this.UserList = data.data.rows;
           this.UserList.forEach((ele, i, arr) => {
             if (ele.userName.slice(0, 1) == 1) {
-              ele.userName = `${ele.userName.slice(0,3)}****${ele.userName.slice(-4)}`;
+              ele.userName = `${ele.userName.slice(
+                0,
+                3
+              )}****${ele.userName.slice(-4)}`;
             }
           });
         }
@@ -330,13 +324,13 @@ export default {
     inviteNewuser() {
       this.innerVisible = !this.innerVisible;
       this.cpxData = [];
-      if(getSession('cp') == null || getSession('GenderType') == null){
-           getMenu('cp',this.cpxData,true)  //获取产品
-           getMenu('GenderType',this.sexList)  //获取产品线
-     }else{
-          this.cpxData = getSession('cp');
-          this.sexList = getSession('GenderType');
-     } 
+      if (getSession("cp") == null || getSession("GenderType") == null) {
+        getMenu("cp", this.cpxData, true); //获取产品
+        getMenu("GenderType", this.sexList); //获取产品线
+      } else {
+        this.cpxData = getSession("cp");
+        this.sexList = getSession("GenderType");
+      }
       this.getUnits();
       this.getDepts();
     },
@@ -346,29 +340,34 @@ export default {
     //       type: "error"
     //     });
     //   }
-    handleCommit() {        
+    handleCommit() {
       if (!this.form.name) {
         this.$alert("请输入姓名", "提示", {
           confirmButtonText: "确定",
           type: "error"
         });
-      }else if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.form.phone.trim())) { //^((0\d{2,3}-\d{7,8})|(1[3456789]\d{9}))$
+      } else if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.form.phone.trim())) {
+        //^((0\d{2,3}-\d{7,8})|(1[3456789]\d{9}))$
         this.$alert("请输入手机号码或号码有误", "提示", {
           confirmButtonText: "确定",
           type: "error"
         });
-      } else if (!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(this.form.email.trim())) {
+      } else if (
+        !/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(
+          this.form.email.trim()
+        )
+      ) {
         this.$alert("请输入正确邮箱地址或地址有误", "提示", {
           confirmButtonText: "确定",
           type: "error"
         });
-      }else if(this.form.rylx=='1013'&&this.form.bm==""){
-         this.$alert("请填写部门", "提示", {
+      } else if (this.form.rylx == "1013" && this.form.bm == "") {
+        this.$alert("请填写部门", "提示", {
           confirmButtonText: "确定",
           type: "error"
         });
-      }else if(this.form.rylx=='1004'&&this.form.dw==""){
-         this.$alert("请选择单位", "提示", {
+      } else if (this.form.rylx == "1004" && this.form.dw == "") {
+        this.$alert("请选择单位", "提示", {
           confirmButtonText: "确定",
           type: "error"
         });
@@ -381,10 +380,10 @@ export default {
           pwd: this.form.pwd,
           cpxdata: this.form.cpx.join("|"),
           rylx: this.form.rylx,
-          unitnum:this.form.rylx=='1013'?'':this.form.dw.split('&')[0],
-          unit:this.form.rylx=='1013'?'':this.form.dw.split('&')[1],
-          dept:this.form.rylx=='1004'?'':this.form.bm,
-          sex:this.form.sex
+          unitnum: this.form.rylx == "1013" ? "" : this.form.dw.split("&")[0],
+          unit: this.form.rylx == "1013" ? "" : this.form.dw.split("&")[1],
+          dept: this.form.rylx == "1004" ? "" : this.form.bm,
+          sex: this.form.sex
         }).then(({ data }) => {
           if (data.state == "success") {
             this.$alert("添加成功", "提示", {
@@ -441,36 +440,38 @@ export default {
         xmbh: this.xmbh
       }).then(({ data }) => {
         if (data.state == "success") {
-          if(!data.data.jf){
-               this.itemJfzrr = {};
-          }else{
-              this.itemJfzrr = data.data.jf;
-              this.itemJfzrr.roleName = this.itemJfzrr.roleName.slice('0,3')
-              this.itemJfzrr.roleName = this.itemJfzrr.roleName.split(',')
+          if (!data.data.jf) {
+            this.itemJfzrr = {};
+          } else {
+            this.itemJfzrr = data.data.jf;
+            this.itemJfzrr.roleName = this.itemJfzrr.roleName.slice("0,3");
+            this.itemJfzrr.roleName = this.itemJfzrr.roleName.split(",");
           }
-          if(!data.data.yf){
+          if (!data.data.yf) {
             this.itemYfzrr = {};
-          }else{
+          } else {
             this.itemYfzrr = data.data.yf;
-            this.itemYfzrr.roleName = this.itemYfzrr.roleName.slice('0,3');
-            this.itemYfzrr.roleName = this.itemYfzrr.roleName.split(',')
+            this.itemYfzrr.roleName = this.itemYfzrr.roleName.slice("0,3");
+            this.itemYfzrr.roleName = this.itemYfzrr.roleName.split(",");
           }
-           this.itemCyz = data.data.qt;
+          this.itemCyz = data.data.qt;
         }
       });
     },
 
-    getUnits() {  //获取单位
+    getUnits() {
+      //获取单位
       getUnits({
         dwlx: 2,
         keyword: ""
       }).then(({ data }) => {
         if (data.state == "success") {
-            this.dwList = data.data;
+          this.dwList = data.data;
         }
       });
     },
-    getDepts() {  //获取部门
+    getDepts() {
+      //获取部门
       getDepts({
         dwbh: "",
         dwmc: this.dwmc
@@ -478,8 +479,7 @@ export default {
         if (data.state == "success") {
           if (data.data != null) {
             this.bmList = data.data;
-          }
-           else {
+          } else {
             this.bmList = [];
           }
         }
@@ -488,21 +488,21 @@ export default {
   },
   mounted() {
     this.queryProjectParticipantMap();
-    Scrollbar.init(document.querySelector('.item-addUser-list'));
+    Scrollbar.init(document.querySelector(".item-addUser-list"));
   },
   components: { pagination }
 };
 </script>
 <style scoped>
-.item-addUser-list{
+.item-addUser-list {
   overflow-y: auto;
 }
-.item-addUser-list .item-user-role{
+.item-addUser-list .item-user-role {
   overflow: hidden;
 }
-.item-addUser ul li button{
-    float: left;
-    padding: 4px 10px;
+.item-addUser ul li button {
+  float: left;
+  padding: 4px 10px;
 }
 .item-addUser {
   background: rgb(248, 248, 248);
@@ -528,7 +528,7 @@ export default {
   cursor: pointer;
   background: #eee;
 }
-.item-user-delect{
+.item-user-delect {
   width: 48px;
   text-align: center;
 }
@@ -609,15 +609,15 @@ export default {
   width: 77%;
 }
 
- .component-fade-enter-active ,.component-fade-leave-active {
-   transition: all 0.3s ease;
-
+.component-fade-enter-active,
+.component-fade-leave-active {
+  transition: all 0.3s ease;
 }
 .component-fade-enter, .component-fade-leave-to
 /* .component-fade-leave-active for below version 2.1.8 */ {
   opacity: 0;
 }
-.bm-select{
+.bm-select {
   width: 200px;
   max-height: 260px;
   border: 1px solid #c0c4cc;
@@ -628,10 +628,11 @@ export default {
   top: 33px;
   color: #606266;
 }
-.bm-select li,.bm-select div{
-  padding:3px 10px;
+.bm-select li,
+.bm-select div {
+  padding: 3px 10px;
 }
-.bm-select li:hover{
+.bm-select li:hover {
   cursor: pointer;
   background: #f5f7fa;
 }

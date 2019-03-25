@@ -79,6 +79,7 @@ export default {
             type: "success"
           });
           this.idArr = this.multipleSelection =  [];
+          this.visible = false;
         } else {
           this.$message({
             message: res.msg,
@@ -95,6 +96,7 @@ export default {
       val.forEach(ele => {
         this.idArr.push(ele.userId);
       });
+      console.log( this.idArr);
     },
 
     // 获取参与者

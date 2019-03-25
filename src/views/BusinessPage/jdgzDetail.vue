@@ -94,9 +94,10 @@ export default {
             lcbbh: this.selectMuiltple.join(",")
           }).then(({ data }) => {
             if (data.state == "success") {
-              this.$alert("确认成功", "提示", {confirmButtonText: "确定",
+              this.$alert("确认成功", "提示", {
+                confirmButtonText: "确定",
                 callback: action => {
-                 this.pageProjectPanelMilestoneDetail();
+                  this.pageProjectPanelMilestoneDetail();
                 }
               });
             }

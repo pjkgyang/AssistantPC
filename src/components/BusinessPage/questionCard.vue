@@ -76,8 +76,8 @@
 export default {
   data() {
     return {
-        username:'',
-        groupTag:''
+      username: "",
+      groupTag: ""
     };
   },
   props: {
@@ -87,58 +87,61 @@ export default {
         return [];
       }
     },
-    isShow:{
-        type:Boolean,
-        default:true
+    isShow: {
+      type: Boolean,
+      default: true
     },
-    wtbqShow:{
-       type:Boolean,
-       default:false
+    wtbqShow: {
+      type: Boolean,
+      default: false
     },
-    bjscShow:{
-       type:Boolean,
-       default:true
+    bjscShow: {
+      type: Boolean,
+      default: true
     },
-    gjjhShow:{
-       type:Boolean,
-       default:false 
+    gjjhShow: {
+      type: Boolean,
+      default: false
     },
-    wtfbq:{
-      type:String,
-      default:''
+    wtfbq: {
+      type: String,
+      default: ""
     }
   },
-  mounted(){
-      this.username = sessionStorage.username;
-      this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
+  mounted() {
+    this.username = sessionStorage.username;
+    this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
   },
-  methods:{
-      handleImprovementPlan(params){
-          this.$emit('handleImprovementPlan',params);
-      },
-      handleQuestionDetail(params){
-          this.$emit('handleQuestionDetail',params);
-      },
-      handleReject(params,index){         // 驳回
-          this.$prompt('请输入驳回说明', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    inputType:'textarea',
-                    inputPattern: /^\S/,
-                    inputErrorMessage: '请输入驳回说明（必填）'
-          }).then(({ value }) => {
-             this.$emit('handleReject',params,index,value); 
-          }).catch(() => {});
-      },
-      handleClose(params,index){
-          this.$emit('handleClose',params,index);   
-      },
-      editQuestion(params){
-          this.$emit('editQuestion',params);  
-      },
-      deleteQuestion(params){
-         this.$emit('deleteQuestion',params);  
-      }
+  methods: {
+    handleImprovementPlan(params) {
+      this.$emit("handleImprovementPlan", params);
+    },
+    handleQuestionDetail(params) {
+      this.$emit("handleQuestionDetail", params);
+    },
+    handleReject(params, index) {
+      // 驳回
+      this.$prompt("请输入驳回说明", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputType: "textarea",
+        inputPattern: /^\S/,
+        inputErrorMessage: "请输入驳回说明（必填）"
+      })
+        .then(({ value }) => {
+          this.$emit("handleReject", params, index, value);
+        })
+        .catch(() => {});
+    },
+    handleClose(params, index) {
+      this.$emit("handleClose", params, index);
+    },
+    editQuestion(params) {
+      this.$emit("editQuestion", params);
+    },
+    deleteQuestion(params) {
+      this.$emit("deleteQuestion", params);
+    }
   },
   components: {}
 };
@@ -184,7 +187,7 @@ export default {
 }
 
 .project-question-list .question-info {
-  width:78%;
+  width: 78%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -240,20 +243,20 @@ export default {
   color: #f56c6c;
   background: rgba(245, 108, 108, 0.2);
 }
-.question-info-wtbq{
-   background: rgb(81, 133, 230);
-   color: #fff;
-   padding: 1px 2px;
-   border-radius: 2px;
-   margin-right:10px;
+.question-info-wtbq {
+  background: rgb(81, 133, 230);
+  color: #fff;
+  padding: 1px 2px;
+  border-radius: 2px;
+  margin-right: 10px;
 }
-.question-gjjhzt-ynr{
-   background: rgb(69, 170, 100) !important;
+.question-gjjhzt-ynr {
+  background: rgb(69, 170, 100) !important;
 }
-.question-gjjhzt-wnr{
-   background: #f56c6c !important;
+.question-gjjhzt-wnr {
+  background: #f56c6c !important;
 }
-.question-gjjhzt-jhz{
-    background:rgb(81, 133, 230) !important;
-} 
+.question-gjjhzt-jhz {
+  background: rgb(81, 133, 230) !important;
+}
 </style>

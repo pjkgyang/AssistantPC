@@ -189,6 +189,8 @@ export default {
     listPersonalPositionLevel:window.baseurl+'personnel/listPersonalPositionLevel.do',//个人任职等级列表
     pagePositionLevel:window.baseurl+'personnel/pagePositionLevel.do',// 任职等级分页列表
     pageXrzz:window.baseurl+'training/pageXrzz.do',// 培训数据记录分页列表
+    nfxgjszt:window.baseurl+'assessment/nfxgjszt.do', // 能否修改结算状态
+    xgjszt:window.baseurl+'assessment/xgjszt.do', // 修改结算状态
 
     
     // 周报返回创建时间以及总结时间
@@ -210,7 +212,17 @@ export default {
     listServiceExpired:window.baseurl+'project/listServiceExpired.do', //获取服务提醒列表
     queryProjectParticipantMap:window.baseurl+'personnel/queryProjectParticipantMap.do', //获取项目参与者
     
+    // crowd
+    getCrowdYwx:window.baseurl+'external/getCrowdYwx.do', // 获取crowd业务线
+    getCrowdCp:window.baseurl+'external/getCrowdCp.do', // 获取crowd产品
+    crowdFbrw:window.baseurl+'external/crowdFbrw.do', 
+
+
+
 
 
     
-}
+
+
+    
+ }

@@ -125,7 +125,6 @@ export default {
     };
   },
   mounted() {
-
     this.baseUrl = window.baseurl;
     this.$get(this.API.getActiveService, {
       wid: this.$route.query.wid

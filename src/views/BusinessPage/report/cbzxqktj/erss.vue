@@ -52,7 +52,6 @@ export default {
         xz: this.$route.query.xz
       }).then(res => {
         if (res.state == "success") {
-          console.log(res);
           this.tableData = res.data.rows;
           this.total = res.data.records;
         }
@@ -65,7 +64,6 @@ export default {
         xmbh: this.$route.query.xmbh
       }).then(res => {
         if (res.state == "success") {
-          console.log(res);
           this.tableData = res.data.rows;
           this.total = res.data.records;
         }
@@ -73,11 +71,11 @@ export default {
     }
   },
   mounted() {
-     if (!!this.$route.query.xz) {
-        this.pageEktbDetail();
-      } else {
-        this.pageBxDetail();
-      }    
+    if (!!this.$route.query.xz) {
+      this.pageEktbDetail();
+    } else {
+      this.pageBxDetail();
+    }
   },
   components: { ekdyTable, ekssTable, bxfyTable }
 };

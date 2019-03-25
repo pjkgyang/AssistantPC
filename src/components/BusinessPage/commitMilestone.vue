@@ -113,17 +113,19 @@ export default {
       sfbwValue: false,
       cnwcrq: "",
 
-      isValid:false,
-      cpList:[],
-      cps:"",
-      cpDataList:[{
-        cp:'',
-        cpbh:'',
-        cpmc:'',
-        ssgzl:0,
-        ekgzl:0,
-        kbgzl:0
-      }],
+      isValid: false,
+      cpList: [],
+      cps: "",
+      cpDataList: [
+        {
+          cp: "",
+          cpbh: "",
+          cpmc: "",
+          ssgzl: 0,
+          ekgzl: 0,
+          kbgzl: 0
+        }
+      ]
     };
   },
   props: {
@@ -147,40 +149,40 @@ export default {
         return [];
       }
     },
-    lcbType:{
+    lcbType: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   mounted() {
     // 获取里程碑类型
-        this.valueXSQRR = "";
-        this.startDate = "";
-        this.signDate = "";
-        this.textarea = "";
-        if(this.lcbType == 1){
-          this.listHtnrApp(this.xmbh ? this.xmbh : '');
-          this.queryProjectParticipant();
-        }
+    this.valueXSQRR = "";
+    this.startDate = "";
+    this.signDate = "";
+    this.textarea = "";
+    if (this.lcbType == 1) {
+      this.listHtnrApp(this.xmbh ? this.xmbh : "");
+      this.queryProjectParticipant();
+    }
   },
   methods: {
-    handleClose(){
-      this.$emit('handleClose','')
+    handleClose() {
+      this.$emit("handleClose", "");
     },
     // 添加列
-    handleAddcp(){
+    handleAddcp() {
       this.cpDataList.push({
-        cp:'',
-        cpbh:'',
-        cpmc:'',
-        ssgzl:0,
-        ekgzl:0,
-        kbgzl:0
-      })
+        cp: "",
+        cpbh: "",
+        cpmc: "",
+        ssgzl: 0,
+        ekgzl: 0,
+        kbgzl: 0
+      });
     },
-     // 删除
-    handleDelete(index){
-      this.cpDataList.splice(index,1);
+    // 删除
+    handleDelete(index) {
+      this.cpDataList.splice(index, 1);
     },
 
     chooseLCBscml(val) {
@@ -189,7 +191,7 @@ export default {
 
     handleCommitMilestone() {
       this.valiaDate();
-      if(!this.isValid && this.sfbwValue) return;
+      if (!this.isValid && this.sfbwValue) return;
       if (this.lcbType != 3 && this.lcbType != 2 && !this.valueXSQRR) {
         this.$alert("请选择销售确认人", "提示", {
           confirmButtonText: "确定",
@@ -217,7 +219,7 @@ export default {
       });
     },
     //提交里程碑
-    submitMilestone(){
+    submitMilestone() {
       submitMilestone({
         xmbh: this.xmbh,
         lcbbh: this.taskLcbbhArr.join(","),
@@ -227,9 +229,9 @@ export default {
         fwsj: this.startDate,
         yhbh: !this.valueXSQRR ? "" : this.valueXSQRR.split("&")[0],
         yhxm: !this.valueXSQRR ? "" : this.valueXSQRR.split("&")[1],
-        fj:'',
+        fj: "",
         bwcnwcsj: this.cnwcrq,
-        cps:this.sfbwValue?this.cps:''
+        cps: this.sfbwValue ? this.cps : ""
       }).then(({ data }) => {
         if (data.state == "success") {
           this.$alert("提报成功", "提示", {
@@ -239,36 +241,37 @@ export default {
               this.$emit("handleCommitMilestone", "");
             }
           });
-        }else{
-           this.$alert(data.msg, "提示", {
+        } else {
+          this.$alert(data.msg, "提示", {
             confirmButtonText: "确定",
             type: "error"
           });
         }
       });
     },
-    valiaDate(){
-      this.cps = '';
-      this.cpDataList.forEach(ele=>{
-        ele.cpmc = ele.cp.split('&')[1];
-        ele.cpbh = ele.cp.split('&')[0];
-        if(this.sfbwValue && !ele.cp){//解决bug 未选择备忘时，不需要校验备忘产品 -huang  2018-12-21 13:40:46
+    valiaDate() {
+      this.cps = "";
+      this.cpDataList.forEach(ele => {
+        ele.cpmc = ele.cp.split("&")[1];
+        ele.cpbh = ele.cp.split("&")[0];
+        if (this.sfbwValue && !ele.cp) {
+          //解决bug 未选择备忘时，不需要校验备忘产品 -huang  2018-12-21 13:40:46
           this.$alert("请选择产品", "提示", {
             confirmButtonText: "确定",
             type: "warning"
           });
-         this.isValid = false;
-         return;
+          this.isValid = false;
+          return;
         }
-        if(!/^[0-9]+\d*$/.test(ele.ssgzl)){
+        if (!/^[0-9]+\d*$/.test(ele.ssgzl)) {
           this.$alert("请输入正确实施工作量", "提示", {
             confirmButtonText: "确定",
             type: "warning"
           });
-         this.isValid = false;
-         return;
+          this.isValid = false;
+          return;
         }
-        if(!/^[0-9]+\d*$/.test(ele.ekgzl)){
+        if (!/^[0-9]+\d*$/.test(ele.ekgzl)) {
           this.$alert("请输入正确二开工作量", "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -276,9 +279,9 @@ export default {
           this.isValid = false;
           return;
         }
-        if(ele.kbgzl == ''){
-           ele.kbgzl = 0;
-          }else if (!/^\d+(\.\d+)?$/.test(ele.kbgzl)) {
+        if (ele.kbgzl == "") {
+          ele.kbgzl = 0;
+        } else if (!/^\d+(\.\d+)?$/.test(ele.kbgzl)) {
           this.$alert("请输入正确可变工作量", "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -287,66 +290,79 @@ export default {
           return;
         }
         this.isValid = true;
-        this.cps += ele.cpbh + String.fromCharCode(1) + ele.cpmc + String.fromCharCode(1) + ele.ssgzl + String.fromCharCode(1)
-        + ele.ekgzl + String.fromCharCode(1) + ele.kbgzl + String.fromCharCode(2)
-      })
+        this.cps +=
+          ele.cpbh +
+          String.fromCharCode(1) +
+          ele.cpmc +
+          String.fromCharCode(1) +
+          ele.ssgzl +
+          String.fromCharCode(1) +
+          ele.ekgzl +
+          String.fromCharCode(1) +
+          ele.kbgzl +
+          String.fromCharCode(2);
+      });
     },
 
     // 获取合同产品
-    listHtnrApp(xmbh){
-      this.$get(this.API.listHtnrApp,{
-       xmbh:xmbh
-      }).then(res=>{
-        if(res.state == 'success'){
-          this.cpList = res.data
-        }else{
-          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "warning"});
+    listHtnrApp(xmbh) {
+      this.$get(this.API.listHtnrApp, {
+        xmbh: xmbh
+      }).then(res => {
+        if (res.state == "success") {
+          this.cpList = res.data;
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          });
         }
-      })
+      });
     },
-     //  获取项目相关人员
-    queryProjectParticipant(){
-        queryProjectParticipant({
-            xmbh: this.xmbh ? this.xmbh : ''
-        }).then(({ data }) => {
-          if (data.state == "success") {
-            this.options = data.data;
-            this.options.forEach((ele, i, arr) => {
-              if (ele.userName == "") {
-                this.options.splice(i, 1);
-              }
-            });
-          }
-        });
+    //  获取项目相关人员
+    queryProjectParticipant() {
+      queryProjectParticipant({
+        xmbh: this.xmbh ? this.xmbh : ""
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          this.options = data.data;
+          this.options.forEach((ele, i, arr) => {
+            if (ele.userName == "") {
+              this.options.splice(i, 1);
+            }
+          });
+        }
+      });
     }
-     
   },
   watch: {
     shown(n, o) {
       if (n) {
         this.baseUrl = window.baseurl;
-        if(this.lcbType == 1){
+        if (this.lcbType == 1) {
           this.queryProjectParticipant();
-          this.listHtnrApp(this.xmbh ? this.xmbh : '');
+          this.listHtnrApp(this.xmbh ? this.xmbh : "");
         }
-      }else{
+      } else {
         this.valueXSQRR = "";
         this.startDate = "";
         this.signDate = "";
         this.textarea = "";
-        this.cpDataList = [{
-            cp:'',
-            cpbh:'',
-            cpmc:'',
-            ssgzl:0,
-            ekgzl:0,
-            kbgzl:0
-        }]
+        this.cpDataList = [
+          {
+            cp: "",
+            cpbh: "",
+            cpmc: "",
+            ssgzl: 0,
+            ekgzl: 0,
+            kbgzl: 0
+          }
+        ];
       }
     },
-    sfbwValue(n,o){
-      if(!n){
-        this.cnwcrq = '';
+    sfbwValue(n, o) {
+      if (!n) {
+        this.cnwcrq = "";
       }
     }
   }
@@ -394,17 +410,17 @@ export default {
 .lcb-wdmb:hover {
   text-decoration: underline;
 }
-.cpList-option{
-  border-bottom:1px dashed #999;
+.cpList-option {
+  border-bottom: 1px dashed #999;
 }
-.cpList-delete{
+.cpList-delete {
   width: 30px !important;
   line-height: 72px;
 }
-.cpList-delete span{
-    color: #f00;
- }
-.cpList-delete span:hover{
+.cpList-delete span {
+  color: #f00;
+}
+.cpList-delete span:hover {
   cursor: pointer;
 }
 </style>
