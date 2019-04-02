@@ -1,128 +1,239 @@
 <template>
- <div>
-  <section class="project_more_table">
-        <div>
-          <div class="project_more_choose">
-              <div>&nbsp;
-                  <span class="table-menu-name">
-                    高级查询</span> 
-                  <el-input class="search-input" placeholder="请输入项目编号/项目名称/合同编号/项目经理" prefix-icon="el-icon-search" size="small" v-model="keyword" @change="SearchItem"></el-input>&#x3000;
-                  <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
-                  <a class="project_more_export" 
-                  :href="baseUrl+'project/exportXmData.do?keyword='+this.keyword+'&xmzt='+this.xmztC+'&xmlb='+xmlbC+'&sfgx='+this.gxhtC+'&projectLabel='+xmbqC+'&gbsjStart='+this.gbksrqValue+'&gbsjEnd='+this.gbjsrqValue" 
-                  target="blank">导出</a>
-              </div>
-              <div>
-                  <p>
-                      <span class="table-menu-name">项目标签:</span> 
-                      <span :class="{'bg-active':xmbqC == ''}" data-xmbq="" @click="CheckXmbq">全部</span>
-                      <span  v-for="xmbq in xmbqMenu" :data-xmbq="xmbq.id" :class="{'bg-active':xmbq.id == xmbqC}"
-                      :key="xmbq.id" @click="CheckXmbq">{{xmbq.mc}}</span>
-                  </p>
-                  <p>
-                      <span class="table-menu-name">项目状态:</span> 
-                      <span :class="{'bg-active':xmztC == ''}"  @click="CheckXmzt('')">全部</span>
-                      <span  v-for="xmzt in xmztMenu"  :class="{'bg-active':xmzt.id == xmztC}"
-                      :key="xmzt.id" @click="CheckXmzt(xmzt.id)">{{xmzt.mc}}</span>
-                  </p>
-                  <p>
-                      <span class="table-menu-name">项目类别:</span> 
-                      <span :class="{'bg-active':xmlbC == ''}" data-xmlb="" @click="CheckXmlb">全部</span>
-                      <span v-for="xmlb in xmlbMenu" :data-xmlb="xmlb.id" :class="{'bg-active':xmlb.id == xmlbC}"
-                      :key="xmlb.id" @click="CheckXmlb">{{xmlb.mc}}</span>
-                  </p>
-                  <p>
-                      <span class="table-menu-name">是否购销合同:</span> 
-                      <span :class="{'bg-active':gxhtC == ''}" data-gxht="" @click="CheckGxht">全部</span>
-                      <span v-for="gxht in gxhtMenu" :data-gxht="gxht.id" :class="{'bg-active':gxht.id == gxhtC}"
-                      :key="gxht.id" @click="CheckGxht">{{gxht.mc}}</span>
-                  </p>
-                  <p>
-                    <span class="table-menu-name">过保开始日期:</span>   
-                    <span>
-                      <el-date-picker @change="handleChangeDate" size="mini" style="200px !important" value-format="yyyy-MM-dd" v-model="gbksrqValue" type="date" placeholder="选择过保开始日期"></el-date-picker>
-                    </span>
-                  </p>
-                  <p>
-                    <span class="table-menu-name">过保结束日期:</span>   
-                    <span>
-                      <el-date-picker @change="handleChangeDate" size="mini" style="200px !important"  value-format="yyyy-MM-dd" v-model="gbjsrqValue" type="date" placeholder="选择过保结束日期"></el-date-picker>
-                    </span>
-                  </p>
-              </div>
+  <div>
+    <section class="project_more_table">
+      <div>
+        <div class="project_more_choose">
+          <div>
+            <span class="table-menu-name" style="padding:2px 4px;margin-right:10px">高级查询:</span>
+            <el-input
+              class="search-input"
+              placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校"
+              prefix-icon="el-icon-search"
+              size="small"
+              v-model="keyword"
+              @change="SearchItem"
+            ></el-input>&#x3000;
+            <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
+            <a class="project_more_export" href="javaScript:void(0)" @click="handleExport">导出</a>
           </div>
-          <div class="project-fbtable">
-                  <el-table
-                      :data="allfbData"
-                      border
-                      style="width:100%"
-                      min-width="1000"
-                      :height="tableHeight"
-                      >
-                      <el-table-column
-                      fixed="left"
-                      label="操作"
-                      width="160"
-                      v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')"
-                      >
-                      <template slot-scope="scope">
-                        <el-button @click.native.prevent="handleCommand('1',scope.row.xmbh)" type="text" size="mini">
-                          过保提醒
-                        </el-button>
-                        <el-button @click.native.prevent="handleCommand('2',scope.row.xmbh)" type="text" size="mini">
-                          提醒记录
-                        </el-button>
-                      </template>
-                    </el-table-column> 
-                      <el-table-column prop="htbh" label="合同编号" show-overflow-tooltip width="150"></el-table-column>
-                      <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip width="100"></el-table-column>
-                      <el-table-column label="项目名称" width="320">
-                          <template slot-scope="scope">
-                              <div slot="reference"  style="display:flex">
-                                  <p>
-                                      <span title="添加收藏" @click="handleAddXB(scope.$index,scope.row,scope.cell,$event)"  :class="{'xb-star':true,'el-icon-star-on':scope.row.isxb,'el-icon-star-off':!scope.row.isxb}"> </span>
-                                  </p>
-                                  <p @click="handleEdit(scope.$index, scope.row)" :title="scope.row.xmmc" class="name-wrapper">
-                                      <span> {{scope.row.xmmc}} </span> 
-                                  </p>
-                              </div>
-                          </template>
-                      </el-table-column>
-                      
-                      <el-table-column prop="dwmc" label="学校" show-overflow-tooltip width="280"></el-table-column>
-                      <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
-                      <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
-                      <el-table-column prop="yfzrrxm" label="项目经理" width="100"></el-table-column>
-                      <el-table-column prop="jfzrrxm" label="甲方责任人" width="100" show-overflow-tooltip></el-table-column>
-                      <el-table-column prop="qssj" label="签署日期" width="100"></el-table-column>
-                      <el-table-column prop="lxrq" label="立项日期" width="100"></el-table-column>
-                      <el-table-column prop="qdrq" label="启动日期" width="100"></el-table-column>
-                      <el-table-column prop="yssj" label="整体验收时间" width="120"></el-table-column>
-                      <el-table-column prop="fwksrq" label="服务开始日期" width="120"></el-table-column>
-                      <el-table-column prop="fwqx" label="服务期限" width="90"></el-table-column>
-                      <el-table-column prop="gbsj" label="过保日期" width="120"></el-table-column>
-                      <el-table-column prop="htje" label="合同金额(元)" width="120"></el-table-column>
-                      <!-- <el-table-column prop="wglv" label="完工率(%)" width="100"></el-table-column> -->
-                      <!-- <el-table-column prop="wglg" label="完工量(元)" width="100"></el-table-column> -->
-                  </el-table>
-                  <pagination v-if="totalNum > 10 " :pageSize="pageSize" :total="totalNum" @handleCurrentChange="handleCurrentChange"></pagination>
+          <div>
+            <p>
+              <span class="table-menu-name">项目标签:</span>
+              <span :class="{'bg-active':xmbqC == ''}" data-xmbq @click="CheckXmbq">全部</span>
+              <span
+                v-for="xmbq in xmbqMenu"
+                :data-xmbq="xmbq.id"
+                :class="{'bg-active':xmbq.id == xmbqC}"
+                :key="xmbq.id"
+                @click="CheckXmbq"
+              >{{xmbq.mc}}</span>
+            </p>
+            <div flex>
+              <p>
+                <span class="table-menu-name">项目状态:</span>
+                <span :class="{'bg-active':xmztC == ''}" @click="CheckXmzt('')">全部</span>
+                <span
+                  v-for="xmzt in xmztMenu"
+                  :class="{'bg-active':xmzt.id == xmztC}"
+                  :key="xmzt.id"
+                  @click="CheckXmzt(xmzt.id)"
+                >{{xmzt.mc}}</span>
+              </p>
+              <p>
+                <span class="table-menu-name">项目类别:</span>
+                <span :class="{'bg-active':xmlbC == ''}" data-xmlb @click="CheckXmlb">全部</span>
+                <span
+                  v-for="xmlb in xmlbMenu"
+                  :data-xmlb="xmlb.id"
+                  :class="{'bg-active':xmlb.id == xmlbC}"
+                  :key="xmlb.id"
+                  @click="CheckXmlb"
+                >{{xmlb.mc}}</span>
+              </p>
+            </div>
+            <div flex>
+              <p>
+                <span class="table-menu-name">是否购销合同:</span>
+                <span :class="{'bg-active':gxhtC == ''}" data-gxht @click="CheckGxht">全部</span>
+                <span
+                  v-for="gxht in gxhtMenu"
+                  :data-gxht="gxht.id"
+                  :class="{'bg-active':gxht.id == gxhtC}"
+                  :key="gxht.id"
+                  @click="CheckGxht"
+                >{{gxht.mc}}</span>
+              </p>
+              <p colcenter>
+                <span class="table-menu-name">合同性质:</span>
+                <el-checkbox-group v-model="htxzList" @change="handleHtxz">
+                  <el-checkbox label="A">正式</el-checkbox>
+                  <!-- <el-checkbox label="B">B类</el-checkbox> -->
+                  <el-checkbox label="C">在谈</el-checkbox>
+                </el-checkbox-group>
+              </p>&#x3000;&#x3000;&#x3000;
+              <p>
+                <span class="table-menu-name">是否续签:</span>
+                <el-radio-group v-model="sfxqC" @change="handleChooseSfxq">
+                  <el-radio label>全部</el-radio>
+                  <el-radio label="1">是</el-radio>
+                  <el-radio label="0">否</el-radio>
+                </el-radio-group>
+              </p>
+            </div>
+            <div flex>
+              <p>
+                <span class="table-menu-name">过保日期:</span>
+                <span>
+                  <el-date-picker
+                    @change="handleChangeDate"
+                    size="mini"
+                    style="200px !important"
+                    value-format="yyyy-MM-dd"
+                    v-model="gbksrqValue"
+                    type="date"
+                    placeholder="过保开始日期"
+                  ></el-date-picker>
+                </span>
+                至
+                <span>
+                  <el-date-picker
+                    @change="handleChangeDate"
+                    size="mini"
+                    style="200px !important"
+                    value-format="yyyy-MM-dd"
+                    v-model="gbjsrqValue"
+                    type="date"
+                    placeholder="过保结束日期"
+                  ></el-date-picker>
+                </span>
+              </p>&#x3000;
+            </div>
+            <p>
+              <span class="table-menu-name">区域工程:</span>
+              <span :class="{'bg-active':gczdC == ''}" data-gczd @click="CheckGcdz('')">全部</span>
+              <span
+                v-for="gczd in gczdList"
+                :class="{'bg-active':gczd.label == gczdC}"
+                :key="gczd.id"
+                @click="CheckGcdz(gczd.label)"
+              >{{gczd.mc}}</span>
+            </p>
           </div>
+        </div>
+        <div class="project-fbtable">
+          <el-table :data="allfbData" border style="width:100%" min-width="1000">
+            <el-table-column
+              fixed="left"
+              label="操作"
+              width="200"
+              v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY') || userGroup.includes('JZFGCRY')"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')"
+                  @click.native.prevent="handleCommand('1',scope.row.xmbh)"
+                  type="text"
+                  size="mini"
+                >过保提醒</el-button>
+                <el-button
+                  v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')"
+                  @click.native.prevent="handleCommand('2',scope.row.xmbh)"
+                  type="text"
+                  size="mini"
+                >提醒记录</el-button>
+                <el-button
+                  v-if="userGroup.includes('JZFGCRY') ||　userGroup.includes('JZGCRY')"
+                  @click.native.prevent="handleCommandXmfk(scope.row)"
+                  type="text"
+                  size="mini"
+                >项目反馈</el-button>
+              </template>
+            </el-table-column>
+            
+            <el-table-column label="项目名称" width="320" fixed="left">
+              <template slot-scope="scope">
+                <div slot="reference" style="display:flex">
+                  <p>
+                    <span
+                      title="添加收藏"
+                      @click="handleAddXB(scope.$index,scope.row,scope.cell,$event)"
+                      :class="{'xb-star':true,'el-icon-star-on':scope.row.isxb,'el-icon-star-off':!scope.row.isxb}"
+                    ></span>
+                  </p>
+                  <p
+                    @click="handleEdit(scope.$index, scope.row)"
+                    :title="scope.row.xmmc"
+                    class="name-wrapper"
+                  >
+                    <span>{{scope.row.xmmc}}</span>
+                  </p>
+                </div>
+              </template>
+            </el-table-column>
+
+            <el-table-column  label="学校" show-overflow-tooltip width="280">
+              <template slot-scope="scope">
+                   <span class="name-wrapper" @click="handleRouterXxkb(scope.row.dwmc)">{{scope.row.dwmc}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
+            <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
+            <el-table-column prop="khjl" label="客户经理" width="100"></el-table-column>
+            <el-table-column prop="yfzrrxm" label="项目经理" width="100"></el-table-column>
+            <el-table-column prop="jfzrrxm" label="甲方责任人" width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="qssj" label="签署日期" width="100"></el-table-column>
+            <el-table-column prop="lxrq" label="立项日期" width="100"></el-table-column>
+            <el-table-column prop="qdrq" label="启动日期" width="100"></el-table-column>
+            <el-table-column prop="yssj" label="整体验收时间" width="120"></el-table-column>
+            <el-table-column prop="fwksrq" label="服务开始日期" width="120"></el-table-column>
+            <el-table-column prop="fwqx" label="服务期限" width="90"></el-table-column>
+            <el-table-column prop="gbsj" label="过保日期" width="120"></el-table-column>
+            <el-table-column prop="htje" label="合同金额(元)" width="120"></el-table-column>
+            <el-table-column prop="xqwb" label="是否续签" width="100">
+              <template slot-scope="scope">
+                    <span>{{scope.row.xqwb==1?'是':'否'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="htbh" label="合同编号" show-overflow-tooltip width="150"></el-table-column>
+            <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip width="100"></el-table-column>
+            <!-- <el-table-column prop="wglv" label="完工率(%)" width="100"></el-table-column> -->
+            <!-- <el-table-column prop="wglg" label="完工量(元)" width="100"></el-table-column> -->
+          </el-table>
+          <pagination
+            v-if="totalNum > 10 "
+            :pageSize="pageSize"
+            :total="totalNum"
+            @handleCurrentChange="handleCurrentChange"
+          ></pagination>
+        </div>
       </div>
     </section>
-   <gbtxDialog :xmbh="xmbh" :show.sync="gbtxShow"></gbtxDialog>
-   <gbtxjlDialog :xmbh="xmbh" :show.sync="gbtxjlShow"></gbtxjlDialog>
- </div>
+
+    <gbtxDialog :xmbh="xmbh" :show.sync="gbtxShow"></gbtxDialog>
+    <gbtxjlDialog :xmbh="xmbh" :show.sync="gbtxjlShow"></gbtxjlDialog>
+    <xmfkDialog :xmData="xmData" :show.sync="xmfkShow" @handleSubmit="handleSubmit"></xmfkDialog>
+  </div>
 </template>
 
 <script>
 import gbtxDialog from "@/components/dialog/xxkbxmlb/gbtxDialog";
 import gbtxjlDialog from "@/components/dialog/xxkbxmlb/gbtxjlDialog";
-import { getProjects } from "@/api/xmkb.js";
+import xmfkDialog from "@/components/dialog/xxkbxmlb/xmfkDialog";
+
+import {
+  exportXmData,
+  changeXbZt,
+  getMyProjects,
+  getProjects
+} from "@/api/xmkb.js";
 import pagination from "@/components/BusinessPage/pagination.vue";
+import { getMenu, getSession } from "@/utils/util.js";
+
 export default {
   data() {
     return {
-      tableHeight:window.innerHeight - 390,
+      xmData:{},
+      tableHeight: window.innerHeight - 390,
       xmlbMenu: [
         { mc: "软件", id: "软件" },
         { mc: "集成", id: "集成" },
@@ -142,13 +253,18 @@ export default {
         { mc: "过保", id: "3" },
         { mc: "已关闭", id: "4" }
       ],
+      gczdList: [],
+      htxzList: [], //合同性质
       keyword: "",
       xmztC: "",
       xmlbC: "",
       gxhtC: "",
-      xmbqC: 1,
+      xmbqC: "",
+      gczdC: "",
+      sfxqC: "",
       allfbData: [],
-      pageSize: 14,
+      curPage:1,
+      pageSize: 15,
       totalNum: null,
       baseUrl: null,
       xmkbkeyword: "",
@@ -158,6 +274,7 @@ export default {
       urlData: {},
       gbtxShow: false, //过保提醒
       gbtxjlShow: false, //过保提醒记录
+      xmfkShow:false,//项目反馈
       userGroup: "",
       xmbh: "",
       gbrqValue: [], //过保日期Value
@@ -166,6 +283,12 @@ export default {
     };
   },
   mounted() {
+    if (getSession("gczd") == null) {
+      getMenu("gczd", this.gczdList, true); //获取工程战队
+    } else {
+      this.gczdList = getSession("gczd");
+    }
+
     this.baseUrl = window.baseurl;
     let shown = JSON.parse(sessionStorage.getItem("shown"));
     this.userGroup = JSON.parse(
@@ -174,6 +297,58 @@ export default {
     this.getProjects(1);
   },
   methods: {
+    // 跳转学校看板
+    handleRouterXxkb(params){
+      let routeData = this.$router.resolve({
+        path:"/xxtsql",
+        query:{ dwmc: escape(params) }
+       });
+      window.open(routeData.href, "_blank");
+    },
+    handleSubmit(params){
+       this.$post(this.API.projectFeedback,{
+         xmbh:this.xmData.xmbh,
+         sm:params.sm,
+         sfxq:params.sfxq
+       }).then(res=>{
+          if(res.state == 'success'){
+            this.xmfkShow = false;
+            this.getProjects(this.curPage);
+            this.$message({
+              message: '保存成功~',
+              type: 'success'
+            });
+          }
+       })
+    },
+    // 导出
+    handleExport() {
+      this.gbksrqValue = !this.gbksrqValue?'':this.gbksrqValue;
+      this.gbjsrqValue = !this.gbjsrqValue?'':this.gbjsrqValue
+      window.open(
+        this.baseUrl +
+          "project/exportXmData.do?keyword=" +
+          this.keyword +
+          "&xmzt=" +
+          this.xmztC +
+          "&xmlb=" +
+          this.xmlbC +
+          "&sfgx=" +
+          this.gxhtC +
+          "&projectLabel=" +
+          this.xmbqC +
+          "&gbsjStart=" +
+          this.gbksrqValue +
+          "&gbsjEnd=" +
+          this.gbjsrqValue +
+          "&qygc=" +
+          this.gczdC +
+          "&sfxq=" +
+          this.sfxqC +
+          "&htxz=" +
+          this.htxzList.join(',')
+      );
+    },
     // 过保提醒
     handleCommand(params, data) {
       this.xmbh = data;
@@ -182,6 +357,11 @@ export default {
       } else {
         this.gbtxjlShow = true;
       }
+    },
+    // 项目反馈
+    handleCommandXmfk(data){
+      this.xmData = data;
+      this.xmfkShow = true;
     },
 
     // 跳转到详情（进度）
@@ -203,7 +383,7 @@ export default {
       }
     },
     // 过保日期
-    handleChangeDate() {
+    handleChangeDate(val) {
       this.getProjects(1);
     },
     // 获取所有项目
@@ -216,6 +396,9 @@ export default {
         xmlb: this.xmlbC,
         sfgx: this.gxhtC,
         pl: this.xmbqC,
+        sfxq: this.sfxqC,
+        htxz: this.htxzList.join(","),
+        qygc: this.gczdC,
         gbsjStart: this.gbksrqValue,
         gbsjEnd: this.gbjsrqValue
       }).then(({ data }) => {
@@ -257,11 +440,45 @@ export default {
       this.xmbqC = xmbq;
       this.getProjects(1);
     },
+    // 是否续签
+    handleChooseSfxq() {
+      this.getProjects(1);
+    },
+    // 合同性质
+    handleHtxz() {
+      this.getProjects(1);
+    },
+    // 工程战队
+    CheckGcdz(data) {
+      this.gczdC = data;
+      this.getProjects(1);
+    },
     handleCurrentChange(data) {
+      this.curPage = data;
       this.getProjects(data);
+    },
+    //  表格 跳转 详情页
+    handleEdit(index, row, cell, event) {
+      this.$router.push({ name: "Task", params: { data: row } });
+    },
+    handleAddXB(index, row, cell, event) {
+      changeXbZt({
+        xmbh: row.xmbh
+      }).then(({ data }) => {
+        if (data.state == "success") {
+          if (event.target.className.includes("el-icon-star-off")) {
+            row.isxb = true;
+          } else if (event.target.className.includes("el-icon-star-on")) {
+            row.isxb = false;
+          }
+          if (this.xmbqC == 1) {
+            this.getProjects(1);
+          }
+        }
+      });
     }
   },
-  components: {pagination, gbtxDialog, gbtxjlDialog }
+  components: { pagination, gbtxDialog, gbtxjlDialog ,xmfkDialog}
 };
 </script>
 
@@ -285,7 +502,7 @@ export default {
 }
 .project_more_table .project_more_choose p {
   font-size: 15px;
-  color: #1874cd;
+  color: #637d8a;
 }
 .project_more_table .table-menu-name {
   display: inline-block;
@@ -294,6 +511,7 @@ export default {
   margin: 5px 0;
   font-size: 14px;
   font-weight: 700;
+  text-align: right;
 }
 .project_more_table .project_more_choose p span {
   margin-right: 10px;

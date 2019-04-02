@@ -326,8 +326,7 @@ export default {
             xmbh: this.xmbh,
             wid: this.wid,
             Guid: this.guid,
-            hjfjwid:
-              this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
+            hjfjwid:this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
             nr: this.slContent //受理内容
           }).then(({ data }) => {
             if (data.state == "success") {
@@ -381,8 +380,6 @@ export default {
           });
           return;
         }
-         console.log(this.question.wtly);
-         return;
         saveQuestion({
           wtly: this.question.wtly,
           wtlb: this.question.wtlb,

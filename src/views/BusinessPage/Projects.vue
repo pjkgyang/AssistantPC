@@ -76,7 +76,6 @@
                     border
                     style="width:100%"
                     min-width="1000"
-                    :height="totalNum > 10?tableHeight:'100%'"
                     >
                      <el-table-column
                     fixed="left"
@@ -111,6 +110,7 @@
                     <el-table-column prop="dwmc" label="学校" show-overflow-tooltip width="280"></el-table-column>
                     <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
                     <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
+                    <el-table-column prop="khjl" label="客户经理" width="100"></el-table-column>
                     <el-table-column prop="yfzrrxm" label="项目经理" width="100"></el-table-column>
                     <el-table-column prop="jfzrrxm" label="甲方责任人" width="100" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="qssj" label="签署日期" width="100"></el-table-column>
@@ -181,7 +181,7 @@ export default {
       gxhtC: "",
       xmbqC: 1,
       allfbData: [],
-      pageSize: 13,
+      pageSize: 15,
       totalNum: null,
       baseUrl: null,
       xmkbkeyword: "",
@@ -455,11 +455,6 @@ export default {
   font-size: 14px;
 }
 
-.bg-active {
-  background: #1874cd;
-  color: #fff;
-}
-
 .project_more_table p span:nth-of-type(n + 2):hover {
   cursor: pointer;
 }
@@ -469,7 +464,6 @@ export default {
   width: 100%;
   margin-top: 10px;
   padding: 10px 10px 0;
-  height:calc(100vh - 410px);
   background: #fff;
   border-radius: 4px;
 }

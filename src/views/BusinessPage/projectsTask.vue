@@ -133,18 +133,21 @@
               </div>
               <p class="task-detail-dialog-header-time">
                 <span>
+                  <span>期望完成日期</span>
+                  <span>
+                    <span class="el-icon-date"></span> {{lcbTasks.jhjsrq}}</span>
+                 </span>
+                <!-- <span>
                   <span>开始日期</span>
                   <span>
                     <span class="el-icon-date"></span> {{lcbTasks.jhksrq}}</span>
-                  <!-- <el-date-picker type="date" placeholder="选择日期" v-model="lcbTasks.jhksrq" size="mini" style="width:120px"></el-date-picker> -->
                 </span>
                 -
                 <span>
                   <span>结束日期</span>
                   <span>
                     <span class="el-icon-date"></span> {{lcbTasks.jhjsrq}}</span>
-                  <!-- <el-date-picker type="date" placeholder="选择日期" v-model="lcbTasks.jhjsrq" size="mini" style="width:120px"></el-date-picker> -->
-                </span>
+                </span> -->
               </p>
 
             </div>
@@ -904,18 +907,17 @@ export default {
 
     // 提交任务 填写日志对话框
     handleDialog(data) {
-      // let param = data;
-      if (typeof data == "object" && data.type == "daily") {
+      if (data.type == "daily") {
         //填写日报
         this.taskName = data.rwmc_display;
         this.TaskProcess = data;
         this.closeDialogNum = this.closeDialogNum - 1;
         this.dialogDailyVisible = !this.dialogDailyVisible;
-      } else if (typeof data == "object" && data.type == "commit") {
+      } else if (data.type == "commit") {
         //提交里程碑
         this.lcbTaskDetail = data;
         this.commitlcbVisible = !this.commitlcbVisible;
-      } else if (typeof data == "object" && data.type == "edit") {
+      } else if (data.type == "edit") {
         this.getTasksByCatalog(
           data.catalog,
           data.catalogId,
@@ -926,7 +928,7 @@ export default {
         this.editTaskInfo = data;
         this.dialog = true;
         this.dialogEditLcbTaskVisible = !this.dialogEditLcbTaskVisible;
-      } else if (data.type == "jfqr") {
+      } else if (data.type == "jfqy") {
         // 甲方确认
         if (data.lx == 1) {
           //  if(window.userName != this.cpData.jfzrrxm){
@@ -943,6 +945,10 @@ export default {
                 lcbbh: data.lcbbh
               }).then(({ data }) => {
                 if (data.state == "success") {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  });
                   if (this.radio == "kbst") {
                     this.getMilestone(this.cpData.cp, this.cpData.cpbh);
                   } else {
@@ -957,13 +963,16 @@ export default {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning"
-          })
-            .then(() => {
+          }).then(() => {
               changeTaskStatus({
                 rwbh: data.rwbh,
                 state: 3
               }).then(({ data }) => {
                 if (data.state == "success") {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                  });
                   if (this.radio == "kbst") {
                     this.getMilestone(this.cpData.cp, this.cpData.cpbh);
                   } else {
@@ -1050,6 +1059,7 @@ export default {
       this.dialogTableVisible = !this.dialogTableVisible;
     },
 
+    // 任务日志
     showAllprocess() {
       this.taskcurPage += 1;
       this.queryTaskProcess();
@@ -1395,8 +1405,12 @@ export default {
         keyword: ""
       }).then(({ data }) => {
         if (data.state == "success") {
+          if(!data.data.rows){
+            this.myTaskArr = []
+          }else{
+            this.myTaskArr = data.data.rows;
+          }
           this.records = data.data.records;
-          this.myTaskArr = data.data.rows;
         }
       });
     },

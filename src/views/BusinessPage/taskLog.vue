@@ -1,115 +1,227 @@
 <template>
   <div class="task-log">
-         <div class="task-log-addDailyPaper">
-              <el-button type="primary"  @click="handleDailyPaper"><span class="el-icon-circle-plus"></span> 添加日报</el-button>
-         </div>
-         <div class="task-log-date">
-             <el-date-picker style="width:130px" v-model="startDate"  type="date" size="small" placeholder="选择开始日期" value-format="yyyy-MM-dd"> </el-date-picker>
-            至
-             <el-date-picker style="width:130px" v-model="endDate" type="date" size="small" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker>&nbsp;
-              <span style="font-size:14px;">阅读状态 :</span>
-              <el-select v-model="ydztValue"   style="width:80px" @change="changeTaskydzt">
-                 <el-option label="全部" value=""></el-option>
-                 <el-option label="已读" value="1"></el-option>
-                 <el-option label="未读" value="0"></el-option>
-              </el-select>
-              &nbsp;
-              <span style="font-size:14px;" v-if="isJzuser == 0">区域 :</span>
-              <el-select v-if="isJzuser == 0" v-model="gcqyValue" style="width:130px" @change="changeTaskgcqy">
-                 <el-option label="全部" value=""></el-option>
-                 <el-option v-for="(qy,index) in gczdList" :key="index" :label="qy.mc" :value="qy.label"></el-option>
-              </el-select>
-              &nbsp;
-               <span style="font-size:14px;">范围 :</span>
-              <el-select v-model="fwValue"   style="width:100px" @change="changeTaskscope">
-                 <el-option v-for="(fw,index) in fwList" :label="fw.label" :value="fw.value" :key="index"></el-option>
-              </el-select>
-              <el-input v-model="keyword" size="small" placeholder="项目编号/项目名称/填写人姓名" style="width:200px;" @change="handleEnterlog"></el-input>
-              <el-button type="info" @click="checkTaskLog">查询</el-button>&nbsp;&nbsp;
-              <a :href="baseUrl+'process/exportPersonnelLog.do?startDay='+startDate+'&endDay='+endDate+'&isRead='+ydztValue+'&gcqy='+this.gcqyValue+'&cybh='+value+'&fw='+fwValue" target="blank">导出</a>
-         </div>
+    <div class="task-log-addDailyPaper">
+      <el-button type="primary" @click="handleDailyPaper">
+        <span class="el-icon-circle-plus"></span> 添加日报
+      </el-button>
+    </div>
+    <div class="task-log-date">
+      <el-date-picker
+        style="width:130px"
+        v-model="startDate"
+        type="date"
+        size="small"
+        placeholder="开始日期"
+        value-format="yyyy-MM-dd"
+      ></el-date-picker>至
+      <el-date-picker
+        style="width:130px"
+        v-model="endDate"
+        type="date"
+        size="small"
+        placeholder="结束日期"
+        value-format="yyyy-MM-dd"
+      ></el-date-picker>&nbsp;
+      <span style="font-size:14px;">阅读状态 :</span>
+      <el-select v-model="ydztValue" style="width:80px" @change="changeTaskydzt">
+        <el-option label="全部" value></el-option>
+        <el-option label="已读" value="1"></el-option>
+        <el-option label="未读" value="0"></el-option>
+      </el-select>&nbsp;
+      <span style="font-size:14px;" v-if="isJzuser == 0">区域 :</span>
+      <el-select
+        v-if="isJzuser == 0"
+        v-model="gcqyValue"
+        style="width:130px"
+        @change="changeTaskgcqy"
+      >
+        <el-option label="全部" value></el-option>
+        <el-option v-for="(qy,index) in gczdList" :key="index" :label="qy.mc" :value="qy.label"></el-option>
+      </el-select>&nbsp;
+      <span style="font-size:14px;">范围 :</span>
+      <el-select v-model="fwValue" style="width:100px" @change="changeTaskscope">
+        <el-option v-for="(fw,index) in fwList" :label="fw.label" :value="fw.value" :key="index"></el-option>
+      </el-select>
+      <el-input
+        v-model="keyword"
+        size="small"
+        placeholder="项目编号/项目名称/填写人姓名"
+        style="width:200px;"
+        @change="handleEnterlog"
+      ></el-input>
+      <el-button type="info" @click="checkTaskLog">查询</el-button>&nbsp;&nbsp;
+      <a href="javaScript:void(0)" @click="handleExport">导出</a>
+    </div>
 
-         <div class="task-log-tabel">
-              <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight"> 
-                 <el-table-column label="操作" width="120">
-                    <template slot-scope="scope">
-                      <div flex spacearound> 
-                        <el-button type="text" size="mini"  @click="handleTasklogDetail(scope.$index, scope.row)">批注</el-button>
-                        <el-button v-if="scope.row.editable" type="text" size="mini"  @click="handleEditDetail(scope.$index, scope.row)">编辑</el-button>
-                        <el-button v-if="scope.row.editable" type="text" size="mini" style="color:#f00" @click="handleDeleteDetail(scope.$index, scope.row)">删除</el-button>
-                      </div>
-                    </template>
-              </el-table-column>
-                  <el-table-column label="阅读状态" width="90" >
-                      <template slot-scope="scope">
-                         <div slot="reference">
-                           <span title="点击设为已阅" class="tasklog-ydzt tasklog-ydzt-wy" v-if="scope.row.ydzt == 0" @click="handleReadlog(scope.$index, scope.row)" >{{scope.row.ydzt_display}}</span>
-                           <span :class="{'tasklog-ydzt':true,'tasklog-ydzt-yy':scope.row.ydzt==1}" v-if="scope.row.ydzt!=0">{{scope.row.ydzt ==1?'已阅':scope.row.ydzt_display}}</span>
-                         </div>
-                      </template>
-                  </el-table-column>
-                  <el-table-column prop="cjrxm"  label="填写人" width="80"  ></el-table-column>
-                  <el-table-column prop="xmbh" label="项目编号"  show-overflow-tooltip  sortable  width="110"></el-table-column>
-                  <el-table-column prop="xmmc" label="项目名称"  show-overflow-tooltip  width="260"></el-table-column>
-                  <el-table-column prop="gcms" label="内容" show-overflow-tooltip width="500"></el-table-column>
-                  <el-table-column prop="cpmc_display" label="产品名称"  show-overflow-tooltip width="180"></el-table-column>
-                  <el-table-column prop="rwmc_display" label="任务名称"  show-overflow-tooltip width="150"></el-table-column>
-                  <el-table-column prop="gcrq" label="日报日期" width="110" sortable></el-table-column>
-                  <el-table-column prop="cjsj" label="填写时间" width="160" sortable></el-table-column>
-                  <el-table-column prop="gs"  label="工时(小时)" width="90" ></el-table-column>
-                  <el-table-column  label="附件">
-                      <template slot-scope="scope">
-                         <div slot="reference" class="name-wrapper">
-                           <div @click="handleDownFile(scope.$index, scope.row,$event)">
-                             <span title="点击下载" v-for="(fj,index) in scope.row.fjData" :key="index" :data-fj="fj.fjbh">{{fj.fjmc}}</span>
-                           </div>
-                        </div>
-                      </template>
-                  </el-table-column>
-              </el-table>
-            <div style="text-align:right;margin:10px 0;" v-if="records > 15">
-               <pagination :pageSize="pageSize" :total="records" @handleCurrentChange="handleCurrentChange"></pagination>
+    <div class="task-log-tabel">
+      <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight">
+        <el-table-column label="操作" width="120">
+          <template slot-scope="scope">
+            <div flex spacearound>
+              <el-button
+                type="text"
+                size="mini"
+                @click="handleTasklogDetail(scope.$index, scope.row)"
+              >批注</el-button>
+              <el-button
+                v-if="scope.row.editable"
+                type="text"
+                size="mini"
+                @click="handleEditDetail(scope.$index, scope.row)"
+              >编辑</el-button>
+              <el-button
+                v-if="scope.row.editable"
+                type="text"
+                size="mini"
+                style="color:#f00"
+                @click="handleDeleteDetail(scope.$index, scope.row)"
+              >删除</el-button>
             </div>
-         </div>  
-         <el-dialog :visible.sync="dialogDialyVisible" title="添加日志" @close="handleCloseDialy" width="600px" :close-on-click-modal="false">
-            <daily-parper :disabled="isDisabled" :sign="sign" :logInfo="logDetail" @resetForm="resetForm" @handleSubmit="handleSubmit" @addDailyTasks="addDailyTasks" :taskName="taskName" :closeDialogNum="closeDialogNum" :addBtnShow="true"></daily-parper>
-        </el-dialog>
-         <el-dialog :visible.sync="dialogTaskVisible" title="关联任务" width="900px" :close-on-click-modal="false">
-            <dialogTask :dialogTaskVisible="dialogTaskVisible" @chooseRevelenceTask="chooseRevelenceTask"></dialogTask>
-        </el-dialog>   
-        <el-dialog :visible.sync="tasklogDetailVisible" title="日志详情" width="700px" :close-on-click-modal="false">
-             <div class="tasklog-detail">
-                <p><span>日报日期 :</span><span>{{taskDetail.gcrq}}</span></p> 
-                <p><span>填写时间 :</span><span>{{taskDetail.cjsj}}</span></p> 
-                <p><span>项目名称 :</span><span>{{taskDetail.xmmc == ''?'无':taskDetail.xmmc}}</span></p> 
-                <p><span>产品名称 :</span><span>{{taskDetail.cpmc == ''?'无':taskDetail.cpmc}}</span></p> 
-                <p><span>关联任务 :</span><span>{{taskDetail.rwmc == ''?'无':taskDetail.rwmc}}</span></p>    
-                <p><span>工时(小时) :</span><span>{{taskDetail.gs}}</span></p> 
-                <p><span>日志内容 :</span><span>{{taskDetail.gcms}}</span></p> 
-                <p><span>附件列表 :</span><span  class="name-wrapper">
-                  <span v-for="(fj,index) in taskDetail.fjData" :key="index" :data-fj="fj.fjbh" @click="handleDownFile('','',$event)">{{fj.fjmc}}</span></span>
-                </p> 
-                 <p  style="border:none" v-if="taskDetail.ydzt == 2||isJzuser == 0"> 
-                  <el-table
-                  :data="pzList"
-                  border
-                  max-height="300"
-                  style="width:100%">
-                  <el-table-column  prop="yhxm" label="姓名" width="80"></el-table-column>
-                  <el-table-column  prop="ydsj" label="阅读日期" width="155"></el-table-column>
-                  <el-table-column  prop="bz" label="批注" show-overflow-tooltip></el-table-column>
-                  </el-table>
-                </p>
-                <p flex style="border:none" v-if="taskDetail.ydzt != 2"> 
-                  <span>批注:</span>
-                  <el-input type="textarea" :rows="5" placeholder="请输入批注内容" v-model="pzValue" resize="none"></el-input>
-                </p>
-                <div style="text-align:right">
-                  <el-button size="mini" type="primary" v-if="taskDetail.ydzt != 2" @click="handleSaveDetail">更新批注</el-button>
-                  <el-button size="mini" type="info" @click="handleCloseDetail">取消</el-button>
-                </div>
-             </div>
-        </el-dialog>
+          </template>
+        </el-table-column>
+        <el-table-column label="阅读状态" width="90">
+          <template slot-scope="scope">
+            <div slot="reference">
+              <span
+                title="点击设为已阅"
+                class="tasklog-ydzt tasklog-ydzt-wy"
+                v-if="scope.row.ydzt == 0"
+                @click="handleReadlog(scope.$index, scope.row)"
+              >{{scope.row.ydzt_display}}</span>
+              <span
+                :class="{'tasklog-ydzt':true,'tasklog-ydzt-yy':scope.row.ydzt==1}"
+                v-if="scope.row.ydzt!=0"
+              >{{scope.row.ydzt ==1?'已阅':scope.row.ydzt_display}}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="cjrxm" label="填写人" width="80"></el-table-column>
+        <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip sortable width="110"></el-table-column>
+        <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip width="260"></el-table-column>
+        <el-table-column prop="gcms" label="内容" show-overflow-tooltip width="500"></el-table-column>
+        <el-table-column prop="cpmc_display" label="产品名称" show-overflow-tooltip width="180"></el-table-column>
+        <el-table-column prop="rwmc_display" label="任务名称" show-overflow-tooltip width="150"></el-table-column>
+        <el-table-column prop="gcrq" label="日报日期" width="110" sortable></el-table-column>
+        <el-table-column prop="cjsj" label="填写时间" width="160" sortable></el-table-column>
+        <el-table-column prop="gs" label="工时(小时)" width="90"></el-table-column>
+        <el-table-column label="附件">
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              <div @click="handleDownFile(scope.$index, scope.row,$event)">
+                <span
+                  title="点击下载"
+                  v-for="(fj,index) in scope.row.fjData"
+                  :key="index"
+                  :data-fj="fj.fjbh"
+                >{{fj.fjmc}}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="text-align:right;margin:10px 0;" v-if="records > 15">
+        <pagination
+          :pageSize="pageSize"
+          :total="records"
+          @handleCurrentChange="handleCurrentChange"
+        ></pagination>
+      </div>
+    </div>
+    <el-dialog
+      :visible.sync="dialogDialyVisible"
+      title="添加日志"
+      @close="handleCloseDialy"
+      width="600px"
+      :close-on-click-modal="false"
+    >
+      <daily-parper
+        :disabled="isDisabled"
+        :sign="sign"
+        :logInfo="logDetail"
+        @resetForm="resetForm"
+        @handleSubmit="handleSubmit"
+        @addDailyTasks="addDailyTasks"
+        :taskName="taskName"
+        :closeDialogNum="closeDialogNum"
+        :addBtnShow="true"
+      ></daily-parper>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="dialogTaskVisible"
+      title="关联任务"
+      width="900px"
+      :close-on-click-modal="false"
+    >
+      <dialogTask :dialogTaskVisible="dialogTaskVisible" @chooseRevelenceTask="chooseRevelenceTask"></dialogTask>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="tasklogDetailVisible"
+      title="日志详情"
+      width="700px"
+      :close-on-click-modal="false"
+    >
+      <div class="tasklog-detail">
+        <p>
+          <span>日报日期 :</span>
+          <span>{{taskDetail.gcrq}}</span>
+        </p>
+        <p>
+          <span>填写时间 :</span>
+          <span>{{taskDetail.cjsj}}</span>
+        </p>
+        <p>
+          <span>项目名称 :</span>
+          <span>{{taskDetail.xmmc == ''?'无':taskDetail.xmmc}}</span>
+        </p>
+        <p>
+          <span>产品名称 :</span>
+          <span>{{taskDetail.cpmc == ''?'无':taskDetail.cpmc}}</span>
+        </p>
+        <p>
+          <span>关联任务 :</span>
+          <span>{{taskDetail.rwmc == ''?'无':taskDetail.rwmc}}</span>
+        </p>
+        <p>
+          <span>工时(小时) :</span>
+          <span>{{taskDetail.gs}}</span>
+        </p>
+        <p>
+          <span>日志内容 :</span>
+          <span>{{taskDetail.gcms}}</span>
+        </p>
+        <p>
+          <span>附件列表 :</span>
+          <span class="name-wrapper">
+            <span
+              v-for="(fj,index) in taskDetail.fjData"
+              :key="index"
+              :data-fj="fj.fjbh"
+              @click="handleDownFile('','',$event)"
+            >{{fj.fjmc}}</span>
+          </span>
+        </p>
+        <p style="border:none" v-if="taskDetail.ydzt == 2||isJzuser == 0">
+          <el-table :data="pzList" border max-height="300" style="width:100%">
+            <el-table-column prop="yhxm" label="姓名" width="80"></el-table-column>
+            <el-table-column prop="ydsj" label="阅读日期" width="155"></el-table-column>
+            <el-table-column prop="bz" label="批注" show-overflow-tooltip></el-table-column>
+          </el-table>
+        </p>
+        <p flex style="border:none" v-if="taskDetail.ydzt != 2">
+          <span>批注:</span>
+          <el-input type="textarea" :rows="5" placeholder="请输入批注内容" v-model="pzValue" resize="none"></el-input>
+        </p>
+        <div style="text-align:right">
+          <el-button
+            size="mini"
+            type="primary"
+            v-if="taskDetail.ydzt != 2"
+            @click="handleSaveDetail"
+          >更新批注</el-button>
+          <el-button size="mini" type="info" @click="handleCloseDetail">取消</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -333,6 +445,28 @@ export default {
 
     handleCloseDialy() {},
 
+    
+    handleExport() {
+      let startDate = !this.startDate?'':this.startDate;
+      let endDate = !this.endDate?'':this.endDate;
+      window.open(
+        this.baseUrl +
+          "process/exportPersonnelLog.do?startDay=" +
+           startDate +
+          "&endDay=" +
+           endDate +
+          "&isRead=" +
+          this.ydztValue +
+          "&gcqy=" +
+          this.gcqyValue +
+          "&cybh=" +
+          this.value +
+          "&fw=" +
+          this.fwValue +
+          "&keyword=" +
+          this.keyword
+      );
+    },
     //查询
     checkTaskLog() {
       let oDate1 = new Date(this.startDate);
@@ -376,8 +510,8 @@ export default {
       queryLogTaskProcess({
         curPage: curPage,
         pageSize: this.pageSize,
-        startDay: this.startDate,
-        endDay: this.endDate,
+        startDay: !this.startDate?'':this.startDate,
+        endDay: !this.endDate?'':this.endDate,
         cybh: this.value,
         isRead: this.ydztValue,
         qygc: this.gcqyValue,

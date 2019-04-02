@@ -79,14 +79,13 @@ export default {
     }
   },
   mounted(){
-    console.log(this.fileCounts.all)
+  
   },
   methods: {
     handleCommit(){
       this.$emit('handleCommit','')
     },
     handleClick(tab, event) {
-      console.log(this.activeName)
       this.$emit("hadnleChangeTab", this.activeName);
     },
     handleSizeChange(data) {

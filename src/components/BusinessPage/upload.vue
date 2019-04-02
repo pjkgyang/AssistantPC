@@ -1,11 +1,15 @@
 <template>
-    <div>
+    <div class="upload_file">
         <div flex>
             <div>
-                <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" :before-upload="newFiles" :on-remove="handleRemove" multiple>
+                <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" 
+                :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange">
                     <el-button size="mini" type="primary">上传附件</el-button>
                     <!-- <div slot="tip" class="el-upload__tip">实验信息附件上传，只能传(.file)文件</div> -->
                 </el-upload>
+                <p v-if="!!fileName">
+                  {{fileName}}&#x3000;<i class="el-icon-close" @click="handleRemove"></i>     
+                </p>
             </div>
         </div>
     </div>
@@ -19,30 +23,54 @@ export default {
     return {
       upload_url: "123",
       uploadForm: new FormData(),
-      form: {
-        sm: "",
-        fileList: ""
-      },
-      files: []
+      fileList:[],//文件集合
+      fileName:null, 
+      uploadAction:'123'
     };
   },
   methods: {
-    // 移除附件
+
+    // 删除文件
     handleRemove(file, fileList) {
-      console.log(file);
-      console.log(fileList);
-      this.uploadForm.append("fileUpload", "");
+      this.fileName = '';
+      this.uploadForm = new FormData();
+      this.$emit('handleUploadCrowd','');
     },
-    newFiles(file) {
-      this.files = [];
-      this.files.push(file);
-      this.uploadForm.append("fileUpload", file);
+
+    beforeUpload(file) {
+      this.fileName = file.name;
+      this.uploadForm.append("uploadCrowd", file);
+      axios.post(window.baseurl + "external/uploadCrowd.do", this.uploadForm, {
+          headers: { "Content-Type": "multipart/form-data" }
+        }).then(res => {
+          if(res.data.state == 'success'){
+             this.$emit('handleUploadCrowd',res.data.data)
+          }
+      });
       return true;
-    }
+    },
+   
+   //  
+   handleChange(file,fileList){
+     
+   },
+
   },
   components: {}
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.upload_file{
+  p{
+    border: 1px solid rgb(235, 234, 234);
+    padding: 5px 3px;
+    border-radius: 3px;
+    margin-top: 4px !important;
+    i:hover{
+      cursor: pointer;
+      color: #f00;
+    }
+  }
+}
 </style>

@@ -217,6 +217,8 @@ export default {
     getCrowdCp:window.baseurl+'external/getCrowdCp.do', // 获取crowd产品
     crowdFbrw:window.baseurl+'external/crowdFbrw.do', 
 
+    projectFeedback:window.baseurl+'project/projectFeedback.do' //项目反馈
+
 
 
 

@@ -120,6 +120,9 @@ export function getProjects(obj) {
 			xmzt: obj.xmzt || "",
 			pl: obj.pl,
 			isAll: obj.isAll || '',
+			sfxq:obj.sfxq||'',
+			htxz:obj.htxz||'',
+			qygc:obj.qygc||'',
 			gbsjStart: obj.gbsjStart,
 			gbsjEnd: obj.gbsjEnd
 		}

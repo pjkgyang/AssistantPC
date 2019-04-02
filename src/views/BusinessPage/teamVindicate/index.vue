@@ -10,7 +10,7 @@
                <div class="mb-12" v-if="limitShow">
                   <el-button type="primary" size="small" @click="handleAddzd">添加战队</el-button>
                </div>
-                <el-table :data="tableData" border  :max-height="tableHeight">
+                <el-table :data="tableData" border >
                     <el-table-column fixed="left" label="操作" width="220">
                         <template slot-scope="scope">
                             <el-button @click="handleClickDelete(scope.row)" type="danger" size="mini" v-if="limitShow">删除</el-button>

@@ -73,6 +73,7 @@
             <el-table-column prop="dkl" label="到款率" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
             <el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="qrsj" label="确认时间" width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="pf" label="评分" width="80"></el-table-column>
@@ -193,6 +194,7 @@ export default {
       this.$post(this.API.submitActiveService, {
         wids: this.wids,
         sm: data.sm,
+        xjgs:data.xjgs,
         fjData: data.fileList
       }).then(res => {
         if (res.state == "success") {

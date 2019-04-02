@@ -619,5 +619,15 @@ function getAbsolutePath () {
       },
       component: resolve => require(['@/views/BusinessPage/xxtsqlDetail.vue'], resolve),
     },
+    // {
+    //   path: "/404",
+    //   name: "notFound",
+    //   component: resolve => require(['@/views/BusinessPage/errorpage.vue'], resolve),
+    //   meta: {}
+    //   },
+    //   {
+    //       path: "*",
+    //       redirect: "/404"
+    //   }
   ]
 })

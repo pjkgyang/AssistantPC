@@ -41,6 +41,10 @@
                     </div><br>
                     </div>
                     <form action="">
+                        <div>
+                          <span class="filter-weight before-require">巡检工时：</span>
+                          <el-input size="mini"  placeholder="请输入巡检工时(小时)" v-model="form.xjgs" style="width:550px"></el-input>
+                        </div><br>
                         <div flex>
                             <span class="filter-weight before-require">提报说明：</span>
                             <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="form.sm" style="width:550px"></el-input>
@@ -248,8 +252,15 @@ export default {
       })
     },
     validate() {
+      if (!this.form.xjgs) {
+        this.$alert("请填写巡检工时", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
       if (!this.form.sm) {
-        this.$alert("请填写提报说明!", "提示", {
+        this.$alert("请填写提报说明", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });

@@ -25,6 +25,8 @@
                              <td>{{!cpData.sjjsrq?'无':cpData.sjjsrq}}</td>
                          </tr>
                          <tr>
+                             <td class="contenTitle">巡检工时(小时)</td>
+                             <td>{{cpData.xjgs}}</td>
                              <td class="contenTitle">相关材料</td>
                              <td colspan="3">
                                  <a style="margin-right:30px;" v-if="!!cpData.fjList" v-for="fj in cpData.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 

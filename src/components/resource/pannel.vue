@@ -9,7 +9,7 @@
       <el-button v-if="catalogue != 'search'" :type="catalogue == 'record'?'primary':''" size="small" @click="catalogue = 'record'">操作记录</el-button>
       <el-button :type="catalogue == 'suggest'?'primary':''" size="small" @click="catalogue = 'suggest'">补充建议</el-button>
       <el-button v-if="userTag.includes('NLPXZJ')" size="small" title="用于全文搜索索引" @click="handleSync">刷新文件索引</el-button>
-    </section>
+    </section><br>
     <el-collapse-transition>
       <section v-if="catalogue == 'file'">
         <ul class="file-list">

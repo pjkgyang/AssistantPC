@@ -221,7 +221,7 @@ export default {
   methods: {
     handleSelect(index, indexPath) {
       if (index.indexOf("http://") != -1 || index.indexOf("https://") != -1) {
-        let des = encryptByDES("assistant" + window.userId, "WISEDUUSER");
+          let des = encryptByDES("assistant" + window.userId, "WISEDUUSER");
         window.open(
           index.includes("?") ? index + "&sign=" + des : index + "?sign=" + des
         );
@@ -234,6 +234,7 @@ export default {
         }
       });
     },
+    
     handleNotice() {
       this.$router.push({ path: "/businesspage/systemMsg" });
       this.title = "/businesspage/systemMsg";

@@ -48,15 +48,22 @@
                     <span class="question-info-front">期望解决日期&#x3000;</span>{{qusetionInfo.qwjjrq==''?'无':qusetionInfo.qwjjrq}}&#x3000;</span>
                   <span>
                     <span class="question-info-front">承诺结束日期&#x3000;</span>{{qusetionInfo.cnjsrq == ''?'无':qusetionInfo.cnjsrq}}</span>
-                  <span v-if="false">
-                    <span class="question-info-front">开发工作量 &#x3000;</span>{{qusetionInfo.kfgzl}} 人/天</span>
+                  <!-- <span v-if="false">
+                    <span class="question-info-front">开发工作量 &#x3000;</span>{{qusetionInfo.kfgzl}} 人/天</span> -->
+                  <span>
+                    <span class="question-info-front">问题来源 &#x3000;</span>{{wtlymc == ''||wtlymc == null?'无':wtlymc}}
+                  </span>
                 </p>
+
                 <p>
                   <span>
-                    <span class="question-info-front">解决责任人 &#x3000;</span>{{qusetionInfo.jjzrr}}</span>
+                  <span class="question-info-front">解决责任人 &#x3000;</span>{{qusetionInfo.jjzrr}}</span>
                   <span v-if="hffjshow">
                     <span class="question-info-front">环境信息 &#x3000;</span>
                     <a :href="baseUrl+'attachment/downloadFile.do?fjId='+qusetionInfo.hjfjwid" target="blank">{{qusetionInfo.fjmc}}</a>
+                  </span>
+                  <span>
+                    <span class="question-info-front">项目状态 &#x3000;</span>{{qusetionInfo.xmzt}}
                   </span>
                 </p>
                 <p>
@@ -410,9 +417,9 @@
                   <el-input type="textarea" placeholder="请输入需求描述" v-model="crowdxqData.xqms"></el-input>
               </el-form-item>
 
-               <!-- <el-form-item >
-                 <uploadFile></uploadFile>
-              </el-form-item> -->
+               <el-form-item >
+                 <uploadFile @handleUploadCrowd="handleUploadCrowd"></uploadFile>
+              </el-form-item>
 
               <el-form-item >
                 <div class="send-crowd_topic">请选择需求客户/学校/个人的期望交付日期，该日期仅作数据记录使用</div> 
@@ -542,6 +549,7 @@ import xxDialog from "@/components/dialog/sendxx-dialog.vue";
 import xmtdcylog from "@/components/dialog/xmtdcy.vue";
 import { getLoginUser } from "@/api/system.js";
 import uploadFile from "@/components/BusinessPage/upload.vue";
+
 import {
   queryQuestion,
   queryAnswers,
@@ -669,7 +677,8 @@ export default {
         qwjfrq: "",
         cpxbh: "", //业务线信息
         cpbh: "",
-        xmbh: ""
+        xmbh: "",
+        fjid:""
       },
       wtlyList: [], //问题来源
       wtly: "",
@@ -737,7 +746,8 @@ export default {
       JDGZList: [],
       username: "",
       rylb: "",
-      wtlbmc: "",
+      wtlbmc: "",//问题类别
+      wtlymc:"",//问题来源
       sqgbgs: 0,
       hjgs: 0,
       uploadAction: "https://jsonplaceholder.typicode.com/posts/",
@@ -771,7 +781,8 @@ export default {
       forwordUser: "",
       userIds: "",
 
-      crowdType: 1
+      crowdType: 1,
+
     };
   },
   props: {},
@@ -851,6 +862,10 @@ export default {
   },
 
   methods: {
+    handleUploadCrowd(data){
+      this.crowdxqData.fjid = data;
+    },
+    // 选择业务线
     handleSeleteYwx(val) {
       this.getCrowdCp(val);
     },
@@ -894,6 +909,7 @@ export default {
             if (res.state == "success") {
                 this.addOrUpdateCrowdId('',res.data,'');
                 this.crowdVisible = false;
+                this.crowdxqData.fjid = '';
             }else{
               this.$alert(res.msg, "提示", {
                   confirmButtonText: "确定",
@@ -2065,6 +2081,7 @@ export default {
       //   查询单个问题
       this.qusetionInfo = {};
       this.wtlbmc = "";
+      this.wtlymc = "";
       this.hjgs = 0;
       queryQuestion({
         wid: wid
@@ -2096,6 +2113,17 @@ export default {
               }
             });
           }
+          if (this.qusetionInfo.wtly != "") {
+            getResponsibleTaskList({
+              name: "ProblemType",
+              code: this.qusetionInfo.wtly
+            }).then(({ data }) => {
+              if (data.state == "success") {
+                this.wtlymc = data.data;
+              }
+            });
+          }
+
           //    关闭问题获取贡献人
           if (data.data.fbzt == 1) {
             this.zlpf = JSON.parse(data.data.zlpf);

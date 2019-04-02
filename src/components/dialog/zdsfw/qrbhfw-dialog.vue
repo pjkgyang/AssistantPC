@@ -15,7 +15,7 @@
                        <el-rate v-model="form.pf"  :show-text="true"  :texts="['1分', '2分', '3分', '4分', '5分']"></el-rate>
                    </div>
                     <div flex class="mg-12">
-                       <span class="filter-weight before-require">说明</span>&#x3000;
+                       <span class="filter-weight">&nbsp;&nbsp;说明</span>&#x3000;
                        <el-input type="textarea"  :rows="5" placeholder="请输入说明内容" v-model="form.sm" style="width:580px"></el-input>
                    </div><br>
                    <div text-right>
@@ -51,10 +51,10 @@
                this.$alert('请选择评价星级!', '提示', {confirmButtonText: '确定',type:'warning'});
                return false;
            }
-           if(!this.form.sm){
-               this.$alert('请填写说明内容!', '提示', {confirmButtonText: '确定',type:'warning'});
-               return false;
-           }
+        //    if(!this.form.sm && this.title != '确认服务'){
+        //        this.$alert('请填写说明内容!', '提示', {confirmButtonText: '确定',type:'warning'});
+        //        return false;
+        //    }
            return true;
        }
    },

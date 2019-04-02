@@ -29,7 +29,7 @@
               </p>
               <p class="lcb_task_info">
                 <span>
-                  <span class="el-icon-date Lcbtask_task-titleTip"> 计划完成日期 :&nbsp;</span>{{detailList.jhjsrq}}</span>
+                  <span class="el-icon-date Lcbtask_task-titleTip"> 期望完成日期 :&nbsp;</span>{{detailList.jhjsrq}}</span>
                 <span>
                   <span class="el-icon-date Lcbtask_task-titleTip"> 实际结束日期 :&nbsp;</span>{{detailList.sjjsrq}}</span>
                 </span>
@@ -57,7 +57,7 @@
               </p>
               <p class="lcb_task_info">
                 <span>
-                  <span class="el-icon-date Lcbtask_task-titleTip"> 计划完成日期 : </span>{{detailList.jhjsrq}}
+                  <span class="el-icon-date Lcbtask_task-titleTip"> 期望完成日期 : </span>{{detailList.jhjsrq}}
                 </span>
                 <span>
                   <span class="el-icon-date Lcbtask_task-titleTip"> 实际结束日期 :&nbsp;</span>{{detailList.sjjsrq}}
@@ -175,12 +175,15 @@ export default {
       this.TaskDatas[param].index = param;
       this.$emit("handleTaskinfo", data);
     },
+
+
     handleTask(e, type, index) {
       e.stopPropagation();
       let task = this.TaskDatas[index];
       task.type = type;
       this.$emit("handleTaskDialog", task);
     },
+
     changeTaskState(e, params) {
       e.stopPropagation();
       let groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;

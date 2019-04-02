@@ -373,6 +373,9 @@ h1,h2,h3,h4,h5,h6{
 .el-form-item__content{
   line-height: 0;
 }
+.xmfk-form .el-form-item__content{
+  line-height: 40px !important;
+}
 
 /* 里程碑模板 */
 .milestone-manage .el-checkbox__input.is-checked .el-checkbox__inner{

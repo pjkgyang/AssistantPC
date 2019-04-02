@@ -57,8 +57,8 @@
                 </el-table>
             </div>
 
-            <div v-if="$route.query.lx == 'xms'">
-                 <div class="xxtsqlDetail-filter">
+            <div >
+                 <div class="xxtsqlDetail-filter" v-if="$route.query.lx == 'xms' || $route.query.lx == 'fk'">
                     <div>
                       <p class="query-title">高级查询:</p>
                       <p>
@@ -112,43 +112,45 @@
                       </p>
                     </div>
                 </div>
-                <el-table :data="tableData" border style="width: 100%" :min-height="500" :max-height="innerHeight - 420" key="jdqr-table" >
-                    <el-table-column prop="xmbh" label="项目编号" width="100" ></el-table-column>
-                    <el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="xmlb" label="项目类别" width="100" ></el-table-column>
-                    <el-table-column  label="项目状态" sortable width="110" >
-                      <template slot-scope="scope">
-                        <el-tag size="mini" type="primary">
-                          {{scope.row.gczt_display}}
-                        </el-tag>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="xmjd" label="整体进度" width="100" ></el-table-column>
-                    <el-table-column prop="qssj" label="签署日期" sortable min-width="110" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="htje" label="合同金额(元)" min-width="110" ></el-table-column>
-                    <el-table-column label="待付款(元)" min-width="100" >
-                      <template slot-scope="scope">
-                          <span>{{!scope.row.dfk?'-':scope.row.dfk}}</span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="已付款(元)" min-width="100" >
-                      <template slot-scope="scope">
-                          <span>{{!scope.row.yfk?'-':scope.row.yfk}}</span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column  label="采购产品" min-width="100" >
-                      <template slot-scope="scope">
-                        <a href="javaScript:void(0)" @click="handleCheckCgcp(scope.row.xmbh)">{{scope.row.cpzs}}</a>
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="qdrq" label="启动日期" min-width="100" ></el-table-column>
-                    <el-table-column prop="ztysjssj" label="整体验收日期" min-width="110" ></el-table-column>
-                    <el-table-column prop="jszq" label="建设周期(月)" min-width="110" ></el-table-column>
-                    <el-table-column prop="fwqx" label="服务期限(月)" min-width="110" ></el-table-column>
-                    <el-table-column prop="gbsj" label="过保日期" sortable min-width="110" ></el-table-column>
-                    <el-table-column prop="jfzrr" label="甲方负责人" min-width="100" ></el-table-column>
-                    <el-table-column prop="xmjl" label="乙方责任人" min-width="100" ></el-table-column>
-                </el-table>
+                <div v-if="$route.query.lx == 'xms'">
+                  <el-table :data="tableData" border style="width: 100%" :min-height="500" :max-height="innerHeight - 420" key="jdqr-table" >
+                      <el-table-column prop="xmbh" label="项目编号" width="100" ></el-table-column>
+                      <el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
+                      <el-table-column prop="xmlb" label="项目类别" width="100" ></el-table-column>
+                      <el-table-column  label="项目状态" sortable width="110" >
+                        <template slot-scope="scope">
+                          <el-tag size="mini" type="primary">
+                            {{scope.row.gczt_display}}
+                          </el-tag>
+                        </template>
+                      </el-table-column>
+                      <el-table-column prop="xmjd" label="整体进度" width="100" ></el-table-column>
+                      <el-table-column prop="qssj" label="签署日期" sortable min-width="110" show-overflow-tooltip></el-table-column>
+                      <el-table-column prop="htje" label="合同金额(元)" min-width="110" ></el-table-column>
+                      <el-table-column label="待付款(元)" min-width="100" >
+                        <template slot-scope="scope">
+                            <span>{{!scope.row.dfk?'-':scope.row.dfk}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="已付款(元)" min-width="100" >
+                        <template slot-scope="scope">
+                            <span>{{!scope.row.yfk?'-':scope.row.yfk}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column  label="采购产品" min-width="100" >
+                        <template slot-scope="scope">
+                          <a href="javaScript:void(0)" @click="handleCheckCgcp(scope.row.xmbh)">{{scope.row.cpzs}}</a>
+                        </template>
+                      </el-table-column>
+                      <el-table-column prop="qdrq" label="启动日期" min-width="100" ></el-table-column>
+                      <el-table-column prop="ztysjssj" label="整体验收日期" min-width="110" ></el-table-column>
+                      <el-table-column prop="jszq" label="建设周期(月)" min-width="110" ></el-table-column>
+                      <el-table-column prop="fwqx" label="服务期限(月)" min-width="110" ></el-table-column>
+                      <el-table-column prop="gbsj" label="过保日期" sortable min-width="110" ></el-table-column>
+                      <el-table-column prop="jfzrr" label="甲方负责人" min-width="100" ></el-table-column>
+                      <el-table-column prop="xmjl" label="乙方责任人" min-width="100" ></el-table-column>
+                  </el-table>
+                </div>
             </div>
 
             <div v-if="$route.query.lx == 'fk'"> 
@@ -306,6 +308,7 @@ export default {
       });
       window.open(href, "_blank");
     },
+
     handleSizeChange(data) {
       this.currentPage = 1;
       this.pageSize = data;
@@ -354,7 +357,16 @@ export default {
     // 付款明细
     listXxdk() {
       this.$get(this.API.listXxdk, {
-        dwmc: this.$route.query.dwmc
+        dwmc: this.$route.query.dwmc,
+        gczt: this.filter.xmzt,
+        xmlb: this.filter.xmlb,
+        qssjStart: !this.filter.qsDate[0] ? "" : this.filter.qsDate[0],
+        qssjEnd: !this.filter.qsDate[1] ? "" : this.filter.qsDate[1],
+        gbsjStart: !this.filter.gbDate[0] ? "" : this.filter.gbDate[0],
+        gbsjEnd: !this.filter.gbDate[1] ? "" : this.filter.gbDate[1],
+        qygc: this.filter.qygc,
+        qkzt: this.filter.qkzt,
+        keyword: this.filter.keyword
       }).then(res => {
         if (res.state == "success") {
           if (!res.data) {

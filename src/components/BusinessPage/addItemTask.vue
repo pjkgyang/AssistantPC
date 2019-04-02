@@ -15,14 +15,16 @@
           <el-form-item label="任务名称" required>
             <el-input v-model="formLabelAlign.rwmc" placeholder="请输入任务名称"></el-input>
           </el-form-item>
-          <el-form-item label="开始日期" required>
-            <el-col :span="10">
+          <!-- 2019/4/1 修改 -->
+          <el-form-item label="期望完成日期" required>
+            <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="formLabelAlign.endDate" style="width:100%"></el-date-picker>
+            <!-- <el-col :span="10">
               <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="formLabelAlign.startDate" style="width: 100%;"></el-date-picker>
             </el-col>
             <el-col style="text-align:center;font-weight:700" :span="4" required class="task-gs-date">结束日期</el-col>
             <el-col :span="10">
               <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="formLabelAlign.endDate" style="width: 100%;"></el-date-picker>
-            </el-col>
+            </el-col> -->
           </el-form-item>
           <el-form-item label="责任人" required>
             <el-col :span="10">
@@ -230,8 +232,8 @@ export default {
         // gq:this.formLabelAlign.jhgsValue,
         rwxq: this.formLabelAlign.desc,
         // lcbmlsy:this.lcbinfo.lcbmlsy,
-        jhksrq: this.formLabelAlign.startDate,
-        jhjsrq: this.formLabelAlign.endDate,
+        // jhksrq: this.formLabelAlign.startDate,
+        jhjsrq: this.formLabelAlign.endDate, //期望完成日期
         ssrbh: this.formLabelAlign.ssry.split("&")[1],
         ssrxm: this.formLabelAlign.ssry.split("&")[0],
         cpbh: this.lcbinfo.cpbh,
@@ -248,15 +250,8 @@ export default {
           callback: action => {}
         });
         return false;
-      } else if (!this.formLabelAlign.startDate) {
-        this.$alert("请选择开始日期", "提示", {
-          confirmButtonText: "确定",
-          type: "error",
-          callback: action => {}
-        });
-        return false;
-      } else if (!this.formLabelAlign.endDate) {
-        this.$alert("请选择结束日期", "提示", {
+      }  else if (!this.formLabelAlign.endDate) {
+        this.$alert("请选择期望完成日期", "提示", {
           confirmButtonText: "确定",
           type: "error",
           callback: action => {}

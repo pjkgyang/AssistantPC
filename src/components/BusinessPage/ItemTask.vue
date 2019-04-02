@@ -122,12 +122,11 @@ export default {
           this.dialogchangeDateVisible = !this.dialogchangeDateVisible;
           this.lcbTask = data; //获取任务信息
         }
-        // else if(data.type == 'jfqy'){
-        //   console.log(data)
-        // }
       }
       this.$emit("handleDialog", data);
     },
+
+
     //新增任务
     AddTaskCommit(data) {
       addOrUpdateTask(JSON.parse(data)).then(({ data }) => {

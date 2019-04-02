@@ -24,8 +24,8 @@
     <el-table-column prop="zt_display" label="任务状态" show-overflow-tooltip width="100"></el-table-column>
     <el-table-column prop="yxj_display" label="优先级" show-overflow-tooltip width="100"></el-table-column>
     <el-table-column prop="cjrxm" label="发起人" show-overflow-tooltip width="80"></el-table-column>
-    <el-table-column prop="jhksrq" label="计划开始日期"show-overflow-tooltip width="130"></el-table-column>
-    <el-table-column prop="jhjsrq" label="计划结束日期"show-overflow-tooltip width="130"></el-table-column>
+    <!-- <el-table-column prop="jhksrq" label="计划开始日期"show-overflow-tooltip width="130"></el-table-column> -->
+    <el-table-column prop="jhjsrq" label="期望完成日期"show-overflow-tooltip width="130"></el-table-column>
     <el-table-column prop="cyr" label="参与人" show-overflow-tooltip ></el-table-column>
   </el-table>
       <div class="item-task-tjlcb">

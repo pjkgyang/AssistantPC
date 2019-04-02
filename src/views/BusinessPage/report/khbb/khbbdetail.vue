@@ -3,21 +3,23 @@
     <div class="bgfff">
       <h4>{{$route.params.id == 'ydjlwtxq'||queryMark == 1?'月度奖励':$route.params.id == 'shgs'?'售后工时':'月度考核'}}报表 -{{$route.params.id.includes('ts')?'投诉详情': $route.params.id.includes('wt')?'问题详情': $route.params.id.includes('lcbxq')?'里程碑详情': $route.params.id.includes('shgs')?'售后工时详情': $route.params.id.includes('ydjlwtxq')?'问题详情':'详情'}}
       </h4>
-        <div flex>
-            <p class="query-title">高级查询:</p>
-            <p>
-                <el-input v-model="keyword" style="width:493px;" size="mini" placeholder="请输入问题标题/问题编号/发布人" @change="handleSearch"></el-input>&#x3000;
-                <el-button size="mini" type="primary" @click="handleSearch">查询</el-button>
-            </p>
+      <div v-if="$route.params.id.includes('shgs')">
+          <div flex >
+              <p class="query-title">高级查询:</p>
+              <p>
+                  <el-input v-model="keyword" style="width:493px;" size="mini" placeholder="请输入问题标题/问题编号/发布人" @change="handleSearch"></el-input>&#x3000;
+                  <el-button size="mini" type="primary" @click="handleSearch">查询</el-button>
+              </p>
+          </div>
+        <!-- 结算状态 -->
+          <div flex>
+              <p class="query-title">结算状态:</p>
+              <p class="query-list">
+              <span  :class="{'bg-active':jszts == ''}" @click="handleFilterJSZT('')">全部</span>
+              <span  v-for="jszt in jsztMenu"  :class="{'bg-active':jszts == jszt.label}"
+                      :key="jszt.id" @click="handleFilterJSZT(jszt.label)">{{jszt.mc}}</span>
+              </p>
         </div>
-      <!-- 结算状态 -->
-        <div flex>
-            <p class="query-title">结算状态:</p>
-            <p class="query-list">
-            <span  :class="{'bg-active':jszts == ''}" @click="handleFilterJSZT('')">全部</span>
-            <span  v-for="jszt in jsztMenu"  :class="{'bg-active':jszts == jszt.label}"
-                    :key="jszt.id" @click="handleFilterJSZT(jszt.label)">{{jszt.mc}}</span>
-            </p>
        </div>
       <div text-right>
         <el-button size="mini" type="primary" @click="handleExport">导出</el-button>

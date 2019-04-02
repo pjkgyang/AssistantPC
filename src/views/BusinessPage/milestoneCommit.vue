@@ -102,9 +102,9 @@
       <div flex class="filter milestone-filter">
         <span class="filter-title">合同性质:</span>
         <el-checkbox-group v-model="htxzList" @change="handleHtxz">
-          <el-checkbox label="A">A类</el-checkbox>
-          <el-checkbox label="B">B类</el-checkbox>
-          <el-checkbox label="C">C类</el-checkbox>
+          <el-checkbox label="A">正式</el-checkbox>
+          <!-- <el-checkbox label="B">B类</el-checkbox> -->
+          <el-checkbox label="C">在谈</el-checkbox>
         </el-checkbox-group>&#x3000;&#x3000;
         </span>
         <span>
