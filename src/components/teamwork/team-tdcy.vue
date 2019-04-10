@@ -188,7 +188,9 @@ import { getMenu,getSession} from '@/utils/util.js'
               this.saveTeamMember('');
            }
         },
+        // 添加团队成员
         handleAddcy(){
+    
             this.getUsers(1,0);
             this.dialogVisible = !this.dialogVisible;
         },
@@ -257,6 +259,13 @@ import { getMenu,getSession} from '@/utils/util.js'
           }).catch(() => {});
         },  
         handleChooseUser(data){  // 选择用户
+            // let that = this;
+            // this.cpxData = [];
+            // this.$get(this.API.queryResponsibleProduct,{xmbh:'',internalProject:''}).then(res=>{
+            //     Object.keys(res.data).forEach(function(key){
+            //       that.cpxData.push({mc:res.data[key],label:key})
+            //    });
+            // })
             this.tdcyInfo = {};
             this.cpxdata = [];
             this.wid = '';
@@ -368,12 +377,14 @@ import { getMenu,getSession} from '@/utils/util.js'
    watch:{
       tabName(n,o){
         if(n == 'second'){
+            let that = this;
             this.getTeamMembers();
-            if(!getSession('cp')){
-                getMenu('cp',this.cpxData,true)  //获取产品
-            }else{
-                this.cpxData = getSession('cp');
-            }
+            this.cpxData = [];
+            this.$get(this.API.queryResponsibleProduct,{xmbh:'',internalProject:''}).then(res=>{
+              Object.keys(res.data).forEach(function(key){
+                  that.cpxData.push({mc:res.data[key],label:key})
+              });
+            })
             if(this.xmcpList.length == 0){
                getProjectCatalog({xmbh:this.xmbh}).then(({data})=>{ // 获取项目产品
                if(data.state == 'success'){

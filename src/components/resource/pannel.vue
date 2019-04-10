@@ -126,9 +126,7 @@
               {{file.size_display}}
             </div>
             <div class="file-search-path" v-html="file.dir"> </div>
-            <div class="file-search-cjsj" style="padding-right:30px">
-              {{file.time == null?'-.-':file.time}}
-            </div>
+            <div class="file-search-cjsj" style="padding-right:30px" v-html="file.time"></div>
             <div class="file-evaluate">
               <div flex colcenter v-if="fileIndex == index">
                 <span  @click="handlePraise($event,'1',file.wid,index,'input')"><span class="appraise-hp"></span> ({{file.good}})</span>&nbsp;

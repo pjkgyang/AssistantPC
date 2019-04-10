@@ -36,7 +36,13 @@
             <div>
                 <span style="display:inline-block;width:120px">备忘承诺完成时间: </span>
                 <el-date-picker size="mini" v-model="cnwcrq" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
+                <span style="display:inline-block;width:100px">备忘性质: </span>
+                <el-radio-group v-model="bwxz">
+                  <el-radio label="1">非集成接口</el-radio>
+                  <el-radio label="0">集成接口</el-radio>
+                </el-radio-group>
             </div>
+            
             <div class="cpList-option" v-for="(item,index) in cpDataList" flex>
               <div flex>
                 <p>
@@ -112,6 +118,7 @@ export default {
 
       sfbwValue: false,
       cnwcrq: "",
+      bwxz:'1',//项目性质
 
       isValid: false,
       cpList: [],
@@ -230,7 +237,8 @@ export default {
         yhbh: !this.valueXSQRR ? "" : this.valueXSQRR.split("&")[0],
         yhxm: !this.valueXSQRR ? "" : this.valueXSQRR.split("&")[1],
         fj: "",
-        bwcnwcsj: this.cnwcrq,
+        bwcnwcsj: this.sfbwValue?this.cnwcrq:'',
+        bwxz:this.sfbwValue ?this.bwxz:"",
         cps: this.sfbwValue ? this.cps : ""
       }).then(({ data }) => {
         if (data.state == "success") {
@@ -360,11 +368,6 @@ export default {
         ];
       }
     },
-    sfbwValue(n, o) {
-      if (!n) {
-        this.cnwcrq = "";
-      }
-    }
   }
 };
 </script>

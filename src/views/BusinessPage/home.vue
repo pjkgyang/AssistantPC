@@ -374,8 +374,25 @@ export default {
                     this.queryRecentQuestions();
                     this.queryRecentComplaints();
               }
+              if(!data.data.rows){
+                this.$alert('您暂无任何单位~', '提示', {
+                  confirmButtonText: '确定',
+                  type:"warning",
+                  callback: action => {}
+                });
+              }
             }else{
-              this.schoolNamesOptions = data.data.rows;  
+              if(!!data.data.rows){
+                 this.schoolNamesOptions = data.data.rows;  
+              }
+              if(!data.data.rows){
+                this.$alert('您暂无任何单位~', '提示', {
+                  confirmButtonText: '确定',
+                  type:"warning",
+                  callback: action => {}
+                });
+              }
+
             }
           }
         });

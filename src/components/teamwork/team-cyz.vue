@@ -368,11 +368,18 @@ export default {
       this.userInfo = data;
 
       // 2018.12.10 改为可以用产品
-      if (!getSession("kycp")) {
-        getMenu("kycp", this.cpxData, true); //获取产品
-      } else {
-        this.cpxData = getSession("kycp");
-      }
+      // if (!getSession("kycp")) {
+      //   getMenu("kycp", this.cpxData, true); //获取产品
+      // } else {
+      //   this.cpxData = getSession("kycp");
+      // }
+        let that = this;
+        this.cpxData = [];
+        this.$get(this.API.queryResponsibleProduct,{xmbh:'',internalProject:''}).then(res=>{
+            Object.keys(res.data).forEach(function(key){
+              that.cpxData.push({mc:res.data[key],label:key})
+            });
+        })
 
       if (data.unitType == 0) {
         this.getRyCpx(data.userId, this.xmbh);

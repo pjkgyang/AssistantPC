@@ -70,7 +70,8 @@
                   <span>
                     <span class="question-info-front item-wtbq">问题标签 &#x3000;</span>
                     <span class="item-wtbq-tag">
-                      <el-tag style="margin:0 10px 5px 0;" v-for="(tag,i) in wtbq" :key="i" :closable="tag.sjly == 2 || (User.indexOf('ProblemAdmin') != -1 && tag.sjly !=0)" size="mini" :type="tag.type" :title="tag.sjly == 0?'点击添加标签':''" @click.native="handleClick(i)" @close="handleCloseTag(i)">
+                      <el-tag style="margin:0 10px 5px 0;" v-for="(tag,i) in wtbq" :key="i" :closable="tag.sjly == 2 || (User.indexOf('ProblemAdmin') != -1 && tag.sjly !=0)" size="mini" :type="tag.type" :title="tag.sjly == 0?'点击添加标签':''" 
+                      @click.native="handleClick(i)" @close="handleCloseTag(i)">
                         {{tag.mc}}
                       </el-tag>
                     </span>
@@ -951,7 +952,7 @@ export default {
     },
 
     //删除标签
-    handleCloseTag(i) {
+    handleCloseTag(index) {
       if (
         this.User.indexOf("ProblemAdmin") == -1 &&
         this.User.indexOf("ZJZBZ") == -1 &&
@@ -965,24 +966,28 @@ export default {
       }
       operationLabel({
         wid: this.wid,
-        dm: this.wtbq[i].dm,
+        dm: this.wtbq[index].dm,
         isDel: true
       }).then(({ data }) => {
         if (data.state == "success") {
-          if (this.wtbq[i].sjly == 0) {
-            this.wtbq[i].sjly = 1;
-            this.wtbq[i].type = "";
+          if (this.wtbq[index].sjly == 0) {
+            this.wtbq[index].sjly = 1;
+            this.wtbq[index].type = "";
           } else {
-            this.wtbq[i].sjly = 0;
-            this.wtbq[i].type = "info";
+            this.wtbq[index].sjly = 0;
+            this.wtbq[index].type = "info";
           }
-          this.sftj = [];
+          this.sftj.forEach((ele, i, arr)=>{
+            if(ele == this.wtbq[index].dm){
+              this.sftj.splice(i,1);
+            }
+          })
           this.queryAnswers(this.wid); //  获取回复
         }
       });
     },
-    handleClick(i) {
       //添加标签
+    handleClick(i) {
       if (
         this.User.indexOf("ProblemAdmin") == -1 &&
         this.User.indexOf("ZJZBZ") == -1 &&
@@ -994,17 +999,13 @@ export default {
         });
         return;
       }
-      this.wtbq.forEach((ele, i, arr) => {
-        if (ele.sjly == 2) this.sftj.push(ele.sjly);
-      });
-      if (this.sftj.length >= 1 && this.User.indexOf("ProblemAdmin") == -1) {
-        this.$alert("一个问题只能添加一个标签", "提示", {
+      if (this.sftj.length >= 2 && this.User.indexOf("ProblemAdmin") == -1) {
+        this.$alert("一个问题只能添加两个标签", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
         return;
       }
-
       if (this.wtbq[i].sjly == 0) {
         operationLabel({
           wid: this.wid,
@@ -1014,6 +1015,7 @@ export default {
           if (data.state == "success") {
             this.wtbq[i].sjly = 2;
             this.wtbq[i].type = "";
+            this.sftj.push(this.wtbq[i].dm);
             this.queryAnswers(this.wid); //  获取回复
           }
         });
@@ -2194,8 +2196,9 @@ export default {
         }
       });
     },
-    queryLabel(wid) {
       //获取问题标签
+    queryLabel(wid) {
+      this.sftj = [];
       queryLabel({
         wid: wid
       }).then(({ data }) => {
@@ -2206,6 +2209,9 @@ export default {
               ele.type = "info";
             } else {
               ele.type = "";
+            }
+            if (ele.sjly == 2){
+              this.sftj.push(ele.dm);
             }
           });
         }

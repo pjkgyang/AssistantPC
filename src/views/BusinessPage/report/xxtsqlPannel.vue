@@ -66,7 +66,25 @@
               <span>
                 <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','53')">{{!detailData.bq53?0:detailData.bq53}}</span> 个
               </span>
-              </p>
+            </p>
+            <p>
+              <span>物理资源不足</span>
+              <span>
+                <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','54')">{{!detailData.bq54?0:detailData.bq54}}</span> 个
+              </span>
+            </p>
+            <p>
+              <span>断电</span>
+              <span>
+                <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','55')">{{!detailData.bq55?0:detailData.bq55}}</span> 个
+              </span>
+            </p>
+            <p>
+              <span>未购买服务</span>
+              <span>
+                <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','56')">{{!detailData.bq56?0:detailData.bq56}}</span> 个
+              </span>
+            </p>
           </div>
         </section>
         <section class="wtfbqk-pie">
@@ -99,6 +117,18 @@
               <span>加强培训</span>
               <span>
                  <span title="查看详情" class="fontRed active" @click="handleCheckDetail('wtbq','63')">{{!detailData.bq63?0:detailData.bq63}}</span> 个
+              </span>
+              </p>
+            <p>
+              <span>数据库账户权限管理不规范</span>
+              <span>
+                 <span title="查看详情" class="fontRed active" @click="handleCheckDetail('wtbq','64')">{{!detailData.bq64?0:detailData.bq64}}</span> 个
+              </span>
+              </p>
+            <p>
+              <span>用户误删数据</span>
+              <span>
+                 <span title="查看详情" class="fontRed active" @click="handleCheckDetail('wtbq','65')">{{!detailData.bq65?0:detailData.bq65}}</span> 个
               </span>
               </p>
           </div>

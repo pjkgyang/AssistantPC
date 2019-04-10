@@ -86,6 +86,7 @@ export function submitMilestone(obj){
 			yhxm:obj.yhxm,
 			bwcnwcsj:obj.bwcnwcsj,
 			fj:obj.fj||"",
+			bwxz:obj.bwxz||"",
 			cps:obj.cps
 
 	},{

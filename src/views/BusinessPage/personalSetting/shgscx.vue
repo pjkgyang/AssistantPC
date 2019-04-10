@@ -143,7 +143,7 @@ export default {
     },
     // 导出
     handleExport() {
-      window.open(window.baseurl + 'assessment/exportYdwtshgsxqb.do?yf='+this.yf+'&keyword='+this.keyword+'&jszt='+this.jszts);
+      window.open(window.baseurl + 'assessment/exportYdwtshgsxqb.do?yf='+this.yf+'&keyword='+this.keyword+'&jszt='+this.jszts+'&isPersonal=true');
     },
     handleCurrentChange(data) {
         this.currentPage = data;

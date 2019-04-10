@@ -4,9 +4,10 @@
       <div class="Question">
         <el-form style="width:750px;margin:0 auto" class="demo-ruleForm" :model="question" :inline="true" label-width="125px">
           <el-form-item label="项目名称" required v-if="chooseableItem">
-            <el-input size="mini" type="text" style="width:520px;" v-model="xmmc" readonly placeholder="请选择项目">
-              <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
+            <el-input :disabled="!!isInnerItem" size="mini" type="text" style="width:520px;" v-model="xmmc" readonly placeholder="请选择项目">
+              <el-button :disabled="!!isInnerItem"  slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
             </el-input>
+            <el-checkbox v-if="(showCondition==1||showCondition==2)" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox>
           </el-form-item>
           <el-form-item label="项目名称"  v-if="!chooseableItem">
             <el-input size="mini" type="text" style="width:520px" v-model="xmmc" readonly></el-input>
@@ -122,6 +123,7 @@ import {
 export default {
   data() {
     return {
+      isInnerItem:false,// 是否为内部项目
       dialogQuestionVisible: false,
       visible: this.show,
       xmmc: "",
@@ -212,6 +214,25 @@ export default {
   },
   components: { itemChoose },
   methods: {
+    // 切换内部项目
+    handleChangeInnerItem(val){
+      let that = this;
+      if(!!val){
+        this.xmcpList = [];
+        this.xmmc = '内部项目';
+        this.xmzt = '在建';
+        this.$get(this.API.queryResponsibleProduct,{xmbh:'',internalProject:true}).then(res=>{
+          Object.keys(res.data).forEach(function(key){
+              that.xmcpList.push({mc:res.data[key],label:key})
+          });
+        })
+      }else{
+        this.xmcpList = [];
+        this.xmmc = ''; 
+        this.xmbh = ''; 
+      }
+    },  
+    // 格式化日期
     handleFocusDate() {
       let self = this;
       return {
@@ -353,8 +374,8 @@ export default {
     //提交问题
     handleCommit() {
       this.question.nr = $("#summernote").summernote("code");
-      if (this.showCondition == 1 || this.showCondition == 2) {
-        if (!this.xmmc) {
+      if ((this.showCondition == 1 || this.showCondition == 2)) {
+        if (!this.xmmc  && !this.isInnerItem) {
           this.$alert("请先选择关联项目", "提示", {
             confirmButtonText: "确定",
             type: "warning"
@@ -391,11 +412,11 @@ export default {
           bbh: this.question.bbh,
           bt: this.question.title,
           qwjjrq: this.question.qwjjrq,
-          xmmc: this.xmmc,
-          xmbh: this.xmbh,
+          xmmc: !!this.isInnerItem?'':this.xmmc,
+          xmbh: !!this.isInnerItem?'':this.xmbh,
           nr: this.question.nr,
-          hjfjwid:
-            this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
+          internalProject:!!this.isInnerItem?true:'',
+          hjfjwid:this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
           wid: this.question.wid
         }).then(({ data }) => {
           if (data.state == "success") {
@@ -506,6 +527,7 @@ export default {
     },
     // 获取项目对应的产品
     queryResponsibleProduct(xmbh) {
+      let that = this;
       this.xmcpList = [];
       queryResponsibleProduct({
         xmbh: xmbh
@@ -519,14 +541,9 @@ export default {
               type: "warning"
             });
           } else {
-            let Arr = Object.keys(res.data.data);
-            let McArr = Object.values(res.data.data);
-            for (var i = 0; i < Arr.length; i++) {
-              this.xmcpList.push({
-                label: Arr[i],
-                mc: McArr[i]
-              });
-            }
+            Object.keys(res.data.data).forEach(function(key){
+              that.xmcpList.push({mc:res.data.data[key],label:key})
+           });
           }
         }
       });

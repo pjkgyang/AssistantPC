@@ -62,7 +62,7 @@
             <el-table-column prop="sjjsrq" label="实际结束日期" width="140"></el-table-column>
             <el-table-column prop="sfgq" label="是否过期" width="100">
               <template slot-scope="scope">
-                <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':'过期'}}</el-tag>
+                <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':scope.row.sfgq=='1'?'过期':'超期完成'}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>

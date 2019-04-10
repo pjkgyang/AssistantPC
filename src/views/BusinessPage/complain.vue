@@ -109,9 +109,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="项目名称" style="margin-bottom:15px;" required>
-            <el-input size="mini" placeholder="请选择项目" v-model="form.xmmc" readonly>
-              <el-button slot="append" icon="el-icon-circle-plus" @click="addComplaintItem"></el-button>
+            <el-input :disabled="!!isInnerItem" size="mini" placeholder="请选择项目" v-model="form.xmmc" readonly style="width:100%">
+              <el-button :disabled="!!isInnerItem" slot="append" icon="el-icon-circle-plus" @click="addComplaintItem"></el-button>
             </el-input>
+             <!-- <el-checkbox v-if="" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox> -->
           </el-form-item>
           <el-form-item label="产品" style="margin-bottom:15px;">
             <el-select ref="selects" v-model="form.cp" placeholder="请选择产品 / 搜索产品名称" size="mini" filterable style="width:100%" @change="handleChoose">
@@ -159,6 +160,7 @@ import { getMenu, getSession } from "@/utils/util.js";
 export default {
   data() {
     return {
+      isInnerItem:false,//内部项目
       note: {
         backgroundImage:
           "url(" + require("../../../static/img/replyIcon.png") + ")"
@@ -222,6 +224,23 @@ export default {
   },
   computed: {},
   methods: {
+    // 切换内部项目
+    handleChangeInnerItem(val){
+      let that = this;
+      if(!!val){
+        this.xmcpList = [];
+        this.form.xmmc = '内部项目';
+        this.$get(this.API.queryResponsibleProduct,{xmbh:'',internalProject:true}).then(res=>{
+          Object.keys(res.data).forEach(function(key){
+              that.xmcpList.push({mc:res.data[key],label:key})
+          });
+        })
+      }else{
+        this.xmcpList = [];
+        this.form.xmmc = ''; 
+        this.form.xmbh = ''; 
+      }
+    },
     searchComplant() {
       this.complaintList(1);
       this.currentPage = 1;

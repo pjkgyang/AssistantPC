@@ -118,7 +118,8 @@ export default {
       gqList: [
         { lable: "", mc: "全部" },
         { lable: "0", mc: "未过期" },
-        { lable: "1", mc: "过期" }
+        { lable: "1", mc: "过期" },
+        { lable: "2", mc: "超期" }
       ],
       filterWord: {
         keyword: "",

@@ -7,6 +7,12 @@
           <el-form-item label="承诺完成时间" required>
               <el-date-picker style="width:750px" v-model="form.cnwcrq" type="date" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
           </el-form-item>
+           <el-form-item label="备忘性质" required>
+              <el-radio-group v-model="form.bwxz">
+                  <el-radio label="1">非集成接口</el-radio>
+                  <el-radio label="0">集成接口</el-radio>
+                </el-radio-group>
+          </el-form-item>
           <div>
             <div class="cpList-option" v-for="(item,index) in cpDataList" flex>
               <div flex colcenter > 
@@ -63,6 +69,7 @@ export default {
       form: {
         cnwcrq: "",
         sm: "",
+        bwxz:'1',
         cps:""
       },
       cpDataList:[{
@@ -216,6 +223,7 @@ export default {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
+        this.form.bwxz = '0';
         this.form.cnwcrq = this.form.sm = "";
         this.form.ssgzl =  this.form.ekgzl = this.form.kbgzl =  0;
         this.cpDataList = [{
@@ -229,6 +237,7 @@ export default {
       } else {
         if(this.isEdit){
           this.form.cnwcrq = this.lcbData.lcb.cnjssj
+          this.form.bwxz = !this.lcbData.lcb.bwxz?'0':this.lcbData.lcb.bwxz
           if(!!this.lcbData.cps){
             this.cpDataList = this.lcbData.cps
           }

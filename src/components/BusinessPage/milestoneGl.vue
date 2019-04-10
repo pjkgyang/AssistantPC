@@ -76,6 +76,11 @@
            </el-table-column>
 
           <el-table-column prop="nrxmlb" min-width="90" label="项目类别" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="bwxz" min-width="130" label="备忘性质" show-overflow-tooltip>
+            <template slot-scope="scope">
+                <span>{{scope.row.bwxz_display}}</span>
+            </template>
+          </el-table-column>
           <el-table-column sortable label="里程碑状态" width="120" show-overflow-tooltip>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">

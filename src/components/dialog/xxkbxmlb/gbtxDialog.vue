@@ -96,7 +96,6 @@ export default {
       val.forEach(ele => {
         this.idArr.push(ele.userId);
       });
-      console.log( this.idArr);
     },
 
     // 获取参与者
@@ -122,6 +121,7 @@ export default {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
+        this.tableData = [];
       } else {
         this.queryProjectParticipantMap();
       }
