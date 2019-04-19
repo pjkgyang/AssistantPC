@@ -186,13 +186,8 @@ export default {
   },
   watch: {
     $route(from, to) {
-      // 路由日志
-      this.$post(this.API.log, {
-        route: from.path
-      }).then(res => {});
       this.routesArr = "";
-      //切换header title
-      // this.getMessages();
+
       this.navActive = window.location.hash.split("#")[1];
       if (window.location.hash.includes("/businesspage/report")) {
         this.title = "/businesspage/report";
@@ -220,6 +215,11 @@ export default {
   },
   methods: {
     handleSelect(index, indexPath) {
+      // 路由日志
+      this.$post(this.API.log, {
+        route: indexPath.length==1?indexPath[0]:indexPath[1]
+      }).then(res => {});
+
       if (index.indexOf("http://") != -1 || index.indexOf("https://") != -1) {
           let des = encryptByDES("assistant" + window.userId, "WISEDUUSER");
         window.open(

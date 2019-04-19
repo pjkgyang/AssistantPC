@@ -126,23 +126,23 @@
               fixed="left"
               label="操作"
               width="200"
-              v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY') || userGroup.includes('JZFGCRY')"
+              v-if="(userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY') || userGroup.includes('JZFGCRY')) && (xmztC == '1' && xmlbC == '软件'?false:true)"
             >
               <template slot-scope="scope">
                 <el-button
-                  v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')"
+                  v-if="(userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')) && (scope.row.xmzt == '在建' && scope.row.xmlb == '软件'?false:true)"
                   @click.native.prevent="handleCommand('1',scope.row.xmbh)"
                   type="text"
                   size="mini"
                 >过保提醒</el-button>
                 <el-button
-                  v-if="userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')"
+                  v-if="(userGroup.includes('XXLDZ') ||　userGroup.includes('JZGCRY')) && (scope.row.xmzt == '在建' && scope.row.xmlb == '软件'?false:true)"
                   @click.native.prevent="handleCommand('2',scope.row.xmbh)"
                   type="text"
                   size="mini"
                 >提醒记录</el-button>
                 <el-button
-                  v-if="userGroup.includes('JZFGCRY') ||　userGroup.includes('JZGCRY')"
+                  v-if="(userGroup.includes('JZFGCRY') ||　userGroup.includes('JZGCRY')) && (scope.row.xmzt == '在建' && scope.row.xmlb == '软件'?false:true)"
                   @click.native.prevent="handleCommandXmfk(scope.row)"
                   type="text"
                   size="mini"
@@ -176,6 +176,7 @@
                    <span class="name-wrapper" @click="handleRouterXxkb(scope.row.dwmc)">{{scope.row.dwmc}}</span>
               </template>
             </el-table-column>
+						<el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
             <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
             <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
             <el-table-column prop="khjl" label="客户经理" width="100"></el-table-column>
@@ -194,6 +195,7 @@
                     <span>{{scope.row.xqwb==1?'是':'否'}}</span>
               </template>
             </el-table-column>
+						<el-table-column prop="htxz" label="合同性质" show-overflow-tooltip width="100"></el-table-column>
             <el-table-column prop="htbh" label="合同编号" show-overflow-tooltip width="150"></el-table-column>
             <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip width="100"></el-table-column>
             <!-- <el-table-column prop="wglv" label="完工率(%)" width="100"></el-table-column> -->

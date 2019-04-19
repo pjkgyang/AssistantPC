@@ -4,7 +4,8 @@
             <p>工号</p>
             <p>姓名</p>
             <p>产品线</p>
-            <p>等级</p>
+            <p>任职级别</p>
+			<p>任职等级</p>
             <p>获取时间</p>
       </div>
       <ul class="grrzdj-list" >
@@ -12,7 +13,8 @@
               <p>{{grrzdj.gh}}</p>
               <p>{{grrzdj.xm}}</p>
               <p>{{grrzdj.cpx}}</p>
-              <p>{{grrzdj.rzdj}}</p>
+              <p>{{grrzdj.rzjb}}</p>
+			  <p>{{grrzdj.rzdj}}</p>
               <p>{{grrzdj.rzrq}}</p>
           </li>
           <div v-if="!grrzdjList.length">

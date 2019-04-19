@@ -7,7 +7,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/base.css'
 import axios  from 'axios'
-import $ from 'jquery'
+import $ from 'jquery';
 import './utils/http.js'
 import global from './utils/global.js'
 Vue.prototype.globals = global

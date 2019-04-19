@@ -132,7 +132,16 @@
         <el-date-picker v-model="sjjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeSjEndDate">
         </el-date-picker>
       </div>
+      <div class="filter">
+        <span class="filter-title">计划结束时间</span>
+        <el-date-picker v-model="jhkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeJhStartDate">
+        </el-date-picker>
+        &nbsp;至&nbsp;
+        <el-date-picker v-model="jhjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeJhEndDate">
+        </el-date-picker>
+      </div>
     </section>
+
     <section class="milestone_tabel">
       <div style="padding:0 10px 10px;">
         <p style="margin:10px 0 !important;" v-if="ishow">
@@ -237,10 +246,12 @@ export default {
       xmztList: [], //项目状态
       htxzList: [], //合同性质
       keyword: "",
-      cnkssj: "",
-      cnjssj: "",
-      sjkssj: "",
-      sjjssj: "",
+      cnkssj: "",//承诺开始日期
+      cnjssj: "",//承诺结束日期
+      sjkssj: "",//实际开始日期
+      sjjssj: "",//实际结束日期
+      jhkssj:"",//计划开始日期
+      jhjssj:"",//计划结束日期
       qygc: "",
       total: null,
       pageSize: 20,
@@ -489,6 +500,9 @@ export default {
       this.cnjssj = !this.cnjssj ? "" : this.cnjssj;
       this.sjkssj = !this.sjkssj ? "" : this.sjkssj;
       this.sjjssj = !this.sjjssj ? "" : this.sjjssj;
+      this.jhkssj = !this.jhkssj ? "" : this.jhkssj;
+      this.jhjssj = !this.jhjssj ? "" : this.jhjssj;
+
       window.open(
         window.baseurl +
           "milestone/exportMilestoneData.do?xmbh=" +
@@ -507,6 +521,12 @@ export default {
           this.sjkssj +
           "&endSjjssj=" +
           this.sjjssj +
+
+          "&startJhjssj=" +
+          this.jhkssj +
+          "&endJhjssj=" +
+          this.jhjssj +
+
           "&nrxmlb=" +
           this.xmlbList.join(",") +
           "&yxmjl=" +
@@ -587,7 +607,17 @@ export default {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
-    //   全选
+    // 计划开始日期
+    changeJhStartDate(){
+      this.currentPage = 1;
+      this.queryMilestoneData();
+    },
+    // 计划结束日期
+    changeJhEndDate(){
+      this.currentPage = 1;
+      this.queryMilestoneData();
+    },
+    //  全选
     handleSelectionChange(val) {
       this.multipleSelection = val;
       this.lcbbhArr = [];
@@ -617,6 +647,8 @@ export default {
         endCnjssj: !this.cnjssj ? "" : this.cnjssj,
         startSjjssj: !this.sjkssj ? "" : this.sjkssj,
         endSjjssj: !this.sjjssj ? "" : this.sjjssj,
+        startJhjssj:!this.jhkssj ? "" : this.jhkssj,
+        endJhjssj:!this.jhjssj ? "" : this.jhjssj,
         nrxmlb: this.xmlbList.length == 0 ? "" : this.xmlbList.join(","),
         xmzt: this.xmztList.length == 0 ? "" : this.xmztList.join(","),
         yxmjl: this.sfxmjl,

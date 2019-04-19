@@ -157,8 +157,11 @@ export default {
       this.$emit("handleBack", "");
     },
     handleClick(tab, event) {
-      let name = tab.name;
-      this.$emit("handleTabsClick", name);
+      let tabObj = {
+        name:tab.name,
+        label:tab.label
+      }
+      this.$emit("handleTabsClick", tabObj);
     },
     handleAddDDgroup() {
       this.$emit("handleAddDDgroup", "");

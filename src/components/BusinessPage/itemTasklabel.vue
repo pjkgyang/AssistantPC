@@ -31,7 +31,7 @@
                 <span>
                   <span class="el-icon-date Lcbtask_task-titleTip"> 期望完成日期 :&nbsp;</span>{{detailList.jhjsrq}}</span>
                 <span>
-                  <span class="el-icon-date Lcbtask_task-titleTip"> 实际结束日期 :&nbsp;</span>{{detailList.sjjsrq}}</span>
+                  <span class="el-icon-date Lcbtask_task-titleTip"> 实际完成日期 :&nbsp;</span>{{detailList.sjjsrq}}</span>
                 </span>
               </p>
             </div>
@@ -60,7 +60,7 @@
                   <span class="el-icon-date Lcbtask_task-titleTip"> 期望完成日期 : </span>{{detailList.jhjsrq}}
                 </span>
                 <span>
-                  <span class="el-icon-date Lcbtask_task-titleTip"> 实际结束日期 :&nbsp;</span>{{detailList.sjjsrq}}
+                  <span class="el-icon-date Lcbtask_task-titleTip"> 实际完成日期 :&nbsp;</span>{{detailList.sjjsrq}}
                 </span>
               </p>
               <p class="lcb_task_info">
@@ -102,7 +102,7 @@
     <el-dialog title="完成任务" :visible.sync="taskVisible" width="50%" :append-to-body="true">
       <div>
         &#x3000;
-        <span class="filter-weight before-require">任务完成日期:</span>
+        <span class="filter-weight before-require">实际完成日期:</span>
         <el-date-picker size="mini" v-model="wcsj" type="date" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
         </el-date-picker>
       </div>

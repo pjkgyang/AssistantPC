@@ -218,7 +218,11 @@ export default {
     crowdFbrw:window.baseurl+'external/crowdFbrw.do', 
 
     projectFeedback:window.baseurl+'project/projectFeedback.do', //项目反馈
-    queryResponsibleProduct:window.baseurl+'question/queryResponsibleProduct.do' //获取负责的产品
+    queryResponsibleProduct:window.baseurl+'question/queryResponsibleProduct.do', //获取负责的产品
+
+    getDwByUser:window.baseurl + 'sys/getDwByUser.do' //获取单位列表
+
+    
 
     
  }

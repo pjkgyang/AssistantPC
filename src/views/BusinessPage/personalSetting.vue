@@ -8,7 +8,6 @@
             </el-menu>
         </div>
         <div slot="content"  class="personal-setting-content">
-              <!-- <h4>{{navContent}}</h4> -->
               <div>
                  <transition name="el-zoom-in-center">
                      <router-view></router-view>
@@ -81,27 +80,19 @@ export default {
   },
   methods: {
     hanldeSelete(index, indexPath) {
-      switch (index) {
-        case "1":
-          this.navContent = "个人信息";
-          break;
-        case "2":
-          this.navContent = "修改密码";
-          break;
-        case "3":
-          this.navContent = "消息设置";
-          break;
-        case "4":
-          this.navContent = "个人结算";
-          break;
-      }
+      this.$post(this.API.log, {
+        name: this.navList[index-1].privname
+      }).then(res => {});
     }
   },
   computed: {},
   activated() {
     this.tagGroup = JSON.parse(sessionStorage.userInfo).userGroupTag;
     this.navContent = "个人信息";
-    // $('.el-menu-item:eq(0)').css('color','rgb(64, 158, 255)').siblings('.el-menu-item').css('color','rgb(112, 128, 135)');
+		// 记录日志
+    this.$post(this.API.log, {
+        name: this.navContent
+      }).then(res => {});
   },
   components: { layout, NavBarItem }
 };
@@ -111,11 +102,5 @@ export default {
 .personal-setting-content {
   padding: 10px 20px;
 }
-.personal-setting-content h4 {
-  font-size: 16px;
-  font-weight: 700;
-  border-left: 3px solid rgb(153, 50, 236);
-  padding-left: 5px;
-  color: #555;
-}
+
 </style>

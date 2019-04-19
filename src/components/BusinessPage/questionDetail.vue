@@ -302,7 +302,7 @@
           <div style="margin:10px 0;" v-if="radio == 11">
             <span class="filter-weight span_label before-require">选择产品:</span>
             <el-select v-model="zfcp" size="mini" placeholder="选择产品" style="width:400px">
-              <el-option v-for="(cp,index) in cplist" :key="index" :label="cp.mc" :value="cp.label"></el-option>
+              <el-option v-for="(cp,index) in zfcplist" :key="index" :label="cp.mc" :value="cp.label"></el-option>
             </el-select>
           </div>
           <!-- 转发对象 -->
@@ -705,7 +705,7 @@ export default {
       cpsm: "", //差评说明
       gssfrk: 1, //工时是否确认
       sfbgValue: "0", //回复是否bug
-      gsValue: "0",
+      gsValue: 0,
       cnjsrq: "",
       xgcnjsrq: "",
       xgqwjjrq: "",
@@ -718,6 +718,7 @@ export default {
       total: null,
       cpline: [],
       cplist: [],
+			zfcplist:[],//转发产品
       wtlb: [],
       qusetionInfo: {},
       questionReply: [],
@@ -783,11 +784,16 @@ export default {
       userIds: "",
 
       crowdType: 1,
+			
+			// 定时器存储
+			timer:''
 
     };
   },
   props: {},
   mounted() {
+		let  that = this;
+
     this.baseUrl = window.baseurl;
     this.wid = this.$route.query.wid;
     this.isCjwt = this.$route.query.f;
@@ -848,8 +854,27 @@ export default {
         ["picture"],
         ["link", ["linkDialogShow", "unlink"]]
       ],
-      callbacks: {}
+      callbacks: {
+				onChange: function(contents, $editable) {
+				if(contents != "<p><br></p>"){
+						clearTimeout(that.timer);
+						that.timer = setTimeout(()=>{
+							localStorage.setItem(that.wid,contents);
+							that.$message({
+								message: '回复内容已暂存',
+								type: 'success'
+							});
+						},3000);
+				}else{
+						clearTimeout(that.timer);
+						localStorage.removeItem(that.wid);
+					}
+			},
+			}
     });
+		if(!!localStorage.getItem(that.wid)){
+			 $("#summernoteT").summernote("code",localStorage.getItem(that.wid));
+		}
     //是否展示环境信息
     showHjFj({ wid: this.wid }).then(({ data }) => {
       if (data.state == "success") {
@@ -861,7 +886,9 @@ export default {
     this.queryQuestion(this.wid, 1); // 获取单个问题
     this.queryAnswers(this.wid); //  获取回复
   },
-
+	beforeDestroy() {
+		clearTimeout(this.timer);	
+	},
   methods: {
     handleUploadCrowd(data){
       this.crowdxqData.fjid = data;
@@ -958,9 +985,9 @@ export default {
         this.User.indexOf("ZJZBZ") == -1 &&
         this.User.indexOf("ZJ") == -1
       ) {
-        this.$alert("抱歉，您无权操作问题标签", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
+				this.$message({
+          message: '抱歉，您无权操作问题标签',
+          type: 'warning'
         });
         return;
       }
@@ -993,17 +1020,17 @@ export default {
         this.User.indexOf("ZJZBZ") == -1 &&
         this.User.indexOf("ZJ") == -1
       ) {
-        this.$alert("抱歉，您无权操作问题标签", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
+				this.$message({
+				  message: '抱歉，您无权操作问题标签',
+				  type: 'warning'
+				});
         return;
       }
       if (this.sftj.length >= 2 && this.User.indexOf("ProblemAdmin") == -1) {
-        this.$alert("一个问题只能添加两个标签", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
+				this.$message({
+				  message: '一个问题只能添加两个标签',
+				  type: 'warning'
+				});
         return;
       }
       if (this.wtbq[i].sjly == 0) {
@@ -1061,10 +1088,10 @@ export default {
         if (data.state == "success") {
           this.queryAnswers(this.wid); //  获取回复
           this.ywxxShow = false;
-          this.$alert("发送成功！", "提示", {
-            confirmButtonText: "确定",
-            type: "success"
-          });
+					this.$message({
+					  message: '发送成功',
+					  type: 'success'
+					});
         } else {
           this.$alert(data.msg, "提示", {
             confirmButtonText: "确定",
@@ -1089,14 +1116,12 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           this.sqdyzVisible = false;
-          this.$alert("保存成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.queryAnswers(this.wid); //  获取回复
-              this.queryBtnAuth(this.wid); //获取按钮权限
-            }
-          });
+					this.$message({
+					  message: '保存成功',
+					  type: 'success'
+					});
+					this.queryAnswers(this.wid); //  获取回复
+					this.queryBtnAuth(this.wid); //获取按钮权限
         }
       });
     },
@@ -1173,19 +1198,16 @@ export default {
             ).summernote("code");
             this.questionReply[this.isEditReplyIndex].gs = this.replygs;
             this.editEplyVisible = false;
-            this.$alert("修改成功", "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {}
-            });
+						this.$message({
+							message: '修改成功',
+							type: 'success'
+						});
           } else {
-            this.$alert("删除成功", "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.queryAnswers(this.wid);
-              }
-            });
+						this.$message({
+							message: '删除成功',
+							type: 'success'
+						});
+						this.queryAnswers(this.wid);
           }
         } else {
           this.$alert(data.msg, "提示", {
@@ -1252,17 +1274,15 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           if (this.isCjwt) {
-            this.$alert("取消成功", "提示", {
-              confirmButtonText: "确定",
-              callback: action => {
-                this.queryAnswers(this.wid); //  获取回复
-              }
-            });
+						this.$message({
+							message: '取消成功',
+							type: 'success'
+						});
           } else {
-            this.$alert("设置成功", "提示", {
-              confirmButtonText: "确定",
-              callback: action => {}
-            });
+						this.$message({
+							message: '设置成功',
+							type: 'success'
+						});
           }
           if (!data) {
             param.wtjjj = 0;
@@ -1287,15 +1307,13 @@ export default {
             sm: this.bhsm
           }).then(({ data }) => {
             if (data.state == "success") {
-              this.$alert("已驳回", "提示", {
-                confirmButtonText: "确定",
-                type: "success",
-                callback: action => {
-                  this.questionReply[param].sfbh = 1;
-                  this.questionReply[param].nr =
-                    this.questionReply[param].nr + "<br>说明 : " + this.bhsm;
-                }
-              });
+							this.$message({
+								message: '已驳回',
+								type: 'success'
+							});
+							this.questionReply[param].sfbh = 1;
+							this.questionReply[param].nr =
+							this.questionReply[param].nr + "<br>说明 : " + this.bhsm;
             } else {
               this.$alert(data.msg, "提示", {
                 confirmButtonText: "确定",
@@ -1375,15 +1393,13 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           this.crowdVisible = false;
-          this.$alert(!this.hfwid ? "新增成功" : "编辑成功", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.queryBtnAuth(this.wid);
-              this.queryAnswers(this.wid);
-              this.queryQuestion(this.wid);
-            }
-          });
+					this.$message({
+						message: !this.hfwid ? "新增成功" : "编辑成功",
+						type: 'success'
+					});
+					this.queryBtnAuth(this.wid);
+					this.queryAnswers(this.wid);
+					this.queryQuestion(this.wid);
         }
       });
     },
@@ -1441,10 +1457,10 @@ export default {
             this.innerCNRQVisible = false;
             this.queryAnswers(this.wid);
             this.queryQuestion(this.wid);
-            this.$alert("修改成功", "提示", {
-              confirmButtonText: "确定",
-              type: "success"
-            });
+						this.$message({
+							message: '修改成功',
+							type: 'success'
+						});
           } else {
             this.$alert(data.msg, "提示", {
               confirmButtonText: "确定",
@@ -1486,16 +1502,14 @@ export default {
               if (data.state == "success") {
                 $("#summernoteT").summernote("code", "");
                 this.innerCNRQVisible = false;
-                this.$alert("受理成功！", "提示", {
-                  confirmButtonText: "确定",
-                  type: "success",
-                  callback: action => {
-                    this.queryAnswers(this.wid);
-                    this.queryBtnAuth(this.wid);
-                    this.queryProcess(this.wid);
-                    this.queryQuestion(this.wid);
-                  }
-                });
+								this.$message({
+									message: '受理成功',
+									type: 'success'
+								});
+								this.queryAnswers(this.wid);
+								this.queryBtnAuth(this.wid);
+								this.queryProcess(this.wid);
+								this.queryQuestion(this.wid);
               } else {
                 this.$alert(data.msg, "提示", {
                   confirmButtonText: "确定",
@@ -1564,10 +1578,10 @@ export default {
             });
             this.sqjsVisible = true;
           } else {
-            this.$alert("不可重复申请关闭，可驳回已有的再重新申请!", "提示", {
-              confirmButtonText: "确定",
-              type: "warning"
-            });
+						this.$message({
+							message: '不可重复申请关闭，可驳回已有的再重新申请',
+							type: 'warning'
+						});
           }
         }
       });
@@ -1585,18 +1599,16 @@ export default {
       }).then(({ data }) => {
         this.sqjsVisible = false;
         if (data.state == "success") {
-          this.$alert("提交成功！", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.queryAnswers(this.wid);
-            }
-          });
+					this.$message({
+						message: '提交成功',
+						type: 'success'
+					});
+					this.queryAnswers(this.wid);
         } else {
-          this.$alert("提交成功！", "提示", {
-            confirmButtonText: "确定",
-            type: "error"
-          });
+					this.$message({
+						message: '提交成功',
+						type: 'success'
+					});
         }
       });
     },
@@ -1772,13 +1784,11 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           $("#summernoteT").summernote("code", "");
-          this.$alert("催办成功！", "提示", {
-            confirmButtonText: "确定",
-            type: "success",
-            callback: action => {
-              this.queryAnswers(this.wid);
-            }
-          });
+					this.$message({
+							message: '催办成功',
+							type: 'success'
+					});
+					this.queryAnswers(this.wid);
           if (ryData) {
             this.zdfzrVisible = false;
           }
@@ -1820,6 +1830,16 @@ export default {
           ]
         });
       });
+			this.$get(this.API.queryResponsibleProduct,{
+				xmbh:!this.qusetionInfo.xmbh?'':this.qusetionInfo.xmbh,
+				internalProject:!this.qusetionInfo.xmbh?true:'',
+			}).then(res=>{
+				if(res.state == 'success'){
+					Object.keys(res.data).forEach(function(key){
+							that.zfcplist.push({mc:res.data[key],label:key})
+					});
+				}
+			})
     },
     //转发问题(提交)
     CommitZFWT() {
@@ -1942,15 +1962,15 @@ export default {
           if (data.state == "success") {
             this.isHF = false;
             this.gsValue = 0;
-            this.$alert("回复成功！", "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.queryAnswers(this.wid);
-                this.queryProcess(this.wid);
-                $("#summernoteT").summernote("code", "");
-              }
-            });
+            this.$message({
+							message: '回复成功',
+							type: 'success'
+						});
+						this.queryAnswers(this.wid);
+						this.queryProcess(this.wid);
+						$("#summernoteT").summernote("code", "");
+						clearTimeout(this.timer);
+						localStorage.removeItem(this.wid);
           } else {
             this.isHF = false;
             this.$alert(data.msg, "提示", {
@@ -2245,7 +2265,9 @@ export default {
       }
     }
   },
-  activated() {},
+  activated() {
+
+	},
   components: {
     pagination,
     itemChoose,

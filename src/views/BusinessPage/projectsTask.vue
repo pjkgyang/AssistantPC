@@ -451,8 +451,8 @@ export default {
       rwlxOptions: [
         { label: "全部", value: "" },
         { label: "里程碑任务", value: "1" },
-        { label: "工程任务", value: "3" },
-        { label: "客户任务", value: "5" },
+        { label: "工程标准任务", value: "3" },
+        { label: "客户标准任务", value: "5" },
         { label: "个人任务", value: "9" }
       ],
       rwztOptions: [
@@ -720,8 +720,8 @@ export default {
     },
     // 进度 模块 文件切换
     handleTabsClick(data) {
-      this.tabsLabel = data;
-      if (data == "process") {
+      this.tabsLabel = data.name;
+      if (data.name == "process") {
         // 获取项目产品目录
         this.getProjectCatalog();
         if (!!localStorage.getItem("jdst")) {
@@ -730,6 +730,10 @@ export default {
           this.radio = "kbst";
         }
       }
+      // 记录页面日志
+      this.$post(this.API.log, {
+        name: data.label
+      }).then(res => {});
     },
 
     //  发布任务过程

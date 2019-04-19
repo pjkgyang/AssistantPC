@@ -114,6 +114,9 @@ export default {
       year: "",
       activeName: "first",
       monthList: [
+        { mc: "一月", val: "01" },
+        { mc: "二月", val: "02" },
+        { mc: "三月", val: "03" },
         { mc: "四月", val: "04" },
         { mc: "五月", val: "05" },
         { mc: "六月", val: "06" },
@@ -122,10 +125,7 @@ export default {
         { mc: "九月", val: "09" },
         { mc: "十月", val: "10" },
         { mc: "十一月", val: "11" },
-        { mc: "十二月", val: "12" },
-        { mc: "一月", val: "01" },
-        { mc: "二月", val: "02" },
-        { mc: "三月", val: "03" }
+        { mc: "十二月", val: "12" }
       ],
       tableData:{},
       month: "",

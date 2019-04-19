@@ -55,6 +55,8 @@ export function queryMilestoneData(obj){
 			endCnjssj:obj.endCnjssj,
 			startSjjssj:obj.startSjjssj,
 			endSjjssj:obj.endSjjssj,
+			startJhjssj:obj.startJhjssj,
+			endJhjssj:obj.endJhjssj,
 			nrxmlb:obj.nrxmlb||"",
 			xmzt:obj.xmzt||"",
 			yxmjl:obj.yxmjl||"",

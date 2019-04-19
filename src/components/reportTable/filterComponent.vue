@@ -43,7 +43,7 @@
           <span v-for="(lbx,index) in lbList" :data-type="lbx.label" :key="index" :class="{'bg-active':filterWord.lb == lbx.label}">{{lbx.mc}}</span>
         </p>
       </div>
-      <div v-if="filterList.includes('qygc')">
+      <div v-if="filterList.includes('qygc') && filterShow">
         <p class="query-title">区域工程:</p>
         <p class="query-list" @click="handleGCZD">
           <span data-type="" :class="{'bg-active':filterWord.gczd == ''}">全部</span>
@@ -136,12 +136,19 @@
           <span v-for="(fbxzx,index) in fbxzList" :data-type="fbxzx.label" :class="{'bg-active':filterWord.fbxz == fbxzx.label}">{{fbxzx.mc}}</span>
         </p>
       </div>
-      <div v-if="filterList.includes('rzdj')">
-        <p class="query-title">任职等级:</p>
-        <p class="query-list" @click="handleRZDJ">
-          <span v-for="(rzdj,index) in rzdjList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzdj == rzdj.label}">{{rzdj.mc}}</span>
+      <div v-if="filterList.includes('rzjb')">
+        <p class="query-title">任职级别:</p>
+        <p class="query-list" @click="handleRZJB">
+          <span v-for="(rzdj,index) in rzjbList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzjb == rzdj.label}">{{rzdj.mc}}</span>
         </p>
       </div>
+			<div v-if="filterList.includes('rzdj')">
+			  <p class="query-title">任职等级:</p>
+			  <p class="query-list" @click="handleRZDJ">
+					<span data-type="" :class="{'bg-active':filterWord.rzdj == ''}">全部</span>
+			    <span v-for="(rzdj,index) in rzdjList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzdj == rzdj.label}">{{rzdj.mc}}</span>
+			  </p>
+			</div>
     </div>
   </div>
 </template>
@@ -177,13 +184,14 @@ export default {
         { label: '1', mc: "待发布" },
         { label: '2', mc: "已发布" }
       ],
-      rzdjList: [
+      rzjbList: [
         { label: '', mc: "全部" },
         // { label: '1', mc: "入门级" },
         { label: '2', mc: "初级" },
         { label: '3', mc: "中级" },
         { label: '4', mc: "高级" }
       ],
+			rzdjList:[],//任职等级
       rylxList:[],
       bmList: [],
       filterWord: {
@@ -193,7 +201,7 @@ export default {
         gczd: "",
         bm: "",
         cp: "",
-        dwlx: "",
+        dwlx: "",//单位类型
         sjlb: "",
         cpx: "",
         xmlx: "",
@@ -208,7 +216,8 @@ export default {
         rylx:[],
         zdsfwzt:'',
         fbxz:'',
-        rzdj:''
+				rzjb:'',//任职级别
+        rzdj:''//任职等级
       }
     };
   },
@@ -348,12 +357,18 @@ export default {
       this.filterWord.fbxz = fbxz;
       this.$emit("handleChangeFilter", this.filterWord); 
     },
-    handleRZDJ(e){
-      let rzdj = e.target.getAttribute("data-type");
-      if (rzdj == null) return;
-      this.filterWord.rzdj = rzdj;
+    handleRZJB(e){
+      let rzjb = e.target.getAttribute("data-type");
+      if (rzjb == null) return;
+      this.filterWord.rzjb = rzjb;
       this.$emit("handleChangeFilter", this.filterWord); 
-    }
+    },
+		handleRZDJ(e){
+			let rzdj = e.target.getAttribute("data-type");
+			if (rzdj == null) return;
+			this.filterWord.rzdj = rzdj;
+			this.$emit("handleChangeFilter", this.filterWord); 
+		}
 
     // queryCostStat(curPage){      //区域学校用户
     //         this.$get('http://172.16.40.61:8080/emap/sys/etender/api/report/queryCostStat.do',{
@@ -415,6 +430,12 @@ export default {
     } else {
       this.fbxzList = getSession("fbxz");
     }
+		
+		if (!getSession("rzdj") && this.filterList.includes('rzdj')) {
+		  getMenu("StaffQualificationLevel", this.rzdjList, ""); //获取任职等级
+		} else {
+		  this.fbxzList = getSession("rzdj");
+		}
   },
   activated() {},
   watch: {},

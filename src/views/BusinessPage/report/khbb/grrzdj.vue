@@ -1,16 +1,19 @@
 <template>
   <div>
     <div>
-      <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'" :filterShow="filterShow"></filterComponent>
+      <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'" :filterShow="!userGroupTag.includes('QYZ')"></filterComponent>
     </div>
     <div>
       <div text-right class="mg-12">
         <el-button type="primary" size="mini" @click="exportTable">导出</el-button>
       </div>
-      <el-table :data="dataList" style="width: 100%" border :max-height="tableHeight">
-        <el-table-column prop="gh" label="工号"></el-table-column>
-        <el-table-column prop="xm" label="姓名"></el-table-column>
-        <el-table-column prop="cpx" label="产品"></el-table-column>
+      <el-table :data="dataList" style="width: 100%" border >
+        <el-table-column prop="gh" label="工号" width="110"></el-table-column>
+        <el-table-column prop="xm" label="姓名" width="110"></el-table-column>
+				<el-table-column prop="dwlx" label="单位类型" width="110"></el-table-column>
+				<el-table-column prop="dwmc" label="所属单位" min-width="200"></el-table-column>
+        <el-table-column prop="cpx" label="产品" min-width="200"></el-table-column>
+				<el-table-column prop="rzjb" label="任职级别"></el-table-column>
         <el-table-column prop="rzdj" label="任职等级"></el-table-column>
         <el-table-column prop="rzrq" label="任职日期"></el-table-column>
       </el-table>
@@ -31,7 +34,7 @@ export default {
       dataList: [],
       archiveShow: false,
       tableHeight: window.innerHeight,
-      filterList: ["keyword", "qygc", "cpx", "rzdj", "date"],
+      filterList: ["keyword", "qygc","dwlx", "cpx", "rzdj","rzjb", "date"],
       filterData: {
         keyword: "",
         cpx: "",
@@ -41,8 +44,8 @@ export default {
       },
       currentPage: 1,
       pageSize: 20,
-      filterShow: true,
-      total: 0
+      total: 0,
+			userGroupTag:""//用户标签
     };
   },
   methods: {
@@ -51,10 +54,14 @@ export default {
         rzrqEnd = !this.filterData.date[1] ? "" : this.filterData.date[1];
       window.open(
         window.baseurl +
-          "personnel/exportPositionLevel.do?rzdj=" +
-          this.filterData.rzdj +
+          "personnel/exportPositionLevel.do?rzjb=" +
+          this.filterData.rzjb +
+					"&rzdj="+
+					this.filterData.rzdj +
           "&cpx=" +
           this.filterData.cpx +
+					"&dwlx="+
+					this.filterData.dwlx+
           "&qygc=" +
           this.filterData.gczd +
           "&rzrqStart=" +
@@ -85,9 +92,11 @@ export default {
       this.$get(this.API.pagePositionLevel, {
         curPage: this.currentPage,
         pageSize: this.pageSize,
-        rzdj: this.filterData.rzdj,
+        rzjb: this.filterData.rzjb,
+				rzdj: this.filterData.rzdj,
         cpx: this.filterData.cpx,
         qygc: this.filterData.gczd,
+				dwlx:this.filterData.dwlx,
         rzrqStart: !this.filterData.date[0] ? "" : this.filterData.date[0],
         rzrqEnd: !this.filterData.date[1] ? "" : this.filterData.date[1],
         keyword: this.filterData.keyword
@@ -109,6 +118,8 @@ export default {
     }
   },
   mounted() {
+		this.userGroupTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
+		
     this.pagePositionLevel();
   },
   activated() {},

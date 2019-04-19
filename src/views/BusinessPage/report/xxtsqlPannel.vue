@@ -38,9 +38,9 @@
         <section class="wtfbqk-detail" flex-column>
           <p col="1">
             <span class="font17">改进学校环境</span>&#x3000;&#x3000;
-            <span>问题个数/占比：
+            <span>问题个数/占比:
               <span class="fontRed">{{detailData.w02}} / {{detailData.w02zb}}</span>
-            </span> &#x3000;&#x3000;工时：
+            </span> &#x3000;工时:
             <span class="fontRed">{{!detailData.w02gs?0:detailData.w02gs}}</span>(小时)</p>
           <div col="5" flex-column spacearound>
             <p>
@@ -85,6 +85,18 @@
                 <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','56')">{{!detailData.bq56?0:detailData.bq56}}</span> 个
               </span>
             </p>
+						<p>
+						  <span>备件更换</span>
+						  <span>
+						    <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','57')">{{!detailData.bq57?0:detailData.bq57}}</span> 个
+						  </span>
+						</p>
+						<p>
+						  <span>第三方应用导致</span>
+						  <span>
+						    <span title="查看详情" class="fontRed active"  @click="handleCheckDetail('wtbq','58')">{{!detailData.bq58?0:detailData.bq58}}</span> 个
+						  </span>
+						</p>
           </div>
         </section>
         <section class="wtfbqk-pie">
@@ -96,9 +108,9 @@
         <section class="wtfbqk-detail" flex-column>
           <p col="1">
             <span class="font17">加强学校培训</span>&#x3000;&#x3000;
-            <span>问题个数/占比：
+            <span>问题个数/占比:
               <span class="fontRed">{{detailData.w04}} / {{detailData.w04zb}}</span>
-            </span> &#x3000;&#x3000;工时：
+            </span> &#x3000;工时:
             <span class="fontRed">{{!detailData.w04gs?0:detailData.w04gs}}</span>(小时)</p>
           <div col="5" flex-column spacearound>
             <p>
@@ -142,9 +154,9 @@
         <section class="wtfbqk-detail" flex-column>
           <p col="1">
             <span class="font17">纳入产品改进</span>&#x3000;&#x3000;
-            <span>问题个数/占比：
+            <span>问题个数/占比:
               <span class="fontRed">{{detailData.w05}} / {{detailData.w05zb}}</span>
-            </span> &#x3000;&#x3000;工时：
+            </span> &#x3000;工时:
             <span class="fontRed">{{detailData.w05gs}}</span>(小时)</p>
           <div col="5" flex-column spacearound>
              <p>
@@ -195,6 +207,12 @@
                 <span class="fontRed">{{!detailData.bq17?0:detailData.bq17}}</span> 个
               </span>
             </p>
+						<p>
+						  <span>帮用户改数据</span>
+						  <span>
+						    <span class="fontRed">{{!detailData.bq20?0:detailData.bq20}}</span> 个
+						  </span>
+						</p>
           </div>
         </section>
         <section class="wtfbqk-pie">
@@ -238,9 +256,9 @@
         <section class="wtfbqk-detail">
           <p col="1">
             <span class="font17">产品个性化需求</span>&#x3000;&#x3000;
-            <span>问题个数/占比：
+            <span>问题个数/占比:
               <span class="fontRed">{{detailData.w01}} / {{detailData.w01zb}}</span>
-            </span> &#x3000;&#x3000;工时：
+            </span> &#x3000;工时:
             <span class="fontRed">{{detailData.w01gs}}</span>(小时)
           </p>
           <div col="5" flex-column spacearound>
