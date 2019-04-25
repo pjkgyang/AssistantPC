@@ -148,8 +148,8 @@
           <el-button size="mini" type="success" @click="commitLcb">提报里程碑</el-button>
           <el-button size="mini" type="primary" @click="exportLcb">导出</el-button>
           <span style="float:right;margin-top:5px">
-            <span class="filter-weight">合计经营完工量 : 
-            <span style="color:#f00;font-size:18px">{{totaljyWgl<10000?totaljyWgl:totaljyWgl<100000000?(totaljyWgl/10000).toFixed(4):(totaljyWgl/100000000).toFixed(4)}} </span>{{totaljyWgl <10000?'元':totaljyWgl<100000000?'万元':'亿'}}</span>&#x3000;
+           <!-- <span class="filter-weight">合计经营完工量 : 
+            <span style="color:#f00;font-size:18px">{{totaljyWgl<10000?totaljyWgl:totaljyWgl<100000000?(totaljyWgl/10000).toFixed(4):(totaljyWgl/100000000).toFixed(4)}} </span>{{totaljyWgl <10000?'元':totaljyWgl<100000000?'万元':'亿'}}</span>&#x3000; -->
             <span class="filter-weight">合计完工量 : <span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} </span>{{totalWgl <10000?'元':totalWgl<100000000?'万元':'亿'}}</span> 
             </span>
             <p style="color:#aaa;font-size:12px;">说明：整体验收里程碑不允许调整，非整体验收里程碑里程碑调整需要用户确认后才生效</p>
@@ -186,8 +186,8 @@
           </el-table-column>
           <el-table-column prop="wglv" label="完工率(%)" width="100" v-if="ishow" show-overflow-tooltip> </el-table-column>
           <el-table-column prop="wglg" label="完工量(元)" width="100" v-if="ishow"> </el-table-column>
-          <el-table-column prop="jywglv" label="经营完工率(%)" width="130" v-if="ishow" show-overflow-tooltip> </el-table-column>
-          <el-table-column prop="jywglg" label="经营完工量(元)" width="130" v-if="ishow"> </el-table-column>
+          <!-- <el-table-column prop="jywglv" label="经营完工率(%)" width="130" v-if="ishow" show-overflow-tooltip> </el-table-column> -->
+          <!-- <el-table-column prop="jywglg" label="经营完工量(元)" width="130" v-if="ishow"> </el-table-column> -->
 
           <el-table-column prop="cnjssj" sortable label="承诺结束时间" width="150"> </el-table-column>
           <el-table-column prop="sjjssj" sortable label="实际结束时间" width="150"> </el-table-column>
@@ -526,7 +526,8 @@ export default {
           this.jhkssj +
           "&endJhjssj=" +
           this.jhjssj +
-
+					"&xmzt="+
+					this.xmztList.join(",") +	
           "&nrxmlb=" +
           this.xmlbList.join(",") +
           "&yxmjl=" +

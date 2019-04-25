@@ -13,9 +13,9 @@
                 <th>{{tableData[0].staravg}}</th>
                 <th>{{tableData[0].wtgbs}}</th>
                 <th>{{tableData[0].wtzs}}</th>
-                <th>{{tableData[0].xmtdgs}}</th>
+                <!-- <th>{{tableData[0].xmtdgs}}</th>
                 <th>{{tableData[0].gczjgs}}</th>
-                <th>{{tableData[0].cpzjgs}}</th>
+                <th>{{tableData[0].cpzjgs}}</th> -->
                 <th>{{tableData[0].zgs}}</th>
             </tr>
             </thead>
@@ -31,9 +31,9 @@
                 <td>{{table.staravg}}</td>
                 <td><a href="javaScript:void(0)" @click="handleWtpfXx(table.unit,'wtgbs',table.wtgbs)">{{table.wtgbs}}</a></td>
                 <td><a href="javaScript:void(0)" @click="handleWtpfXx(table.unit,'wtzs',table.wtzs)">{{table.wtzs}}</a></td>
-                <td>{{table.xmtdgs}}</td>
+              <!--  <td>{{table.xmtdgs}}</td>
                 <td>{{table.gczjgs}}</td>
-                <td>{{table.cpzjgs}}</td>
+                <td>{{table.cpzjgs}}</td> -->
                 <td>{{table.zgs}}</td>
                 <!-- <td><a href="javaScript:void(0)" @click="handleWtpfXx(table.unitnum,'xmtdgs',table.xmtdgs)">{{table.xmtdgs}}</a></td>
                 <td><a href="javaScript:void(0)" @click="handleWtpfXx(table.unitnum,'gczjgs',table.gczjgs)">{{table.gczjgs}}</a></td>

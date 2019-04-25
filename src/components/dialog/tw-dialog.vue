@@ -592,7 +592,7 @@
 						data
 					}) => {
 						if (data.state == "success") {
-							if (data.data.records == 1) {
+							if (data.data.records == 1 && data.data.rows[0].xmzt != '过保') {
 								this.xmzt = data.data.rows[0].xmzt;
 								this.xmmc = data.data.rows[0].xmmc;
 								this.xmbh = data.data.rows[0].xmbh;
@@ -608,7 +608,7 @@
 			if (this.show) {
 				if (this.questionTitle == "我要提问") {
 					  this.getProjects();
-			  }
+			     }
 				this.isJZuser = sessionStorage.getItem('isJZuser');
 				this.question.wtly = sessionStorage.getItem('isJZuser') == '0' ? '2' : '1';
 				this.$nextTick(() => {

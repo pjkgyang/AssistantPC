@@ -387,7 +387,7 @@
                   <el-input size="mini" v-model="crowdxqData.rwmc" placeholder="一个清晰的名字能帮助开发者快速的了解需求"></el-input> 
                 </el-form-item>
                 <el-form-item>
-                  <el-select  size="mini" v-model="crowdxqData.rwlx" placeholder="请选择需求类型">
+                  <el-select  size="mini" v-model="crowdxqData.rwlx"  placeholder="请选择需求类型" >
                     <el-option label="--- 请选择需求类型 ---" value=""></el-option>
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
@@ -406,8 +406,8 @@
                   </el-select>
                 </el-form-item>
                 <!-- 预算金额 -->
-              <el-form-item prop="xmysje">
-                <el-input size="mini" v-model="crowdxqData.xmysje" placeholder="请输入预算金额(元),不能小于0"></el-input>
+              <el-form-item>
+                <el-input size="mini" v-model="crowdxqData.xmysje"  :readonly="crowdxqData.rwlx == '2'" placeholder="请输入预算金额(元)"></el-input>
               </el-form-item>
               <!-- 机密信息 -->
               <el-form-item >
@@ -605,7 +605,7 @@ import {
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
-      if (!/^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/.test(value)) {
+      if (!/^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/.test(value) && crowdxqData.rwlx != "2") {
         callback(new Error("请填写正确金额"));
       } else {
         callback();
@@ -670,7 +670,7 @@ export default {
         rwlx: "", //需求类型
         sfjj: "0", //需求紧急
         sfxyzc: "0", //是否需要驻场
-        xmysje: "",
+        xmysje: 0,
         jmxx: "",
         xqms: "", //需求描述
         zbjzrq: "",
@@ -840,8 +840,7 @@ export default {
       placeholder: "请输入回复内容",
       height: 200,
       width: 100 + "%",
-      minHeight: 200,
-      maxHeight: 200,
+      minHeight: 300,
       lang: "zh-CN",
       focus: true,
       toolbar: [
@@ -930,6 +929,20 @@ export default {
         });
         return;
       }
+// 			if(this.crowdxqData.rwlx == '2' && !/^([1-9]\d*(\.\d*[1-9])?)$/.test(value)){
+// 			   this.$alert("请填写正确金额", "提示", {
+// 			     confirmButtonText: "确定",
+// 			     type: "warning"
+// 			   });
+// 				return;
+// 			}
+			if(this.crowdxqData.rwlx != '2' && !/^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/.test(this.crowdxqData.xmysje)){
+				this.$alert("请填写正确金额", "提示", {
+				   confirmButtonText: "确定",
+				   type: "warning"
+				 });
+				return;
+			}
       this.crowdxqData.xmbh = this.qusetionInfo.xmbh; // 项目编号
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -1797,6 +1810,8 @@ export default {
     },
     //转发问题
     forwardingProblem() {
+			let that = this;
+			this.zfcplist = [];
       this.innerZFWTisible = true;
       forwardLabel({
         wid: this.wid
@@ -1831,7 +1846,7 @@ export default {
         });
       });
 			this.$get(this.API.queryResponsibleProduct,{
-				xmbh:!this.qusetionInfo.xmbh?'':this.qusetionInfo.xmbh,
+				xmbh:'',
 				internalProject:!this.qusetionInfo.xmbh?true:'',
 			}).then(res=>{
 				if(res.state == 'success'){
@@ -2322,6 +2337,8 @@ div.el-form-item {
 .project-question-detail {
   padding: 5px 10px;
   background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .project-question-detail li {
   border-bottom: 1px solid #f1f1f1;
