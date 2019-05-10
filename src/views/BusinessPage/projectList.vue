@@ -72,7 +72,7 @@
                 </el-checkbox-group>
               </p>&#x3000;&#x3000;&#x3000;
               <p>
-                <span class="table-menu-name">是否续签:</span>
+                <span class="table-menu-name">续签维保合同:</span>
                 <el-radio-group v-model="sfxqC" @change="handleChooseSfxq">
                   <el-radio label>全部</el-radio>
                   <el-radio label="1">是</el-radio>

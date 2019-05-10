@@ -78,6 +78,7 @@ export default {
       this.questionList[this.index].sqgbCount = 0;
     },
     getReportQuestion(curPage) {
+			console.log(this.Data)
       this.Data = this.$route.query;
       this.Data.curPage = curPage;
       this.Data.pageSize = this.pageSize;

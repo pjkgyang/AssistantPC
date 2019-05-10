@@ -107,9 +107,9 @@ export default {
           sessionStorage.setItem("isJZuser", res.data.data.unitType);
           sessionStorage.setItem("userInfo", JSON.stringify(res.data.data));
         } else {
-          this.$alert(data.msg + "获取用户失败,请联系管理员 ", "提示", {
+          this.$alert(res.data.msg + "获取用户失败,请联系管理员 ", "提示", {
             confirmButtonText: "确定",
-            type: error,
+            type: 'error',
             callback: action => {
               window.location.href =
                 window.baseurl +

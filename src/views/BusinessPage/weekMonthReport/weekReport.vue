@@ -36,7 +36,7 @@
                 </span>
                 <span>
                   <span class="filter-weight">项目:&nbsp;</span>
-                  <el-select class="report-chooseitem" style="width:370px" v-model="itemValue" clearable filterable remote :remote-method="remoteMethod" @change="changeProject"  placeholder="请选择/搜索项目/项目编号" size="small">
+                  <el-select class="report-chooseitem" style="width:200px" v-model="itemValue" clearable filterable remote :remote-method="remoteMethod" @change="changeProject"  placeholder="请选择/搜索项目/项目编号" size="small">
                     <el-option  v-for="item in itemList"  :key="item.value"  :label="'['+item.xmbh+'] '+item.xmmc"  :value="item.xmmc"></el-option>
                   </el-select>
                 </span>
@@ -213,6 +213,7 @@ export default {
   },
   props: {},
   beforeMount(){},
+	
   mounted(){
      //获取工程战队
      if (getSession("gczd") == null) {
@@ -239,14 +240,7 @@ export default {
        this.listWeekPlanPerson(); 
   },
   computed:{
-    fullName:{
-      set(){  //计算属性默认只有 getter 
-        
-      },
-      get(){  // setter
-         
-      }
-    }
+    
   },
   methods: {
       changeProject(val) {
@@ -577,17 +571,23 @@ export default {
         return  this.weekStartDate+' 至 '+this.weekEndDate
     },
       // 初始化日期（计算）
-   initializeDate(){     
+   initializeDate(){   
        this.year = new Date().getFullYear();
        this.month = new Date().getMonth(); 
+			 
        let lastMonth = getPreMonth(this.year+'-'+(this.month+1)) //获取上个月日期
        let Year = lastMonth.split('-')[0];
        let Month = lastMonth.split('-')[1]-1;
        let week = getWeeks(Year,Month+1);  //获取上月周数
        let weekStartDate = GetNextDate(getLastMonth(Year,Month),(week-1)*7);
        let weekEndDate = GetNextDate(weekStartDate,6);
+			 
        let NowDate = getNowFormatDate();
-       
+			 let nextWeek = getWeeks(Year,Month+3); //下周周数
+			 let nextWeekStartDate = GetNextDate(getLastMonth(Year,Month+2),0); //下周第一周日期
+			 let nextWeekEndDate = GetNextDate(nextWeekStartDate,6);
+
+
       //  this.weekValue == week &&
        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
           new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
@@ -595,14 +595,23 @@ export default {
             this.weekValue = this.curWeek =  this.weeksNum = getWeeks(Year,Month+1);
             this.weekDay  = weekStartDate+' 至 '+weekEndDate;
             this.monthValue = lastMonth;
- 
-       }else{
-            this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
-            this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
-            this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
-            this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);  
-       } 
-      
+       }else if(new Date(NowDate).getTime() >= new Date(nextWeekStartDate).getTime() && 
+								new Date(NowDate).getTime() <= new Date(nextWeekEndDate).getTime()
+			  ){
+					this.weekValue = 1;
+					this.weeksNum = nextWeek;
+					this.weekDay  = this.getWeekDate(this.year,this.month+1,this.weekValue);
+					if(this.month + 2 > 12){
+					  this.monthValue = (this.year+1) + '-' +'01';  
+					}else{
+						this.monthValue = this.year+'-'+((this.month+2)<10?'0'+(this.month+2):(this.month+2));  
+					}
+				}else{
+					     this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
+					     this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
+					     this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
+					     this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):(this.month+1));  
+				}
         // this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1); 
        this.mapWeekReportDate();
     },

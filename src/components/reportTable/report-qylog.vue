@@ -1,7 +1,6 @@
 <template>
     <div class="out-table">
         <table class="table media-table" >
-            <caption>区域日报报表</caption>
                 <thead>
                   <tr>
                     <th>日期</th>
@@ -126,7 +125,7 @@ export default {
 }
 .table tbody{
     display: block;
-    height:64vh;
+    max-height:64vh;
     width: 100%;
     overflow-y: scroll;
 }

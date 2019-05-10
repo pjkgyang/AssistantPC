@@ -345,11 +345,11 @@ export default {
             text-align: center;
           }
           .fkjd_sj {
-            width: 40%;
+            width: 35%;
           }
 
           .fkjd_je {
-            width: 35%;
+            width: 40%;
           }
           .fkjd_sm {
             width: 25%;

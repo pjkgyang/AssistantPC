@@ -20,12 +20,17 @@ export default {
     pageEktbDetail:window.baseurl+'report/pageEktbDetail.do', //二开提报明细分页列表
     pageBxDetail:window.baseurl+'report/pageBxDetail.do',//报销明细分页列表
     listXxdk:window.baseurl+'project/listXxdk.do', //获取学校到款明细
+	queryMilestoneStageWorkHour:window.baseurl+'report/queryMilestoneStageWorkHour.do',//获取日报工时详情
+	getPersonalWorkLog:window.baseurl+'process/getPersonalWorkLog.do',//获取日报
 
 
     // 使用报表
     problemsameIPStat:window.baseurl+'usageReport/problemsameIPStat.do',//提问受理IP相同统计报表
     userLoginStat:window.baseurl+'usageReport/userLoginStat.do',//用户登录统计报表
     userLoginReport:window.baseurl+'usageReport/userLoginReport.do',//用户登录详情
+	userBehaviorReport:window.baseurl+'usageReport/userBehaviorReport.do',//用户行为记录
+	questionProgressSummaryReport:window.baseurl+'report/questionProgressSummaryReport.do',//问题处理进展报表
+	
 
     // 考核报表
     ydkhb:window.baseurl+'assessment/ydkhb.do', //月度考核报表
@@ -82,7 +87,9 @@ export default {
     addActiveServiceRisk:window.baseurl+'activeservice/addActiveServiceRisk.do',//添加主动式服务风险
     deleteActiveServiceRisk:window.baseurl+'activeservice/deleteActiveServiceRisk.do',//删除主动式服务风险
     pageActiveServiceRisk:window.baseurl+'activeservice/pageActiveServiceRisk.do',// 主动式服务风险分页列表
+	pageActiveServiceProblem:window.baseurl+'activeservice/pageActiveServiceProblem.do',// 主动式服务风险分页列表
     submitActiveServiceRisk:window.baseurl+'activeservice/submitActiveServiceRisk.do',//提交主动式服务风险
+	submitActiveServiceProblem:window.baseurl+'activeservice/submitActiveServiceProblem.do',//提交问题
     pageProblemSets:window.baseurl+'activeservice/pageProblemSets.do',//问题库查询
     pageRiskSets:window.baseurl+'activeservice/pageRiskSets.do',//风险库查询
     getLatestSubmitDescription:window.baseurl+'activeservice/getLatestSubmitDescription.do',//获取最近一次提交的说明

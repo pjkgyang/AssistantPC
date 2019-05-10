@@ -63,7 +63,8 @@
                     <a :href="baseUrl+'attachment/downloadFile.do?fjId='+qusetionInfo.hjfjwid" target="blank">{{qusetionInfo.fjmc}}</a>
                   </span>
                   <span>
-                    <span class="question-info-front">项目状态 &#x3000;</span>{{qusetionInfo.xmzt}}
+                    <span class="question-info-front">项目状态 &#x3000;</span>{{qusetionInfo.xmzt}} &#x3000; &#x3000;
+										<span class="question-info-front">是否有服务 &#x3000;</span>{{!qusetionInfo.sfyfw?'无':'有'}}
                   </span>
                 </p>
                 <p>
@@ -95,7 +96,7 @@
                     <span>回复人 : {{reply.fbrxm}}</span>&#x3000;
                     <span>流程状态 : {{reply.lcbh==''?'无':reply.lcbh}}</span>&#x3000;
                     <span>{{reply.fbsj}}</span>&#x3000;
-                    <span v-if="reply.fbrxm != qusetionInfo.fbrxm && reply.hflx != 11 && reply.hflx != 12 && reply.hflx != 13">
+                    <span v-if="reply.fbrbh != qusetionInfo.fbrbh && reply.hflx != 11 && reply.hflx != 12 && reply.hflx != 13">
                       <!-- 问题复盘 标签11 -->
                       <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">是否bug:{{reply.sfbg==0?'否':'是'}}</span>&#x3000;
                       <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">实施工时:{{reply.gs==''?0:reply.gs}}</span>

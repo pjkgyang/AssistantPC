@@ -112,7 +112,7 @@
             <span v-for="(item,index) in cnqxList" :data-type="item.label" :class="{'bg-active':cnqx == item.label}">{{item.mc}}</span>
           </p>
         </div>
-        <div v-if="showCondition==1||showCondition==2">
+        <div v-if="userGroupTag.includes('ProblemAdmin')||userGroupTag.includes('QYZ')">
           <p class="query-title">区域工程:</p>
           <p class="query-list" @click="handleGCZD">
             <span data-type="" :class="{'bg-active':gczd == ''}">全部</span>
@@ -382,7 +382,7 @@ export default {
             this.$alert(
               "您有" +
                 data.data +
-                "个问题申请关闭，请根据问题处理情况驳回或者关闭，处理之后可以继续提问，谢谢支持",
+                "个问题已解决申请待确认，如果已解决请点击“关闭”，如果未解决请点击“驳回”，所有申请处理后可以提新问题，谢谢支持！",
               " 提示",
               {
                 confirmButtonText: "确定",

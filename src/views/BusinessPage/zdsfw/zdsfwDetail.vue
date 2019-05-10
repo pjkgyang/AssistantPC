@@ -43,14 +43,27 @@
                                <span>{{index+1}}</span>
                             </div>
                             <div> 
-                                <p class="filter-weight">{{wt.cpmc}}&#x3000;{{wt.fwnr}}</p>
+                                <p >
+															  	<span class="filter-weight"></span>{{wt.cpmc}}&#x3000;{{wt.fwnr}}&#x3000;
+																 <el-tag size="mini" :type="wt.zt=='1'?'success':'primary'">{{wt.zt=='0'?'待处理':wt.zt=='1'?'已处理':'无需处理'}}</el-tag>&nbsp;
+																</p>
                                 <p>
                                     <span>问题描述：</span>
                                     <span style="color:#f00">{{wt.wtms}}</span>
                                 </p>
+																 <p>
+																    <span>处理建议：</span>
+																    <span style="color:green">{{wt.clyj}}</span>
+																</p>
+																<p v-if="isJzuser == 0">
+																    <span >问题工时：</span>
+																    <span style="color:green">{{wt.gs}}</span>
+																</p>
                                 <p>
+																	 <span>处理时间：</span>
+																 	 <span style="color:green">{{wt.clsj}}</span>&#x3000;
                                     <span>处理结果：</span>
-                                    <span style="color:green">{{wt.cljg}}</span>
+                                    <span>{{wt.cljg}}</span>
                                 </p>
                             </div>    
                         </section>
@@ -66,7 +79,10 @@
                             <div>
                                 <p class="filter-weight">
                                     {{fx.cpmc}}&#x3000;{{fx.fwnr}}&#x3000;
-                                    <el-tag size="mini" :class="{'zdsfw-fxdj-s1':fx.fxdj==1,'zdsfw-fxdj-s2':fx.fxdj==2,'zdsfw-fxdj-s3':fx.fxdj==3}" >{{fx.fxdj==1?'S1':fx.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
+                                    <el-tag size="mini" :class="{'zdsfw-fxdj-s1':fx.fxdj==1,'zdsfw-fxdj-s2':fx.fxdj==2,'zdsfw-fxdj-s3':fx.fxdj==3}" >{{fx.fxdj==1?'S1':fx.fxdj==2?'S2':'S3'}}</el-tag>&#x3000;
+																		
+																		<el-tag size="mini" :type="fx.zt=='1'?'success':'primary'">{{fx.zt=='0'?'待处理':fx.zt=='1'?'已处理':'无需处理'}}</el-tag>&nbsp;
+																		
                                 </p>
                                 <p>
                                     <span >风险描述：</span>
@@ -76,10 +92,15 @@
                                     <span >处理建议：</span>
                                     <span style="color:green">{{fx.cljy}}</span>
                                 </p>
-                                <p><span>是否处理：</span>
-                                    <span style="color:green">{{fx.zt==0?'未解决':'已解决'}} &#x3000;
-                                    <span v-if="fx.zt==1" >{{fx.cljg}}</span>
-                                    </span>
+																<p v-if="isJzuser == 0">
+																    <span >风险工时：</span>
+																    <span style="color:green">{{fx.gs}}</span>
+																</p>
+                                <p><span>处理时间：</span>
+                                    <span style="color:green">{{fx.clsj}}</span>&#x3000;
+																		<span>处理结果：</span>
+                                    <span >{{fx.cljg}}</span>
+                                  </span>
                                 </p>
                                 <p v-if="!!fx.fjList"><span>相关附件：</span>
                                     <a style="margin-right:30px;"  v-for="fj in fx.fjList" :href="baseUrl+'attachment/downloadFile.do?fjId='+fj.fjbh">{{fj.fjmc}}</a> 
@@ -128,6 +149,7 @@ export default {
   },
   mounted() {
     this.baseUrl = window.baseurl;
+		this.isJzuser = sessionStorage.getItem('isJZuser');
     this.$get(this.API.getActiveService, {
       wid: this.$route.query.wid
     }).then(res => {

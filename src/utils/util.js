@@ -173,6 +173,14 @@ function delCookie(name){
         return null;
 } 
 
+// 获取最后一天周几
+ function getLastMonthWeekDay(year,month) {
+      let myDate = new Date(year, month, 0);
+      let lastDay = year + "-" + (month>=10?month:'0'+month) + "-" + myDate.getDate();
+	  let week  = new Data(lastDay).getDay();
+	  return week;
+}
+
 export function getSession(name) {
      return JSON.parse(sessionStorage.getItem(name));
 } 
@@ -290,6 +298,7 @@ export function getLastMonth(year,month){
     var myDate = new Date(year, month, 0);
     var lastDay = year + "-" + month + "-" + myDate.getDate();//上个月的最后一天
     let lastWeekDay = new Date(lastDay).getDay();
+	
     if(lastWeekDay<4){
         return addDate(lastDay,-(lastWeekDay-1));
     }else{
@@ -370,6 +379,7 @@ export function weekIndexInMonth(str){
     } else {
         firstWeek = 8 - dateStart.getDay() + 1;
     }
+	
     let weekIndex = 1;
     let c = Math.ceil(Math.abs(Date.now() - (new Date(str)).getTime())/(24*3600*1000));
     // let c = date.getDate();

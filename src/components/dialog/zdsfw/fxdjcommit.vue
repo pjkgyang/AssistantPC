@@ -2,7 +2,7 @@
     <div>
         <el-dialog title="风险处理" width="700px" top="30px" :visible.sync="visible" :append-to-body="true" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
             <div class="dialog-fxdj">
-                <div class="option-list" v-for="fx in fxList" @click="handleCommitfxdj(fx)" title="点击处理风险">
+                <div class="option-list" v-for="(fx,index) in fxList" @click="handleCommitfxdj(fx)" title="点击处理风险" :key="index">
                     <p>
                        <span  class="filter-weight">
                          {{fx.cpmc}}&#x3000;{{fx.fwnr}}
@@ -17,6 +17,20 @@
                         <span class="filter-weight">处理建议&nbsp;&nbsp;</span>
                         <span style="color:green">{{fx.cljy}}</span>
                     </p>
+										<p v-if="isJZuser == 0">
+										    <span class="filter-weight">风险工时&nbsp;&nbsp;</span>
+										    <span style="color:green">{{fx.gs}}</span>
+										</p>
+										<p>
+											 <span class="filter-weight">处理时间&nbsp;&nbsp;</span>
+									 	    <span style="color:green">{{fx.clsj}}</span>&#x3000;
+										    <span class="filter-weight">处理结果&nbsp;&nbsp;</span>
+										    <span style="color:green">{{fx.cljg}}</span>
+										</p>
+										
+										<div :class="{'fxdj-badge':true,'fx_ycl':fx.zt == '1'}">
+											{{fx.zt=='0'?'待处理':fx.zt=='1'?'已处理':'无需处理'}}
+										</div>
                 </div>
             </div>
              <div text-right>
@@ -45,14 +59,17 @@
                <el-form ref="form" :model="form" label-width="100px" size="mini">
                     <el-form-item label="是否已处理" required>
                         <el-radio-group v-model="form.sfcl">
-                            <el-radio :label="1">是</el-radio>
-                            <el-radio :label="0">否</el-radio>
+                            <el-radio :label="1">已处理</el-radio>
+                            <el-radio :label="0">无需处理</el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="处理结果" required>
+										<el-form-item label="处理工时" :required="form.sfcl == 1">
+										  <el-input type="text" style="width:90%" v-model="form.gs" placeholder="请输入工时(不能小于0)"></el-input>
+										</el-form-item>
+                    <el-form-item label="处理结果" :required="form.sfcl == 1">
                         <el-input style="width:90%" type="textarea" rows="3" v-model="form.cljg" placeholder="请输入处理结果"></el-input>
                     </el-form-item>
-                    <el-form-item label="上传附件" required>
+                    <el-form-item label="上传附件">
                         <div>
                             <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" 
                             :before-upload="newFiles" :on-remove="handleRemove" multiple :file-list="files">
@@ -75,6 +92,7 @@ import Qs from "qs";
 export default {
   data() {
     return {
+			isJZuser:0,
       dialogVisible:false,
       visible: this.show,
       upload_url: "123",
@@ -82,7 +100,8 @@ export default {
       form: {
         cljg: "",
         sfcl: 1,
-        fileList:""
+        fileList:"",
+				gs:''
       },
       files: [],
       fxList:[],
@@ -99,6 +118,10 @@ export default {
     },
     handleCommitfxdj(data){
       this.fxData = data;
+			if(data.zt == 1) {
+				 this.$message({message: '该风险已处理，无需处理~',type: 'warning'});
+				 return;
+			}
       this.dialogVisible = !this.dialogVisible
     },
     // 切换分页
@@ -139,7 +162,7 @@ export default {
           })
           .catch(error => {});
       }else {
-        
+        this.submitActiveServiceRisk();
       }
     },
     newFiles(file) {
@@ -152,11 +175,13 @@ export default {
       this.$post(this.API.submitActiveServiceRisk,{
         wid:this.fxData.wid,
         cljg:this.form.cljg,
-        sfcl:this.form.sfcl,
-        fjData:this.form.fileList
+        zt:this.form.sfcl,
+        fjData:this.form.fileList,
+				gs:this.form.gs
       }).then(res=>{
         if(res.state == 'success'){
           this.$message({message: '提交成功~',type: 'success'});
+					this.pageActiveServiceRisk();
           this.dialogVisible = !this.dialogVisible
         }else{
           this.$alert(res.msg, "提示", { confirmButtonText: "确定",type: "error"});
@@ -182,13 +207,21 @@ export default {
       })
     },
     validate() {
-      if (!this.form.cljg) {
+			if (!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(this.form.gs)  && this.form.sfcl == 1) {
+			  this.$alert("请输入正确工时", "提示", {
+			    confirmButtonText: "确定",
+			    type: "warning"
+			  });
+			  return false;
+			}
+      if (!this.form.cljg && this.form.sfcl == 1) {
         this.$alert("请输入处理结果!", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
         return false;
       }
+			
       return true;
     }
   },
@@ -207,6 +240,7 @@ export default {
   watch: {
     show(n, o) {
       this.visible = this.show;
+			this.isJZuser = sessionStorage.getItem('isJZuser');
       if (!n) {
         this.form.cljg = "";
         this.form.fileList = "";
@@ -227,18 +261,37 @@ export default {
   max-height: calc(100vh - 350px);
   overflow-y: auto;
   .option-list {
-    padding: 0 0 0 32px;
+    padding: 0 65px 0 15px;
     margin: 5px 0 ;
     border: 1px solid #ddd;
     font-size: 12px;
     border-radius: 4px;
     transition: 0.5s;
+		position: relative;
+		overflow: hidden;
     &:hover{
       transform: translateX(5px);
       cursor: pointer;
       background: rgba(150, 148, 148, 0.1);
     }
   }
+	
+	.fxdj-badge{
+		position: absolute;
+		width: 96px;
+		height: 26px;
+		right: -25px;
+		top: 10px;
+		transform: rotate(45deg);
+		text-align: center;
+		background: rgba(64,158,255,.1);
+		line-height: 26px;
+		color: #409eff;
+	}
+}
+.fx_ycl{
+	background: rgba(103,194,58,.1) !important;
+	color: #67c23a !important;
 }
 .el-form-item--mini.el-form-item {
   margin-bottom: 4px;

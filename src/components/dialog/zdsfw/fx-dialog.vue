@@ -4,6 +4,13 @@
             <div class="dialog-tjfx">
                 <h5>添加风险</h5>
                 <el-form ref="form" :model="form" label-width="90px" size="mini">
+									 <el-form-item label="风险状态" required>
+									    <el-radio-group v-model="form.zt">
+												  <el-radio :label="0">待处理</el-radio>
+									        <el-radio :label="1">已处理</el-radio>
+									        <el-radio :label="2">无需处理</el-radio>
+									    </el-radio-group>
+									</el-form-item>
                     <el-form-item label="风险描述" required>
                       <el-autocomplete
                         v-model="form.fxms"
@@ -20,10 +27,23 @@
                             <el-radio :label="3">S3</el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="处理建议" required>
+										<el-form-item label="处理工时" :required="form.zt == 1">
+										  <el-input type="text" style="width:100%" v-model="form.gs" placeholder="请输入工时(不能小于0)"></el-input>
+										</el-form-item>
+                    <el-form-item label="处理建议" :required="form.zt == 0">
                         <el-input type="textarea" rows="3" v-model="form.cljy" placeholder="请输入处理建议"></el-input>
                     </el-form-item>
-
+										<el-form-item label="处理结果" :required="form.zt != 0">
+										    <el-input type="textarea" rows="3" v-model="form.cljg" placeholder="请输入处理结果"></el-input>
+										</el-form-item>
+										<el-form-item label="上传附件" >
+										    <div>
+										        <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" 
+										        :before-upload="newFiles" :on-remove="handleRemove" multiple :file-list="files">
+										            <el-button size="small" type="primary">点击上传</el-button>
+										        </el-upload>
+										    </div>
+										</el-form-item>
                 </el-form>
                 <h5>历史风险</h5>
                 <div class="history-fx">
@@ -37,8 +57,8 @@
                             <span >处理建议：</span>
                             <span style="color:green">{{fx.cljy}}</span>
                         </p>
-                        <p><span>是否处理：</span>
-                            <span style="color:green">{{fx.zt==0?'未解决':'已解决'}} &#x3000;
+                        <p> <span>是否处理：</span>
+                            <span style="color:green">{{fx.zt==0?'待处理':'已处理'}} &#x3000;
                               <span v-if="fx.zt==1" >{{fx.cljg}}</span>
                             </span>
                         </p>
@@ -60,15 +80,24 @@
 </template>
 
 <script>
+	import axios from "axios";
+	import Qs from "qs";
 export default {
   data() {
     return {
       visible: this.show,
+			upload_url: "123",
+			uploadForm: new FormData(),
+			files: [],
       baseUrl:'',
       form: {
         fxms: "",
         cljy: "",
-        fxdj: 1
+				cljg:"",
+        fxdj: 1,
+				zt:0,
+				gs:"",
+				fileList:""
       },
       restaurants: [],
       // loading: false,
@@ -114,8 +143,42 @@ export default {
     },
     handleCommit() {
       if (!this.validate()) return;
-      this.$emit("handleAddFx", this.form);
+			 this.$refs.uploadfile.submit();
+			if (!!this.files.length) {
+			  axios.post(
+			      window.baseurl + "attachment/uploadAttach.do",
+			      this.uploadForm,
+			      {
+			        headers: { "Content-Type": "multipart/form-data" }
+			      }
+			    ).then(res => {
+			      if (res.data.state == "success") {
+			        this.form.fileList = res.data.data;
+			        this.$emit("handleAddFx", this.form);
+			      } else {
+			        this.$alert(res.data.msg, "提示", {
+			          confirmButtonText: "确定",
+			          type: "error"
+			        });
+			      }
+			    })
+			    .catch(error => {});
+			}else {
+			   this.$emit("handleAddFx", this.form);
+			}
     },
+		
+		// 移除附件
+		handleRemove(file, fileList) {
+		  this.uploadForm.append("fileUpload", "");
+		},
+
+		newFiles(file) {
+		  this.files = [];
+		  this.files.push(file);
+		  this.uploadForm.append("fileUpload", file);
+		  return true;
+		},
 
     //获取服务风险分页列表
     pageActiveServiceRisk(){
@@ -164,8 +227,22 @@ export default {
         });
         return false;
       }
-      if (!this.form.cljy) {
-        this.$alert("请输入处理建议!", "提示", {
+			if (!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(this.form.gs)  && this.form.zt == 1) {
+				this.$alert('请输入正确工时', '提示', {
+					confirmButtonText: '确定',
+					type: 'warning'
+				});
+				return false;
+			}
+			 if (!this.form.cljy && this.form.zt == '0') {
+			  this.$alert("请输入处理建议", "提示", {
+			    confirmButtonText: "确定",
+			    type: "warning"
+			  });
+			  return false;
+			}
+      if (!this.form.cljg && this.form.zt != '0') {
+        this.$alert("请输入处理结果!", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
@@ -191,7 +268,7 @@ export default {
       this.visible = this.show;
       if (!n) {
         this.form.fxms = "";
-        this.form.cljy = "";
+        this.form.cljy =  this.form.cljg =  this.form.gs = "";
       } else {
         this.baseUrl = window.baseurl;
         this.currentPage = 1;

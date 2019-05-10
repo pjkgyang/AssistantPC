@@ -76,6 +76,13 @@ export default {
       this.getSettlementApplication();
     },
     handleXxwt(data, i, params) {
+			if(data[3] == '已终止' && params == "sqjs"){
+				 this.$message({
+          message: '该项目已经终止，不允许提交结算申请！',
+          type: 'warning'
+        });
+				return;
+			}
       this.rowData.fbmc = data[4];
       this.rowData.fbbh = data[3];
       this.rowData.xmbh = data[1];

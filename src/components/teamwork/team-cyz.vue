@@ -50,7 +50,7 @@
             <el-button v-if="itemYfzrr.edit" plain size="mini" @click="editUser(itemYfzrr)">编辑</el-button>
           </td>
         </tr>
-        <tr v-for="(cyz,index) in itemCyz" v-if="itemCyz.length">
+        <tr v-for="(cyz,index) in itemCyz" v-if="itemCyz.length" :key="index">
           <td>
             <el-tag style="margin-right:5px;" size="mini" v-for="(roleName,index) in cyz.roleName" :key="index">{{roleName}}</el-tag>
           </td>
@@ -61,7 +61,7 @@
           <td>{{cyz.cjsj}}</td>
 
           <td>
-            <el-button v-if="cyz.roleName.indexOf('销售') != -1 &&　(userTag || itemYfzrr.userName == username)" plain size="mini" plain @click="changeXsr(cyz)">修改</el-button>
+            <el-button v-if="cyz.roleName.indexOf('销售') != -1 &&　(userTag || itemYfzrr.userName == username)" plain  size="mini" plain @click="changeXsr(cyz)">修改</el-button>
             <el-button v-if="cyz.edit" plain size="mini" :data-wid="cyz.userId" plain @click="editUser(cyz)">编辑</el-button>
             <el-button v-if="cyz.del" type="danger" size="mini" :data-wid="cyz.userId" plain @click="delectUser($event,cyz.userId)">删除</el-button>
           </td>
@@ -84,7 +84,7 @@
           </span>
           <span class="el-icon-circle-plus  invite-newUser" @click="inviteNewuser">添加</span>
         </li>
-        <li v-for="(user,index) in UserList" v-if="UserList.length != 0">
+        <li v-for="(user,index) in UserList" v-if="UserList.length != 0" :key="index">
           <span>{{user.nickName}}</span>
           <span>{{user.userName}}</span>
           <span :title="user.unit">{{user.unit}}</span>
@@ -99,18 +99,21 @@
         </div>
       </ul>
       <div style="padding:10px 0;text-align:center">
-        <pagination v-if="" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
+        <pagination  :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
       </div>
     </el-dialog>
 
     <el-dialog width="750px" title="添加外部人员" :visible.sync="innerVisible" :close-on-click-modal="false" append-to-body>
       <el-form :model="form" style="margin:10px 0;padding:0 30px;min-height:330px" size="mini" label-width="80px" :inline="true">
         <el-form-item label="姓名" required>
-          <el-input required v-model="form.name" style="width:210px" clearable placeholder="请输入姓名"></el-input>
+          <el-input type="text" required v-model="form.name" style="width:210px" clearable placeholder="请输入姓名"></el-input>
+				<!-- 	<input type="text" name="txt" style="display:none" autocomplete = "off">
+					<input type="text" name="txt" ref="inp" v-model="form.name" class="input_psw" placeholder="请输入姓名" @focus="hanldeFoucs"/ -->
         </el-form-item>
         <el-form-item label="密码" required>
-          <el-input type="password" required v-model="form.pwd" style="width:210px" clearable placeholder="6-12位字母、数字和下划线"></el-input>
-        </el-form-item>
+						<input type="text" name="txt" ref="inp" v-model="form.pwd" class="input_psw" placeholder="6-12位字母、数字和下划线" @focus="hanldeFoucs"/>
+					<!-- <el-input type="text" required  ref="inp" v-model="form.pwd" @focus="hanldeFoucs"  style="width:210px;" clearable placeholder="6-12位字母、数字和下划线" ></el-input> -->
+				</el-form-item>
         <el-form-item label="手机号" required>
           <el-input required v-model="form.phone" style="width:210px" clearable placeholder="请输入手机号"></el-input>
         </el-form-item>
@@ -322,6 +325,9 @@ export default {
     }
   },
   methods: {
+		hanldeFoucs(){
+			this.$refs.inp.type  = 'password'
+		},
     // 修改中标人
     handlemodifyZbr(data) {
       this.mark = false;
@@ -629,6 +635,7 @@ export default {
       this.getUnits();
       this.getDepts();
     },
+		
     // 获取学校产品线
     getXxCpx(){
       let Arrlist = [];
@@ -655,21 +662,18 @@ export default {
       if(this.form.rylx == '1013'){
           this.isAllCpx = false;
       }
-
       if (!this.form.name) {
         this.$alert("请输入姓名", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      } else if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.form.phone.trim())) {
+      } else if (!/^[1][3,4,5,6,7,8,9][0-9]{9}$/.test(this.form.phone.trim()) && !this.form.phone) {
         this.$alert("请输入手机号码或号码有误", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
       } else if (
-        !/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(
-          this.form.email.trim()
-        )
+        !/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(this.form.email.trim()) || !this.form.email
       ) {
         this.$alert("请输入正确邮箱地址或地址有误", "提示", {
           confirmButtonText: "确定",
@@ -692,12 +696,12 @@ export default {
           confirmButtonText: "确定",
           type: "warning"
         });
-      } else if (this.form.rylx == "1013" && this.form.bm == "") {
+      } else if (this.form.rylx == "1013" && !this.form.bm) {
         this.$alert("请填写部门", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
-      } else if (this.form.rylx == "1004" && this.form.dw == "") {
+      } else if (this.form.rylx == "1004" && !this.form.dw) {
         this.$alert("请选择单位", "提示", {
           confirmButtonText: "确定",
           type: "warning"
@@ -730,6 +734,7 @@ export default {
                   this.queryUser(1, true);
                 }
                 this.innerVisible = !this.innerVisible;
+								this.form.name = this.form.phone = this.form.email = this.form.pwd = '';
               }
             });
           } else {
@@ -1076,5 +1081,18 @@ export default {
 .bm-select li:hover {
   cursor: pointer;
   background: #f5f7fa;
+}
+
+.input_psw{
+	width: 210px;border: 1px solid #dcdfe6;height:28px;line-height: 28px;
+	padding: 0 15px;
+	border-radius: 4px;
+	outline:none;
+
+}
+.input_psw::placeholder{
+	color:#BABDC6;
+	font-size: 12px;
+
 }
 </style>

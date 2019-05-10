@@ -10,7 +10,7 @@ import monthReportWrite from '@/views/BusinessPage/weekMonthReport/monthReport-w
 
 function getAbsolutePath() {
 	let path = location.pathname
-	return path.substring(0, path.lastIndexOf('/') + 1)
+	return path.substring(0, path.lastIndexOf('/') + 1);
 }
 
 export default new Router({
@@ -113,6 +113,18 @@ export default new Router({
 					component: resolve => require(['@/views/BusinessPage/zdsfw/zdsfwPannel.vue'], resolve),
 				},
 				{
+					path: '/zdsfwQuestion',
+					name: 'zdsfwQuestion',
+					meta: {},
+					component: resolve => require(['@/views/BusinessPage/zdsfw/question.vue'], resolve),
+				},
+				{
+					path: '/zdsfwRisk',
+					name: 'zdsfwRisk',
+					meta: {},
+					component: resolve => require(['@/views/BusinessPage/zdsfw/risk.vue'], resolve),
+				},
+				{
 					path: '/template',
 					name: 'Template',
 					meta: {},
@@ -176,6 +188,50 @@ export default new Router({
 					path: '/businesspage/xxtsql',
 					name: 'BusinesspageXxtsql',
 					component: resolve => require(['@/views/BusinessPage/xxtsql.vue'], resolve),
+				},
+				
+				{
+					path: '/projectSubcontract',
+					name: 'projectSubcontract',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/projectSubcontract.vue'], resolve),
+				},
+				{
+					path: '/projectfbmx',
+					name: 'projectLxxx',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/lxxx.vue'], resolve),
+				},
+				{
+					path: '/projectXmfb',
+					name: 'projectXmfb',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/xmfb.vue'], resolve),
+				},
+				{
+					path: '/projectbid',
+					name: 'projectBid',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/projectBid.vue'], resolve),
+				},
+				{
+					path: '/projectbiddetail',
+					name: 'projectBidDetail',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/projectBidDetail.vue'], resolve),
+				},
+				// 中标
+				{
+					path: '/projectFbsh',
+					name: 'projectFbsh',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/fbsh.vue'], resolve),
+				},
+				{
+					path: '/fbshdetail',
+					name: 'fbshdetail',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/fbshDetail.vue'], resolve),
 				},
 				{
 					path: '/school',
@@ -287,6 +343,16 @@ export default new Router({
 							path: '/businesspage/report/use/userlogin',
 							name: 'BusinessReportUserlogin',
 							component: resolve => require(['@/views/BusinessPage/report/useReport/userlogin.vue'], resolve),
+						},
+						{
+							path: '/businesspage/report/use/userBehavior',
+							name: 'BusinessReportUserBehavior',
+							component: resolve => require(['@/views/BusinessPage/report/useReport/userBehavior.vue'], resolve),
+						},
+						{
+							path: '/businesspage/report/use/userQuestion',
+							name: 'BusinessReportUserQuestion',
+							component: resolve => require(['@/views/BusinessPage/report/useReport/userQuestion.vue'], resolve),
 						},
 						{
 							path: '/businesspage/report/khbb/grrzdj',
@@ -562,6 +628,14 @@ export default new Router({
 			component: resolve => require(['@/views/BusinessPage/report/cbzxqktj/erss.vue'], resolve),
 		},
 		{
+			path: '/gsrbdetail',
+			name: 'Gsrbdetail',
+			meta: {
+				title: ''
+			},
+			component: resolve => require(['@/views/BusinessPage/report/cbzxqktj/rbgs.vue'], resolve),
+		},
+		{
 			path: '/gjjhcpl',
 			name: 'Gjjhcpl',
 			meta: {},
@@ -596,6 +670,12 @@ export default new Router({
 			name: 'xxtsqlDetail',
 			meta: {},
 			component: resolve => require(['@/views/BusinessPage/xxtsqlDetail.vue'], resolve),
+		},
+		{
+			path: '/questionport',
+			name: 'questionPort',
+			meta: {},
+			component: resolve => require(['@/views/BusinessPage/report/questionReport.vue'], resolve),
 		},
 		// {
 		//   path: "/404",

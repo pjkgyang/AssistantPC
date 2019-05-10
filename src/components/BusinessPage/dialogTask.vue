@@ -27,13 +27,13 @@
                         <li class="choose-daily-emptyItem"  v-if="wcyData.length == 0">暂无项目</li>
                     </ul>
                 </el-collapse-item>
-                <el-collapse-item title="已关闭项目" name="5" >
+             <!--   <el-collapse-item title="已关闭项目" name="5" >
                     <ul>
                         <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in ygbData" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>
                         <li class="choose-daily-more"><a href="javascript:void(0)" @click="handleMoreitem(5)" v-if="ygbCurPage < ygbTotal && ygbTotal > 1">加载更多...</a></li>
                         <li class="choose-daily-emptyItem"  v-if="ygbData.length == 0">暂无项目</li>
                     </ul>
-                </el-collapse-item>
+                </el-collapse-item> -->
                 <el-collapse-item title="其他 ( 非项目任务 ) " name="6" >
                     <ul>
                         <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in otherData" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>

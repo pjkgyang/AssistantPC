@@ -219,7 +219,8 @@ export default {
     queryItem(){
         this.getDwXmTjRT(1,this.xmmcValue);
     },
-    checkItemDetails(params){  //查看项目详情
+		//查看项目详情
+    checkItemDetails(params){ 
        this.data.xmbh = params.xmbh;
        this.data.xmmc = params.xmmc;
        this.data.isAll = true;
@@ -228,6 +229,7 @@ export default {
        this.data.xx = params.xx;
        this.data.yh = params.yh;
        this.data.sfzq = params.sfzq;
+			 this.data.xmzt = params.xmzt;
        this.$router.push({ name: 'Task',params:{data:this.data}});
     },
     checkAllQuestion(){

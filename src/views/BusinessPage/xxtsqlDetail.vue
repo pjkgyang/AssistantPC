@@ -1,7 +1,7 @@
 <template>
     <div class="pd-10">
         <div class="dialog-jd">
-            <h4>统计情况 - {{$route.query.lx == 'zj'?'在建':$route.query.lx == 'zj'?'售后':$route.query.lx == 'gb'?'过保':$route.query.lx == 'xms'?'项目列表':$route.query.lx == 'fk'?'付款详情':'延期任务'}}</h4>
+            <h4 text-center>统计情况 - {{$route.query.lx == 'zj'?'在建':$route.query.lx == 'zj'?'售后':$route.query.lx == 'gb'?'过保':$route.query.lx == 'xms'?'项目列表':$route.query.lx == 'fk'?'付款详情':'延期任务'}}</h4>
             <div v-if="$route.query.lx == 'zj'">
                 <el-table :data="tableData" border style="width: 100%" :min-height="500" :max-height="tableHeight" key="ssyh-table">
                     <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>

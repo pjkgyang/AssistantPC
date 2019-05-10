@@ -3,10 +3,17 @@
     <section style="border-radius:5px;padding:8px 0;background:#fff;box-shadow:0 0 5px #ccc">
       <div class="filter">
         <span class="filter-title">高级查询:</span>
-        <el-input size="mini" style="width:40%" placeholder="请输入项目编号/项目名称/里程碑描述/项目内容/项目经理/责任人"   v-model="keyword" @change="searchLcbContent"> </el-input>
-        <el-button type="primary" size="mini" @click="handleOpenfilter">{{!filterShow?'打开':'隐藏（清空）'}}高级查询条件<i :class='{"el-icon-arrow-up":!filterShow,"el-icon-arrow-down":filterShow,"el-icon--right":true}'></i></el-button>
+        <el-input size="mini" style="width:400px" placeholder="请输入项目编号/项目名称/里程碑描述/项目内容/项目经理/责任人"   v-model="keyword" @change="searchLcbContent"> </el-input>
+        &#x3000;  
+				<el-radio-group v-model="cxlx" @change="handleChooseCxlx">
+             <el-radio label="0" style="margin-bottom: 0;">完工查询</el-radio>
+             <el-radio label="1" style="margin-bottom: 0;">验收查询</el-radio>
+         </el-radio-group>
+				&#x3000;
+				<el-button type="primary" size="mini" @click="handleOpenfilter">{{!filterShow?'打开':'隐藏（清空）'}}高级查询条件<i :class='{"el-icon-arrow-up":!filterShow,"el-icon-arrow-down":filterShow,"el-icon--right":true}'></i></el-button>
         &#x3000;<el-button size="mini" type="primary" @click="handleSearchLcb">查询</el-button>
       </div>
+			
       <transition name="el-zoom-in-top">
         <div style="padding:0 20px;" v-if="filterShow" flex flexwrap>
           <div class="filter filterFlex" >
@@ -39,6 +46,8 @@
           </div>
         </div>
       </transition>
+			
+			
       <div class="filter colcenter milestone-filter">
         <span class="filter-title">区域工程:</span>
         <el-select v-model="qygc" placeholder="请选择" size="mini" @change="handleChangeFilter">
@@ -62,7 +71,6 @@
           </el-radio-group>
         </span>
       </div>
-
       <!-- </div> -->
       <div flex class="filter">
         <span class="filter-title">里程碑状态:</span>
@@ -148,21 +156,20 @@
           <el-button size="mini" type="success" @click="commitLcb">提报里程碑</el-button>
           <el-button size="mini" type="primary" @click="exportLcb">导出</el-button>
           <span style="float:right;margin-top:5px">
-           <!-- <span class="filter-weight">合计经营完工量 : 
-            <span style="color:#f00;font-size:18px">{{totaljyWgl<10000?totaljyWgl:totaljyWgl<100000000?(totaljyWgl/10000).toFixed(4):(totaljyWgl/100000000).toFixed(4)}} </span>{{totaljyWgl <10000?'元':totaljyWgl<100000000?'万元':'亿'}}</span>&#x3000; -->
-            <span class="filter-weight">合计完工量 : <span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} </span>{{totalWgl <10000?'元':totalWgl<100000000?'万元':'亿'}}</span> 
+            <span v-if="cxlx == '1'" class="filter-weight">合计合同额 : <span style="color:#f00;font-size:18px">{{totalHtje<10000?totalHtje:totalHtje<100000000?(totalHtje/10000).toFixed(4):(totalHtje/100000000).toFixed(4)}} </span>{{totalHtje <10000?'元':totalHtje<100000000?'万元':'亿'}}</span>&#x3000;
+            <span v-if="cxlx == '0'" class="filter-weight">合计完工量 : <span style="color:#f00;font-size:18px">{{totalWgl<10000?totalWgl:totalWgl<100000000?(totalWgl/10000).toFixed(4):(totalWgl/100000000).toFixed(4)}} </span>{{totalWgl <10000?'元':totalWgl<100000000?'万元':'亿'}}</span> 
             </span>
             <p style="color:#aaa;font-size:12px;">说明：整体验收里程碑不允许调整，非整体验收里程碑里程碑调整需要用户确认后才生效</p>
         </p>
         <el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" :selectable='checkboxInit'>
+          <el-table-column type="selection" width="55" :selectable='checkboxInit' :key="Math.random()">
           </el-table-column>
           
-          <el-table-column prop="qygc" min-width="130" label="区域工程" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmbh" min-width="100" label="项目编号" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmmc" min-width="200" label="项目名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xmnr_display" min-width="260" label="项目内容" show-overflow-tooltip></el-table-column>
-          <el-table-column min-width="260" label="里程碑描述" show-overflow-tooltip>
+          <el-table-column prop="qygc" min-width="130" label="区域工程" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="xmbh" min-width="100" label="项目编号" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="xmmc" min-width="200" label="项目名称" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="xmnr_display" min-width="260" label="项目内容" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column min-width="260" label="里程碑描述" show-overflow-tooltip v-if="cxlx == '0'" :key="Math.random()">
             <template slot-scope="scope">
               <div class="name-wrapper">
                 <a v-if="scope.row.xmnr_display == '项目备忘'" href="javaScript:;;" @click="handleCheckList(scope.row)">{{scope.row.lcbms_display}}</a>
@@ -170,13 +177,13 @@
               </div>
             </template>
            </el-table-column>
-          <el-table-column prop="nrxmlb" min-width="90" label="项目类别" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="bwxz" min-width="130" label="备忘性质" show-overflow-tooltip>
+          <el-table-column prop="nrxmlb" min-width="90" label="项目类别" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="bwxz" min-width="130" label="备忘性质" show-overflow-tooltip :key="Math.random()">
             <template slot-scope="scope">
-                <span>{{scope.row.bwxz_display}}</span>
+                <span>{{!scope.row.bwxz_display?'无':scope.row.bwxz_display}}</span>
             </template>
           </el-table-column>
-          <el-table-column sortable label="里程碑状态" width="120" show-overflow-tooltip>
+          <el-table-column sortable label="里程碑状态" width="120" show-overflow-tooltip :key="Math.random()">
             <template slot-scope="scope">
               <div class="name-wrapper">
                 <el-tag size="small" title="点击查看操作详情" type='success' v-if="scope.row.zt == '关闭'" @click.native="handleCheckRrecord(scope.row)">{{ scope.row.zt }}</el-tag>
@@ -184,20 +191,25 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="wglv" label="完工率(%)" width="100" v-if="ishow" show-overflow-tooltip> </el-table-column>
-          <el-table-column prop="wglg" label="完工量(元)" width="100" v-if="ishow"> </el-table-column>
-          <!-- <el-table-column prop="jywglv" label="经营完工率(%)" width="130" v-if="ishow" show-overflow-tooltip> </el-table-column> -->
-          <!-- <el-table-column prop="jywglg" label="经营完工量(元)" width="130" v-if="ishow"> </el-table-column> -->
+          <el-table-column prop="wglv" label="完工率(%)" width="100" v-if="ishow && cxlx == '0'" show-overflow-tooltip :key="Math.random()"> </el-table-column>
+          <el-table-column prop="wglg" label="完工量(元)" width="100" v-if="ishow && cxlx == '0'" :key="Math.random()"> </el-table-column>
+					<!-- 验收 -->
+					<el-table-column prop="htje" label="合同金额" width="100" v-if="cxlx == '1'" :key="Math.random()" ></el-table-column>
 
-          <el-table-column prop="cnjssj" sortable label="承诺结束时间" width="150"> </el-table-column>
-          <el-table-column prop="sjjssj" sortable label="实际结束时间" width="150"> </el-table-column>
-          <el-table-column prop="dwmc" min-width="200" label="学校名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="yfzrrxm" min-width="100" label="项目经理" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="zzrxm" label="责任人" width="100"> </el-table-column>
-          <el-table-column prop="htbh" min-width="150" label="合同编号" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="sfzt" min-width="100" label="是否在谈" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="sfgx" min-width="100" label="是否购销" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="dkl" min-width="100" label="到款率" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="cnjssj" sortable label="承诺结束时间" width="150" :key="Math.random()"> </el-table-column>
+          <el-table-column prop="sjjssj" sortable label="实际结束时间" width="150" :key="Math.random()"> </el-table-column>
+          <el-table-column prop="dwmc" min-width="200" label="学校名称" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="yfzrrxm" min-width="100" label="项目经理" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="zzrxm" label="责任人" width="100" :key="Math.random()"> </el-table-column>
+		
+          <el-table-column prop="htbh" min-width="150" label="合同编号" :key="Math.random()"></el-table-column>
+					<!-- 验收 -->
+					<el-table-column prop="xsjl" label="销售经理" width="100" v-if="cxlx == '1'" :key="Math.random()"></el-table-column>
+
+					
+          <el-table-column prop="sfzt" min-width="100" label="是否在谈" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="sfgx" min-width="100" label="是否购销" show-overflow-tooltip :key="Math.random()"></el-table-column>
+          <el-table-column prop="dkl" min-width="100" label="到款率" show-overflow-tooltip :key="Math.random()"></el-table-column>
         </el-table>
       </div>
       <div style="padding:5px 0;text-align:right">
@@ -253,12 +265,13 @@ export default {
       jhkssj:"",//计划开始日期
       jhjssj:"",//计划结束日期
       qygc: "",
+			cxlx:"0",//查询类型
       total: null,
       pageSize: 20,
       currentPage: 1,
       tableData3: [],
       totalWgl: "",
-      totaljyWgl: "", //经营完工量
+      totalHtje: "", //经营完工量
       multipleSelection: [],
       planVisible: false,
       milestoneVisible: false,
@@ -423,6 +436,12 @@ export default {
       this.currentPage = 1;
       this.queryMilestoneData();
     },
+		// 查询类型
+		handleChooseCxlx(val){
+			this.cxlx = val;
+			this.currentPage = 1;
+			this.queryMilestoneData();
+		},
     // 提报里程碑
     handleCommitMilestone() {
       this.milestoneVisible = false;
@@ -444,9 +463,9 @@ export default {
     handleClose() {
       this.planVisible = false;
     },
-
+		
+		//提交
     handleCommit() {
-      //提交
       ModifyMilestoneCommitmentDate({
         xmbh: "",
         lcbbh: this.lcbbhArr.join(","),
@@ -549,7 +568,9 @@ export default {
           "&htxz=" +
           this.htxzList.join(",") +
           "&sfgx=" +
-          this.sfgx
+          this.sfgx +
+					"&cxlx=" +
+					this.cxlx
       );
     },
     //查询里程碑
@@ -637,6 +658,7 @@ export default {
     },
     // 获取里程碑信息
     queryMilestoneData() {
+			this.tableData3 = [];
       queryMilestoneData({
         curPage: this.currentPage,
         pageSize: this.pageSize,
@@ -663,11 +685,12 @@ export default {
         zrr: this.zrrKeyword,
         xmbh: this.xmbhKeyword,
         htxz: this.htxzList.join(","),
-        sfgx: this.sfgx
+        sfgx: this.sfgx,
+				cxlx: this.cxlx  //
       }).then(({ data }) => {
         if (data.state == "success") {
-          this.totalWgl = data.data.totalWgl;
-          this.totaljyWgl = !data.data.totaljyWgl ? 0 : data.data.totaljyWgl;
+          this.totalWgl = !data.data.totalWgl ? 0 : data.data.totalWgl;
+          this.totalHtje = !data.data.totalHtje ? 0 : data.data.totalHtje;
           let milestone = data.data.data.rows;
           milestone.forEach((val, index, arr) => {
             arr[index].wglv = !arr[index].wglv ? 0 : returnFloat(val.wglv);
@@ -695,7 +718,9 @@ export default {
           });
           this.tableData3 = milestone;
           this.total = data.data.data.records;
-        }
+        }else{
+					this.tableData3 = [];
+				}
       });
     }
   },

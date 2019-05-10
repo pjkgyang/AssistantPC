@@ -332,8 +332,8 @@ export default {
       }
       obj[key] = value;
       let { href } = this.$router.resolve({
-        path: "/report-list/questionlist.html",
-        query: obj
+        path: "/questionport",
+        query: {}
       });
       window.open(href, "_blank");
     },

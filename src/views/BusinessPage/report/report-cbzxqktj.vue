@@ -41,7 +41,7 @@ export default {
         keyword: ""
       },
       currentPage: 1,
-      pageSize: 10
+      pageSize: 18
     };
   },
   methods: {
@@ -94,14 +94,15 @@ export default {
 
     handleXxwt(data, i, params) {
         let obj = {};
-        obj.xmbh = data[0]
+        obj.xmbh = data[0];
+				 obj.xmmc = data[1];
         if(params[i].en == 'ekdy'){
             obj.xz = '0';
         }else if(params[i].en == 'ssdy'){
             obj.xz = '1';  
         }
       let routeData = this.$router.resolve({
-        path: "/erssdetail",
+        path: params[i].en == "rbgs"?"/gsrbdetail":"/erssdetail",
         query:obj
       });
       window.open(routeData.href, "_blank");

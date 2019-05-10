@@ -4,8 +4,8 @@
           <div slot="menu" class="menu report-menu">
             <el-menu background-color="#fff" text-color="#708087"  :active-text-color="'#409EFF'" ref="navbar" :router='true' :default-active='defActive'  :default-openeds='openeds' menu-trigger="click" @select="selectMenu"  unique-opened>
                 <nav-bar-item v-for="(item, n) in navList" :urlIndex="item.url" :item="item" :navIndex="String(n+1)" :key="n"></nav-bar-item>
-                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/common/1?url=https://www.baidu.com'}"><i class="el-icon-menu"></i> <span slot="title">测试</span></el-menu-item> 
-                <el-menu-item index="7" :route="{path:'/businesspage/report/common/2?url=https://www.qq.com'}"><i class="el-icon-menu"></i> <span slot="title">测试</span></el-menu-item>  -->
+                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/use/userBehavior'}"><i class="el-icon-menu"></i> <span slot="title"> 行为</span></el-menu-item> -->
+                <!-- <el-menu-item index="7" :route="{path:'/businesspage/report/use/userQuestion'}"><i class="el-icon-menu"></i> <span slot="title">问题</span></el-menu-item> -->
 
 
                 <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/khbb/grrzsj'}"><i class="el-icon-menu"></i> <span slot="title">任职</span></el-menu-item>  -->

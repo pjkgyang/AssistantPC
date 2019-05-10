@@ -1,11 +1,11 @@
 <template>
 	<div class="dialog-container">
-		<el-dialog :title="questionTitle" width="800px" top="30px" :visible.sync="visible" :close-on-click-modal="false"
+		<el-dialog :title="questionTitle" width="1000px" top="30px" :visible.sync="visible" :close-on-click-modal="false"
 		 @close="$emit('update:show', false)" :show="show">
 			<div class="Question">
-				<el-form style="width:750px;margin:0 auto" class="demo-ruleForm" :model="question" :inline="true" label-width="125px">
+				<el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="question" :inline="true" label-width="125px">
 					<el-form-item label="项目名称" required v-if="chooseableItem">
-						<el-input :disabled="!!isInnerItem" size="mini" type="text" style="width:520px;" v-model="xmmc" readonly
+						<el-input :disabled="!!isInnerItem" size="mini" type="text" style="width:720px;" v-model="xmmc" readonly
 						 placeholder="请选择项目">
 							<el-button :disabled="!!isInnerItem" slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;"
 							 @click="addQuestiontItem"></el-button>
@@ -13,64 +13,64 @@
 						<el-checkbox v-if="(showCondition==1||showCondition==2)" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox>
 					</el-form-item>
 					<el-form-item label="项目名称" v-if="!chooseableItem">
-						<el-input size="mini" type="text" style="width:520px" v-model="xmmc" readonly></el-input>
+						<el-input size="mini" type="text" style="width:700px" v-model="xmmc" readonly></el-input>
 					</el-form-item>
 					<el-form-item label="项目状态" required>
-						<el-input size="mini" type="text" style="width:192px" v-model="xmzt" readonly></el-input>
+						<el-input size="mini" type="text" style="width:330px" v-model="xmzt" readonly></el-input>
 					</el-form-item>
 					<el-form-item label="问题来源" required>
-						<el-select v-model="question.wtly" size="mini" placeholder="请选择问题来源" style="width:192px">
+						<el-select v-model="question.wtly" size="mini" placeholder="请选择问题来源" style="width:330px">
 							<el-option v-for="(item,index) in wtly" :key="index" :label="item.mc" :value="item.label">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="问题类别" required v-if="(showCondition==1||showCondition==2)">
-						<el-select v-model="question.wtlb" size="mini" placeholder="请选择问题类别" style="width:192px">
+						<el-select v-model="question.wtlb" size="mini" placeholder="请选择问题类别" style="width:330px">
 							<el-option v-for="(item,index) in wtlb" :key="index" :label="item.mc" :value="item.label">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="是否紧急" required>
-						<el-select v-model="question.sfjj" size="mini" placeholder="请选择是否紧急" style="width:192px">
+						<el-select v-model="question.sfjj" size="mini" placeholder="请选择是否紧急" style="width:330px">
 							<el-option label="是" value="1"></el-option>
 							<el-option label="否" value="0"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="问题级别" required v-if="(showCondition==1||showCondition==2)">
-						<el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:192px">
+						<el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:330px">
 							<el-option label="不严重" value="不严重"></el-option>
 							<el-option label="一般" value="一般"></el-option>
 							<el-option label="严重" value="严重"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="产品" required>
-						<el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:192px" @change="handleChangeCp">
+						<el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:330px" @change="handleChangeCp">
 							<el-option v-for="(cp,index) in xmcpList" :key="index" :label="cp.mc" :value="cp.label">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="影响范围" required v-if="(showCondition==1||showCondition==2)">
-						<el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:192px">
+						<el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:330px">
 							<el-option label="影响局部" value="影响局部"></el-option>
 							<el-option label="影响整体" value="影响整体"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="是否bug" required v-if="(showCondition==1||showCondition==2)">
-						<el-select v-model="question.sfbug" size="mini" placeholder="请选择是否bug" style="width:192px">
+						<el-select v-model="question.sfbug" size="mini" placeholder="请选择是否bug" style="width:330px">
 							<el-option label="是" value="1"></el-option>
 							<el-option label="否" value="0"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="版本号" required v-if="(showCondition==1||showCondition==2)">
-						<el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:193px;"></el-input>
+						<el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:330px;"></el-input>
 					</el-form-item>
 
 					<el-form-item label="期望解决日期" required v-if="!accreditShow">
 						<el-date-picker :picker-options="pickerBeginDateQw" :clearable="false" size="mini" v-model="question.qwjjrq" type="date"
-						 placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
+						 placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:330px;"></el-date-picker>
 					</el-form-item>
 					<el-form-item label="期望解决日期" required v-if="accreditShow">
-						<el-input size="mini" style="width:193px;" readonly v-model="question.qwjjrqO"></el-input>
+						<el-input size="mini" style="width:330px;" readonly v-model="question.qwjjrqO"></el-input>
 					</el-form-item>
 
 					<el-form-item label="环境信息" v-if="isJZuser != 1">
@@ -81,11 +81,11 @@
 					</el-form-item>
 					<el-form-item label="承诺解决日期" required v-if="accreditShow">
 						<el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="question.cnjsrq"
-						 type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:193px;"></el-date-picker>
+						 type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:330px;"></el-date-picker>
 					</el-form-item>
 
 					<el-form-item label="标题" required v-if="!accreditShow">
-						<el-input size="mini" v-model="question.title" type="text" placeholder="标题" style="width:520px;"></el-input>
+						<el-input size="mini" v-model="question.title" type="text" placeholder="标题" style="width:800px;"></el-input>
 					</el-form-item>
 				</el-form>
 				<div class="question-textarea" v-if="!accreditShow">
@@ -96,7 +96,7 @@
 				<div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
 					<el-button size="small" type="primary" @click="handleCommit" v-if="!accreditShow">确认提交</el-button>
 					<el-button size="small" type="primary" @click="handleAccredit" v-if="accreditShow">确认受理</el-button>
-					<el-button size="small" type="info" @click="handleCancel">取消</el-button>
+					<el-button size="small"  @click="handleCancel">取消</el-button>
 				</div>
 			</div>
 		</el-dialog>
@@ -267,6 +267,7 @@
 			handleEdit(data) {
 				this.xmzt = data.xmzt;
 				this.xmData = data;
+				console.log(data);
 				if (this.questionTitle == "我要提问") {
 					this.queryResponsibleProduct(data.xmbh);
 				}
@@ -285,25 +286,28 @@
 
 			// 根据产品切换承诺结束日期范围（9.26）
 			handleChangeCp(val) {
-				this.$get(this.API.questionLimitProduct, {
-					xmbh: this.xmbh,
-					cpbh: val
-				}).then(res => {
-					if (res.state == "success") {
-						let cpmc = "";
-						this.xmcpList.forEach(ele => {
-							if (ele.label == val) cpmc = ele.mc;
-						});
-						if (!res.data) {
-							this.$alert("该项目未采购 " + cpmc + " 专项基础环境运维服务,请联系销售采购对应的服务",
-								"提示", {
-									confirmButtonText: "确定",
-									type: "warning"
-								}
-							);
-						}
-					}
-				});
+				// 非内部项目（2019.05.06）
+				// if(!this.isInnerItem){
+				// 	this.$get(this.API.questionLimitProduct, {
+				// 		xmbh: this.xmbh,
+				// 		cpbh: val
+				// 	}).then(res => {
+				// 		if (res.state == "success") {
+				// 			let cpmc = "";
+				// 			this.xmcpList.forEach(ele => {
+				// 				if (ele.label == val) cpmc = ele.mc;
+				// 			});
+				// 			if (!res.data) {
+				// 				this.$alert("该项目未采购 " + cpmc + " 专项基础环境运维服务,请联系销售采购对应的服务",
+				// 					"提示", {
+				// 						confirmButtonText: "确定",
+				// 						type: "warning"
+				// 					}
+				// 				);
+				// 			}
+				// 		}
+				// 	});
+				// }
 				if (!!this.accreditShow) {
 					queryProductSolutionTime({
 						cpbh: val
@@ -321,7 +325,7 @@
 			handleAccredit() {
 				//确认受理
 				if (
-					!this.xmbh ||
+					(!this.xmbh && !this.isInnerItem) ||
 					!this.question.wtlb ||
 					!this.question.sfjj ||
 					!this.question.wtjb ||
@@ -349,9 +353,7 @@
 							confirmButtonText: "确定",
 							cancelButtonText: "取消",
 							type: "warning"
-						}
-					)
-					.then(() => {
+						}).then(() => {
 						customerQuestion({
 							wtly: this.question.wtly,
 							wtlb: this.question.wtlb,
@@ -363,15 +365,13 @@
 							bbh: this.question.bbh,
 							qwjjrq: this.questionInfo.qwjjrq,
 							cnjsrq: this.question.cnjsrq,
-							xmmc: this.xmmc,
-							xmbh: this.xmbh,
+							xmmc: !!this.isInnerItem?'':this.xmmc,
+							xmbh: !!this.isInnerItem?'':this.xmbh,
 							wid: this.wid,
 							Guid: this.guid,
 							hjfjwid: this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
 							nr: this.slContent //受理内容
-						}).then(({
-							data
-						}) => {
+						}).then(({data}) => {
 							if (data.state == "success") {
 								this.visible = false;
 								this.$alert("受理成功！", "提示", {
@@ -389,8 +389,7 @@
 								});
 							}
 						});
-					})
-					.catch(() => {});
+					}).catch(() => {});
 			},
 
 			//提交问题
@@ -607,7 +606,7 @@
 			this.visible = this.show;
 			if (this.show) {
 				if (this.questionTitle == "我要提问") {
-					  this.getProjects();
+					this.getProjects();
 			     }
 				this.isJZuser = sessionStorage.getItem('isJZuser');
 				this.question.wtly = sessionStorage.getItem('isJZuser') == '0' ? '2' : '1';
@@ -619,7 +618,6 @@
 						height: 200,
 						width: 100 + "%",
 						minHeight: 200,
-						maxHeight: 200,
 						lang: "zh-CN",
 						toolbar: [
 							["style", ["bold", "italic", "underline", "clear"]],
@@ -639,12 +637,12 @@
 					//提问展示
 					this.showCondition = data.data;
 				});
-				if (!getSession("ProblemType") || !getSession("kycp")) {
+				if (!getSession("ProblemType")) {
 					getMenu("ProblemType", this.wtlb, "");
-					getMenu("kycp", this.cplist, true);
+					// getMenu("kycp", this.cplist, true);
 				} else {
 					this.wtlb = getSession("ProblemType");
-					this.cplist = getSession("kycp");
+					// this.cplist = getSession("kycp");
 				}
 
 				if (!getSession("ProblemSource")) {
@@ -677,10 +675,9 @@
 						this.xmmc = this.itemInfo.xmmc;
 						this.xmbh = this.itemInfo.xmbh;
 						this.xmzt = this.itemInfo.xmzt;
-						this.queryResponsibleProduct(this.xmbh);
 					}
 				} else {
-					this.xmcpList = this.cplist;
+					// this.xmcpList = this.cplist;
 					this.question.title = this.questionInfo.bt;
 					this.question.cp = this.questionInfo.cpbh;
 					this.question.wtlb = this.questionInfo.wtlb;
@@ -694,16 +691,21 @@
 						this.questionInfo.cnjsrq == "" ? this.questionInfo.qwjjrqO : this.questionInfo.cnjsrqO;
 					this.question.qwjjrq = this.questionInfo.qwjjrq;
 					this.question.wid = this.questionInfo.wid;
-					this.xmmc = this.questionInfo.xmmc;
-					this.xmbh = this.questionInfo.xmbh;
-					this.xmzt = this.questionInfo.xmzt;
+					this.xmmc = !this.questionInfo.xmmc?'':this.questionInfo.xmmc;
+					if(!!this.questionInfo.xmbh){
+						this.xmbh = this.questionInfo.xmbh
+						this.xmzt = this.questionInfo.xmzt;
+					}else{
+						this.isInnerItem = true;
+						this.xmzt = '在建'
+					}
 					this.question.wtly = this.questionInfo.wtly;
 
 					this.$nextTick(() => {
 						$("#summernote").summernote("code", this.questionInfo.nr);
 					});
 				}
-
+				this.queryResponsibleProduct(this.xmbh);
 			}else{
 				this.isInnerItem = false;
 			}
@@ -721,7 +723,7 @@
 	}
 
 	.question-textarea {
-		width: 750px;
+		width: 950px;
 		margin: 0 auto;
 	}
 

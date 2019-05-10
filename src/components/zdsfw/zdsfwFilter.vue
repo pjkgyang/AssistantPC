@@ -24,37 +24,54 @@
             </p>
           </div>
 
-          <div v-if="filterList.includes('cp')">
-            <p class="query-title">产品:</p>
-            <p class="query-list" @click="handleCp">
+          <div v-if="filterList.includes('cp')" flex>
+            <p class="query-title" style="width:100px !important">产品:</p>
+            <p class="query-list" style="width:90%" @click="handleCp">
               <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
               <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
             </p>
           </div>
 
-          <div v-if="filterList.includes('fwnr')">
+          <div v-if="filterList.includes('fwnr')" >
             <p class="query-title">服务内容:</p>
             <p class="query-list" @click="handleFwnr">
               <span data-type="" :class="{'bg-active':filterWord.fwnr == ''}">全部</span>
               <span v-for="(fwnrl,index) in fwnrList" :data-type="fwnrl.id" :key="index" :class="{'bg-active':filterWord.fwnr == fwnrl.id}">{{fwnrl.text}}</span>
             </p>
           </div>
+					
+					<div flex>
+						<div v-if="filterList.includes('fwzt')" flex style="width: 550px;">
+							<p class="query-title">服务状态:</p>
+							<p class="query-list" @click="handleZt">
+								<span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
+								<span v-for="(ztl,index) in ztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.fwzt == ztl.lable}">{{ztl.mc}}</span>
+							</p>
+						</div>
 
-          <div v-if="filterList.includes('fwzt')">
-            <p class="query-title">服务状态:</p>
-            <p class="query-list" @click="handleZt">
-              <span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
-              <span v-for="(ztl,index) in ztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.fwzt == ztl.lable}">{{ztl.mc}}</span>
-            </p>
-          </div>
-
-          <div v-if="filterList.includes('fxdj')">
-            <p class="query-title">风险:</p>
-            <p class="query-list" @click="handleFx">
-              <span v-for="(fxdj,index) in fxList" :data-type="fxdj.lable" :key="index" :class="{'bg-active':filterWord.fxdj == fxdj.lable}">{{fxdj.mc}}</span>
-            </p>
-          </div>
-
+						<div v-if="filterList.includes('fxdj')" flex >
+							<p class="query-title">风险:</p>
+							<p class="query-list" @click="handleFx">
+								<span v-for="(fxdj,index) in fxList" :data-type="fxdj.lable" :key="index" :class="{'bg-active':filterWord.fxdj == fxdj.lable}">{{fxdj.mc}}</span>
+							</p>
+						</div>
+					</div>	
+					
+					<div flex>
+						<div v-if="filterList.includes('wtzt')" flex style="width: 550px;">
+							<p class="query-title">问题状态:</p>
+							<p class="query-list" >
+								<span  v-for="(wtzt,index) in wtztList"  @click="handleWTZT(wtzt.lable)" :key="index" :class="{'bg-active':filterWord.wtzt == wtzt.lable}">{{wtzt.mc}}</span>
+							</p>
+						</div>
+						<div v-if="filterList.includes('fxzt')" flex>
+							<p class="query-title">风险状态:</p>
+							<p class="query-list">
+								<span v-for="(fxzt,index) in wtztList" @click="handleFXZT(fxzt.lable)"  :key="index" :class="{'bg-active':filterWord.fxzt == fxzt.lable}">{{fxzt.mc}}</span>
+							</p>
+						</div>
+					</div>
+						
           <div v-if="filterList.includes('xmzt')">
             <p class="query-title">项目状态:</p>
             <p class="query-list" @click="handleXmzt">
@@ -121,6 +138,11 @@ export default {
         { lable: "1", mc: "过期" },
         { lable: "2", mc: "超期" }
       ],
+			wtztList:[
+				{ lable: "", mc: "全部" },
+				{ lable: "0", mc: "待处理" },
+				{ lable: "1", mc: "已处理" },
+			],
       filterWord: {
         keyword: "",
         fwnr: "",
@@ -141,7 +163,9 @@ export default {
         //   )
         // ],
         sfgq: "",
-        fxdj:""
+        fxdj:"",
+				wtzt:"",
+				fxzt:""
       },
       groupTag: "",
       sfzk: true
@@ -151,7 +175,7 @@ export default {
     filterList: {
       type: Array,
       default: () => {
-        return ["keyword", "cp", "fwnr", "fwzt",'fxdj', "xmzt", "lb", "date", "sfgq"];
+        return ["keyword", "cp", "fwnr", "fwzt",'fxdj', "xmzt", "lb", "date", "sfgq","wtzt","fxzt"];
       }
     },
     placeholder: {
@@ -209,7 +233,7 @@ export default {
       this.filterWord.fwzt = zt;
       this.$emit("handleChangeFilter", this.filterWord);
     },
-  handleFx(e) {
+    handleFx(e) {
       let fxdj = e.target.getAttribute("data-type");
       if (fxdj == null) return;
       this.filterWord.fxdj = fxdj;
@@ -233,7 +257,17 @@ export default {
       this.filterWord.sfgq = gq;
       this.$emit("handleChangeFilter", this.filterWord);
     },
-
+		// 问题状态
+		handleWTZT(data){
+			 this.filterWord.wtzt = data;
+			 this.$emit("handleChangeFilter", this.filterWord);
+		},
+		// 风险状态
+		handleFXZT(data){
+			console.log(data);
+			 this.filterWord.fxzt = data;
+			 this.$emit("handleChangeFilter", this.filterWord);
+		},
     listXmZdsfwCp() {
       this.$get(this.API.listXmZdsfwCp, {
         xmbh: this.xmbh

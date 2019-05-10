@@ -38,9 +38,18 @@
                     <el-tag size="mini" :class="{'zdsfw-fxdj-s1':scope.row.fxdj==1,'zdsfw-fxdj-s2':scope.row.fxdj==2,'zdsfw-fxdj-s3':scope.row.fxdj==3}" >{{scope.row.fxdj==1?'S1':scope.row.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
                   </a>
                   <span v-if="scope.row.fxdj == '-'">{{scope.row.fxdj}}</span>
-                  <span style="font-size:12px">{{scope.row.fxsfcl==0?'(未处理)':scope.row.fxsfcl==1?'(已处理)':scope.row.fxsfcl}}</span>
+                  <span style="font-size:12px">{{scope.row.fxsfcl==0?'(待处理)':scope.row.fxsfcl==1?'(已处理)':''}}</span>
               </template>
             </el-table-column>
+						<el-table-column label="问题总数" width="150">
+						  <template slot-scope="scope">
+						      <a href="javaScript:;;" v-if="scope.row.wtzs != '0' && scope.row.wtzs != '-'"  @click="handleCheckWt(scope.row)">
+						       {{scope.row.wtzs}}
+						      </a>
+									<span v-if="scope.row.wtzs == '-' || scope.row.wtzs == '0' || !scope.row.wtzs" >- -</span>
+						      <span v-if="scope.row.wtzs != '0' && scope.row.wtzs != '-'" style="font-size:12px">({{scope.row.wtsfcl}})</span>
+						  </template>
+						</el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
                 <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
@@ -62,7 +71,9 @@
             <el-table-column prop="dkl" label="到款率" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
+            <el-table-column v-if="isJzuser == '0'" prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
+						<el-table-column v-if="isJzuser == '0'" prop="wtgs" label="问题工时(小时)" width="120"></el-table-column>
+						<el-table-column v-if="isJzuser == '0'" prop="fxgs" label="风险工时(小时)" width="120"></el-table-column>
             <el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="qrsj" label="确认时间" width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="pf" label="评分" width="80"></el-table-column>
@@ -78,6 +89,7 @@
     <tbfwDialog :show.sync='tbfwShow' @handleCommitTB="handleCommitTB" :wids="wids" :isMultiple="isMultiple" :rowData="rowData"></tbfwDialog>
     <qrbhfwDialog :show.sync='qrbhfwShow' :title="title" @handleCommitQR="handleCommitQR"></qrbhfwDialog>
     <fxdjDialog :show.sync='fxdjShow' :rowData="rowData" @handleSave="handleSave"></fxdjDialog>
+		<wtDialog :show.sync='wtShow' :rowData="rowData" @handleSave="handleSave"></wtDialog>
   </div>
 </template>
 
@@ -88,11 +100,13 @@ import { getProjectCatalog } from "@/api/xmfz.js";
 import tbfwDialog from "@/components/dialog/zdsfw/tbfw-dialog.vue";
 import qrbhfwDialog from "@/components/dialog/zdsfw/qrbhfw-dialog.vue";
 import fxdjDialog from "@/components/dialog/zdsfw/fxdjcommit.vue";
+import wtDialog from "@/components/dialog/zdsfw/wtcommit.vue";
 import { getLastMonthDay } from "@/utils/util.js";
 
 export default {
   data() {
     return {
+			wtShow:false,
       tbfwShow: false,
       qrbhfwShow: false,
       fxdjShow: false,
@@ -117,7 +131,9 @@ export default {
         jhksrq: "",
         jhjsrq: "",
         sfgq: "",
-        fxdj: ""
+        fxdj: "",
+				wtzt:"",
+				fxzt:""
       },
       isJzuser: "",
       userGroupTag: "",
@@ -133,6 +149,11 @@ export default {
       this.rowData = data;
       this.fxdjShow = !this.fxdjShow;
     },
+		//添加问题
+		handleCheckWt(data){
+			this.rowData = data;
+			this.wtShow = !this.wtShow;
+		},
     // 风险等级列保存
     handleSave(data) {
       this.$post(this.API.submitActiveServiceRisk, {
@@ -321,7 +342,11 @@ export default {
               this.filterData.lb +
               "&sffb=1" +
               "&fxdj=" +
-              this.filterData.fxdj
+              this.filterData.fxdj+
+							"&wtzt=" +
+							this.filterData.wtzt +
+							"&fxzt=" +
+							this.filterData.fxzt
           );
           break;
         case "sc": //生成
@@ -399,7 +424,9 @@ export default {
         sfgq: this.filterData.sfgq,
         keyword: this.filterData.keyword,
         sffb: 1,
-        fxdj: this.filterData.fxdj
+        fxdj: this.filterData.fxdj,
+				wtzt:this.filterData.wtzt,
+				fxzt:this.filterData.fxzt,
       }).then(res => {
         if (res.state == "success") {
           this.tableData = res.data.rows;
@@ -422,7 +449,7 @@ export default {
     this.username = JSON.parse(sessionStorage.userInfo).nickName;
   },
   props: {},
-  components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter, fxdjDialog }
+  components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter, fxdjDialog,wtDialog }
 };
 </script>
 

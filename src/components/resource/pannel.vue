@@ -14,7 +14,7 @@
 			<section v-if="catalogue == 'file'">
 				<ul class="file-list">
 					<div style="padding-bottom:10px;border-bottom:1px solid #ccc">
-						<span class="file-breadcrumb" @click="handleAllfile">全部目录（{{resourceType==1?'模板':resourceType==2?'课件':resourceType==3?'新人专区':resourceType==5?'学校资料库':'合作伙伴资料库'}}）</span>
+						<span class="file-breadcrumb" @click="handleAllfile">全部目录（{{resourceType==1?'模板':resourceType==2?'课件':resourceType==3?'新人专区':resourceType==5?'文档中心':'合作伙伴文档中心'}}）</span>
 						<span v-for="(file,index) in fileBread" class="file-breadcrumb" :data-fjbh="file.fjbh" @click="handleBreadFile">
 							<span class="el-icon-arrow-right"></span>
 							<span>{{file.fjmc}}</span>

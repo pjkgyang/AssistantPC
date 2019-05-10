@@ -17,11 +17,12 @@
                                 <span class="el-icon-close" title="删除" @click="handleDelete('wt',wt,index)"></span>
                             </section>
                             <section class="option-list-right">
-                                <p>问题描述：{{wt.wtms}}</p>
-                                <p>处理结果：{{wt.cljg}}</p>
+                                <p><span class="filter-weight">问题描述</span> : {{wt.wtms}}</p>
+                                <p><span class="filter-weight">处理结果</span> : {{wt.cljg}}</p>
                             </section>
                         </div>
                     </div><br>
+										
                     <div>
                         <span class="filter-weight before-require">风险：</span>
                         <span>
@@ -33,9 +34,9 @@
                                 <span class="el-icon-close" title="删除" @click="handleDelete('fx',fx,index)"></span>
                             </section>
                             <section class="option-list-right">
-                                <p>风险描述:{{fx.fxms}}</span></p>
-                                <p>风险等级:{{fx.fxdj==1?'S1':fx.fxdj==2?'S2':'S3'}}</p>
-                                <p>处理建议:{{fx.cljy}}</p>
+                                <p><span class="filter-weight">风险描述</span> : {{fx.fxms}}</p>
+                                <p><span class="filter-weight">风险等级</span> : {{fx.fxdj==1?'S1':fx.fxdj==2?'S2':'S3'}}</p>
+                                <p><span class="filter-weight">处理建议</span> : {{fx.cljy}}</p>
                             </section>
                         </div>
                     </div><br>
@@ -115,7 +116,10 @@ export default {
       this.$post(this.API.addActiveServiceProblem,{
         zbwid:this.rowData.wid,
         wtms:data.ms,
+				clyj:data.jy,
         cljg:data.jg,
+				gs:data.gs,
+				zt:data.zt
       }).then(res=>{
         if(res.state == 'success'){
           this.$message({message: '添加成功~',type: 'success'});
@@ -130,7 +134,11 @@ export default {
         zbwid:this.rowData.wid,
         fxms:data.fxms,
         fxdj:data.fxdj,
-        cljy:data.cljy, 
+        cljy:data.cljy,
+				cljg:data.cljg,
+				zt:data.zt,
+				gs:data.gs,
+				fjData:data.fileList
       }).then(res=>{
         if(res.state == 'success'){
           this.$message({message: '添加成功~',type: 'success'});
