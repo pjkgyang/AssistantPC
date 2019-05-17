@@ -2,7 +2,7 @@
 	<div class="pd-10">
 		<div class="layout-bgf">
 			<h4 text-center>问题统计</h4>
-			<questionReport :isXxkb="true"></questionReport>
+			<questionReport  :bh="$route.query.bh"></questionReport>
 		</div>
 	</div>
 </template>

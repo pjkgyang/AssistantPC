@@ -64,9 +64,13 @@ export default {
           fbbh: this.fbbh
         }).then(res => {
           if (res.state == "success") {
-            console.log(res);
             this.tableData = res.data;
-          }
+          }else{
+						this.$message({
+						  message: res.msg,
+						  type: 'error'
+						});
+					}
         });
       }
     }

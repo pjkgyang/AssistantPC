@@ -248,6 +248,7 @@ export default {
     this.userGroupTag = JSON.parse(
       sessionStorage.getItem("userInfo")
     ).userGroupTag;
+		
     showQuestionCondition().then(({ data }) => {
       //提问展示
       this.showCondition = data.data;

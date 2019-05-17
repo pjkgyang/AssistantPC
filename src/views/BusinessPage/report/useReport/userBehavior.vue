@@ -37,7 +37,7 @@ export default {
 				keyword: ''
 			},
 			currentPage: 1,
-			pageSize: 20
+			pageSize: 30
 		};
 	},
 	methods: {

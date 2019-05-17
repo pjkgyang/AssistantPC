@@ -60,6 +60,7 @@
            </div>
       </div>
     </el-dialog>
+		
     <el-dialog
         width="750px"
         title="团队成员信息"

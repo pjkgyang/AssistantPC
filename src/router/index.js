@@ -88,7 +88,8 @@ export default new Router({
 					name: 'QutAnalyse',
 					meta: {},
 					component: resolve => require(['@/views/BusinessPage/questionAnalyse.vue'], resolve)
-				}, {
+				},
+				{
 					path: '/questionDetail',
 					name: 'questionDetail',
 					meta: {},
@@ -199,13 +200,17 @@ export default new Router({
 				{
 					path: '/projectfbmx',
 					name: 'projectLxxx',
-					meta: {},
+					meta: {
+						title:"立项信息"
+					},
 					component: resolve => require(['@/views/xmgl/lxxx.vue'], resolve),
 				},
 				{
 					path: '/projectXmfb',
 					name: 'projectXmfb',
-					meta: {},
+					meta: {
+						title:"项目分包"
+					},
 					component: resolve => require(['@/views/xmgl/xmfb.vue'], resolve),
 				},
 				{
@@ -228,10 +233,44 @@ export default new Router({
 					component: resolve => require(['@/views/xmgl/fbsh.vue'], resolve),
 				},
 				{
+					path: '/projectfbshdetail',
+					name: 'projectfbshdetail',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/fbshDetail.vue'], resolve),
+				},
+				{
 					path: '/fbshdetail',
 					name: 'fbshdetail',
 					meta: {},
 					component: resolve => require(['@/views/xmgl/fbshDetail.vue'], resolve),
+				},
+				{
+					path: '/projectSettle',
+					name: 'projectSettle',
+					meta: {
+						title:"项目结算"
+					},
+					component: resolve => require(['@/views/xmgl/projectSettle.vue'], resolve),
+				},
+				{
+					path: '/projectsettledetail',
+					name: 'projectSettleDetail',
+					meta: {
+						title:"项目结算详情"
+					},
+					component: resolve => require(['@/views/xmgl/projectSettleDetail.vue'], resolve),
+				},
+				{
+					path: '/projectSettleAudit',
+					name: 'projectSettleAudit',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/projectSettleAudit.vue'], resolve),
+				},
+				{
+					path: '/projectSettleAuditDetail',
+					name: 'projectSettleAuditDetail',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/projectSettleAuditDetail.vue'], resolve),
 				},
 				{
 					path: '/school',

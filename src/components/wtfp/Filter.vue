@@ -19,7 +19,7 @@
                     </div>
                     <div v-if="filterList.includes('cp')">
                         <p class="query-title">产品:</p>
-                        <p class="query-list" @click="handleCp">
+                        <p class="query-list" @click="handleCp" style="width: 92%;">
                             <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
                             <span v-for="(cpx,index) in cplist" :data-index="index" :data-type="cpx.label" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.label&&filterWord.cpmc == cpx.mc}">{{cpx.mc}}</span>
                         </p>

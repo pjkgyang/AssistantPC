@@ -1,7 +1,7 @@
 <template>
     <div class="pannelPadding-10">
         <div class="pannelPaddingBg-10">
-            <h4>{{$route.query.xz=='0'?'二开调用详情':$route.query.xz=='1'?'实施调用详情':'报销提报详情'}}</h4>
+            <h4 text-center>{{$route.query.xz=='0'?'二开调用详情':$route.query.xz=='1'?'实施调用详情':'报销提报详情'}}</h4>
             <ekdyTable :tableData="tableData" v-if="$route.query.xz == '0'"></ekdyTable>
             <ekssTable :tableData="tableData" v-if="$route.query.xz == '1'"></ekssTable>
             <bxfyTable :tableData="tableData" v-if="!$route.query.xz"></bxfyTable>

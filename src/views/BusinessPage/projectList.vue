@@ -173,9 +173,11 @@
 
             <el-table-column  label="学校" show-overflow-tooltip width="280">
               <template slot-scope="scope">
-                   <span class="name-wrapper" @click="handleRouterXxkb(scope.row.dwmc)">{{scope.row.dwmc}}</span>
+                   <span class="name-wrapper" @click="handleRouterXxkb(scope.row)">{{scope.row.dwmc}}</span>
               </template>
             </el-table-column>
+						<el-table-column prop="cn" label="财年"  width="100"></el-table-column>
+						<el-table-column prop="gczd" label="区域工程" min-width="150"></el-table-column>
 						<el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
             <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
             <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
@@ -303,7 +305,7 @@ export default {
     handleRouterXxkb(params){
       let routeData = this.$router.resolve({
         path:"/xxtsql",
-        query:{ dwmc: escape(params) }
+        query:{ dwmc: escape(params.dwmc),bh:params.wid }
        });
       window.open(routeData.href, "_blank");
     },

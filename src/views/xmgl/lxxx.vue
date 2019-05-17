@@ -9,87 +9,87 @@
 						<table>
 							<tr>
 								<th>项目编号</th>
-								<td>{{ htjbxx.htje }}</td>
+								<td>{{ htjbxx.xmbh }}</td>
 								<th>项目名称</th>
-								<td colspan="3"></td>
+								<td colspan="3">{{ htjbxx.xmmc }}</td>
 							</tr>
 							<tr>
 								<th>合同编号</th>
-								<td>{{ htjbxx.sxrq }}</td>
+								<td>{{ htjbxx.htbh }}</td>
 								<th>项目类别</th>
-								<td>{{ htjbxx.lxrq }}</td>
+								<td>{{ htjbxx.xmlbmc }}</td>
 								<th>项目状态</th>
-								<td>{{ !htjbxx.fwksrq ? '无' : htjbxx.fwksrq }}</td>
+								<td>{{ htjbxx.xmxz }}</td>
 							</tr>
 							<tr>
 								<th>合同金额（元）</th>
-								<td>{{ !htjbxx.fwqx ? '无' : htjbxx.fwqx }}</td>
+								<td>{{ !htjbxx.htje ? 0 : htjbxx.htje }}</td>
 								<th>合同毛收入（元）</th>
-								<td>{{ !htjbxx.khjl ? '无' : htjbxx.khjl }}</td>
+								<td>{{ !htjbxx.htmsr ? 0 : htjbxx.htmsr }}</td>
 								<th>到款率（%）</th>
-								<td>{{ !htjbxx.xmjl ? '无' : htjbxx.xmjl }}</td>
+								<td>{{ !htjbxx.dkl ? 0 : htjbxx.dkl }}</td>
 							</tr>
 							<tr>
 								<th>合同性质</th>
-								<td>{{ htjbxx.xmxz }}</td>
+								<td>{{ htjbxx.sfzt=='A'?'正式':htjbxx.sfzt=='B'?'内部':'在谈' }}</td>
 								<th>是否购销</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.sfgx=='0'?'否':'是' }}</td>
 								<th>财年</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.cn }}</td>
 							</tr>
 							<tr>
 								<th>项目经理</th>
-								<td>{{ htjbxx.xmxz }}</td>
+								<td>{{ htjbxx.xmjl }}</td>
 								<th>客户经理</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.khjl }}</td>
 								<th>学校</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.xx }}</td>
 							</tr>
 							<tr>
 								<th>甲方</th>
-								<td>{{ htjbxx.xmxz }}</td>
+								<td>{{ htjbxx.yh }}</td>
 								<th>签署方</th>
-								<td>金智教育</td>
+								<td>{{ htjbxx.qsfmc }}</td>
 								<th>签署日期</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.qssj }}</td>
 							</tr>
 							<tr>
 								<th>生效日期</th>
-								<td>{{ htjbxx.xmxz }}</td>
+								<td>{{ htjbxx.sxrq }}</td>
 								<th>立项日期</th>
-								<td>‘</td>
+								<td>{{ htjbxx.lxrq }}</td>
 								<th>启动日期</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.qdrq }}</td>
 							</tr>
 							<tr>
 								<th>承诺验收日期</th>
-								<td>{{ htjbxx.xmxz }}</td>
+								<td>{{ htjbxx.cnysrq }}</td>
 								<th>整体验收报告日期</th>
-								<td>‘</td>
+								<td>{{ htjbxx.ztysbgsj }}</td>
 								<th>整体验收结束日期</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.ztysjssj }}</td>
 							</tr>
 							<tr>
 								<th>服务开始日期</th>
-								<td>{{ htjbxx.xmxz }}</td>
-								<th>服务年限</th>
-								<td>‘</td>
+								<td>{{ htjbxx.fwksrq }}</td>
+								<th>服务年限（月）</th>
+								<td>{{ htjbxx.fwqx }}</td>
 								<th>过保日期</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.gbsj }}</td>
 							</tr>
 							<tr>
 								<th>工程区域</th>
-								<td>{{ htjbxx.xmxz }}</td>
+								<td>{{ htjbxx.gcqy }}</td>
 								<th>工程战队</th>
-								<td>‘</td>
+								<td>{{ htjbxx.gczd }}</td>
 								<th>是否延长售后</th>
-								<td>{{ htjbxx.xmlb }}</td>
+								<td>{{ htjbxx.gcfwzt==1?'是':'否' }}</td>
 							</tr>
 							<tr>
 								<th>延长截止日期</th>
-								<td>{{ htjbxx.xmxz }}</td>
+								<td>{{ htjbxx.ycfwqx }}</td>
 								<th>延长说明</th>
-								<td colspan="3">‘</td>
+								<td colspan="3">{{ htjbxx.gcfwztsm }}</td>
 							</tr>
 						</table>
 					</div>
@@ -100,148 +100,11 @@
 							<el-table-column prop="app" label="合同内容" show-overflow-tooltip min-width="150"></el-table-column>
 							<el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>
 							<el-table-column prop="sm" label="说明" min-width="150" show-overflow-tooltip></el-table-column>
-							<el-table-column prop="rjcpmc" label="产品归属" min-width="150"></el-table-column>
+							<el-table-column prop="ejcpmc" label="产品归属" min-width="150"></el-table-column>
 							<el-table-column prop="ssry" label="实施人月" width="100"></el-table-column>
 							<el-table-column prop="kfry" label="二开人月" width="120"></el-table-column>
 							<el-table-column prop="kfry" label="项目类别" width="120"></el-table-column>
 						</el-table>
-					</div>
-				</div>
-
-				<div v-if="!!$route.query.v">
-					<div>
-						<h6>分包基本信息</h6>
-						<table>
-							<tr>
-								<th>项目编号</th>
-								<td>1</td>
-								<th>项目名称</th>
-								<td colspan="3"></td>
-							</tr>
-							<tr>
-								<th>分包名称</th>
-								<td colspan="5">1</td>
-							</tr>
-							<tr>
-								<th>分包日期</th>
-								<td>1</td>
-								<th>计划开始日期</th>
-								<td>1</td>
-								<th>计划结束日期</th>
-								<td>1</td>
-							</tr>
-							<tr>
-								<th>实施费用（元）</th>
-								<td>1</td>
-								<th>二开费用（元）</th>
-								<td>1</td>
-								<th>可变费用（元）</th>
-								<td>1</td>
-							</tr>
-							<tr>
-								<th>实施费用标准（元）</th>
-								<td>1</td>
-								<th>二开费用标准（元）</th>
-								<td>1</td>
-								<th></th>
-								<td></td>
-							</tr>
-							<tr height="50px">
-								<th rowspan="2">分包说明</th>
-								<td colspan="5" rowspan="2">11</td>
-							</tr>
-						</table>
-					</div>
-
-					<div>
-						<h6>业务域分包统计</h6>
-						<table class="table_center">
-							<tr>
-								<th>业务域</th>
-								<th>占比</th>
-								<th>实施人月（合同）</th>
-								<th>实施参考标准</th>
-								<th>实施人月（分包）</th>
-								<th>二开人月（合同）</th>
-								<th>二开人月（分包）</th>
-							</tr>
-							<tr>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-							</tr>
-							<tr>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-							</tr>
-							<tr>
-								<th colspan="2" style="text-align: center;">总计</th>
-								<td>1</td>
-								<td>2</td>
-								<td>3</td>
-								<td>4</td>
-								<td>5</td>
-							</tr>
-						</table>
-					</div>
-
-					<div>
-						<h6>分包内容</h6>
-						<table class="table_center">
-							<tr>
-								<th>业务域</th>
-								<th>合同内容</th>
-								<th>占比</th>
-								<th>说明</th>
-								<th>项目类别</th>
-								<th>实施人月（合同）</th>
-								<th>实施参考（标准）</th>
-								<th>实施人月（分包）</th>
-								<th>二开人月（合同）</th>
-								<th>二开人月（分包）</th>
-							</tr>
-							<tr>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-							</tr>
-							<tr>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-								<td>只读</td>
-							</tr>
-							<tr>
-								<th colspan="5" style="text-align: center;">总计</th>
-								<td>1</td>
-								<td>2</td>
-								<td>3</td>
-								<td>4</td>
-								<td>5</td>
-							</tr>
-						</table>
 					</div>
 				</div>
 			</div>
@@ -256,16 +119,27 @@ export default {
 			htnrData: []
 		};
 	},
-	mounted() {},
-	methods: {},
+	mounted() {
+		this.getLxxx();
+	},
+	methods: {
+		getLxxx(){
+			this.$get(this.API.queryLxxx,{xmbh:this.$route.query.xmbh}).then(res=>{
+				if(res.state == 'success'){
+					console.log(res)
+					this.htjbxx = res.data.lxxx;
+					this.htnrData = !res.data.lxxx_htnr?[]:res.data.lxxx_htnr
+				}
+			})
+		}
+	},
 	activated() {},
 	components: {}
 };
 </script>
 <style scoped>
 .fbdetail_container {
-	min-width: 1200px;
-	max-width: 80%;
+	width: 90%;
 	margin: 20px auto;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 	border-radius: 4px;
@@ -291,20 +165,20 @@ export default {
 .fb_info table {
 	width: 100%;
 	border-collapse: collapse;
-	border: 1px solid #c9ece7;
+	border: 1px solid #E9ECF4;
 	font-size: 14px;
 }
 .fb_info table th {
 	font-size: 14px;
 	text-align: center;
 	width: 150px;
-	background: #eee;
+	background: #F4F6F9;
 	color: #4d4d4d;
 }
 .fb_info table td,
 .fb_info table th {
 	text-align: left;
-	border: 1px solid #ccc !important;
+	border: 1px solid #E9ECF4 !important;
 	padding: 5px 10px;
 }
 .fb_info h4 {

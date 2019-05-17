@@ -1,12 +1,15 @@
 <template>
   <div class="pannelPadding-10">
     <div class="pannelPaddingBg-10">
+			<div text-center>
+				<h4 class="filter-weight pd-10">实施提升计划--参与人数详情</h4>
+			</div>
       <div>
         <el-input v-model="keyword" style="width:500px;" size="mini" placeholder="请输入工号/部门名称/一级部门名称/姓名/区域战队" @change="handleSearch"></el-input>
         <el-button @click="handleSearch" size="mini" type="primary">查询</el-button>
       </div><br>
       <div class="mg-12" text-right>
-        <el-button size="mini" @click="handleExport">导出</el-button>
+        <el-button size="mini" @click="handleExport" type="primary">导出</el-button>
       </div>
       <div>
         <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight">

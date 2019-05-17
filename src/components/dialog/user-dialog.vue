@@ -17,7 +17,7 @@
                     <el-table-column prop="username" label="姓名" ></el-table-column>
                     <el-table-column prop="usercode" label="工号" ></el-table-column>
                     <el-table-column prop="dept" label="部门" ></el-table-column>
-                    <el-table-column label="操作" width="110">
+                    <el-table-column label="操作" min-width="110">
                         <template slot-scope="scope">
                             <el-button size="mini" :disabled="scope.row.ytj == 0" @click="handleAdd(scope.$index,scope.row)">{{!scope.row.ytj?'已添加':'添加'}}</el-button>
                         </template>
@@ -52,6 +52,7 @@
           pageSize:15,
           total:200,
           tableData: [],
+		  userDatas:[],
           inx:''
      }
    },
@@ -69,23 +70,30 @@
            this.getUsers();
        },
        handleAdd(index,row){        //添加
-            this.$post(this.API.saveZdcy,{
-                wid:'',
-                cyid:row.usercode,
-                cyxm:row.username,
-                qyzdwid:this.qyzdwid
-            }).then((res)=>{
-                if(res.state == 'success'){
-                    this.$alert('添加成功', '提示', {
-                    confirmButtonText: '确定',
-                    type:'success',
-                    callback: action => {
-                       row.ytj = 0
-                       this.$emit('addUserSuccess','')
-                    }
-                  });
-                }
-            })
+	       if(!this.isdept){
+			   this.userDatas[index].ytj = 0;
+			   this.$set(this.tableData,index, this.userDatas[index]);
+				this.$emit('addUserSuccess',row);
+		   }else{
+			  this.$post(this.API.saveZdcy,{
+			     wid:'',
+			     cyid:row.usercode,
+			     cyxm:row.username,
+			     qyzdwid:this.qyzdwid
+			 }).then((res)=>{
+			     if(res.state == 'success'){
+			         this.$alert('添加成功', '提示', {
+			         confirmButtonText: '确定',
+			         type:'success',
+			         callback: action => {
+			            this.userDatas[index].ytj = 0;
+			            this.$set(this.tableData,index, this.userDatas[index]);
+			            this.$emit('addUserSuccess','');
+			         }
+			       });
+			     }
+			 })  
+		   }
        },
        getUsers(){
            getUsers({
@@ -93,7 +101,7 @@
             pageSize: this.pageSize,
             unitType:0,
             keyword: this.keyword,
-            dept:'01AM'
+            dept:!!this.isdept?'01AM':''
         }).then(({ data }) => {
             if (data.state == "success") {
             if(!data.data || !data.data.rows){
@@ -105,6 +113,7 @@
                  this.tableData.forEach(ele=>{
                     ele.ytj = 1
                 })
+				this.userDatas = this.tableData;
               }
             }
         });
@@ -118,7 +127,11 @@
        qyzdwid:{
            type:String,
            default:''
-       }
+       },
+	   isdept:{
+		   type:Boolean,
+		   default:true
+	   }
    },
      watch: {
         show (n,o) {

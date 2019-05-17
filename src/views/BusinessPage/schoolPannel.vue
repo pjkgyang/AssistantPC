@@ -10,7 +10,7 @@
       ></el-input>
     </div>
     <div flex>
-      <div v-for="item in schools" class="project-school_card" flex colcenter @click="handleCheckDetail(item.mc)">
+      <div v-for="item in schools" class="project-school_card" flex colcenter @click="handleCheckDetail(item)">
         <div class="logo">
           <img :src="item.logo" :onerror="errorImg">
         </div>
@@ -50,7 +50,7 @@ export default {
     handleCheckDetail(params){
       let { href } = this.$router.resolve({
         path: "/xxtsql",
-        query: {dwmc:params}
+        query: {dwmc:params.mc,bh:params.wid}
       });
       window.open(href, "_blank");
     },

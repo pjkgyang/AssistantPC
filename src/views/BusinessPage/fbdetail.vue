@@ -197,17 +197,17 @@
 					<br>
 					<div>
 						<span class="filter-weight">创建团队：</span>
-						<div text-right style="margin: 10px 0">
-							<el-button size="mini" type="primary">添加成员</el-button>
+						<div style="margin: 10px 0">
+							<el-button size="mini" type="primary" @click="handleAddUser">添加成员</el-button>
 						</div>
-						<el-table :data="tableData" border style="width: 100%">
+						<el-table :data="userData" border style="width: 100%">
 							<el-table-column fixed="left" label="操作" width="80">
 								<template slot-scope="scope">
-									<el-button type="danger" size="mini">删除</el-button>
+									<el-button type="danger" size="mini" @click="hanldeDelete(scope.$index)">删除</el-button>
 								</template>
 							</el-table-column>
-							<el-table-column prop="date" label="工号" width="100"></el-table-column>
-							<el-table-column prop="name" label="姓名" width="100"></el-table-column>
+							<el-table-column prop="usercode" label="工号" width="100"></el-table-column>
+							<el-table-column prop="username" label="姓名" width="100"></el-table-column>
 							<el-table-column prop="name" label="负责业务线"></el-table-column>
 							<el-table-column prop="name" label="分配实施金额"></el-table-column>
 							<el-table-column prop="name" label="分配二开金额"></el-table-column>
@@ -249,17 +249,20 @@
 				<div style="margin:10px 0;text-align:right;padding:10px 20px;"><button class="tbcommit" @click="handleCommit">提交</button></div>
 			</el-dialog>
 		</div>
+		<userDialog :show.sync="show" :isdept="false" @addUserSuccess="addUserSuccess"></userDialog>
 	</div>
 </template>
 <script>
 import htnrTable from '@/components/BusinessPage/htnrTable.vue';
 import { queryHtxx, queryFbxx, launchTb, saveTbxx } from '@/api/toubiao.js';
 import { EventBus, returnFloat } from '../../utils/util.js';
+import userDialog from '@/components/dialog/user-dialog.vue'
 
 export default {
 	data() {
 		return {
 			dialogTableVisible: false,
+			show:false,
 			tbly: '',
 			xmbh: '',
 			fbData: '',
@@ -272,38 +275,8 @@ export default {
 			fbcpData: [],
 			tbje: null,
 			zbxx: '',
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}
-			],
-			options: [
-				{
-					value: '选项1',
-					label: '黄金糕'
-				},
-				{
-					value: '选项2',
-					label: '双皮奶'
-				},
-				{
-					value: '选项3',
-					label: '蚵仔煎'
-				},
-				{
-					value: '选项4',
-					label: '龙须面'
-				},
-				{
-					value: '选项5',
-					label: '北京烤鸭'
-				}
-			],
+			userData: [],//团队成员
+			options: [],
 			value:'选项4'
 		};
 	},
@@ -313,6 +286,16 @@ export default {
 		});
 	},
 	methods: {
+		handleAddUser(){
+			this.show = true;
+		},
+		addUserSuccess(data){
+			this.userData.push(data);
+		},
+		// 删除团队成员
+		hanldeDelete(index){
+			
+		},
 		//   获取投标费用
 		handleToubiao() {
 			launchTb({
@@ -415,7 +398,7 @@ export default {
 			}
 		});
 	},
-	components: { htnrTable }
+	components: { htnrTable,userDialog }
 };
 </script>
 <style scoped>
@@ -500,20 +483,20 @@ export default {
 .fb_info table {
 	width: 100%;
 	border-collapse: collapse;
-	border: 1px solid #c9ece7;
+	border: 1px solid #e9ecf4;
 	font-size: 14px;
 }
 .fb_info table th {
 	font-size: 14px;
 	text-align: center;
 	width: 150px;
-	background: #eee;
+	background: #f4f6f9;
 	color: #4d4d4d;
 }
 .fb_info table td,
 .fb_info table th {
 	text-align: left;
-	border: 1px solid #ccc !important;
+	border: 1px solid #e9ecf4 !important;
 	padding: 5px 10px;
 }
 .fb_info h4 {

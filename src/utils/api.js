@@ -227,9 +227,12 @@ export default {
     projectFeedback:window.baseurl+'project/projectFeedback.do', //项目反馈
     queryResponsibleProduct:window.baseurl+'question/queryResponsibleProduct.do', //获取负责的产品
 
-    getDwByUser:window.baseurl + 'sys/getDwByUser.do' //获取单位列表
+    getDwByUser:window.baseurl + 'sys/getDwByUser.do', //获取单位列表
 
     
-
-    
+	// 分包
+	queryLxxx:window.baseurl + 'fbxx/queryLxxx.do', //获取立项信息
+    canProjectSubcontract:window.baseurl + 'fbxx/canProjectSubcontract.do', //是否可以分包
+	queryFbYwxData:window.baseurl + 'fbxx/queryFbYwxData.do',//获取分包产品或业务域数据
+	saveFbxx:window.baseurl + 'fbxx/saveFbxx.do',//保存分包
  }

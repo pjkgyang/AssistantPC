@@ -6,7 +6,7 @@
     <div text-right>
       <el-button size="mini" type="primary" @click="handleExport">导出</el-button>
     </div>
-    <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" :indexArr='[0]' :widthArr="[2,4]" :Width="'130'" :Height="250" :rowWidth="'260'" :archiveShow="false" :exportShow="false"></tableComponents>
+    <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" :indexArr='[0]' :widthArr="[2,5]" :Width="'130'" :Height="250" :rowWidth="'260'" :archiveShow="false" :exportShow="false"></tableComponents>
     <xmjsDialog :show.sync="show" :data="rowData" @handleClickSure="handleClickSure"></xmjsDialog>
     <jssqcxDialog :show.sync="jscxShow" :fbbh="rowData.fbbh"></jssqcxDialog>
   </div>
@@ -83,8 +83,8 @@ export default {
         });
 				return;
 			}
-      this.rowData.fbmc = data[4];
-      this.rowData.fbbh = data[3];
+      this.rowData.fbmc = data[5];
+      this.rowData.fbbh = data[4];
       this.rowData.xmbh = data[1];
       if (params == "sqjs") {
         this.show = !this.show;

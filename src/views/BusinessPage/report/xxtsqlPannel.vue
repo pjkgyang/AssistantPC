@@ -333,7 +333,9 @@ export default {
       obj[key] = value;
       let { href } = this.$router.resolve({
         path: "/questionport",
-        query: {}
+        query: {
+					bh:this.detailData.dwbh
+				}
       });
       window.open(href, "_blank");
     },

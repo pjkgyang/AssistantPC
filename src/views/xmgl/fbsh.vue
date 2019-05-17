@@ -78,7 +78,7 @@ export default {
 				sfsh: ''
 			},
 			gczdList: [],
-			sfshList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '2' }],
+			sfshList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '2' },{ label: '审核未通过', id: '3' }, { label: '审核通过', id: '4' }],
 			tableData: [
 				{
 					date: '2016-05-03',
@@ -86,7 +86,8 @@ export default {
 					province: '上海',
 					city: '普陀区',
 					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
+					zip: 200333,
+					xmbh:'JC18020'
 				},
 				{
 					date: '2016-05-02',
@@ -94,7 +95,8 @@ export default {
 					province: '上海',
 					city: '普陀区',
 					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
+					zip: 200333,
+					xmbh:'JC18020'
 				},
 				{
 					date: '2016-05-04',
@@ -102,15 +104,8 @@ export default {
 					province: '上海',
 					city: '普陀区',
 					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				},
-				{
-					date: '2016-05-01',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
+					zip: 200333,
+					xmbh:'JC18020'
 				}
 			]
 		};
@@ -130,11 +125,11 @@ export default {
 		CheckSfsh() {},
 		handleCurrentChange() {},
 		handleSizeChange() {},
-		handleClick() {
+		handleClick(data) {
 			let routeData = this.$router.resolve({
-				path: '/projectfbmx',
+				path: '/projectfbshdetail',
 				query: {
-					v: 'fbsh'
+					xmbh:data.xmbh
 				}
 			});
 			window.open(routeData.href, '_blank');

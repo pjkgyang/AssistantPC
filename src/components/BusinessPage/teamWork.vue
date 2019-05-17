@@ -6,7 +6,7 @@
                 <el-tab-pane label="参与者" name="first">
                     <teamCyz :xmbh="xmbh" :xmmc="xmInfo.xmmc" :tabName="tabName" :dwmc="xmInfo.dwmc" :jsJf="jsJf"></teamCyz>
                 </el-tab-pane>
-                <el-tab-pane label="团队成员" name="second" v-if="!jsJf">
+                <el-tab-pane label="接包团队" name="second" v-if="!jsJf">
                     <teamTdcy :tabName="tabName" :xmbh="xmbh"></teamTdcy>
                 </el-tab-pane>
             </el-tabs>

@@ -108,7 +108,7 @@
                 </span>
               </p>&#x3000;
             </div>
-            <p>
+            <p v-if="!userGroup.includes('QYZ')">
               <span class="table-menu-name">区域工程:</span>
               <span :class="{'bg-active':gczdC == ''}" data-gczd @click="CheckGcdz('')">全部</span>
               <span
@@ -128,12 +128,12 @@
               width="150">
               <template slot-scope="scope">
                 <el-button
-                  @click.native.prevent="handleCommand('1',scope.row.xmbh)"
+                  @click.native.prevent="handleCommand('1',scope.row)"
                   type="text"
                   size="mini"
                 >立项信息</el-button>
                 <el-button
-                  @click.native.prevent="handleCommand('2',scope.row.xmbh)"
+                  @click.native.prevent="handleCommand('2',scope.row)"
                   type="text"
                   size="mini"
                 >项目分包</el-button>
@@ -178,8 +178,6 @@
       </div>
     </section>
 
-    <gbtxDialog :xmbh="xmbh" :show.sync="gbtxShow"></gbtxDialog>
-    <gbtxjlDialog :xmbh="xmbh" :show.sync="gbtxjlShow"></gbtxjlDialog>
     <xmfkDialog :xmData="xmData" :show.sync="xmfkShow" @handleSubmit="handleSubmit"></xmfkDialog>
   </div>
 </template>
@@ -241,8 +239,6 @@ export default {
       myItemData: {},
       emptyArray: [],
       urlData: {},
-      gbtxShow: false, //过保提醒
-      gbtxjlShow: false, //过保提醒记录
       xmfkShow:false,//项目反馈
       userGroup: "",
       xmbh: "",
@@ -320,12 +316,36 @@ export default {
     },
     // 过保提醒
     handleCommand(params, data) {
-      this.xmbh = data;
-      if (params == 1) {
-        this.gbtxShow = true;
-      } else {
-        this.gbtxjlShow = true;
-      }
+      this.xmbh = data.xmbh;
+			if(params == 2){
+				this.$get(this.API.canProjectSubcontract,{xmbh:data}).then(res=>{
+					if(res.state == 'success'){
+						if(!!res.data){
+							let routeData = this.$router.resolve({
+								path:'/projectXmfb',
+								query: {
+									xmbh:data.xmbh,
+									xmmc:data.xmmc
+								}
+							});
+							window.open(routeData.href, '_blank');
+						}else{
+							this.$alert('该项目已分包~', '提示', {
+							confirmButtonText: '确定',
+							type:'warning'
+						 });
+						}
+					}
+				})
+			}else{
+				let routeData = this.$router.resolve({
+					path:'/projectfbmx',
+					query: {
+						xmbh:data.xmbh
+					}
+				});
+				window.open(routeData.href, '_blank');
+			}
     },
     // 项目反馈
     handleCommandXmfk(data){

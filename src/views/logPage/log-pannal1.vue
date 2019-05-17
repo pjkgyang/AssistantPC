@@ -197,13 +197,16 @@ export default {
 </script>
 <style scoped>
 .qyrb-pannal1{
-  background: #fff;
   height: 100%;
+  padding: 10px;
 }
 .out-table{
+	background: #fff;
     padding: 10px 15px;
     height: 100%;
     overflow-y: auto;
+	padding: 10px;
+	border-radius: 4px;
 }
 .table{
     border: 1px solid #ddd;
@@ -219,7 +222,7 @@ export default {
 }
 .table tbody{
     display: block;
-    height:66vh;
+   max-height:61vh;
     width: 100%;
     overflow-y: scroll;
 }

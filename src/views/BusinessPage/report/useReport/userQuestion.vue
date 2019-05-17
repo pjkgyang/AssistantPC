@@ -46,14 +46,14 @@
 		<div>
 			<tableComponents
 				:tableData="dataList"
-				:pageShow="true"
+				:pageShow="false"
 				:currentPage="currentPage"
 				:pageSize="pageSize"
 				@handleCurrentChange="handleCurrentChange"
 				@exportTable="exportTable"
 				@handleXxwt="handleXxwt"
-				:widthArr="[1]"
-				:rowWidth="'200'"
+				:widthArr="[1,12]"
+				:rowWidth="'100'"
 				:Width="'60'"
 				:Height="250"
 				:indexArr="[]"
@@ -76,7 +76,7 @@ export default {
 			gczd: '',
 			dataList: {},
 			headList: [],
-			periodList: [{ mc: '本日', label: 1 }, { mc: '本周', label: 2 }, { mc: '本月', label: 3 }, { mc: '本年', label: 4 }],
+			periodList: [{ mc: '本日', label: 1 }, { mc: '本周', label: 2 }, { mc: '本月', label: 3 }, { mc: '本年', label: 4 },{ mc: '全部', label: 5 }],
 			filterWord: {
 				period: 1
 			},
@@ -91,24 +91,21 @@ export default {
 		};
 	},
 	props: {
-		isXxkb: {
-			type: Boolean,
-			default: false
-		},
+
 	},
 	methods: {
 		exportTable() {
 			let startDate = this.dateType==0?this.startDate:this.startDateFw;
 			let endDate = this.dateType==0?this.endDate:this.endDateFw;
 			window.open(window.baseurl + 'report/exportQuestionProgressSummaryReport.do?startDate='+ 
-			startDate +'&endDate=' +endDate +'&dwbh='+this.userInfo.unit);
+			startDate +'&endDate=' +endDate +'&dwbh='+this.$route.query.bh);
 		},
 		// 
 		handleXxwt(data, i, params) {
 			let obj = {
 		        userQuestionStartDt:this.dateType==0?this.startDate:this.startDateFw,
 				userQuestionEndDt:this.dateType==0?this.endDate:this.endDateFw,
-				dwbh:this.userInfo.unitnum,
+				dwbh:this.$route.query.bh,
 				cpbh:data[0]
 		    }
 			if (params[i].en.indexOf(",") != -1) {
@@ -160,6 +157,10 @@ export default {
 				 this.startDate = new Date().getFullYear() +'-01-01';
 				  this.endDate = new Date().getFullYear() +'-12-31';
 					break;
+				case 5:
+				  this.startDate = '2018-01-01';
+				  this.endDate = GetDateStr(0);
+					break;
 				default:
 					break;
 			}
@@ -179,11 +180,9 @@ export default {
 		// 用户登录统计报表
 		questionProgressSummaryReport(curPage) {
 			this.$get(this.API.questionProgressSummaryReport, {
-				curPage: this.currentPage,
-				pageSize: this.pageSize,
 				startDate:this.dateType==0?this.startDate:this.startDateFw,
 				endDate:this.dateType==0?this.endDate:this.endDateFw,
-				dwbh:this.userInfo.unitnum
+				dwbh:!!this.$route.query.bh?this.$route.query.bh:this.userInfo.unitnum
 			}).then(res => {
 				if (res.state == 'success') {
 					this.dataList = res.data;
@@ -199,7 +198,7 @@ export default {
 	mounted() {
 		this.dateType = 0;
 		this.startDate = this.endDate = GetDateStr(0);
-		if(!!this.isXxkb){
+		if(!!this.$route.query.bh){
 			this.startDateFw = '2018-01-10';
 			this.endDateFw = GetDateStr(0);	
 		}else{

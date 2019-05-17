@@ -69,12 +69,39 @@
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page="currentPage"
-					:page-sizes="[20,50 ,70, 100]"
+					:page-sizes="[20, 50, 70, 100]"
 					:page-size="pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
 					:total="total"
 				></el-pagination>
 			</div>
+		</div>
+
+		<div>
+			<el-dialog title="提示" :visible.sync="dialogVisible" width="1150px">
+				<div class="pd-10">
+					<el-table :data="tableData" style="width: 100%" border>
+						 <el-table-column
+							  fixed="left"
+							  label="操作"
+							  width="120">
+							  <template slot-scope="scope">
+								<el-button type="text" size="small">设为中标</el-button>
+								<el-button type="text" size="small">详情</el-button>
+							  </template>
+							</el-table-column>
+						<el-table-column prop="date" label="是否中标" width="110"></el-table-column>
+						<el-table-column prop="date" label="分包编号" width="110"></el-table-column>
+						<el-table-column prop="name" label="分包名称" min-width="180"></el-table-column>
+						<el-table-column prop="name" label="投标人" width="110"></el-table-column>
+						<el-table-column prop="name" label="投标时间" width="110"></el-table-column>
+						<el-table-column prop="name" label="投标实施金额" width="120"></el-table-column>
+						<el-table-column prop="name" label="投标二开金额" width="120"></el-table-column>
+						<el-table-column prop="name" label="投标可变金额" width="120"></el-table-column>
+					</el-table>
+				</div>
+				<span slot="footer" class="dialog-footer"><el-button @click="dialogVisible = false" size="mini">取 消</el-button></span>
+			</el-dialog>
 		</div>
 	</div>
 </template>
@@ -84,9 +111,10 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
-			currentPage:1,
-			pageSize:20,
-			total:0,
+			dialogVisible: false,
+			currentPage: 1,
+			pageSize: 20,
+			total: 0,
 			filterData: {
 				keyword: '',
 				gczd: '',
@@ -94,40 +122,7 @@ export default {
 			},
 			gczdList: [],
 			sfshList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '2' }],
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				},
-				{
-					date: '2016-05-02',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				},
-				{
-					date: '2016-05-04',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				},
-				{
-					date: '2016-05-01',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}
-			]
+			tableData: []
 		};
 	},
 	mounted() {
@@ -143,20 +138,17 @@ export default {
 		SearchItem() {},
 		CheckGcdz() {},
 		CheckSfsh() {},
-		handleCurrentChange(){
-			
-		},
-		handleSizeChange(){
-			
-		},
+		handleCurrentChange() {},
+		handleSizeChange() {},
 		handleClick() {
-			let routeData = this.$router.resolve({
-				path: '/projectfbmx',
-				query: {
-					v: 'fbsh'
-				}
-			});
-			window.open(routeData.href, '_blank');
+			this.dialogVisible = !this.dialogVisible;
+			// let routeData = this.$router.resolve({
+			// 	path: '/projectfbmx',
+			// 	query: {
+			// 		v: 'fbsh'
+			// 	}
+			// });
+			// window.open(routeData.href, '_blank');
 		}
 	}
 };
