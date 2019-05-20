@@ -192,7 +192,7 @@
             <el-table-column prop="fwqx" label="服务期限" width="90"></el-table-column>
             <el-table-column prop="gbsj" label="过保日期" width="120"></el-table-column>
             <el-table-column prop="htje" label="合同金额(元)" width="120"></el-table-column>
-            <el-table-column prop="xqwb" label="是否续签" width="100">
+            <el-table-column prop="xqwb" label="续签维保合同" width="120">
               <template slot-scope="scope">
                     <span>{{scope.row.xqwb==1?'是':'否'}}</span>
               </template>

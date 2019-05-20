@@ -17,17 +17,17 @@
 		</div>
 
 		<div flex style="margin:10px 0;">
-			<span class="query-title">区域工程:</span>
+			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
-				<span :class="{ 'bg-active': filterData.gczd == '' }" @click="CheckGcdz('')">全部</span>
-				<span v-for="gczd in gczdList" :class="{ 'bg-active': gczd.label == filterData.gczd }" :key="gczd.id" @click="CheckGcdz(gczd.label)">{{ gczd.mc }}</span>
+				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.label == filterData.gcdq }"  @click="CheckGcdz(gcdq.label)"  >{{ gcdq.label }}</span>
 			</p>
 		</div>
 
 		<div flex>
 			<span class="query-title">是否审核:</span>
 			<p class="query-list">
-				<span v-for="sfsh in sfshList" :class="{ 'bg-active': sfsh.id == filterData.sfsh }" :key="sfsh.id" @click="CheckSfsh(sfsh.id)">{{ sfsh.label }}</span>
+				<span :class="{ 'bg-active': filterData.shzt == ''}" @click="CheckSfsh()">全部</span>
+				<span v-for="sfsh in sfshList" :class="{ 'bg-active': sfsh.label == filterData.shzt }" :key="sfsh.label" @click="CheckSfsh(sfsh.label)">{{ sfsh.mc }}</span>
 			</p>
 		</div>
 		<br />
@@ -38,26 +38,32 @@
 						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column prop="date" label="是否审核" width="120"></el-table-column>
-				<el-table-column prop="name" label="项目编号" width="120"></el-table-column>
-				<el-table-column prop="address" label="项目名称"></el-table-column>
-				<el-table-column prop="address" label="合同编号"></el-table-column>
-				<el-table-column prop="address" label="分包名称"></el-table-column>
-				<el-table-column prop="name" label="分包人" width="110"></el-table-column>
-				<el-table-column prop="name" label="分包时间" width="110"></el-table-column>
-				<el-table-column prop="name" label="分包实施金额" width="110"></el-table-column>
-				<el-table-column prop="name" label="分包二开金额" width="110"></el-table-column>
-				<el-table-column prop="name" label="分包可变金额" width="110"></el-table-column>
+				<el-table-column prop="date" label="是否审核" width="120">
+					<template slot-scope="scope">
+						<el-tag size="mini" :type="scope.row.shzt==1?'success':scope.row.shzt==2?'danger':'info'">
+						{{scope.row.shzt==1?'审核通过':scope.row.shzt==2?'审核不通过':'未审核'}}
+						</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
+				<el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="htbh" label="合同编号" width="150"></el-table-column>
+				<el-table-column prop="fbmc" label="分包名称" min-width="280" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="fbrxm" label="分包人" width="110"></el-table-column>
+				<el-table-column prop="fbrq" label="分包时间" width="110"></el-table-column>
+				<el-table-column prop="ssfy" label="分包实施金额" width="110"></el-table-column>
+				<el-table-column prop="ekfy" label="分包二开金额" width="110"></el-table-column>
+				<el-table-column prop="kbfy" label="分包可变金额" width="110"></el-table-column>
 			</el-table>
 			<div text-right>
 				<el-pagination
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page="currentPage"
-					:page-sizes="[20, 50, 70, 100]"
+					:page-sizes="[15, 30, 50, 100]"
 					:page-size="pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
-					:total="total"
+					:total="records"
 				></el-pagination>
 			</div>
 		</div>
@@ -70,69 +76,87 @@ export default {
 	data() {
 		return {
 			currentPage: 1,
-			pageSize: 20,
-			total: 0,
+			pageSize: 15,
+			records:0,
 			filterData: {
 				keyword: '',
-				gczd: '',
-				sfsh: ''
+				gcdq: '南区',
+				shzt: ''
 			},
-			gczdList: [],
-			sfshList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '2' },{ label: '审核未通过', id: '3' }, { label: '审核通过', id: '4' }],
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333,
-					xmbh:'JC18020'
-				},
-				{
-					date: '2016-05-02',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333,
-					xmbh:'JC18020'
-				},
-				{
-					date: '2016-05-04',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333,
-					xmbh:'JC18020'
-				}
-			]
+			gcdqList: [{label:'南区',id:''},{label:'北区',id:''},{label:'其他',id:''}],
+			sfshList: [],
+			tableData: []
 		};
 	},
 	mounted() {
-		if (getSession('gczd') == null) {
-			getMenu('gczd', this.gczdList, true); //获取工程战队
+		if (getSession('SHZT') == null) {
+			getMenu('SHZT', this.sfshList); //获取审核状态
 		} else {
-			this.gczdList = getSession('gczd');
+			this.sfshList = getSession('SHZT');
 		}
+		this.getFbshList();
 	},
 	methods: {
-		handleSearch() {},
+		handleSearch() {
+			this.currentPage = 1;
+			this.getFbshList();
+		},
+		SearchItem() {
+			this.currentPage = 1;
+			this.getFbshList();
+		},
 		handleExport() {},
-		SearchItem() {},
-		CheckGcdz() {},
-		CheckSfsh() {},
-		handleCurrentChange() {},
-		handleSizeChange() {},
+		// 工程大区
+		CheckGcdz(params) {
+			this.currentPage = 1;
+			this.filterData.gcdq = params;
+			this.getFbshList();
+		},
+		// 审核状态
+		CheckSfsh(params) {
+			this.currentPage = 1;
+			this.filterData.shzt = !params?'':params;
+			this.getFbshList();
+		},
+		handleCurrentChange(data) {
+			this.currentPage = data;
+			this.getFbshList();
+		},
+		handleSizeChange(data) {
+			this.currentPage = 1;
+			this.pageSize = data;
+			this.getFbshList();
+		},
 		handleClick(data) {
 			let routeData = this.$router.resolve({
 				path: '/projectfbshdetail',
 				query: {
-					xmbh:data.xmbh
+					xmbh:data.xmbh,
+					fbbh:data.fbbh
 				}
 			});
 			window.open(routeData.href, '_blank');
+		},
+		getFbshList(){
+			this.$get(this.API.fbManage,{
+				curPage:this.currentPage,
+				pageSize:this.pageSize,
+				gczq:this.filterData.gcdq,
+				shzt:this.filterData.shzt,
+				keyword:this.filterData.keyword
+			}).then(res=>{
+				if(res.state == 'success'){
+					if(!!res.data.rows){
+						this.tableData = res.data.rows;
+					}
+					this.records = res.data.records;
+				}else{
+					 this.$message({
+					  message: res.msg,
+					  type: 'error'
+					});
+				}
+			})
 		}
 	}
 };

@@ -4,8 +4,8 @@
 			<div class="fb_info">
 				<div>
 					<div text-right>
-						<el-button type="primary">审核通过</el-button>
-						<el-button type="danger">审核不通过</el-button>
+						<el-button type="primary" @click="handleVerify('1')">审核通过</el-button>
+						<el-button type="danger"  @click="handleVerify('0')">审核不通过</el-button>
 					</div>
 						<div>
 						<h5>合同基本信息</h5>
@@ -215,6 +215,22 @@ export default {
 		this.getLxxx();
 	},
 	methods: {
+		handleVerify(params){
+			if(params == '1'){
+				this.verifyFb(this.$route.fbbh,params);
+			}else{
+				this.$prompt('请输入说明内容', '提示', {
+				  confirmButtonText: '确定',
+				  cancelButtonText: '取消',
+				  inputPattern: /\S/,
+				  inputErrorMessage: '格式不正确',
+				  inputPlaceholder:'请输入说明内容'
+				}).then(({ value }) => {
+				  this.verifyFb(this.$route.fbbh,params,value);
+				}).catch(() => {});
+			}
+		},
+		
 		queryFbYwxData(){
 			this.$get(this.API.queryFbYwxData,{
 				xmbh:this.$route.query.xmbh,
@@ -239,6 +255,20 @@ export default {
 					this.htnrData = !res.data.lxxx_htnr?[]:res.data.lxxx_htnr
 				}
 			})
+		},
+		verifyFb(fbbh,shjg,sm){
+			this.$get(this.API.verifyFb,{
+				fbbh:fbbh,
+				shjg:shjg,
+				sm:sm||""
+			}).then(res=>{
+				if(res.state == 'success'){
+					this.$message({
+					  message: params=='1'?'已提交为 "审核通过" ~':'已提交为 "审核不通过" ~',
+					  type: 'success'
+					});
+				}
+			})	
 		}
 	},
 	activated() {

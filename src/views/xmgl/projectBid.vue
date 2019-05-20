@@ -17,20 +17,21 @@
 		</div>
 
 		<div flex style="margin:10px 0;">
-			<span class="query-title">区域工程:</span>
+			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
-				<span :class="{ 'bg-active': filterData.gczd == '' }" @click="CheckGcdz('')">全部</span>
-				<span v-for="gczd in gczdList" :class="{ 'bg-active': gczd.label == filterData.gczd }" :key="gczd.id" @click="CheckGcdz(gczd.label)">{{ gczd.mc }}</span>
+				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.label == filterData.gcdq }"  @click="CheckGcdz(gcdq.label)"  >{{ gcdq.label }}</span>
 			</p>
 		</div>
 
 		<div flex>
-			<span class="query-title">是否审核:</span>
+			<span class="query-title">是否中标:</span>
 			<p class="query-list">
 				<span v-for="sfsh in sfshList" :class="{ 'bg-active': sfsh.id == filterData.sfsh }" :key="sfsh.id" @click="CheckSfsh(sfsh.id)">{{ sfsh.label }}</span>
 			</p>
 		</div>
 		<br />
+			<el-button size="mini" type="danger">关闭分包</el-button>
+		<br /><br />
 		<div>
 			<el-table :data="tableData" border style="width: 100%">
 				<el-table-column fixed="left" label="操作" width="80">
@@ -50,7 +51,6 @@
 				<el-table-column prop="date" label="分包金额" width="120"></el-table-column>
 				<el-table-column prop="date" label="实施金额" width="120"></el-table-column>
 				<el-table-column prop="date" label="实施人月" width="120"></el-table-column>
-
 				<el-table-column prop="date" label="二开金额" width="120"></el-table-column>
 				<el-table-column prop="name" label="二开人月" width="120"></el-table-column>
 				<el-table-column prop="name" label="可变金额" width="110"></el-table-column>
@@ -117,20 +117,16 @@ export default {
 			total: 0,
 			filterData: {
 				keyword: '',
-				gczd: '',
+				gcdq: '南区',
 				sfsh: ''
 			},
-			gczdList: [],
-			sfshList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '2' }],
+			gcdqList: [{label:'南区',id:''},{label:'北区',id:''},{label:'其他',id:''}],
+			sfshList: [{ label: '全部', id: '' }, { label: '已中标', id: '1' }, { label: '未中标', id: '2' }],
 			tableData: []
 		};
 	},
 	mounted() {
-		if (getSession('gczd') == null) {
-			getMenu('gczd', this.gczdList, true); //获取工程战队
-		} else {
-			this.gczdList = getSession('gczd');
-		}
+
 	},
 	methods: {
 		handleSearch() {},

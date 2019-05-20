@@ -44,7 +44,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="产品" required>
-						<el-select v-model="question.cp" size="mini" placeholder="请选择产品" style="width:330px" @change="handleChangeCp">
+						<el-select v-model="question.cp" size="mini" filterable  placeholder="请选择产品" style="width:330px" @change="handleChangeCp">
 							<el-option v-for="(cp,index) in xmcpList" :key="index" :label="cp.mc" :value="cp.label">
 							</el-option>
 						</el-select>

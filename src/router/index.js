@@ -190,7 +190,7 @@ export default new Router({
 					name: 'BusinesspageXxtsql',
 					component: resolve => require(['@/views/BusinessPage/xxtsql.vue'], resolve),
 				},
-				
+				// 项目分包
 				{
 					path: '/projectSubcontract',
 					name: 'projectSubcontract',
@@ -216,7 +216,9 @@ export default new Router({
 				{
 					path: '/projectbid',
 					name: 'projectBid',
-					meta: {},
+					meta: {
+						title:'项目中标'
+					},
 					component: resolve => require(['@/views/xmgl/projectBid.vue'], resolve),
 				},
 				{
@@ -229,8 +231,18 @@ export default new Router({
 				{
 					path: '/projectFbsh',
 					name: 'projectFbsh',
-					meta: {},
+					meta: {
+						title:'分包审核'
+					},
 					component: resolve => require(['@/views/xmgl/fbsh.vue'], resolve),
+				},
+				{
+					path: '/projectFbbj',
+					name: 'projectFbbj',
+					meta: {
+						title:'分包编辑'
+					},
+					component: resolve => require(['@/views/xmgl/fbEdit.vue'], resolve),
 				},
 				{
 					path: '/projectfbshdetail',

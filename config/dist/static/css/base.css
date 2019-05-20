@@ -317,19 +317,8 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
-.fb_info .el-table {
-    border:1px solid #ccc;
-}
 .fb_info .el-table th{
-   padding: 6px 0 !important;
-   background: #eee;
-   border-right:1px solid #ccc;  
-   border-bottom:1px solid #ccc;
    color: #4D4D4D;
-}
-.fb_info .el-table td{
-    padding: 6px 0 !important;
-    color: #000;
 }
 
 /* 分页 */

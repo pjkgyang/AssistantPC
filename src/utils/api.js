@@ -235,4 +235,7 @@ export default {
     canProjectSubcontract:window.baseurl + 'fbxx/canProjectSubcontract.do', //是否可以分包
 	queryFbYwxData:window.baseurl + 'fbxx/queryFbYwxData.do',//获取分包产品或业务域数据
 	saveFbxx:window.baseurl + 'fbxx/saveFbxx.do',//保存分包
+	fbManage:window.baseurl + 'fbxx/fbManage.do',//分包审核
+	closeFb:window.baseurl + 'fbxx/closeFb.do',//关闭分包
+	verifyFb:window.baseurl + 'fbxx/verifyFb.do',//分包审核
  }
