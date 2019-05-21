@@ -318,7 +318,7 @@ export default {
     handleCommand(params, data) {
       this.xmbh = data.xmbh;
 			if(params == 2){
-				this.$get(this.API.canProjectSubcontract,{xmbh:data}).then(res=>{
+				this.$get(this.API.canProjectSubcontract,{xmbh:data.xmbh}).then(res=>{
 					if(res.state == 'success'){
 						if(!!res.data){
 							let routeData = this.$router.resolve({

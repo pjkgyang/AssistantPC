@@ -237,5 +237,7 @@ export default {
 	saveFbxx:window.baseurl + 'fbxx/saveFbxx.do',//保存分包
 	fbManage:window.baseurl + 'fbxx/fbManage.do',//分包审核
 	closeFb:window.baseurl + 'fbxx/closeFb.do',//关闭分包
-	verifyFb:window.baseurl + 'fbxx/verifyFb.do',//分包审核
+    verifyFb:window.baseurl + 'fbxx/verifyFb.do',//分包审核
+    // 投标
+    saveTbxx:window.baseurl + 'tbxx/saveTbxx.do',//投标
  }

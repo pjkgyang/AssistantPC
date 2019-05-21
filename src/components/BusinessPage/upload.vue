@@ -3,12 +3,12 @@
         <div flex>
             <div>
                 <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" 
-                :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange">
+                :before-upload="beforeUpload"  :on-change="handleChange" multiple>
                     <el-button size="mini" type="primary">上传附件</el-button>
                     <!-- <div slot="tip" class="el-upload__tip">实验信息附件上传，只能传(.file)文件</div> -->
                 </el-upload>
-                <p v-if="!!fileName">
-                  {{fileName}}&#x3000;<i class="el-icon-close" @click="handleRemove"></i>     
+                <p v-if="!!fileList.length" v-for="(item,index) in fileList" flex colcenter spacebetween >
+                  <span>{{item.name}}</span><i class="el-icon-close" @click="handleRemove(index)"></i>     
                 </p>
             </div>
         </div>
@@ -24,6 +24,7 @@ export default {
       upload_url: "123",
       uploadForm: new FormData(),
       fileList:[],//文件集合
+      files:[],
       fileName:null, 
       uploadAction:'123'
     };
@@ -31,26 +32,25 @@ export default {
   methods: {
 
     // 删除文件
-    handleRemove(file, fileList) {
-      this.fileName = '';
-      this.uploadForm = new FormData();
-      this.$emit('handleUploadCrowd','');
+    handleRemove(index) {
+      this.files.splice(index,1);
+      this.fileList.splice(index,1);
+      this.$emit('handleUploadFile',this.files);
     },
-
     beforeUpload(file) {
-      this.fileName = file.name;
-      this.uploadForm.append("uploadCrowd", file);
-      axios.post(window.baseurl + "external/uploadCrowd.do", this.uploadForm, {
+      this.uploadForm = new FormData();
+      this.fileList.push(file);
+      this.uploadForm.append("fileUpload", file);
+      axios.post(window.baseurl + "attachment/uploadAttach.do", this.uploadForm, {
           headers: { "Content-Type": "multipart/form-data" }
         }).then(res => {
           if(res.data.state == 'success'){
-             this.$emit('handleUploadCrowd',res.data.data)
+            this.files.push(res.data.data);
+            this.$emit('handleUploadFile',this.files);
           }
       });
       return true;
     },
-   
-   //  
    handleChange(file,fileList){
      
    },
@@ -64,9 +64,13 @@ export default {
 .upload_file{
   p{
     border: 1px solid rgb(235, 234, 234);
-    padding: 5px 3px;
+    padding: 2px 6px;
     border-radius: 3px;
+    width: 900px;
     margin-top: 4px !important;
+    &:hover{
+      background: rgba(216, 214, 214,0.5);
+    }
     i:hover{
       cursor: pointer;
       color: #f00;

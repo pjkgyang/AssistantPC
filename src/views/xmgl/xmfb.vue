@@ -6,7 +6,7 @@
 					<h4>合同内容</h4>
 					<div>
 						<h5>分包基本信息</h5>
-						<div text-right v-if="!isSave">
+						<div text-right v-if="isSave">
 							<el-button size="small" style="margin: 10px 0;" type="danger" @click="handleSaveFb">保存</el-button>
 						</div>
 						<table>
@@ -66,9 +66,9 @@
 							</tr>
 							<tr >
 								<th>实施费用标准（元）</th>
-								<td>{{ htjbxx.SSBZ }}</td>
+								<td>{{ htjbxx.ssbz }}</td>
 								<th>二开费用标准（元）</th>
-								<td>{{ htjbxx.EKBZ }}</td>
+								<td>{{ htjbxx.ekbz }}</td>
 								<th></th>
 								<td></td>
 							</tr>
@@ -94,26 +94,6 @@
 						  <el-table-column prop="htekry" label="二开人月(合同)" min-width="140"></el-table-column>
 						  <el-table-column prop="fbekry" label="二开人月(分包)" min-width="140"></el-table-column>
 						</el-table>
-	<!-- 					<table class="table_center">
-							<tr>
-								<th>业务域</th>
-								<th>占比(%)</th>
-								<th>实施人月（合同）</th>
-								<th>实施参考标准</th>
-								<th>实施人月（分包）</th>
-								<th>二开人月（合同）</th>
-								<th>二开人月（分包）</th>
-							</tr>
-							<tr v-for="(item,index) in ywyData" :key="index">
-								<td>{{ item.ywymc }}</td>
-								<td>{{ item.zb }}</td>
-								<td>{{ item.htssry }}</td>
-								<td>{{ item.ssckbz }}</td>
-								<td>{{ item.fbssry }}</td>
-								<td>{{ item.htekry }}</td>
-								<td>{{ item.fbekry }}</td>
-							</tr>
-						</table> -->
 					</div>
 					<div>
 						<h5>分包内容</h5>
@@ -146,37 +126,6 @@
 							  </template>
 						  </el-table-column>
 						</el-table>
-						
-					<!-- 	<table class="table_center">
-							<tr>
-								<th>业务域</th>
-								<th>合同内容</th>
-								<th>占比(%)</th>
-								<th>说明</th>
-								<th>项目类别</th>
-								<th>实施人月（合同）</th>
-								<th>实施参考（标准）</th>
-								<th>实施人月（分包）</th>
-								<th>二开人月（合同）</th>
-								<th>二开人月（分包）</th>
-								<th>说明</th>
-							</tr>
-							<tr v-for="(item,index) in fbData" :key="index">
-								<td>{{item.ywymc}}</td>
-								<td>{{item.cpmc}}</td>
-								<td>{{item.zb}}</td>
-								<td>{{item.htsm}}</td>
-								<td>{{item.xmlb}}</td>
-								<td>{{item.htssry}}</td>
-								<td>{{item.ssckbz}}</td>
-								<td><input v-model="item.fbssry" type="text" style="width:100px" placeholder="请输入金额" @input="handleInputSSry(item.ywybh)"></td>
-								<td>{{item.htekry}}</td>
-								<td><input v-model="item.fbekry"  type="text" style="width:100px" placeholder="请输入金额"></td>
-								<td>
-									<textarea v-model="item.fbsm" style="width:100%;padding:4px 8px;resize: none;" placeholder="请输入说明"></textarea>
-								</td>
-							</tr>
-						</table> -->
 					</div>
 				</div>
 			</div>
@@ -192,7 +141,7 @@ export default {
 			ywyData: [],
 			ywyTotal:{},//业务域数据合计
 			fbnrlist:[],
-			isSave:false
+			isSave:true
 		};
 	},
 	mounted() {
@@ -209,7 +158,6 @@ export default {
 					fbsm:ele.fbsm
 				})
 			})
-			console.log(this.fbnrlist);
 			this.$post(this.API.saveFbxx,{
 				xmbh:this.$route.query.xmbh,
 				fbmc:this.htjbxx.fbmc,
@@ -225,6 +173,10 @@ export default {
 			}).then(res=>{
 				if(res.state == 'success'){
 					this.isSave = false;
+					this.$message({
+						content:'保存成功~',
+						type:'error'
+					})
 				}else{
 					this.$message({
 						content:res.msg,

@@ -15,9 +15,7 @@
                <span>
                     <span class="card_color">投标人数: </span><span> {{cardData.tbrs}}</span>
                </span>
-               <span :class="{'card-state':true,'card-state-zbz':cardData.tbzt=='01','card-state-close':cardData.tbzt=='02'}">
-                   {{cardData.tbzt=='01'?'招标中':'招标结束'}}
-               </span>
+               <el-tag size="mini" :type="cardData.tbzt=='01'?'success':'danger'">{{cardData.tbzt=='01'?'招标中':'招标结束'}}</el-tag>
            </p>
            <hr>
            <p  class="item_Card_midInfoThr">

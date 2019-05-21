@@ -22,8 +22,8 @@ export function queryTbxx(obj){
 	})
 }
 // 查询合同信息
-export function queryHtxx(obj){
-    let url =  window.baseurl + suburl + 'queryHtxx.do'
+export function queryXmTbxx(obj){
+    let url =  window.baseurl + suburl + 'queryXmTbxx.do'
     return axios.get(url,{
 		params:{
           xmbh:obj.xmbh,
@@ -43,8 +43,8 @@ export function queryFbxx(obj){
 }
 
 // 发起投标
-export function launchTb(obj){
-    let url =  window.baseurl + suburl + 'launchTb.do'
+export function tbxq(obj){
+    let url =  window.baseurl + suburl + 'tbxq.do'
     return axios.get(url,{
 		params:{
           fbbh:obj.fbbh
