@@ -29,7 +29,7 @@
                             </p>
                             <p style="display:flex;margin-top:5px !important;">
                                 <img src="static/img/js.png" alt="" style="width:14px;height:14px;"> &nbsp;
-                                <span class="project-grid-card-xmjd" :title="data.xmjd"> {{data.xmjd == null?'未启动':data.xmjd}}</span>
+                                <span class="project-grid-card-xmjd" > {{data.ztztmc}}</span>
                             </p>
                         </div>
                     </div>
@@ -80,11 +80,11 @@
                                 <!-- 是否超期 -->
                                 <span v-if="data.yssj != null &&　data.xmjd == '建设中'">
                                     <span v-if="new Date(data.yssj).getTime() < new Date().getTime()" class="sf-overdue" :class="{'overdue-active':new Date(data.yssj).getTime() < new Date().getTime()}">{{new Date(data.yssj).getTime() < new Date().getTime()?'已超期':'未超期'}}</span> </span> <!-- 'Unoverdue-active' :new Date(data.yssj).getTime()> new Date().getTime() -->
-                                            <span style="font-size: 12px;color:#363748;">{{data.yssj == ''?'无':data.yssj}}</span>
+                                    <span style="font-size: 12px;color:#363748;">{{data.yssj == ''?'无':data.yssj}}</span>
                             </p>
                             <p style="display:flex;margin-top:5px !important;">
                                 <img src="static/img/js.png" alt="" style="width:14px;height:14px;"> &nbsp;
-                                <span class="project-grid-card-xmjd" :title="data.xmjd"> {{data.xmjd == null?'未启动':data.xmjd}}</span>
+                                <span class="project-grid-card-xmjd"> {{data.ztztmc}}</span>
                             </p>
                         </div>
                     </div>

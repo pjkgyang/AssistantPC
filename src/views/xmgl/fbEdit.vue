@@ -9,7 +9,7 @@
 				prefix-icon="el-icon-search"
 				size="small"
 				v-model="filterData.keyword"
-				@change="SearchItem"
+				@change="handleSearch"
 			></el-input>
 			&#x3000;
 			<el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
@@ -19,7 +19,7 @@
 		<div flex style="margin:10px 0;">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
-				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.label == filterData.gcdq }" @click="CheckGcdz(gcdq.label)">{{ gcdq.label }}</span>
+				<span v-for="(gcdq,index) in gcdqList" :key="index" :class="{ 'bg-active': gcdq.id == filterData.gcdq }" @click="CheckGcdz(gcdq.id)">{{ gcdq.label }}</span>
 			</p>
 		</div>
 
@@ -31,15 +31,15 @@
 			</p>
 		</div>
 		<br />
-		<el-button size="mini" type="danger">关闭分包</el-button>
+		<el-button :disabled="!fbbhList.length" size="mini" type="danger" @click="closeFb">关闭分包</el-button>
 		<br />
 		<br />
 		<div>
-			<el-table :data="tableData" border style="width: 100%">
+			<el-table :data="tableData"  @selection-change="handleSelectionChange" border style="width: 100%">
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
-						<el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+						<el-button :disabled="scope.row.shzt != 3" @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
 					</template>
 				</el-table-column>
 				<el-table-column prop="date" label="是否审核" width="120">
@@ -87,9 +87,10 @@ export default {
 				gcdq: '南区',
 				shzt: ''
 			},
-			gcdqList: [{ label: '南区', id: '' }, { label: '北区', id: '' }, { label: '其他', id: '' }],
+			gcdqList: [{ label: '全部', id: '' },{ label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
 			sfshList: [],
-			tableData: []
+			tableData: [],
+			fbbhList:[]
 		};
 	},
 	mounted() {
@@ -101,11 +102,32 @@ export default {
 		this.getFbshList();
 	},
 	methods: {
-		handleSearch() {
-			this.currentPage = 1;
-			this.getFbshList();
+		handleSelectionChange(val){
+			this.fbbhList = [];
+			val.forEach(ele=>{
+				this.fbbhList.push(ele.fbbh);
+			})
 		},
-		SearchItem() {
+		closeFb(){
+			this.$confirm('是否确认关闭分包?', '提示', {
+			  cancelButtonText: '再想想',
+			  confirmButtonText: '确定',
+			  type: 'warning'
+			}).then(() => {
+				this.$post(this.API.closeFb,{
+					fbbh:this.fbbhList.join(',')
+				}).then(res=>{
+					if(res.state == 'success'){
+						this.$message({message:'已关闭分包',type:'success'});
+						this.getFbshList();
+					}else{
+						this.$message({message:res.msg,type:'warning'});
+					}
+				})
+			}).catch(() => {});
+		},
+		// 关键字搜索
+		handleSearch() {
 			this.currentPage = 1;
 			this.getFbshList();
 		},

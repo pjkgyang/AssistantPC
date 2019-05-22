@@ -19,7 +19,7 @@
 		<div flex style="margin:10px 0;">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
-				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.label == filterData.gcdq }"  @click="CheckGcdz(gcdq.label)"  >{{ gcdq.label }}</span>
+				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }"  @click="CheckGcdz(gcdq.id)"  >{{ gcdq.label }}</span>
 			</p>
 		</div>
 
@@ -83,7 +83,7 @@ export default {
 				gcdq: '南区',
 				shzt: ''
 			},
-			gcdqList: [{label:'南区',id:''},{label:'北区',id:''},{label:'其他',id:''}],
+			gcdqList: [{label:'全部',id:''},{label:'南区',id:'南区'},{label:'北区',id:'南区'},{label:'其他',id:'南区'}],
 			sfshList: [],
 			tableData: []
 		};

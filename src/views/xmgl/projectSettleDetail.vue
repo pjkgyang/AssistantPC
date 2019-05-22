@@ -84,11 +84,11 @@
 							</tr>
 							<tr>
 								<th>预留实施费用（元）</th>
-								<td><input style="width: 100%;" value="0" type="text" /></td>
+								<td><input style="width: 100%;" value="0" type="number" /></td>
 								<th>预留二开费用（元）</th>
-								<td><input style="width: 100%;" value="0" type="text" /></td>
+								<td><input style="width: 100%;" value="0" type="number" /></td>
 								<th>预留可变费用（元）</th>
-								<td><input style="width: 100%;" value="0" type="text" /></td>
+								<td><input style="width: 100%;" value="0" type="number" /></td>
 							</tr>
 							<tr>
 								<th>实施调用费用（元）</th>
@@ -153,13 +153,13 @@
 								<td>4</td>
 								<td>5</td>
 								<td>6</td>
-								<td><input v-model="item.fy1" type="text" style="width: 80px;" @input="handleChangeInput(index)" /></td>
+								<td><input v-model="item.fy1" type="number" style="width: 80px;" @input="handleChangeInput(index)" /></td>
 								<td>8</td>
 								<td>9</td>
-								<td><input v-model="item.fy2" type="text" style="width: 80px;" @input="handleChangeInput(index)" /></td>
+								<td><input v-model="item.fy2" type="number" style="width: 80px;" @input="handleChangeInput(index)" /></td>
 								<td>11</td>
 								<td>12</td>
-								<td><input v-model="item.fy3" type="text" style="width: 80px;" @input="handleChangeInput(index)" /></td>
+								<td><input v-model="item.fy3" type="number" style="width: 80px;" @input="handleChangeInput(index)" /></td>
 								<td>{{ Number(item.fy1) + Number(item.fy2) + Number(item.fy3) }}</td>
 							</tr>
 						</table>

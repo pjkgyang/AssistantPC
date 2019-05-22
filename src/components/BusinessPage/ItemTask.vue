@@ -54,7 +54,7 @@ export default {
       indexArr: [],
       LcbArr: [],
       LcbTaskDatas: this.TaskDatas,
-      commitSuccess: false
+      commitSuccess: false,
     };
   },
   props: {
@@ -66,7 +66,7 @@ export default {
     },
     index: {
       type: Number,
-      default: ""
+      default: 0
     },
     TaskDatas: {
       type: Array,
@@ -81,10 +81,11 @@ export default {
     rwzt: {
       type: String,
       default: ""
-    }
+    },
   },
   mounted() {
     Scrollbar.init(document.querySelector("#my-scrollbar" + this.index));
+		this.cpDataInfo = this.cpData;
   },
   methods: {
     handleTaskDialog(data) {

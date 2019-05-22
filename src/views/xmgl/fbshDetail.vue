@@ -3,9 +3,12 @@
 		<div class="fbdetail_container">
 			<div class="fb_info">
 				<div>
-					<div text-right>
+					<div text-right v-if="fbjbxx.fbzt == '02'">
 						<el-button type="primary" @click="handleVerify('1')">审核通过</el-button>
 						<el-button type="danger"  @click="handleVerify('0')">审核不通过</el-button>
+					</div>
+					<div text-right v-if="fbjbxx.fbzt == '04'||fbjbxx.fbzt == '05'">
+						<el-tag :type="fbjbxx.fbzt=='04'?'danger':'success'">{{fbjbxx.fbzt=='04'?'审核不通过':'审核通过'}}</el-tag>
 					</div>
 						<div>
 						<h5>合同基本信息</h5>

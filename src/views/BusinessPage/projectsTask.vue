@@ -68,7 +68,7 @@
         <div class="project_task_milestone">
           <div style="height:100%;" class="milestone-list" v-if="ViewTransition && radio != 'bgst'">
             <div v-for="(milestone,index) in milestones" :key="index" v-if="taskList.length != 0 && taskList != null">
-              <itemTask :rwlx="rwlxValue" :rwzt="rwztValue" :TaskDatas="milestone.tasks.rows" :index="index" :milestone="milestone" @handleDialog="handleDialog" @handleTaskinfo="handleTaskinfo"></itemTask>
+              <itemTask :rwlx="rwlxValue" :cpData="cpData" :rwzt="rwztValue" :TaskDatas="milestone.tasks.rows" :index="index" :milestone="milestone" @handleDialog="handleDialog" @handleTaskinfo="handleTaskinfo"></itemTask>
             </div>
             <div v-if="taskList.length == 0 || taskList == null" style="text-align:center;padding-top:150px;width:100%">
               <img src="static/img/empty.png" alt="">
@@ -155,6 +155,7 @@
               <p>
                 <span style="display:inline-block;width:105px" class="el-icon-service"> 责任人</span>
                 <span>{{lcbTasks.ssrxm == ''?'暂无':lcbTasks.ssrxm}}&#x3000;</span>
+								<!-- 非里程碑任务 并且 乙方责任人 -->
                 <span v-if="lcbTasks.lx != 1 && Operatepower">
                   <span v-if="!xgssry">
                     <el-select v-model="value" size='mini' filterable :filter-method="filterSearch" @change="getTaskssry" placeholder="请选择/搜索用户姓名/编号">
@@ -1386,6 +1387,7 @@ export default {
       }).then(({ data }) => {
         if (data.state == "success") {
           this.milestones = data.data;
+					window.cpData = this.cpData;
         }
       });
     },

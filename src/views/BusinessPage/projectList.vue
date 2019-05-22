@@ -179,7 +179,6 @@
 						<el-table-column prop="cn" label="财年"  width="100"></el-table-column>
 						<el-table-column prop="gczd" label="区域工程" min-width="150"></el-table-column>
 						<el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
-            <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
             <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
             <el-table-column prop="khjl" label="客户经理" width="100"></el-table-column>
             <el-table-column prop="yfzrrxm" label="项目经理" width="100"></el-table-column>

@@ -98,22 +98,6 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
-/* 分包状态 */
-.card-state{
-    color: #fff;
-    border-radius: 4px;
-    padding: 0 2px;
-    background-color: #F91818;
-    font-size: 14px;
-}
-.card-state-zbz{
-    background-color: #F91818;
-}
-
-.card-state-close{
-    background-color:#93D36E;
-}
-
 .card-level-hard{
     color: #F91818;
 }

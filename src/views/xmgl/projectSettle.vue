@@ -9,7 +9,7 @@
 				prefix-icon="el-icon-search"
 				size="small"
 				v-model="filterData.keyword"
-				@change="SearchItem"
+				@change="handleSearch"
 			></el-input>
 			&#x3000;
 			<el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
@@ -19,15 +19,15 @@
 		<div flex style="margin:10px 0;">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
-				<span :class="{ 'bg-active': filterData.gczd == '' }" @click="CheckGcdz('')">全部</span>
-				<span v-for="gczd in gczdList" :class="{ 'bg-active': gczd.label == filterData.gczd }" :key="gczd.id" @click="CheckGcdz(gczd.label)">{{ gczd.mc }}</span>
+				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }" :key="gcdq.id" @click="CheckGcdz(gcdq.id)">{{ gcdq.label }}</span>
 			</p>
 		</div>
 
 		<div flex>
 			<span class="query-title">是否审核:</span>
 			<p class="query-list">
-				<span v-for="sfsh in sfjsList" :class="{ 'bg-active': sfsh.id == filterData.sfsh }" :key="sfsh.id" @click="CheckSfsh(sfsh.id)">{{ sfsh.label }}</span>
+				<span :class="{ 'bg-active': filterData.jszt == '' }">全部</span>
+				<span v-for="sfsh in jsztList" :class="{ 'bg-active': sfsh.label == filterData.jszt }" :key="sfsh.label" @click="CheckSfsh(sfsh.label)">{{ sfsh.mc }}</span>
 			</p>
 		</div>
 		<br />
@@ -38,29 +38,35 @@
 						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column prop="date" label="是否结算" width="120"></el-table-column>
-				<el-table-column prop="name" label="项目编号" width="120"></el-table-column>
-				<el-table-column prop="address" label="项目名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="address" label="合同编号" ></el-table-column>
-				<el-table-column prop="address" label="分包名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="name" label="申请人" width="110"></el-table-column>
-				<el-table-column prop="name" label="申请时间" width="110"></el-table-column>
-				<el-table-column prop="name" label="中标实施金额" width="110"></el-table-column>
-				<el-table-column prop="name" label="中标二开金额" width="110"></el-table-column>
-				<el-table-column prop="name" label="中标可变金额" width="110"></el-table-column>
-				<el-table-column prop="name" label="结算实施金额" width="110"></el-table-column>
-				<el-table-column prop="name" label="结算二开金额" width="110"></el-table-column>
-				<el-table-column prop="name" label="结算可变金额" width="110"></el-table-column>
+				<el-table-column  label="是否结算" width="120">
+					<template slot-scope="scope">
+						<el-tag size="mini" :type="scope.row.jszt=='01'?'primary':scope.row.jszt=='05'||scope.row.jszt=='04'?'danger':'success'">
+							{{scope.row.jszt=='01'?'申请中':scope.row.jszt=='02'?'已结算':scope.row.jszt=='03'?'审核通过':scope.row.jszt=='04'?'审核不通过':scope.row.jszt=='05'?'申请不通过':'已冲账'}}
+						</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
+				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="fbbh" label="合同编号" width="160"></el-table-column>
+				<el-table-column prop="fbmc" label="分包名称" min-width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="sqjsrxm" label="申请人" width="110"></el-table-column>
+				<el-table-column prop="sqjsrq" label="申请时间" width="110"></el-table-column>
+				<el-table-column prop="zbssfy" label="中标实施金额" width="110"></el-table-column>
+				<el-table-column prop="zbekfy" label="中标二开金额" width="110"></el-table-column>
+				<el-table-column prop="zbkbfy" label="中标可变金额" width="110"></el-table-column>
+				<el-table-column prop="jsssfy" label="结算实施金额" width="110"></el-table-column>
+				<el-table-column prop="jsekfy" label="结算二开金额" width="110"></el-table-column>
+				<el-table-column prop="jskbfy" label="结算可变金额" width="110"></el-table-column>
 			</el-table>
 			<div text-right>
 				<el-pagination
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page="currentPage"
-					:page-sizes="[20, 50, 70, 100]"
+					:page-sizes="[15, 30, 50, 100]"
 					:page-size="pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
-					:total="total"
+					:total="records"
 				></el-pagination>
 			</div>
 		</div>
@@ -73,72 +79,75 @@ export default {
 	data() {
 		return {
 			currentPage: 1,
-			pageSize: 20,
-			total: 0,
+			pageSize: 15,
+			records: 0,
 			filterData: {
 				keyword: '',
-				gczd: '',
-				sfsh: ''
+				gcdq: '',
+				jszt: ''
 			},
-			gczdList: [],
-			sfjsList: [{ label: '全部', id: '' }, { label: '已结算', id: '1' }, { label: '未结算', id: '2' }],
-			tableData: [
-				{
-					date: '2016-05-03',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				},
-				{
-					date: '2016-05-02',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				},
-				{
-					date: '2016-05-04',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				},
-				{
-					date: '2016-05-01',
-					name: '王小虎',
-					province: '上海',
-					city: '普陀区',
-					address: '上海市普陀区金沙江路 1518 弄',
-					zip: 200333
-				}
-			]
+			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区'},{ label: '其他', id: '其他'}],
+			jsztList: [],
+			tableData: []
 		};
 	},
 	mounted() {
-		if (getSession('gczd') == null) {
-			getMenu('gczd', this.gczdList, true); //获取工程战队
-		} else {
-			this.gczdList = getSession('gczd');
-		}
+		this.jsztList = [];
+		getMenu('SettlementStatus',this.jsztList);
+		this.queryJsData();
 	},
 	methods: {
-		handleSearch() {},
+		handleSearch() {
+			this.currentPage = 1;
+			this.queryJsData();
+		},
 		handleExport() {},
-		SearchItem() {},
-		CheckGcdz() {},
-		CheckSfsh() {},
-		handleCurrentChange() {},
-		handleSizeChange() {},
+		CheckGcdz(data) {
+			this.filterData.gcdq = data;
+			this.currentPage = 1;
+			this.queryJsData();
+		},
+		CheckSfsh(data) {
+			this.filterData.jszt = data;
+			this.currentPage = 1;
+			this.queryJsData();
+		},
+		handleCurrentChange(data) {
+			this.currentPage = data;
+			this.queryJsData();
+		},
+		handleSizeChange(data) {
+			this.currentPage = 1;
+			this.pageSize = data;
+			this.queryJsData();
+		},
 		handleClick() {
 			let routeData = this.$router.resolve({
 				path: '/projectsettledetail',
 				query: {}
 			});
 			window.open(routeData.href, '_blank');
+		},
+		queryJsData(){
+			this.$get(this.API.queryJsData,{
+				curPage:this.currentPage,
+				pageSize:this.pageSize,
+				gcdq:this.filterData.gcdq,
+				jszt:this.filterData.jszt,
+				keyword:this.filterData.keyword
+			}).then(res=>{
+				if(res.state == 'success'){
+					if(!!res.data.rows){
+						this.tableData = res.data.rows
+					}
+					this.records = res.data.records;
+				}else{
+					this.$message({
+						message:res.msg,
+						type:'error'
+					})
+				}
+			})
 		}
 	}
 };

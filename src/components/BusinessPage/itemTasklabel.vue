@@ -38,7 +38,7 @@
           </div>
           <div class="task_label_bottom">
             <!-- <span data-lx="1"  :data-type="'changeDate&'+index" style="border-left:none"> 调整计划</span> -->
-            <el-button v-if="detailList.sfjfqr != 1 && userName == detailList.jfzrrxm" @click="handleTask($event,'jfqy',index)">甲方确认</el-button>
+            <el-button v-if="detailList.sfjfqr != 1 && userCode == cpData.jfzrrbh" @click="handleTask($event,'jfqy',index)">甲方确认</el-button>
             <!-- <el-button  @click="handleTask($event,'commit',index)" v-if="detailList.zt != 5"> 提交里程碑</el-button> -->
             <el-button @click="handleTask($event,'daily',index)"> 填写日报</el-button>
             <!-- <el-button  @click="handleTask($event,'edit',index)">编辑任务</el-button> -->
@@ -75,7 +75,7 @@
               </p>
               <p class="lcb_task_info">
                 <span>
-                  <span class="el-icon-erp-yonghu Lcbtask_task-titleTip"> 责任人 : </span>{{detailList.ssrxm == ''?'暂无':detailList.ssrxm}}
+                  <span class="el-icon-erp-yonghu Lcbtask_task-titleTip"> 责任人：</span><span :style="{'color':detailList.lx == 5?'#3ba7f5':''}">{{detailList.ssrxm == ''?'暂无':detailList.ssrxm}}</span>
                 </span>
                 <!-- <span> -->
                 <span style="font-size:12px;" class="el-icon-erp-yonghu" v-if="detailList.lx != 3 && detailList.lx != 5">
@@ -86,9 +86,9 @@
           </div>
           <div class="task_label_bottom">
             <!-- <span v-if="(detailList.lx == 3 || detailList.lx == 5) && detailList.zt != 2"  data-lx="1" :data-type="'changeDate&'+index" class="el-icon-date"> 调整计划</span> -->
-            <el-button v-if="detailList.zt == 2 && detailList.lx == 1||detailList.lx == 3?userName == detailList.jfzrrxm:detailList.lx == 5?userName == detailList.yfzrrxm:userName == detailList.cjrxm" @click="handleTask($event,'jfqy',index)" :disabled="detailList.zt == 3">{{detailList.lx == 3?'甲方确认':detailList.lx == 5?'乙方确认':'创建人确认'}}</el-button>
-            <el-button v-if="detailList.lx == 9 && detailList.zt != 2 && userName == detailList.cjrxm " @click="handleTask($event,'delete',index)">删除任务</el-button>
-            <el-button v-if="detailList.lx == 9 && detailList.zt != 2 && userName == detailList.cjrxm" @click="handleTask($event,'edit',index)">编辑任务</el-button>
+            <el-button v-if="detailList.zt == 2 && detailList.lx == 3?userCode == cpData.jfzrrbh:detailList.lx == 5?userCode == cpData.yfzrrbh:userCode == detailList.cjrbh" @click="handleTask($event,'jfqy',index)" :disabled="detailList.zt == 3">{{detailList.lx == 3?'甲方确认':detailList.lx == 5?'乙方确认':'创建人确认'}}</el-button>
+            <el-button v-if="detailList.lx == 9 && detailList.zt != 2 && userCode == detailList.cjrbh " @click="handleTask($event,'delete',index)">删除任务</el-button>
+            <el-button v-if="detailList.lx == 9 && detailList.zt != 2 && userCode == detailList.cjrbh" @click="handleTask($event,'edit',index)">编辑任务</el-button>
             <el-button @click="handleTask($event,'daily',index)"> 填写日报</el-button>
           </div>
           <div :class="{'task-priority':true,'task-priority-1':true}"></div>
@@ -119,10 +119,11 @@ export default {
   data() {
     return {
       checked: false,
-      userName: "",
+      userCode: "",
       taskVisible: false,
       wcsj: "",
-      taskInfo: {}
+      taskInfo: {},
+			cpData:{}
     };
   },
   props: {
@@ -134,7 +135,8 @@ export default {
     }
   },
   mounted() {
-    this.userName = window.userName;
+    this.userCode = JSON.parse(sessionStorage.getItem('userInfo')).uid ;
+		this.cpData = window.cpData;
   },
   methods: {
     // 关闭弹出层
@@ -215,7 +217,7 @@ export default {
         if (params.lx == 9) {
           if (
             params.sfjfqr == "0" &&
-            (this.userName == params.cjrxm || this.userName == params.ssrxm)
+            (this.userCode == params.cjrbh || this.userCode == params.ssrbh)
           ) {
             changeTaskStatus({
               rwbh: params.rwbh,

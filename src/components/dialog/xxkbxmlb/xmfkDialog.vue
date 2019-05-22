@@ -25,7 +25,7 @@
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="说明">
+          <el-form-item label="说明" :required="form.sfxq == '0'">
             <el-input type="textarea" v-model="form.sm"></el-input>
           </el-form-item>
 
@@ -64,7 +64,14 @@ export default {
   },
   methods: {
       onSubmit(){
-          this.$emit('handleSubmit',this.form)
+				if(this.form.sfxq == '0' && /^[\s]*$/.test(this.form.sm)){
+						this.$message({
+							message:'请填写说明内容',
+							type:"warning"
+						})
+						return;
+				}
+        this.$emit('handleSubmit',this.form);
       }
   },
   watch: {

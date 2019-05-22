@@ -240,4 +240,10 @@ export default {
     verifyFb:window.baseurl + 'fbxx/verifyFb.do',//分包审核
     // 投标
     saveTbxx:window.baseurl + 'tbxx/saveTbxx.do',//投标
+	tbManage:window.baseurl + 'tbxx/tbManage.do',//投标详情
+	setBid:window.baseurl + 'tbxx/swzb.do',//设为中标
+	
+	// 结算
+	queryJsData:window.baseurl + 'jsxx/queryJsData.do',//获取结算
+	queryJsxq:window.baseurl + 'jsxx/queryJsxq.do',//获取结算详情
  }

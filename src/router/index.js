@@ -227,6 +227,12 @@ export default new Router({
 					meta: {},
 					component: resolve => require(['@/views/xmgl/projectBidDetail.vue'], resolve),
 				},
+				{
+					path: '/biddetail',
+					name: 'BidDetail',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/projectBidDetail2.vue'], resolve),
+				},
 				// 中标
 				{
 					path: '/projectFbsh',
@@ -283,6 +289,13 @@ export default new Router({
 					name: 'projectSettleAuditDetail',
 					meta: {},
 					component: resolve => require(['@/views/xmgl/projectSettleAuditDetail.vue'], resolve),
+				},
+				// 销售支持确认
+				{
+					path: '/saleconfirm',
+					name: 'saleConfirm',
+					meta: {},
+					component: resolve => require(['@/views/xmgl/salesConfirm.vue'], resolve),
 				},
 				{
 					path: '/school',

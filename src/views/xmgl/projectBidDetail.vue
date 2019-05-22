@@ -6,18 +6,29 @@
 		<el-table :data="tableData" border style="width: 100%">
 			<el-table-column fixed="left" label="操作" width="120">
 				<template slot-scope="scope">
-					<el-button @click="handleClick(scope.row)" type="text" size="small">设为中标</el-button>
-					<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+					<el-button @click="handleClick(scope.row,'swzb')" type="text" size="small">设为中标</el-button>
+					<el-button @click="handleClick(scope.row,'xq')" type="text" size="small">详情</el-button>
 				</template>
 			</el-table-column>
-			<el-table-column prop="name" label="是否中标" width="120"></el-table-column>
-			<el-table-column prop="name" label="分包名称" min-width="240"></el-table-column>
-			<el-table-column prop="name" label="投标人" width="110"></el-table-column>
-			<el-table-column prop="name" label="投标时间" min-width="130"></el-table-column>
-			<el-table-column prop="name" label="投标实施金额" min-width="110"></el-table-column>
-			<el-table-column prop="name" label="投标二开金额" min-width="110"></el-table-column>
-			<el-table-column prop="name" label="投标可变金额" min-width="110"></el-table-column>
+			<el-table-column prop="sfzb" label="是否中标" width="120"></el-table-column>
+			<el-table-column prop="fbmc" label="分包名称" min-width="240"></el-table-column>
+			<el-table-column prop="tbrxm" label="投标人" width="110"></el-table-column>
+			<el-table-column prop="tbrq" label="投标时间" min-width="130"></el-table-column>
+			<el-table-column prop="tbssfy" label="投标实施金额" min-width="110"></el-table-column>
+			<el-table-column prop="tbekfy" label="投标二开金额" min-width="110"></el-table-column>
+			<el-table-column prop="tbkbfy" label="投标可变金额" min-width="110"></el-table-column>
 		</el-table>
+		<div text-right>
+			<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-sizes="[20, 50, 70, 100]"
+				:page-size="pageSize"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="records"
+			></el-pagination>
+		</div>
 	</div>
 </template>
 
@@ -25,16 +36,66 @@
 	export default{
 		data(){
 			return {
-				tableData:[
-					{
-						name:'hhh'
-					}
-				]	
+				tableData:[],
+				currentPage:1,
+				pageSize:20,
+				records:0
 			}
 		},
+		mounted(){
+			this.tbManage();
+		},
 		methods: {
-			handleClick() {
-				
+			handleClick(data,type) {
+				if(type == 'swzb'){
+					this.$confirm('是否确认设为中标?', '提示', {
+					  cancelButtonText: '再想想',
+					  confirmButtonText: '确定',
+					  type: 'warning'
+					}).then(() => {
+						this.$post(this.API.swzb,{
+							tbbh:data.tbbh
+						}).then(res=>{
+							if(res.state == 'success'){
+								this.$message({message:'已设为中标',type:'success'});
+								this.tbManage();
+							}else{
+								this.$message({message:res.msg,type:'warning'})
+							}
+						})
+					}).catch(() => {});
+				}else{
+					let routeData = this.$router.resolve({
+						path: '/biddetail',
+						query: {
+							fbbh:data.fbbh
+						}
+					});
+					window.open(routeData.href, '_blank');
+				}
+			},
+			handleCurrentChange(data){
+				this.currentPage = data;
+				this.tbManage();
+			},
+			handleSizeChange(data){
+				this.currentPage = 1;
+				this.pageSize = data;
+				this.tbManage();
+			},
+			tbManage(){
+				this.$get(this.API.tbManage,{
+					curPage:this.currentPage,
+					pageSize:this.pageSize,
+					fbbh:this.$route.query.fbbh
+				}).then(res=>{
+					if(res.state == 'success'){
+						if(!!res.data.rows){
+							this.tableData = res.data.rows
+						}
+						this.records = res.data.records;
+					}
+				})
 			}
 		},
 	}
