@@ -47,7 +47,8 @@ export function tbxq(obj){
     let url =  window.baseurl + suburl + 'tbxq.do'
     return axios.get(url,{
 		params:{
-          fbbh:obj.fbbh
+          fbbh:obj.fbbh,
+		  tbbh:obj.tbbh||""
 		}
 	})
 }

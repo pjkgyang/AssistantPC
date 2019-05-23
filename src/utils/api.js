@@ -246,4 +246,10 @@ export default {
 	// 结算
 	queryJsData:window.baseurl + 'jsxx/queryJsData.do',//获取结算
 	queryJsxq:window.baseurl + 'jsxx/queryJsxq.do',//获取结算详情
+	querySsfy:window.baseurl + 'jsxx/querySsfy.do',//获取实施费用
+	queryEkfy:window.baseurl + 'jsxx/queryEkfy.do',//获取二开费用
+	queryBxfy:window.baseurl + 'jsxx/queryBxfy.do',//获取报销费用
+	batchSetJsFySource:window.baseurl + 'jsxx/batchSetJsFySource.do',//批量设置结算费用
+	saveJsFeeData:window.baseurl + 'jsxx/saveJsFeeData.do',//保存项目结算
+	jsReview:window.baseurl + 'jsxx/jsReview.do',//结算审核
  }

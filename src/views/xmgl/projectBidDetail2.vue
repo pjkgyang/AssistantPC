@@ -82,7 +82,7 @@
 			
 		},
 		mounted(){
-			tbxq({fbbh:this.$route.query.fbbh}).then(({data})=>{
+			tbxq({fbbh:this.$route.query.fbbh,tbbh:this.$route.query.tbbh}).then(({data})=>{
 				if(data.state == 'success'){
 					this.ywyData = data.data.htnrfy;
 					if(!!data.data.tbxx){

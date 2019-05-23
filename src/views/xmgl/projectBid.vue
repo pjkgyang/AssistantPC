@@ -141,6 +141,8 @@ export default {
 				if(res.state == 'success'){
 					if(!!res.data.rows){
 						this.tableData = res.data.rows
+					}else{
+						this.tableData  = [];
 					}
 					this.total = res.data.total;
 					this.records = res.data.records;

@@ -6,7 +6,7 @@
 		<el-table :data="tableData" border style="width: 100%">
 			<el-table-column fixed="left" label="操作" width="120">
 				<template slot-scope="scope">
-					<el-button @click="handleClick(scope.row,'swzb')" type="text" size="small">设为中标</el-button>
+					<el-button v-if="scope.row.sfswzb == '1'" @click="handleClick(scope.row,'swzb')" type="text" size="small">设为中标</el-button>
 					<el-button @click="handleClick(scope.row,'xq')" type="text" size="small">详情</el-button>
 				</template>
 			</el-table-column>
@@ -53,7 +53,8 @@
 					  confirmButtonText: '确定',
 					  type: 'warning'
 					}).then(() => {
-						this.$post(this.API.swzb,{
+						this.$post(this.API.setBid,{
+							fbbh:this.$route.query.fbbh,
 							tbbh:data.tbbh
 						}).then(res=>{
 							if(res.state == 'success'){
@@ -68,7 +69,8 @@
 					let routeData = this.$router.resolve({
 						path: '/biddetail',
 						query: {
-							fbbh:data.fbbh
+							fbbh:data.fbbh,
+							tbbh:data.tbbh
 						}
 					});
 					window.open(routeData.href, '_blank');
@@ -92,7 +94,9 @@
 					if(res.state == 'success'){
 						if(!!res.data.rows){
 							this.tableData = res.data.rows
-						}
+						}else{
+						this.tableData  = [];
+					}
 						this.records = res.data.records;
 					}
 				})

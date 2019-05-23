@@ -26,8 +26,7 @@
 		<div flex>
 			<span class="query-title">是否审核:</span>
 			<p class="query-list">
-				<span :class="{ 'bg-active': filterData.shzt == '' }" @click="CheckSfsh()">全部</span>
-				<span v-for="sfsh in sfshList" :class="{ 'bg-active': sfsh.label == filterData.shzt }" :key="sfsh.label" @click="CheckSfsh(sfsh.label)">{{ sfsh.mc }}</span>
+				<span v-for="sfsh in sfshList" :class="{ 'bg-active': sfsh.id == filterData.shzt }" :key="sfsh.id" @click="CheckSfsh(sfsh.id)">{{ sfsh.label }}</span>
 			</p>
 		</div>
 		<br />
@@ -84,21 +83,16 @@ export default {
 			records: 0,
 			filterData: {
 				keyword: '',
-				gcdq: '南区',
+				gcdq: '',
 				shzt: ''
 			},
 			gcdqList: [{ label: '全部', id: '' },{ label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
-			sfshList: [],
+			sfshList: [{label:'全部',id:''},{label:'已审核',id:'1'},{label:'未审核',id:'0'}],
 			tableData: [],
 			fbbhList:[]
 		};
 	},
 	mounted() {
-		if (getSession('SHZT') == null) {
-			getMenu('SHZT', this.sfshList); //获取审核状态
-		} else {
-			this.sfshList = getSession('SHZT');
-		}
 		this.getFbshList();
 	},
 	methods: {
@@ -175,6 +169,8 @@ export default {
 				if (res.state == 'success') {
 					if (!!res.data.rows) {
 						this.tableData = res.data.rows;
+					}else{
+						this.tableData  = [];
 					}
 					this.records = res.data.records;
 				} else {

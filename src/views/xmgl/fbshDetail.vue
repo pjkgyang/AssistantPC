@@ -226,7 +226,7 @@ export default {
 				  confirmButtonText: '确定',
 				  cancelButtonText: '取消',
 				  inputPattern: /\S/,
-				  inputErrorMessage: '格式不正确',
+				  inputErrorMessage: '请输入说明内容',
 				  inputPlaceholder:'请输入说明内容'
 				}).then(({ value }) => {
 				  this.verifyFb(this.$route.fbbh,params,value);

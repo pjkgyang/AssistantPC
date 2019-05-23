@@ -24,10 +24,9 @@
 		</div>
 
 		<div flex>
-			<span class="query-title">是否审核:</span>
+			<span class="query-title">是否结算:</span>
 			<p class="query-list">
-				<span :class="{ 'bg-active': filterData.jszt == '' }">全部</span>
-				<span v-for="sfsh in jsztList" :class="{ 'bg-active': sfsh.label == filterData.jszt }" :key="sfsh.label" @click="CheckSfsh(sfsh.label)">{{ sfsh.mc }}</span>
+				<span v-for="jszt in jsztList" :class="{ 'bg-active': jszt.id == filterData.jszt }" :key="jszt.id" @click="CheckSfsh(jszt.id)">{{ jszt.label }}</span>
 			</p>
 		</div>
 		<br />
@@ -40,8 +39,8 @@
 				</el-table-column>
 				<el-table-column  label="是否结算" width="120">
 					<template slot-scope="scope">
-						<el-tag size="mini" :type="scope.row.jszt=='01'?'primary':scope.row.jszt=='05'||scope.row.jszt=='04'?'danger':'success'">
-							{{scope.row.jszt=='01'?'申请中':scope.row.jszt=='02'?'已结算':scope.row.jszt=='03'?'审核通过':scope.row.jszt=='04'?'审核不通过':scope.row.jszt=='05'?'申请不通过':'已冲账'}}
+						<el-tag size="mini" :type="scope.row.jszt=='未结算'?'primary':'success'">
+							{{scope.row.jszt}}
 						</el-tag>
 					</template>
 				</el-table-column>
@@ -87,13 +86,11 @@ export default {
 				jszt: ''
 			},
 			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区'},{ label: '其他', id: '其他'}],
-			jsztList: [],
+			jsztList: [{ label: '全部', id: '' }, { label: '已结算', id: '1' }, { label: '未结算', id: '0'}],
 			tableData: []
 		};
 	},
 	mounted() {
-		this.jsztList = [];
-		getMenu('SettlementStatus',this.jsztList);
 		this.queryJsData();
 	},
 	methods: {
@@ -121,10 +118,13 @@ export default {
 			this.pageSize = data;
 			this.queryJsData();
 		},
-		handleClick() {
+		handleClick(data) {
 			let routeData = this.$router.resolve({
 				path: '/projectsettledetail',
-				query: {}
+				query: {
+					wid:data.jssqwid,
+					fbbh:data.fbbh
+				}
 			});
 			window.open(routeData.href, '_blank');
 		},
@@ -133,12 +133,14 @@ export default {
 				curPage:this.currentPage,
 				pageSize:this.pageSize,
 				gcdq:this.filterData.gcdq,
-				jszt:this.filterData.jszt,
+				sfjs:this.filterData.jszt,
 				keyword:this.filterData.keyword
 			}).then(res=>{
 				if(res.state == 'success'){
 					if(!!res.data.rows){
 						this.tableData = res.data.rows
+					}else{
+						this.tableData  = [];
 					}
 					this.records = res.data.records;
 				}else{

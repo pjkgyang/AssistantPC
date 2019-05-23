@@ -4,25 +4,25 @@
 			<div class="fb_info">
 				<div>
 					<h4>项目结算详情</h4>
-					<div text-right><el-button size="small" type="danger">保存</el-button></div>
+					<div text-right v-if="jsxx.jszt != 1">
+						<el-button size="small" type="danger" @click='handleSave'>保存</el-button>
+					</div>
 					<div>
 						<h5>历史结算信息</h5>
 						<table>
 							<tr>
 								<th>分包结算次数</th>
-								<td>{{ htjbxx.htje }}</td>
+								<td>{{ jsxx.jscs }}</td>
 								<th>中标总金额（元）</th>
-								<td>{{ htjbxx.htje }}</td>
+								<td>{{ jsxx.zbzfy }}</td>
 								<th>已结算金额（元）</th>
-								<td>{{ htjbxx.htje }}</td>
+								<td>{{ jsxx.yjszfy }}</td>
 							</tr>
 							<tr>
 								<th>剩余结算金额（元）</th>
-								<td>{{ htjbxx.htje }}</td>
+								<td>{{ jsxx.syjsje }}</td>
 								<th>团队结算金额（元）</th>
-								<td>{{ htjbxx.htje }}</td>
-								<th>团队剩余金额（元）</th>
-								<td>{{ htjbxx.htje }}</td>
+								<td>{{ jsxx.yjstdfy }}</td>
 							</tr>
 						</table>
 					</div>
@@ -31,31 +31,31 @@
 						<table>
 							<tr>
 								<th>项目名称</th>
-								<td colspan="5"></td>
+								<td colspan="5">{{jsxx.xmmc}}</td>
 							</tr>
 							<tr>
 								<th>分包名称</th>
-								<td colspan="5"></td>
+								<td colspan="5">{{jsxx.fbmc}}</td>
 							</tr>
 							<tr>
 								<th>中标人</th>
-								<td>1</td>
+								<td>{{jsxx.zbrmc}}</td>
 								<th>申请人</th>
-								<td>1</td>
+								<td>{{jssqData.jsrmc}}</td>
 								<th>申请时间</th>
-								<td>1</td>
+								<td>{{jssqData.jsrq}}</td>
 							</tr>
 							<tr>
 								<th>实际开始日期</th>
-								<td>1</td>
+								<td>{{jssqData.sjkssj}}</td>
 								<th>实际结束日期</th>
-								<td>1</td>
+								<td>{{jssqData.sjjssj}}</td>
 								<th>结算点</th>
-								<td>1</td>
+								<td>{{jssqData.sjkssj}}</td>
 							</tr>
 							<tr>
 								<th>申请说明</th>
-								<td colspan="5" height="80px">1</td>
+								<td colspan="5" height="80px">{{jssqData.sm}}</td>
 							</tr>
 						</table>
 					</div>
@@ -64,61 +64,61 @@
 						<table>
 							<tr>
 								<th>本次结算总金额（元）</th>
-								<td colspan="5"></td>
+								<td colspan="5">{{jsxx.jsje}}</td>
 							</tr>
 							<tr>
 								<th>中标实施费用（元）</th>
-								<td>1</td>
+								<td>{{jsxx.zbssfy}}</td>
 								<th>中标二开费用（元）</th>
-								<td>1</td>
+								<td>{{jsxx.zbekfy}}</td>
 								<th>中标可变费用（元）</th>
-								<td>1</td>
+								<td>{{jsxx.zbkbfy}}</td>
 							</tr>
 							<tr>
 								<th>已结算实施费用（元）</th>
-								<td>1</td>
+								<td>{{jsxx.yjsssfy}}</td>
 								<th>已结算二开费用（元）</th>
-								<td>1</td>
+								<td>{{jsxx.yjsekfy}}</td>
 								<th>已结算可变费用（元）</th>
-								<td>1</td>
+								<td>{{jsxx.yjskbfy}}</td>
 							</tr>
 							<tr>
 								<th>预留实施费用（元）</th>
-								<td><input style="width: 100%;" value="0" type="number" /></td>
+								<td><input v-model="jsxx.ylssfy" style="width: 100%;" value="0" type="number" /></td>
 								<th>预留二开费用（元）</th>
-								<td><input style="width: 100%;" value="0" type="number" /></td>
+								<td><input v-model="jsxx.ylekfy" style="width: 100%;" value="0" type="number" /></td>
 								<th>预留可变费用（元）</th>
-								<td><input style="width: 100%;" value="0" type="number" /></td>
+								<td><input v-model="jsxx.ylkbfy" style="width: 100%;" value="0" type="number" /></td>
 							</tr>
 							<tr>
 								<th>实施调用费用（元）</th>
-								<td>1</td>
+								<td colcenter spacebetween style="border:none !important"><span>{{!jsxx.rlssfy?0:jsxx.rlssfy}}</span><i title="设置费用"  class="el-icon-edit-outline" @click="handleSettleMoney('0')"></i></td>
 								<th>二开调用费用（元）</th>
-								<td>1</td>
+								<td colcenter spacebetween style="border:none !important"><span>{{!jsxx.rlekfy?0:jsxx.rlekfy}}</span><i title="设置费用"  class="el-icon-edit-outline" @click="handleSettleMoney('1')"></i></td>
 								<th>可变报销费用（元）</th>
-								<td>1</td>
+								<td colcenter spacebetween style="border:none !important"><span>{{!jsxx.rlkbfy?0:jsxx.rlkbfy}}</span><i title="设置费用"  class="el-icon-edit-outline" @click="handleSettleMoney('2')"></i></td>
 							</tr>
 							<tr>
 								<th>本次结算实施费用（元）</th>
-								<td style="text-align: right;"><i title="设置费用" class="el-icon-edit-outline" @click="handleSettleMoney('ss')"></i></td>
+								<td>{{jsxx.jsssfy = (Number(jsxx.zbssfy) - Number(jsxx.yjsssfy) - Number(jsxx.ylssfy) - Number(!jsxx.rlssfy?0:jsxx.rlssfy))}}</td>
 								<th>本次结算二开费用（元）</th>
-								<td style="text-align: right;"><i title="设置费用" class="el-icon-edit-outline" @click="handleSettleMoney('ek')"></i></td>
+								<td>{{jsxx.jsekfy = (Number(jsxx.zbekfy) - Number(jsxx.yjsekfy) - Number(jsxx.ylekfy) - Number(!jsxx.rlekfy?0:jsxx.rlekfy))}}</td>
 								<th>本次结算可变费用（元）</th>
-								<td style="text-align: right;"><i title="设置费用" class="el-icon-edit-outline" @click="handleSettleMoney('kb')"></i></td>
+								<td>{{jsxx.jskbfy = (Number(jsxx.zbkbfy) - Number(jsxx.yjskbfy) - Number(jsxx.ylkbfy) - Number(!jsxx.rlkbfy?0:jsxx.rlkbfy))}}</td>
 							</tr>
 							<tr>
 								<th>预留说明</th>
-								<td colspan="5">1</td>
+								<td colspan="5">{{jsxx.sm}}</td>
 							</tr>
 							<tr>
 								<th>奖励金额（元）</th>
-								<td>1</td>
+								<td>{{jsxx.jlje}}</td>
 								<th>惩罚金额（元）</th>
-								<td colspan="3">1</td>
+								<td colspan="3">{{jsxx.cfje}}</td>
 							</tr>
 							<tr>
 								<th>奖惩说明</th>
-								<td colspan="5">1</td>
+								<td colspan="5">{{jsxx.jlsm}}</td>
 							</tr>
 						</table>
 					</div>
@@ -146,21 +146,21 @@
 								<th>本次结算可变费用(元)</th>
 								<th>本次合计结算</th>
 							</tr>
-							<tr v-for="(item, index) in testArr">
-								<td>1</td>
-								<td>2</td>
-								<td>3</td>
-								<td>4</td>
-								<td>5</td>
-								<td>6</td>
-								<td><input v-model="item.fy1" type="number" style="width: 80px;" @input="handleChangeInput(index)" /></td>
-								<td>8</td>
-								<td>9</td>
-								<td><input v-model="item.fy2" type="number" style="width: 80px;" @input="handleChangeInput(index)" /></td>
-								<td>11</td>
-								<td>12</td>
-								<td><input v-model="item.fy3" type="number" style="width: 80px;" @input="handleChangeInput(index)" /></td>
-								<td>{{ Number(item.fy1) + Number(item.fy2) + Number(item.fy3) }}</td>
+							<tr v-for="(item, index) in tdxxData">
+								<td>{{item.ywymc}}</td>
+								<td>{{item.htnr}}</td>
+								<td>{{item.dqjd}}</td>
+								<td >{{item.cymc}}</td>
+								<td>{{item.zbssfy}}</td>
+								<td>{{item.yjsssfy}}</td>
+								<td><input v-model="item.jsssfy" type="number" style="width: 80px;" @input="handleChangeInput(index,'ss')" /></td>
+								<td>{{item.zbekfy}}</td>
+								<td>{{item.yjsekfy}}</td>
+								<td><input v-model="item.jsekfy" type="number" style="width: 80px;" @input="handleChangeInput(index,'ek')" /></td>
+								<td>{{item.zbkbfy}}</td>
+								<td>{{item.yjskbfy}}</td>
+								<td><input v-model="item.jskbfy" type="number" style="width: 80px;" @input="handleChangeInput(index,'kb')" /></td>
+								<td>{{ !item.jsje?0:item.jsje }}</td>
 							</tr>
 						</table>
 					</div>
@@ -173,28 +173,54 @@
 				<div>
 					<span class="filter-weight">承担人：</span>
 					<el-radio-group v-model="cdradio">
-						<el-radio :label="1">区域承担</el-radio>
-						<el-radio :label="2">分包承担</el-radio>
+						<el-radio :label="0">区域承担</el-radio>
+						<el-radio :label="1">分包扣除</el-radio>
 					</el-radio-group>
 					&#x3000;
-					<el-button type="primary" size="mini">批量设置</el-button>
+					<el-button :disabled="!wids.length" type="primary" size="mini" @click="handleMultipleSet">批量设置</el-button>
 				</div>
-				<p style="color: #f00;margin:10px 0 !important; ">总金额：3000元，区域承担：1000元，分包扣除：2000元</p>
-				<el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+				<p style="color: #f00;margin:10px 0 !important; ">总金额：{{!cdfyData.zje?0:cdfyData.zje}}元，区域承担：{{!cdfyData.qycd?0:cdfyData.qycd}}元，分包扣除：{{!cdfyData.fbcd?0:cdfyData.fbcd}}元</p>
+				<el-table v-if="jsSource != 2" :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
 					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="name" label="承担人" width="100"></el-table-column>
-					<el-table-column prop="date" label="单据编号" width="180"></el-table-column>
+					<el-table-column  label="承担人" width="100">
+						<template slot-scope="scope">
+							<span>{{scope.row.rlzt=='0'?'区域承担':scope.row.rlzt=='1'?'分包扣除':''}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="djbh" label="单据编号" width="180"></el-table-column>
 					<el-table-column prop="name" label="开发性质" width="100"></el-table-column>
-					<el-table-column prop="name" label="服务类型"></el-table-column>
-					<el-table-column prop="name" label="状态" width="100"></el-table-column>
-					<el-table-column prop="name" label="业务线" min-width="150"></el-table-column>
-					<el-table-column prop="name" label="金额" width="100"></el-table-column>
-					<el-table-column prop="name" label="需求方" width="100"></el-table-column>
-					<el-table-column prop="name" label="招标截止日期"></el-table-column>
-					<el-table-column prop="name" label="交付日期"></el-table-column>
-					<el-table-column prop="name" label="中标人" width="100"></el-table-column>
-					<el-table-column prop="name" label="中标时间"></el-table-column>
+					<el-table-column prop="fwlxmc" label="服务类型" width="100"></el-table-column>
+					<el-table-column prop="ztmc" label="状态" width="100"></el-table-column>
+					<el-table-column prop="ssywxmc" label="业务线" min-width="250"></el-table-column>
+					<el-table-column prop="ysje" label="金额" width="100"></el-table-column>
+					<el-table-column prop="xqfmc" label="需求方" width="100"></el-table-column>
+					<el-table-column prop="zbjzrq" label="招标截止日期" width="140"></el-table-column>
+					<el-table-column prop="jfrq" label="交付日期" width="140"></el-table-column>
+					<el-table-column prop="zbrmc" label="中标人" width="100"></el-table-column>
+					<el-table-column prop="zbsj" label="中标时间" width="140"></el-table-column>
 				</el-table>
+				
+				<el-table v-if="jsSource == 2" :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+					<el-table-column type="selection" width="55"></el-table-column>
+					<el-table-column  label="承担人" width="100">
+						<template slot-scope="scope">
+							<span>{{scope.row.rlzt=='0'?'区域承担':scope.row.rlzt=='1'?'分包扣除':''}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="djbh" label="单据编号" width="120"></el-table-column>
+					<el-table-column prop="djzt" label="状态" width="100"></el-table-column>
+					<el-table-column prop="kmbh" label="科目编号" width="100"></el-table-column>
+					<el-table-column prop="kmmc" label="科目名称" min-width="250" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="je" label="金额" width="100"></el-table-column>
+					<el-table-column prop="bxsqrq" label="申请日期" width="110"></el-table-column>
+					<el-table-column prop="bxwcrq" label="完成日期" width="110"></el-table-column>
+					<el-table-column prop="bxrmc" label="报销人" width="90"></el-table-column>
+					<el-table-column prop="bxrbmmc" label="报销人部门" width="150" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="fycdrmc" label="承担人" width="90"></el-table-column>
+					<el-table-column prop="fycdrbmmc" label="承担人部门" width="150" show-overflow-tooltip></el-table-column>
+				</el-table>
+				
+				<br>
 				<div slot="footer" text-right>
 					<el-button size="mini" @click="dialogVisible = false">取 消</el-button>
 					<el-button size="mini" type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -209,73 +235,138 @@ export default {
 		return {
 			dialogVisible: false,
 			title:'',
-			cdradio: 1, //承担
-			tableData: [{
-				date: '2016-05-02',
-				name: '王小虎',
-				address: '上海市普陀区金沙江路 1518 弄'
-			  }, {
-				date: '2016-05-04',
-				name: '王小虎',
-				address: '上海市普陀区金沙江路 1517 弄'
-			  }, {
-				date: '2016-05-01',
-				name: '王小虎',
-				address: '上海市普陀区金沙江路 1519 弄'
-			  }, {
-				date: '2016-05-03',
-				name: '王小虎',
-				address: '上海市普陀区金沙江路 1516 弄'
-			  }],
-			  multipleSelection: [],
-		 	htjbxx: {},
-			fbxxInfo: {
-				fbmc: '哈哈哈哈哈',
-				fbrq: '2019-08-06'
-			}, //分包信息
-			testArr: [
-				{
-					fy1: 0,
-					fy2: 0,
-					fy3: 0,
-					hj: 0
-				},
-				{
-					fy1: 0,
-					fy2: 0,
-					fy3: 0,
-					hj: 0
-				}
-			],
-			fbcpData: [],
+			tableData: [],
+			jsxx:{},//结算详情
+			jssqData:{},//结算申请
+			tdxxData: [],
 			tbje: null,
-			zbxx: ''
+			zbxx: '',
+			// 承担费用
+			cdradio: 0, //承担
+			wids: [],
+			jsSource:'',
+			url:'',
+			cdfyData:{}
+			
 		};
 	},
-	mounted() {},
+	mounted() {
+		this.queryJsxq();
+	},
 	methods: {
-		handleSelectionChange(){
-
+		// 保存
+		handleSave(){
+			this.$post(this.API.saveJsFeeData,{
+				fbbh:this.jssqData
+			}).then(res=>{
+				if(res.state == 'success'){
+					this.$message({
+						message:'保存成功',
+						type:'success'
+					})
+					this.jsxx.jszt = 1;
+				}else{
+					this.$message({
+						message:res.msg,
+						type:'error'
+					})
+				}
+			})
+		},
+		handleSelectionChange(val){
+			val.forEach(ele=>{
+				this.wids.push(ele.wid);
+			})
+		},
+		handleMultipleSet(){
+			this.$post(this.API.batchSetJsFySource,{
+				wids:this.wids.join(','),
+				jssqwid:this.jssqData.wid,
+				cdlx:this.cdradio,
+				jsFySource:this.jsSource
+			}).then(res=>{
+				if(res.state == 'success'){
+					this.$message({
+						message:'保存成功',
+						type:'success'
+					})
+					this.querySettleMoney(this.jsSource);
+				}else{
+					this.$message({
+						message:res.msg,
+						type:'error'
+					})
+				}
+			})
 		},
 		// 计算结算费用
 		handleSettleMoney(data){
+			this.jsSource = data;
 			switch (data){
-				case 'ss':
-					this.title = '本次结算实施费用'
+				case '0':
+					this.title = '本次结算实施费用';
+					this.url = this.API.querySsfy;
 					break;
-				case 'ek':
-					this.title = '本次结算二开费用'
+				case '1':
+					this.title = '本次结算二开费用';
+					this.url = this.API.queryEkfy;
 					break;
-				case 'kb':
-					this.title = '本次结算可变费用'
+				case '2':
+					this.title = '本次结算可变费用';
+					this.url = this.API.queryBxfy;
 					break;
 				default:
 					break;
 			}
-			this.dialogVisible = !this.dialogVisible
+			this.querySettleMoney(data);
+			this.dialogVisible = !this.dialogVisible;
 		},
-		handleChangeInput(index) {
-			this.testArr[index].hj = Number(this.testArr[index].fy1) + Number(this.testArr[index].fy2) + Number(this.testArr[index].fy3);
+		// 金额计算
+		querySettleMoney(type){
+			this.$get(this.url,{
+				xmbh:'UK19138',//this.jsxx.xmbh,
+				jssqwid:this.jssqData.wid
+			}).then(res=>{
+				if(res.state == 'success'){
+						this.cdfyData = res.data;
+						this.tableData = !res.data.tableData?[]:es.data.tableData;
+						if(type == '0'){
+							this.jsxx.rlssfy = this.cdfyData.zje;
+						}else if(type == '1'){
+							this.jsxx.rlekfy = this.cdfyData.zje;
+						}else{
+							this.jsxx.rlkbfy = this.cdfyData.zje;
+						}
+				}else{
+					this.$message({
+						message:res.msg,
+						type:'error'
+					})
+				}
+			})
+		},
+		handleChangeInput(index,type) {
+			switch (type){
+				case 'ss':
+					break;
+				default:
+					break;
+			}
+			this.tdxxData[index].jsje = Number(this.tdxxData[index].jsssfy) + Number(this.tdxxData[index].jsekfy) + Number(this.tdxxData[index].jskbfy);
+		},
+		
+		// 获取结算申请详情
+		queryJsxq(){
+			this.$get(this.API.queryJsxq,{
+				jssqwid:this.$route.query.wid,
+				fbbh:this.$route.query.fbbh
+			}).then(res=>{
+				if(res.state == 'success'){
+					this.jssqData = res.data.jssqData;
+					this.tdxxData = !res.data.jstdData?[]:res.data.jstdData;
+					this.jsxx = res.data.jsxx;
+				}
+			})
 		}
 	},
 	activated() {},
