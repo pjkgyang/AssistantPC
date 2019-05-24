@@ -64,7 +64,7 @@
 						<table>
 							<tr>
 								<th>本次结算总金额（元）</th>
-								<td colspan="5">{{jsxx.jsje}}</td>
+								<td colspan="5"><input style="width:100%" type="number" v-model="jsxx.jsje" ></td>
 							</tr>
 							<tr>
 								<th>中标实施费用（元）</th>
@@ -84,11 +84,11 @@
 							</tr>
 							<tr>
 								<th>预留实施费用（元）</th>
-								<td><input v-model="jsxx.ylssfy" style="width: 100%;" value="0" type="number" /></td>
+								<td><input v-model="jsxx.ylssfy" style="width: 100%;"  type="number" @input="handleInputfy('0')"/></td>
 								<th>预留二开费用（元）</th>
-								<td><input v-model="jsxx.ylekfy" style="width: 100%;" value="0" type="number" /></td>
+								<td><input v-model="jsxx.ylekfy" style="width: 100%;"  type="number" @input="handleInputfy('1')"/></td>
 								<th>预留可变费用（元）</th>
-								<td><input v-model="jsxx.ylkbfy" style="width: 100%;" value="0" type="number" /></td>
+								<td><input v-model="jsxx.ylkbfy" style="width: 100%;"  type="number" @input="handleInputfy('2')"/></td>
 							</tr>
 							<tr>
 								<th>实施调用费用（元）</th>
@@ -100,32 +100,36 @@
 							</tr>
 							<tr>
 								<th>本次结算实施费用（元）</th>
-								<td>{{jsxx.jsssfy = (Number(jsxx.zbssfy) - Number(jsxx.yjsssfy) - Number(jsxx.ylssfy) - Number(!jsxx.rlssfy?0:jsxx.rlssfy))}}</td>
+								<td>{{jsxx.jsssfy}}</td>
 								<th>本次结算二开费用（元）</th>
-								<td>{{jsxx.jsekfy = (Number(jsxx.zbekfy) - Number(jsxx.yjsekfy) - Number(jsxx.ylekfy) - Number(!jsxx.rlekfy?0:jsxx.rlekfy))}}</td>
+								<td>{{jsxx.jsekfy}}</td>
 								<th>本次结算可变费用（元）</th>
-								<td>{{jsxx.jskbfy = (Number(jsxx.zbkbfy) - Number(jsxx.yjskbfy) - Number(jsxx.ylkbfy) - Number(!jsxx.rlkbfy?0:jsxx.rlkbfy))}}</td>
+								<td>{{jsxx.jskbfy}}</td>
 							</tr>
 							<tr>
 								<th>预留说明</th>
-								<td colspan="5">{{jsxx.sm}}</td>
+								<td colspan="5">
+									<textarea v-model="jsxx.sm" placeholder="请输入预留说明" style="width: 100%;padding: 5px;" rows="3"></textarea>
+								</td>
 							</tr>
 							<tr>
 								<th>奖励金额（元）</th>
-								<td>{{jsxx.jlje}}</td>
+								<td><input style="width: 100%;" type="number" v-model="jsxx.jlje" @input="handleInputfy"></td>
 								<th>惩罚金额（元）</th>
-								<td colspan="3">{{jsxx.cfje}}</td>
+								<td colspan="3"><input style="width: 100%;" type="number" v-model="jsxx.cfje" @input="handleInputfy"></td>
 							</tr>
 							<tr>
 								<th>奖惩说明</th>
-								<td colspan="5">{{jsxx.jlsm}}</td>
+								<td colspan="5">
+									<textarea v-model="jsxx.jlsm" placeholder="请输入奖惩说明" style="width: 100%;padding: 5px;" rows="3"></textarea>
+								</td>
 							</tr>
 						</table>
 					</div>
 					<div>
 						<h5>本次团队结算信息</h5>
 						<p style="color:#f00;font-size: 12px;">
-							个人结算二开费用=结算二开费用 * 5400 / 8800 个人结算可变费用= 结算可变费用 * 70%;
+							个人结算二开费用 = 结算二开费用 * 5400 / 8800; 个人结算可变费用 = 结算可变费用 * 70%;
 							<br />
 							结算总金额包含团队结算费用; 实际实施费用指二开实施费用；实际二开费用指二开开发费用；实际可变费用指报销费用;
 						</p>
@@ -146,10 +150,13 @@
 								<th>本次结算可变费用(元)</th>
 								<th>本次合计结算</th>
 							</tr>
-							<tr v-for="(item, index) in tdxxData">
+							<tr v-if="!tdxxData.length">
+								<td colspan="14">暂无内容</td>
+							</tr>
+							<tr v-for="(item, index) in tdxxData" :key="index">
 								<td>{{item.ywymc}}</td>
-								<td>{{item.htnr}}</td>
-								<td>{{item.dqjd}}</td>
+								<td style="width: 300px;">{{item.cpmc}}</td>
+								<td style="width: 240px;">{{item.dqjd}}</td>
 								<td >{{item.cymc}}</td>
 								<td>{{item.zbssfy}}</td>
 								<td>{{item.yjsssfy}}</td>
@@ -230,7 +237,8 @@
 	</div>
 </template>
 <script>
-export default {
+	import {xxs} from '@/utils/util'
+	export default {
 	data() {
 		return {
 			dialogVisible: false,
@@ -254,10 +262,77 @@ export default {
 		this.queryJsxq();
 	},
 	methods: {
+		// 计算总金额
+		handleInputfy(type){
+			switch (type){
+				case '0':
+				this.jsxx.jsssfy = (Number(this.jsxx.zbssfy) - Number(this.jsxx.yjsssfy) - Number(this.jsxx.ylssfy) - Number(!this.jsxx.rlssfy?0:this.jsxx.rlssfy));
+					break;
+				case '1':
+				this.jsxx.jsekfy = (Number(this.jsxx.zbekfy) - Number(this.jsxx.yjsekfy) - Number(this.jsxx.ylekfy) - Number(!this.jsxx.rlekfy?0:this.jsxx.rlekfy));
+					break;
+				case '2':
+				this.jsxx.jskbfy = (Number(this.jsxx.zbkbfy) - Number(this.jsxx.yjskbfy) - Number(this.jsxx.ylkbfy) - Number(!this.jsxx.rlkbfy?0:this.jsxx.rlkbfy));
+					break;
+				default:
+					break;
+			}
+			this.jsxx.jsje = (this.jsxx.jsssfy + this.jsxx.jsekfy + this.jsxx.jskbfy + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
+		},
 		// 保存
 		handleSave(){
+			let xmtdData = [],
+			    erfy = 0,
+				kbfy = 0;
+			this.tdxxData.forEach(ele=>{
+				xmtdData.push({
+					fbbh:ele.fbbh,
+					lcbbbh:ele.lcbbh,
+					lcbmc:ele.lcbmc,
+					tdwid:ele.tdwid,
+					cpbh:ele.cybh,
+					cpmc:ele.cymc,
+					jsssfy:ele.jsssfy,
+					jsekfy:ele.jsekfy,
+					jskbfy:ele.jskbfy
+				})
+				erfy += Number(ele.jsekfy);
+				kbfy += Number(ele.jskbfy);
+			})
+			this.$message.close();
+			// 个人结算二开费用=结算二开费用 * 5400 / 8800
+			if((this.jsxx.jsekfy *  5400 / 8800) > erfy){
+				this.$message({
+					message:'金额错误',
+					type:'warning'
+				})
+				return;
+			}
+			// 个人结算可变费用= 结算可变费用 * 70%; 
+			if((this.jsxx.jskbfy *  0.7) > kbfy){
+				this.$message({
+					message:'金额错误',
+					type:'warning'
+				})
+				return;
+			}
 			this.$post(this.API.saveJsFeeData,{
-				fbbh:this.jssqData
+				fbbh:this.jssqData,
+				lcbbh:this.jssqData.lcbbh,
+				lcbmc:this.jssqData.lcbmc,
+				jsje:this.jsxx.jsje,
+				sm:xxs(this.jsxx.sm),
+				jlsm:xxs(this.jsxx.jlsm),
+				ylssfy:this.jsxx.ylssfy,
+				jsekfy:this.jsxx.jsekfy,
+				jskbfy:this.jsxx.jskbfy,
+				rlssfy:this.jsxx.rlssfy,
+				rlekfy:this.jsxx.rlekfy,
+				rlkbfy:this.jsxx.rlkbfy,
+				jsssfy:this.jsxx.jsssfy,
+				jsekfy:this.jsxx.jsekfy,
+				jskbfy:this.jsxx.jskbfy,
+				teamFeeListZ:JSON.stringify(xmtdData)
 			}).then(res=>{
 				if(res.state == 'success'){
 					this.$message({
@@ -273,6 +348,8 @@ export default {
 				}
 			})
 		},
+		
+		// 批量设置
 		handleSelectionChange(val){
 			val.forEach(ele=>{
 				this.wids.push(ele.wid);
@@ -331,12 +408,13 @@ export default {
 						this.cdfyData = res.data;
 						this.tableData = !res.data.tableData?[]:es.data.tableData;
 						if(type == '0'){
-							this.jsxx.rlssfy = this.cdfyData.zje;
+							this.jsxx.rlssfy = !this.cdfyData.zje?0:this.cdfyData.zje;
 						}else if(type == '1'){
-							this.jsxx.rlekfy = this.cdfyData.zje;
+							this.jsxx.rlekfy = !this.cdfyData.zje?0:this.cdfyData.zje;
 						}else{
-							this.jsxx.rlkbfy = this.cdfyData.zje;
+							this.jsxx.rlkbfy = !this.cdfyData.zje?0:this.cdfyData.zje;
 						}
+						this.handleInputfy(type);
 				}else{
 					this.$message({
 						message:res.msg,

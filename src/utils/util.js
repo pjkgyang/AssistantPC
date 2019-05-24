@@ -6,6 +6,9 @@ import CryptoJS from 'crypto-js';
 // 总线
 export const EventBus = new Vue();
 
+export function xxs(value){
+	return value.replace('<','&lt;').replace('>','&gt;');
+}
 // DES 加密
 export function encryptByDES(message, key){
     const keyHex = CryptoJS.enc.Utf8.parse(key);

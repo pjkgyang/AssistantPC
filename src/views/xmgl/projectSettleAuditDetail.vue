@@ -3,7 +3,6 @@
 		<div class="jsdetail_container">
 			<div class="fb_info">
 				<div>
-					<h4>项目结算详情</h4>
 					<div text-right v-if="jsxx.shzt != 1">
 						<el-button type="primary" @click="handleAudit('1')">审核通过</el-button>
 						<el-button type="danger" @click="handleAudit('0')">审核不通过</el-button>
@@ -126,7 +125,7 @@
 					<div>
 						<h5>本次团队结算信息</h5>
 						<p style="color:#f00;font-size: 12px;">
-							个人结算二开费用=结算二开费用 * 5400 / 8800 个人结算可变费用= 结算可变费用 * 70%;
+							个人结算二开费用 = 结算二开费用 * 5400 / 8800; 个人结算可变费用 = 结算可变费用 * 70%;
 							<br />
 							结算总金额包含团队结算费用; 实际实施费用指二开实施费用；实际二开费用指二开开发费用；实际可变费用指报销费用;
 						</p>
@@ -147,7 +146,10 @@
 								<th>本次结算可变费用(元)</th>
 								<th>本次合计结算</th>
 							</tr>
-							<tr v-for="(item, index) in tdxxData">
+							<tr v-if="!tdxxData.length">
+								<td colspan="14">暂无内容</td>
+							</tr>
+							<tr v-for="(item, index) in tdxxData" :key="index">
 								<td>{{item.ywymc}}</td>
 								<td>{{item.htnr}}</td>
 								<td>{{item.dqjd}}</td>
