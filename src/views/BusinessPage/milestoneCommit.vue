@@ -47,15 +47,26 @@
         </div>
       </transition>
 			
-			
-      <div class="filter colcenter milestone-filter">
-        <span class="filter-title">区域工程:</span>
-        <el-select v-model="qygc" placeholder="请选择" size="mini" @change="handleChangeFilter">
+			<!-- 经营管理可见 -->
+      <div class="filter colcenter milestone-filter" v-if="groupTag.includes('JYGL') || groupTag.includes('GCZJ')">
+          <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="qygc" @change="handleCheckAllChange">全选</el-checkbox> -->
+          <span class="filter-title">区域工程:</span>
+          <div style="width:90%">
+            <el-checkbox  v-model="checkAll" @change="handleCheckAllChange" style="font-weight:700">全选(区域)</el-checkbox>
+            <el-checkbox-group v-model="qygc" @change="handleChangeFilter" >
+              <el-checkbox v-for="item in qygcList" :label="item" :key="item">{{item}}</el-checkbox>
+            </el-checkbox-group>
+          </div>
+        <!-- <span class="filter-title">区域工程:</span>
+        <el-select v-model="qygc" placeholder="请选择" size="mini" multiple style="width:400px"  @change="handleChangeFilter">
           <el-option label="全部" value=""> </el-option>
           <el-option v-for="item in gczdList" :key="item.label" :label="item.mc" :value="item.label"> </el-option>
-        </el-select>&#x3000;&#x3000;
+        </el-select>&#x3000;&#x3000; -->
+
+      </div>
+      <div class="filter">
         <span>
-          <span class="filter-weight">是否有项目经理:</span>
+          <span class="filter-weight">&#x3000;&#x3000;&nbsp;&nbsp;&nbsp;是否有项目经理 : </span>
           <el-radio-group v-model="sfxmjl" @change="handleChooseXmjl">
             <el-radio label="">全部</el-radio>
             <el-radio label="1">是</el-radio>
@@ -86,24 +97,26 @@
         </el-checkbox-group>
       </div>
 
-      <div flex class="filter">
-        <span class="filter-title">项目类别:</span>
-        <el-checkbox-group v-model="xmlbList" @change="handleXMlb">
-          <el-checkbox label="软件">软件</el-checkbox>
-          <el-checkbox label="集成">集成</el-checkbox>
-          <el-checkbox label="软件服务">软件服务</el-checkbox>
-          <el-checkbox label="集成服务">集成服务</el-checkbox>
-        </el-checkbox-group>
-      </div>
+      <div flex>
+        <div flex class="filter">
+          <span class="filter-title">项目类别:</span>
+          <el-checkbox-group v-model="xmlbList" @change="handleXMlb">
+            <el-checkbox label="软件">软件</el-checkbox>
+            <el-checkbox label="集成">集成</el-checkbox>
+            <el-checkbox label="软件服务">软件服务</el-checkbox>
+            <el-checkbox label="集成服务">集成服务</el-checkbox>
+          </el-checkbox-group>
+        </div>
 
-      <div flex class="filter">
-        <span class="filter-title">项目状态:</span>
-        <el-checkbox-group v-model="xmztList" @change="handleXMZT">
-           <el-checkbox label="1">在建</el-checkbox>
-          <el-checkbox label="2">售后</el-checkbox>
-          <el-checkbox label="3">过保</el-checkbox>
-          <el-checkbox label="4">关闭</el-checkbox>
-        </el-checkbox-group>
+        <div flex class="filter">
+          <span class="filter-title">项目状态:</span>
+          <el-checkbox-group v-model="xmztList" @change="handleXMZT">
+            <el-checkbox label="1">在建</el-checkbox>&#x3000;&#x3000;
+            <el-checkbox label="2">售后</el-checkbox>
+            <el-checkbox label="3">过保</el-checkbox>
+            <el-checkbox label="4">关闭</el-checkbox>
+          </el-checkbox-group>
+        </div>
       </div>
       
 
@@ -124,30 +137,42 @@
           </el-radio-group>
         </span>
       </div>
-      <div class="filter">
-        <span class="filter-title">承诺结束时间</span>
-        <el-date-picker v-model="cnkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeCnStartDate">
-        </el-date-picker>
-        &nbsp;至&nbsp;
-        <el-date-picker v-model="cnjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeCnEndDate">
-        </el-date-picker>
+      <div flex>
+        <div class="filter">
+          <span class="filter-title">承诺结束时间:</span>
+          <el-date-picker v-model="cnkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeCnStartDate">
+          </el-date-picker>
+          &nbsp;至&nbsp;
+          <el-date-picker v-model="cnjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeCnEndDate">
+          </el-date-picker>
+        </div>
+          <div class="filter">
+            <span class="filter-title">实际结束时间:</span>
+            <el-date-picker v-model="sjkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeSjStartDate">
+            </el-date-picker>
+            &nbsp;至&nbsp;
+            <el-date-picker v-model="sjjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeSjEndDate">
+            </el-date-picker>
+          </div>
       </div>
-      <div class="filter">
-        <span class="filter-title">实际结束时间</span>
-        <el-date-picker v-model="sjkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeSjStartDate">
-        </el-date-picker>
-        &nbsp;至&nbsp;
-        <el-date-picker v-model="sjjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeSjEndDate">
-        </el-date-picker>
-      </div>
-      <div class="filter">
-        <span class="filter-title">计划结束时间</span>
-        <el-date-picker v-model="jhkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeJhStartDate">
-        </el-date-picker>
-        &nbsp;至&nbsp;
-        <el-date-picker v-model="jhjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeJhEndDate">
-        </el-date-picker>
-      </div>
+      <div flex>
+        <div class="filter">
+            <span class="filter-title">认定结束时间:</span>
+            <el-date-picker v-model="rdkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeSjStartDate">
+            </el-date-picker>
+            &nbsp;至&nbsp;
+            <el-date-picker v-model="rdjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeSjEndDate">
+            </el-date-picker>
+          </div>
+        <div class="filter">
+          <span class="filter-title">计划结束时间:</span>
+          <el-date-picker v-model="jhkssj" type="date" size="small" placeholder="开始日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeJhStartDate">
+          </el-date-picker>
+          &nbsp;至&nbsp;
+          <el-date-picker v-model="jhjssj" type="date" size="small" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="changeJhEndDate">
+          </el-date-picker>
+        </div>
+       </div>
     </section>
 
     <section class="milestone_tabel">
@@ -164,7 +189,6 @@
         <el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" :selectable='checkboxInit' :key="Math.random()">
           </el-table-column>
-          
           <el-table-column prop="qygc" min-width="130" label="区域工程" show-overflow-tooltip :key="Math.random()"></el-table-column>
           <el-table-column prop="xmbh" min-width="100" label="项目编号" show-overflow-tooltip :key="Math.random()"></el-table-column>
           <el-table-column prop="xmmc" min-width="200" label="项目名称" show-overflow-tooltip :key="Math.random()"></el-table-column>
@@ -198,6 +222,8 @@
 
           <el-table-column prop="cnjssj" sortable label="承诺结束时间" width="150" :key="Math.random()"> </el-table-column>
           <el-table-column prop="sjjssj" sortable label="实际结束时间" width="150" :key="Math.random()"> </el-table-column>
+          <el-table-column prop="rdsj" sortable label="认定结束时间" width="160" :key="Math.random()"> </el-table-column>
+
           <el-table-column prop="dwmc" min-width="200" label="学校名称" show-overflow-tooltip :key="Math.random()"></el-table-column>
           <el-table-column prop="yfzrrxm" min-width="100" label="项目经理" show-overflow-tooltip :key="Math.random()"></el-table-column>
           <el-table-column prop="zzrxm" label="责任人" width="100" :key="Math.random()"> </el-table-column>
@@ -253,6 +279,7 @@ export default {
       xmbwShow: false,
       lcbbh: "",
       gczdList: [],
+      qygcList:[],//区域工程列表
       checkList: [],
       xmlbList: [], //项目类别
       xmztList: [], //项目状态
@@ -264,7 +291,11 @@ export default {
       sjjssj: "",//实际结束日期
       jhkssj:"",//计划开始日期
       jhjssj:"",//计划结束日期
-      qygc: "",
+      rdkssj:"",//认定开始时间
+      rdjssj:"",//认定结束时间
+      qygc: [],
+      isIndeterminate:true,//全选
+      checkAll:false,
 			cxlx:"0",//查询类型
       total: null,
       pageSize: 20,
@@ -306,6 +337,15 @@ export default {
   },
 
   methods: {
+    handleCheckAllChange(val){
+      this.qygc = val ? this.qygcList : [];
+    },
+    // 区域工程
+    handleChangeFilter(val) {
+       let checkedCount = val.length;
+       this.checkAll = checkedCount === this.qygcList.length;
+       this.isIndeterminate = checkedCount > 0 && checkedCount < this.qygcList.length;
+    },
     handleCloseMile() {
       this.milestoneVisible = false;
     },
@@ -413,40 +453,7 @@ export default {
     handleOpenfilter() {
       this.filterShow = !this.filterShow;
     },
-    handleChooseXmjl() {
-      this.currentPage = 1;
-      this.queryMilestoneData();
-    },
-    handleChooseZrr() {
-      this.currentPage = 1;
-      this.queryMilestoneData();
-    },
-    // 是否购销
-    handleChooseSfgx() {
-      this.currentPage = 1;
-      this.queryMilestoneData();
-    },
-    // 查看里程碑操作记录
-    handleCheckRrecord(data) {
-      this.lcbbh = data.lcbbh;
-      this.lcbjlShow = !this.lcbjlShow;
-    },
-    // 区域工程
-    handleChangeFilter(val) {
-      this.currentPage = 1;
-      this.queryMilestoneData();
-    },
-		// 查询类型
-		handleChooseCxlx(val){
-			this.cxlx = val;
-			this.currentPage = 1;
-			this.queryMilestoneData();
-		},
-    // 提报里程碑
-    handleCommitMilestone() {
-      this.milestoneVisible = false;
-      this.queryMilestoneData();
-    },
+   
     // && row.zt != '处理中'
     checkboxInit(row, index) {
       if (this.ishow) {
@@ -521,6 +528,8 @@ export default {
       this.sjjssj = !this.sjjssj ? "" : this.sjjssj;
       this.jhkssj = !this.jhkssj ? "" : this.jhkssj;
       this.jhjssj = !this.jhjssj ? "" : this.jhjssj;
+      this.rjkssj = !this.rjkssj ? "" : this.rjkssj;
+      this.rjjssj = !this.rjjssj ? "" : this.rjjssj;
 
       window.open(
         window.baseurl +
@@ -531,15 +540,21 @@ export default {
           "&zt=" +
           this.checkList.join(",") +
           "&qygc=" +
-          this.qygc +
+          this.qygc.join(',') +
           "&startCnjssj=" +
           this.cnkssj +
           "&endCnjssj=" +
           this.cnjssj +
+
           "&startSjjssj=" +
           this.sjkssj +
           "&endSjjssj=" +
           this.sjjssj +
+
+          "&startRdjssj=" +
+          this.rdkssj +
+          "&endRdjssj=" +
+          this.rdjssj +
 
           "&startJhjssj=" +
           this.jhkssj +
@@ -575,6 +590,7 @@ export default {
     },
     //查询里程碑
     handleSearchLcb() {
+      this.currentPage = 1;
       this.queryMilestoneData();
     },
     //支持回车
@@ -593,52 +609,83 @@ export default {
     },
     //选择里程碑状态
     handleCheckbox(val) {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     //查询项目类别
     handleXMlb(val) {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     handleXMZT(val) {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     handleHtxz(val) {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     //承诺开始时间
     changeCnStartDate() {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     //承诺结束时间
     changeCnEndDate() {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     //实际开始时间
     changeSjStartDate() {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     //实际结束时间
     changeSjEndDate() {
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     // 计划开始日期
     changeJhStartDate(){
-      this.currentPage = 1;
-      this.queryMilestoneData();
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
     },
     // 计划结束日期
     changeJhEndDate(){
-      this.currentPage = 1;
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
+    },
+     handleChooseXmjl() {
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
+    },
+    handleChooseZrr() {
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
+    },
+    // 是否购销
+    handleChooseSfgx() {
+      // this.currentPage = 1;
+      // this.queryMilestoneData();
+    },
+    // 查看里程碑操作记录
+    handleCheckRrecord(data) {
+      this.lcbbh = data.lcbbh;
+      this.lcbjlShow = !this.lcbjlShow;
+    },
+
+		// 查询类型
+		handleChooseCxlx(val){
+			this.cxlx = val;
+			// this.currentPage = 1;
+			// this.queryMilestoneData();
+		},
+    // 提报里程碑
+    handleCommitMilestone() {
+      this.milestoneVisible = false;
       this.queryMilestoneData();
     },
+
     //  全选
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -664,14 +711,19 @@ export default {
         pageSize: this.pageSize,
         xmbh: "",
         keyword: this.keyword,
-        qygc: this.qygc,
+        qygc: this.qygc.join(','),
         zt: this.checkList.length == 0 ? "" : this.checkList.join(","),
         startCnjssj: !this.cnkssj ? "" : this.cnkssj,
         endCnjssj: !this.cnjssj ? "" : this.cnjssj,
         startSjjssj: !this.sjkssj ? "" : this.sjkssj,
         endSjjssj: !this.sjjssj ? "" : this.sjjssj,
+        // 认定结束日期
+        startRdjssj: !this.rdkssj ? "" : this.rdkssj,
+        endRdjssj: !this.rdjssj ? "" : this.rdjssj,
+
         startJhjssj:!this.jhkssj ? "" : this.jhkssj,
         endJhjssj:!this.jhjssj ? "" : this.jhjssj,
+
         nrxmlb: this.xmlbList.length == 0 ? "" : this.xmlbList.join(","),
         xmzt: this.xmztList.length == 0 ? "" : this.xmztList.join(","),
         yxmjl: this.sfxmjl,
@@ -735,12 +787,17 @@ export default {
     }
   },
   activated() {
+    this.qygcList = [];
     this.groupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
     if (getSession("gczd") == null) {
       getMenu("gczd", this.gczdList, true); //获取工程战队))
     } else {
       this.gczdList = getSession("gczd");
     }
+    this.gczdList.forEach(ele=>{
+      this.qygcList.push(ele.label);
+    })
+
     if (this.groupTag.indexOf("JZGCRY") != -1) {
       this.ishow = true;
     } else {
@@ -786,5 +843,9 @@ export default {
 }
 .filterFlex {
   width: 30%;
+}
+
+.milestone-filter .el-checkbox{
+  margin:0  30px 0 0;
 }
 </style>

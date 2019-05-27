@@ -119,7 +119,7 @@
 								<th>项目编号</th>
 								<td>{{ $route.query.xmbh }}</td>
 								<th>项目名称</th>
-								<td colspan="3">{{ $route.query.xmmc }}</td>
+								<td colspan="3">{{ htjbxx.xmmc }}</td>
 							</tr>
 							<tr>
 								<th>分包名称</th>
@@ -220,7 +220,7 @@ export default {
 	methods: {
 		handleVerify(params){
 			if(params == '1'){
-				this.verifyFb(this.$route.fbbh,params);
+				this.verifyFb(this.$route.query.fbbh,params);
 			}else{
 				this.$prompt('请输入说明内容', '提示', {
 				  confirmButtonText: '确定',
@@ -229,7 +229,7 @@ export default {
 				  inputErrorMessage: '请输入说明内容',
 				  inputPlaceholder:'请输入说明内容'
 				}).then(({ value }) => {
-				  this.verifyFb(this.$route.fbbh,params,value);
+				  this.verifyFb(this.$route.query.fbbh,params,value);
 				}).catch(() => {});
 			}
 		},
@@ -259,6 +259,7 @@ export default {
 				}
 			})
 		},
+		// 审核
 		verifyFb(fbbh,shjg,sm){
 			this.$get(this.API.verifyFb,{
 				fbbh:fbbh,
@@ -267,9 +268,15 @@ export default {
 			}).then(res=>{
 				if(res.state == 'success'){
 					this.$message({
-					  message: params=='1'?'已提交为 "审核通过" ~':'已提交为 "审核不通过" ~',
+					  message: shjg=='1'?'已提交为 "审核通过" ~':'已提交为 "审核不通过" ~',
 					  type: 'success'
 					});
+					this.queryFbYwxData();
+				}else{
+					this.$message({
+					  message: res.msg,
+					  type: 'error'
+					});	
 				}
 			})	
 		}

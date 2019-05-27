@@ -403,7 +403,6 @@ export default {
 		handleUploadFile(data){
 			this.fileList = data;
 		},
-
 		//   获取投标费用
 		handleToubiao() {
 			let userList = [];

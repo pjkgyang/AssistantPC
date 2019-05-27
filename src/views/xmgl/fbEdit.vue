@@ -38,13 +38,13 @@
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
-						<el-button :disabled="scope.row.shzt != 3" @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+						<el-button :disabled="scope.row.shzt == '已审核'" @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
 					</template>
 				</el-table-column>
 				<el-table-column prop="date" label="是否审核" width="120">
 					<template slot-scope="scope">
-						<el-tag size="mini" :type="scope.row.shzt == 1 ? 'success' : scope.row.shzt == 2 ? 'danger' : 'info'">
-							{{ scope.row.shzt == 1 ? '审核通过' : scope.row.shzt == 2 ? '审核不通过' : '未审核' }}
+						<el-tag size="mini" :type="scope.row.shzt == '已审核' ? 'success' :  'info'">
+							{{ scope.row.shzt}}
 						</el-tag>
 					</template>
 				</el-table-column>

@@ -6,7 +6,7 @@
 					<h4>合同内容</h4>
 					<div>
 						<h5>分包基本信息</h5>
-						<div text-right v-if="isSave">
+						<div text-right >
 							<el-button size="small" style="margin: 10px 0;" type="danger" @click="handleSaveFb">保存</el-button>
 						</div>
 						<table>
@@ -160,6 +160,7 @@ export default {
 			})
 			this.$post(this.API.saveFbxx,{
 				xmbh:this.$route.query.xmbh,
+				fbbh:!this.htjbxx.fbbh?'':this.htjbxx.fbbh,
 				fbmc:this.htjbxx.fbmc,
 				fbrq:this.htjbxx.fbrq,
 				jhksrq:this.htjbxx.jhksrq,
@@ -167,19 +168,19 @@ export default {
 				ssfy:this.htjbxx.ssfy,
 				ekfy:this.htjbxx.ekfy,
 				kbfy:this.htjbxx.kbfy,
-				SSBZ:this.htjbxx.SSBZ,
-				EKBZ:this.htjbxx.EKBZ,
+				ssbz:this.htjbxx.ssbz,
+				ekbz:this.htjbxx.ekbz,
+				fbsm:this.htjbxx.fbsm,
 				fbnrlist:JSON.stringify(this.fbnrlist)
 			}).then(res=>{
 				if(res.state == 'success'){
-					this.isSave = false;
 					this.$message({
-						content:'保存成功~',
-						type:'error'
+						message:'保存成功~',
+						type:'success'
 					})
 				}else{
 					this.$message({
-						content:res.msg,
+						message:res.msg,
 						type:'error'
 					})
 				}
@@ -229,7 +230,8 @@ export default {
 		},
 		queryFbYwxData(){
 			this.$get(this.API.queryFbYwxData,{
-				xmbh:this.$route.query.xmbh
+				xmbh:this.$route.query.xmbh,
+				fbbh:!this.$route.query.fbbh?'':this.$route.query.fbbh
 			}).then(res=>{
 				if(res.state == 'success'){
 					this.htjbxx = res.data.fbxx;

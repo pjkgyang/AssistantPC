@@ -64,6 +64,12 @@
 					</tr>
 				</table>
 			</div>
+			<div>
+				<span class="filter-weight tips" style="margin: 10px 0">相关附件：</span>
+				<p>
+					<a :href="baseUrl+'attachment/downloadFile.do?fjId='+tbxxData.fjwid" target="blank">{{fjmc}}</a>
+				</p>
+			</div>
 		</div>
 	</div>
 </template>
@@ -75,16 +81,21 @@
 			return {
 				tbxxData:{},
 				userData:[],
-				ywyData:[]
+				ywyData:[],
+				fjmc:'',
+				baseUrl:''
 			}
 		},
 		methods:{
 			
 		},
 		mounted(){
+			let userList = [];
+			this.baseUrl = window.baseurl;
 			tbxq({fbbh:this.$route.query.fbbh,tbbh:this.$route.query.tbbh}).then(({data})=>{
 				if(data.state == 'success'){
 					this.ywyData = data.data.htnrfy;
+					this.fjmc = data.data.fjmc;
 					if(!!data.data.tbxx){
 						this.tbxxData = data.data.tbxx
 					}
