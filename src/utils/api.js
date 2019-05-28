@@ -1,5 +1,8 @@
 
 export default {
+    // 枚举
+    getDictEnum:window.baseurl +'dict/getDictEnum.do',
+    // 报表
     queryReportQuestionLst:window.baseurl +'report/queryReportQuestionLst.do',
     WtReportOrderStar:window.baseurl +'report/WtReportOrderStar.do',
     WtReportOrderStarLst:window.baseurl +'report/WtReportOrderStarLst.do',

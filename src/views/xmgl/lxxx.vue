@@ -79,9 +79,9 @@
 							</tr>
 							<tr>
 								<th>工程区域</th>
-								<td>{{ htjbxx.gcqy }}</td>
+								<td>{{ htjbxx.qy }}</td>
 								<th>工程战队</th>
-								<td>{{ htjbxx.gczd }}</td>
+								<td>{{ htjbxx.qyzd }}</td>
 								<th>是否延长售后</th>
 								<td>{{ htjbxx.gcfwzt==1?'是':'否' }}</td>
 							</tr>
@@ -100,10 +100,10 @@
 							<el-table-column prop="app" label="合同内容" show-overflow-tooltip min-width="150"></el-table-column>
 							<el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>
 							<el-table-column prop="sm" label="说明" min-width="150" show-overflow-tooltip></el-table-column>
-							<el-table-column prop="ejcpmc" label="产品归属" min-width="150"></el-table-column>
+							<el-table-column prop="sjcpmc" label="产品归属" min-width="150"></el-table-column>
 							<el-table-column prop="ssry" label="实施人月" width="100"></el-table-column>
 							<el-table-column prop="kfry" label="二开人月" width="120"></el-table-column>
-							<el-table-column prop="kfry" label="项目类别" width="120"></el-table-column>
+							<el-table-column prop="xmlb" label="项目类别" width="120"></el-table-column>
 						</el-table>
 					</div>
 				</div>
@@ -126,7 +126,6 @@ export default {
 		getLxxx(){
 			this.$get(this.API.queryLxxx,{xmbh:this.$route.query.xmbh}).then(res=>{
 				if(res.state == 'success'){
-					console.log(res)
 					this.htjbxx = res.data.lxxx;
 					this.htnrData = !res.data.lxxx_htnr?[]:res.data.lxxx_htnr
 				}

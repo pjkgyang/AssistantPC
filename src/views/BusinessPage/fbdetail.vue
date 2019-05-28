@@ -7,15 +7,14 @@
 						{{ $route.query.xmbh }} {{ $route.query.fbmc }}
 						<el-tag size="mini" :type="!!tbzt ? 'success' : 'danger'">{{ !!tbzt ? '投标中' : '招标结束' }}</el-tag>
 					</p>
-
 					<p class="project__label">￥{{ fbxxData.zfy }}</p>
 				</div>
 				<div class="project__extra">
 					<b>已有 {{ $route.query.r }} 人投标</b>
 					<p>招标截止 {{ fbxxData.zbjzrq }}</p>
 					<a href="javaScript:;;" @click="handleToubiao" v-if="!istb && !!tbzt">我要投标</a>
-					<el-tag v-if="!!istb && !!tbzt"  type="success">已投标</el-tag>
-					<el-button size="mini" type="primary"  v-if="!!istb && !!tbzt" @click="handleToubiao">编辑投标</el-button>
+					<el-tag v-if="!!istb && !!tbzt" type="success">已投标</el-tag>
+					<el-button size="mini" type="primary" v-if="!!istb && !!tbzt" @click="handleToubiao">编辑投标</el-button>
 				</div>
 			</div>
 			<div class="fb_info">
@@ -96,9 +95,9 @@
 							</tr>
 							<tr>
 								<th>工程区域</th>
-								<td>{{ htjbxx.gcqy }}</td>
+								<td>{{ htjbxx.qy }}</td>
 								<th>工程战队</th>
-								<td>{{ htjbxx.gczd }}</td>
+								<td>{{ htjbxx.qyzd }}</td>
 								<th>是否延长售后</th>
 								<td>{{ htjbxx.gcfwzt == 1 ? '是' : '否' }}</td>
 							</tr>
@@ -117,10 +116,10 @@
 							<el-table-column prop="app" label="合同内容" show-overflow-tooltip min-width="150"></el-table-column>
 							<el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>
 							<el-table-column prop="sm" label="说明" min-width="150" show-overflow-tooltip></el-table-column>
-							<el-table-column prop="ejcpmc" label="产品归属" min-width="150"></el-table-column>
+							<el-table-column prop="rjcpmc" label="产品归属" min-width="150"></el-table-column>
 							<el-table-column prop="ssry" label="实施人月" width="100"></el-table-column>
 							<el-table-column prop="kfry" label="二开人月" width="120"></el-table-column>
-							<el-table-column prop="kfry" label="项目类别" width="120"></el-table-column>
+							<el-table-column prop="xmlb" label="项目类别" width="120"></el-table-column>
 						</el-table>
 					</div>
 				</div>
@@ -184,22 +183,19 @@
 						</div>
 						<div>
 							<h6>分包内容</h6>
-							<el-table
-							  :data="fbnrData"
-							  border
-							  style="width: 100%">
-							  <el-table-column prop="ywymc" label="业务域" min-width="200" show-overflow-tooltip></el-table-column>
-							  <el-table-column prop="cpmc" label="合同内容" width="160" show-overflow-tooltip></el-table-column>
-							  <el-table-column prop="zb" label="占比(%)" width="90"></el-table-column>
-							  <el-table-column prop="htsm" label="说明"  width="160" show-overflow-tooltip></el-table-column>
-							  <el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
-							  
-							  <el-table-column prop="htssry" label="实施人月(合同)" min-width="90"></el-table-column>
-							  <el-table-column prop="ssckbz" label="实施参考标准" min-width="90"></el-table-column>
-							  <el-table-column prop="fbssry" label="实施人月(分包)" min-width="90"></el-table-column>
-							  <el-table-column prop="htekry" label="二开人月(合同)" min-width="90"></el-table-column>
-							  <el-table-column prop="fbekry" label="二开人月(分包)" min-width="90"></el-table-column>
-							  <el-table-column prop="fbsm" label="说明" min-width="160" ></el-table-column>
+							<el-table :data="fbnrData" border style="width: 100%">
+								<el-table-column prop="ywymc" label="业务域" min-width="200" show-overflow-tooltip></el-table-column>
+								<el-table-column prop="cpmc" label="合同内容" width="160" show-overflow-tooltip></el-table-column>
+								<el-table-column prop="zb" label="占比(%)" width="90"></el-table-column>
+								<el-table-column prop="htsm" label="说明" width="160" show-overflow-tooltip></el-table-column>
+								<el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
+
+								<el-table-column prop="htssry" label="实施人月(合同)" min-width="90"></el-table-column>
+								<el-table-column prop="ssckbz" label="实施参考标准" min-width="90"></el-table-column>
+								<el-table-column prop="fbssry" label="实施人月(分包)" min-width="90"></el-table-column>
+								<el-table-column prop="htekry" label="二开人月(合同)" min-width="90"></el-table-column>
+								<el-table-column prop="fbekry" label="二开人月(分包)" min-width="90"></el-table-column>
+								<el-table-column prop="fbsm" label="说明" min-width="160"></el-table-column>
 							</el-table>
 						</div>
 					</div>
@@ -223,24 +219,22 @@
 						</tr>
 						<tr>
 							<td>实施费用</td>
-							<td>{{ssfyTotalkm}}</td>
+							<td>{{ ssfyTotalkm }}</td>
 						</tr>
 						<tr>
 							<td>二开费用</td>
-							<td>{{ekfyTotalkm}}</td>
+							<td>{{ ekfyTotalkm }}</td>
 						</tr>
 						<tr>
 							<td>可变费用</td>
-							<td>{{kbfyTotalkm}}</td>
+							<td>{{ kbfyTotalkm }}</td>
 						</tr>
 					</table>
 
 					<br />
-						<div>
+					<div>
 						<span class="filter-weight">创建团队：</span>
-						<div style="margin: 10px 0">
-							<el-button size="mini" type="primary" @click="handleAddUser">添加成员</el-button>
-						</div>
+						<div style="margin: 10px 0"><el-button size="mini" type="primary" @click="handleAddUser">添加成员</el-button></div>
 						<el-table :data="userData" border style="width: 100%">
 							<el-table-column fixed="left" label="操作" width="80">
 								<template slot-scope="scope">
@@ -269,26 +263,31 @@
 								<th>二开金额</th>
 								<th>可变金额</th>
 							</tr>
-							<tr v-for="(item,index) in ywyData" :key="index">
-								<td>{{item.ywymc}}</td>
-								<td>{{item.cpmc}}</td>
-								<td>{{item.zb}}</td>
-								<td >{{item.htsm}}</td>
-								<td>{{item.xmlb}}</td>
+							<tr v-for="(item, index) in ywyData" :key="index">
+								<td>{{ item.ywymc }}</td>
+								<td>{{ item.cpmc }}</td>
+								<td>{{ item.zb }}</td>
+								<td>{{ item.htsm }}</td>
+								<td>{{ item.xmlb }}</td>
 								<td width="100px" style="position: relative;">
 									<el-select v-model="item.zrrbh" size="mini" placeholder="请选择" style="border: none;" @change="handleSeleteUser">
-										<el-option v-for="(item,index) in userData"  :key="index" :label="item.username" :value="item.usercode"></el-option>
+										<el-option v-for="(item, index) in userData" :key="index" :label="item.username" :value="item.usercode"></el-option>
 									</el-select>
 								</td>
-								<td width="80px"><input type="number" v-model="item.ssfy"  @input="handleChangefy(index,'ss',item.zrrbh)"/></td>
-								<td width="80px"><input type="number" v-model="item.ekfy"  @input="handleChangefy(index,'ek',item.zrrbh)"/></td>
-								<td width="80px"><input type="number" v-model="item.kbfy"  @input="handleChangefy(index,'kb',item.zrrbh)"/></td>
+								<td width="80px"><input type="number" v-model="item.ssfy" @input="handleChangefy(index, 'ss', item.zrrbh)" /></td>
+								<td width="80px"><input type="number" v-model="item.ekfy" @input="handleChangefy(index, 'ek', item.zrrbh)" /></td>
+								<td width="80px"><input type="number" v-model="item.kbfy" @input="handleChangefy(index, 'kb', item.zrrbh)" /></td>
 							</tr>
 						</table>
-						<br>
+
+						<br />
 						<div>
 							<span class="filter-weight" style="margin: 10px 0">项目文件：</span>
 							<uploadComponent @handleUploadFile="handleUploadFile"></uploadComponent>
+							<p class="upload_file-p" v-if="!!fileName" flex colcenter spacebetween>
+								<span>{{ fileName }}</span>
+								<i class="el-icon-close" @click="handleDeleteFile"></i>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -302,14 +301,14 @@
 import { queryXmTbxx, queryFbxx, tbxq, saveTbxx } from '@/api/toubiao.js';
 import { EventBus, returnFloat } from '../../utils/util.js';
 import userDialog from '@/components/dialog/user-dialog.vue';
-import uploadComponent from '@/components/BusinessPage/upload'
+import uploadComponent from '@/components/BusinessPage/upload';
 
 export default {
 	data() {
 		return {
 			dialogTableVisible: false,
 			show: false,
-			tbly: '',//投标理由
+			tbly: '', //投标理由
 			xmbh: '',
 			fbData: '',
 			htjbxx: {},
@@ -318,35 +317,39 @@ export default {
 			tbfyData: [],
 			istb: '',
 			tbzt: '',
-			fbxxData: {},//分包信息
-			fbnrData:[],//分包内容
+			fbxxData: {}, //分包信息
+			fbnrData: [], //分包内容
 			fbcpData: [],
 			tbje: null,
 			zbxx: '',
 			userData: [], //团队成员
-			ywyData:[{
-				ssje:0,
-				ekje:0,
-				kbje:0,
-				zrrbh:""
-			},{
-				ssje:0,
-				ekje:0,
-				kbje:0,
-				zrrbh:""
-			}],//业务域列表
-			
-			ssfyTotal:0,
-			ywxArr:[],
-			ekfyTotal:0,
-			kbfyTotal:0,
-			
-			ssfyTotalkm:0,
-			ekfyTotalkm:0,
-			kbfyTotalkm:0,
+			ywyData: [
+				{
+					ssje: 0,
+					ekje: 0,
+					kbje: 0,
+					zrrbh: ''
+				},
+				{
+					ssje: 0,
+					ekje: 0,
+					kbje: 0,
+					zrrbh: ''
+				}
+			], //业务域列表
 
-			fileList:[]
-			
+			ssfyTotal: 0,
+			ywxArr: [],
+			ekfyTotal: 0,
+			kbfyTotal: 0,
+
+			ssfyTotalkm: 0,
+			ekfyTotalkm: 0,
+			kbfyTotalkm: 0,
+
+			fileList: [],
+			tbxx: {}, //投标信息
+			fileName: '' //
 		};
 	},
 	mounted() {
@@ -362,201 +365,212 @@ export default {
 		// 添加成员
 		addUserSuccess(data) {
 			let i = false;
-			if(!this.userData.length){
+			if (!this.userData.length) {
 				this.userData.push(data);
-			}else{
-				this.userData.forEach(ele=>{
-					if(ele.usercode == data.usercode){
+			} else {
+				this.userData.forEach(ele => {
+					if (ele.usercode == data.usercode) {
 						i = true;
 						this.$message({
-							message:'该用户已添加~',
-							type:'warning'
-						})
-					}	
-				})
-				if(!!i){
+							message: '该用户已添加~',
+							type: 'warning'
+						});
+					}
+				});
+				if (!!i) {
 					return;
-				}else{
+				} else {
 					this.userData.push(data);
 				}
 			}
 		},
 		// 删除团队成员
 		hanldeDelete(index) {
-			this.ywyData.forEach((ele,i,arr)=>{
-				if(ele.zrrbh == this.userData[index].usercode){
-					this.$set(this.ywyData[i],'zrrbh','');
-					this.$set(this.ywyData[i],'zrrxm','');
+			this.ywyData.forEach((ele, i, arr) => {
+				if (ele.zrrbh == this.userData[index].usercode) {
+					this.$set(this.ywyData[i], 'zrrbh', '');
+					this.$set(this.ywyData[i], 'zrrxm', '');
 
 					this.ssfyTotalkm = this.ssfyTotalkm - this.ywyData[i].ssfy;
 					this.ekfyTotalkm = this.ekfyTotalkm - this.ywyData[i].ekfy;
 					this.kbfyTotalkm = this.kbfyTotalkm - this.ywyData[i].kbfy;
 
-					this.$set(this.ywyData[i],'ssfy',0);
-					this.$set(this.ywyData[i],'ekfy',0);
-					this.$set(this.ywyData[i],'kbfy',0);
+					this.$set(this.ywyData[i], 'ssfy', 0);
+					this.$set(this.ywyData[i], 'ekfy', 0);
+					this.$set(this.ywyData[i], 'kbfy', 0);
 				}
-			})
-			this.userData.splice(index,1);
+			});
+			this.userData.splice(index, 1);
 		},
 		// 上传附件
-		handleUploadFile(data){
+		handleUploadFile(data) {
 			this.fileList = data;
 		},
 		//   获取投标费用
 		handleToubiao() {
 			let userList = [];
-			tbxq({fbbh:this.$route.query.fbbh}).then(({data})=>{
-				if(data.state == 'success'){
+			tbxq({ fbbh: this.$route.query.fbbh }).then(({ data }) => {
+				if (data.state == 'success') {
 					this.ywyData = data.data.htnrfy;
-					if(!!data.data.tbxx){
+					this.tbxx = !data.data.tbxx ? {} : data.data.tbxx; //投标信息
+					if (!!data.data.tbxx) {
 						this.ssfyTotalkm = data.data.tbxx.ssfy;
 						this.ekfyTotalkm = data.data.tbxx.ekfy;
 						this.kbfyTotalkm = data.data.tbxx.kbfy;
 						this.tbly = data.data.tbxx.tbly;
 					}
-					if(!!data.data.tdfy){
-						data.data.tdfy.forEach((ele,i,arr)=>{
+					if (!!data.data.fjmc) {
+						this.fileName = data.data.fjmc;
+						this.fileList.push(data.data.tbxx.fjwid);
+					}
+					if (!!data.data.tdfy) {
+						data.data.tdfy.forEach((ele, i, arr) => {
 							userList.push({
-								username:ele.zrrxm,
-								usercode:ele.zrrbh,
-								ywx:ele.ywymc,
-								ssfy:ele.ssfy,
-								ekfy:ele.ekfy,
-								kbfy:ele.kbfy
-							})
-						})
-					this.userData = userList;
+								username: ele.zrrxm,
+								usercode: ele.zrrbh,
+								ywx: ele.ywymc,
+								ssfy: ele.ssfy,
+								ekfy: ele.ekfy,
+								kbfy: ele.kbfy
+							});
+						});
+						this.userData = userList;
 					}
 				}
-			})
+			});
 			this.dialogTableVisible = !this.dialogTableVisible;
 		},
 
 		// 分配用户
-		handleSeleteUser(val){
+		handleSeleteUser(val) {
 			this.ywxArr = [];
-			this.userData.forEach((element,i,arr)=>{
-				if(element.usercode == val){
-						this.ywyData.forEach((ele,i,arr)=>{
-							if(val == ele.zrrbh ){
-								this.$set(this.ywyData[i],'zrrxm',element.username);
-								if(!this.ywxArr.includes(ele.ywymc)){
-									this.ywxArr.push(ele.ywymc);
-								}
+			this.userData.forEach((element, i, arr) => {
+				if (element.usercode == val) {
+					this.ywyData.forEach((ele, i, arr) => {
+						if (val == ele.zrrbh) {
+							this.$set(this.ywyData[i], 'zrrxm', element.username);
+							if (!this.ywxArr.includes(ele.ywymc)) {
+								this.ywxArr.push(ele.ywymc);
 							}
-						})
-					this.$set(this.userData[i],'ywx',this.ywxArr.join(','));
+						}
+					});
+					this.$set(this.userData[i], 'ywx', this.ywxArr.join(','));
 				}
-			})
+			});
 		},
 		// 实施费用
-		handleChangefy(index,type,yhbh){
-			if(!this.ywyData[index].zrrbh){
+		handleChangefy(index, type, yhbh) {
+			if (!this.ywyData[index].zrrbh) {
 				this.$alert('请先选择责任人', ' 提示', {
-				  type:'warning',
-				  confirmButtonText: '确定',
+					type: 'warning',
+					confirmButtonText: '确定'
 				});
 				return;
 			}
-			switch (type){
+			switch (type) {
 				case 'ss':
 					this.ssfyTotal = 0;
 					this.ssfyTotalkm = 0;
-					this.ywyData.forEach(ele=>{
-						if(ele.zrrbh == yhbh){
+					this.ywyData.forEach(ele => {
+						if (ele.zrrbh == yhbh) {
 							this.ssfyTotal += Number(ele.ssfy);
 						}
-					})
-					this.userData.forEach((ele,i,arr)=>{
-						if(ele.usercode == yhbh){
-							this.$set(this.userData[i],'ssfy',this.ssfyTotal);
+					});
+					this.userData.forEach((ele, i, arr) => {
+						if (ele.usercode == yhbh) {
+							this.$set(this.userData[i], 'ssfy', this.ssfyTotal);
 						}
-						this.ssfyTotalkm += !this.userData[i].ssfy?0:this.userData[i].ssfy;
-					})
+						this.ssfyTotalkm += !this.userData[i].ssfy ? 0 : this.userData[i].ssfy;
+					});
 					break;
 				case 'ek':
 					this.ekfyTotal = 0;
 					this.ekfyTotalkm = 0;
-					this.ywyData.forEach(ele=>{
-						if(ele.zrrbh == yhbh){
+					this.ywyData.forEach(ele => {
+						if (ele.zrrbh == yhbh) {
 							this.ekfyTotal += Number(ele.ekfy);
 						}
-					})
-					this.userData.forEach((ele,i,arr)=>{
-						if(ele.usercode == yhbh){
-							this.$set(this.userData[i],'ekfy',this.ekfyTotal);
+					});
+					this.userData.forEach((ele, i, arr) => {
+						if (ele.usercode == yhbh) {
+							this.$set(this.userData[i], 'ekfy', this.ekfyTotal);
 						}
-						this.ekfyTotalkm += !this.userData[i].ekfy?0:this.userData[i].ekfy;
-					})
+						this.ekfyTotalkm += !this.userData[i].ekfy ? 0 : this.userData[i].ekfy;
+					});
 					break;
 				case 'kb':
 					this.kbfyTotal = 0;
 					this.kbfyTotalkm = 0;
-					this.ywyData.forEach(ele=>{
-						if(ele.zrrbh == yhbh){
+					this.ywyData.forEach(ele => {
+						if (ele.zrrbh == yhbh) {
 							this.kbfyTotal += Number(ele.kbfy);
 						}
-					})
-					this.userData.forEach((ele,i,arr)=>{
-						if(ele.usercode == yhbh){
-							this.$set(this.userData[i],'kbfy',this.kbfyTotal);
+					});
+					this.userData.forEach((ele, i, arr) => {
+						if (ele.usercode == yhbh) {
+							this.$set(this.userData[i], 'kbfy', this.kbfyTotal);
 						}
-						this.kbfyTotalkm += !this.userData[i].kbfy?0:this.userData[i].kbfy;
-					})
+						this.kbfyTotalkm += !this.userData[i].kbfy ? 0 : this.userData[i].kbfy;
+					});
 					break;
 				default:
 					break;
 			}
 		},
+		// 删除附件
+		handleDeleteFile() {
+			this.fileName = '';
+			this.fileList = [];
+		},
 		// 提交投标
 		handleCommit() {
 			let tdList = [],
-			    zrrnull = false;
-			this.ywyData.forEach(ele=>{
-				if(!ele.zrrbh){
+				zrrnull = false;
+			this.ywyData.forEach(ele => {
+				if (!ele.zrrbh) {
 					zrrnull = true;
 				}
 				tdList.push({
-					htnrwid:ele.htnrwid,
-					zrrbh:ele.zrrbh,
-					zrrxm:ele.zrrxm,
-					ssfy:ele.ssfy,
-					ekfy:ele.ekfy,
-					kbfy:ele.kbfy
-				})
-			})
-			if(!!zrrnull){
-				  this.$message({
-							message:'请先选择所属责任人~',
-							type:'warning'
-					})
-					return;
+					htnrwid: ele.htnrwid,
+					zrrbh: ele.zrrbh,
+					zrrxm: ele.zrrxm,
+					ssfy: ele.ssfy,
+					ekfy: ele.ekfy,
+					kbfy: ele.kbfy
+				});
+			});
+			if (!!zrrnull) {
+				this.$message({
+					message: '请先选择所属责任人~',
+					type: 'warning'
+				});
+				return;
 			}
-			this.$post(this.API.saveTbxx,{
-					fbbh:this.$route.query.fbbh,
-					tbly:this.tbly,
-					fjwid:this.fileList.join(','),
-					ssfy:this.ssfyTotalkm,
-					ekfy:this.ekfyTotalkm,
-					kbfy:this.kbfyTotalkm,
-					tbtdlist:JSON.stringify(tdList)
-				}).then(res=>{
-					if(res.state == 'success'){
-						this.$message({
-							message:'投标成功',
-							type:'success'
-						})
-						this.dialogTableVisible = !this.dialogTableVisible;
-						this.istb = true;
-						this.tbzt = true;
-					}else{
-						this.$message({
-							message:res.msg,
-							type:'error'
-						})
-					}
-				})
+			this.$post(this.API.saveTbxx, {
+				wid: !this.tbxx.wid ? '' : this.tbxx.wid,
+				fbbh: this.$route.query.fbbh,
+				tbly: this.tbly,
+				fjwid: this.fileList.join(','),
+				ssfy: this.ssfyTotalkm,
+				ekfy: this.ekfyTotalkm,
+				kbfy: this.kbfyTotalkm,
+				tbtdlist: JSON.stringify(tdList)
+			}).then(res => {
+				if (res.state == 'success') {
+					this.$message({
+						message: '投标成功',
+						type: 'success'
+					});
+					this.dialogTableVisible = !this.dialogTableVisible;
+					this.istb = true;
+					this.tbzt = true;
+				} else {
+					this.$message({
+						message: res.msg,
+						type: 'error'
+					});
+				}
+			});
 		}
 	},
 	activated() {
@@ -566,10 +580,10 @@ export default {
 			fbbh: this.$route.query.fbbh
 		}).then(({ data }) => {
 			if (data.state == 'success') {
-				this.htjbxx = data.data.lxxx;//合同信息
-				this.htnrData = data.data.lxxx_htnr;//合同内容
-				this.fbxxData = data.data.fbxx;//分包信息
-				this.fbnrData = !data.data.fbnr?[]:data.data.fbnr;//分包内容
+				this.htjbxx = data.data.lxxx; //合同信息
+				this.htnrData = data.data.lxxx_htnr; //合同内容
+				this.fbxxData = data.data.fbxx; //分包信息
+				this.fbnrData = !data.data.fbnr ? [] : data.data.fbnr; //分包内容
 				this.istb = data.data.istb;
 				this.tbzt = data.data.tbzt;
 			} else {
@@ -579,30 +593,8 @@ export default {
 				});
 			}
 		});
-		
-		// 		//   查询分包信息
-		// 		queryFbxx({
-		// 			fbbh: this.$route.query.fbbh
-		// 		}).then(({ data }) => {
-		// 			if (data.state == 'success') {
-		// 				this.fbxxData = data.data.fbxx;
-		// 				let fbnrArr = data.data.fbcp;
-		//
-		// 				// 格式化 完工率 完工量
-		// 				fbnrArr.forEach((val, index, arr) => {
-		// 					arr[index].wglv = returnFloat(val.wglv);
-		// 					arr[index].wgl = returnFloat(val.wgl);
-		// 				});
-		// 				this.fbcpData = fbnrArr;
-		// 			} else {
-		// 				this.$message({
-		// 					message: data.msg,
-		// 					type: 'error'
-		// 				});
-		// 			}
-		// 		});
 	},
-	components: { userDialog,uploadComponent }
+	components: { userDialog, uploadComponent }
 };
 </script>
 <style scoped>
@@ -747,23 +739,24 @@ export default {
 	padding: 5px 8px !important;
 	border: 1px solid #000;
 }
-/* .fbdetail_container .close-page{
-        position:absolute;
-        right:0;
-        top:0;
-        font-size:18px;
-        background:rgba(0, 0, 0, 0.1);
-        color: #000;
-        padding: 5px 10px;
-    }
-    .fbdetail_container .close-page:hover{
-        cursor: pointer;
-        color: #ccc;
-    } */
 .tdfp-table td {
 	text-align: center;
 }
 .max-length {
+	color: #f00;
+}
+p.upload_file-p {
+	border: 1px solid rgb(235, 234, 234);
+	padding: 2px 6px;
+	border-radius: 3px;
+	width: 900px;
+	margin-top: 4px !important;
+}
+p.upload_file-p:hover {
+	background: rgba(216, 214, 214, 0.5);
+}
+p.upload_file-p i:hover {
+	cursor: pointer;
 	color: #f00;
 }
 </style>

@@ -262,7 +262,7 @@
 		this.queryJsxq();
 	},
 	methods: {
-		// 计算总金额
+		// 计算本次结算总金额
 		handleInputfy(type){
 			switch (type){
 				case '0':
@@ -277,7 +277,7 @@
 				default:
 					break;
 			}
-			this.jsxx.jsje = (this.jsxx.sjssfy + this.jsxx.sjekfy + this.jsxx.sjkbfy + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
+			this.jsxx.jsje = (Number(this.jsxx.sjssfy) + Number(this.jsxx.sjekfy) + Number(this.jsxx.sjkbfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
 		},
 		// 保存
 		handleSave(){
@@ -286,17 +286,17 @@
 				kbfy = 0;
 			this.tdxxData.forEach(ele=>{
 				xmtdData.push({
-					fbbh:ele.fbbh,
-					lcbbbh:this.jssqData.lcbbh,
+					fbbh:this.jssqData.fbbh,
+					lcbbh:this.jssqData.lcbbh,
 					lcbmc:this.jssqData.lcbmc,
-					tdwid:ele.tdwid,
-					cpbh:ele.cpbh,
 					cpmc:ele.cpmc,
+					tdwid:ele.tdwid,
 					cybh:ele.cybh,
 					cymc:ele.cymc,
 					jsssfy:ele.jsssfy,
 					jsekfy:ele.jsekfy,
-					jskbfy:ele.jskbfy
+					jskbfy:ele.jskbfy,
+					jsje:ele.jsje
 				})
 				erfy += Number(ele.jsekfy);
 				kbfy += Number(ele.jskbfy);
@@ -319,9 +319,14 @@
 				return;
 			}
 			this.$post(this.API.saveJsFeeData,{
+				wid:!this.jsxx.wid?'':this.jsxx.wid,
 				fbbh:this.jssqData.fbbh,
 				lcbbh:this.jssqData.lcbbh,
 				lcbmc:this.jssqData.lcbmc,
+
+				jlje:!this.jsxx.jlje?0:this.jsxx.jlje,
+				cfje:!this.jsxx.cfje?0:this.jsxx.cfje,
+
 				jsje:this.jsxx.jsje,
 				sm:xxs(this.jsxx.sm),
 				jlsm:xxs(this.jsxx.jlsm),
@@ -431,7 +436,7 @@
 		},
 		// 实施，二开，可变
 		handleChangeInput(index,type) {
-			this.tdxxData[index].jsje = Number(this.tdxxData[index].sjssfy) + Number(this.tdxxData[index].sjekfy) + Number(this.tdxxData[index].sjkbfy);
+			this.tdxxData[index].jsje = Number(this.tdxxData[index].jsssfy) + Number(this.tdxxData[index].jsekfy) + Number(this.tdxxData[index].jskbfy);
 		},
 		
 		// 获取结算申请详情

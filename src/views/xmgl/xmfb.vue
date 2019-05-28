@@ -6,7 +6,7 @@
 					<h4>合同内容</h4>
 					<div>
 						<h5>分包基本信息</h5>
-						<div text-right >
+						<div text-right v-if="!!isSave">
 							<el-button size="small" style="margin: 10px 0;" type="danger" @click="handleSaveFb">保存</el-button>
 						</div>
 						<table>
@@ -58,9 +58,9 @@
 							</tr>
 							<tr>
 								<th >实施费用（元）</th>
-								<td>{{ htjbxx.ssfy }}</td>
+								<td>{{ !htjbxx.ssfy?0:htjbxx.ssfy }}</td>
 								<th>二开费用（元）</th>
-								<td>{{ htjbxx.ekfy }}</td>
+								<td>{{ !htjbxx.ekfy?0:htjbxx.ekfy }}</td>
 								<th>可变费用（元）</th>
 								<td><input v-model="htjbxx.kbfy" type="text" style="width:100%" placeholder="请输入金额"></td>
 							</tr>
@@ -178,6 +178,9 @@ export default {
 						message:'保存成功~',
 						type:'success'
 					})
+					if(!this.$route.query.fbbh){
+						this.isSave = false;
+					}
 				}else{
 					this.$message({
 						message:res.msg,
@@ -235,6 +238,7 @@ export default {
 			}).then(res=>{
 				if(res.state == 'success'){
 					this.htjbxx = res.data.fbxx;
+					this.htjbxx.kbfy = !this.htjbxx.kbfy?0:this.htjbxx.kbfy;
 					this.ywyData = res.data.fbywy;
 					this.fbData = res.data.fbnr;
 				}else{

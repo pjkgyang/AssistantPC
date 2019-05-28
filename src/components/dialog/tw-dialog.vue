@@ -5,7 +5,7 @@
 			<div class="Question">
 				<el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="question" :inline="true" label-width="125px">
 					<el-form-item label="项目名称" required v-if="chooseableItem">
-						<el-input :disabled="!!isInnerItem" size="mini" type="text" style="width:720px;" v-model="xmmc" readonly
+						<el-input :disabled="!!isInnerItem" size="mini" type="text" :style="{width:showCondition==0?800+'px':720+'px',}" v-model="xmmc" readonly
 						 placeholder="请选择项目">
 							<el-button :disabled="!!isInnerItem" slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;"
 							 @click="addQuestiontItem"></el-button>
@@ -13,7 +13,7 @@
 						<el-checkbox v-if="(showCondition==1||showCondition==2)" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox>
 					</el-form-item>
 					<el-form-item label="项目名称" v-if="!chooseableItem">
-						<el-input size="mini" type="text" style="width:700px" v-model="xmmc" readonly></el-input>
+						<el-input size="mini" type="text" style="width:700px"  v-model="xmmc" readonly></el-input>
 					</el-form-item>
 					<el-form-item label="项目状态" required>
 						<el-input size="mini" type="text" style="width:330px" v-model="xmzt" readonly></el-input>
@@ -267,7 +267,6 @@
 			handleEdit(data) {
 				this.xmzt = data.xmzt;
 				this.xmData = data;
-				console.log(data);
 				if (this.questionTitle == "我要提问") {
 					this.queryResponsibleProduct(data.xmbh);
 				}
@@ -464,13 +463,13 @@
 				} else if (this.showCondition == 0) {
 					// 老师提问
 					if (
-						this.question.wtly == "" ||
-						this.question.title == "" ||
-						this.question.nr == "" ||
-						this.question.cp == "" ||
-						this.question.qwjjrq == "" ||
-						this.question.sfjj == "" ||
-						this.question.xmbh == ""
+						!this.question.wtly||
+						!this.question.title||
+						!this.question.nr||
+						!this.question.cp||
+						!this.question.qwjjrq||
+						!this.question.sfjj||
+						!this.xmmc
 					) {
 						this.$alert("请将信息填写完整!", "提示", {
 							confirmButtonText: "确定",
@@ -522,8 +521,7 @@
 				fd.append("fileUpload", file);
 				fd.append("xmbh", this.xmbh);
 
-				axios
-					.post(window.baseurl + "attachment/uploadAttach.do", fd, {
+				axios.post(window.baseurl + "attachment/uploadAttach.do", fd, {
 						headers: {
 							"Content-Type": "multipart/form-data"
 						}

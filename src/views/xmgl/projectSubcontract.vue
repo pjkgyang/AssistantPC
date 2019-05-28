@@ -14,7 +14,7 @@
               @change="SearchItem"
             ></el-input>&#x3000;
             <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
-            <a class="project_more_export" href="javaScript:void(0)" @click="handleExport">导出</a>
+						<el-button type="primary" size="mini" @click="handleExport">导出</el-button>
           </div>
           <div>
             <p>
@@ -140,10 +140,9 @@
               </template>
             </el-table-column>
             
-            <el-table-column prop="xmmc" label="项目名称" width="320" fixed="left"></el-table-column>
-
+            <el-table-column prop="xmmc" label="项目名称" width="320" fixed="left" show-overflow-tooltip></el-table-column>
             <el-table-column prop="dwmc" label="学校" show-overflow-tooltip width="280"></el-table-column>
-			<el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
+					  <el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
             <el-table-column prop="xmzt" label="项目状态" width="100"></el-table-column>
             <el-table-column prop="ztztmc" label="整体状态" width="100"></el-table-column>
             <el-table-column prop="khjl" label="客户经理" width="100"></el-table-column>
@@ -507,16 +506,6 @@ export default {
   padding: 2px 4px;
   border-radius: 3px;
   font-size: 14px;
-}
-
-.project_more_export {
-  background: forestgreen;
-  color: #fff;
-  padding: 6px 16px;
-  font-size: 12px;
-  border-radius: 3px;
-  line-height: 25px;
-  margin: 0 10px;
 }
 .bg-active {
   background: #1874cd;

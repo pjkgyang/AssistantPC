@@ -16,7 +16,7 @@
 			<el-button type="primary" size="mini" @click="handleExport">导出</el-button>
 		</div>
 
-		<div flex style="margin:10px 0;">
+		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('GCZJ') == -1">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
 				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }"  @click="CheckGcdz(gcdq.id)"  >{{ gcdq.label }}</span>
@@ -54,7 +54,7 @@
 				<el-table-column prop="ekfy" label="分包二开金额" width="110"></el-table-column>
 				<el-table-column prop="kbfy" label="分包可变金额" width="110"></el-table-column>
 			</el-table>
-			<div text-right>
+			<div>
 				<el-pagination
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
@@ -84,7 +84,8 @@ export default {
 			},
 			gcdqList: [{label:'全部',id:''},{label:'南区',id:'南区'},{label:'北区',id:'北区'},{label:'其他',id:'其他'}],
 			sfshList: [{label:'全部',id:''},{label:'已审核',id:'1'},{label:'未审核',id:'0'}],
-			tableData: []
+			tableData: [],
+			userGroup:''
 		};
 	},
 	mounted() {
@@ -94,6 +95,7 @@ export default {
 		// 	this.sfshList = getSession('SHZT');
 		// }
 		this.getFbshList();
+		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
 	},
 	methods: {
 		handleSearch() {
@@ -104,7 +106,18 @@ export default {
 			this.currentPage = 1;
 			this.getFbshList();
 		},
-		handleExport() {},
+		handleExport() {
+			window.open(
+			  window.baseurl +
+			    "fbxx/exportFbManage.do?keyword=" +
+			    this.filterData.keyword +
+			    "&gczq=" +
+			    this.filterData.gcdq +
+			    "&shzt=" +
+			    this.filterData.shzt +
+				"&isfb=1"
+			);
+		},
 		// 工程大区
 		CheckGcdz(params) {
 			this.currentPage = 1;
@@ -165,8 +178,8 @@ export default {
 
 <style lang="scss" scoped>
 .project_fbsh {
-	margin: 20px;
-	padding: 15px;
+	margin: 12px 20px;
+	padding: 15px 15px 5px ;
 	background: #ffffff;
 	border-radius: 4px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);

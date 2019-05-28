@@ -16,7 +16,7 @@
 			<el-button type="primary" size="mini" @click="handleExport">导出</el-button>
 		</div>
 
-		<div flex style="margin:10px 0;">
+		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('GCZJ') == -1">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
 				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }" :key="gcdq.id" @click="CheckGcdz(gcdq.id)">{{ gcdq.label }}</span>
@@ -57,7 +57,7 @@
 				<el-table-column prop="jsekfy" label="结算二开金额" width="110"></el-table-column>
 				<el-table-column prop="jskbfy" label="结算可变金额" width="110"></el-table-column>
 			</el-table>
-			<div text-right>
+			<div>
 				<el-pagination
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
@@ -87,18 +87,31 @@ export default {
 			},
 			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区'},{ label: '其他', id: '其他'}],
 			jsztList: [{ label: '全部', id: '' }, { label: '已结算', id: '1' }, { label: '未结算', id: '0'}],
-			tableData: []
+			tableData: [],
+			userGroup:''
 		};
 	},
 	mounted() {
 		this.queryJsData();
+		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
 	},
 	methods: {
 		handleSearch() {
 			this.currentPage = 1;
 			this.queryJsData();
 		},
-		handleExport() {},
+		handleExport() {
+			window.open(
+			  window.baseurl +
+			    "jsxx/exportJsData.do?keyword=" +
+			    this.filterData.keyword +
+			    "&gcdq=" +
+			    this.filterData.gcdq +
+			    "&sfjs=" +
+			    this.filterData.jszt +
+				"&isjs=1"
+			);	
+		},
 		CheckGcdz(data) {
 			this.filterData.gcdq = data;
 			this.currentPage = 1;
@@ -157,8 +170,8 @@ export default {
 
 <style lang="scss" scoped>
 .project_settle {
-	margin: 20px;
-	padding: 15px;
+	margin: 12px 20px;
+	padding: 15px 15px 5px ;
 	background: #ffffff;
 	border-radius: 4px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);

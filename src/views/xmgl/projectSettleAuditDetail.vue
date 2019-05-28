@@ -205,7 +205,7 @@ export default {
 				   inputErrorMessage: '请输入说明内容',
 				   inputPlaceholder:'请输入说明内容'
 				 }).then(({ value }) => {
-				   this.verifyFb(data,value);
+				   this.jsReview(data,value);
 				 }).catch(() => {});
 			 }
 		},
