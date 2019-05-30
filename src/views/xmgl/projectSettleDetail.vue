@@ -4,7 +4,7 @@
 			<div class="fb_info">
 				<div>
 					<h4>项目结算详情</h4>
-					<div text-right v-if="jssqData.jszt == '02' ">
+					<div text-right v-if="jssqData.jszt == '02' || jssqData.jszt == '01'  ">
 						<el-button size="small" type="danger" @click='handleSave'>保存</el-button>
 					</div>
 					<div>
@@ -64,7 +64,7 @@
 						<table>
 							<tr>
 								<th>本次结算总金额（元）</th>
-								<td colspan="5">{{jsxx.jsje}}</td>
+								<td colspan="5">{{!jsxx.jsje?0:jsxx.jsje}}</td>
 							</tr>
 							<tr>
 								<th>中标实施费用（元）</th>
@@ -100,11 +100,11 @@
 							</tr>
 							<tr>
 								<th>本次结算实施费用（元）</th>
-								<td>{{jsxx.sjssfy}}</td>
+								<td><input style="width: 100%;" type="number" v-model="jsxx.sjssfy" @input="handleSettleBcjsfy('0')"></td>
 								<th>本次结算二开费用（元）</th>
-								<td>{{jsxx.sjekfy}}</td>
+								<td><input style="width: 100%;" type="number" v-model="jsxx.sjekfy" @input="handleSettleBcjsfy('1')"></td>
 								<th>本次结算可变费用（元）</th>
-								<td>{{jsxx.sjkbfy}}</td>
+								<td><input style="width: 100%;" type="number" v-model="jsxx.sjkbfy" @input="handleSettleBcjsfy('2')"></td>
 							</tr>
 							<tr>
 								<th>预留说明</th>
@@ -137,7 +137,6 @@
 							<tr>
 								<th>业务域</th>
 								<th>合同内容</th>
-								<th>当前进度</th>
 								<th>责任人</th>
 								<th>中标实施费用(元)</th>
 								<th>已结算实施费用(元)</th>
@@ -156,7 +155,6 @@
 							<tr v-for="(item, index) in tdxxData" :key="index">
 								<td>{{item.ywymc}}</td>
 								<td style="width: 300px;">{{item.cpmc}}</td>
-								<td style="width: 240px;">{{item.dqjd}}</td>
 								<td >{{item.cymc}}</td>
 								<td>{{item.zbssfy}}</td>
 								<td>{{item.yjsssfy}}</td>
@@ -263,6 +261,24 @@
 		this.queryJsxq();
 	},
 	methods: {
+		// 计算本次总金额
+		handleSettleBcjsfy(type){
+			if(type == '0' && Number(this.jsxx.sjssfy) > Number(this.jsxx.zbssfy)){
+				this.$message({message: '中标实施费用必须 大于 本次结算实施费用 ',type: 'warning'});
+				this.jsxx.sjssfy = 0;
+			}
+			if(type == '1' && Number(this.jsxx.sjekfy) > Number(this.jsxx.zbekfy)){
+				this.$message({message: '中标二开费用必须 大于 本次结算二开费用',type: 'warning'});
+				this.jsxx.sjekfy = 0;
+			}
+			if(type == '2' && Number(this.jsxx.sjkbfy) > Number(this.jsxx.zbkbfy)){
+				this.$message({message: '中标可变费用必须 大于 本次结算可变费用 ',type: 'warning'});
+				this.jsxx.sjkbfy = 0;
+			}
+			
+			this.jsxx.jsje = (Number(this.jsxx.sjssfy) + Number(this.jsxx.sjekfy) + Number(this.jsxx.sjkbfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
+			this.jsxx.jsje = this.jsxx.jsje <0?0:this.jsxx.jsje;
+		},
 		// 计算本次结算总金额
 		handleInputfy(type){
 			switch (type){
@@ -322,13 +338,11 @@
 			}
 		
 			if(!!msg){
-				this.$message({
-					message:msg,
-					type:'warning'
-				})
+				this.$message({message:msg,type:'warning'})
 				return;
 			}
 			
+
 			this.$post(this.API.saveJsFeeData,{
 				wid:!this.jsxx.wid?'':this.jsxx.wid,
 				fbbh:this.jssqData.fbbh,
@@ -447,9 +461,10 @@
 		},
 		// 实施，二开，可变
 		handleChangeInput(index,type) {
+			this.jsssfyTotal = 0;
 			this.tdxxData[index].jsje = Number(this.tdxxData[index].jsssfy) + Number(this.tdxxData[index].jsekfy) + Number(this.tdxxData[index].jskbfy);
 			this.tdxxData.forEach(ele=>{
-				this.jsssfyTotal += !ele.jsssfy?0:Number(ele.jsssfy)
+				this.jsssfyTotal += !ele.jsssfy?0:Number(ele.jsssfy);
 			})
 		},
 		
@@ -468,14 +483,15 @@
 					this.jsxx.ylekfy = !this.jsxx.ylekfy?0:this.jsxx.ylekfy;
 					this.jsxx.ylkbfy = !this.jsxx.ylkbfy?0:this.jsxx.ylkbfy;
 					
-					this.jsxx.sjssfy = (Number(this.jsxx.zbssfy) - Number(this.jsxx.yjsssfy) - Number(this.jsxx.ylssfy) - Number(!this.jsxx.rlssfy?0:this.jsxx.rlssfy));
-					this.jsxx.sjssfy = this.jsxx.sjssfy < 0?0:this.jsxx.sjssfy ;
-					this.jsxx.sjekfy = (Number(this.jsxx.zbekfy) - Number(this.jsxx.yjsekfy) - Number(this.jsxx.ylekfy) - Number(!this.jsxx.rlekfy?0:this.jsxx.rlekfy));
-					this.jsxx.sjekfy = this.jsxx.sjekfy < 0?0:this.jsxx.sjekfy ;
-					this.jsxx.sjkbfy = (Number(this.jsxx.zbkbfy) - Number(this.jsxx.yjskbfy) - Number(this.jsxx.ylkbfy) - Number(!this.jsxx.rlkbfy?0:this.jsxx.rlkbfy));
-					this.jsxx.sjkbfy = this.jsxx.sjkbfy < 0?0:this.jsxx.sjkbfy ;
-					this.jsxx.jsje = (Number(this.jsxx.sjssfy) + Number(this.jsxx.sjekfy) + Number(this.jsxx.sjkbfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
-					this.jsxx.jsje = this.jsxx.jsje <0?0:this.jsxx.jsje;
+					// this.jsxx.sjssfy = (Number(this.jsxx.zbssfy) - Number(this.jsxx.yjsssfy) - Number(this.jsxx.ylssfy) - Number(!this.jsxx.rlssfy?0:this.jsxx.rlssfy));
+					// this.jsxx.sjssfy = this.jsxx.sjssfy < 0?0:this.jsxx.sjssfy ;
+					// this.jsxx.sjekfy = (Number(this.jsxx.zbekfy) - Number(this.jsxx.yjsekfy) - Number(this.jsxx.ylekfy) - Number(!this.jsxx.rlekfy?0:this.jsxx.rlekfy));
+					// this.jsxx.sjekfy = this.jsxx.sjekfy < 0?0:this.jsxx.sjekfy ;
+					// this.jsxx.sjkbfy = (Number(this.jsxx.zbkbfy) - Number(this.jsxx.yjskbfy) - Number(this.jsxx.ylkbfy) - Number(!this.jsxx.rlkbfy?0:this.jsxx.rlkbfy));
+					// this.jsxx.sjkbfy = this.jsxx.sjkbfy < 0?0:this.jsxx.sjkbfy ;
+					// 
+					// this.jsxx.jsje = (Number(this.jsxx.sjssfy) + Number(this.jsxx.sjekfy) + Number(this.jsxx.sjkbfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
+					// this.jsxx.jsje = this.jsxx.jsje <0?0:this.jsxx.jsje;
 					
 					// 团队实施费用
 					this.tdxxData.forEach(ele=>{

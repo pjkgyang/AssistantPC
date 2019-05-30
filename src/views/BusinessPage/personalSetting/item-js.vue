@@ -62,8 +62,9 @@ export default {
               confirmButtonText: "确定",
               type: key == "true" ? "success" : "error",
               callback: action => {
-                if (key == "true") {
-                  this.show = false;
+                if (!!key) {
+                  _this.show = false;
+									_this.getSettlementApplication();
                 }
               }
             });

@@ -55,11 +55,9 @@
 							</p>
 						</div>
 						<div flex>
-								<p>
+							<p>
 								<span class="table-menu-name">是否分包:</span>
-								<span v-for="sffb in sffbMenu"  :class="{ 'bg-active': sffb.id == sffbc }" :key="sffb.id" @click="CheckSffb(sffb.id)">
-									{{ sffb.mc }}
-								</span>
+								<span v-for="sffb in sffbMenu" :class="{ 'bg-active': sffb.id == sffbc }" :key="sffb.id" @click="CheckSffb(sffb.id)">{{ sffb.mc }}</span>
 							</p>
 						</div>
 						<p v-if="!userGroup.includes('QYZ')">
@@ -74,13 +72,15 @@
 						<el-table-column fixed="left" label="操作" width="150">
 							<template slot-scope="scope">
 								<el-button @click.native.prevent="handleCommand('1', scope.row)" type="text" size="mini">立项信息</el-button>
-								<el-button v-if="scope.row.fbgs <= 0 || !scope.row.fbgs" @click.native.prevent="handleCommand('2', scope.row)" type="text" size="mini">项目分包</el-button>
+								<el-button v-if="scope.row.fbgs <= 0 || !scope.row.fbgs" @click.native.prevent="handleCommand('2', scope.row)" type="text" size="mini">
+									项目分包
+								</el-button>
 							</template>
 						</el-table-column>
 						<el-table-column prop="xmmc" label="项目名称" width="320" fixed="left" show-overflow-tooltip></el-table-column>
-						<el-table-column label="分包个数" width="100" >
+						<el-table-column label="分包个数" width="100">
 							<template slot-scope="scope">
-								<span>{{!scope.row.fbgs?0:scope.row.fbgs}}</span>
+								<span>{{ !scope.row.fbgs ? 0 : scope.row.fbgs }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column prop="dwmc" label="学校" show-overflow-tooltip width="280"></el-table-column>
@@ -152,7 +152,7 @@ export default {
 			xmbqC: '',
 			gczdC: '',
 			sfxqC: '',
-			sffbc:'', //是否分包
+			sffbc: '', //是否分包
 			allfbData: [],
 			curPage: 1,
 			pageSize: 15,
@@ -232,29 +232,37 @@ export default {
 					this.htxzList.join(',')
 			);
 		},
-		// 过保提醒
+		// 立项信息 ， 项目分包
 		handleCommand(params, data) {
 			this.xmbh = data.xmbh;
 			if (params == 2) {
-				this.$get(this.API.canProjectSubcontract, { xmbh: data.xmbh }).then(res => {
-					if (res.state == 'success') {
-						if (!!res.data) {
-							let routeData = this.$router.resolve({
-								path: '/projectXmfb',
-								query: {
-									xmbh: data.xmbh,
-									xmmc: data.xmmc
-								}
-							});
-							window.open(routeData.href, '_blank');
-						} else {
-							this.$alert('该项目已分包~', '提示', {
-								confirmButtonText: '确定',
-								type: 'warning'
-							});
-						}
+				let routeData = this.$router.resolve({
+					path: '/projectXmfb',
+					query: {
+						xmbh: data.xmbh,
+						xmmc: data.xmmc
 					}
 				});
+				window.open(routeData.href, '_blank');
+				// this.$get(this.API.canProjectSubcontract, { xmbh: data.xmbh }).then(res => {
+				// 	if (res.state == 'success') {
+				// 		if (!!res.data) {
+				// 			let routeData = this.$router.resolve({
+				// 				path: '/projectXmfb',
+				// 				query: {
+				// 					xmbh: data.xmbh,
+				// 					xmmc: data.xmmc
+				// 				}
+				// 			});
+				// 			window.open(routeData.href, '_blank');
+				// 		} else {
+				// 			this.$alert('该项目已分包~', '提示', {
+				// 				confirmButtonText: '确定',
+				// 				type: 'warning'
+				// 			});
+				// 		}
+				// 	}
+				// });
 			} else {
 				let routeData = this.$router.resolve({
 					path: '/projectfbmx',
@@ -294,7 +302,7 @@ export default {
 		},
 		// 获取所有项目
 		getProjects(curPage) {
-			this.$get(this.API.getProjects,{
+			this.$get(this.API.getProjects, {
 				curPage: curPage,
 				pageSize: this.pageSize,
 				keyword: this.keyword,
@@ -304,13 +312,13 @@ export default {
 				pl: this.xmbqC,
 				sffb: this.sffbc,
 				htxz: this.htxzList.join(','),
-				qygc: this.gczdC,
-			}).then(res=>{
+				qygc: this.gczdC
+			}).then(res => {
 				if (res.state == 'success') {
 					this.allfbData = res.data.rows;
 					this.totalNum = res.data.records;
 				}
-			})
+			});
 		},
 		// 搜索关键字
 		handleSearch() {
@@ -357,8 +365,8 @@ export default {
 			this.getProjects(1);
 		},
 		// 是否分包
-		CheckSffb(data){
-			this.sffbc = data; 	
+		CheckSffb(data) {
+			this.sffbc = data;
 			this.getProjects(1);
 		},
 		handleCurrentChange(data) {

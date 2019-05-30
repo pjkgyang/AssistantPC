@@ -3,7 +3,7 @@
 		<div class="jsdetail_container">
 			<div class="fb_info">
 				<div>
-					<div text-right v-if="jsxx.shzt == 0">
+					<div text-right v-if="jssqData.jszt == '02'||jssqData.jszt == '03'||jssqData.jszt == '04'">
 						<el-button type="primary" @click="handleAudit('1')">审核通过</el-button>
 						<el-button type="danger" @click="handleAudit('0')">审核不通过</el-button>
 					</div>
@@ -51,7 +51,7 @@
 								<th>实际结束日期</th>
 								<td>{{jssqData.sjjssj}}</td>
 								<th>结算点</th>
-								<td>{{jssqData.sjkssj}}</td>
+								<td>{{jssqData.lcbmc}}</td>
 							</tr>
 							<tr>
 								<th>申请说明</th>
@@ -92,19 +92,19 @@
 							</tr>
 							<tr>
 								<th>实施调用费用（元）</th>
-								<td>{{jsxx.rlssfy}}</i></td>
+								<td>{{!jsxx.rlssfy?0:jsxx.rlssfy}}</i></td>
 								<th>二开调用费用（元）</th>
-								<td>{{jsxx.rlekfy}}</td>
+								<td>{{!jsxx.rlekfy?0:jsxx.rlekfy}}</td>
 								<th>可变报销费用（元）</th>
-								<td>{{jsxx.rlkbfy}}</td>
+								<td>{{!jsxx.rlkbfy?0:jsxx.rlkbfy}}</td>
 							</tr>
 							<tr>
 								<th>本次结算实施费用（元）</th>
-								<td>{{jsxx.jsssfy = (Number(jsxx.zbssfy) - Number(jsxx.yjsssfy) - Number(jsxx.ylssfy) - Number(!jsxx.rlssfy?0:jsxx.rlssfy))}}</td>
+								<td>{{jsxx.sjssfy}}</td>
 								<th>本次结算二开费用（元）</th>
-								<td>{{jsxx.jsekfy = (Number(jsxx.zbekfy) - Number(jsxx.yjsekfy) - Number(jsxx.ylekfy) - Number(!jsxx.rlekfy?0:jsxx.rlekfy))}}</td>
+								<td>{{jsxx.sjekfy}}</td>
 								<th>本次结算可变费用（元）</th>
-								<td>{{jsxx.jskbfy = (Number(jsxx.zbkbfy) - Number(jsxx.yjskbfy) - Number(jsxx.ylkbfy) - Number(!jsxx.rlkbfy?0:jsxx.rlkbfy))}}</td>
+								<td>{{jsxx.sjkbfy}}</td>
 							</tr>
 							<tr>
 								<th>预留说明</th>
@@ -133,7 +133,6 @@
 							<tr>
 								<th>业务域</th>
 								<th>合同内容</th>
-								<th>当前进度</th>
 								<th>责任人</th>
 								<th>中标实施费用(元)</th>
 								<th>已结算实施费用(元)</th>
@@ -151,8 +150,7 @@
 							</tr>
 							<tr v-for="(item, index) in tdxxData" :key="index">
 								<td>{{item.ywymc}}</td>
-								<td>{{item.htnr}}</td>
-								<td>{{item.dqjd}}</td>
+								<td>{{item.cpmc}}</td>
 								<td>{{item.cymc}}</td>
 								<td>{{item.zbssfy}}</td>
 								<td>{{item.yjsssfy}}</td>

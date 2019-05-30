@@ -31,24 +31,27 @@
 		<br />
 		<div>
 			<el-button size="mini" type="danger" @click="handleSetCz" :disabled="!jssqwidArr.length">设置冲账</el-button><br><br>
-			<el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+			<el-table :max-height="height" :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
 				<el-table-column type="selection" width="55" :selectable="checkboxInit"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
-						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+						<el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.shzt == '已结算'?'审核':'详情'}}</el-button>
 					</template>
 				</el-table-column>
+				<el-table-column prop="fbmc" label="分包名称" min-width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="lcbmc" label="结算点" min-width="140" show-overflow-tooltip></el-table-column>
 				<el-table-column label="是否审核" width="120">
 					<template slot-scope="scope">
 						<el-tag size="mini" :type="scope.row.shzt == '未审核'||scope.row.shzt == '审核不通过' ? 'info' : 'success'">{{ scope.row.shzt }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
-				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="fbbh" label="合同编号" width="160"></el-table-column>
-				<el-table-column prop="fbmc" label="分包名称" min-width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="shzt" label="结算状态" width="120"></el-table-column>
 				<el-table-column prop="sqjsrxm" label="申请人" width="110"></el-table-column>
 				<el-table-column prop="sqjsrq" label="申请时间" width="110"></el-table-column>
+				<el-table-column prop="fbbh" label="分包编号" width="160"></el-table-column>
+				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
+				<el-table-column prop="htbh" label="合同编号" width="160"></el-table-column>
 				<el-table-column prop="zbssfy" label="中标实施金额" width="110"></el-table-column>
 				<el-table-column prop="zbekfy" label="中标二开金额" width="110"></el-table-column>
 				<el-table-column prop="zbkbfy" label="中标可变金额" width="110"></el-table-column>
@@ -76,6 +79,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
+			height:window.innerHeight - 310,
 			currentPage: 1,
 			pageSize: 15,
 			records: 0,

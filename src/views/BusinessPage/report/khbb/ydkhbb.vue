@@ -28,7 +28,8 @@ export default {
         rylx: []
       },
       currentPage: 1,
-      pageSize: 15
+      pageSize: 15,
+			userGroup:''
     };
   },
   methods: {
@@ -182,8 +183,16 @@ export default {
     this.$nextTick(() => {
       this.ydkhb();
     });
-
-    this.hasDepositData();
+		
+		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
+		
+		if(this.userGroup.includes('ProblemAdmin')){
+			this.archiveShow = true;
+		}
+		if(this.userGroup.includes('ProblemAdmin')||this.userGroup.includes('JYGL')){
+			this.filterList.push('bm');
+		}
+    // this.hasDepositData();
   },
   activated() {},
   watch: {},

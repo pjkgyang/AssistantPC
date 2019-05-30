@@ -109,7 +109,7 @@
 							<el-table-column prop="rjcpmc" label="产品归属" min-width="150"></el-table-column>
 							<el-table-column prop="ssry" label="实施人月" width="100"></el-table-column>
 							<el-table-column prop="kfry" label="二开人月" width="120"></el-table-column>
-							<el-table-column prop="kfry" label="项目类别" width="120"></el-table-column>
+							<el-table-column prop="xmlb" label="项目类别" width="120"></el-table-column>
 						</el-table>
 					</div>
 					<div>
@@ -143,9 +143,9 @@
 							</tr>
 							<tr>
 								<th>实施费用标准（元）</th>
-								<td>{{ fbjbxx.SSBZ }}</td>
+								<td>{{ fbjbxx.ssbz }}</td>
 								<th>二开费用标准（元）</th>
-								<td>{{ fbjbxx.EKBZ }}</td>
+								<td>{{ fbjbxx.ekbz }}</td>
 								<th></th>
 								<td></td>
 							</tr>
@@ -164,6 +164,8 @@
 							<el-table-column prop="fbssry" label="实施人月(分包)" min-width="140"></el-table-column>
 							<el-table-column prop="htekry" label="二开人月(合同)" min-width="140"></el-table-column>
 							<el-table-column prop="fbekry" label="二开人月(分包)" min-width="140"></el-table-column>
+							<el-table-column prop="ssfy" label="实施费用" min-width="100"></el-table-column>
+							<el-table-column prop="erfy" label="二开费用" min-width="100"></el-table-column>
 						</el-table>
 					</div>
 					<div>
@@ -178,6 +180,8 @@
 							<el-table-column prop="fbssry" label="实施人月(分包)" min-width="90"></el-table-column>
 							<el-table-column prop="htekry" label="二开人月(合同)" min-width="90"></el-table-column>
 							<el-table-column prop="fbekry" label="二开人月(分包)" min-width="90"></el-table-column>
+							<el-table-column prop="ssfy" label="实施费用" min-width="100"></el-table-column>
+							<el-table-column prop="erfy" label="二开费用" min-width="100"></el-table-column>
 							<el-table-column prop="fbsm" label="说明" min-width="150"></el-table-column>
 						</el-table>
 					</div>

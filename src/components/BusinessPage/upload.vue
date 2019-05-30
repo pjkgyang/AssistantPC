@@ -49,6 +49,8 @@ export default {
             this.files.push(res.data.data.split('|')[0]);
 						this.fileList.push(res.data.data.split('|')[1]);
             this.$emit('handleUploadFile',this.files);
+						this.fileList = [];
+						this.files = [];
           }
       });
       return true;

@@ -31,16 +31,20 @@
 		</div>
 		<br />
 		<div>
-			<el-table :data="tableData" border style="width: 100%">
+			<el-table :max-height="height" :data="tableData" border style="width: 100%">
 				<el-table-column fixed="left" label="操作" width="120">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="handleClick(scope.row)">详情</el-button>
 					</template>
 				</el-table-column>
+				<el-table-column prop="xmmc" label="项目名称" fixed="left" min-width="260" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="xmbh" label="项目编号"></el-table-column>
-				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column  label="分包状态" width="120">
+					<template slot-scope="scope">
+						{{ scope.row.fbzt=='02'?'审核中':scope.row.fbzt=='03'?'招标中':scope.row.fbzt=='04'?'审核未通过':scope.row.fbzt=='05'?'分包结束':'分包关闭' }}
+					</template>
+				</el-table-column>
 				<el-table-column prop="htbh" label="合同编号" min-width="130" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="ztztmc" label="项目整体状态" width="110"></el-table-column>
 				<el-table-column prop="xx" label="学校" min-width="200"></el-table-column>
 				<el-table-column prop="jf" label="甲方" width="120" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="fbbh" label="分包编号" min-width="130"></el-table-column>
@@ -77,6 +81,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
+			height:window.innerHeight - 280,
 			dialogVisible: false,
 			currentPage: 1,
 			pageSize: 15,

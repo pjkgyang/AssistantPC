@@ -23,7 +23,7 @@ export default {
       dataList: {},
       headList: [],
       archiveShow: false,
-      filterList: ["keyword", "yf","yfDate", "bm", "rylx"],
+      filterList: ["keyword", "yf","yfDate",  "rylx"],
       filterData: {
         keyword: "",
         yf: "",
@@ -31,7 +31,8 @@ export default {
         rylx: []
       },
       currentPage: 1,
-      pageSize: 15
+      pageSize: 15,
+			userGroup:''
     };
   },
   methods: {
@@ -98,9 +99,10 @@ export default {
       if(!!params){
         if(!!data.yf){
           this.hasDepositData();
-        }else{
-          this.archiveShow = false;
         }
+				// else{
+    //       this.archiveShow = false;
+    //     }
       }
     },
     ydjlb() {
@@ -126,6 +128,8 @@ export default {
         }
       });
     },
+		
+		//  
     hasDepositData() {
       this.$get(this.API.hasDepositData, {
         yf: this.filterData.yf,
@@ -206,7 +210,16 @@ export default {
       this.ydjlb();
     });
     
-    this.hasDepositData();
+		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
+		
+		if(this.userGroup.includes('ProblemAdmin')){
+			this.archiveShow = true;
+		}
+		
+		if(this.userGroup.includes('ProblemAdmin')||this.userGroup.includes('JYGL')){
+			this.filterList.push('bm');
+		}
+    // this.hasDepositData();
   },
   activated() {},
   watch: {},

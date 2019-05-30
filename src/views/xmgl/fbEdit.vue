@@ -34,7 +34,7 @@
 		<br />
 		<br />
 		<div>
-			<el-table :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
+			<el-table :max-height="height" :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="120">
 					<template slot-scope="scope">
@@ -47,7 +47,7 @@
 						<el-tag size="mini" :type="scope.row.shzt == '已审核' ? 'success' : 'info'">{{ scope.row.shzt }}</el-tag>
 					</template>
 				</el-table-column>
-					<el-table-column  label="审核状态" width="120">
+					<el-table-column  label="分包状态" width="120">
 					<template slot-scope="scope">
 						{{ scope.row.fbzt=='02'?'审核中':scope.row.fbzt=='03'?'招标中':scope.row.fbzt=='04'?'审核未通过':scope.row.fbzt=='05'?'分包结束':'分包关闭' }}
 					</template>
@@ -82,6 +82,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
+			height:window.innerHeight - 320,
 			currentPage: 1,
 			pageSize: 15,
 			records: 0,
@@ -136,7 +137,7 @@ export default {
 		// 导出
 		handleExport() {
 			window.open(
-				window.baseurl + 'fbxx/exportFbManage.do?keyword=' + this.filterData.keyword + '&gczq=' + this.filterData.gcdq + '&shzt=' + this.filterData.shzt + '&isfb=1'
+				window.baseurl + 'fbxx/exportFbManage.do?keyword=' + this.filterData.keyword + '&gcdq=' + this.filterData.gcdq + '&shzt=' + this.filterData.shzt + '&isfb=1'
 			);
 		},
 		// 工程大区

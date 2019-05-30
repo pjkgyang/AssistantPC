@@ -31,7 +31,7 @@
 		</div>
 		<br />
 		<div>
-			<el-table :data="tableData" border style="width: 100%">
+			<el-table :max-height="height" :data="tableData" border style="width: 100%">
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
 						<el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.shzt == '已审核'?'详情':'审核'}}</el-button>
@@ -42,7 +42,7 @@
 						<el-tag size="mini" :type="scope.row.shzt == '已审核' ? 'success' : 'info'">{{ scope.row.shzt }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column  label="审核状态" width="120">
+				<el-table-column  label="分包状态" width="120">
 					<template slot-scope="scope">
 						{{ scope.row.fbzt=='02'?'审核中':scope.row.fbzt=='03'?'招标中':scope.row.fbzt=='04'?'审核未通过':scope.row.fbzt=='05'?'分包结束':'分包关闭' }}
 					</template>
@@ -77,13 +77,14 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
+			height:window.innerHeight - 280,
 			currentPage: 1,
 			pageSize: 15,
 			records: 0,
 			filterData: {
 				keyword: '',
 				gcdq: '',
-				shzt: ''
+				shzt: '0'
 			},
 			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
 			sfshList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '0' }],
@@ -106,7 +107,7 @@ export default {
 		},
 		handleExport() {
 			window.open(
-				window.baseurl + 'fbxx/exportFbManage.do?keyword=' + this.filterData.keyword + '&gczq=' + this.filterData.gcdq + '&shzt=' + this.filterData.shzt + '&isfb=1'
+				window.baseurl + 'fbxx/exportFbManage.do?keyword=' + this.filterData.keyword + '&gcdq=' + this.filterData.gcdq + '&shzt=' + this.filterData.shzt + '&isfb=1'
 			);
 		},
 		// 工程大区
@@ -144,7 +145,7 @@ export default {
 			this.$get(this.API.fbManage, {
 				curPage: this.currentPage,
 				pageSize: this.pageSize,
-				gczq: this.filterData.gcdq,
+				gcdq: this.filterData.gcdq,
 				shzt: this.filterData.shzt,
 				isfb:1,
 				keyword: this.filterData.keyword

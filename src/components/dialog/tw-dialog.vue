@@ -41,6 +41,7 @@
 							<el-option label="不严重" value="不严重"></el-option>
 							<el-option label="一般" value="一般"></el-option>
 							<el-option label="严重" value="严重"></el-option>
+							<el-option label="宕机服务不可用" value="宕机服务不可用"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="产品" required>

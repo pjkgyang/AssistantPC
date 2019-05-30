@@ -5,7 +5,7 @@
 				<div>
 					<h4>合同内容</h4>
 					<div>
-						<div text-right v-if="!!isSave">
+						<div text-right v-if="((!htjbxx.fbzt || htjbxx.fbzt=='02') && !this.$route.query.fbbh) || (!!this.$route.query.fbbh) ">
 							<el-button size="small" style="margin: 10px 0;" type="danger" @click="handleSaveFb">保存</el-button>
 						</div>
 						<h5>分包基本信息</h5>
@@ -104,8 +104,8 @@
 						  :data="fbData"
 						  border
 						  style="width: 100%">
-						  <el-table-column prop="ywymc" label="业务域" min-width="130" show-overflow-tooltip></el-table-column>
-						  <el-table-column prop="cpmc" label="合同内容" min-width="130" show-overflow-tooltip></el-table-column>
+						  <el-table-column prop="ywymc" label="业务域" min-width="130" fixed="left" show-overflow-tooltip></el-table-column>
+						  <el-table-column prop="cpmc" label="合同内容" min-width="130" fixed="left" show-overflow-tooltip></el-table-column>
 						  <el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>
 						  <el-table-column prop="htsm" label="内容说明"  min-width="130" show-overflow-tooltip></el-table-column>
 						  <el-table-column prop="xmlb" label="项目类别" width="90" show-overflow-tooltip></el-table-column>
@@ -145,7 +145,6 @@
 			ywyData: [],
 			ywyTotal:{},//业务域数据合计
 			fbnrlist:[],
-			isSave:true
 		};
 	},
 	mounted() {
@@ -183,7 +182,7 @@
 						type:'success'
 					})
 					if(!this.$route.query.fbbh){
-						this.isSave = false;
+						this.queryFbYwxData();
 					}
 				}else{
 					this.$message({
@@ -257,6 +256,7 @@
 			this.htjbxx.ekfy = erssfy;
 		},
 		
+		// 查询分包
 		queryFbYwxData(){
 			this.$get(this.API.queryFbYwxData,{
 				xmbh:this.$route.query.xmbh,
