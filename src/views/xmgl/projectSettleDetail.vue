@@ -4,7 +4,7 @@
 			<div class="fb_info">
 				<div>
 					<h4>项目结算详情</h4>
-					<div text-right v-if="jsxx.jszt != 1">
+					<div text-right v-if="jssqData.jszt == '02' ">
 						<el-button size="small" type="danger" @click='handleSave'>保存</el-button>
 					</div>
 					<div>
@@ -51,7 +51,7 @@
 								<th>实际结束日期</th>
 								<td>{{jssqData.sjjssj}}</td>
 								<th>结算点</th>
-								<td>{{jssqData.sjkssj}}</td>
+								<td>{{jssqData.lcbmc}}</td>
 							</tr>
 							<tr>
 								<th>申请说明</th>
@@ -194,12 +194,12 @@
 							<span>{{scope.row.rlzt=='0'?'区域承担':scope.row.rlzt=='1'?'分包扣除':''}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column prop="ssdqbh" label="单据编号" width="180"></el-table-column>
+					<el-table-column prop="wid" label="单据编号" width="180"></el-table-column>
 					<el-table-column prop="kfkjmc" label="开发性质" width="100"></el-table-column>
 					<el-table-column prop="fwlxmc" label="服务类型" width="100"></el-table-column>
 					<el-table-column prop="ztmc" label="状态" width="100"></el-table-column>
 					<el-table-column prop="ssywxmc" label="业务线" min-width="250"></el-table-column>
-					<el-table-column prop="ysje" label="金额" width="100"></el-table-column>
+					<el-table-column prop="zbje" label="中标金额" width="100"></el-table-column>
 					<el-table-column prop="xqfmc" label="需求方" width="100"></el-table-column>
 					<el-table-column prop="zbjzrq" label="招标截止日期" width="140"></el-table-column>
 					<el-table-column prop="jfrq" label="交付日期" width="140"></el-table-column>
@@ -254,7 +254,8 @@
 			wids: [],
 			jsSource:'',
 			url:'',
-			cdfyData:{}
+			cdfyData:{},
+			jsssfyTotal:0//结算实施总金额
 			
 		};
 	},
@@ -267,23 +268,28 @@
 			switch (type){
 				case '0':
 				this.jsxx.sjssfy = (Number(this.jsxx.zbssfy) - Number(this.jsxx.yjsssfy) - Number(this.jsxx.ylssfy) - Number(!this.jsxx.rlssfy?0:this.jsxx.rlssfy));
+				this.jsxx.sjssfy = this.jsxx.sjssfy < 0?0:this.jsxx.sjssfy ;
 					break;
 				case '1':
 				this.jsxx.sjekfy = (Number(this.jsxx.zbekfy) - Number(this.jsxx.yjsekfy) - Number(this.jsxx.ylekfy) - Number(!this.jsxx.rlekfy?0:this.jsxx.rlekfy));
+				this.jsxx.sjekfy = this.jsxx.sjekfy < 0?0:this.jsxx.sjekfy ;
 					break;
 				case '2':
 				this.jsxx.sjkbfy = (Number(this.jsxx.zbkbfy) - Number(this.jsxx.yjskbfy) - Number(this.jsxx.ylkbfy) - Number(!this.jsxx.rlkbfy?0:this.jsxx.rlkbfy));
+				this.jsxx.sjkbfy = this.jsxx.sjkbfy < 0?0:this.jsxx.sjkbfy ;
 					break;
 				default:
 					break;
 			}
 			this.jsxx.jsje = (Number(this.jsxx.sjssfy) + Number(this.jsxx.sjekfy) + Number(this.jsxx.sjkbfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
+			this.jsxx.jsje = this.jsxx.jsje <0?0:this.jsxx.jsje;
 		},
 		// 保存
 		handleSave(){
 			let xmtdData = [],
 			    erfy = 0,
 				kbfy = 0;
+			let msg = '';
 			this.tdxxData.forEach(ele=>{
 				xmtdData.push({
 					fbbh:this.jssqData.fbbh,
@@ -298,26 +304,31 @@
 					jskbfy:ele.jskbfy,
 					jsje:ele.jsje
 				})
-				erfy += Number(ele.jsekfy);
-				kbfy += Number(ele.jskbfy);
+				erfy += !ele.jsekfy?0:Number(ele.jsekfy);
+				kbfy += !ele.jskbfy?0:Number(ele.jskbfy);
 			})
 			this.$message.close();
+				// 个人结算实施费用
+			if( this.jsxx.sjssfy < this.jsssfyTotal){
+				msg += '分包实施结算费用必须大于团队实施结算费用！'
+			}
 			// 个人结算二开费用=结算二开费用 * 5400 / 8800
-			if((this.jsxx.sjekfy *  5400 / 8800) <= erfy){
-				this.$message({
-					message:'金额错误',
-					type:'warning'
-				})
-				return;
+			if((this.jsxx.sjekfy *  5400 / 8800) < erfy ){
+				msg += '分包二开结算费用必须大于团队二开结算费用！　'
 			}
 			// 个人结算可变费用= 结算可变费用 * 70%; 
-			if((this.jsxx.sjkbfy *  0.7) <= kbfy){
+			if((this.jsxx.sjkbfy *  0.7) < kbfy){
+				msg += '分包可变结算费用必须大于团队可变结算费用!　'
+			}
+		
+			if(!!msg){
 				this.$message({
-					message:'金额错误',
+					message:msg,
 					type:'warning'
 				})
 				return;
 			}
+			
 			this.$post(this.API.saveJsFeeData,{
 				wid:!this.jsxx.wid?'':this.jsxx.wid,
 				fbbh:this.jssqData.fbbh,
@@ -350,7 +361,7 @@
 						message:'保存成功',
 						type:'success'
 					})
-					this.jsxx.jszt = 1;
+					
 				}else{
 					this.$message({
 						message:res.msg,
@@ -437,6 +448,9 @@
 		// 实施，二开，可变
 		handleChangeInput(index,type) {
 			this.tdxxData[index].jsje = Number(this.tdxxData[index].jsssfy) + Number(this.tdxxData[index].jsekfy) + Number(this.tdxxData[index].jskbfy);
+			this.tdxxData.forEach(ele=>{
+				this.jsssfyTotal += !ele.jsssfy?0:Number(ele.jsssfy)
+			})
 		},
 		
 		// 获取结算申请详情
@@ -449,6 +463,24 @@
 					this.jssqData = res.data.jssqData;
 					this.tdxxData = !res.data.jstdData?[]:res.data.jstdData;
 					this.jsxx = res.data.jsxx;
+					
+					this.jsxx.ylssfy = !this.jsxx.ylssfy?0:this.jsxx.ylssfy;
+					this.jsxx.ylekfy = !this.jsxx.ylekfy?0:this.jsxx.ylekfy;
+					this.jsxx.ylkbfy = !this.jsxx.ylkbfy?0:this.jsxx.ylkbfy;
+					
+					this.jsxx.sjssfy = (Number(this.jsxx.zbssfy) - Number(this.jsxx.yjsssfy) - Number(this.jsxx.ylssfy) - Number(!this.jsxx.rlssfy?0:this.jsxx.rlssfy));
+					this.jsxx.sjssfy = this.jsxx.sjssfy < 0?0:this.jsxx.sjssfy ;
+					this.jsxx.sjekfy = (Number(this.jsxx.zbekfy) - Number(this.jsxx.yjsekfy) - Number(this.jsxx.ylekfy) - Number(!this.jsxx.rlekfy?0:this.jsxx.rlekfy));
+					this.jsxx.sjekfy = this.jsxx.sjekfy < 0?0:this.jsxx.sjekfy ;
+					this.jsxx.sjkbfy = (Number(this.jsxx.zbkbfy) - Number(this.jsxx.yjskbfy) - Number(this.jsxx.ylkbfy) - Number(!this.jsxx.rlkbfy?0:this.jsxx.rlkbfy));
+					this.jsxx.sjkbfy = this.jsxx.sjkbfy < 0?0:this.jsxx.sjkbfy ;
+					this.jsxx.jsje = (Number(this.jsxx.sjssfy) + Number(this.jsxx.sjekfy) + Number(this.jsxx.sjkbfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
+					this.jsxx.jsje = this.jsxx.jsje <0?0:this.jsxx.jsje;
+					
+					// 团队实施费用
+					this.tdxxData.forEach(ele=>{
+						this.jsssfyTotal += !ele.jsssfy?0:Number(ele.jsssfy)
+					})
 				}
 			})
 		}

@@ -64,18 +64,16 @@ export default {
 		return {
 			currentPage: 1,
 			pageSize: 15,
-			records:0,
+			records: 0,
 			filterData: {
 				keyword: '',
 				qrzt: ''
 			},
-			qrztList: [{label:'',mc:'全部'},{label:'0',mc:'未确认'},{label:'1',mc:'已确认'}],
-			tableData: [{},{}]
+			qrztList: [{ label: '', mc: '全部' }, { label: '0', mc: '未确认' }, { label: '1', mc: '已确认' }],
+			tableData: [{}, {}]
 		};
 	},
-	mounted() {
-	
-	},
+	mounted() {},
 	methods: {
 		handleSearch() {
 			this.currentPage = 1;
@@ -95,7 +93,7 @@ export default {
 		// 审核状态
 		CheckSfsh(params) {
 			this.currentPage = 1;
-			this.filterData.shzt = !params?'':params;
+			this.filterData.shzt = !params ? '' : params;
 			this.getFbshList();
 		},
 		handleCurrentChange(data) {
@@ -111,32 +109,32 @@ export default {
 			let routeData = this.$router.resolve({
 				path: '/projectfbshdetail',
 				query: {
-					xmbh:data.xmbh,
-					fbbh:data.fbbh
+					xmbh: data.xmbh,
+					fbbh: data.fbbh
 				}
 			});
 			window.open(routeData.href, '_blank');
 		},
-		getFbshList(){
-			this.$get(this.API.fbManage,{
-				curPage:this.currentPage,
-				pageSize:this.pageSize,
-				gczq:this.filterData.gcdq,
-				shzt:this.filterData.shzt,
-				keyword:this.filterData.keyword
-			}).then(res=>{
-				if(res.state == 'success'){
-					if(!!res.data.rows){
+		getFbshList() {
+			this.$get(this.API.fbManage, {
+				curPage: this.currentPage,
+				pageSize: this.pageSize,
+				gczq: this.filterData.gcdq,
+				shzt: this.filterData.shzt,
+				keyword: this.filterData.keyword
+			}).then(res => {
+				if (res.state == 'success') {
+					if (!!res.data.rows) {
 						this.tableData = res.data.rows;
 					}
 					this.records = res.data.records;
-				}else{
-					 this.$message({
-					  message: res.msg,
-					  type: 'error'
+				} else {
+					this.$message({
+						message: res.msg,
+						type: 'error'
 					});
 				}
-			})
+			});
 		}
 	}
 };

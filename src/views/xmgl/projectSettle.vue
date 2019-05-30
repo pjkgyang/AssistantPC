@@ -16,7 +16,7 @@
 			<el-button type="primary" size="mini" @click="handleExport">导出</el-button>
 		</div>
 
-		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('GCZJ') == -1">
+		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('JYGL') != -1">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
 				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }" :key="gcdq.id" @click="CheckGcdz(gcdq.id)">{{ gcdq.label }}</span>
@@ -34,19 +34,17 @@
 			<el-table :data="tableData" border style="width: 100%">
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
-						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+						<el-button @click="handleClick(scope.row)" type="text" size="small">{{ scope.row.jszt == '未结算' ? '结算' : '详情' }}</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column  label="是否结算" width="120">
+				<el-table-column label="是否结算" width="120">
 					<template slot-scope="scope">
-						<el-tag size="mini" :type="scope.row.jszt=='未结算'?'primary':'success'">
-							{{scope.row.jszt}}
-						</el-tag>
+						<el-tag size="mini" :type="scope.row.jszt == '未结算' ? 'primary' : 'success'">{{ scope.row.jszt }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
 				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="fbbh" label="合同编号" width="160"></el-table-column>
+				<el-table-column prop="fbbh" label="分包编号" width="160"></el-table-column>
 				<el-table-column prop="fbmc" label="分包名称" min-width="260" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="sqjsrxm" label="申请人" width="110"></el-table-column>
 				<el-table-column prop="sqjsrq" label="申请时间" width="110"></el-table-column>
@@ -85,10 +83,10 @@ export default {
 				gcdq: '',
 				jszt: ''
 			},
-			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区'},{ label: '其他', id: '其他'}],
-			jsztList: [{ label: '全部', id: '' }, { label: '已结算', id: '1' }, { label: '未结算', id: '0'}],
+			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
+			jsztList: [{ label: '全部', id: '' }, { label: '已结算', id: '1' }, { label: '未结算', id: '0' }],
 			tableData: [],
-			userGroup:''
+			userGroup: ''
 		};
 	},
 	mounted() {
@@ -101,16 +99,7 @@ export default {
 			this.queryJsData();
 		},
 		handleExport() {
-			window.open(
-			  window.baseurl +
-			    "jsxx/exportJsData.do?keyword=" +
-			    this.filterData.keyword +
-			    "&gcdq=" +
-			    this.filterData.gcdq +
-			    "&sfjs=" +
-			    this.filterData.jszt +
-				"&isjs=1"
-			);	
+			window.open(window.baseurl + 'jsxx/exportJsData.do?keyword=' + this.filterData.keyword + '&gcdq=' + this.filterData.gcdq + '&sfjs=' + this.filterData.jszt + '&isjs=1');
 		},
 		CheckGcdz(data) {
 			this.filterData.gcdq = data;
@@ -135,34 +124,34 @@ export default {
 			let routeData = this.$router.resolve({
 				path: '/projectsettledetail',
 				query: {
-					wid:data.jssqwid,
-					fbbh:data.fbbh
+					wid: data.jssqwid,
+					fbbh: data.fbbh
 				}
 			});
 			window.open(routeData.href, '_blank');
 		},
-		queryJsData(){
-			this.$get(this.API.queryJsData,{
-				curPage:this.currentPage,
-				pageSize:this.pageSize,
-				gcdq:this.filterData.gcdq,
-				sfjs:this.filterData.jszt,
-				keyword:this.filterData.keyword
-			}).then(res=>{
-				if(res.state == 'success'){
-					if(!!res.data.rows){
-						this.tableData = res.data.rows
-					}else{
-						this.tableData  = [];
+		queryJsData() {
+			this.$get(this.API.queryJsData, {
+				curPage: this.currentPage,
+				pageSize: this.pageSize,
+				gcdq: this.filterData.gcdq,
+				sfjs: this.filterData.jszt,
+				keyword: this.filterData.keyword
+			}).then(res => {
+				if (res.state == 'success') {
+					if (!!res.data.rows) {
+						this.tableData = res.data.rows;
+					} else {
+						this.tableData = [];
 					}
 					this.records = res.data.records;
-				}else{
+				} else {
 					this.$message({
-						message:res.msg,
-						type:'error'
-					})
+						message: res.msg,
+						type: 'error'
+					});
 				}
-			})
+			});
 		}
 	}
 };
@@ -171,7 +160,7 @@ export default {
 <style lang="scss" scoped>
 .project_settle {
 	margin: 12px 20px;
-	padding: 15px 15px 5px ;
+	padding: 15px 15px 5px;
 	background: #ffffff;
 	border-radius: 4px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);

@@ -3,7 +3,7 @@
 		<div class="jsdetail_container">
 			<div class="fb_info">
 				<div>
-					<div text-right v-if="jsxx.shzt != 1">
+					<div text-right v-if="jsxx.shzt == 0">
 						<el-button type="primary" @click="handleAudit('1')">审核通过</el-button>
 						<el-button type="danger" @click="handleAudit('0')">审核不通过</el-button>
 					</div>
@@ -221,7 +221,11 @@ export default {
 					  message: shjg=='1'?'已提交为 "审核通过" ~':'已提交为 "审核不通过" ~',
 					  type: 'success'
 					});
-					this.jssqData.shzt = 1;
+					if(!sm){
+						this.jssqData.shzt = 1;
+					}else{
+						this.jssqData.shzt = 2;
+					}
 				}else{
 					this.$message({
 					  message: res.msg,

@@ -31,9 +31,9 @@
 							</tr>
 							<tr>
 								<th>合同性质</th>
-								<td>{{ htjbxx.sfzt=='A'?'正式':htjbxx.sfzt=='B'?'内部':'在谈' }}</td>
+								<td>{{ htjbxx.sfzt == 'A' ? '正式' : htjbxx.sfzt == 'B' ? '内部' : '在谈' }}</td>
 								<th>是否购销</th>
-								<td>{{ htjbxx.sfgx=='0'?'否':'是' }}</td>
+								<td>{{ htjbxx.sfgx == '0' ? '否' : '是' }}</td>
 								<th>财年</th>
 								<td>{{ htjbxx.cn }}</td>
 							</tr>
@@ -83,7 +83,7 @@
 								<th>工程战队</th>
 								<td>{{ htjbxx.qyzd }}</td>
 								<th>是否延长售后</th>
-								<td>{{ htjbxx.gcfwzt==1?'是':'否' }}</td>
+								<td>{{ htjbxx.gcfwzt == 1 ? '是' : '否' }}</td>
 							</tr>
 							<tr>
 								<th>延长截止日期</th>
@@ -100,7 +100,7 @@
 							<el-table-column prop="app" label="合同内容" show-overflow-tooltip min-width="150"></el-table-column>
 							<el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>
 							<el-table-column prop="sm" label="说明" min-width="150" show-overflow-tooltip></el-table-column>
-							<el-table-column prop="sjcpmc" label="产品归属" min-width="150"></el-table-column>
+							<el-table-column prop="rjcpmc" label="产品归属" min-width="150"></el-table-column>
 							<el-table-column prop="ssry" label="实施人月" width="100"></el-table-column>
 							<el-table-column prop="kfry" label="二开人月" width="120"></el-table-column>
 							<el-table-column prop="xmlb" label="项目类别" width="120"></el-table-column>
@@ -123,13 +123,13 @@ export default {
 		this.getLxxx();
 	},
 	methods: {
-		getLxxx(){
-			this.$get(this.API.queryLxxx,{xmbh:this.$route.query.xmbh}).then(res=>{
-				if(res.state == 'success'){
+		getLxxx() {
+			this.$get(this.API.queryLxxx, { xmbh: this.$route.query.xmbh }).then(res => {
+				if (res.state == 'success') {
 					this.htjbxx = res.data.lxxx;
-					this.htnrData = !res.data.lxxx_htnr?[]:res.data.lxxx_htnr
+					this.htnrData = !res.data.lxxx_htnr ? [] : res.data.lxxx_htnr;
 				}
-			})
+			});
 		}
 	},
 	activated() {},
@@ -164,20 +164,20 @@ export default {
 .fb_info table {
 	width: 100%;
 	border-collapse: collapse;
-	border: 1px solid #E9ECF4;
+	border: 1px solid #e9ecf4;
 	font-size: 14px;
 }
 .fb_info table th {
 	font-size: 14px;
 	text-align: center;
 	width: 150px;
-	background: #F4F6F9;
+	background: #f4f6f9;
 	color: #4d4d4d;
 }
 .fb_info table td,
 .fb_info table th {
 	text-align: left;
-	border: 1px solid #E9ECF4 !important;
+	border: 1px solid #e9ecf4 !important;
 	padding: 5px 10px;
 }
 .fb_info h4 {

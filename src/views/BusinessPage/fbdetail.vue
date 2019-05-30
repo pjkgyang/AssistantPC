@@ -12,9 +12,9 @@
 				<div class="project__extra">
 					<b>已有 {{ $route.query.r }} 人投标</b>
 					<p>招标截止 {{ fbxxData.zbjzrq }}</p>
-					<a href="javaScript:;;" @click="handleToubiao" v-if="!istb && !!tbzt">我要投标</a>
+					<a href="javaScript:;;" @click="handleToubiao('tb')" v-if="!istb && !!tbzt">我要投标</a>
 					<el-tag v-if="!!istb && !!tbzt" type="success">已投标</el-tag>
-					<el-button size="mini" type="primary" v-if="!!istb && !!tbzt" @click="handleToubiao">编辑投标</el-button>
+					<el-button size="mini" type="primary" v-if="!!istb && !!tbzt" @click="handleToubiao('edit')">编辑投标</el-button>
 				</div>
 			</div>
 			<div class="fb_info">
@@ -37,14 +37,14 @@
 								<th>项目状态</th>
 								<td>{{ htjbxx.xmxz }}</td>
 							</tr>
-							<tr>
+							<!-- 	<tr>
 								<th>合同金额（元）</th>
 								<td>{{ !htjbxx.htje ? 0 : htjbxx.htje }}</td>
 								<th>合同毛收入（元）</th>
 								<td>{{ !htjbxx.htmsr ? 0 : htjbxx.htmsr }}</td>
 								<th>到款率（%）</th>
 								<td>{{ !htjbxx.dkl ? 0 : htjbxx.dkl }}</td>
-							</tr>
+							</tr> -->
 							<tr>
 								<th>合同性质</th>
 								<td>{{ htjbxx.sfzt == 'A' ? '正式' : htjbxx.sfzt == 'B' ? '内部' : '在谈' }}</td>
@@ -212,28 +212,26 @@
 							/ 200 )
 						</span>
 					</div>
-					<table border width="100%" class="tb-table tdfp-table">
-						<tr>
-							<th>科目名称</th>
-							<th>总金额（元）</th>
-						</tr>
-						<tr>
-							<td>实施费用</td>
-							<td>{{ ssfyTotalkm }}</td>
-						</tr>
-						<tr>
-							<td>二开费用</td>
-							<td>{{ ekfyTotalkm }}</td>
-						</tr>
-						<tr>
-							<td>可变费用</td>
-							<td>{{ kbfyTotalkm }}</td>
-						</tr>
-					</table>
-
+					<div>
+						<span class="filter-weight">投标费用：</span>
+						<table border width="100%" class="tb-table tdfp-table">
+							<tr>
+								<th>总金额（元）</th>
+								<td width="30%">{{ Number(ssfyTotalkm) + Number(ekfyTotalkm) + Number(kbfyTotalkm) }}</td>
+								<th>实施费用（元）</th>
+								<td width="30%">{{ ssfyTotalkm }}</td>
+							</tr>
+							<tr>
+								<th>二开费用（元）</th>
+								<td width="30%">{{ ekfyTotalkm }}</td>
+								<th>可变费用（元）</th>
+								<td width="30%">{{ kbfyTotalkm }}</td>
+							</tr>
+						</table>
+					</div>
 					<br />
 					<div>
-						<span class="filter-weight">创建团队：</span>
+						<span class="filter-weight">团队成员：</span>
 						<div style="margin: 10px 0"><el-button size="mini" type="primary" @click="handleAddUser">添加成员</el-button></div>
 						<el-table :data="userData" border style="width: 100%">
 							<el-table-column fixed="left" label="操作" width="80">
@@ -263,6 +261,7 @@
 								<th>二开金额</th>
 								<th>可变金额</th>
 							</tr>
+							<tr v-if="!ywyData.length"><td colspan="9" style="color:#909399;padding:15px 0 !important">暂无数据</td></tr>
 							<tr v-for="(item, index) in ywyData" :key="index">
 								<td>{{ item.ywymc }}</td>
 								<td>{{ item.cpmc }}</td>
@@ -323,20 +322,7 @@ export default {
 			tbje: null,
 			zbxx: '',
 			userData: [], //团队成员
-			ywyData: [
-				{
-					ssje: 0,
-					ekje: 0,
-					kbje: 0,
-					zrrbh: ''
-				},
-				{
-					ssje: 0,
-					ekje: 0,
-					kbje: 0,
-					zrrbh: ''
-				}
-			], //业务域列表
+			ywyData: [], //业务域列表
 
 			ssfyTotal: 0,
 			ywxArr: [],
@@ -349,19 +335,20 @@ export default {
 
 			fileList: [],
 			tbxx: {}, //投标信息
-			fileName: '' //
+			fileName: '', //附件名称
+			userInfo: {}
 		};
 	},
 	mounted() {
 		EventBus.$on('hoshRouter', param => {
 			this.$router.push({ name: 'DataTab' });
 		});
+		this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 	},
 	methods: {
 		handleAddUser() {
 			this.show = true;
 		},
-
 		// 添加成员
 		addUserSuccess(data) {
 			let i = false;
@@ -407,11 +394,21 @@ export default {
 			this.fileList = data;
 		},
 		//   获取投标费用
-		handleToubiao() {
+		handleToubiao(type) {
 			let userList = [];
+			if (type == 'tb') {
+				userList.push({
+					username: this.userInfo.nickName,
+					usercode: this.userInfo.userName,
+					ywx: '',
+					ssfy: '',
+					ekfy: '',
+					kbfy: ''
+				});
+			}
 			tbxq({ fbbh: this.$route.query.fbbh }).then(({ data }) => {
 				if (data.state == 'success') {
-					this.ywyData = data.data.htnrfy;
+					this.ywyData = !data.data.htnrfy ? [] : data.data.htnrfy;
 					this.tbxx = !data.data.tbxx ? {} : data.data.tbxx; //投标信息
 					if (!!data.data.tbxx) {
 						this.ssfyTotalkm = data.data.tbxx.ssfy;
@@ -434,8 +431,8 @@ export default {
 								kbfy: ele.kbfy
 							});
 						});
-						this.userData = userList;
 					}
+					this.userData = userList;
 				}
 			});
 			this.dialogTableVisible = !this.dialogTableVisible;

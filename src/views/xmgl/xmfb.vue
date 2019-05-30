@@ -5,10 +5,10 @@
 				<div>
 					<h4>合同内容</h4>
 					<div>
-						<h5>分包基本信息</h5>
 						<div text-right v-if="!!isSave">
 							<el-button size="small" style="margin: 10px 0;" type="danger" @click="handleSaveFb">保存</el-button>
 						</div>
+						<h5>分包基本信息</h5>
 						<table>
 							<tr>
 								<th>项目编号</th>
@@ -17,15 +17,16 @@
 								<td colspan="3">{{ $route.query.xmmc }}</td>
 							</tr>
 							<tr>
+								<th>分包编号</th>
+								<td>{{htjbxx.fbbh}}</td>
 								<th>分包名称</th>
-								<td colspan="5">
-							  	   <input v-model="htjbxx.fbmc" style="width: 100%;" placeholder="请输入分包名称"></input>
-								</td>
+								<td colspan="3"><input v-model="htjbxx.fbmc" style="width: 100%;height:25px" placeholder="请输入分包名称"></input></td>
 							</tr>
 							<tr>
 								<th>分包日期</th>
-								<td>
-									<el-date-picker
+								<td>{{htjbxx.fbrq}}
+									<!-- <el-date-picker
+									  readonly
 									  style="width: 100%;"
 									  size="mini"
 									  v-model="htjbxx.fbrq"
@@ -33,7 +34,7 @@
 									  placeholder="选择日期"
 									  format="yyyy 年 MM 月 dd 日"
 									  value-format="yyyy-MM-dd">
-									</el-date-picker>
+									</el-date-picker> -->
 								</td>
 								<th>计划开始日期</th>
 								<td><el-date-picker
@@ -54,7 +55,8 @@
 									  placeholder="选择日期"
 									  format="yyyy 年 MM 月 dd 日"
 									  value-format="yyyy-MM-dd">
-									</el-date-picker></td>
+									</el-date-picker>
+								</td>
 							</tr>
 							<tr>
 								<th >实施费用（元）</th>
@@ -62,7 +64,7 @@
 								<th>二开费用（元）</th>
 								<td>{{ !htjbxx.ekfy?0:htjbxx.ekfy }}</td>
 								<th>可变费用（元）</th>
-								<td><input v-model="htjbxx.kbfy" type="text" style="width:100%" placeholder="请输入金额"></td>
+								<td><input v-model="htjbxx.kbfy" type="text" style="width:100%;height: 25px;" placeholder="请输入金额"></td>
 							</tr>
 							<tr >
 								<th>实施费用标准（元）</th>
@@ -88,11 +90,12 @@
 						  style="width: 100%">
 						  <el-table-column prop="ywymc" label="业务域" min-width="200"></el-table-column>
 						  <el-table-column prop="zb" label="占比" width="110"></el-table-column>
-						  <el-table-column prop="htssry" label="实施人月(合同)" min-width="140"></el-table-column>
-						  <el-table-column prop="ssckbz" label="实施参考标准" min-width="140"></el-table-column>
-						  <el-table-column prop="fbssry" label="实施人月(分包)" min-width="140"></el-table-column>
-						  <el-table-column prop="htekry" label="二开人月(合同)" min-width="140"></el-table-column>
-						  <el-table-column prop="fbekry" label="二开人月(分包)" min-width="140"></el-table-column>
+						  <el-table-column prop="htssry" label="实施人月(合同)" min-width="100"></el-table-column>
+						  <el-table-column prop="fbssry" label="实施人月(分包)" min-width="100"></el-table-column>
+						  <el-table-column prop="htekry" label="二开人月(合同)" min-width="100"></el-table-column>
+						  <el-table-column prop="fbekry" label="二开人月(分包)" min-width="100"></el-table-column>
+						  <el-table-column prop="ssfy" label="实施费用" min-width="100"></el-table-column>
+						  <el-table-column prop="ekfy" label="二开费用" min-width="100"></el-table-column>
 						</el-table>
 					</div>
 					<div>
@@ -101,25 +104,25 @@
 						  :data="fbData"
 						  border
 						  style="width: 100%">
-						  <el-table-column prop="ywymc" label="业务域" min-width="200" show-overflow-tooltip></el-table-column>
-						  <el-table-column prop="cpmc" label="合同内容" width="160" show-overflow-tooltip></el-table-column>
-						  <el-table-column prop="zb" label="占比(%)" width="90"></el-table-column>
-						  <el-table-column prop="htsm" label="说明"  width="160" show-overflow-tooltip></el-table-column>
-						  <el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
-						  
-						  <el-table-column prop="htssry" label="实施人月(合同)" min-width="90"></el-table-column>
-						  <el-table-column prop="ssckbz" label="实施参考标准" min-width="90"></el-table-column>
-						  <el-table-column  label="实施人月(分包)" min-width="90">
+						  <el-table-column prop="ywymc" label="业务域" min-width="130" show-overflow-tooltip></el-table-column>
+						  <el-table-column prop="cpmc" label="合同内容" min-width="130" show-overflow-tooltip></el-table-column>
+						  <el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>
+						  <el-table-column prop="htsm" label="内容说明"  min-width="130" show-overflow-tooltip></el-table-column>
+						  <el-table-column prop="xmlb" label="项目类别" width="90" show-overflow-tooltip></el-table-column>
+						  <el-table-column prop="htssry" label="实施人月(合同)" min-width="80"></el-table-column>
+						  <el-table-column label="实施人月(分包)" min-width="80">
 							<template slot-scope="scope">
-								<input v-model="scope.row.fbssry"  type="text" style="width:100%" placeholder="请输入金额" @input="handleInputSSry(scope.row.ywybh)">
+								<input v-model="scope.row.fbssry"  type="text" style="width:100%;height:25px" placeholder="请输入金额" @input="handleInputSSry(scope.row.ywybh,scope.$index)">
 							</template>   
 						  </el-table-column>
-						  <el-table-column prop="htekry" label="二开人月(合同)" min-width="90"></el-table-column>
-						  <el-table-column  label="二开人月(分包)" min-width="90">
+						  <el-table-column prop="htekry" label="二开人月(合同)" min-width="80"></el-table-column>
+						  <el-table-column  label="二开人月(分包)" min-width="80">
 							<template slot-scope="scope">
-								<input v-model="scope.row.fbekry"  type="text" style="width:100%" placeholder="请输入金额" @input="handleInputEKry(scope.row.ywybh)">
+								<input v-model="scope.row.fbekry"  type="text" style="width:100%;height:25px" placeholder="请输入金额" @input="handleInputEKry(scope.row.ywybh,scope.$index)">
 							</template>  
 						  </el-table-column>
+						  <el-table-column prop="ssfy" label="实施费用" min-width="90"></el-table-column>
+						  <el-table-column prop="ekfy" label="二开费用" min-width="90"></el-table-column>
 						  <el-table-column  label="说明" min-width="160" >
 							  <template slot-scope="scope">
 								<textarea v-model="scope.row.fbsm" style="width:100%;padding:4px 8px;" placeholder="请输入说明"></textarea>
@@ -133,7 +136,8 @@
 	</div>
 </template>
 <script>
-export default {
+	import {GetDateStr} from '@/utils/util'
+	export default {
 	data() {
 		return {
 			htjbxx:{},
@@ -190,47 +194,69 @@ export default {
 			})
 		},
 		// 计算实施人月
-		handleInputSSry(bh){
-			let ssryTotal = 0;
+		handleInputSSry(bh,index){
+			let ssryTotal = 0, //业务域分包 实施人月合计
+				fbssfy = 0,
+			    ssry = 0;      //分包内容 实施人月合计
 			this.htjbxx.ssfy = 0;
-			this.fbData.forEach(ele=>{
+			this.fbData.forEach((ele,i,arr)=>{
+				if(i == index){
+					this.fbData[index].ssfy = Number(ele.fbssry) * this.htjbxx.ssbz;
+				}
 				if(ele.ywybh == bh){
-				  this.htjbxx.ssfy += Number(ele.fbssry)
+				   ssry += Number(ele.fbssry  * 1000); //计算实施人月
+				   this.htjbxx.ssfy += (Number(ele.fbssry) * this.htjbxx.ssbz); //实施总费用（分包基本信息）实施人月 * 实施标准
 				}
 			});
+			
 			this.ywyData.forEach(ele=>{
 				if(ele.ywybh == bh){
-					ele.fbssry = this.htjbxx.ssfy;
+					ele.fbssry = ssry / 1000;
+					ele.ssfy = this.htjbxx.ssfy; //计算实施费用
 				}
 				if(!!ele.ywybh){
-					ssryTotal += !ele.fbssry?0:ele.fbssry;
+					ssryTotal += !ele.fbssry?0:Number(ele.fbssry * 1000);
+					fbssfy += ele.ssfy;
 				}
 				if(!ele.ywybh){
-					ele.fbssry = this.htjbxx.ssfy =  ssryTotal;
+					ele.fbssry = ssryTotal/1000; //实施人月
+					ele.ssfy = fbssfy;//实施费用
 				}
 			})
+			this.htjbxx.ssfy = fbssfy;
 		},
 		// 计算二开人月
-		handleInputEKry(bh){
-			let ekryTotal = 0;
+		handleInputEKry(bh,index){
+			let ekryTotal = 0, //业务域分包 二开人月合计
+				erssfy = 0,
+			    ekry = 0;//分包内容 二开人月合计
 			this.htjbxx.ekfy = 0;
-			this.fbData.forEach(ele=>{
+			this.fbData.forEach((ele,i,arr)=>{
+				if(i == index){
+					this.fbData[index].ekfy = Number(ele.fbekry) * this.htjbxx.ekbz;
+				}
 				if(ele.ywybh == bh){
-				  this.htjbxx.ekfy += Number(ele.fbekry)
+				  ekry += Number(ele.fbekry * 1000); //计算二开人月
+				  this.htjbxx.ekfy += (Number(ele.fbekry) * this.htjbxx.ekbz); //二开总费用（分包基本信息）二开人月 * 二开标准
 				}
 			});
 			this.ywyData.forEach(ele=>{
 				if(ele.ywybh == bh){
-					ele.fbekry = this.htjbxx.ekfy;
+					ele.fbekry = ekry / 1000;	//计算二开人月
+					ele.ekfy = this.htjbxx.ekfy; //计算二开费用
 				}
 				if(!!ele.ywybh){
-					ekryTotal += !ele.fbekry?0:ele.fbekry;
+					ekryTotal += !ele.fbekry?0:Number(ele.fbekry * 1000);
+					erssfy += ele.ekfy;
 				}
 				if(!ele.ywybh){
-					ele.fbekry = this.htjbxx.ekfy = ekryTotal;
+					ele.fbekry = ekryTotal/1000;
+					ele.ekfy = erssfy; // 实施费用
 				}
 			})
+			this.htjbxx.ekfy = erssfy;
 		},
+		
 		queryFbYwxData(){
 			this.$get(this.API.queryFbYwxData,{
 				xmbh:this.$route.query.xmbh,
@@ -239,8 +265,16 @@ export default {
 				if(res.state == 'success'){
 					this.htjbxx = res.data.fbxx;
 					this.htjbxx.kbfy = !this.htjbxx.kbfy?0:this.htjbxx.kbfy;
-					this.ywyData = res.data.fbywy;
+					this.htjbxx.fbrq = !this.htjbxx.fbrq?GetDateStr(0):this.htjbxx.fbrq;
+					
+					this.ywyData = !res.data.fbywy?[]:res.data.fbywy;
 					this.fbData = res.data.fbnr;
+					
+					if(!!this.ywyData.length){
+						this.htjbxx.ssfy = this.ywyData[this.ywyData.length - 1].ssfy;
+						this.htjbxx.ekfy = this.ywyData[this.ywyData.length - 1].ekfy;
+					}
+					
 				}else{
 					this.$message({
 					  message: res.msg,
@@ -298,7 +332,8 @@ export default {
 .fb_info table th {
 	text-align: left;
 	border: 1px solid #E9ECF4 !important;
-	padding: 5px 10px;
+	padding:0 10px;
+	height: 30px;
 }
 .fb_info h4 {
 	border-left: 5px solid #cd69c9;

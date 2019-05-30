@@ -16,13 +16,12 @@
 			<el-button type="primary" size="mini" @click="handleExport">导出</el-button>
 		</div>
 
-		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('GCZJ') == -1">
+		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('JYGL') != -1">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
 				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }" :key="gcdq.id" @click="CheckGcdz(gcdq.id)">{{ gcdq.label }}</span>
 			</p>
 		</div>
-
 		<div flex>
 			<span class="query-title">是否审核:</span>
 			<p class="query-list">
@@ -31,17 +30,17 @@
 		</div>
 		<br />
 		<div>
-			<el-table :data="tableData" border style="width: 100%">
+			<el-button size="mini" type="danger" @click="handleSetCz" :disabled="!jssqwidArr.length">设置冲账</el-button><br><br>
+			<el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+				<el-table-column type="selection" width="55" :selectable="checkboxInit"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
 						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column  label="是否审核" width="120">
+				<el-table-column label="是否审核" width="120">
 					<template slot-scope="scope">
-						<el-tag size="mini" :type="scope.row.shzt=='未审核'?'primary':'success'">
-							{{scope.row.shzt}}
-						</el-tag>
+						<el-tag size="mini" :type="scope.row.shzt == '未审核'||scope.row.shzt == '审核不通过' ? 'info' : 'success'">{{ scope.row.shzt }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
@@ -85,10 +84,11 @@ export default {
 				gcdq: '',
 				shzt: ''
 			},
-			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区'},{ label: '其他', id: '其他'}],
-			shztList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '0'}],
+			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
+			shztList: [{ label: '全部', id: '' }, { label: '未审核', id: '0' },{ label: '审核通过', id: '1' },{ label: '审核不通过', id: '2' }, { label: '已冲账', id: '3' }],
 			tableData: [],
-			userGroup:""
+			userGroup: '', //用户权限
+			jssqwidArr: [] //冲账结算申请
 		};
 	},
 	mounted() {
@@ -96,20 +96,41 @@ export default {
 		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
 	},
 	methods: {
+		// 设置冲账
+		handleSetCz() {
+			this.$post(this.API.setCz,{
+				jssqwids:this.jssqwidArr.join(',')
+			}).then(res=>{
+				if(res.state == 'success'){
+					this.$message({message:'设置成功',type:'success'});
+					this.queryJsData();
+				}else{
+					this.$message({message:'设置成功',type:'success'});
+				}
+			})
+		},
+		// 复选设置冲账
+		handleSelectionChange(val) {
+			this.jssqwidArr = [];
+			val.forEach(ele=>{
+				this.jssqwidArr.push(ele.jssqwid);
+			})
+		},
+		// 未审核禁用
+		checkboxInit(row, index) {
+			if (row.shzt == '审核通过') {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		// 关键字查询
 		handleSearch() {
 			this.currentPage = 1;
 			this.queryJsData();
 		},
 		handleExport() {
-			window.open(
-			  window.baseurl +
-			    "jsxx/exportJsData.do?keyword=" +
-			    this.filterData.keyword +
-			    "&gcdq=" +
-			    this.filterData.gcdq +
-			    "&sfsh=" +
-			    this.filterData.shzt
-			);
+			window.open(window.baseurl + 'jsxx/exportJsData.do?keyword=' + this.filterData.keyword + '&gcdq=' + this.filterData.gcdq + '&shzt=' + this.filterData.shzt +'&isReview=1');
 		},
 		CheckGcdz(data) {
 			this.filterData.gcdq = data;
@@ -134,34 +155,35 @@ export default {
 			let routeData = this.$router.resolve({
 				path: '/projectSettleAuditDetail',
 				query: {
-					wid:data.jssqwid,
-					fbbh:data.fbbh
+					wid: data.jssqwid,
+					fbbh: data.fbbh
 				}
 			});
 			window.open(routeData.href, '_blank');
 		},
-		queryJsData(){
-			this.$get(this.API.queryJsData,{
-				curPage:this.currentPage,
-				pageSize:this.pageSize,
-				gcdq:this.filterData.gcdq,
-				sfsh:this.filterData.shzt,
-				keyword:this.filterData.keyword
-			}).then(res=>{
-				if(res.state == 'success'){
-					if(!!res.data.rows){
-						this.tableData = res.data.rows
-					}else{
-						this.tableData  = [];
+		queryJsData() {
+			this.$get(this.API.queryJsData, {
+				curPage: this.currentPage,
+				pageSize: this.pageSize,
+				gcdq: this.filterData.gcdq,
+				shzt: this.filterData.shzt,
+				isReview:1, //是否审核页面（审核页面传1）
+				keyword: this.filterData.keyword
+			}).then(res => {
+				if (res.state == 'success') {
+					if (!!res.data.rows) {
+						this.tableData = res.data.rows;
+					} else {
+						this.tableData = [];
 					}
 					this.records = res.data.records;
-				}else{
+				} else {
 					this.$message({
-						message:res.msg,
-						type:'error'
-					})
+						message: res.msg,
+						type: 'error'
+					});
 				}
-			})
+			});
 		}
 	}
 };
@@ -170,7 +192,7 @@ export default {
 <style lang="scss" scoped>
 .project_settle {
 	margin: 12px 20px;
-	padding: 15px 15px 5px ;
+	padding: 15px 15px 5px;
 	background: #ffffff;
 	border-radius: 4px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);

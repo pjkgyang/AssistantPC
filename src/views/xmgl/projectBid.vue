@@ -16,10 +16,10 @@
 			<el-button type="primary" size="mini" @click="handleExport">导出</el-button>
 		</div>
 
-		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('GCZJ') == -1">
+		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('JYGL') != -1">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
-				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }"  @click="CheckGcdz(gcdq.id)"  >{{ gcdq.label }}</span>
+				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }" @click="CheckGcdz(gcdq.id)">{{ gcdq.label }}</span>
 			</p>
 		</div>
 
@@ -39,7 +39,7 @@
 				</el-table-column>
 				<el-table-column prop="xmbh" label="项目编号"></el-table-column>
 				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="htbh" label="合同编号" min-width="130"></el-table-column>
+				<el-table-column prop="htbh" label="合同编号" min-width="130" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="ztztmc" label="项目整体状态" width="110"></el-table-column>
 				<el-table-column prop="xx" label="学校" min-width="200"></el-table-column>
 				<el-table-column prop="jf" label="甲方" width="120" show-overflow-tooltip></el-table-column>
@@ -81,16 +81,16 @@ export default {
 			currentPage: 1,
 			pageSize: 15,
 			total: 0,
-			records:0,
+			records: 0,
 			filterData: {
 				keyword: '',
 				gcdq: '',
 				sfzb: ''
 			},
-			gcdqList: [{label:'全部',id:''},{label:'南区',id:'南区'},{label:'北区',id:'北区'},{label:'其他',id:'其他'}],
+			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
 			sfzbList: [{ label: '全部', id: '' }, { label: '已中标', id: '1' }, { label: '未中标', id: '0' }],
 			tableData: [],
-			userGroup:''
+			userGroup: ''
 		};
 	},
 	mounted() {
@@ -103,15 +103,7 @@ export default {
 		},
 		// 导出
 		handleExport() {
-			window.open(
-			  window.baseurl +
-			    "fbxx/exportFbManage.do?keyword=" +
-			    this.filterData.keyword +
-			    "&gcdq=" +
-			    this.filterData.gcdq +
-			    "&sfzb=" +
-			    this.filterData.sfzb
-			);
+			window.open(window.baseurl + 'fbxx/exportFbManage.do?keyword=' + this.filterData.keyword + '&gcdq=' + this.filterData.gcdq + '&sfzb=' + this.filterData.sfzb + '&isfb=0');
 		},
 		CheckGcdz(data) {
 			this.filterData.gcdq = data;
@@ -137,35 +129,37 @@ export default {
 			let routeData = this.$router.resolve({
 				path: '/projectbiddetail',
 				query: {
-					fbbh:data.fbbh
+					fbbh: data.fbbh,
+					xmmc:data.xmmc
 				}
 			});
 			window.open(routeData.href, '_blank');
 		},
 		// 中标管理
-		fbManage(){
-			this.$get(this.API.fbManage,{
-				curPage:this.currentPage,
-				pageSize:this.pageSize,
-				sfzb:this.filterData.sfzb,
-				gcdq:this.filterData.gcdq,
-				keyword:this.filterData.keyword
-			}).then(res=>{
-				if(res.state == 'success'){
-					if(!!res.data.rows){
-						this.tableData = res.data.rows
-					}else{
-						this.tableData  = [];
+		fbManage() {
+			this.$get(this.API.fbManage, {
+				curPage: this.currentPage,
+				pageSize: this.pageSize,
+				sfzb: this.filterData.sfzb,
+				gcdq: this.filterData.gcdq,
+				isfb:0,
+				keyword: this.filterData.keyword
+			}).then(res => {
+				if (res.state == 'success') {
+					if (!!res.data.rows) {
+						this.tableData = res.data.rows;
+					} else {
+						this.tableData = [];
 					}
 					this.total = res.data.total;
 					this.records = res.data.records;
-				}else{
+				} else {
 					this.$message({
-						message:res.msg,
-						type:'error'
-					})
+						message: res.msg,
+						type: 'error'
+					});
 				}
-			})
+			});
 		}
 	}
 };
@@ -174,7 +168,7 @@ export default {
 <style lang="scss" scoped>
 .project_fbsh {
 	margin: 12px 20px;
-	padding: 15px 15px 5px ;
+	padding: 15px 15px 5px;
 	background: #ffffff;
 	border-radius: 4px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);

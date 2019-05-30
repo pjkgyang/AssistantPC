@@ -20,18 +20,19 @@
             <el-table-column fixed="left" type="selection" width="55"></el-table-column>
             <el-table-column fixed="left" label="操作" width="150">
               <template slot-scope="scope">
-                <el-button v-if="scope.row.zt != '1' && isJzuser == '0' && username == scope.row.zrrxm" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
+								<!-- 关闭 2，完成待确认 1  -->
+                <el-button v-if="scope.row.zt != '1' && scope.row.zt != '2' && isJzuser == '0' && username == scope.row.zrrxm" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
                 <el-button v-if="scope.row.zt == '1' && isJzuser == '1'" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
                 <el-button v-if="scope.row.zt == '1' && (userGroupTag.includes('ZDSFWGLY') || scope.row.jffzrxm == username)" type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
                 <el-button type="text" size="mini" @click="handleCheckDetail(scope.row)">详情</el-button>
               </template>
             </el-table-column>
             <el-table-column prop="yh" label="学校名称" min-width="200" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
             <el-table-column prop="cpmc" label="产品" min-width="240" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column label="风险等级(解决情况)" width="150">
               <template slot-scope="scope">
                   <a href="javaScript:;;" v-if="scope.row.fxdj != '-'" @click="handleCheck(scope.row)">

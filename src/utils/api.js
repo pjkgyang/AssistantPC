@@ -241,6 +241,7 @@ export default {
 	fbManage:window.baseurl + 'fbxx/fbManage.do',//分包审核
 	closeFb:window.baseurl + 'fbxx/closeFb.do',//关闭分包
     verifyFb:window.baseurl + 'fbxx/verifyFb.do',//分包审核
+	getProjects:window.baseurl + 'fbxx/getProjects.do',//获取分包项目
     // 投标
     saveTbxx:window.baseurl + 'tbxx/saveTbxx.do',//投标
 	tbManage:window.baseurl + 'tbxx/tbManage.do',//投标详情
@@ -255,4 +256,5 @@ export default {
 	batchSetJsFySource:window.baseurl + 'jsxx/batchSetJsFySource.do',//批量设置结算费用
 	saveJsFeeData:window.baseurl + 'jsxx/saveJsFeeData.do',//保存项目结算
 	jsReview:window.baseurl + 'jsxx/jsReview.do',//结算审核
+	setCz:window.baseurl + 'jsxx/setCz.do',//设置冲账
  }

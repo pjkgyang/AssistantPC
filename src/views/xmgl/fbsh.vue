@@ -16,10 +16,10 @@
 			<el-button type="primary" size="mini" @click="handleExport">导出</el-button>
 		</div>
 
-		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('GCZJ') == -1">
+		<div flex style="margin:10px 0;" v-if="userGroup.indexOf('JYGL') != -1">
 			<span class="query-title">工程大区:</span>
 			<p class="query-list" style="width:90%">
-				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }"  @click="CheckGcdz(gcdq.id)"  >{{ gcdq.label }}</span>
+				<span v-for="gcdq in gcdqList" :class="{ 'bg-active': gcdq.id == filterData.gcdq }" @click="CheckGcdz(gcdq.id)">{{ gcdq.label }}</span>
 			</p>
 		</div>
 
@@ -34,18 +34,21 @@
 			<el-table :data="tableData" border style="width: 100%">
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
-						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+						<el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.shzt == '已审核'?'详情':'审核'}}</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column prop="date" label="是否审核" width="120">
+				<el-table-column  label="是否审核" width="120">
 					<template slot-scope="scope">
-						<el-tag size="mini" :type="scope.row.shzt==1?'success':scope.row.shzt==2?'danger':'info'">
-						{{scope.row.shzt==1?'审核通过':scope.row.shzt==2?'审核不通过':'未审核'}}
-						</el-tag>
+						<el-tag size="mini" :type="scope.row.shzt == '已审核' ? 'success' : 'info'">{{ scope.row.shzt }}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column  label="审核状态" width="120">
+					<template slot-scope="scope">
+						{{ scope.row.fbzt=='02'?'审核中':scope.row.fbzt=='03'?'招标中':scope.row.fbzt=='04'?'审核未通过':scope.row.fbzt=='05'?'分包结束':'分包关闭' }}
 					</template>
 				</el-table-column>
 				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
-				<el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="xmmc" label="项目名称" min-width="280" fixed="left" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="htbh" label="合同编号" width="150"></el-table-column>
 				<el-table-column prop="fbmc" label="分包名称" min-width="280" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="fbrxm" label="分包人" width="110"></el-table-column>
@@ -76,24 +79,19 @@ export default {
 		return {
 			currentPage: 1,
 			pageSize: 15,
-			records:0,
+			records: 0,
 			filterData: {
 				keyword: '',
 				gcdq: '',
 				shzt: ''
 			},
-			gcdqList: [{label:'全部',id:''},{label:'南区',id:'南区'},{label:'北区',id:'北区'},{label:'其他',id:'其他'}],
-			sfshList: [{label:'全部',id:''},{label:'已审核',id:'1'},{label:'未审核',id:'0'}],
+			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
+			sfshList: [{ label: '全部', id: '' }, { label: '已审核', id: '1' }, { label: '未审核', id: '0' }],
 			tableData: [],
-			userGroup:''
+			userGroup: ''
 		};
 	},
 	mounted() {
-		// if (getSession('SHZT') == null) {
-		// 	getMenu('SHZT', this.sfshList); //获取审核状态
-		// } else {
-		// 	this.sfshList = getSession('SHZT');
-		// }
 		this.getFbshList();
 		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
 	},
@@ -108,14 +106,7 @@ export default {
 		},
 		handleExport() {
 			window.open(
-			  window.baseurl +
-			    "fbxx/exportFbManage.do?keyword=" +
-			    this.filterData.keyword +
-			    "&gczq=" +
-			    this.filterData.gcdq +
-			    "&shzt=" +
-			    this.filterData.shzt +
-				"&isfb=1"
+				window.baseurl + 'fbxx/exportFbManage.do?keyword=' + this.filterData.keyword + '&gczq=' + this.filterData.gcdq + '&shzt=' + this.filterData.shzt + '&isfb=1'
 			);
 		},
 		// 工程大区
@@ -127,7 +118,7 @@ export default {
 		// 审核状态
 		CheckSfsh(params) {
 			this.currentPage = 1;
-			this.filterData.shzt = !params?'':params;
+			this.filterData.shzt = !params ? '' : params;
 			this.getFbshList();
 		},
 		handleCurrentChange(data) {
@@ -143,34 +134,35 @@ export default {
 			let routeData = this.$router.resolve({
 				path: '/projectfbshdetail',
 				query: {
-					xmbh:data.xmbh,
-					fbbh:data.fbbh
+					xmbh: data.xmbh,
+					fbbh: data.fbbh
 				}
 			});
 			window.open(routeData.href, '_blank');
 		},
-		getFbshList(){
-			this.$get(this.API.fbManage,{
-				curPage:this.currentPage,
-				pageSize:this.pageSize,
-				gczq:this.filterData.gcdq,
-				shzt:this.filterData.shzt,
-				keyword:this.filterData.keyword
-			}).then(res=>{
-				if(res.state == 'success'){
-					if(!!res.data.rows){
+		getFbshList() {
+			this.$get(this.API.fbManage, {
+				curPage: this.currentPage,
+				pageSize: this.pageSize,
+				gczq: this.filterData.gcdq,
+				shzt: this.filterData.shzt,
+				isfb:1,
+				keyword: this.filterData.keyword
+			}).then(res => {
+				if (res.state == 'success') {
+					if (!!res.data.rows) {
 						this.tableData = res.data.rows;
-					}else{
-						this.tableData  = [];
+					} else {
+						this.tableData = [];
 					}
 					this.records = res.data.records;
-				}else{
-					 this.$message({
-					  message: res.msg,
-					  type: 'error'
+				} else {
+					this.$message({
+						message: res.msg,
+						type: 'error'
 					});
 				}
-			})
+			});
 		}
 	}
 };
@@ -179,7 +171,7 @@ export default {
 <style lang="scss" scoped>
 .project_fbsh {
 	margin: 12px 20px;
-	padding: 15px 15px 5px ;
+	padding: 15px 15px 5px;
 	background: #ffffff;
 	border-radius: 4px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
