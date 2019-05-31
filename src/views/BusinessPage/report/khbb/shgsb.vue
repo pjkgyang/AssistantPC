@@ -121,7 +121,7 @@ export default {
       let arr = params[i].en.split(",");
       let obj = {
         yf: this.filterData.yf,
-        rygh: data[0]
+        rywid: data[0]
       };
       if (arr[0] && !!params[i].canRedirect) {
         url = "/khbbdetail/shgs";

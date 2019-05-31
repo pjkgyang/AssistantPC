@@ -38,7 +38,8 @@
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="120">
 					<template slot-scope="scope">
-						<el-button :disabled="scope.row.fbzt != '02'&&scope.row.fbzt != '03'" @click="handleClick(scope.row, 'edit')" type="text" size="small">编辑</el-button>
+						<!-- 02 审核中  04 审核未通过 -->
+						<el-button :disabled="scope.row.fbzt != '02'&&scope.row.fbzt != '04'" @click="handleClick(scope.row, 'edit')" type="text" size="small">编辑</el-button>
 						<el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
 					</template>
 				</el-table-column>
@@ -82,7 +83,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
-			height:window.innerHeight - 320,
+			height:window.innerHeight - 300,
 			currentPage: 1,
 			pageSize: 15,
 			records: 0,

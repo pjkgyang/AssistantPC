@@ -38,10 +38,11 @@
 					</el-form-item>
 					<el-form-item label="问题级别" required v-if="(showCondition==1||showCondition==2)">
 						<el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:330px">
-							<el-option label="不严重" value="不严重"></el-option>
+							<el-option v-for="(wtjb,index) in wtjbList" :key="index" :label="wtjb.mc" :value="wtjb.label"></el-option>
+						<!-- 	<el-option label="不严重" value="不严重"></el-option>
 							<el-option label="一般" value="一般"></el-option>
 							<el-option label="严重" value="严重"></el-option>
-							<el-option label="宕机服务不可用" value="宕机服务不可用"></el-option>
+							<el-option label="宕机服务不可用" value="宕机服务不可用"></el-option> -->
 						</el-select>
 					</el-form-item>
 					<el-form-item label="产品" required>
@@ -52,8 +53,10 @@
 					</el-form-item>
 					<el-form-item label="影响范围" required v-if="(showCondition==1||showCondition==2)">
 						<el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:330px">
-							<el-option label="影响局部" value="影响局部"></el-option>
-							<el-option label="影响整体" value="影响整体"></el-option>
+							 <el-option v-for="(yxfw,index) in yxfwList" :key="index" :label="yxfw.mc" :value="yxfw.label"></el-option>
+							<!-- <el-option label="影响局部" value="影响局部"></el-option>
+							<el-option label="影响整体" value="影响整体"></el-option> -->
+							
 						</el-select>
 					</el-form-item>
 					<el-form-item label="是否bug" required v-if="(showCondition==1||showCondition==2)">
@@ -157,6 +160,8 @@
 					qwjjrqO: "",
 					cnjsrq: ""
 				},
+				wtjbList:[],//问题级别枚举
+				yxfwList:[],//影响范围
 				cplist: [],
 				wtlb: [],
 				wtly: [], //问题来源
@@ -638,15 +643,29 @@
 				});
 				if (!getSession("ProblemType")) {
 					getMenu("ProblemType", this.wtlb, "");
-					// getMenu("kycp", this.cplist, true);
 				} else {
+					this.wtlb = [];
 					this.wtlb = getSession("ProblemType");
-					// this.cplist = getSession("kycp");
+				}
+				
+				if (!getSession("ProblemLevel")) {
+					getMenu("ProblemLevel", this.wtjbList, "");
+				} else {
+					this.wtjbList = [];
+					this.wtjbList = getSession("ProblemLevel");
+				}
+				
+				if (!getSession("ProblemEffectScope")) {
+					getMenu("ProblemEffectScope", this.yxfwList, "");
+				} else {
+					this.yxfwList = [];
+					this.yxfwList = getSession("ProblemEffectScope");
 				}
 
 				if (!getSession("ProblemSource")) {
 					getMenu("ProblemSource", this.wtly, "");
 				} else {
+					this.wtly = [];
 					this.wtly = getSession("ProblemSource");
 				}
 

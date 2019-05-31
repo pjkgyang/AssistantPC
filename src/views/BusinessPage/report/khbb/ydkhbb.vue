@@ -97,7 +97,11 @@ export default {
         khlx: "1"
       }).then(res => {
         if (res.state == "success") {
-          this.archiveShow = !res.data;
+					if(this.userGroup.includes('ProblemAdmin')){
+					   this.archiveShow = !res.data;
+					}else{
+						 this.archiveShow = false;
+					}
         }
       })
     },
@@ -127,8 +131,7 @@ export default {
       let arr = params[i].en.split(",");
       let obj = {
         yf: this.filterData.yf,
-        rybh: data[0],
-        rygh: data[1]
+        rywid: data[0]
       };
       if (params[i].en.indexOf(",") != -1) {
         if (arr[0] == arr[1]) {
@@ -143,7 +146,6 @@ export default {
       }
       if (arr[0] == "lcbjs" || arr[0] == "lcbdcs") {
         url = "/khbbdetail/lcbxq";
-        delete obj.rybh;
       } else if (
         arr[0] == "wtsljs" ||
         arr[0] == "wtslaqwcs" ||
@@ -151,20 +153,16 @@ export default {
         arr[0] == "aqsl"
       ) {
         url = "/khbbdetail/wt";
-        delete obj.rygh;
       } else if (arr[0] == "tscls") {
         url = "/khbbdetail/ts";
-        delete obj.rybh;
       } else if (arr[0] == "rbbts") {
         url = "/rbdetail";
         obj["sfbt"] = "1";
         obj["sfglpz"] = "0";
-        delete obj.rygh;
       } else if (arr[0] == "zbbts") {
         url = "/zbdetail";
         obj["sfbt"] = "1";
         obj["sfglpz"] = "0";
-        delete obj.rygh;
       } else {
         return;
       }
@@ -185,14 +183,11 @@ export default {
     });
 		
 		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
-		
-		if(this.userGroup.includes('ProblemAdmin')){
-			this.archiveShow = true;
-		}
+
 		if(this.userGroup.includes('ProblemAdmin')||this.userGroup.includes('JYGL')){
 			this.filterList.push('bm');
 		}
-    // this.hasDepositData();
+    this.hasDepositData();
   },
   activated() {},
   watch: {},

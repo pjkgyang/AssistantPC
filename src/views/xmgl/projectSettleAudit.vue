@@ -38,8 +38,8 @@
 						<el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.shzt == '已结算'?'审核':'详情'}}</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column prop="fbmc" label="分包名称" min-width="260" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="lcbmc" label="结算点" min-width="140" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="fbmc" label="分包名称" fixed="left" min-width="260" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="lcbmc" label="结算点" fixed="left" min-width="140" show-overflow-tooltip></el-table-column>
 				<el-table-column label="是否审核" width="120">
 					<template slot-scope="scope">
 						<el-tag size="mini" :type="scope.row.shzt == '未审核'||scope.row.shzt == '审核不通过' ? 'info' : 'success'">{{ scope.row.shzt }}</el-tag>

@@ -129,14 +129,18 @@ export default {
       });
     },
 		
-		//  
+		//  是否封存
     hasDepositData() {
       this.$get(this.API.hasDepositData, {
         yf: this.filterData.yf,
         khlx: "2"
       }).then(res => {
         if (res.state == "success") {
-          this.archiveShow = !res.data;
+					if(this.userGroup.includes('ProblemAdmin')){
+						this.archiveShow = !res.data;
+					}else{
+						this.archiveShow = false;
+					}
         }
       });
     },
@@ -145,7 +149,7 @@ export default {
       let arr = params[i].en.split(",");
       let obj = {
         yf: this.filterData.yf,
-        rygh: data[1]
+        rywid: data[0]
       };
       if (
         arr[0] == "ysjs" ||
@@ -171,14 +175,12 @@ export default {
         url = "/rbdetail";
         obj["sfbt"] = "1";
         obj["sfglpz"] = "0";
-        obj["rybh"] = data[0];
-        delete obj.rygh;
+        obj["rywid"] = data[0];
       } else if (arr[0] == "zbbts") {
         url = "/zbdetail";
         obj["sfbt"] = "1";
         obj["sfglpz"] = "0";
-        obj["rybh"] = data[0];
-        delete obj.rygh;
+        obj["rywid"] = data[0];
       } else {
         return;
       }
@@ -212,14 +214,10 @@ export default {
     
 		this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
 		
-		if(this.userGroup.includes('ProblemAdmin')){
-			this.archiveShow = true;
-		}
-		
 		if(this.userGroup.includes('ProblemAdmin')||this.userGroup.includes('JYGL')){
 			this.filterList.push('bm');
 		}
-    // this.hasDepositData();
+    this.hasDepositData();
   },
   activated() {},
   watch: {},

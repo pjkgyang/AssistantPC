@@ -57,7 +57,7 @@
 				<el-form-item label="是否已处理" required>
 					<el-radio-group v-model="form.sfcl">
 						<el-radio :label="1">已处理</el-radio>
-						<el-radio :label="0">无需处理</el-radio>
+						<el-radio :label="2">无需处理</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="处理工时" :required="form.sfcl == 1">

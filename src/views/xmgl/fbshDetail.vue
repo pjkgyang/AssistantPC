@@ -97,6 +97,16 @@
 								<th>延长说明</th>
 								<td colspan="3">{{ htjbxx.gcfwztsm }}</td>
 							</tr>
+							<tr>
+								<th>审核人</th>
+								<td>{{ htjbxx.shrmc }}</td>
+								<th>审核时间</th>
+								<td colspan="3">{{ htjbxx.shrq }}</td>
+							</tr>
+							<tr>
+								<th>审核意见</th>
+								<td colspan="5">{{ htjbxx.shyj }}</td>
+							</tr>
 						</table>
 					</div>
 					<div>

@@ -115,7 +115,7 @@ export default {
 			if (this.$route.params.id == 'ts') {
 				// 投诉
 				url = 'assessment/exportYdkhtsxqb.do';
-				param = 'yf=' + this.queryData.yf + '&rywid=' + this.queryData.rygh;
+				param = 'yf=' + this.queryData.yf + '&rywid=' + this.queryData.rywid;
 			}
 			// 售后工时详情
 			if (this.$route.params.id == 'shgs') {
@@ -134,11 +134,9 @@ export default {
 
 		// 提交
 		handleCommit() {
-			if (this.jsztRadio != '0') {
+			if (this.jsztRadio != '0' && !this.jssm) {
 				this.$message({ message: '请填写结算说明', type: 'warning' });
 				return;
-			} else {
-				this.jssm = '';
 			}
 			this.xgjszt();
 		},
@@ -164,7 +162,7 @@ export default {
 			if (this.$route.params.id == 'shgs') {
 				if (params[i].zh == '核准工时') {
 					this.$get(this.API.nfxggs, {
-						rywid: data[1],
+						rygh: data[1],
 						wid: data[0]
 						// yf: this.queryData.yf
 					}).then(res => {
@@ -181,7 +179,7 @@ export default {
 									.then(({ value }) => {
 										this.$get(this.API.xggs, {
 											wid: data[0],
-											rywid: data[1],
+											rygh: data[1],
 											gs: value
 										}).then(res => {
 											if (res.state == 'success') {
@@ -201,7 +199,7 @@ export default {
 				} else if (params[i].zh == '结算状态') {
 					this.$get(this.API.nfxgjszt, {
 						wid: data[0],
-						rywid: data[1]
+						rygh: data[1]
 					}).then(res => {
 						if (res.state == 'success') {
 							if (!!res.data) {
@@ -219,7 +217,7 @@ export default {
 			this.$get(this.API.xgjszt, {
 				yf: this.queryData.yf,
 				wid: this.wid,
-				rywid: this.rygh,
+				rygh: this.rygh,
 				jszt: this.jsztRadio,
 				jssm: this.jssm
 			}).then(res => {
@@ -278,7 +276,7 @@ export default {
 				curPage: this.queryData.curPage,
 				pageSize: this.pageSize,
 				yf: this.queryData.yf,
-				rywid: this.queryData.rygh,
+				rywid: this.queryData.rywid,
 				jszt: this.jszts,
 				keyword: this.keyword
 			}).then(res => {

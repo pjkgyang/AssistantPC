@@ -53,7 +53,7 @@ export default {
         xmbh: this.$route.query.xmbh,
         isAll: !this.$route.query.isAll ? "" : this.$route.query.isAll,
         yf: !this.$route.query.yf ? "" : this.$route.query.yf,
-        rybh: !this.$route.query.rybh ? "" : this.$route.query.rybh,
+        rywid: !this.$route.query.rywid ? "" : this.$route.query.rywid,
         sfbt: !this.$route.query.sfbt ? "" : this.$route.query.sfbt,
         sfglpz: !this.$route.query.sfglpz ? "" : this.$route.query.sfglpz
       }).then(res => {

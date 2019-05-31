@@ -2153,7 +2153,7 @@ export default {
           }
           if (this.qusetionInfo.wtly != "") {
             getResponsibleTaskList({
-              name: "ProblemType",
+              name: "ProblemSource",
               code: this.qusetionInfo.wtly
             }).then(({ data }) => {
               if (data.state == "success") {

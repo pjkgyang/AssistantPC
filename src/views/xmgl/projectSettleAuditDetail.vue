@@ -57,6 +57,16 @@
 								<th>申请说明</th>
 								<td colspan="5" height="80px">{{jssqData.sm}}</td>
 							</tr>
+							<tr>
+								<th>审核人</th>
+								<td>{{ jssqData.shrmc }}</td>
+								<th>审核时间</th>
+								<td colspan="3">{{ jssqData.shrq }}</td>
+							</tr>
+							<tr>
+								<th>审核意见</th>
+								<td colspan="5">{{ jssqData.shyj }}</td>
+							</tr>
 						</table>
 					</div>
 					<div>
