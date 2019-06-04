@@ -29,7 +29,18 @@ export default {
       uploadAction:'123',
     };
   },
-
+	props:{
+		istb:{
+			 type:Boolean,
+			 default:false
+		}
+	},
+	watch: {
+		istb(newValue, oldValue) {
+			this.fileList = [];
+			this.files = [];
+		}
+	},
   methods: {
     // 删除文件
     handleRemove(index,edit) {
@@ -49,8 +60,6 @@ export default {
             this.files.push(res.data.data.split('|')[0]);
 						this.fileList.push(res.data.data.split('|')[1]);
             this.$emit('handleUploadFile',this.files);
-						this.fileList = [];
-						this.files = [];
           }
       });
       return true;

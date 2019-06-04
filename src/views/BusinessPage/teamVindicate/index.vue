@@ -59,7 +59,7 @@ export default {
       filterData: "",
       qyzdwid: "", //区域战队wid
       userGroupTag: "",
-      limitShow: true,
+      limitShow: false,
       zdData: {},
       tableData: [],
       title: ""
@@ -67,12 +67,8 @@ export default {
   },
   mounted() {
     this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
-    if (
-      (this.userGroupTag.indexOf("JYGL") != -1 ||
-        this.userGroupTag.indexOf("ZDDZ") != -1) &&
-      this.userGroupTag.indexOf("QYZ") == -1
-    ) {
-      this.limitShow = false;
+    if (this.userGroupTag.indexOf("JYGL") != -1 || this.userGroupTag.indexOf("ZDDZ") != -1 || this.userGroupTag.indexOf("QYZ") == -1) {
+      this.limitShow = true;
     }
     if (this.userGroupTag.indexOf("JYGL") != -1) {
       this.filterList.push("qygc");

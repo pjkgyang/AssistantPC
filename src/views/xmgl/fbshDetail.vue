@@ -97,16 +97,6 @@
 								<th>延长说明</th>
 								<td colspan="3">{{ htjbxx.gcfwztsm }}</td>
 							</tr>
-							<tr>
-								<th>审核人</th>
-								<td>{{ htjbxx.shrmc }}</td>
-								<th>审核时间</th>
-								<td colspan="3">{{ htjbxx.shrq }}</td>
-							</tr>
-							<tr>
-								<th>审核意见</th>
-								<td colspan="5">{{ htjbxx.shyj }}</td>
-							</tr>
 						</table>
 					</div>
 					<div>
@@ -160,8 +150,18 @@
 								<td></td>
 							</tr>
 							<tr height="100px">
-								<th rowspan="2">分包说明</th>
-								<td colspan="5" rowspan="2">{{ fbjbxx.fbsm }}</td>
+								<th >分包说明</th>
+								<td colspan="5">{{ fbjbxx.fbsm }}</td>
+							</tr>
+							<tr>
+								<th>审核人</th>
+								<td colspan="1">{{ fbjbxx.shrmc }}</td>
+								<th>审核人</th>
+								<td colspan="1">{{ fbjbxx.shrq }}</td>
+							</tr>
+							<tr>
+								<th>审核意见</th>
+								<td colspan="5">{{ fbjbxx.shyj }}</td>
 							</tr>
 						</table>
 					</div>
@@ -175,7 +175,7 @@
 							<el-table-column prop="htekry" label="二开人月(合同)" min-width="140"></el-table-column>
 							<el-table-column prop="fbekry" label="二开人月(分包)" min-width="140"></el-table-column>
 							<el-table-column prop="ssfy" label="实施费用" min-width="100"></el-table-column>
-							<el-table-column prop="erfy" label="二开费用" min-width="100"></el-table-column>
+							<el-table-column prop="ekfy" label="二开费用" min-width="100"></el-table-column>
 						</el-table>
 					</div>
 					<div>
@@ -191,7 +191,7 @@
 							<el-table-column prop="htekry" label="二开人月(合同)" min-width="90"></el-table-column>
 							<el-table-column prop="fbekry" label="二开人月(分包)" min-width="90"></el-table-column>
 							<el-table-column prop="ssfy" label="实施费用" min-width="100"></el-table-column>
-							<el-table-column prop="erfy" label="二开费用" min-width="100"></el-table-column>
+							<el-table-column prop="ekfy" label="二开费用" min-width="100"></el-table-column>
 							<el-table-column prop="fbsm" label="说明" min-width="150"></el-table-column>
 						</el-table>
 					</div>

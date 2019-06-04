@@ -37,14 +37,6 @@
 								<th>项目状态</th>
 								<td>{{ htjbxx.xmxz }}</td>
 							</tr>
-							<!-- 	<tr>
-								<th>合同金额（元）</th>
-								<td>{{ !htjbxx.htje ? 0 : htjbxx.htje }}</td>
-								<th>合同毛收入（元）</th>
-								<td>{{ !htjbxx.htmsr ? 0 : htjbxx.htmsr }}</td>
-								<th>到款率（%）</th>
-								<td>{{ !htjbxx.dkl ? 0 : htjbxx.dkl }}</td>
-							</tr> -->
 							<tr>
 								<th>合同性质</th>
 								<td>{{ htjbxx.sfzt == 'A' ? '正式' : htjbxx.sfzt == 'B' ? '内部' : '在谈' }}</td>
@@ -59,19 +51,11 @@
 								<th>客户经理</th>
 								<td>{{ htjbxx.khjl }}</td>
 								<th>学校</th>
-								<td>{{ htjbxx.xx }}</td>
+								<td>{{ htjbxx.yh }}</td>
 							</tr>
 							<tr>
-								<th>甲方</th>
-								<td>{{ htjbxx.yh }}</td>
-								<th>签署方</th>
-								<td>{{ htjbxx.qsfmc }}</td>
 								<th>签署日期</th>
 								<td>{{ htjbxx.qssj }}</td>
-							</tr>
-							<tr>
-								<th>生效日期</th>
-								<td>{{ htjbxx.sxrq }}</td>
 								<th>立项日期</th>
 								<td>{{ htjbxx.lxrq }}</td>
 								<th>启动日期</th>
@@ -208,9 +192,26 @@
 						<span class="filter-weight">投标说明：</span>
 						<el-input type="textarea" maxlength="200" resize="none" v-model="tbly" rows="3"></el-input>
 						<span style="position:absolute;bottom:0;right:10px;font-size:12px;">
-							<span :class="{ 'max-length': tbly.length >= 200 }">( {{ tbly.length }}</span>
+							<span :class="{ 'max-length':!!tbly?tbly.length>=200:false  }">( {{!!tbly?tbly.length:0 }}</span>
 							/ 200 )
 						</span>
+					</div>
+					<div>
+						<span class="filter-weight">分包费用：</span>
+						<table border width="100%" class="tb-table tdfp-table">
+							<tr>
+								<th>总金额（元）</th>
+								<td width="30%">{{ fbxx.zfy }}</td>
+								<th>实施费用（元）</th>
+								<td width="30%">{{ fbxx.ssfy  }}</td>
+							</tr>
+							<tr>
+								<th>二开费用（元）</th>
+								<td width="30%">{{ fbxx.ekfy  }}</td>
+								<th>可变费用（元）</th>
+								<td width="30%">{{ fbxx.kbfy  }}</td>
+							</tr>
+						</table>
 					</div>
 					<div>
 						<span class="filter-weight">投标费用：</span>
@@ -282,7 +283,7 @@
 						<br />
 						<div>
 							<span class="filter-weight" style="margin: 10px 0">项目文件：</span>
-							<uploadComponent @handleUploadFile="handleUploadFile"></uploadComponent>
+							<uploadComponent @handleUploadFile="handleUploadFile" :istb="istbMark"></uploadComponent>
 							<p class="upload_file-p" v-if="!!fileName" flex colcenter spacebetween>
 								<span>{{ fileName }}</span>
 								<i class="el-icon-close" @click="handleDeleteFile"></i>
@@ -335,8 +336,12 @@ export default {
 
 			fileList: [],
 			tbxx: {}, //投标信息
+			fbxx:{},//分包信息
 			fileName: '', //附件名称
-			userInfo: {}
+			userInfo: {},
+			
+			userYwyData:[],
+			istbMark:false
 		};
 	},
 	mounted() {
@@ -406,10 +411,14 @@ export default {
 					kbfy: ''
 				});
 			}
+			if(type == 'edit'){
+				this.fileList = [];
+			}
 			tbxq({ fbbh: this.$route.query.fbbh }).then(({ data }) => {
 				if (data.state == 'success') {
 					this.ywyData = !data.data.htnrfy ? [] : data.data.htnrfy;
 					this.tbxx = !data.data.tbxx ? {} : data.data.tbxx; //投标信息
+					this.fbxx = data.data.fbxx;//分包信息
 					if (!!data.data.tbxx) {
 						this.ssfyTotalkm = data.data.tbxx.ssfy;
 						this.ekfyTotalkm = data.data.tbxx.ekfy;
@@ -433,6 +442,10 @@ export default {
 						});
 					}
 					this.userData = userList;
+					
+					this.userData.forEach((ele,i,arr)=>{
+						this.userYwyData[i] = [];
+					})
 				}
 			});
 			this.dialogTableVisible = !this.dialogTableVisible;
@@ -440,20 +453,33 @@ export default {
 
 		// 分配用户
 		handleSeleteUser(val) {
-			this.ywxArr = [];
-			this.userData.forEach((element, i, arr) => {
-				if (element.usercode == val) {
+			this.ssfyTotalkm = this.ekfyTotalkm = this.kbfyTotalkm = 0;
+			let zrrxm = '';
+			this.userData.forEach((element, j, arr) => {
+					this.userData[j].ssfy = this.userData[j].ekfy = this.userData[j].kbfy =  0;
+				    this.$set(this.userData[j], 'ywx','');
+					this.userYwyData[j] = [];
+					if(val == element.usercode){
+						zrrxm = element.username;
+					}
 					this.ywyData.forEach((ele, i, arr) => {
-						if (val == ele.zrrbh) {
-							this.$set(this.ywyData[i], 'zrrxm', element.username);
-							if (!this.ywxArr.includes(ele.ywymc)) {
-								this.ywxArr.push(ele.ywymc);
+						if(val == ele.zrrbh){
+							this.ywyData[i].zrrxm = zrrxm;
+						}
+						if(element.usercode == ele.zrrbh){
+							if(!this.userYwyData[j].includes(ele.ywymc)){
+								this.userYwyData[j].push(ele.ywymc);
 							}
+							this.userData[j].ssfy += Number(ele.ssfy); //累加责任人  实施金额
+							this.userData[j].ekfy += Number(ele.ekfy); //累加责任人  二开金额
+							this.userData[j].kbfy += Number(ele.kbfy); //累加责任人  可变金额
+							this.$set(this.userData[j], 'ywx', this.userYwyData[j].join(','));
 						}
 					});
-					this.$set(this.userData[i], 'ywx', this.ywxArr.join(','));
-				}
-			});
+					this.ssfyTotalkm += this.userData[j].ssfy;  //投标费用实施费用 计算
+					this.ekfyTotalkm += this.userData[j].ekfy;	//投标费用二开费用 计算
+					this.kbfyTotalkm += this.userData[j].kbfy;	//投标费用可变费用 计算
+		  	});
 		},
 		// 实施费用
 		handleChangefy(index, type, yhbh) {
@@ -558,6 +584,7 @@ export default {
 						message: '投标成功',
 						type: 'success'
 					});
+					this.istbMark = !this.istbMark;
 					this.dialogTableVisible = !this.dialogTableVisible;
 					this.istb = true;
 					this.tbzt = true;

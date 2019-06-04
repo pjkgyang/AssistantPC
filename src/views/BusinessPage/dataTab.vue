@@ -1,18 +1,21 @@
 <template>
 	<!-- <div style="position: relative;height:100%;"> -->
 	<div class="project_toubiao">
-		<div><busy-nav @dropdownSelect="handleSelect" @dropdownSelectTwo="handleSelectT" @dropdownSelectThree="handleSelectTh" @dropdownSelectFour="handleSelectF"></busy-nav></div>
 		<div class="item_dataTab">
-			<item-card v-for="(data, index) in datas" :cardData="data" :data-fbbh="data.fbbh" :key="index" @handleFBdetails="handleFBdetails"></item-card>
-			<div style="text-align:center;width:100%;height:100%;padding-top:10%;" v-if="datas.length == 0">
+			<div style="width: 100%;;">
+				<busy-nav @dropdownSelect="handleSelect" @dropdownSelectTwo="handleSelectT" @dropdownSelectThree="handleSelectTh" @dropdownSelectFour="handleSelectF"></busy-nav>
+			</div>
+			<div class="item_dataTab_card">
+				<item-card v-for="(data, index) in datas" :cardData="data" :data-fbbh="data.fbbh" :key="index" @handleFBdetails="handleFBdetails"></item-card>
+			</div>
+			<div style="text-align:center;width:100%;height:100%;padding:50px 0;" v-if="datas.length == 0">
 				<img src="static/img/empty.png" alt="" />
 				<br />
-				<br />
-				<p>暂 无 项 目</p>
+				<p>暂无项目</p>
 			</div>
-			<div style="text-align:right;position:absolute;bottom:-20px;right:15px">
-				<pagination v-if="totalPage != 1 && total != 0 && totalPage != null" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
-			</div>
+		</div>
+		<div>
+			<pagination v-if="totalPage != 1 && total != 0 && totalPage != null" :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
 		</div>
 	</div>
 </template>
@@ -112,7 +115,6 @@ export default {
 .project_toubiao {
 	width: 1300px;
 	margin: 0 auto;
-	height: calc(100vh - 80px);
 	box-shadow: 0 0 5px #999;
 	overflow-x: hidden;
 	background: #fff;
@@ -121,10 +123,14 @@ export default {
 }
 
 .item_dataTab {
-	padding-left: 16px;
 	display: flex;
 	flex-wrap: wrap;
 	position: relative;
+}
+
+.item_dataTab_card{
+	max-height: calc(100vh - 190px);
+	overflow-y: auto;
 }
 .item_dataTab::after {
 	content: '';

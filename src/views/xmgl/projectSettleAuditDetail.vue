@@ -229,11 +229,7 @@ export default {
 					  message: shjg=='1'?'已提交为 "审核通过" ~':'已提交为 "审核不通过" ~',
 					  type: 'success'
 					});
-					if(!sm){
-						this.jssqData.shzt = 1;
-					}else{
-						this.jssqData.shzt = 2;
-					}
+					this.queryJsxq();
 				}else{
 					this.$message({
 					  message: res.msg,

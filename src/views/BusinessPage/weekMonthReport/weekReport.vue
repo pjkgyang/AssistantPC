@@ -18,7 +18,7 @@
                             <el-option v-for="item in weeksNum" :key="item" :label="'第'+(item==1?'一':item==2?'二':item==3?'三':item==4?'四':'五')+'周'" :value="item"></el-option>
                     </el-select>
                 </span>
-                 <span >
+                <span>
                   <el-input placeholder="请输入内容" v-model="weekDay" :disabled="true" size="small" style="width:200px"></el-input>
                 </span>
                 <span v-if="groupTag.indexOf('JYGL') != -1" >
@@ -235,6 +235,7 @@ export default {
     this.dateObj.month = this.monthValue;
     this.dateObj.weekValue = this.weekValue;
     this.dateObj.weeksNum = this.weeksNum;
+		
   },
   activated(){
        this.listWeekPlanPerson(); 
@@ -570,8 +571,8 @@ export default {
         this.weekEndDate = GetNextDate(getLastMonth(this.year,this.month),6)
         return  this.weekStartDate+' 至 '+this.weekEndDate
     },
-      // 初始化日期（计算）
-   initializeDate(){   
+     // 初始化日期（计算）
+    initializeDate(){   
        this.year = new Date().getFullYear();
        this.month = new Date().getMonth(); 
 			 
@@ -583,18 +584,18 @@ export default {
        let weekEndDate = GetNextDate(weekStartDate,6);
 			 
        let NowDate = getNowFormatDate();
-			 let nextWeek = getWeeks(Year,Month+3); //下周周数
-			 let nextWeekStartDate = GetNextDate(getLastMonth(Year,Month+2),0); //下周第一周日期
+			 let nextWeek = getWeeks(Year,Month+3); //下月周数
+			 let nextWeekStartDate = GetNextDate(getLastMonth(Year,Month+2),0); //下月第一周日期
 			 let nextWeekEndDate = GetNextDate(nextWeekStartDate,6);
+			 
 
-
-      //  this.weekValue == week &&
        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
           new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
-            new Date(GetDateStr(0)).getDay() >= 4){
+            new Date(GetDateStr(0)).getDay()==0?7:new Date(GetDateStr(0)).getDay() >= 4){
             this.weekValue = this.curWeek =  this.weeksNum = getWeeks(Year,Month+1);
             this.weekDay  = weekStartDate+' 至 '+weekEndDate;
             this.monthValue = lastMonth;
+						
        }else if(new Date(NowDate).getTime() >= new Date(nextWeekStartDate).getTime() && 
 								new Date(NowDate).getTime() <= new Date(nextWeekEndDate).getTime()
 			  ){
@@ -606,12 +607,14 @@ export default {
 					}else{
 						this.monthValue = this.year+'-'+((this.month+2)<10?'0'+(this.month+2):(this.month+2));  
 					}
+					
 				}else{
 					     this.weekValue = this.curWeek = weekIndexInMonth(getLastMonth(this.year,this.month));
 					     this.weeksNum =  getWeeks(this.year,this.month+1);    //周数
 					     this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
 					     this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):(this.month+1));  
 				}
+				
         // this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1); 
        this.mapWeekReportDate();
     },

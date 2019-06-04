@@ -81,7 +81,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
-			height:window.innerHeight - 280,
+			height:window.innerHeight - 250,
 			dialogVisible: false,
 			currentPage: 1,
 			pageSize: 15,

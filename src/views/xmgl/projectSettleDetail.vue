@@ -64,7 +64,9 @@
 						<table>
 							<tr>
 								<th>本次结算总金额（元）</th>
-								<td colspan="5">{{!jsxx.jsje?0:jsxx.jsje}}</td>
+								<td>{{!jsxx.jsje?0:jsxx.jsje}}</td>
+								<th>本次已结算总金额（元）</th>
+								<td colspan="3">{{!jsxx.yjszfy?0:jsxx.yjszfy}}</td>
 							</tr>
 							<tr>
 								<th>中标实施费用（元）</th>
@@ -123,6 +125,32 @@
 								<td colspan="5">
 									<textarea v-model="jsxx.jlsm" placeholder="请输入奖惩说明" style="width: 100%;padding: 5px;" rows="3"></textarea>
 								</td>
+							</tr>
+						</table>
+					</div>
+					<div>
+						<h5>个人结算信息</h5>
+						<table class="table_center">
+							<tr>
+								<th>工号</th>
+								<th>姓名</th>
+								<th>负责业务线</th>
+								<th>结算实施金额</th>
+								<th>结算二开金额</th>
+								<th>结算可变金额</th>
+								<th>合计</th>
+							</tr>
+							<tr v-for="(item,index) in tdywyData" :key="index">
+								<td :colspan="item.cybh == '合计'?3:0">{{item.cybh}}</td>
+								<td v-if="item.cybh != '合计'">{{item.cymc}}</td>
+								<td v-if="item.cybh != '合计'">{{item.ywymc}}</td>
+								<td>{{item.jsssfy}}</td>
+								<td>{{item.jsekfy}}</td>
+								<td>{{item.jskbfy}}</td>
+								<td>{{!item.jsje?0:item.jsje}}</td>
+							</tr>
+							<tr v-if="!tdywyData.length">
+								<td colspan="7">暂无内容</td>
 							</tr>
 						</table>
 					</div>
@@ -242,13 +270,14 @@
 			dialogVisible: false,
 			title:'',
 			tableData: [],
+			tdywyData:[],//团队业务域列表
 			jsxx:{},//结算详情
 			jssqData:{},//结算申请
 			tdxxData: [],
 			tbje: null,
 			zbxx: '',
 			// 承担费用
-			cdradio: 0, //承担
+			cdradio: 1, //承担
 			wids: [],
 			jsSource:'',
 			url:'',
@@ -326,22 +355,23 @@
 			this.$message.close();
 				// 个人结算实施费用
 			if( this.jsxx.sjssfy < this.jsssfyTotal){
-				msg += '分包实施结算费用必须大于团队实施结算费用！'
+				msg += '分包实施结算费用必须大于等于团队实施结算费用！，'
 			}
 			// 个人结算二开费用=结算二开费用 * 5400 / 8800
 			if((this.jsxx.sjekfy *  5400 / 8800) < erfy ){
-				msg += '分包二开结算费用必须大于团队二开结算费用！　'
+				msg += '分包二开结算费用必须大于等于团队二开结算费用！，'
 			}
 			// 个人结算可变费用= 结算可变费用 * 70%; 
 			if((this.jsxx.sjkbfy *  0.7) < kbfy){
-				msg += '分包可变结算费用必须大于团队可变结算费用!　'
+				msg += '分包可变结算费用必须大于等于团队可变结算费用！，'
 			}
 		
 			if(!!msg){
-				this.$message({message:msg,type:'warning'})
+				 this.$alert('<strong style="color:#f00">'+msg+'</strong>', '提示', {
+				  dangerouslyUseHTMLString: true
+				});
 				return;
 			}
-			
 
 			this.$post(this.API.saveJsFeeData,{
 				wid:!this.jsxx.wid?'':this.jsxx.wid,
@@ -391,6 +421,7 @@
 				this.wids.push(ele.wid);
 			})
 		},
+		// 批量摄者承担人
 		handleMultipleSet(){
 			this.$post(this.API.batchSetJsFySource,{
 				wids:this.wids.join(','),
@@ -459,12 +490,38 @@
 				}
 			})
 		},
-		// 实施，二开，可变
+		// 实施，二开，可变（团队结算信息）
 		handleChangeInput(index,type) {
 			this.jsssfyTotal = 0;
+			let jsekfyTotal = 0,
+				jskbfyTotal = 0;
+			this.jsxx.yjszfy = 0;
 			this.tdxxData[index].jsje = Number(this.tdxxData[index].jsssfy) + Number(this.tdxxData[index].jsekfy) + Number(this.tdxxData[index].jskbfy);
+			
 			this.tdxxData.forEach(ele=>{
 				this.jsssfyTotal += !ele.jsssfy?0:Number(ele.jsssfy);
+				jsekfyTotal += !ele.jsekfy?0:Number(ele.jsekfy);   //团队结算二开总费用
+				jskbfyTotal += !ele.jskbfy?0:Number(ele.jskbfy); //团队结算可变总费用
+				this.jsxx.yjszfy += Number(ele.jsje); //已结算总费用 计算
+			})
+			
+			this.tdywyData.forEach((ele,j,arr)=>{
+				this.tdywyData[j].jsssfy = this.tdywyData[j].jsekfy = this.tdywyData[j].jskbfy = this.tdywyData[j].jsje = 0;
+				this.tdxxData.forEach((element,i,arr)=>{
+					if(ele.cybh == element.cybh){
+						this.tdywyData[j].jsssfy += Number(element.jsssfy);
+						this.tdywyData[j].jsekfy += Number(element.jsekfy);
+						this.tdywyData[j].jskbfy += Number(element.jskbfy);
+						this.tdywyData[j].jsje += Number(this.tdxxData[i].jsje);
+					}
+				})
+				// 个人结算信息合计
+				if(ele.cybh == '合计'){
+					this.tdywyData[j].jsssfy = this.jsssfyTotal; 
+					this.tdywyData[j].jsekfy = jsekfyTotal;
+					this.tdywyData[j].jskbfy = jskbfyTotal;
+					this.tdywyData[j].jsje += this.jsssfyTotal + jsekfyTotal + jskbfyTotal;
+				}
 			})
 		},
 		
@@ -477,8 +534,9 @@
 				if(res.state == 'success'){
 					this.jssqData = res.data.jssqData;
 					this.tdxxData = !res.data.jstdData?[]:res.data.jstdData;
+					this.tdywyData = !res.data.jstdYwyData?[]:res.data.jstdYwyData;//个人结算信息
+
 					this.jsxx = res.data.jsxx;
-					
 					this.jsxx.ylssfy = !this.jsxx.ylssfy?0:this.jsxx.ylssfy;
 					this.jsxx.ylekfy = !this.jsxx.ylekfy?0:this.jsxx.ylekfy;
 					this.jsxx.ylkbfy = !this.jsxx.ylkbfy?0:this.jsxx.ylkbfy;

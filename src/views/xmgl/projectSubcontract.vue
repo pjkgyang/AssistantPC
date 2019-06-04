@@ -68,7 +68,7 @@
 					</div>
 				</div>
 				<div class="project-fbtable">
-					<el-table :data="allfbData" border style="width:100%" min-width="1000">
+					<el-table :data="allfbData" border style="width:100%" min-width="1000" :max-height="height"> 
 						<el-table-column fixed="left" label="操作" width="150">
 							<template slot-scope="scope">
 								<el-button @click.native.prevent="handleCommand('1', scope.row)" type="text" size="mini">立项信息</el-button>
@@ -130,6 +130,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
+			height:window.innerHeight - 330,
 			xmData: {},
 			tableHeight: window.innerHeight - 390,
 			xmlbMenu: [{ mc: '软件', id: '软件' }, { mc: '集成', id: '集成' }, { mc: '服务', id: '服务' }],

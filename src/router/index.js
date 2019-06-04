@@ -433,6 +433,21 @@ export default new Router({
 							name: 'ReportCommon',
 							component: resolve => require(['@/views/BusinessPage/public/common.vue'], resolve),
 						},
+						{
+							path: '/businesspage/report/use',
+							name: 'useReport',
+							component: resolve => require(['@/views/BusinessPage/report/useReport/userStudyTotal.vue'], resolve),
+						},
+						{
+							path: '/businesspage/report/userstudy',
+							name: 'useReport',
+							component: resolve => require(['@/views/BusinessPage/report/useReport/userStudy.vue'], resolve),
+						},
+						{
+							path: '/businesspage/report/coursequality',
+							name: 'useReport',
+							component: resolve => require(['@/views/BusinessPage/report/useReport/courseQuality.vue'], resolve),
+						},
 					]
 				},
 				{

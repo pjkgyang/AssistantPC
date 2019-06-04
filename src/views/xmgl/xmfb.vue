@@ -19,7 +19,7 @@
 							<tr>
 								<th>分包编号</th>
 								<td>{{htjbxx.fbbh}}</td>
-								<th>分包名称</th>
+								<th class="before-require">分包名称</th>
 								<td colspan="3"><input v-model="htjbxx.fbmc" style="width: 100%;height:25px" placeholder="请输入分包名称"></input></td>
 							</tr>
 							<tr>
@@ -36,7 +36,7 @@
 									  value-format="yyyy-MM-dd">
 									</el-date-picker> -->
 								</td>
-								<th>计划开始日期</th>
+								<th  class="before-require">计划开始日期</th>
 								<td><el-date-picker
 									  style="width: 100%;"
 									  size="mini"
@@ -46,7 +46,7 @@
 									  format="yyyy 年 MM 月 dd 日"
 									  value-format="yyyy-MM-dd">
 									</el-date-picker></td>
-								<th>计划结束日期</th>
+								<th class="before-require">计划结束日期</th>
 								<td><el-date-picker
 									  style="width: 100%;"
 									  size="mini"
@@ -63,7 +63,7 @@
 								<td>{{ !htjbxx.ssfy?0:htjbxx.ssfy }}</td>
 								<th>二开费用（元）</th>
 								<td>{{ !htjbxx.ekfy?0:htjbxx.ekfy }}</td>
-								<th>可变费用（元）</th>
+								<th  class="before-require">可变费用（元）</th>
 								<td><input v-model="htjbxx.kbfy" type="text" style="width:100%;height: 25px;" placeholder="请输入金额"></td>
 							</tr>
 							<tr >
@@ -71,8 +71,8 @@
 								<td>{{ htjbxx.ssbz }}</td>
 								<th>二开费用标准（元）</th>
 								<td>{{ htjbxx.ekbz }}</td>
-								<th></th>
-								<td></td>
+								<th>分包总费用</th>
+								<td>{{ htjbxx.sjzfy = Number(htjbxx.ssfy)+Number(htjbxx.ekfy)+Number(htjbxx.kbfy)}}</td>
 							</tr>
 							<tr height="100px">
 								<th rowspan="2">分包说明</th>
@@ -152,6 +152,7 @@
 	},
 	methods: {
 		handleSaveFb(){
+			if(!this.validate()) return;
 			this.fbnrlist = [];
 			this.fbData.forEach(ele=>{
 				this.fbnrlist.push({
@@ -282,6 +283,26 @@
 					});
 				}
 			})
+		},
+		
+		validate(){
+			if(!this.htjbxx.fbmc){
+				 this.$message({ message: '请输入分包名称',type: 'warning'});
+				return false;
+			}
+			if(!this.htjbxx.jhksrq){
+				this.$message({ message: '请选择计划开始日期',type: 'warning'});
+				return false;
+			}
+			if(!this.htjbxx.jhjsrq){
+				this.$message({ message: '请选择计划结束日期',type: 'warning'});
+				return false;
+			}
+			if(!this.htjbxx.kbfy){
+				this.$message({ message: '请填写可变费用',type: 'warning'});
+				return false;
+			}
+			return true;
 		}
 	},
 	activated() {

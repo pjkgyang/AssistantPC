@@ -9,6 +9,23 @@
 				</p>
 			</div>
 			<div>
+				<p><span class="filter-weight tips">分包费用：</span></p>
+				<table border width="100%" class="tb-table ">
+					<tr>
+						<th>总金额（元）</th>
+						<td width="30%">{{ fbxxData.zfy }}</td>
+						<th>实施费用（元）</th>
+						<td width="30%">{{ fbxxData.ssfy }}</td>
+					</tr>
+					<tr>
+						<th>二开费用（元）</th>
+						<td width="30%">{{ fbxxData.ekfy }}</td>
+						<th>可变费用（元）</th>
+						<td width="30%">{{ fbxxData.kbfy }}</td>
+					</tr>
+				</table>
+			</div>
+			<div>
 				<p><span class="filter-weight tips">投标费用：</span></p>
 				<table border width="100%" class="tb-table ">
 					<tr>
@@ -95,6 +112,7 @@ export default {
 		tbxq({ fbbh: this.$route.query.fbbh, tbbh: this.$route.query.tbbh }).then(({ data }) => {
 			if (data.state == 'success') {
 				this.ywyData = !data.data.htnrfy ? [] : data.data.htnrfy;
+				this.fbxxData = !data.data.fbxx ? {} : data.data.fbxx;
 				this.fjmc = data.data.fjmc;
 				if (!!data.data.tbxx) {
 					this.tbxxData = data.data.tbxx;

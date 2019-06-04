@@ -13,7 +13,7 @@
            </p>
            <p  class="item_Card_midInfoT">
                <span>
-                    <span class="card_color">投标人数: </span><span> {{cardData.tbrs}}</span>
+                    <span class="card_color">投标人数：</span><span> {{cardData.tbrs}}</span>
                </span>
                <el-tag size="mini" :type="cardData.tbzt=='01'?'success':'danger'">{{cardData.tbzt=='01'?'招标中':'招标结束'}}</el-tag>
            </p>
@@ -22,7 +22,7 @@
                 <span style="float:left;color:#000"> 
                     {{cardData.fbxz=='01'?'在建':cardData.fbxz=='02'?'售后服务':'过保'}}
                </span>
-              <span><span style="color:#999">招标截止日期:</span>{{cardData.zbjzrq}}</span>
+              <span><span style="color:#999">招标截止日期：</span>{{!cardData.zbjzrq?'无':cardData.zbjzrq}}</span>
            </p>
        </div>
  </div>   
@@ -63,8 +63,8 @@ export default {
 <style scoped>
 .item_Card {
   width: 300px;
-  box-shadow: 0 0px 5px #999;
-  margin: 10px 15px 25px 0;
+  box-shadow: 0 0px 5px rgba(0,0,0,0.2);
+  margin:10px 0 10px 20px;
   float: left;
   position: relative;
 }
@@ -138,6 +138,6 @@ export default {
 }
 .item_Card:hover {
   transform: translate3d(0, -3px, 0);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
 </style>

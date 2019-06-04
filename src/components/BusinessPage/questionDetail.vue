@@ -34,6 +34,8 @@
                     <span class="question-info-front">所属单位 &#x3000;</span>{{qusetionInfo.ssbm == ''?'无':qusetionInfo.ssbm}}</span>
                   <span>
                     <span class="question-info-front">问题类别 &#x3000;</span>{{wtlbmc == ''||wtlbmc == null?'无':wtlbmc}}</span>
+									<span>
+										  <span class="question-info-front">问题级别 &#x3000;</span>{{wtjbmc == ''||wtjbmc == null?'无':wtjbmc}}</span>
                 </p>
                 <p>
                   <span>
@@ -48,8 +50,6 @@
                     <span class="question-info-front">期望解决日期&#x3000;</span>{{qusetionInfo.qwjjrq==''?'无':qusetionInfo.qwjjrq}}&#x3000;</span>
                   <span>
                     <span class="question-info-front">承诺结束日期&#x3000;</span>{{qusetionInfo.cnjsrq == ''?'无':qusetionInfo.cnjsrq}}</span>
-                  <!-- <span v-if="false">
-                    <span class="question-info-front">开发工作量 &#x3000;</span>{{qusetionInfo.kfgzl}} 人/天</span> -->
                   <span>
                     <span class="question-info-front">问题来源 &#x3000;</span>{{wtlymc == ''||wtlymc == null?'无':wtlymc}}
                   </span>
@@ -751,6 +751,7 @@ export default {
       rylb: "",
       wtlbmc: "",//问题类别
       wtlymc:"",//问题来源
+			wtjbmc:"",//问题级别
       sqgbgs: 0,
       hjgs: 0,
       uploadAction: "https://jsonplaceholder.typicode.com/posts/",
@@ -2114,12 +2115,14 @@ export default {
         }
       });
     },
-
+		
+		// 查询单个问题
     queryQuestion(wid, xmtd) {
       //   查询单个问题
       this.qusetionInfo = {};
       this.wtlbmc = "";
       this.wtlymc = "";
+			this.wtjbmc = "";
       this.hjgs = 0;
       queryQuestion({
         wid: wid
@@ -2151,6 +2154,7 @@ export default {
               }
             });
           }
+					
           if (this.qusetionInfo.wtly != "") {
             getResponsibleTaskList({
               name: "ProblemSource",
@@ -2161,6 +2165,19 @@ export default {
               }
             });
           }
+					
+					if (this.qusetionInfo.wtjb != "") {
+					  getResponsibleTaskList({
+					    name: "ProblemLevel",
+					    code: this.qusetionInfo.wtjb
+					  }).then(({ data }) => {
+					    if (data.state == "success") {
+					      this.wtjbmc = data.data;
+					    }
+					  });
+					}
+					
+					
 
           //    关闭问题获取贡献人
           if (data.data.fbzt == 1) {
@@ -2387,7 +2404,7 @@ div.el-form-item {
 }
 .question-content > p > span {
   display: inline-block;
-  min-width: 25%;
+  min-width: 20%;
   white-space: nowrap;
   font-size: 14px;
   color: #363748;

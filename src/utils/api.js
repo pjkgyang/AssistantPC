@@ -25,7 +25,13 @@ export default {
     listXxdk:window.baseurl+'project/listXxdk.do', //获取学校到款明细
 	queryMilestoneStageWorkHour:window.baseurl+'report/queryMilestoneStageWorkHour.do',//获取日报工时详情
 	getPersonalWorkLog:window.baseurl+'process/getPersonalWorkLog.do',//获取日报
-
+	
+	
+	// 用户学习报表
+	queryUserStudyTotalReport:window.baseurl+'userstudyreport/queryUserStudyTotalReport.do',//用户使用报表
+	queryUserStudyReport:window.baseurl+'userstudyreport/queryUserStudyReport.do',//学习行为报表
+	queryCourseQualityReport:window.baseurl+'userstudyreport/queryCourseQualityReport.do',//课程质量报表
+	
 
     // 使用报表
     problemsameIPStat:window.baseurl+'usageReport/problemsameIPStat.do',//提问受理IP相同统计报表
@@ -33,6 +39,7 @@ export default {
     userLoginReport:window.baseurl+'usageReport/userLoginReport.do',//用户登录详情
 	userBehaviorReport:window.baseurl+'usageReport/userBehaviorReport.do',//用户行为记录
 	questionProgressSummaryReport:window.baseurl+'report/questionProgressSummaryReport.do',//问题处理进展报表
+	
 	
 
     // 考核报表

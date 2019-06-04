@@ -45,7 +45,7 @@
       </div>
       <div v-if="filterList.includes('qygc') && filterShow">
         <p class="query-title">区域工程:</p>
-        <p class="query-list" @click="handleGCZD">
+        <p class="query-list" @click="handleGCZD" style="width: 90%;">
           <span data-type="" :class="{'bg-active':filterWord.gczd == ''}">全部</span>
           <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':filterWord.gczd == gcqy.label}">{{gcqy.mc}}</span>
         </p>

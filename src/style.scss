@@ -133,6 +133,18 @@ img{
 [flex-1]{
 	flex:1 0 0;
 }
+
+.width100{
+	 display: inline-block;
+	 width: 100px;
+	 text-align: right;
+}
+.width120{
+	 display: inline-block;
+	 width: 120px;
+	 text-align: right;
+	 white-space: nowrap;
+}
 .filter-weight{
   font-weight: 700;
 }
