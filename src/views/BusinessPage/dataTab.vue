@@ -129,7 +129,7 @@ export default {
 }
 
 .item_dataTab_card{
-	max-height: calc(100vh - 190px);
+	max-height: calc(100vh - 160px);
 	overflow-y: auto;
 }
 .item_dataTab::after {

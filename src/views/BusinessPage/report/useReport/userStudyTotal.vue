@@ -47,7 +47,11 @@ export default {
     };
   },
   methods: {
-    exportTable() {},
+    exportTable() {
+		this.jrksrq = !this.jrksrq?'':this.jrksrq;
+		this.jrjsrq = !this.jrjsrq?'':this.jrjsrq;
+		window.open(window.baseurl + 'userstudyreport/exportUserStudyTotalReport.do?startDate='+this.jrksrq +'&endDate='+this.jrjsrq);
+	},
 	handleCheck(){
 		this.currentPage = 1;
 		this.queryUserStudyTotalReport();

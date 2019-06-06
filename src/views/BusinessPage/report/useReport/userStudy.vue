@@ -9,17 +9,45 @@
 			</div>
 			<div class="mg-12">
 				<span class="filter-weight width120">首次学习开始日期：</span>
-				<el-date-picker v-model="filterData.scxxksrq" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
+				<el-date-picker
+					v-model="filterData.scxxksrq"
+					type="date"
+					placeholder="选择日期"
+					size="mini"
+					format="yyyy 年 MM 月 dd 日"
+					value-format="yyyy-MM-dd"
+				></el-date-picker>
 				&#x3000;
 				<span class="filter-weight width120">首次学习结束日期：</span>
-				<el-date-picker v-model="filterData.scxxjsrq" type="date" size="mini" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
+				<el-date-picker
+					v-model="filterData.scxxjsrq"
+					type="date"
+					size="mini"
+					placeholder="选择日期"
+					format="yyyy 年 MM 月 dd 日"
+					value-format="yyyy-MM-dd"
+				></el-date-picker>
 			</div>
 			<div class="mg-12">
 				<span class="filter-weight width120">最近学习开始日期：</span>
-				<el-date-picker v-model="filterData.zjxxksrq" type="date" placeholder="选择日期" size="mini" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
+				<el-date-picker
+					v-model="filterData.zjxxksrq"
+					type="date"
+					placeholder="选择日期"
+					size="mini"
+					format="yyyy 年 MM 月 dd 日"
+					value-format="yyyy-MM-dd"
+				></el-date-picker>
 				&#x3000;
 				<span class="filter-weight width120">最近学习结束日期：</span>
-				<el-date-picker v-model="filterData.zjxxjsrq" type="date" size="mini" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
+				<el-date-picker
+					v-model="filterData.zjxxjsrq"
+					type="date"
+					size="mini"
+					placeholder="选择日期"
+					format="yyyy 年 MM 月 dd 日"
+					value-format="yyyy-MM-dd"
+				></el-date-picker>
 			</div>
 		</div>
 		<div>
@@ -34,7 +62,7 @@
 				:indexArr="[0]"
 				:widthArr="[]"
 				:Width="'160'"
-				:Height="240"
+				:Height="290"
 			></tableComponents>
 		</div>
 	</div>
@@ -44,12 +72,12 @@ import tableComponents from '@/components/reportTable/tableComponents.vue';
 export default {
 	data() {
 		return {
-			filterData:{
+			filterData: {
 				keyword: '',
-				scxxksrq:"",
-				scxxjsrq:"",
-				zjxxksrq:"",
-				zjxxjsrq:""
+				scxxksrq: '',
+				scxxjsrq: '',
+				zjxxksrq: '',
+				zjxxjsrq: ''
 			},
 			dataList: {},
 			headList: [],
@@ -58,7 +86,19 @@ export default {
 		};
 	},
 	methods: {
-		exportTable() {},
+		exportTable() {
+			this.filterData.scxxksrq = !this.filterData.scxxksrq ? '' : this.filterData.scxxksrq;
+			this.filterData.scxxjsrq = !this.filterData.scxxjsrq ? '' : this.filterData.scxxjsrq;
+			this.filterData.zjxxksrq = !this.filterData.zjxxksrq ? '' : this.filterData.zjxxksrq;
+			this.filterData.zjxxjsrq = !this.filterData.zjxxjsrq ? '' : this.filterData.zjxxjsrq;
+			
+			window.open(window.baseurl + 'userstudyreport/exportUserStudyReport.do?conditions=' + this.filterData.keyword 
+			+'&startDateFirst=' + this.filterData.scxxksrq  
+			+'&endDateFirst=' + this.filterData.scxxjsrq  
+			+'&startDateLast=' + this.filterData.zjxxksrq  
+			+'&endDateLast=' + this.filterData.zjxxjsrq  
+			);
+		},
 		handleCheck() {
 			this.currentPage = 1;
 			this.queryUserStudyReport();
@@ -77,11 +117,11 @@ export default {
 			this.$get(this.API.queryUserStudyReport, {
 				curPage: this.currentPage,
 				pageSize: this.pageSize,
-				conditions:this.filterData.keyword,
-				startDateFirst: !this.filterData.scxxksrq?'':this.filterData.scxxksrq,
-				endDateFirst: !this.filterData.scxxjsrq?'':this.filterData.scxxjsrq,
-				startDateLast:!this.filterData.zjxxksrq?'':ththis.filterData.zjxxjsrqis.filterData.zjxxksrq,
-				endDateLast:!this.filterData.zjxxjsrq?'':this.filterData.zjxxjsrq
+				conditions: this.filterData.keyword,
+				startDateFirst: !this.filterData.scxxksrq ? '' : this.filterData.scxxksrq,
+				endDateFirst: !this.filterData.scxxjsrq ? '' : this.filterData.scxxjsrq,
+				startDateLast: !this.filterData.zjxxksrq ? '' : ththis.filterData.zjxxjsrqis.filterData.zjxxksrq,
+				endDateLast: !this.filterData.zjxxjsrq ? '' : this.filterData.zjxxjsrq
 			}).then(res => {
 				if (res.state == 'success') {
 					this.dataList = res.data;

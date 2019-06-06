@@ -40,6 +40,7 @@
             <span data-type="" :class="{'bg-active':sqgb == ''}">全部</span>
             <span data-type="1" :class="{'bg-active':sqgb == '1'}">是</span>
             <span data-type="0" :class="{'bg-active':sqgb == '0'}">否</span>
+						<span data-type="2" :class="{'bg-active':sqgb == '2'}">已驳回</span>
           </p>
         </div>
   

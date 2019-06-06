@@ -49,7 +49,15 @@ export default {
 		};
 	},
 	methods: {
-		exportTable() {},
+		exportTable() {
+			this.filterData.zjxxksrq = !this.filterData.zjxxksrq ? '' : this.filterData.zjxxksrq;
+			this.filterData.zjxxjsrq = !this.filterData.zjxxjsrq ? '' : this.filterData.zjxxjsrq;
+			
+			window.open(window.baseurl + 'userstudyreport/exportCourseQualityReport.do?conditions=' + this.filterData.keyword 
+			+'&startDate=' + this.filterData.zjxxksrq  
+			+'&endDate=' + this.filterData.zjxxjsrq  
+			);
+		},
 		handleCheck() {
 			this.currentPage = 1;
 			this.queryCourseQualityReport();

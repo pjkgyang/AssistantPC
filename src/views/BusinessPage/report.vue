@@ -4,9 +4,9 @@
           <div slot="menu" class="menu report-menu">
             <el-menu background-color="#fff" text-color="#708087"  :active-text-color="'#409EFF'" ref="navbar" :router='true' :default-active='defActive'  :default-openeds='openeds' menu-trigger="click" @select="selectMenu"  unique-opened>
                 <nav-bar-item v-for="(item, n) in navList" :urlIndex="item.url" :item="item" :navIndex="String(n+1)" :key="n"></nav-bar-item>
-               <el-menu-item index="6" :route="{path:'/businesspage/report/use'}"><i class="el-icon-menu"></i> <span slot="title">用户使用</span></el-menu-item>
-                <el-menu-item index="7" :route="{path:'/businesspage/report/userstudy'}"><i class="el-icon-menu"></i> <span slot="title">学习行为</span></el-menu-item>
-								<el-menu-item index="8" :route="{path:'/businesspage/report/coursequality'}"><i class="el-icon-menu"></i> <span slot="title">课程质量</span></el-menu-item>
+                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/use'}"><i class="el-icon-menu"></i> <span slot="title">用户使用</span></el-menu-item> -->
+                <!-- <el-menu-item index="7" :route="{path:'/businesspage/report/userstudy'}"><i class="el-icon-menu"></i> <span slot="title">学习行为</span></el-menu-item> -->
+								<!-- <el-menu-item index="8" :route="{path:'/businesspage/report/coursequality'}"><i class="el-icon-menu"></i> <span slot="title">课程质量</span></el-menu-item> -->
 
                 <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/khbb/grrzsj'}"><i class="el-icon-menu"></i> <span slot="title">任职</span></el-menu-item>  -->
                 <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/use/userlogin'}"><i class="el-icon-menu"></i> <span slot="title">用户登录</span></el-menu-item>  -->
