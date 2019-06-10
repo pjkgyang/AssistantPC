@@ -8,8 +8,8 @@
                 <!-- <el-menu-item index="7" :route="{path:'/businesspage/report/userstudy'}"><i class="el-icon-menu"></i> <span slot="title">学习行为</span></el-menu-item> -->
 								<!-- <el-menu-item index="8" :route="{path:'/businesspage/report/coursequality'}"><i class="el-icon-menu"></i> <span slot="title">课程质量</span></el-menu-item> -->
 
-                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/khbb/grrzsj'}"><i class="el-icon-menu"></i> <span slot="title">任职</span></el-menu-item>  -->
-                <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/use/userlogin'}"><i class="el-icon-menu"></i> <span slot="title">用户登录</span></el-menu-item>  -->
+                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/fbjs'}"><i class="el-icon-menu"></i> <span slot="title">分包</span></el-menu-item> -->
+                <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/userphi'}"><i class="el-icon-menu"></i> <span slot="title">cccc</span></el-menu-item> -->
             
                 <!-- <el-submenu index="8">
                   <template slot="title">

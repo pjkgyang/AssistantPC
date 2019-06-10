@@ -146,8 +146,8 @@
 								<td>{{ fbjbxx.ssbz }}</td>
 								<th>二开费用标准（元）</th>
 								<td>{{ fbjbxx.ekbz }}</td>
-								<th></th>
-								<td></td>
+								<th>分包总费用（元）</th>
+								<td>{{ fbjbxx.zfy }}</td>
 							</tr>
 							<tr height="100px">
 								<th >分包说明</th>

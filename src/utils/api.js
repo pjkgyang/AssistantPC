@@ -55,6 +55,7 @@ export default {
     xggs:window.baseurl+'assessment/xggs.do', //修改工时
     hasDepositData:window.baseurl+'assessment/hasDepositData.do',//考核数据是否已封存
     depositAssessmentData:window.baseurl+'assessment/depositAssessmentData.do',//封存考核数据
+	personalProblemHandleIndicator:window.baseurl+'assessment/personalProblemHandleIndicator.do',//个人指标的地址
 
     
 
@@ -249,6 +250,9 @@ export default {
 	closeFb:window.baseurl + 'fbxx/closeFb.do',//关闭分包
     verifyFb:window.baseurl + 'fbxx/verifyFb.do',//分包审核
 	getProjects:window.baseurl + 'fbxx/getProjects.do',//获取分包项目
+	queryFbjsMonthReport:window.baseurl + 'fbxx/queryFbjsMonthReport.do',//查询项目月度结算单
+	
+	
     // 投标
     saveTbxx:window.baseurl + 'tbxx/saveTbxx.do',//投标
 	tbManage:window.baseurl + 'tbxx/tbManage.do',//投标详情

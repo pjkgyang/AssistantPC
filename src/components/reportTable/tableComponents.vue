@@ -8,7 +8,7 @@
             <el-table :data="bodyData" border class="report-ele-table" width="100%" :max-height="Height==0?'auto':tableHeight">
                 <el-table-column v-for="(th,index) in tableData.head" :key="index" :label="th.zh" v-if="!th.hidden" 
                 :min-width="widthArr.includes(index)?rowWidth:th.zh=='排名'||th.zh=='姓名'||th.zh=='评分'?80:th.zh=='工号'||th.zh=='贡献人姓名'||th.zh=='贡献人工号'||th.zh=='发布人'||th.en=='gl'?100:Width" 
-								show-overflow-tooltip :fixed="indexArr.includes(index)?true:false">
+								show-overflow-tooltip  :fixed="!!th.fix?true:indexArr.includes(index)?true:false">
                     <template slot-scope="scope">
                         <span v-if="!th.canRedirect && th.zh != '状态'"  :style="{'float':!!th.position && th.position != 'center'?th.position:''}">{{scope.row[index]}}</span>
                         <a v-if="th.canRedirect" href="javaScript:void(0)" @click="handleRouter(scope.row,index)">{{scope.row[index]}}</a>
@@ -24,7 +24,6 @@
 </template>
 <script>
 import pagination from "@/components/BusinessPage/pagination.vue";
-
 export default {
   data() {
     return {

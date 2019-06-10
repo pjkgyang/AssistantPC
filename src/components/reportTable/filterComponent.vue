@@ -9,7 +9,7 @@
         </p>
       </div>
       <div v-if="filterList.includes('date')">
-        <p class="query-title">日期:</p>
+        <p class="query-title">{{dateTip+'日期'}}:</p>
         <p>
           <el-date-picker  v-model="filterWord.date" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" @change="handleDatepick">
           </el-date-picker>
@@ -153,7 +153,7 @@
   </div>
 </template>
 <script>
-import { getMenu, getSession ,getPreMonth} from "@/utils/util.js";
+import { getMenu, getSession ,getPreMonth,getLastMonthDay} from "@/utils/util.js";
 export default {
   data() {
     return {
@@ -235,7 +235,11 @@ export default {
     filterShow:{
          type:Boolean,
          default:true
-    }
+    },
+		dateTip:{
+			 type: String,
+			 default: ""
+		}
   },
   methods: {
     handleSearchBtn() {
@@ -380,6 +384,11 @@ export default {
     //   },
   },
   mounted() {
+		let month = new Date().getMonth();
+		month = month + 1;
+		if(!!this.dateTip){
+			this.filterWord.date = ['2019-'+(month<10?('0'+month):month)+'-01',getLastMonthDay('2019',month)]
+		}
     // 上个月
      let date = new Date().getFullYear()+'-'+(new Date().getMonth()+1<10?('0'+(new Date().getMonth()+1)):new Date().getMonth()+1)
      this.filterWord.yf = getPreMonth(date);

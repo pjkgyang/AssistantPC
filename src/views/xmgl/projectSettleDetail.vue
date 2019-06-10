@@ -63,7 +63,7 @@
 						<h5>本次结算信息</h5>
 						<table>
 							<tr>
-								<th>本次结算总金额（元）</th>
+								<th>本次可结算总金额（元）</th>
 								<td>{{!jsxx.jsje?0:jsxx.jsje}}</td>
 								<th>本次已结算总金额（元）</th>
 								<td colspan="3">{{!jsxx.yjszfy?0:jsxx.yjszfy}}</td>
@@ -328,6 +328,9 @@
 			}
 			this.jsxx.jsje = (Number(this.jsxx.sjssfy) + Number(this.jsxx.sjekfy) + Number(this.jsxx.sjkbfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje));
 			this.jsxx.jsje = this.jsxx.jsje <0?0:this.jsxx.jsje;
+			// 本次已结算金额加上奖励-惩罚  把奖励和惩罚加到已结算总金额，小于0，不处理。
+			this.jsxx.yjszfy = Number(this.jsxx.yjszfy) + Number(this.jsxx.jlje) - Number(this.jsxx.cfje);
+			this.jsxx.yjszfy = this.jsxx.yjszfy<0?0:this.jsxx.yjszfy;
 		},
 		// 保存
 		handleSave(){
@@ -554,6 +557,11 @@
 					// 团队实施费用
 					this.tdxxData.forEach(ele=>{
 						this.jsssfyTotal += !ele.jsssfy?0:Number(ele.jsssfy)
+					})
+				}else{
+					this.$message({
+						message:res.msg,
+						type:'error'
 					})
 				}
 			})

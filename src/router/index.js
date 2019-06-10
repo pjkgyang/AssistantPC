@@ -440,15 +440,27 @@ export default new Router({
 						},
 						{
 							path: '/businesspage/report/userstudy',
-							name: 'useReport',
+							name: 'userstudyReport',
 							component: resolve => require(['@/views/BusinessPage/report/useReport/userStudy.vue'], resolve),
 						},
 						{
 							path: '/businesspage/report/coursequality',
-							name: 'useReport',
+							name: 'coursequalityReport',
 							component: resolve => require(['@/views/BusinessPage/report/useReport/courseQuality.vue'], resolve),
 						},
-					]
+						//个人问题处理指标
+						{
+							path: '/businesspage/report/userphi',
+							name: 'userphiReport',
+							component: resolve => require(['@/views/BusinessPage/report/useReport/grwtclzb.vue'], resolve),
+						},
+						// fbjs
+						{
+							path: '/businesspage/report/fbjs',
+							name: 'fbjsReport',
+							component: resolve => require(['@/views/BusinessPage/report/fbxx/fbjs.vue'], resolve),
+						},
+					],
 				},
 				{
 					path: '/businesspage/toplist',
@@ -535,7 +547,6 @@ export default new Router({
 							name: 'BusinessReportGryswg',
 							component: resolve => require(['@/views/BusinessPage/report/yswgphb/gryswg.vue'], resolve),
 						},
-
 
 					]
 				},

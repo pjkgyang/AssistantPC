@@ -736,7 +736,8 @@ export function listWeekPlanPerson(obj) {
     params: {
       month:obj.month,
       zxh:obj.zxh,
-      qygc:obj.qygc
+      qygc:obj.qygc,
+			sfkhzj:obj.sfkhzj
     }
   })
 }  
