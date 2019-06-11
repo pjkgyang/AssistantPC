@@ -3,7 +3,7 @@
         <div flex>
             <div>
                 <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" 
-                :before-upload="beforeUpload"  :on-change="handleChange">
+                :before-upload="beforeUpload"  :on-change="handleChange" :multiple="isMultiple">
                     <el-button size="mini" type="primary">上传附件</el-button>
                     <!-- <div slot="tip" class="el-upload__tip">实验信息附件上传，只能传(.file)文件</div> -->
                 </el-upload>
@@ -33,6 +33,10 @@ export default {
 		istb:{
 			 type:Boolean,
 			 default:false
+		},
+		isMultiple:{
+			type:Boolean,
+			default:false
 		}
 	},
 	watch: {
@@ -49,8 +53,10 @@ export default {
 				this.$emit('handleUploadFile',this.files);
     },
     beforeUpload(file) {
-			this.fileList = [];
-			this.files = [];
+			if(!this.isMultiple){
+					this.fileList = [];
+					this.files = [];
+			}
       this.uploadForm = new FormData();
       this.uploadForm.append("fileUpload", file);
       axios.post(window.baseurl + "attachment/uploadAttach.do", this.uploadForm, {

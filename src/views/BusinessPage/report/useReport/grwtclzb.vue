@@ -77,7 +77,7 @@
 				 this.filterData.date = !this.filterData.date?[]:this.filterData.date;
 				 this.filterData.date[0] = !this.filterData.date[0]?'':this.filterData.date[0];
 				 this.filterData.date[1] = !this.filterData.date[1]?'':this.filterData.date[1];
-				 window.open(window.baseurl + 'assessment/exportPersonalProblemHandleIndicator?slStarDt='+
+				 window.open(window.baseurl + 'assessment/exportPersonalProblemHandleIndicator.do?slStarDt='+
 				   this.filterData.date[0]+
 				  '&slEndDt='+ this.filterData.date[1] +
 				  '&bm='+ this.filterData.bm +

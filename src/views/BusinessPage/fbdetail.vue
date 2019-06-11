@@ -127,9 +127,7 @@
 									<th>分包日期</th>
 									<td>{{ fbxxData.fbrq }}</td>
 									<th>分包性质</th>
-									<td>{{ fbxxData.fbxz == '01' ? '在建' : fbxxData.fbxz == '02' ? '售后服务' : '过保' }}</td>
-									<th>自助打印</th>
-									<td>{{ fbxxData.zzdy }}</td>
+									<td colspan="3">{{ fbxxData.fbxz == '01' ? '在建' : fbxxData.fbxz == '02' ? '售后服务' : '过保' }}</td>
 								</tr>
 								<tr>
 									<th>计划开始日期</th>

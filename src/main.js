@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
   sessionStorage.setItem("Detailpannel",to.fullPath);
 
   if(!to.meta.title){
-    document.title = '金智教育工程小助手';
+    document.title = '金智教育共创小助手';
   }else{
     document.title = to.meta.title
   }

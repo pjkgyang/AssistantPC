@@ -3,7 +3,7 @@
 		<div>
 			<div class="mg-12">
 				<span class="filter-weight  width120">关键字查询：</span>
-				<el-input v-model="filterData.keyword" size="mini" placeholder="请输入课程名称" style="width: 586px;"></el-input>
+				<el-input v-model="filterData.keyword" size="mini" placeholder="请输入成员编号/成员名称" style="width: 586px;"></el-input>
 				&#x3000;
 				<el-button size="mini" type="primary" @click="handleCheck">查询</el-button>
 			</div>

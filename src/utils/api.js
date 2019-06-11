@@ -152,6 +152,9 @@ export default {
     listMemoProduct:window.baseurl+'milestone/listMemoProduct.do', //备忘产品列表
     isCanEditMemoMilestone:window.baseurl+'milestone/isCanEditMemoMilestone.do', //是否可编辑备忘里程碑
     addMemo:window.baseurl+'milestone/addMemo.do',//编辑备忘里程碑
+	querySaleConfirmMilestone:window.baseurl+'milestone/querySaleConfirmMilestone.do',//销售确认里程碑
+
+
 
      // 资源中心
     openTemplateFolder:window.baseurl+'attachment/openTemplateFolder.do',//模板
@@ -268,4 +271,5 @@ export default {
 	saveJsFeeData:window.baseurl + 'jsxx/saveJsFeeData.do',//保存项目结算
 	jsReview:window.baseurl + 'jsxx/jsReview.do',//结算审核
 	setCz:window.baseurl + 'jsxx/setCz.do',//设置冲账
+	setSettlementFeeAttribution:window.baseurl + 'jsxx/setSettlementFeeAttribution.do',//设置结算费用归属
  }

@@ -420,7 +420,7 @@
               </el-form-item>
 
                <el-form-item >
-                 <uploadFile @handleUploadCrowd="handleUploadCrowd"></uploadFile>
+                 <uploadFile @handleUploadFile="handleUploadFile"></uploadFile>
               </el-form-item>
 
               <el-form-item >
@@ -891,8 +891,9 @@ export default {
 		clearTimeout(this.timer);	
 	},
   methods: {
-    handleUploadCrowd(data){
-      this.crowdxqData.fjid = data;
+		// 上传附件
+    handleUploadFile(data){
+      this.crowdxqData.fjid = data.join(',');
     },
     // 选择业务线
     handleSeleteYwx(val) {

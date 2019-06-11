@@ -5,7 +5,7 @@
       <div class="title_menu">
         <p>
           <img src="static/img/logo2.png" alt="logo">&#x3000;
-          <span>金智教育工程小助手</span>
+          <span>金智教育共创小助手</span>
         </p>
       </div>
       <div class="header-navmenu">

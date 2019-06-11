@@ -561,6 +561,12 @@ export default new Router({
 					name: 'TeamVindicate',
 					component: resolve => require(['@/views/BusinessPage/teamVindicate/index.vue'], resolve),
 				},
+				// 销售确认验收
+				{
+					path: '/businesspage/saleConfirm',
+					name: 'TeamVindicate',
+					component: resolve => require(['@/views/BusinessPage/salesConfirm.vue'], resolve),
+				},
 				{
 					path: '/businesspage/personalSetting',
 					name: 'PersonalSetting',
