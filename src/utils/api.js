@@ -147,13 +147,13 @@ export default {
     addProjectProcess:window.baseurl+'project/addProjectProcess.do',//添加项目催办
     pageProjectReminder:window.baseurl+'project/pageProjectReminder.do',
 
-    // 项目备忘
+    // 项目备忘 销售确认里程碑
     listHtnrApp:window.baseurl+'project/listHtnrApp.do', //合同APP
     listMemoProduct:window.baseurl+'milestone/listMemoProduct.do', //备忘产品列表
     isCanEditMemoMilestone:window.baseurl+'milestone/isCanEditMemoMilestone.do', //是否可编辑备忘里程碑
     addMemo:window.baseurl+'milestone/addMemo.do',//编辑备忘里程碑
-	querySaleConfirmMilestone:window.baseurl+'milestone/querySaleConfirmMilestone.do',//销售确认里程碑
-
+	querySaleConfirmMilestone:window.baseurl+'milestone/querySaleConfirmMilestone.do',//获取销售确认里程碑列表
+	saleConfirmMilestone:window.baseurl+'milestone/saleConfirmMilestone.do',//销售确认里程碑
 
 
      // 资源中心

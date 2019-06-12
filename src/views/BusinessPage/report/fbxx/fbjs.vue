@@ -24,6 +24,8 @@
 				@exportTable="exportTable"
 				@handleXxwt="handleXxwt"
 				:Height="240"
+				:indexArr="[0,1]"
+				:widthArr="[1]"
 			></tableComponents>
 		</div>
 	</div>

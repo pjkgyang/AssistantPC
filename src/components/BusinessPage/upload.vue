@@ -37,6 +37,10 @@ export default {
 		isMultiple:{
 			type:Boolean,
 			default:false
+		},
+		isCrowd:{
+			type:Boolean,
+			default:false
 		}
 	},
 	watch: {
@@ -58,13 +62,21 @@ export default {
 					this.files = [];
 			}
       this.uploadForm = new FormData();
-      this.uploadForm.append("fileUpload", file);
-      axios.post(window.baseurl + "attachment/uploadAttach.do", this.uploadForm, {
+			if(!this.isCrowd){
+				this.uploadForm.append("fileUpload", file);
+			}else{
+			  this.uploadForm.append("uploadCrowd", file);	
+			}
+      axios.post(window.baseurl + (!this.isCrowd?"attachment/uploadAttach.do":"external/uploadCrowd.do"), this.uploadForm, {
           headers: { "Content-Type": "multipart/form-data" }
         }).then(res => {
           if(res.data.state == 'success'){
             this.files.push(res.data.data.split('|')[0]);
-						this.fileList.push(res.data.data.split('|')[1]);
+						if(!this.isCrowd){
+							this.fileList.push(res.data.data.split('|')[1]);
+						}else{
+							this.fileList.push(file.name);
+						}
             this.$emit('handleUploadFile',this.files);
           }
       });

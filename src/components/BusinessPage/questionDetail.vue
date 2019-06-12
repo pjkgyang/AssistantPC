@@ -420,7 +420,7 @@
               </el-form-item>
 
                <el-form-item >
-                 <uploadFile @handleUploadFile="handleUploadFile"></uploadFile>
+                 <uploadFile :isCrowd="true" @handleUploadFile="handleUploadFile"></uploadFile>
               </el-form-item>
 
               <el-form-item >
@@ -780,13 +780,10 @@ export default {
       cnjssm: "",
       hfwid: "",
       crowdId: "",
-
       // 项目团队转发 成员
       forwordUser: "",
       userIds: "",
-
       crowdType: 1,
-			
 			// 定时器存储
 			timer:''
 

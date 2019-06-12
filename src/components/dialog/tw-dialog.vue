@@ -722,8 +722,8 @@
 					this.$nextTick(() => {
 						$("#summernote").summernote("code", this.questionInfo.nr);
 					});
+					this.queryResponsibleProduct(this.xmbh);
 				}
-				this.queryResponsibleProduct(this.xmbh);
 			}else{
 				this.isInnerItem = false;
 			}

@@ -105,7 +105,7 @@ export default {
 			let obj = {
 		        userQuestionStartDt:this.dateType==0?this.startDate:this.startDateFw,
 				userQuestionEndDt:this.dateType==0?this.endDate:this.endDateFw,
-				dwbh:this.$route.query.bh,
+				dwbh:!!this.$route.query.bh?this.$route.query.bh:this.userInfo.unitnum,
 				cpbh:data[0]
 		    }
 			if (params[i].en.indexOf(",") != -1) {

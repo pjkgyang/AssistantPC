@@ -8,7 +8,7 @@
                 <!-- <el-menu-item index="7" :route="{path:'/businesspage/report/userstudy'}"><i class="el-icon-menu"></i> <span slot="title">学习行为</span></el-menu-item> -->
 								<!-- <el-menu-item index="8" :route="{path:'/businesspage/report/coursequality'}"><i class="el-icon-menu"></i> <span slot="title">课程质量</span></el-menu-item> -->
 
-                <el-menu-item index="6" :route="{path:'/businesspage/report/fbjs'}"><i class="el-icon-menu"></i> <span slot="title">月度分包计算</span></el-menu-item>
+                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/ydjs'}"><i class="el-icon-menu"></i> <span slot="title">月度分包计算</span></el-menu-item> -->
                 <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/userphi'}"><i class="el-icon-menu"></i> <span slot="title">cccc</span></el-menu-item> -->
             
                 <!-- <el-submenu index="8">

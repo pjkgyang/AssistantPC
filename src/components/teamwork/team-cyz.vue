@@ -175,14 +175,15 @@
     <el-dialog title="编辑人员信息" :visible.sync="editdialogVisible" width="660px" :close-on-click-modal="false" :append-to-body=true>
       <el-form style="margin:10px 0 80px;padding:0 50px;" size="mini" label-width="80px" :inline="true">
         <el-form-item label="负责业务" required>
-          <el-select v-model="fzywList" placeholder="请选择" multiple :style="{width:userInfo.unitType != 1?'400px':'450px'}" :disabled='userInfo.unitType == 1?false:isAllCpx'>
+					<!-- :style="{width:userInfo.unitType != 1?'400px':'450px'}" :disabled='userInfo.unitType == 1?false:isAllCpx' -->
+          <el-select v-model="fzywList" placeholder="请选择" multiple style="width: 450px;">
             <el-option v-for="(yw,index) in cpxData" :label="yw.mc" :value="yw.label + String.fromCharCode(2) + yw.mc" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <!-- 2018.12.11 学校用户不显示全部-->
-        <el-form-item label="" v-if="userInfo.unitType != 1">
+        <!-- <el-form-item label="" v-if="userInfo.unitType != 1">
           <el-checkbox v-model="isAllCpx">全部</el-checkbox>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="用户类别" required v-if="userInfo.unitType == 1">
           <el-radio v-model="yhlb" label="1">学校老师</el-radio>
           <el-radio v-model="yhlb" label="2">学校领导</el-radio>
@@ -410,15 +411,18 @@ export default {
     //保存 编辑 业务线
     handleEditCommit() {
       // 学校老师  金智编辑学校老师
-      if(this.userInfo.unitType == 1){
-          this.isAllCpx = false;
-      }
-      if (!this.isAllCpx && this.fzywList.length == 0 && this.userInfo.unitType != 1) {
-        this.$alert("请选择负责业务", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
-      }else if(this.fzywList.length == 0 && this.userInfo.unitType == 1){
+			// 2019-06-12 修改 删除全部
+			
+      // if(this.userInfo.unitType == 1){
+      //     this.isAllCpx = false;
+      // }
+      // if (!this.isAllCpx && this.fzywList.length == 0 && this.userInfo.unitType != 1) {
+      //   this.$alert("请选择负责业务", "提示", {
+      //     confirmButtonText: "确定",
+      //     type: "warning"
+      //   });
+      // }else
+			if(this.fzywList.length == 0 && this.userInfo.unitType == 1){
         this.$alert("请选择负责业务", "提示", {
           confirmButtonText: "确定",
           type: "warning"

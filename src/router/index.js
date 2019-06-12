@@ -454,9 +454,9 @@ export default new Router({
 							name: 'userphiReport',
 							component: resolve => require(['@/views/BusinessPage/report/useReport/grwtclzb.vue'], resolve),
 						},
-						// fbjs
+						// 项目月度结算
 						{
-							path: '/businesspage/report/fbjs',
+							path: '/businesspage/report/ydjs',
 							name: 'fbjsReport',
 							component: resolve => require(['@/views/BusinessPage/report/fbxx/fbjs.vue'], resolve),
 						},
