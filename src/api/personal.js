@@ -287,7 +287,7 @@ export function queryVisiblePerson(obj){
 	let url =  window.baseurl + suburl + 'queryVisiblePerson.do'
 	return axios.get(url,{
 		params:{
-			qygc:obj.qygc||''
+				qygc:obj.qygc||''
   		}
 	})
 }

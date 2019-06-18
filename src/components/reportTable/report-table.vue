@@ -15,6 +15,7 @@
                     <td><a href="javaScript:void(0)" @click="handleWtgz(table.cpxbh,'dxmtdjj',table.dxmtdjj)">{{table.dxmtdjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtgz(table.cpxbh,'dzjjj',table.dzjjj)">{{table.dzjjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtgz(table.cpxbh,'dcpjj',table.dcpjj)">{{table.dcpjj}}</a></td>
+					<td><a href="javaScript:void(0)" @click="handleWtgz(table.cpxbh,'dcpjljj',table.dcpjljj)">{{table.dcpjljj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtgz(table.cpxbh,'dzdrjj',table.dzdrjj)">{{table.dzdrjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtgz(table.cpxbh,'dgb',table.dgb)">{{table.dgb}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtgz(table.cpxbh,'wtzs',table.wtzs)">{{table.wtzs}}</a></td>
@@ -46,6 +47,9 @@ export default {
          },{
            name:'待专家解决',
            label:'dzjjj'
+         },{
+           name:'待产品经理解决',
+           label:'dcpjljj'
          },{
            name:'待产品解决',
            label:'dcpjj'

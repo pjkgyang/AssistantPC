@@ -397,6 +397,12 @@ export default new Router({
 							name: 'BusinessReportShgsb',
 							component: resolve => require(['@/views/BusinessPage/report/khbb/shgsb.vue'], resolve),
 						},
+						{
+							path: '/businesspage/report/khbb/shgsjsqd',
+							name: 'BusinessReportShgsjsqd',
+							component: resolve => require(['@/views/BusinessPage/report/khbb/shgsjsqd.vue'], resolve),
+						},
+						
 						// 使用报表
 						{
 							path: '/businesspage/report/use/wtslip',

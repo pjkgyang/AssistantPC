@@ -8,11 +8,13 @@
                     <th>{{tableData[0].xmtdjj}}</th>
                     <th>{{tableData[0].gczjjj}}</th>
                     <th>{{tableData[0].cpzjjj}}</th>
+					<th>{{tableData[0].cpjljj}}</th>
                     <th>{{tableData[0].zdrjj}}</th>
                     <th>{{tableData[0].qdjkrhs}}</th>
                     <th>{{tableData[0].xmtdhs}}</th>
                     <th>{{tableData[0].gczjhs}}</th>
                     <th>{{tableData[0].cpzjhs}}</th>
+					<th>{{tableData[0].cpjlhs}}</th>
                     <th>{{tableData[0].zdrhs}}</th>
                     <th>{{tableData[0].hjhs}}</th>
                     <th>{{tableData[0].dyz}}</th>
@@ -24,11 +26,17 @@
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'xmtdjj',table.xmtdjj)">{{table.xmtdjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'gczjjj',table.gczjjj)">{{table.gczjjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'cpzjjj',table.cpzjjj)">{{table.cpzjjj}}</a></td>
+					
+					<td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'cpjljj',table.cpjljj)">{{table.cpjljj}}</a></td>
+
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'zdrjj',table.zdrjj)">{{table.zdrjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'qdjkrhs',table.qdjkrhs)">{{table.qdjkrhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'xmtdhs',table.xmtdhs)">{{table.xmtdhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'gczjhs',table.gczjhs)">{{table.gczjhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'cpzjhs',table.cpzjhs)">{{table.cpzjhs}}</a></td>
+					
+					<td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'cpjlhs',table.cpjlhs)">{{table.cpjlhs}}</a></td>
+					
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'zdrhs',table.zdrhs)">{{table.zdrhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'hjhs',table.hjhs)">{{table.hjhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleQyjjqk(table.qybh,'dyz',table.dyz)">{{table.dyz}}</a></td>  

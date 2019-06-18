@@ -4,6 +4,10 @@
 			<div class="fb_info">
 				<div>
 					<h4>合同内容</h4>
+					<div text-right v-if="userGroup.includes('JYGL') || userGroup.includes('GCZJ')">
+						<el-button size="mini" type="primary" @click="handleChangeInfo('xmjl')">修改项目经理</el-button>
+						<el-button size="mini" type="primary" @click="handleChangeInfo('gcqy')">修改工程区域</el-button>
+					</div>
 					<div>
 						<h6>合同基本信息</h6>
 						<table>
@@ -109,20 +113,104 @@
 				</div>
 			</div>
 		</div>
+
+		<el-dialog :title="type=='xmjl'?'修改项目经理':'修改工程区域'" :visible.sync="dialogVisible" width="500px">
+	     	<div v-if="type == 'xmjl'" class="mg15">
+				<span class="filter-weight">选择人员：</span>
+				<el-select v-model="rybh" size="small" placeholder="请选择" @change="handleChoosePerson" style="width:300px">
+					<el-option v-for="(item, i) in options" :key="i" :label="item.text" :value="item.id"></el-option>
+				</el-select>
+			</div>
+			<div  v-if="type == 'gcqy'" class="mg15">
+				<span class="filter-weight">区域工程：</span>
+				<el-select v-model="gcqy" size="small" placeholder="请选择"  style="width:300px">
+					<el-option v-for="(item, i) in gcqyList" :key="i" :label="item.mc" :value="item.label"></el-option>
+				</el-select>
+			</div>
+
+			<span slot="footer" class="dialog-footer">
+				<el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+				<el-button size="mini" type="primary" @click="handleCommit">确 定</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 <script>
+import { listWeekPlanPerson } from '@/api/weekMonthReport.js';
+import { getMenu, getSession } from "@/utils/util.js";
 export default {
 	data() {
 		return {
+			dialogVisible:false,
 			htjbxx: {},
-			htnrData: []
+			htnrData: [],
+			//
+			userGroup:'',
+			type:'',
+			options:[],
+			gcqyList:[],
+			rybh:'',
+			ryxm:'',
+			gcqy:''
+
 		};
 	},
 	mounted() {
-		this.getLxxx();
+	      this.getLxxx();
+		  this.userGroup = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
+		  if (getSession("gczd") == null) {
+		    getMenu("gczd", this.gcqyList, true); //获取工程战队
+		  } else {
+		    this.gcqyList = getSession("gczd");
+		  }
 	},
 	methods: {
+		handleChangeInfo(type){
+			this.type = type;
+			if(type == 'xmjl'){
+				this.getPerson();
+			}
+			this.dialogVisible = !this.dialogVisible;
+		},
+		handleChoosePerson(val){
+			this.options.forEach(ele=>{
+				if(ele.id == val){
+				  this.ryxm = ele.text;	
+				}
+			})
+		},
+		handleCommit(){
+			let obj = {};
+			if(this.type == 'xmjl' && !this.rybh){
+				this.$alert('请选择人员', '提示', { confirmButtonText: '确定', type: 'warning' });
+				return;
+			};
+			if(this.type == 'gcqy' && !this.gcqy){
+				this.$alert('请选择工程区域', '提示', { confirmButtonText: '确定', type: 'warning' });
+				return;
+			};
+			if(this.type == 'gcqy'){
+				obj = {
+					xmbh:this.$route.query.xmbh,
+					gcqy:this.gcqy
+				}
+			}else{
+				obj = {
+					xmbh:this.$route.query.xmbh,
+					rybh:this.rybh,
+					ryxm:this.ryxm,
+				}
+			}
+			this.$post(this.type == 'xmjl'?this.API.modifyProjectManager:this.API.modifyProjectArea,obj).then(res=>{
+				if(res.state == 'success'){
+					this.$message({message:'修改成功',type:'success'});
+					this.getLxxx();
+					this.dialogVisible = false;
+				}else{
+					this.$message({message:res.msg,type:'error'})
+				}
+			})
+		},
 		getLxxx() {
 			this.$get(this.API.queryLxxx, { xmbh: this.$route.query.xmbh }).then(res => {
 				if (res.state == 'success') {
@@ -130,6 +218,22 @@ export default {
 					this.htnrData = !res.data.lxxx_htnr ? [] : res.data.lxxx_htnr;
 				}
 			});
+		},
+			
+		getPerson(){
+			// 获取周报人员
+				listWeekPlanPerson({
+					month:'',
+					zxh:'',
+					qygc: this.htjbxx.qy,
+					sfkhzj:''
+				}).then(({ data }) => {
+					if (data.state == 'success') {
+						this.options = data.data;
+					} else {
+						this.$alert(data.msg, '提示', { confirmButtonText: '确定', type: 'error' });
+					}
+				});
 		}
 	},
 	activated() {},

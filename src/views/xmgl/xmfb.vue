@@ -151,6 +151,8 @@
 		this.queryFbYwxData();
 	},
 	methods: {
+		
+		// 保存分包
 		handleSaveFb(){
 			if(!this.validate()) return;
 			this.fbnrlist = [];
@@ -193,6 +195,8 @@
 				}
 			})
 		},
+		
+		
 		// 计算实施人月
 		handleInputSSry(bh,index){
 			let ssryTotal = 0, //业务域分包 实施人月合计

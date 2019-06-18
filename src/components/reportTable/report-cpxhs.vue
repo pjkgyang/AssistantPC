@@ -7,14 +7,17 @@
                     <th>{{tableData[0].xmtdjj}}</th>
                     <th>{{tableData[0].gczjjj}}</th>
                     <th>{{tableData[0].cpzjjj}}</th>
+					<th>{{tableData[0].cpjljj}}</th>
                     <th>{{tableData[0].zdrjj}}</th>
                     <th>{{tableData[0].xmtdhs}}</th>
                     <th>{{tableData[0].gczjhs}}</th>
                     <th>{{tableData[0].cpzjhs}}</th>
+					<th>{{tableData[0].cpjlhs}}</th>
                     <th>{{tableData[0].zdrhs}}</th>
                     <th>{{tableData[0].hjhs}}</th>
                     <th>{{tableData[0].xmtdzfl}}</th>
                     <th>{{tableData[0].gczjzfl}}</th>
+					<th>{{tableData[0].cpzjzfl}}</th>
                     <th>{{tableData[0].dyz}}</th>
                     <th>{{tableData[0].wtzs}}</th>
                 </tr>
@@ -25,16 +28,24 @@
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'xmtdjj',table.xmtdjj)">{{table.xmtdjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'gczjjj',table.gczjjj)">{{table.gczjjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'cpzjjj',table.cpzjjj)">{{table.cpzjjj}}</a></td>
+					
+					<td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'cpjljj',table.cpjljj)">{{table.cpjljj}}</a></td>
+					
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'zdrjj',table.zdrjj)">{{table.zdrjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'xmtdhs',table.xmtdhs)">{{table.xmtdhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'gczjhs',table.gczjhs)">{{table.gczjhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'cpzjhs',table.cpzjhs)">{{table.cpzjhs}}</a></td>
+					
+					<td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'cpjlhs',table.cpjlhs)">{{table.cpjlhs}}</a></td>
+					
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'zdrhs',table.zdrhs)">{{table.zdrhs}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'hjhs',table.hjhs)">{{table.hjhs}}</a></td>
 
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'xmtdzfl',table.xmtdzfl)">{{table.xmtdzfl}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'gczjzfl',table.gczjzfl)">{{table.gczjzfl}}</a></td>
-
+					
+					<td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'cpzjzfl',table.cpzjzfl)">{{table.cpzjzfl}}</a></td> 
+					
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'dyz',table.dyz)">{{table.dyz}}</a></td> 
                     <td><a href="javaScript:void(0)" @click="handleCpx(table.cpxbh,'wtzs',table.wtzs)">{{table.wtzs}}</a></td> 
                 </tr>

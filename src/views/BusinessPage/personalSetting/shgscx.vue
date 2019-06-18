@@ -75,6 +75,12 @@ export default {
       index:''
     };
   },
+	props:{
+		isJsqd:{
+			type:Boolean,
+			default:false
+		}
+	},
   methods: {
     handleSearch() {
       this.ydwtshgsxqb();
@@ -102,22 +108,56 @@ export default {
       }
       if(params[i].zh == '结算状态'){
         this.$get(this.API.nfxgjszt,{
-          yf:this.yf,
-          rygh:data[1]
+          rygh: data[1],
+          wid: data[0]
         }).then(res=>{
           if(res.state == 'success'){
             if(!!res.data){
               this.dialogVisible = true;
             }else{
-               this.$message({
-                showClose: true,
-                message:res.msg,
-                type: 'warning'
-              });
+							this.$alert('对不起，您无权修改结算状态!如有疑问，请联系管理员','提示' , {
+								confirmButtonText: '确定',
+								type:'warning'
+							});
             }
           }
         })
       }
+			if (params[i].zh == '核准工时' && !!this.isJsqd) {
+					this.$get(this.API.nfxggs, {
+						rygh: data[1],
+						wid: data[0]
+					}).then(res => {
+						if (res.state == 'success') {
+							if (!res.data) {
+								this.$alert('对不起，您无权修改工时!如有疑问，请联系管理员;', '提示', { confirmButtonText: '确定', type: 'warning' });
+							} else {
+								this.$prompt('请输入工时', '提示', {
+									confirmButtonText: '确定',
+									cancelButtonText: '取消',
+									inputPattern: /^\d+(\.\d+)?$/,
+									inputErrorMessage: '工时格式不正确'
+								}).then(({ value }) => {
+										this.$get(this.API.xggs, {
+											wid: data[0],
+											rygh: data[1],
+											gs: value
+										}).then(res => {
+											if (res.state == 'success') {
+												this.$alert('修改成功', '提示', {
+													confirmButtonText: '确定',
+													callback: action => {
+														this.ydwtshgsxqb();
+													}
+												});
+											}
+										});
+									})
+								.catch(() => {});
+							}
+						}
+					});
+				}
     },
     // 修改结算状态
     xgjszt(){
@@ -157,7 +197,7 @@ export default {
       this.$get(this.API.ydwtshgsxqb,{
         curPage:this.currentPage,
         pageSize:this.pageSize,
-        isPersonal:true,
+        isPersonal:this.isJsqd?false:true,
         yf:this.yf,
         jszt:this.jszts,
         keyword:this.keyword

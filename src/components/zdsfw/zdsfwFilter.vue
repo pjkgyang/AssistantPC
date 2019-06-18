@@ -41,7 +41,7 @@
           </div>
 					
 					<div flex>
-						<div v-if="filterList.includes('fwzt')" flex style="width: 550px;">
+						<div v-if="filterList.includes('fwzt')" flex style="width: 602px;">
 							<p class="query-title">服务状态:</p>
 							<p class="query-list" @click="handleZt">
 								<span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
@@ -58,12 +58,13 @@
 					</div>	
 					
 					<div flex>
-						<div v-if="filterList.includes('wtzt')" flex style="width: 550px;">
+						<div v-if="filterList.includes('wtzt')" flex style="width: 602px;">
 							<p class="query-title">问题状态:</p>
 							<p class="query-list" >
 								<span  v-for="(wtzt,index) in wtztList"  @click="handleWTZT(wtzt.lable)" :key="index" :class="{'bg-active':filterWord.wtzt == wtzt.lable}">{{wtzt.mc}}</span>
 							</p>
 						</div>
+						
 						<div v-if="filterList.includes('fxzt')" flex>
 							<p class="query-title">风险状态:</p>
 							<p class="query-list">
@@ -71,14 +72,23 @@
 							</p>
 						</div>
 					</div>
+					
+					<div flex>
+						<div v-if="filterList.includes('xmzt')">
+							<p class="query-title">项目状态:</p>
+							<p class="query-list" @click="handleXmzt">
+								<span data-type="" :class="{'bg-active':filterWord.xmzt == ''}">全部</span>
+								<span v-for="(xmzt,index) in xmztList" :data-type="xmzt.lable" :key="index" :class="{'bg-active':filterWord.xmzt == xmzt.lable}">{{xmzt.mc}}</span>
+							</p>
+						</div>
 						
-          <div v-if="filterList.includes('xmzt')">
-            <p class="query-title">项目状态:</p>
-            <p class="query-list" @click="handleXmzt">
-              <span data-type="" :class="{'bg-active':filterWord.xmzt == ''}">全部</span>
-              <span v-for="(xmzt,index) in xmztList" :data-type="xmzt.lable" :key="index" :class="{'bg-active':filterWord.xmzt == xmzt.lable}">{{xmzt.mc}}</span>
-            </p>
-          </div>
+						<div  v-if="filterList.includes('ismine')" flex>
+							<p class="query-title">责任人是我:</p>
+							<p>
+								<el-checkbox v-model="filterWord.ismine" true-label="1" false-label="0" @change="handleChangeIsmine">是</el-checkbox>
+							</p>
+						</div>
+					 </div>
 <!-- 
           <div v-if="filterList.includes('lb')">
             <p class="query-title">类别:</p>
@@ -165,7 +175,8 @@ export default {
         sfgq: "",
         fxdj:"",
 				wtzt:"",
-				fxzt:""
+				fxzt:"",
+				ismine:"1"
       },
       groupTag: "",
       sfzk: true
@@ -175,7 +186,7 @@ export default {
     filterList: {
       type: Array,
       default: () => {
-        return ["keyword", "cp", "fwnr", "fwzt",'fxdj', "xmzt", "lb", "date", "sfgq","wtzt","fxzt"];
+        return ["keyword", "cp", "fwnr", "fwzt",'fxdj', "xmzt", "lb", "date", "sfgq","wtzt","fxzt","ismine"];
       }
     },
     placeholder: {
@@ -245,6 +256,9 @@ export default {
       this.filterWord.xmzt = zt;
       this.$emit("handleChangeFilter", this.filterWord);
     },
+		handleChangeIsmine(){
+			this.$emit("handleChangeFilter", this.filterWord);
+		},
     handleLb(e) {
       let lb = e.target.getAttribute("data-type");
       if (lb == null) return;

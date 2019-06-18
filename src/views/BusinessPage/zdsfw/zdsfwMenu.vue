@@ -29,6 +29,14 @@
             </el-table-column>
             <el-table-column prop="yh" label="学校名称" min-width="200" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>
+						<el-table-column v-if="isJzuser == '0'" prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
+						<el-table-column v-if="isJzuser == '0'" prop="wtgs" label="问题工时(小时)" width="120"></el-table-column>
+						<el-table-column v-if="isJzuser == '0'" prop="fxgs" label="风险工时(小时)" width="120"></el-table-column>
+						<el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="qrsj" label="确认时间" width="160" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="pf" label="评分" width="80"></el-table-column>	
+						
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
@@ -64,7 +72,6 @@
                 <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':scope.row.sfgq=='1'?'过期':'超期完成'}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>
             <!-- <el-table-column prop="ztztmc" label="项目状态" min-width="100" show-overflow-tooltip></el-table-column> -->
             <el-table-column prop="xmlb" label="项目类别" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="sfzt" label="合同性质" min-width="80" show-overflow-tooltip></el-table-column>
@@ -72,12 +79,6 @@
             <el-table-column prop="dkl" label="到款率" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
-            <el-table-column v-if="isJzuser == '0'" prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
-						<el-table-column v-if="isJzuser == '0'" prop="wtgs" label="问题工时(小时)" width="120"></el-table-column>
-						<el-table-column v-if="isJzuser == '0'" prop="fxgs" label="风险工时(小时)" width="120"></el-table-column>
-            <el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="qrsj" label="确认时间" width="160" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="pf" label="评分" width="80"></el-table-column>
           </el-table>
         </section>
         <div text-right style="margin-top:2px">
@@ -134,7 +135,8 @@ export default {
         sfgq: "",
         fxdj: "",
 				wtzt:"",
-				fxzt:""
+				fxzt:"",
+				ismine:"1"
       },
       isJzuser: "",
       userGroupTag: "",
@@ -347,7 +349,9 @@ export default {
 							"&wtzt=" +
 							this.filterData.wtzt +
 							"&fxzt=" +
-							this.filterData.fxzt
+							this.filterData.fxzt +
+							"&ismine=" +
+							this.filterData.ismine
           );
           break;
         case "sc": //生成
@@ -428,6 +432,7 @@ export default {
         fxdj: this.filterData.fxdj,
 				wtzt:this.filterData.wtzt,
 				fxzt:this.filterData.fxzt,
+				ismine:this.filterData.ismine,
       }).then(res => {
         if (res.state == "success") {
           this.tableData = res.data.rows;

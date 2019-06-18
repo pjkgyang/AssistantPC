@@ -21,7 +21,7 @@ export default {
     return {
       filterList: ["keyword", "zdsfwzt"],
       tableData: [],
-      pageSize: 15,
+      pageSize: 18,
       currentPage: 1,
       total: 0,
       filterData: {

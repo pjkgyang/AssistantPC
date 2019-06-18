@@ -13,7 +13,7 @@
 						<el-checkbox v-if="(showCondition==1||showCondition==2)" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox>
 					</el-form-item>
 					<el-form-item label="项目名称" v-if="!chooseableItem">
-						<el-input size="mini" type="text" style="width:700px"  v-model="xmmc" readonly></el-input>
+						<el-input size="mini" type="text" style="width:800px"  v-model="xmmc" readonly></el-input>
 					</el-form-item>
 					<el-form-item label="项目状态" required>
 						<el-input size="mini" type="text" style="width:330px" v-model="xmzt" readonly></el-input>
@@ -693,6 +693,7 @@
 						this.xmmc = this.itemInfo.xmmc;
 						this.xmbh = this.itemInfo.xmbh;
 						this.xmzt = this.itemInfo.xmzt;
+						this.queryResponsibleProduct(this.xmbh);
 					}
 				} else {
 					// this.xmcpList = this.cplist;

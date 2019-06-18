@@ -87,7 +87,7 @@
           <li v-for="(reply,index) in questionReply">
             <div class="project-question-detail-top" style="background:#F5F7FA;height:44px;">
               <div class="question-type">
-                <span class="question-reply">{{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'记录':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}</span>
+                <span class="question-reply">{{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'记录':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':reply.hflx == 14?'挂起':'开发'}}</span>
               </div>
               <div class="question-content-SC">
                 <span>{{reply.bt}}</span>
@@ -124,6 +124,13 @@
                   <span v-if="reply.hflx == 9 && !!isgcXmtdbyWt" flex-align-center>
                     <el-button @click="handleEditkfrw($event,reply)" type="primary" size="mini">编辑开发任务</el-button>&#x3000;
                   </span>
+									<!-- 申请挂起 -->
+									<span  v-if="reply.hflx == 14">
+											  <el-tag  v-if="!!reply.sfbh" size="mini" type="success">{{reply.sfbh=='0'?'已同意':reply.sfbh=='1'?'已驳回':'已解除'}}已同意</el-tag>
+												<el-button v-if="!reply.sfbh" type="primary" size="mini" @click="handleOperateGq(reply.wid,0)">同意</el-button>&#x3000;
+												<el-button v-if="!reply.sfbh" type="danger" size="mini" @click="handleOperateGq(reply.wid,1)">驳回</el-button>&#x3000;
+												<el-button v-if="reply.sfbh == '0'" type="info"  size="mini" @click="handleOperateGq(reply.wid,2)">解除</el-button>
+									</span>
                 </div>
               </div>
             </div>
@@ -192,6 +199,7 @@
             <div id="summernoteT"></div>
           </div>
           <div style="text-align:right;padding-top:10px">
+						<el-button size="mini" type="primary" @click="handleSqgq" v-if="btnShwon.gq">申请挂起</el-button>
             <el-button size="mini" type="primary" @click="handleSqdyz" v-if="btnShwon.sqdyz">申请待验证</el-button>
             <el-button size="mini" type="primary" @click="sendMsg" v-if="btnShwon.fsxx">发送消息</el-button>
             <el-button size="mini" type="primary" @click="replyQuestion('yyjl')" v-if="btnShwon.yyjl">添加运营记录</el-button>
@@ -536,7 +544,36 @@
       <xxDialog :show.sync="ywxxShow" :tableData="userList" @handleSure="handleSure"></xxDialog>
       <!-- 项目团队成员 -->
       <xmtdcylog :show.sync="xmtdcyShow" :xmbh="qusetionInfo.xmbh" @hanldeCommitUser="hanldeCommitUser" ></xmtdcylog>
-
+			
+			<el-dialog
+				title="提示"
+				:visible.sync="dialogVisibleGq"
+				width="500px"
+				:before-close="handleClose">
+				<div class="mg15">
+					<div v-show="suspendType == 'gq'">
+						<span class="filter-bt before-require">截止日期 :</span>
+						<el-date-picker :picker-options="pickerJfrqDateBefore" v-model="gqData.date" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
+					</div><br>
+					<div>
+						<span class="filter-bt before-require">说明 :</span>
+						 <el-input
+								type="textarea"
+								style="width: 350px;"
+								:rows="2"
+								placeholder="请输入内容"
+								v-model="gqData.sm">
+							</el-input>
+					</div>
+					<div>
+						
+					</div>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button size="mini" @click="dialogVisibleGq = false">取 消</el-button>
+					<el-button size="mini" type="primary" @click="handleCommitGq">确 定</el-button>
+				</span>
+			</el-dialog>
     </div>
   </div>
 </template>
@@ -684,7 +721,13 @@ export default {
       },
       wtlyList: [], //问题来源
       wtly: "",
-
+			dialogVisibleGq:false,
+			gqData:{    //挂起参数
+				date:'',
+				sm:''
+      },
+      suspendType:'',//挂起说明类型
+		
       dateruleVisible: false, //日期规则
       userList: [],
       pickerBeginDateBefore: this.handleFocusDate(),
@@ -888,6 +931,42 @@ export default {
 		clearTimeout(this.timer);	
 	},
   methods: {
+		// 处理挂起
+		handleOperateGq(wid,data){
+      // 能否处理挂起
+      this.hfwid = wid;
+			this.$get(this.API.canDealSuspend,{
+				hfwid:wid,
+				isagree:data
+			}).then(res=>{
+				if(res.state == 'success'){
+					if(!!res.data){
+            // 同意，解除
+						if(data != 1){
+							this.$post(this.API.dealSuspend,{
+								hfwid:wid,
+								isagree:data
+							}).then(res=>{
+								if(res.state == 'success'){
+                  this.$message({messgae:'操作成功',type:'success'});
+                  this.queryQuestion(this.wid);
+								}else{
+                  this.$message({messgae:res.msg,type:'error'})
+                }
+							})
+						}else{
+              // 驳回
+              this.dialogVisibleGq = true;
+              this.suspendType = 'bh';
+            }
+					}else{
+						this.$message({messgae:'您无权操作',type:'warning'})
+					}
+				}else{
+					this.$message({messgae:res.msg,type:'error'})
+				}
+			})
+		},
 		// 上传附件
     handleUploadFile(data){
       this.crowdxqData.fjid = data.join(',');
@@ -929,13 +1008,6 @@ export default {
         });
         return;
       }
-// 			if(this.crowdxqData.rwlx == '2' && !/^([1-9]\d*(\.\d*[1-9])?)$/.test(value)){
-// 			   this.$alert("请填写正确金额", "提示", {
-// 			     confirmButtonText: "确定",
-// 			     type: "warning"
-// 			   });
-// 				return;
-// 			}
 			if(this.crowdxqData.rwlx != '2' && !/^([1-9]\d*(\.\d*[1-9])?)|(0\.\d*[1-9])$/.test(this.crowdxqData.xmysje)){
 				this.$alert("请填写正确金额", "提示", {
 				   confirmButtonText: "确定",
@@ -1061,10 +1133,69 @@ export default {
         });
       }
     },
+		// 申请挂起
+		handleSqgq(){
+			this.$get(this.API.canApplySuspension,{}).then(res=>{
+				if(res.state == 'success'){
+					if(!!res.data){
+						this.$alert('您有1个问题已申请挂起，请先联系提问人处理，谢谢支持！', '提示', {
+							confirmButtonText: '确定',
+							type:'warning',
+					 });
+					}else{
+            this.dialogVisibleGq = true;
+            this.suspendType = 'gq';
+					}
+				}
+			})
+		},
+		
+		// 申请挂起（确定）
+		handleCommitGq(){
+			if(!this.gqData.date && this.suspendType == 'gq'){
+			 this.$message({message:'请选择截止日期',type:'warning'})
+			 return;
+			}
+			if(!/\S/.test(this.gqData.sm)){
+			 this.$message({message:'请填写说明',type:'warning'})
+			 return;
+      }
+      
+      if(this.suspendType == 'gq'){
+        this.$post(this.API.submitSuspend,{
+          wid:this.wid,
+          suspendDate:this.gqData.date,
+          sm:this.gqData.sm
+        }).then(res=>{
+          if(res.state == 'success'){
+            this.$message({message:'提交成功',type:'success'})
+            this.dialogVisibleGq = false;
+          }else{
+            this.$message({message:res.msg,type:'error'})
+          }
+        })
+      }else{
+        // 驳回 挂起
+        this.$post(this.API.dealSuspend,{
+						hfwid:this.hfwid,
+            isagree:1,
+            sm:this.gqData.sm
+					}).then(res=>{
+						if(res.state == 'success'){
+              this.$message({messgae:'操作成功',type:'success'});
+              this.queryQuestion(this.wid);
+						}else{
+              this.$message({messgae:res.msg,type:'error'})
+            }
+				})
+      }
+		},
+		
+		//申请待验证
     handleSqdyz() {
-      //申请待验证
       this.sqdyzVisible = !this.sqdyzVisible;
     },
+		
     // 发送消息
     sendMsg() {
       this.ywxxShow = true;

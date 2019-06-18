@@ -95,7 +95,7 @@
 					</div>
 					<div>
 						<h6>合同内容</h6>
-						<el-table :data="htnrData" border style="width: 100%" max-height="400">
+						<el-table :data="htnrData" border style="width: 100%" >
 							<el-table-column prop="ywx" label="业务线" min-width="120"></el-table-column>
 							<el-table-column prop="app" label="合同内容" show-overflow-tooltip min-width="150"></el-table-column>
 							<el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>
@@ -167,15 +167,15 @@
 							<h6>分包内容</h6>
 							<el-table :data="fbnrData" border style="width: 100%">
 								<el-table-column prop="ywymc" label="业务域" min-width="200" show-overflow-tooltip></el-table-column>
-								<el-table-column prop="cpmc" label="合同内容" width="160" show-overflow-tooltip></el-table-column>
+								<el-table-column prop="cpmc" label="合同内容" min-width="160" show-overflow-tooltip></el-table-column>
 								<el-table-column prop="zb" label="占比(%)" width="90"></el-table-column>
-								<el-table-column prop="htsm" label="说明" width="160" show-overflow-tooltip></el-table-column>
+								<el-table-column prop="htsm" label="说明" min-width="160" show-overflow-tooltip></el-table-column>
 								<el-table-column prop="xmlb" label="项目类别" width="100"></el-table-column>
 
-								<el-table-column prop="htssry" label="实施人月(合同)" min-width="90"></el-table-column>
+								<!-- <el-table-column prop="htssry" label="实施人月(合同)" min-width="90"></el-table-column> -->
 								<el-table-column prop="ssckbz" label="实施参考标准" min-width="90"></el-table-column>
 								<el-table-column prop="fbssry" label="实施人月(分包)" min-width="90"></el-table-column>
-								<el-table-column prop="htekry" label="二开人月(合同)" min-width="90"></el-table-column>
+								<!-- <el-table-column prop="htekry" label="二开人月(合同)" min-width="90"></el-table-column> -->
 								<el-table-column prop="fbekry" label="二开人月(分包)" min-width="90"></el-table-column>
 								<el-table-column prop="fbsm" label="说明" min-width="160"></el-table-column>
 							</el-table>

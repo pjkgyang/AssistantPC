@@ -433,17 +433,18 @@ export default {
     } else {
       this.rylxList = getSession("rylx");
     }
-
-    if (!getSession("fbxz") && this.filterList.includes('fbxz')) {
+		
+		
+    if (!getSession("FbXz") && this.filterList.includes('fbxz')) {
       getMenu("FbXz", this.fbxzList, ""); //获取分包性质
     } else {
-      this.fbxzList = getSession("fbxz");
+      this.fbxzList = getSession("FbXz");
     }
 		
 		if (!getSession("rzdj") && this.filterList.includes('rzdj')) {
 		  getMenu("StaffQualificationLevel", this.rzdjList, ""); //获取任职等级
 		} else {
-		  this.fbxzList = getSession("rzdj");
+		  this.rzjbList = getSession("rzdj");
 		}
   },
   activated() {},

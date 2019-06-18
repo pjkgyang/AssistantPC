@@ -44,6 +44,7 @@
 						<el-table-column prop="htmsr" label="合同毛收入(元)" width="120"></el-table-column>
 						<el-table-column prop="czsj" label="操作时间" width="160"></el-table-column>
 						<el-table-column prop="tjr" label="提交人" width="100"></el-table-column>
+						<el-table-column prop="qrr" label="销售确认人" width="100"></el-table-column>
 						<el-table-column prop="sjjssj" label="实际结束时间" width="140"></el-table-column>
 					</el-table>
 					<el-pagination
@@ -58,6 +59,24 @@
 				</div>
 			</div>
 		</div>
+		<el-dialog
+		  title="打回说明"
+		  :visible.sync="dialogVisible"
+		  width="500px"
+		  >
+		  <div class="mg15">
+			  <el-input
+				  type="textarea"
+				  :rows="4"
+				  placeholder="请输入说明内容"
+				  v-model="sm">
+				</el-input>
+		  </div>
+		  <span slot="footer" class="dialog-footer">
+			<el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+			<el-button size="mini" type="primary" @click="handleCommitReject">确 定</el-button>
+		  </span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -65,6 +84,7 @@
 export default {
 	data() {
 		return {
+			dialogVisible:false,
 			currentPage: 1,
 			pageSize: 15,
 			total: 0,
@@ -73,8 +93,9 @@ export default {
 			showAlert:false,
 			filterData: {
 				keyword: '',
-				sfqr: 1
-			}
+				sfqr: 0,
+			},
+			sm:''
 		};
 	},
 	mounted() {
@@ -82,7 +103,7 @@ export default {
 		
 	},
 	methods: {
-		// 确认or打回
+		// 确认 
 		handleConfirmOrReject(data){
 			if(!!this.showAlert){
 				this.$alert('状态非 “完成待确认” 的不能确认或打回~', '提示', {
@@ -91,23 +112,22 @@ export default {
 				});
 				return;
 			}
-			this.$confirm('您确定要'+(!!data?'确认':'打回')+'里程碑吗?', '提示', {
-			  confirmButtonText: '确定',
-			  cancelButtonText: '取消',
-			  type: 'warning'
-			}).then(() => {
-			  this.$post(this.API.saleConfirmMilestone,{
-			  	wids:this.widsArr.join(','),
-			  	isConfirm:data
-			  }).then(res=>{
-			  	this.$message({
-				  message: '提交成功~',
-				  type: 'success'
-				});
-				this.currentPage = 1;
-				this.querySaleConfirmMilestone();
-			  })
-			}).catch(() => {});
+			if(!data){
+				this.dialogVisible = true;
+			}else{
+				this.commitSalesConfirm(1);
+			}
+		},
+		// 打回
+		handleCommitReject(){
+			if(!/^\S+$/.test(this.sm)){
+				this.$message({
+					message:'请填写说明内容',
+					type:'warning'
+				})
+				return;
+			}
+			this.commitSalesConfirm(0,this.sm);
 		},
 		// 导出
 		handleExport(){
@@ -140,11 +160,34 @@ export default {
 		handleSelectionChange(val){
 			this.widsArr = [];
 			val.forEach(ele=>{
-				this.widsArr.push(ele.wid);
+				this.widsArr.push(ele.lcbwid);
 				if(ele.zt != 9 ){
 					this.showAlert = true;
 				}
 			})
+		},
+		// 销售确认
+		commitSalesConfirm(data,sm){
+			this.$confirm('您确定要'+(!!data?'确认':'打回')+'里程碑吗?', '提示', {
+			  confirmButtonText: '确定',
+			  cancelButtonText: '取消',
+			  type: 'warning'
+			}).then(() => {
+			  this.$post(this.API.saleConfirmMilestone,{
+			  	wids:this.widsArr.join(','),
+			  	isConfirm:data,
+				sm:sm||''
+			  }).then(res=>{
+			  	this.$message({
+				  message: '提交成功~',
+				  type: 'success'
+				});
+				this.dialogVisible = false;
+				this.sm = '';
+				this.currentPage = 1;
+				this.querySaleConfirmMilestone();
+			  })
+			}).catch(() => {});
 		},
 		// 查询里程碑列表
 		querySaleConfirmMilestone() {

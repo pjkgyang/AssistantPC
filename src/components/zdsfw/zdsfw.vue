@@ -155,7 +155,8 @@ export default {
         //   )
         // ],
         sfgq: "",
-        fxdj:''
+        fxdj:'',
+				ismine:"1"
       },
       xmbh: this.nxmbh,
       plxgZrr: false,
@@ -396,7 +397,8 @@ export default {
               "&lb=" +
               this.filterData.lb,
               "&fxdj=" +
-              this.filterData.fxdj
+              this.filterData.fxdj 
+							
           );
           break;
         case "edit": //编辑

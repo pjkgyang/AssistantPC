@@ -97,8 +97,9 @@ export default {
 		exportTable() {
 			let startDate = this.dateType==0?this.startDate:this.startDateFw;
 			let endDate = this.dateType==0?this.endDate:this.endDateFw;
+			let dwbh = !!this.$route.query.bh?this.$route.query.bh:this.userInfo.unitnum;
 			window.open(window.baseurl + 'report/exportQuestionProgressSummaryReport.do?startDate='+ 
-			startDate +'&endDate=' +endDate +'&dwbh='+this.$route.query.bh);
+			startDate +'&endDate=' +endDate +'&dwbh='+dwbh);
 		},
 		// 
 		handleXxwt(data, i, params) {

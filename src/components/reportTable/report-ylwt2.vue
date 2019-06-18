@@ -8,6 +8,7 @@
                 <th>{{tableData2[0].dxmtdjj}}</th>
                 <th>{{tableData2[0].dzjjj}}</th>
                 <th>{{tableData2[0].dcpjj}}</th>
+				<th>{{tableData2[0].dcpjljj}}</th>
                 <th>{{tableData2[0].dzdrjj}}</th>
             </tr>
             </thead>
@@ -20,6 +21,7 @@
                     <td><a href="javaScript:void(0)" @click="handleWtxygz(table.cpxbh,table.sj,'dxmtdjj',table.dxmtdjj)">{{table.dxmtdjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtxygz(table.cpxbh,table.sj,'dzjjj',table.dzjjj)">{{table.dzjjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtxygz(table.cpxbh,table.sj,'dcpjj',table.dcpjj)">{{table.dcpjj}}</a></td>
+					<td><a href="javaScript:void(0)" @click="handleWtxygz(table.cpxbh,table.sj,'dcpjljj',table.dcpjljj)">{{table.dcpjljj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleWtxygz(table.cpxbh,table.sj,'dzdrjj',table.dzdrjj)">{{table.dzdrjj}}</a></td>
                 </tr>
         </table>
@@ -115,7 +117,7 @@ export default {
     border-bottom:1px solid #ebeef5;
 }
 .table th,table td{
-    width: 16.6%;
+    width:14.3%;
 }
 .table td{
     text-overflow: ellipsis;

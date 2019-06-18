@@ -44,6 +44,8 @@
 						<!-- question.sqgbCount > 0 && question.fbzt != 1 -->
 						<span class="question-tag-ysqgb" v-if="question.fbzt == 2">已申请关闭</span>
 						&#x3000;
+						<span class="question-tag-ysqgb" v-if="!!question.sfgq">已申请挂起</span>
+						&#x3000;
 						<span v-if="question.tjkfs > 0" style="color:#363748;font-size:12px;" class="question-tag-green">已提交开发</span>
 						&#x3000;
 						<p>

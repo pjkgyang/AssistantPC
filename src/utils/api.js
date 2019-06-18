@@ -254,7 +254,8 @@ export default {
     verifyFb:window.baseurl + 'fbxx/verifyFb.do',//分包审核
 	getProjects:window.baseurl + 'fbxx/getProjects.do',//获取分包项目
 	queryFbjsMonthReport:window.baseurl + 'fbxx/queryFbjsMonthReport.do',//查询项目月度结算单
-	
+	modifyProjectManager:window.baseurl + 'fbxx/modifyProjectManager.do',//修改项目经理
+	modifyProjectArea:window.baseurl + 'fbxx/modifyProjectArea.do',//修改工程区域
 	
     // 投标
     saveTbxx:window.baseurl + 'tbxx/saveTbxx.do',//投标
@@ -272,4 +273,12 @@ export default {
 	jsReview:window.baseurl + 'jsxx/jsReview.do',//结算审核
 	setCz:window.baseurl + 'jsxx/setCz.do',//设置冲账
 	setSettlementFeeAttribution:window.baseurl + 'jsxx/setSettlementFeeAttribution.do',//设置结算费用归属
+	
+	
+	// 问题
+	canApplySuspension:window.baseurl + 'question/canApplySuspension.do',//能否申请挂起
+	submitSuspend:window.baseurl + 'question/submitSuspend.do',//提交挂起
+	canDealSuspend:window.baseurl + 'question/canDealSuspend.do',//能否处理挂起
+	dealSuspend:window.baseurl + 'question/dealSuspend.do',//处理挂起
+	queryApplySuspension:window.baseurl + 'question/queryApplySuspension.do',//获取挂起问题
  }

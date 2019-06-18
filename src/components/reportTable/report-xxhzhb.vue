@@ -9,6 +9,7 @@
                     <th>{{tableData[0].dxmtdjj}}</th>
                     <th>{{tableData[0].dzjjj}}</th>
                     <th>{{tableData[0].dcpjj}}</th>
+					<th>{{tableData[0].dcpjljj}}</th>
                     <th>{{tableData[0].dyz}}</th>
                     <th>{{tableData[0].wtzs}}</th>
                     <th>{{tableData[0].ylbl}}</th>
@@ -32,6 +33,8 @@
                     <td><a href="javaScript:void(0)" @click="handleXxwt(table.dwbh,table.qybh,'dxmtdjj',table.dxmtdjj)">{{table.dxmtdjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleXxwt(table.dwbh,table.qybh,'dzjjj',table.dzjjj)">{{table.dzjjj}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleXxwt(table.dwbh,table.qybh,'dcpjj',table.dcpjj)">{{table.dcpjj}}</a></td>
+					
+					<td><a href="javaScript:void(0)" @click="handleXxwt(table.dwbh,table.qybh,'dcpjljj',table.dcpjljj)">{{table.dcpjljj}}</a></td>
 
                     <td><a href="javaScript:void(0)" @click="handleXxwt(table.dwbh,table.qybh,'dyz',table.dyz)">{{table.dyz}}</a></td>
                     <td><a href="javaScript:void(0)" @click="handleXxwt(table.dwbh,table.qybh,'wtzs',table.wtzs)">{{table.wtzs}}</a></td>
