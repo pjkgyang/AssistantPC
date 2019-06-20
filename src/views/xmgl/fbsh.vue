@@ -31,7 +31,8 @@
 		</div>
 		<br />
 		<div>
-			<el-table :max-height="height" :data="tableData" border style="width: 100%">
+			<!-- :max-height="height" -->
+			<el-table  :data="tableData" border style="width: 100%">
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
 						<el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.shzt == '已审核'?'详情':'审核'}}</el-button>

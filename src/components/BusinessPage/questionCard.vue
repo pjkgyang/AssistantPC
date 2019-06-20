@@ -122,7 +122,7 @@
 						</span>
 						<br />
 						<!-- !bjscShow && gjjhShow &&  -->
-						<span v-if="(question.fbqdm.includes('W03') && groupTag.includes('NLPXZJ')) || (question.fbqdm.includes('W05') && groupTag.includes('ZJ'))">
+						<span v-if="(!!question.fbqdm && (question.fbqdm.includes('W03') && groupTag.includes('NLPXZJ')) || (question.fbqdm.includes('W05') && groupTag.includes('ZJ')))">
 							<el-button size="mini" type="primary" @click="handleImprovementPlan(question)">改进计划</el-button>
 						</span>
 					</div>

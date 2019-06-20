@@ -610,7 +610,7 @@
 			this.visible = this.show;
 			if (this.show) {
 				if (this.questionTitle == "我要提问") {
-					this.getProjects();
+					// this.getProjects();
 			     }
 				this.isJZuser = sessionStorage.getItem('isJZuser');
 				this.question.wtly = sessionStorage.getItem('isJZuser') == '0' ? '2' : '1';

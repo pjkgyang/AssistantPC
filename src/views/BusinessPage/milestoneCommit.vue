@@ -333,7 +333,7 @@
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page="currentPage"
-					:page-sizes="[20, 50, 100, 200]"
+					:page-sizes="[15, 35, 50, 100]"
 					:page-size="pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
 					:total="total"
@@ -393,7 +393,7 @@ export default {
 			checkAll: false,
 			cxlx: '0', //查询类型
 			total: null,
-			pageSize: 20,
+			pageSize: 15,
 			currentPage: 1,
 			tableData3: [],
 			totalWgl: '',

@@ -43,6 +43,16 @@
 						<span data-type="2" :class="{'bg-active':sqgb == '2'}">已驳回</span>
           </p>
         </div>
+				
+				<div>
+				  <p class="query-title">申请挂起:</p>
+				  <p class="query-list" @click="handleSQGQ">
+				    <span data-type="" :class="{'bg-active':sqgq == ''}">全部</span>
+				    <span data-type="1" :class="{'bg-active':sqgq == '1'}">是</span>
+				    <span data-type="0" :class="{'bg-active':sqgq == '0'}">否</span>
+						<span data-type="2" :class="{'bg-active':sqgq == '2'}">已驳回</span>
+				  </p>
+				</div>
   
         <div>
           <p class="query-title">是否催办:</p>
@@ -91,7 +101,7 @@
                   <span data-type="1" :class="{'bg-active':sfbug == '1'}">是</span>
                   <span data-type="0" :class="{'bg-active':sfbug == '0'}">否</span>
               </p>
-           </div> -->
+        </div> -->
         <div v-if="showCondition==1||showCondition==2">
           <p class="query-title">未响应状态:</p>
           <p class="query-list" @click="handleWXYZT">
@@ -219,7 +229,8 @@ export default {
       cpbg: "",
       sfbug: "",
       cxzt: "0",
-      sqgb: "",
+      sqgb: "",//申请关闭
+			sqgq:"",//是否挂起
       wxyztbg: "",
       wjjztbg: "",
       gczd: "",
@@ -373,10 +384,11 @@ export default {
           break;
       }
     },
+		// 高级查询
     handleQueryShow() {
-      // 高级查询
       this.queryLJshow = !this.queryLJshow;
     },
+		
     handleQuestion() {
       canSubmitQuestion().then(({ data }) => {
         if (data.state == "success") {
@@ -403,6 +415,7 @@ export default {
         }
       });
     },
+		
     handleQuestionDetail(params) {
       //查看问题详情
       let routeData = this.$router.resolve({
@@ -561,13 +574,20 @@ export default {
       this.cxzt = cxzt;
       this.queryAllQuestions(1);
     },
+		//申请关闭
     handleSQGB(e) {
-      //申请关闭
       let sqgb = e.target.getAttribute("data-type");
       if (sqgb == null) return;
       this.sqgb = sqgb;
       this.queryAllQuestions(1);
     },
+		// 申请挂起
+		handleSQGQ(e){
+			let sqgq = e.target.getAttribute("data-type");
+			if (sqgq == null) return;
+			this.sqgq = sqgq;
+			this.queryAllQuestions(1);
+		},
     handleWXYZT(e) {
       //未响应状态
       let wxyzt = e.target.getAttribute("data-type");
@@ -633,7 +653,8 @@ export default {
         deadline: this.cnqx,
         starDay: this.starDay,
         endDay: this.endDay,
-        tjkf: this.tjkf
+        tjkf: this.tjkf,
+				sqgq:this.sqgq
       }).then(({ data }) => {
         if (data.state == "success") {
           if (!!data.data && data.data.rows.length != 0) {

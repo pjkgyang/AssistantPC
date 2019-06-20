@@ -1,6 +1,7 @@
 <template>
     <div>
-        <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight">
+		<!-- :max-height="tableHeight" -->
+        <el-table :data="tableData" border style="width: 100%" >
             <el-table-column prop="yh" label="学校名称" min-width="200" show-overflow-tooltip></el-table-column>
             <el-table-column  label="项目名称" min-width="240" show-overflow-tooltip>
                 <template slot-scope="scope">

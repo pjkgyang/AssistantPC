@@ -41,7 +41,7 @@
           </div>
 					
 					<div flex>
-						<div v-if="filterList.includes('fwzt')" flex style="width: 602px;">
+						<div v-if="filterList.includes('fwzt')" flex style="width: 600px;">
 							<p class="query-title">服务状态:</p>
 							<p class="query-list" @click="handleZt">
 								<span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
@@ -58,7 +58,7 @@
 					</div>	
 					
 					<div flex>
-						<div v-if="filterList.includes('wtzt')" flex style="width: 602px;">
+						<div v-if="filterList.includes('wtzt')" flex style="width: 600px;">
 							<p class="query-title">问题状态:</p>
 							<p class="query-list" >
 								<span  v-for="(wtzt,index) in wtztList"  @click="handleWTZT(wtzt.lable)" :key="index" :class="{'bg-active':filterWord.wtzt == wtzt.lable}">{{wtzt.mc}}</span>
@@ -74,7 +74,7 @@
 					</div>
 					
 					<div flex>
-						<div v-if="filterList.includes('xmzt')">
+						<div v-if="filterList.includes('xmzt')" flex>
 							<p class="query-title">项目状态:</p>
 							<p class="query-list" @click="handleXmzt">
 								<span data-type="" :class="{'bg-active':filterWord.xmzt == ''}">全部</span>

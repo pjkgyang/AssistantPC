@@ -4,9 +4,9 @@
 			<div class="fb_info">
 				<div>
 					<h4>合同内容</h4>
-					<div text-right v-if="userGroup.includes('JYGL') || userGroup.includes('GCZJ')">
-						<el-button size="mini" type="primary" @click="handleChangeInfo('xmjl')">修改项目经理</el-button>
-						<el-button size="mini" type="primary" @click="handleChangeInfo('gcqy')">修改工程区域</el-button>
+					<div text-right >
+						<el-button v-if="userGroup.includes('QYZ') ||userGroup.includes('JYGL') || userGroup.includes('GCZJ')" size="mini" type="primary" @click="handleChangeInfo('xmjl')">修改项目经理</el-button>
+						<el-button v-if="userGroup.includes('JYGL') || userGroup.includes('GCZJ')" size="mini" type="primary" @click="handleChangeInfo('gcqy')">修改工程区域</el-button>
 					</div>
 					<div>
 						<h6>合同基本信息</h6>
@@ -99,7 +99,7 @@
 					</div>
 					<div>
 						<h6>合同内容</h6>
-						<el-table :data="htnrData" border style="width: 100%" max-height="400">
+						<el-table :data="htnrData" border style="width: 100%">
 							<el-table-column prop="ywx" label="业务线" min-width="120"></el-table-column>
 							<el-table-column prop="app" label="合同内容" show-overflow-tooltip min-width="150"></el-table-column>
 							<el-table-column prop="zb" label="占比(%)" width="80"></el-table-column>

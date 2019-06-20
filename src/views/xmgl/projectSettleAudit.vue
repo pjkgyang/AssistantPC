@@ -31,7 +31,8 @@
 		<br />
 		<div>
 			<el-button size="mini" type="danger" @click="handleSetCz" :disabled="!jssqwidArr.length">设置冲账</el-button><br><br>
-			<el-table :max-height="height" :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+			<!-- :max-height="height" -->
+			<el-table  :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
 				<el-table-column type="selection" width="55" :selectable="checkboxInit"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">

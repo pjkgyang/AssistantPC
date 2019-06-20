@@ -34,7 +34,8 @@
 		<br />
 		<br />
 		<div>
-			<el-table :max-height="height" :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
+			<!-- :max-height="height"  -->
+			<el-table :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
 				<el-table-column type="selection" width="55"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="120">
 					<template slot-scope="scope">

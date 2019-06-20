@@ -297,6 +297,19 @@ export default new Router({
 					meta: {},
 					component: resolve => require(['@/views/xmgl/salesConfirm.vue'], resolve),
 				},
+				// 项目停滞
+				{
+					path: '/projectStagnation',
+					name: 'projectStagnation',
+					meta: {},
+					component: resolve => require(['@/views/BusinessPage/projectStagnation/index.vue'], resolve),
+				},
+				{
+					path: '/projectStagnationDetail',
+					name: 'projectStagnationDetail',
+					meta: {},
+					component: resolve => require(['@/views/BusinessPage/projectStagnation/detail.vue'], resolve),
+				},
 				{
 					path: '/school',
 					name: 'schoolList',

@@ -59,7 +59,7 @@ export default {
     return {
       dialogVisible:false,
       currentPage: 1,
-      pageSize: 25,
+      pageSize: 18,
       dataList: {},
       routePath: "",
       queryMark: "",

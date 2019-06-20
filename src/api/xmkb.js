@@ -188,7 +188,8 @@ export function queryAllQuestions(obj) {
 			bqly: obj.bqly || "",
 			wtfbq: obj.wtfbq || "",
 			wtgjzt: obj.wtgjzt || "",
-			tjkf: obj.tjkf || ""
+			tjkf: obj.tjkf || "",
+			sqgq:obj.sqgq||""
 		}
 	})
 }

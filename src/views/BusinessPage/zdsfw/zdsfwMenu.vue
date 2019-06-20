@@ -36,6 +36,14 @@
 						<el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="qrsj" label="确认时间" width="160" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="pf" label="评分" width="80"></el-table-column>	
+						<el-table-column prop="jhksrq" label="计划开始日期" width="150"></el-table-column>
+						<el-table-column prop="jhjsrq" label="计划结束日期" width="150"></el-table-column>
+						<el-table-column prop="sjjsrq" label="实际结束日期" width="150"></el-table-column>
+						<el-table-column prop="sfgq" label="是否过期" width="100">
+						  <template slot-scope="scope">
+						    <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':scope.row.sfgq=='1'?'过期':'超期完成'}}</el-tag>
+						  </template>
+						</el-table-column>
 						
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
@@ -64,14 +72,7 @@
                 <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>  
-            <el-table-column prop="jhksrq" label="计划开始日期" width="150"></el-table-column>
-            <el-table-column prop="jhjsrq" label="计划结束日期" width="150"></el-table-column>
-            <el-table-column prop="sjjsrq" label="实际结束日期" width="150"></el-table-column>
-            <el-table-column prop="sfgq" label="是否过期" width="100">
-              <template slot-scope="scope">
-                <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':scope.row.sfgq=='1'?'过期':'超期完成'}}</el-tag>
-              </template>
-            </el-table-column>
+            
             <!-- <el-table-column prop="ztztmc" label="项目状态" min-width="100" show-overflow-tooltip></el-table-column> -->
             <el-table-column prop="xmlb" label="项目类别" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="sfzt" label="合同性质" min-width="80" show-overflow-tooltip></el-table-column>

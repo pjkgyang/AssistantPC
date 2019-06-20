@@ -4,7 +4,8 @@
 			<span class="filter-weight">关键字查询:</span>
 			<el-input style="width: 50%;" @change="handleSearchKeyword" type="text" size="mini" v-model="keyword" placeholder="项目编号/项目名称/学校"></el-input>
 		</div>
-		<el-table :data="tableData" border style="width: 100%" :max-height="height">
+		<!-- :max-height="height" -->
+		<el-table :data="tableData" border style="width: 100%" >
 			<el-table-column prop="xx" label="学校" min-width="160" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="xmbh" label="项目编号" width="90" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="xmmc" label="项目名称" min-width="200" show-overflow-tooltip></el-table-column>

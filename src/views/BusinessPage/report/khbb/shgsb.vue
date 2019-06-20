@@ -4,7 +4,8 @@
       <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'" :filterShow="filterShow"></filterComponent>
     </div>
     <div>
-      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" :indexArr='[20]' :widthArr="[]" :Width="'130'" :Height="0" :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
+      <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" 
+			:indexArr='[20]' :widthArr="[]" :Width="'130'" :Height="0" :archiveShow="archiveShow" @handleArchive="handleArchive"></tableComponents>
     </div>
   </div>
 </template>

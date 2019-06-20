@@ -1,7 +1,7 @@
 <template>
  <div>
      <el-dialog
-            title="申请关闭问题列表(我的提问)"
+            :title="!this.suspend?'申请关闭问题列表(我的提问)':'申请挂起问题列表'"
             width="1200px"
             :visible.sync="visible"
             :append-to-body="true"
@@ -59,6 +59,7 @@ export default {
       });
       window.open(routeData.href, "_blank");  
     },
+
     handleReject(params,index,sm){   // 驳回
       this.$confirm("确定驳回该申请, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -108,6 +109,7 @@ export default {
       this.currentPage = 1;
       this.queryAllQuestions();
     },
+    // 查询申请关闭的问题
     queryAllQuestions() {
       queryAllQuestions({
         curPage: this.currentPage,
@@ -121,12 +123,40 @@ export default {
             this.questionList = data.data.rows;
           }
           this.total = data.data.records;
+        }else{
+          this.$message({
+            message:res.msg,
+            type:'error'
+          }) 
         }
       });
+    },
+    // 获取挂起问题
+    queryApplySuspension(){
+      this.$get(this.API.queryApplySuspension,{
+        curPage:this.currentPage,
+        pageSize:this.pageSize
+      }).then(res=>{
+        if(res.state == 'success'){
+           if (!!res.data.rows && !!res.data) {
+            this.questionList = res.data.rows;
+          }
+          this.total = res.data.records;
+        }else{
+          this.$message({
+            message:res.msg,
+            type:'error'
+          }) 
+        }
+      })
     }
   },
   props: {
     show: {
+      type: Boolean,
+      default: false
+    },
+    suspend:{
       type: Boolean,
       default: false
     }
@@ -138,7 +168,11 @@ export default {
 
       } else {
         this.currentPage = 1;
-        this.queryAllQuestions();
+        if(!this.suspend){
+          this.queryAllQuestions();
+        }else{
+          this.queryApplySuspension();
+        }
       }
     }
   },

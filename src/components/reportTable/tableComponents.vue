@@ -5,7 +5,8 @@
             <el-button type="primary" size="mini" @click="exportTable" v-if="exportShow">导出</el-button>
         </div>
         <div class="out-table">
-            <el-table :data="bodyData" border class="report-ele-table" width="100%" :max-height="Height==0?'auto':tableHeight">
+					<!-- :max-height="Height==0?'auto':tableHeight" -->
+            <el-table :data="bodyData" border class="report-ele-table" width="100%" >
                 <el-table-column v-for="(th,index) in tableData.head" :key="index" :label="th.zh" v-if="!th.hidden" 
                 :min-width="widthArr.includes(index)?rowWidth:th.zh=='排名'||th.zh=='姓名'||th.zh=='评分'?80:th.zh=='工号'||th.zh=='贡献人姓名'||th.zh=='贡献人工号'||th.zh=='发布人'||th.en=='gl'?100:Width" 
 								show-overflow-tooltip  :fixed="!!th.fix?true:indexArr.includes(index)?true:false">

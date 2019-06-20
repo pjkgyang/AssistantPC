@@ -30,8 +30,8 @@
 			</p>
 		</div>
 		<br />
-		<div>
-			<el-table :max-height="height" :data="tableData" border style="width: 100%">
+		<div> 
+	     	<el-table  :data="tableData" border style="width: 100%">
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
 						<el-button @click="handleClick(scope.row)" type="text" size="small">{{ scope.row.jszt == '未结算' ? '结算' : '详情' }}</el-button>
@@ -64,7 +64,7 @@
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page="currentPage"
-					:page-sizes="[15, 30, 50, 100]"
+					:page-sizes="[13, 30, 50, 100]"
 					:page-size="pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
 					:total="records"
@@ -81,7 +81,7 @@ export default {
 		return {
 			height:window.innerHeight - 260,
 			currentPage: 1,
-			pageSize: 15,
+			pageSize: 13,
 			records: 0,
 			filterData: {
 				keyword: '',

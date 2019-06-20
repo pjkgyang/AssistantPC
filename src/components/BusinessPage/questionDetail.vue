@@ -126,7 +126,7 @@
                   </span>
 									<!-- 申请挂起 -->
 									<span  v-if="reply.hflx == 14">
-											  <el-tag  v-if="!!reply.sfbh" size="mini" type="success">{{reply.sfbh=='0'?'已同意':reply.sfbh=='1'?'已驳回':'已解除'}}已同意</el-tag>
+											  <el-tag  v-if="!!reply.sfbh" size="mini" type="success">{{reply.sfbh=='0'?'已同意':reply.sfbh=='1'?'已驳回':'已解除'}}</el-tag>
 												<el-button v-if="!reply.sfbh" type="primary" size="mini" @click="handleOperateGq(reply.wid,0)">同意</el-button>&#x3000;
 												<el-button v-if="!reply.sfbh" type="danger" size="mini" @click="handleOperateGq(reply.wid,1)">驳回</el-button>&#x3000;
 												<el-button v-if="reply.sfbh == '0'" type="info"  size="mini" @click="handleOperateGq(reply.wid,2)">解除</el-button>
@@ -135,8 +135,9 @@
               </div>
             </div>
             <div class="project-question-detail-bottom">
-              <div v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" v-if="reply.hflx != 9"></div>
-              <div v-if="reply.hflx == 9">
+              <div v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" v-if="reply.hflx != 9 && reply.hflx != 14"></div>
+              <div v-html="reply.nr + (!reply.sm?'':'<br><span style=color:red>'+reply.sm+'</span>')" v-if="reply.hflx == 14"></div>
+							<div v-if="reply.hflx == 9">
                 <a href="javascript:void(0)" @click="handleJDGZ(reply.crowdid)">查看开发任务进度</a><br>
                 <div v-html="reply.nr"></div>
               </div>
@@ -191,7 +192,7 @@
                 <el-option label="是" value="1"></el-option>
                 <el-option label="否" value="0"></el-option>
               </el-select>&nbsp;
-              </el-date-picker>
+
               通知提问人 :
               <el-radio v-model="tktwr" :label="true">是</el-radio>
               <el-radio v-model="tktwr" :label="false">否</el-radio>
@@ -260,14 +261,18 @@
           </div>
         </div>
       </el-dialog>
+			
       <!-- 受理 -->
       <el-dialog width="600px" :title="isSltitle" :visible.sync="innerCNRQVisible" :close-on-click-modal="false" append-to-body>
         <div style="padding:10px;">
-          <span v-if="isSLvisible" class="filter-bt" style="display:inline-block;">
-            期望解决日期 :
-          </span>
+					<div v-if="isSLvisible">
+						<span  class="filter-bt" style="display:inline-block;">
+							期望解决日期 :
+						</span>
            <el-date-picker v-model="xgqwjjrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" :clearable="false" size="mini" readonly></el-date-picker>
-          <div v-if="false" style="display:flex;margin-bottom:15px;">
+          </div>
+					
+					<div v-if="false" style="display:flex;margin-bottom:15px;">
             <span>环境信息 : </span>
             <el-upload style="width:510px;" class="upload-demo" ref="upload" :limit='1' :action="uploadAction" :before-upload="beforeUpload" :on-remove="handleRemove" :on-change="handleChange" :file-list="fileList" :show-file-list="true" :auto-upload="false">
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
@@ -512,7 +517,9 @@
       <el-dialog title="申请待验证" :visible.sync="sqdyzVisible" :close-on-click-modal="false" width="600px" top="30px" append-to-body>
         <div style="padding:20px 10px" class="question-sqdyz">
           <span class="question-sqdyz-title">版本发布日期:</span>
-          <el-date-picker v-model="sqdyzValue" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
+          <el-date-picker v-model="sqdyzValue" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :clearable="false" size="mini">
+
+          </el-date-picker>
           <div style="text-align:right">
             <el-button size="mini" type="primary" @click="saveSqdyz">保存</el-button>
           </div>
@@ -574,6 +581,8 @@
 					<el-button size="mini" type="primary" @click="handleCommitGq">确 定</el-button>
 				</span>
 			</el-dialog>
+
+       <sqgqwtDialog :show.sync="sqgqShow" :suspend="true"></sqgqwtDialog>
     </div>
   </div>
 </template>
@@ -588,6 +597,7 @@ import xxDialog from "@/components/dialog/sendxx-dialog.vue";
 import xmtdcylog from "@/components/dialog/xmtdcy.vue";
 import { getLoginUser } from "@/api/system.js";
 import uploadFile from "@/components/BusinessPage/upload.vue";
+import sqgqwtDialog from "@/components/dialog/sqgbwt-dialog.vue";
 
 import {
   queryQuestion,
@@ -721,6 +731,7 @@ export default {
       },
       wtlyList: [], //问题来源
       wtly: "",
+      sqgqShow:false,//挂起问题列表
 			dialogVisibleGq:false,
 			gqData:{    //挂起参数
 				date:'',
@@ -834,11 +845,12 @@ export default {
   },
   props: {},
   mounted() {
+		
 		let  that = this;
-
     this.baseUrl = window.baseurl;
     this.wid = this.$route.query.wid;
     this.isCjwt = this.$route.query.f;
+
     // if (window.location.hash.includes("h=1")) {
     //   sessionStorage.setItem("Detailpannel", window.location.hash);
     // } else {
@@ -929,7 +941,8 @@ export default {
   },
 	beforeDestroy() {
 		clearTimeout(this.timer);	
-	},
+  },
+  
   methods: {
 		// 处理挂起
 		handleOperateGq(wid,data){
@@ -948,10 +961,13 @@ export default {
 								isagree:data
 							}).then(res=>{
 								if(res.state == 'success'){
-                  this.$message({messgae:'操作成功',type:'success'});
-                  this.queryQuestion(this.wid);
+                  this.$message({message:'操作成功',type:'success'});
+									if(data!=2){
+										this.queryQuestion(this.wid);
+									}
+									this.queryAnswers(this.wid);
 								}else{
-                  this.$message({messgae:res.msg,type:'error'})
+                  this.$message({message:res.msg,type:'error'})
                 }
 							})
 						}else{
@@ -960,10 +976,10 @@ export default {
               this.suspendType = 'bh';
             }
 					}else{
-						this.$message({messgae:'您无权操作',type:'warning'})
+						this.$message({message:'您无权操作',type:'warning'})
 					}
 				}else{
-					this.$message({messgae:res.msg,type:'error'})
+					this.$message({message:res.msg,type:'error'})
 				}
 			})
 		},
@@ -1076,27 +1092,33 @@ export default {
         });
         return;
       }
-      operationLabel({
-        wid: this.wid,
-        dm: this.wtbq[index].dm,
-        isDel: true
-      }).then(({ data }) => {
-        if (data.state == "success") {
-          if (this.wtbq[index].sjly == 0) {
-            this.wtbq[index].sjly = 1;
-            this.wtbq[index].type = "";
-          } else {
-            this.wtbq[index].sjly = 0;
-            this.wtbq[index].type = "info";
-          }
-          this.sftj.forEach((ele, i, arr)=>{
-            if(ele == this.wtbq[index].dm){
-              this.sftj.splice(i,1);
-            }
-          })
-          this.queryAnswers(this.wid); //  获取回复
-        }
-      });
+			this.$confirm('是否确定删除此问题标签?', '提示', {
+			  confirmButtonText: '确定',
+			  cancelButtonText: '取消',
+			  type: 'warning'
+			}).then(() => {
+				operationLabel({
+				  wid: this.wid,
+				  dm: this.wtbq[index].dm,
+				  isDel: true
+				}).then(({ data }) => {
+				  if (data.state == "success") {
+				    if (this.wtbq[index].sjly == 0) {
+				      this.wtbq[index].sjly = 1;
+				      this.wtbq[index].type = "";
+				    } else {
+				      this.wtbq[index].sjly = 0;
+				      this.wtbq[index].type = "info";
+				    }
+				    this.sftj.forEach((ele, i, arr)=>{
+				      if(ele == this.wtbq[index].dm){
+				        this.sftj.splice(i,1);
+				      }
+				    })
+				    this.queryAnswers(this.wid); //  获取回复
+				  }
+				});
+			})
     },
       //添加标签
     handleClick(i) {
@@ -1119,28 +1141,37 @@ export default {
         return;
       }
       if (this.wtbq[i].sjly == 0) {
-        operationLabel({
-          wid: this.wid,
-          dm: this.wtbq[i].dm,
-          isDel: false
-        }).then(({ data }) => {
-          if (data.state == "success") {
-            this.wtbq[i].sjly = 2;
-            this.wtbq[i].type = "";
-            this.sftj.push(this.wtbq[i].dm);
-            this.queryAnswers(this.wid); //  获取回复
-          }
-        });
+				 this.$confirm('是否确定添加此问题标签?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            operationLabel({
+            wid: this.wid,
+            dm: this.wtbq[i].dm,
+            isDel: false
+          }).then(({ data }) => {
+            if (data.state == "success") {
+              this.wtbq[i].sjly = 2;
+              this.wtbq[i].type = "";
+              this.sftj.push(this.wtbq[i].dm);
+              this.queryAnswers(this.wid); //  获取回复
+            }
+          });
+        }).catch(() => {});
       }
     },
 		// 申请挂起
 		handleSqgq(){
 			this.$get(this.API.canApplySuspension,{}).then(res=>{
 				if(res.state == 'success'){
-					if(!!res.data){
+					if(!res.data){
 						this.$alert('您有1个问题已申请挂起，请先联系提问人处理，谢谢支持！', '提示', {
-							confirmButtonText: '确定',
-							type:'warning',
+							confirmButtonText: '查看问题',
+              type:'warning',
+               callback: action => {
+                 this.sqgqShow = true;
+               }
 					 });
 					}else{
             this.dialogVisibleGq = true;
@@ -1160,7 +1191,7 @@ export default {
 			 this.$message({message:'请填写说明',type:'warning'})
 			 return;
       }
-      
+      // 确定挂起问题
       if(this.suspendType == 'gq'){
         this.$post(this.API.submitSuspend,{
           wid:this.wid,
@@ -1170,6 +1201,9 @@ export default {
           if(res.state == 'success'){
             this.$message({message:'提交成功',type:'success'})
             this.dialogVisibleGq = false;
+						this.queryAnswers(this.wid);
+						this.queryBtnAuth(this.wid);
+						this.gqData.sm = '';
           }else{
             this.$message({message:res.msg,type:'error'})
           }
@@ -1182,10 +1216,12 @@ export default {
             sm:this.gqData.sm
 					}).then(res=>{
 						if(res.state == 'success'){
-              this.$message({messgae:'操作成功',type:'success'});
-              this.queryQuestion(this.wid);
+              this.$message({message:'操作成功',type:'success'});
+              this.queryAnswers(this.wid);
+							this.dialogVisibleGq = false;
+							this.gqData.sm = '';
 						}else{
-              this.$message({messgae:res.msg,type:'error'})
+              this.$message({message:res.msg,type:'error'})
             }
 				})
       }
@@ -1250,7 +1286,6 @@ export default {
         this.$alert("请选择版本发布日期", "提示", {
           confirmButtonText: "确定",
           type: "warning",
-          callback: action => {}
         });
         return;
       }
@@ -1356,8 +1391,7 @@ export default {
         } else {
           this.$alert(data.msg, "提示", {
             confirmButtonText: "确定",
-            type: "error",
-            callback: action => {}
+            type: "error"
           });
         }
       });
@@ -1723,7 +1757,7 @@ export default {
             this.sqjsVisible = true;
           } else {
 						this.$message({
-							message: '不可重复申请关闭，可驳回已有的再重新申请',
+							message: '不可重复申请关闭，可驳回已有的再重新申请 ; 已挂起的问题也不可申请关闭！',
 							type: 'warning'
 						});
           }
@@ -2175,16 +2209,14 @@ export default {
           if (this.fwzlValue == 0) {
             this.$alert("请选择服务质量星级", "提示", {
               confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
+              type: "warning"
             });
             return;
           }
           if (this.fwzlValue <= 3 && !this.cpsm) {
             this.$alert("请填写评价说明", "提示", {
               confirmButtonText: "确定",
-              type: "warning",
-              callback: action => {}
+              type: "warning"
             });
             return;
           }
@@ -2438,7 +2470,8 @@ export default {
     twDialog,
     xxDialog,
     xmtdcylog,
-    uploadFile
+    uploadFile,
+    sqgqwtDialog
   }
 };
 </script>
