@@ -437,6 +437,7 @@ export default new Router({
 							name: 'BusinessReportUserQuestion',
 							component: resolve => require(['@/views/BusinessPage/report/useReport/userQuestion.vue'], resolve),
 						},
+						// 考核报表
 						{
 							path: '/businesspage/report/khbb/grrzdj',
 							name: 'BusinessReportGrrzdj',
@@ -447,6 +448,13 @@ export default new Router({
 							name: 'BusinessReportGrrzsj',
 							component: resolve => require(['@/views/BusinessPage/report/khbb/rzsjcx.vue'], resolve),
 						},
+						{
+							path: '/businesspage/report/gwzrzg',
+							name: 'gwzrzg',
+							component: resolve => require(['@/views/BusinessPage/report/useReport/Postqualification.vue'], resolve),
+						},
+						
+						
 						{
 							path: '/businesspage/report/common/:id',
 							name: 'ReportCommon',

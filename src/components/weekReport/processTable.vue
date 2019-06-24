@@ -17,12 +17,12 @@
         </template>
       </el-table-column>
       <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
-      <el-table-column prop="xmmc" label="项目名称" width="350" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="cpmc_display" label="产品名称" width="350" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="rwmc_display" label="任务名称"  width="200" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="gzms" label="工作内容" min-width="300" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="wwcyy" label="未完成原因" min-width="200" v-if="wordShow" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="hxcs" label="后续措施" min-width="200" v-if="wordShow" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="xmmc" label="项目名称" width="350" ></el-table-column>
+      <el-table-column prop="cpmc_display" label="产品名称" width="250" ></el-table-column>
+      <el-table-column prop="rwmc_display" label="任务名称"  width="300" ></el-table-column>
+      <el-table-column prop="gzms" label="工作内容" min-width="300" ></el-table-column>
+      <el-table-column prop="wwcyy" label="未完成原因" min-width="200" v-if="wordShow" ></el-table-column>
+      <el-table-column prop="hxcs" label="后续措施" min-width="200" v-if="wordShow" ></el-table-column>
       <el-table-column prop="cjrxm" label="创建人" width="100"></el-table-column>
       <el-table-column prop="cjsj" label="创建时间" width="155"></el-table-column>
       <el-table-column prop="zjsj" label="总结时间" width="155" ></el-table-column>

@@ -13,19 +13,19 @@
                 <section flex v-if="isShow">
                     <span class="edit-title before-require">{{!isCljh?'工作内容':'处理计划'}}</span>
                     <span class="edit-content">
-                        <el-input type="textarea" :rows="10" :maxlength="500" :placeholder="!isCljh?'请输入工作内容':'请输入处理计划'" v-model="form.gznr"></el-input>
+                        <el-input type="textarea" :rows="5"  :placeholder="!isCljh?'请输入工作内容':'请输入处理计划'" v-model="form.gznr"></el-input>
                     </span>
                 </section>
                 <section flex v-if="yycsShow">
                     <span class="edit-title before-require">未完成原因</span>
                     <span class="edit-content">
-                       <el-input type="textarea" :rows="5" :maxlength="500" placeholder="请输入未完成原因" v-model="form.wwcyy"></el-input>
+                       <el-input type="textarea" :rows="5"  placeholder="请输入未完成原因" v-model="form.wwcyy"></el-input>
                     </span>
                 </section>
                 <section flex v-if="yycsShow">
                     <span class="edit-title before-require">后续措施</span>
                     <span class="edit-content">
-                       <el-input type="textarea" :rows="5" :maxlength="500"  placeholder="请输入后续措施" v-model="form.hxcs"></el-input>
+                       <el-input type="textarea" :rows="5" placeholder="请输入后续措施" v-model="form.hxcs"></el-input>
                     </span>
                 </section>
                 <section class="edit-btn-group">
@@ -42,7 +42,11 @@
    data () {
      return {
          visible:this.show,
-         form:this.data
+         form:{
+			 gznr:'',
+			 wwcyy:'',
+			 hxcs:''
+		 }
      }
    },
    methods:{
@@ -82,14 +86,10 @@
             type: Boolean,
             default:true    
         },
-    data:{
+		data:{
         type:Object,
         default:()=>{
-            return {
-                 gznr:'',
-                 wwcyy:'',
-                 hxcs:''
-             }
+            return { }
           }
     },
     isCljh:{
@@ -110,7 +110,10 @@
             }else{
 
             }
-        }
+        },
+		data(n,o){
+			this.form = data;
+		}
     },
    components: {}
  }

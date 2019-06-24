@@ -7,7 +7,7 @@
       <div text-right class="mg-12">
         <el-button type="primary" size="mini" @click="exportTable">导出</el-button>
       </div>
-      <el-table :data="dataList" style="width: 100%"  border :height="500">
+      <el-table :data="dataList" style="width: 100%"  border :max-height="tableHeight">
         <el-table-column prop="gh" label="工号" width="120"></el-table-column>
         <el-table-column prop="xm" label="姓名" width="90"></el-table-column>
 				<el-table-column prop="dwlx" label="单位类型" width="90"></el-table-column>
@@ -33,7 +33,7 @@ export default {
     return {
       dataList: [],
       archiveShow: false,
-      tableHeight: window.innerHeight,
+      tableHeight: window.innerHeight - 300,
       filterList: ["keyword", "qygc","dwlx", "cpx", "rzdj","rzjb", "date"],
       filterData: {
         keyword: "",

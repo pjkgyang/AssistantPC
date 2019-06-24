@@ -193,7 +193,7 @@ export default {
 						focus: true,
 						height: 200,
 						width: 100 + '%',
-						minHeight: 200,
+						minHeight: 260,
 						lang: 'zh-CN',
 						toolbar: [
 							['style', ['bold', 'italic', 'underline', 'clear']],

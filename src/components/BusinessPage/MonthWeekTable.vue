@@ -16,14 +16,14 @@
         </template>
       </el-table-column>
       <el-table-column prop="xmbh" label="项目编号" width="150"></el-table-column>
-      <el-table-column prop="xmmc" label="项目名称" width="350" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="xmnr_display" label="项目内容" min-width="300" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="lcbms_display" label="里程碑描述"  width="180" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="xmmc" label="项目名称" width="350" ></el-table-column>
+      <el-table-column prop="xmnr_display" label="项目内容" min-width="300" ></el-table-column>
+      <el-table-column prop="lcbms_display" label="里程碑描述"  width="180" ></el-table-column>
       <el-table-column prop="cnjssj" label="承诺完成时间" width="120"></el-table-column>
       <el-table-column prop="jhjssj" label="计划完成时间" width="120"></el-table-column>
       <el-table-column prop="zt_display" label="完成状态" width="120"></el-table-column>
-      <el-table-column prop="wwcyy" label="未完成原因" width="120" show-overflow-tooltip v-if="wordShow"></el-table-column>
-      <el-table-column prop="hxcs" label="后续措施" width="120" show-overflow-tooltip v-if="wordShow"></el-table-column>
+      <el-table-column prop="wwcyy" label="未完成原因" width="120"  v-if="wordShow"></el-table-column>
+      <el-table-column prop="hxcs" label="后续措施" width="120"  v-if="wordShow"></el-table-column>
       <el-table-column prop="wglg" label="完工量（元）" width="120" v-if="otherShow"></el-table-column>
       <el-table-column prop="yhmc" label="创建人" width="100" ></el-table-column>
       <el-table-column prop="cjsj" label="创建时间" width="155" ></el-table-column>

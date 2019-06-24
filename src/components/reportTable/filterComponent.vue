@@ -142,11 +142,20 @@
           <span v-for="(rzdj,index) in rzjbList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzjb == rzdj.label}">{{rzdj.mc}}</span>
         </p>
       </div>
+			
 			<div v-if="filterList.includes('rzdj')">
 			  <p class="query-title">任职等级:</p>
 			  <p class="query-list" @click="handleRZDJ">
 					<span data-type="" :class="{'bg-active':filterWord.rzdj == ''}">全部</span>
 			    <span v-for="(rzdj,index) in rzdjList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzdj == rzdj.label}">{{rzdj.mc}}</span>
+			  </p>
+			</div>
+			
+			<div v-if="filterList.includes('xllx')">
+			  <p class="query-title">序列类型:</p>
+			  <p class="query-list" @click="handleXllx">
+					<span data-type="" :class="{'bg-active':filterWord.xllx == ''}">全部</span>
+			    <span v-for="(xllx,index) in xllxList" :data-type="xllx.label" :class="{'bg-active':filterWord.xllx == xllx.label}">{{xllx.mc}}</span>
 			  </p>
 			</div>
     </div>
@@ -193,6 +202,7 @@ export default {
       ],
 			rzdjList:[],//任职等级
       rylxList:[],
+			xllxList:[],//序列类型
       bmList: [],
       filterWord: {
         sfzt: "",
@@ -217,7 +227,8 @@ export default {
         zdsfwzt:'',
         fbxz:'',
 				rzjb:'',//任职级别
-        rzdj:''//任职等级
+        rzdj:'',//任职等级
+				xllx:'' //序列类型
       }
     };
   },
@@ -372,7 +383,14 @@ export default {
 			if (rzdj == null) return;
 			this.filterWord.rzdj = rzdj;
 			this.$emit("handleChangeFilter", this.filterWord); 
+		},
+		handleXllx(e){
+			let xllx = e.target.getAttribute("data-type");
+			if (xllx == null) return;
+			this.filterWord.xllx = xllx;
+			this.$emit("handleChangeFilter", this.filterWord); 
 		}
+		
 
     // queryCostStat(curPage){      //区域学校用户
     //         this.$get('http://172.16.40.61:8080/emap/sys/etender/api/report/queryCostStat.do',{
@@ -446,6 +464,14 @@ export default {
 		} else {
 		  this.rzjbList = getSession("rzdj");
 		}
+		
+		if (!getSession("xllx") && this.filterList.includes('xllx')) {
+		  getMenu("JobSequence", this.xllxList, ""); //获取序列类型
+		} else {
+		  this.xllxList = getSession("xllx");
+		}
+		
+		
   },
   activated() {},
   watch: {},

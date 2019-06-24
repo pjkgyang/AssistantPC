@@ -48,11 +48,11 @@ export default {
            name:'待专家解决',
            label:'dzjjj'
          },{
+		   name:'待产品解决',
+		   label:'dcpjj'
+		 },{
            name:'待产品经理解决',
            label:'dcpjljj'
-         },{
-           name:'待产品解决',
-           label:'dcpjj'
          },{
            name:'待指定人解决',
            label:'dzdrjj'

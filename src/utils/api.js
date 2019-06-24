@@ -281,4 +281,9 @@ export default {
 	canDealSuspend:window.baseurl + 'question/canDealSuspend.do',//能否处理挂起
 	dealSuspend:window.baseurl + 'question/dealSuspend.do',//处理挂起
 	queryApplySuspension:window.baseurl + 'question/queryApplySuspension.do',//获取挂起问题
+	
+	// 岗位任职资格查询
+	jobQualificationQuery:window.baseurl + 'personnel/jobQualificationQuery.do',//获取挂起问题
+	
+	
  }

@@ -83,9 +83,9 @@
 							</tr>
 							<tr>
 								<th>工程区域</th>
-								<td>{{ htjbxx.qy }}</td>
+								<td>{{ htjbxx.qymc }}</td>
 								<th>工程战队</th>
-								<td>{{ htjbxx.qyzd }}</td>
+								<td>{{ htjbxx.gczd }}</td>
 								<th>是否延长售后</th>
 								<td>{{ htjbxx.gcfwzt == 1 ? '是' : '否' }}</td>
 							</tr>
@@ -225,7 +225,7 @@ export default {
 				listWeekPlanPerson({
 					month:'',
 					zxh:'',
-					qygc: this.htjbxx.qy,
+					qygc:this.htjbxx.qymc,
 					sfkhzj:''
 				}).then(({ data }) => {
 					if (data.state == 'success') {

@@ -6,7 +6,7 @@
 					<span class="query-title">高级查询:</span>
 					<el-input
 						size="mini"
-						style="width:400px"
+						style="width:463px"
 						placeholder="请输入项目编号/项目名称/里程碑描述/项目内容/项目经理/责任人"
 						v-model="formdata.keyword"
 						@change="handleSearchLcb"
@@ -57,9 +57,7 @@
 			<div class="pd-10">
 				<div class="mg-12">
 					<el-button size="mini" type="primary" @click="handleApply('tz')">停滞申请</el-button>
-					&nbsp;
-					<el-button size="mini" type="primary" @click="handleApply('cq')">停滞重启</el-button>
-					&nbsp;
+					<el-button size="mini" type="danger" @click="handleApply('cq')">停滞重启</el-button>
 					<el-button size="mini" type="primary">导出</el-button>
 				</div>
 				<el-table :data="tableData" style="width: 100%" border @selection-change="handleSelectionChange">
@@ -110,6 +108,7 @@
 				keyword: '',
 				ksrq: '',
 				jsrq: '',
+				sqlb:0,
 				zt: 0
 			},
 			type:'tz',//停滞 重启

@@ -15,20 +15,20 @@
         <span><el-button @click="handleClickCheck(scope.row)" type="text" size="small">查看</el-button></span>
       </template>
     </el-table-column>
-    <el-table-column prop="wtbt" label="问题标题" width="250" fixed="left" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="fbrxm" label="发布人" width="100" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="fbrssdw" label="发布人所属单位" width="300" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="xmmc" label="所属项目"  width="300" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="cpmc" label="所属产品" width="300" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="wtbt" label="问题标题" width="250" fixed="left" ></el-table-column>
+    <el-table-column prop="fbrxm" label="发布人" width="100" ></el-table-column>
+    <el-table-column prop="fbrssdw" label="发布人所属单位" width="300" ></el-table-column>
+    <el-table-column prop="xmmc" label="所属项目"  width="300" ></el-table-column>
+    <el-table-column prop="cpmc" label="所属产品" width="300" ></el-table-column>
     <el-table-column prop="wtlb_display" label="问题类别" width="120"></el-table-column>
     <el-table-column prop="sfjj_display" label="是否紧急" width="120"></el-table-column>
     <el-table-column prop="wtlc" label="当前处理环节" width="140"></el-table-column>
-    <el-table-column prop="qwjjsj" label="期望解决时间" width="120" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="cnjjsj" label="承诺解决时间" width="120" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="zt_display" label="问题状态" width="120" show-overflow-tooltip v-if="othShow"></el-table-column>
-    <el-table-column prop="wwcyy" label="未完成原因" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>
-    <el-table-column prop="hxcs" label="后续措施" width="200" show-overflow-tooltip v-if="othShow"></el-table-column>   
-    <el-table-column prop="yhmc" label="创建人" width="100" show-overflow-tooltip></el-table-column> 
+    <el-table-column prop="qwjjsj" label="期望解决时间" width="120" ></el-table-column>
+    <el-table-column prop="cnjjsj" label="承诺解决时间" width="120" ></el-table-column>
+    <el-table-column prop="zt_display" label="问题状态" width="120" v-if="othShow"></el-table-column>
+    <el-table-column prop="wwcyy" label="未完成原因" width="200"  v-if="othShow"></el-table-column>
+    <el-table-column prop="hxcs" label="后续措施" width="200"  v-if="othShow"></el-table-column>   
+    <el-table-column prop="yhmc" label="创建人" width="100" ></el-table-column> 
     <el-table-column prop="cjsj" label="创建时间" width="155" ></el-table-column>
     <!-- 2019.1.14 xiugai -->
     <el-table-column prop="zjsj" label="总结时间" width="155" ></el-table-column>
@@ -40,7 +40,7 @@
           </el-tag>
         </template>
     </el-table-column>
-    <el-table-column prop="cljh" label="处理计划" width="200" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="cljh" label="处理计划" width="200" ></el-table-column>
     <el-table-column label="批注" width="120" v-if="show">
        <template slot-scope="scope">
           <span>{{scope.row.pzzs==0?'无':scope.row.pzzs+'人次批注'}}</span>
