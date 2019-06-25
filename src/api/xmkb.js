@@ -101,7 +101,8 @@ export function getMyProjects(obj) {
 			keyword: obj.keyword,
 			xmlb: obj.xmlb || "",
 			sfgx: obj.sfgx || "",
-			xmzt: obj.xmzt || "",
+			xmzt: obj.xmzt||"",
+			xmztzt:obj.xmztzt,
 			pl: obj.pl || ""
 		}
 	})

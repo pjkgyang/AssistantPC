@@ -64,9 +64,9 @@
             <table>
               <tr>
                 <th>本次可结算总金额（元）</th>
-                <td>{{!jsxx.jsje?0:jsxx.jsje}}</td>
+                <td>{{!jsxx.syjsje?0:jsxx.syjsje}}</td>
                 <th>本次已结算总金额（元）</th>
-                <td colspan="3">{{!jsxx.yjszfy?0:jsxx.yjszfy}}</td>
+                <td colspan="3">{{!jsxx.sjzfy?0:jsxx.sjzfy}}</td>
               </tr>
               <tr>
                 <th>中标实施费用（元）</th>
@@ -404,36 +404,71 @@ export default {
   methods: {
     // 计算本次总金额
     handleSettleBcjsfy(type) {
-      if (type == "0" && Number(this.jsxx.sjssfy) > Number(this.jsxx.zbssfy)) {
-        this.$message({
-          message: "中标实施费用必须 大于 本次结算实施费用 ",
-          type: "warning"
-        });
-        this.jsxx.sjssfy = 0;
+      if (type == "0") {
+				if(Number(this.jsxx.sjssfy) > Number(this.jsxx.zbssfy)){
+					 this.$message({
+					  message: "中标实施费用必须 大于 本次结算实施费用 ",
+					  type: "warning"
+					});
+					this.jsxx.sjssfy = 0;
+				}
+				if((Number(this.jsxx.sjssfy) + Number(this.jsxx.rlssfy) + Number(this.jsxx.ylssfy) + Number(this.jsxx.yjsssfy)) > Number(this.jsxx.zbssfy)){
+					this.$message({
+					  message: "本次结算实施费用过高，请重新填写~",
+					  type: "warning"
+					});
+					 this.jsxx.sjssfy = 0;
+				}
       }
-      if (type == "1" && Number(this.jsxx.sjekfy) > Number(this.jsxx.zbekfy)) {
-        this.$message({
-          message: "中标二开费用必须 大于 本次结算二开费用",
-          type: "warning"
-        });
-        this.jsxx.sjekfy = 0;
+      if (type == "1") {
+				if(Number(this.jsxx.sjekfy) > Number(this.jsxx.zbekfy)){
+					this.$message({
+					  message: "中标二开费用必须 大于 本次结算二开费用",
+					  type: "warning"
+					});
+					this.jsxx.sjekfy = 0;
+				}
+				if((Number(this.jsxx.sjekfy) + Number(this.jsxx.rlekfy) + Number(this.jsxx.ylekfy) + Number(this.jsxx.yjsekfy)) > Number(this.jsxx.zbekfy)){
+					this.$message({
+					  message: "本次结算二开费用过高，请重新填写~",
+					  type: "warning"
+					});
+					 this.jsxx.sjekfy = 0;
+				}
       }
-      if (type == "2" && Number(this.jsxx.sjkbfy) > Number(this.jsxx.zbkbfy)) {
-        this.$message({
-          message: "中标可变费用必须 大于 本次结算可变费用 ",
-          type: "warning"
-        });
-        this.jsxx.sjkbfy = 0;
+      if (type == "2") {
+				if(Number(this.jsxx.sjkbfy) > Number(this.jsxx.zbkbfy)){
+					this.$message({
+					  message: "中标可变费用必须 大于 本次结算可变费用 ",
+					  type: "warning"
+					});
+					this.jsxx.sjkbfy = 0;
+				}
+				if((Number(this.jsxx.sjkbfy) + Number(this.jsxx.rlkbfy) + Number(this.jsxx.ylkbfy) + Number(this.jsxx.yjskbfy)) > Number(this.jsxx.zbkbfy)){
+					this.$message({
+					  message: "本次结算可变费用过高，请重新填写~",
+					  type: "warning"
+					});
+					this.jsxx.sjkbfy = 0;
+				}
       }
 
-      this.jsxx.jsje =
-        Number(this.jsxx.sjssfy) +
-        Number(this.jsxx.sjekfy) +
-        Number(this.jsxx.sjkbfy) +
-        Number(this.jsxx.jlje) -
-        Number(this.jsxx.cfje);
-      this.jsxx.jsje = this.jsxx.jsje < 0 ? 0 : this.jsxx.jsje;
+      // this.jsxx.jsje =
+      //   Number(this.jsxx.sjssfy) +
+      //   Number(this.jsxx.sjekfy) +
+      //   Number(this.jsxx.sjkbfy) +
+      //   Number(this.jsxx.jlje) -
+      //   Number(this.jsxx.cfje);
+      // this.jsxx.jsje = this.jsxx.jsje < 0 ? 0 : this.jsxx.jsje;
+			
+					   // 本次已结算金额加上奖励-惩罚  把奖励和惩罚加到已结算总金额，小于0，不处理。 
+			this.jsxx.sjzfy =
+			  Number(this.jsxx.sjssfy) +
+			  Number(this.jsxx.sjekfy) +
+			  Number(this.jsxx.sjkbfy);
+			this.jsxx.sjzfy = this.jsxx.sjzfy < 0 ? 0 : this.jsxx.sjzfy;
     },
+		
     // 计算本次结算总金额
     handleInputfy(type) {
       switch (type) {
@@ -464,19 +499,6 @@ export default {
         default:
           break;
       }
-      this.jsxx.jsje =
-        Number(this.jsxx.sjssfy) +
-        Number(this.jsxx.sjekfy) +
-        Number(this.jsxx.sjkbfy) +
-        Number(this.jsxx.jlje) -
-        Number(this.jsxx.cfje);
-      this.jsxx.jsje = this.jsxx.jsje < 0 ? 0 : this.jsxx.jsje;
-      // 本次已结算金额加上奖励-惩罚  把奖励和惩罚加到已结算总金额，小于0，不处理。
-      this.jsxx.yjszfy =
-        Number(this.jsxx.yjszfy) +
-        Number(this.jsxx.jlje) -
-        Number(this.jsxx.cfje);
-      this.jsxx.yjszfy = this.jsxx.yjszfy < 0 ? 0 : this.jsxx.yjszfy;
     },
     // 保存
     handleSave() {
@@ -535,17 +557,18 @@ export default {
         sm: xxs(this.jsxx.sm),
         jlsm: xxs(this.jsxx.jlsm),
 
-        ylssfy: this.jsxx.ylssfy,
-        ylekfy: this.jsxx.ylekfy,
-        ylkbfy: this.jsxx.ylkbfy,
+        ylssfy: Number(this.jsxx.ylssfy),
+        ylekfy: Number(this.jsxx.ylekfy),
+        ylkbfy: Number(this.jsxx.ylkbfy),
 
-        rlssfy: this.jsxx.rlssfy,
-        rlekfy: this.jsxx.rlekfy,
-        rlkbfy: this.jsxx.rlkbfy,
-
-        sjssfy: this.jsxx.sjssfy,
-        sjekfy: this.jsxx.sjekfy,
-        sjkbfy: this.jsxx.sjkbfy,
+        rlssfy: Number(this.jsxx.rlssfy),
+        rlekfy: Number(this.jsxx.rlekfy),
+        rlkbfy: Number(this.jsxx.rlkbfy),
+        
+				// 本次结算实施费用
+        sjssfy: Number(this.jsxx.sjssfy),
+        sjekfy: Number(this.jsxx.sjekfy),
+        sjkbfy: Number(this.jsxx.sjkbfy),
 
         teamFeeList: JSON.stringify(xmtdData)
       }).then(res => {
@@ -587,6 +610,7 @@ export default {
 
     // 批量设置
     handleSelectionChange(val) {
+			this.wids = [];
       val.forEach(ele => {
         this.wids.push(ele.wid);
       });
@@ -657,7 +681,7 @@ export default {
       this.jsssfyTotal = 0;
       let  jsekfyTotal = 0,
            jskbfyTotal = 0;
-      this.jsxx.yjszfy = 0;
+      // this.jsxx.yjszfy = 0;
       this.tdxxData[index].jsje =
         Number(this.tdxxData[index].jsssfy) +
         Number(this.tdxxData[index].jsekfy) +
@@ -667,7 +691,7 @@ export default {
         this.jsssfyTotal += !ele.jsssfy ? 0 : Number(ele.jsssfy);
         jsekfyTotal += !ele.jsekfy ? 0 : Number(ele.jsekfy); //团队结算二开总费用
         jskbfyTotal += !ele.jskbfy ? 0 : Number(ele.jskbfy); //团队结算可变总费用
-        this.jsxx.yjszfy += Number(ele.jsje); //已结算总费用 计算
+        // this.jsxx.yjszfy += Number(ele.jsje); //已结算总费用 计算
       });
 
       this.tdywyData.forEach((ele, _j, arr) => {

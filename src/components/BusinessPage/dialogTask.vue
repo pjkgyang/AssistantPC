@@ -273,11 +273,13 @@ export default {
         }
       });
     },
+		
     getMyProjects(type) {
       getMyProjects({
         curPage: this.curPage,
         pageSize: 20,
         keyword: this.xmValue,
+				xmztzt:'0,1,4,5,7',
         pl: type
       }).then(({ data }) => {
         if (data.state == "success") {

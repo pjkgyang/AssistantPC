@@ -552,7 +552,7 @@ export default {
 		// && row.zt != '处理中'
 		checkboxInit(row, index) {
 			if (this.ishow) {
-				if (row.zt != '计划中' && row.zt != '处理中') {
+				if ((row.zt != '计划中' && row.zt != '处理中') || !row.sxrq) {
 					return false;
 				} else {
 					return true;
