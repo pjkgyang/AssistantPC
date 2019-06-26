@@ -232,7 +232,8 @@ export default {
     sendServiceExpired:window.baseurl+'project/sendServiceExpired.do', //发送服务过期提醒
     listServiceExpired:window.baseurl+'project/listServiceExpired.do', //获取服务提醒列表
     queryProjectParticipantMap:window.baseurl+'personnel/queryProjectParticipantMap.do', //获取项目参与者
-    
+    getTeamMembers:window.baseurl+'team/getTeamMembers.do', //获取项目团队成员
+	
     // crowd
     getCrowdYwx:window.baseurl+'external/getCrowdYwx.do', // 获取crowd业务线
     getCrowdCp:window.baseurl+'external/getCrowdCp.do', // 获取crowd产品

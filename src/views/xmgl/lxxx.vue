@@ -83,9 +83,9 @@
 							</tr>
 							<tr>
 								<th>工程区域</th>
-								<td>{{ htjbxx.qymc }}</td>
+								<td>{{ htjbxx.gczd}}</td>
 								<th>工程战队</th>
-								<td>{{ htjbxx.gczd }}</td>
+								<td>{{ htjbxx.qymc }}</td>
 								<th>是否延长售后</th>
 								<td>{{ htjbxx.gcfwzt == 1 ? '是' : '否' }}</td>
 							</tr>

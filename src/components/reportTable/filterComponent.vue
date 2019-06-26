@@ -133,13 +133,14 @@
         <p class="query-title">分包性质:</p>
         <p class="query-list" @click="handleFBXZ">
           <span data-type="" :class="{'bg-active':filterWord.fbxz == ''}">全部</span>
-          <span v-for="(fbxzx,index) in fbxzList" :data-type="fbxzx.label" :class="{'bg-active':filterWord.fbxz == fbxzx.label}">{{fbxzx.mc}}</span>
+          <span v-for="(fbxzx,index) in fbxzList" :key="index" :data-type="fbxzx.label" :class="{'bg-active':filterWord.fbxz == fbxzx.label}">{{fbxzx.mc}}</span>
         </p>
       </div>
       <div v-if="filterList.includes('rzjb')">
         <p class="query-title">任职级别:</p>
         <p class="query-list" @click="handleRZJB">
-          <span v-for="(rzdj,index) in rzjbList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzjb == rzdj.label}">{{rzdj.mc}}</span>
+					<span data-type="" :class="{'bg-active':filterWord.rzjb == ''}">全部</span>
+          <span v-for="(rzjb,index) in rzjbList" :key="index" :data-type="rzjb.label" :class="{'bg-active':filterWord.rzjb == rzjb.label}">{{rzjb.mc}}</span>
         </p>
       </div>
 			
@@ -147,7 +148,7 @@
 			  <p class="query-title">任职等级:</p>
 			  <p class="query-list" @click="handleRZDJ">
 					<span data-type="" :class="{'bg-active':filterWord.rzdj == ''}">全部</span>
-			    <span v-for="(rzdj,index) in rzdjList" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzdj == rzdj.label}">{{rzdj.mc}}</span>
+			    <span v-for="(rzdj,index) in rzdjList" :key="index" :data-type="rzdj.label" :class="{'bg-active':filterWord.rzdj == rzdj.label}">{{rzdj.mc}}</span>
 			  </p>
 			</div>
 			
@@ -155,7 +156,7 @@
 			  <p class="query-title">序列类型:</p>
 			  <p class="query-list" @click="handleXllx">
 					<span data-type="" :class="{'bg-active':filterWord.xllx == ''}">全部</span>
-			    <span v-for="(xllx,index) in xllxList" :data-type="xllx.label" :class="{'bg-active':filterWord.xllx == xllx.label}">{{xllx.mc}}</span>
+			    <span v-for="(xllx,index) in xllxList" :key="index" :data-type="xllx.label" :class="{'bg-active':filterWord.xllx == xllx.label}">{{xllx.mc}}</span>
 			  </p>
 			</div>
     </div>
@@ -194,11 +195,7 @@ export default {
         { label: '2', mc: "已发布" }
       ],
       rzjbList: [
-        { label: '', mc: "全部" },
-        // { label: '1', mc: "入门级" },
-        { label: '2', mc: "初级" },
-        { label: '3', mc: "中级" },
-        { label: '4', mc: "高级" }
+   
       ],
 			rzdjList:[],//任职等级
       rylxList:[],
@@ -462,7 +459,13 @@ export default {
 		if (!getSession("rzdj") && this.filterList.includes('rzdj')) {
 		  getMenu("StaffQualificationLevel", this.rzdjList, ""); //获取任职等级
 		} else {
-		  this.rzjbList = getSession("rzdj");
+		  this.rzdjList = getSession("rzdj");
+		}
+		
+		if (!getSession("rzjb") && this.filterList.includes('rzjb')) {
+		  getMenu("StaffLevel", this.rzjbList, ""); //获取任职级别
+		} else {
+		  this.rzjbList = getSession("rzjb");
 		}
 		
 		if (!getSession("xllx") && this.filterList.includes('xllx')) {

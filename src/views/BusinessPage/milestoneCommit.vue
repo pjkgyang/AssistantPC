@@ -272,7 +272,7 @@
 							{{ totalWgl < 10000 ? '元' : totalWgl < 100000000 ? '万元' : '亿' }}
 						</span>
 					</span>
-					<p style="color:#aaa;font-size:12px;">说明：整体验收里程碑不允许调整，非整体验收里程碑里程碑调整需要用户确认后才生效</p>
+					<p style="color:#f00;font-size:12px;">说明：合同正本未回，不允许提交整体验收里程碑。</p>
 				</div>
 				<el-table ref="multipleTable" :data="tableData3" border tooltip-effect="dark" @selection-change="handleSelectionChange">
 					<el-table-column type="selection" width="55" :selectable="checkboxInit" :key="Math.random()"></el-table-column>
@@ -552,7 +552,7 @@ export default {
 		// && row.zt != '处理中'
 		checkboxInit(row, index) {
 			if (this.ishow) {
-				if ((row.zt != '计划中' && row.zt != '处理中') || !row.sxrq) {
+				if ((row.zt != '计划中' && row.zt != '处理中') || (!row.sxrq && (row.xmnr_display == '项目整体验收' || row.xmnr_display == '项目交付验收'))) {
 					return false;
 				} else {
 					return true;

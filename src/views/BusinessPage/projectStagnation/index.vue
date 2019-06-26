@@ -67,9 +67,9 @@
 					  label="操作"
 					  width="220">
 					  <template slot-scope="scope">
-						<el-button @click="handleClick(scope.row)" type="text" size="small">审批通过</el-button>
-						<el-button type="text" size="small">审批不通过</el-button>
-						<el-button type="text" size="small">查看进度</el-button>
+						<el-button @click="handleClick(scope.row,'pass')" type="text" size="small">审批通过</el-button>
+						<el-button type="text" size="small" @click="handleClick(scope.row,'reject')">审批不通过</el-button>
+						<el-button type="text" size="small" @click="handleClick(scope.row,'process')">查看进度</el-button>
 					  </template>
 					</el-table-column>
 					<el-table-column prop="date" label="项目名称" min-width="220"></el-table-column>
@@ -138,10 +138,16 @@
 	},
 	mounted(){},
 	methods: {
+		// 关键字查询
 		handleSearchLcb(){
 			
 		},
+		// 选择 复选
 		handleSelectionChange() {
+			
+		},
+		// 审批通过，不通过，进度
+		handleClick(){
 			
 		},
 		// 停滞，重启
