@@ -69,8 +69,7 @@ export default {
 			}
 			axios.post(window.baseurl + (!this.isCrowd ? 'attachment/uploadAttach.do' : 'external/uploadCrowd.do'), this.uploadForm, {
 					headers: { 'Content-Type': 'multipart/form-data' }
-				})
-				.then(res => {
+				}).then(res => {
 					if (res.data.state == 'success') {
 						this.files.push(res.data.data.split('|')[0]);
 						if (!this.isCrowd) {

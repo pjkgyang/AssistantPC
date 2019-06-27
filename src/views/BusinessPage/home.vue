@@ -355,7 +355,7 @@ export default {
         getDwByUser({
         dwlx: "",
         curPage: 1,
-        pageSize: 7,
+        pageSize: 9,
         keyword:keyword
         }).then(({ data }) => {
         if (data.state == "success") {

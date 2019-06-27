@@ -125,7 +125,14 @@ export function getProjects(obj) {
 			htxz:obj.htxz||'',
 			qygc:obj.qygc||'',
 			gbsjStart: obj.gbsjStart,
-			gbsjEnd: obj.gbsjEnd
+			gbsjEnd: obj.gbsjEnd,
+			gbcl:obj.gbcl,
+			gbzrr:obj.ywzrr,
+			yjqdksrq:obj.yjqdksrq,
+			yjqdjsrq:obj.yjqdjsrq,
+			minqdje:obj.minqdje,
+			maxqdje:obj.maxqdje,
+			gbgzzt:obj.gzzt
 		}
 	})
 }

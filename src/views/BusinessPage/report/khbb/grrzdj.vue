@@ -40,6 +40,8 @@ export default {
         cpx: "",
         rzdj: "",
         gczd: "",
+				dwlx: "",
+				rzjb: "",
         date: ""
       },
       currentPage: 1,

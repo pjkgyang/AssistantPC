@@ -29,7 +29,7 @@ export default {
 				keyword: '',
 				bm: '',
 				rzdj: '',
-				gczd: '',
+				rzjb: '',
 				date: '',
 				xllx:''
 			},

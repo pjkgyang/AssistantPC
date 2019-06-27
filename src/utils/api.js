@@ -286,5 +286,18 @@ export default {
 	// 岗位任职资格查询
 	jobQualificationQuery:window.baseurl + 'personnel/jobQualificationQuery.do',//获取挂起问题
 	
+	// 过保反馈
+	overProtectionFeedback:window.baseurl + 'project/overProtectionFeedback.do',//过保反馈
 	
+	// 项目停滞
+	pageProjectStopWorkflow:window.baseurl + 'flow/pageProjectStopWorkflow.do',//项目停滞/重启流程分页数据
+	startProjectStopProgress:window.baseurl + 'flow/startProjectStopProgress.do',//发起项目停滞流程
+	startProjectRestartProgress:window.baseurl + 'flow/startProjectRestartProgress.do',//发起项目重启流程
+	restartProjectStopProgress:window.baseurl + 'flow/restartProjectStopProgress.do',//重新发起项目停滞
+	restartProjectRestartProgress:window.baseurl + 'flow/restartProjectRestartProgress.do',//重新发起项目重启
+	agree:window.baseurl + 'flow/agree.do',//审批同意
+	reject:window.baseurl + 'flow/reject.do',//审批驳回
+	getProjectStopVO:window.baseurl + 'flow/getProjectStopVO.do',//获取项目停滞重启详情
+	listWorkFlowNodes:window.baseurl + 'flow/listWorkFlowNodes.do',//流程节点列表
+	logs:window.baseurl + 'flow/logs.do',//流程日志列表
  }

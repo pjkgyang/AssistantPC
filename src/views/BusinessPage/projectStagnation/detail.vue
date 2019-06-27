@@ -39,7 +39,7 @@
 	export default{
 		data(){
 			return {
-				     activities: [{
+				    activities: [{
 					  content: '2018-04-12 20:46',
 					  timestamp: '',
 					}, {
@@ -52,6 +52,44 @@
 					  content: '2018-04-03 20:46',
 					  timestamp: ''
 					}]
+			}
+		},
+		methods:{
+			// 获取项目停滞重启详情
+			getProjectStopVO(){
+				this.$get(this.API.getProjectStopVO,{
+					wid:this.$route.query.wid
+				}).then(res=>{
+					if(res.state == 'success'){
+						
+					}else{
+						
+					}
+				})
+			},
+			// 获取流程节点
+			listWorkFlowNodes(){
+				this.$get(this.API.listWorkFlowNodes,{
+					wid:this.$route.query.wid
+				}).then(res=>{
+					if(res.state == 'success'){
+						
+					}else{
+						
+					}
+				})
+			},
+			// 流程日志列表
+			logs(){
+				this.$get(this.API.logs,{
+					wid:this.$route.query.wid
+				}).then(res=>{
+					if(res.state == 'success'){
+						
+					}else{
+						
+					}
+				})
 			}
 		},
 		components: {

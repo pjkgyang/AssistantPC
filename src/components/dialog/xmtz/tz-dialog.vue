@@ -7,7 +7,7 @@
 						<th class="before-require">选择项目</th>
 						<td colspan="3">
 							<el-input size="mini" type="text" style="width: 100%;" v-model="formData.xmmc" readonly placeholder="请选择项目">
-								<el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
+								<el-button v-if="!xmData.xmbh" slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
 							</el-input>
 						</td>
 					</tr>
@@ -15,7 +15,7 @@
 						<th>项目状态</th>
 						<td>{{ xmInfo.xmzt }}</td>
 						<th>学校</th>
-						<td>{{ xmInfo.dwmc }}</td>
+						<td>{{ xmInfo.dwmc||xmInfo.xx }}</td>
 					</tr>
 					<tr v-show="!!formData.xmmc">
 						<th>项目类别</th>
@@ -25,7 +25,7 @@
 					</tr>
 					<tr v-show="!!formData.xmmc">
 						<th>项目经理</th>
-						<td>{{ xmInfo.yfzrrxm }}</td>
+						<td>{{ xmInfo.yfzrrxm||xmInfo.xmjl }}</td>
 						<th>客户经理</th>
 						<td>{{ xmInfo.khjl }}</td>
 					</tr>
@@ -65,14 +65,14 @@
 					<tr v-if="type == 'cq' && !!formData.xmmc">
 						<th>停滞到</th>
 						<td colspan="3">
-							{{xmInfo.htje}}
+							{{xmInfo.gbsj}}
 						</td>
 					</tr>
 					
 					<tr v-if="type == 'tz'">
 						<th>上传附件</th>
 						<td colspan="3">
-							<uploadFile ></uploadFile>
+							<uploadFile @handleUploadFile="handleUploadFile" :istb="isClearFile"></uploadFile>
 						</td>
 					</tr>
 					<tr>
@@ -100,17 +100,19 @@
 import axios from 'axios';
 import itemChoose from '@/components/BusinessPage/itemChoose.vue';
 import uploadFile from '@/components/BusinessPage/upload';
-
+import {getProject} from '@/api/xmkb'
 export default {
 	data() {
 		return {
 			dialogQuestionVisible: false,
 			visible: false,
+			isClearFile:false,
 			xmInfo: {},
 			formData: {
 				xmmc: '',
 				xmbh: '',
 				tzrq: '',
+				fjData:'',
 				sm:''
 			}
 		};
@@ -123,6 +125,12 @@ export default {
 		type:{
 			type:String,
 			default:''
+		},
+		xmData:{
+		  type:Object,
+		  default:()=>{
+			  return {}
+		  }
 		}
 	},
 
@@ -138,8 +146,9 @@ export default {
 			this.dialogQuestionVisible = true;
 		},
 		handleCommit(){
-			if(!this.validate()) return;
 			this.formData.sm = $("#summernote").summernote("code");
+			if(!this.validate()) return;
+			this.$emit('handleCommit',this.formData);
 		},
 		handleCancel() {
 			//关闭dialog
@@ -149,7 +158,9 @@ export default {
 			this.formData.xmmc = '';
 			this.formData.tzrq = '';
 		},
-		
+		handleUploadFile(data){
+			this.formData.fjData = data.join(',');
+		},
 		validate(){
 			if(!this.formData.xmmc){
 				this.$message({
@@ -158,14 +169,7 @@ export default {
 				})
 				return false;
 			}
-			if(!this.formData.tzrq){
-				this.$message({
-					message:'请选择停滞日期',
-					type:'warning'
-				})
-				return false;
-			}
-			if(!this.formData.tzrq){
+			if(!this.formData.tzrq && this.type == 'tz' ){
 				this.$message({
 					message:'请选择停滞日期',
 					type:'warning'
@@ -207,7 +211,22 @@ export default {
 						]
 					});
 				});
+				
+				if(!!this.xmData.xmbh){
+					this.formData.xmbh = this.xmData.xmbh;
+					this.formData.xmmc = this.xmData.xmmc;
+					getProject({xmbh:this.xmData.xmbh}).then(res=>{
+						if(res.data.state == 'success'){
+							this.xmInfo = res.data.data
+						}
+					})
+				}else{
+					this.xmInfo = {};
+					this.formData.xmbh = '';
+					this.formData.xmmc = '';
+				}
 			} else {
+				this.isClearFile = !this.isClearFile;
 			}
 		}
 	},

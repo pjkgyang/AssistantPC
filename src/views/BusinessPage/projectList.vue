@@ -7,7 +7,7 @@
 						<span class="table-menu-name" style="padding:2px 4px;margin-right:10px">高级查询:</span>
 						<el-input
 							class="search-input"
-							placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校"
+							placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校/过保责任人"
 							prefix-icon="el-icon-search"
 							size="small"
 							v-model="keyword"
@@ -92,25 +92,26 @@
 							&#x3000;
 						</div>
 						<!-- 过保策略 -->
-<!-- 						<div flex>
+						<div flex>
 							  <p>
 									<span class="table-menu-name">过保策略:</span>
-									<span :class="{'bg-active':gbcl == ''}"  @click="CheckGbcl">全部</span>
+									<span :class="{'bg-active':gbcl == ''}"  @click="CheckGbcl('')">全部</span>
 									<span :class="{'bg-active':gbcl == item.label}" v-for="(item,index) in gbclList"  :key="index" @click="CheckGbcl(item.label)">{{item.mc}}</span>
 								</p>
 								<p>
-									<span class="table-menu-name">有无责任人:</span>
+									<span class="table-menu-name">过保有无责任人:</span>
 									<span :class="{'bg-active':ywzrr == item.id}"  v-for="(item,index) in ywzrrList" :key="index" @click="CheckYwzrr(item.id)" >{{item.label}}</span>
 								</p>
-						</div> -->
+						</div>
 						
 						<!-- 预计签单日期 -->
-<!-- 						<div flex>
+						<div flex>
 							  <p>
 									<span class="table-menu-name">预计签单日期:</span>
-									<span  v-for="item in qdrqList" :class="{'bg-active':yjqdrq == item.id}" @click="CheckYjqdrq(item.id)" >{{item.label}}</span>
+									<span  v-for="(item,index) in qdrqList" :key="index" :class="{'bg-active':yjqdrq == item.id}" @click="CheckYjqdrq(item.id)" >{{item.label}}</span>
 									<el-date-picker
 										  v-if="yjqdrq == 2"
+										  value-format="yyyy-MM-dd"
 											size="mini"
 											v-model="qdrq"
 											type="daterange"
@@ -119,24 +120,24 @@
 											end-placeholder="结束日期">
 										</el-date-picker>
 								</p>
-						</div> -->
+						</div>
 						
 						<!-- 预计签单金额 -->
-<!-- 						<div flex>
+						<div flex>
 							<p>
-								<span class="table-menu-name">预计签单金额:</span>
-								从&#x3000;<el-input-number size="mini" v-model="qsje" :step="1"></el-input-number>&#x3000;到&#x3000;
-							   	 <el-input-number size="mini" v-model="jsje" :step="1"></el-input-number>
+								<span class="table-menu-name">过保预计签单金额:</span>
+								从&#x3000;<el-input-number size="mini" v-model="minqdje" :step="1"></el-input-number>&#x3000;到&#x3000;
+							   	 <el-input-number size="mini" v-model="maxqdje" :step="1"></el-input-number>
 							</p>
-						</div> -->
+						</div>
 						<!-- 当前跟踪状态 -->
-		<!-- 				<div flex>
+						<div flex>
 							<p>
 								<span class="table-menu-name">当前跟踪状态:</span>
-								<span :class="{'bg-active':gzzt == ''}"  @click="CheckGzzt">全部</span>
+								<span :class="{'bg-active':gzzt == ''}"  @click="CheckGzzt('')">全部</span>
 								<span :class="{'bg-active':gzzt == item.label}" v-for="(item,index) in gzztList"  :key="index" @click="CheckGzzt(item.label)">{{item.mc}}</span>
 							</p>
-						</div> -->
+						</div>
 						
 						<p>
 							<span class="table-menu-name">区域工程:</span>
@@ -150,7 +151,7 @@
 						<el-table-column
 							fixed="left"
 							label="操作"
-							width="270"
+							width="200"
 							v-if="
 								(userGroup.includes('XXLDZ') || userGroup.includes('JZGCRY') || userGroup.includes('JZFGCRY')) && (xmztC == '1' && xmlbC == '软件' ? false : true)
 							"
@@ -172,17 +173,17 @@
 								>
 									提醒记录
 								</el-button>
-								<el-button
+<!-- 							<el-button
 									v-if="(userGroup.includes('JZFGCRY') || userGroup.includes('JZGCRY')) && (scope.row.xmzt == '在建' && scope.row.xmlb == '软件' ? false : true)"
 									@click.native.prevent="handleCommandXmfk(scope.row)"
 									type="text"
 									size="mini"
 								>
 									项目反馈
-								</el-button>
+								</el-button> -->
 								
-								<!-- v-if="(userGroup.includes('JZFGCRY') || userGroup.includes('JZGCRY')) && (scope.row.xmzt == '在建' && scope.row.xmlb == '软件' ? false : true)" -->
 								<el-button
+									v-if="(userGroup.includes('JZFGCRY') || userGroup.includes('JZGCRY')) && (scope.row.xmzt == '在建' && scope.row.xmlb == '软件' ? false : true)"
 									@click.native.prevent="handleCommandGbfk(scope.row)"
 									type="text"
 									size="mini"
@@ -292,10 +293,12 @@ export default {
 			sfxqC: '',
 			gbcl: '', //过保策略
 			ywzrr: '', //有无责任人
-			yjqdrq: '0', //预计签单日期
+			yjqdrq: '2', //预计签单日期
+			yjqdksrq:'',//签单开始日期
+			yjqdjsrq:'',//签单结束日期
 			qdrq:[],//自定义签单日期
-			qsje:0,//签单开始金额
-			jsje:0,//签单结束金额
+			minqdje:0,//签单开始金额
+			maxqdje:0,//签单结束金额
 			gzzt:'',//跟踪状态
 			allfbData: [],
 			curPage: 1,
@@ -353,7 +356,22 @@ export default {
 		},
 		// 过保反馈
 		handleSubmitGbfk(data){
-			
+			data.xmbh = this.xmbh;
+			this.$post(this.API.overProtectionFeedback,data).then(res=>{
+				if(res.state == 'success'){
+					this.$message({
+						message: '提交成功~',
+						type: 'success'
+					});	
+					this.getProjects(this.curPage);
+					this.gbfkShow = false;
+				}else{
+					this.$message({
+						message: res.msg,
+						type: 'error'
+					});	
+				}
+			})
 		},
 		// 项目反馈
 		handleSubmit(params) {
@@ -369,6 +387,11 @@ export default {
 						message: '保存成功~',
 						type: 'success'
 					});
+				}else{
+					this.$message({
+						message: res.msg,
+						type: 'error'
+					});	
 				}
 			});
 		},
@@ -376,6 +399,9 @@ export default {
 		handleExport() {
 			this.gbksrqValue = !this.gbksrqValue ? '' : this.gbksrqValue;
 			this.gbjsrqValue = !this.gbjsrqValue ? '' : this.gbjsrqValue;
+			this.minqdje = !this.minqdje?'':this.minqdje;
+			this.maxqdje = !this.maxqdje?'':this.maxqdje;
+			
 			window.open(
 				this.baseUrl +
 					'project/exportXmData.do?keyword=' +
@@ -397,7 +423,21 @@ export default {
 					'&sfxq=' +
 					this.sfxqC +
 					'&htxz=' +
-					this.htxzList.join(',')
+					this.htxzList.join(',') +
+					'&gbcl=' +
+					this.gbcl +
+					'&gbzrr=' +
+					this.ywzrr +
+					'&yjqdksrq=' +
+					this.yjqdksrq +
+					'&yjqdjsrq=' +
+					this.yjqdjsrq +
+					'&minqdje=' +
+					this.minqdje +
+					'&maxqdje=' +
+					this.maxqdje +
+					'&gbgzzt=' +
+					this.gzzt
 			);
 		},
 		// 过保提醒
@@ -441,8 +481,11 @@ export default {
 		handleChangeDate(val) {
 			this.getProjects(1);
 		},
+		
 		// 获取所有项目
 		getProjects(curPage) {
+			this.yjqdksrq = this.yjqdrq=='0'?(new Date().getFullYear()+'-01-01'):this.yjqdrq=='1'?((new Date().getFullYear()+1)+'-01-01'):(!this.qdrq[0]?'':this.qdrq[0]);
+			this.yjqdjsrq = this.yjqdrq=='0'?(new Date().getFullYear()+'-12-31'):this.yjqdrq=='1'?((new Date().getFullYear()+1)+'-12-31'):(!this.qdrq[1]?'':this.qdrq[1]);
 			getProjects({
 				curPage: curPage,
 				pageSize: this.pageSize,
@@ -455,7 +498,14 @@ export default {
 				htxz: this.htxzList.join(','),
 				qygc: this.gczdC,
 				gbsjStart: this.gbksrqValue,
-				gbsjEnd: this.gbjsrqValue
+				gbsjEnd: this.gbjsrqValue,
+				gbcl:this.gbcl,
+				gbzrr:this.ywzrr,
+				yjqdksrq:this.yjqdksrq,
+				yjqdjsrq:this.yjqdjsrq,
+				minqdje:!this.minqdje?'':this.minqdje,
+				maxqdje:!this.maxqdje?'':this.maxqdje,
+				gbgzzt:this.gzzt
 			}).then(({ data }) => {
 				if (data.state == 'success') {
 					this.allfbData = data.data.rows;
@@ -510,7 +560,7 @@ export default {
 		},
 		// 过保策略
 		CheckGbcl(data) {
-			this.gbcl = data;
+			this.gbcl = !data?'':data;
 			this.getProjects(1);
 		},
 		// 有无责任人
@@ -520,6 +570,7 @@ export default {
 		},
 		CheckYjqdrq(data){
 			this.yjqdrq = data;
+			this.getProjects(1);
 		},
 		// 跟踪状态
 		CheckGzzt(data){
@@ -579,7 +630,7 @@ export default {
 }
 .project_more_table .table-menu-name {
 	display: inline-block;
-	width: 120px;
+	width: 130px;
 	color: #666;
 	margin: 5px 0;
 	font-size: 14px;
