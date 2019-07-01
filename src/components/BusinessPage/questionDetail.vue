@@ -34,14 +34,13 @@
                     <span class="question-info-front">所属单位 &#x3000;</span>{{qusetionInfo.ssbm == ''?'无':qusetionInfo.ssbm}}</span>
                   <span>
                     <span class="question-info-front">问题类别 &#x3000;</span>{{wtlbmc == ''||wtlbmc == null?'无':wtlbmc}}</span>
-									<span>
-										  <span class="question-info-front">问题级别 &#x3000;</span>{{wtjbmc == ''||wtjbmc == null?'无':wtjbmc}}</span>
                 </p>
                 <p>
                   <span>
-                    <span class="question-info-front">产品 &#x3000;</span>{{qusetionInfo.cpmc}}</span>
-                  <span>
-                    <span class="question-info-front">是否紧急 &#x3000;</span>{{qusetionInfo.jjyf==null?'无':qusetionInfo.jjyf == 0?'否':'是'}}</span>
+                    <span class="question-info-front">产品 &#x3000;</span>{{qusetionInfo.cpmc}}
+									</span>
+                 <span>
+                 	  <span class="question-info-front">问题级别 &#x3000;</span>{{wtjbmc == ''||wtjbmc == null?'无':wtjbmc}}</span>
                   <span>
                     <span class="question-info-front">版本号 &#x3000;</span>{{qusetionInfo.bbh}}</span>
                 </p>
@@ -84,7 +83,7 @@
               <div v-html="qusetionInfo.nr"></div>
             </div>
           </li>
-          <li v-for="(reply,index) in questionReply">
+          <li v-for="(reply,index) in questionReply" :key="index">
             <div class="project-question-detail-top" style="background:#F5F7FA;height:44px;">
               <div class="question-type">
                 <span class="question-reply">{{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'记录':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':reply.hflx == 14?'挂起':'开发'}}</span>

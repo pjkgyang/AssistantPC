@@ -43,7 +43,11 @@ export default {
     sfts: {
       type: Boolean,
       default: false
-    }
+    },
+		isCq:{
+			type: Boolean,
+			default: false
+		}
   },
   methods: {
     handleChooseItem(data) {
@@ -78,8 +82,8 @@ export default {
         keyword: this.xMkeyword,
         xmlb: "",
         sfgx: "",
-        // this.sfts?'1,2':'1,2,3'
-        xmzt: "1,2,3",
+        // xmzt: "1,2,3",
+				xmztzt: !!this.isCq?'0,6,4,5,7':'0,1,4,5,7',
         pl: ""
       }).then(({ data }) => {
         if (data.state == "success") {

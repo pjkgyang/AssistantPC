@@ -14,6 +14,7 @@
 							@change="SearchItem"
 						></el-input>
 						&#x3000;
+						<el-button type="primary" size="mini" @click="handleCheckGbtj">过保条件</el-button>
 						<el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
 						<a class="project_more_export" href="javaScript:void(0)" @click="handleExport">导出</a>
 					</div>
@@ -62,81 +63,83 @@
                 </el-radio-group>
               </p> -->
 						</div>
-						<div flex>
-							<p>
-								<span class="table-menu-name">过保日期:</span>
-								<span>
-									<el-date-picker
-										@change="handleChangeDate"
-										size="mini"
-										style="200px !important"
-										value-format="yyyy-MM-dd"
-										v-model="gbksrqValue"
-										type="date"
-										placeholder="过保开始日期"
-									></el-date-picker>
-								</span>
-								至 &nbsp;
-								<span>
-									<el-date-picker
-										@change="handleChangeDate"
-										size="mini"
-										style="200px !important"
-										value-format="yyyy-MM-dd"
-										v-model="gbjsrqValue"
-										type="date"
-										placeholder="过保结束日期"
-									></el-date-picker>
-								</span>
-							</p>
-							&#x3000;
-						</div>
-						<!-- 过保策略 -->
-						<div flex>
-							  <p>
-									<span class="table-menu-name">过保策略:</span>
-									<span :class="{'bg-active':gbcl == ''}"  @click="CheckGbcl('')">全部</span>
-									<span :class="{'bg-active':gbcl == item.label}" v-for="(item,index) in gbclList"  :key="index" @click="CheckGbcl(item.label)">{{item.mc}}</span>
-								</p>
+						<div v-if="gbtjShow">
+							<div flex>
 								<p>
-									<span class="table-menu-name">过保有无责任人:</span>
-									<span :class="{'bg-active':ywzrr == item.id}"  v-for="(item,index) in ywzrrList" :key="index" @click="CheckYwzrr(item.id)" >{{item.label}}</span>
-								</p>
-						</div>
-						
-						<!-- 预计签单日期 -->
-						<div flex>
-							  <p>
-									<span class="table-menu-name">预计签单日期:</span>
-									<span  v-for="(item,index) in qdrqList" :key="index" :class="{'bg-active':yjqdrq == item.id}" @click="CheckYjqdrq(item.id)" >{{item.label}}</span>
-									<el-date-picker
-										  v-if="yjqdrq == 2"
-										  value-format="yyyy-MM-dd"
+									<span class="table-menu-name">过保日期:</span>
+									<span>
+										<el-date-picker
+											@change="handleChangeDate"
 											size="mini"
-											v-model="qdrq"
-											type="daterange"
-											range-separator="至"
-											start-placeholder="开始日期"
-											end-placeholder="结束日期">
-										</el-date-picker>
+											style="200px !important"
+											value-format="yyyy-MM-dd"
+											v-model="gbksrqValue"
+											type="date"
+											placeholder="过保开始日期"
+										></el-date-picker>
+									</span>
+									至 &nbsp;
+									<span>
+										<el-date-picker
+											@change="handleChangeDate"
+											size="mini"
+											style="200px !important"
+											value-format="yyyy-MM-dd"
+											v-model="gbjsrqValue"
+											type="date"
+											placeholder="过保结束日期"
+										></el-date-picker>
+									</span>
 								</p>
-						</div>
-						
-						<!-- 预计签单金额 -->
-						<div flex>
-							<p>
-								<span class="table-menu-name">过保预计签单金额:</span>
-								从&#x3000;<el-input-number size="mini" v-model="minqdje" :step="1"></el-input-number>&#x3000;到&#x3000;
-							   	 <el-input-number size="mini" v-model="maxqdje" :step="1"></el-input-number>
-							</p>
-						</div>
-						<!-- 当前跟踪状态 -->
-						<div flex>
-							<p>
-								<span class="table-menu-name">当前跟踪状态:</span>
-								<span :class="{'bg-active':gzzt == ''}"  @click="CheckGzzt('')">全部</span>
-								<span :class="{'bg-active':gzzt == item.label}" v-for="(item,index) in gzztList"  :key="index" @click="CheckGzzt(item.label)">{{item.mc}}</span>
-							</p>
+								&#x3000;
+							</div>
+							<!-- 过保策略 -->
+							<div flex>
+								  <p>
+										<span class="table-menu-name">过保策略:</span>
+										<span :class="{'bg-active':gbcl == ''}"  @click="CheckGbcl('')">全部</span>
+										<span :class="{'bg-active':gbcl == item.label}" v-for="(item,index) in gbclList"  :key="index" @click="CheckGbcl(item.label)">{{item.mc}}</span>
+									</p>
+									<p>
+										<span class="table-menu-name">过保有无责任人:</span>
+										<span :class="{'bg-active':ywzrr == item.id}"  v-for="(item,index) in ywzrrList" :key="index" @click="CheckYwzrr(item.id)" >{{item.label}}</span>
+									</p>
+							</div>
+							
+							<!-- 预计签单日期 -->
+							<div flex>
+								  <p>
+										<span class="table-menu-name">预计签单日期:</span>
+										<span  v-for="(item,index) in qdrqList" :key="index" :class="{'bg-active':yjqdrq == item.id}" @click="CheckYjqdrq(item.id)" >{{item.label}}</span>
+										<el-date-picker
+											  v-if="yjqdrq == 2"
+											  value-format="yyyy-MM-dd"
+												size="mini"
+												v-model="qdrq"
+												type="daterange"
+												range-separator="至"
+												start-placeholder="开始日期"
+												end-placeholder="结束日期">
+											</el-date-picker>
+									</p>
+							</div>
+							
+							<!-- 预计签单金额 -->
+							<div flex>
+								<p>
+									<span class="table-menu-name">过保预计签单金额:</span>
+									从&#x3000;<el-input-number size="mini" v-model="minqdje" :step="1"></el-input-number>&#x3000;到&#x3000;
+									 <el-input-number size="mini" v-model="maxqdje" :step="1"></el-input-number>
+								</p>
+							</div>
+							<!-- 当前跟踪状态 -->
+							<div flex>
+								<p>
+									<span class="table-menu-name">当前跟踪状态:</span>
+									<span :class="{'bg-active':gzzt == ''}"  @click="CheckGzzt('')">全部</span>
+									<span :class="{'bg-active':gzzt == item.label}" v-for="(item,index) in gzztList"  :key="index" @click="CheckGzzt(item.label)">{{item.mc}}</span>
+								</p>
+							</div>
 						</div>
 						
 						<p>
@@ -318,7 +321,9 @@ export default {
 			xmbh: '',
 			gbrqValue: [], //过保日期Value
 			gbksrqValue: '',
-			gbjsrqValue: ''
+			gbjsrqValue: '',
+			gbtjShow:false //过保条件显示
+			
 		};
 	},
 	mounted() {
@@ -513,7 +518,10 @@ export default {
 				}
 			});
 		},
-
+		// 过保条件显示
+		handleCheckGbtj(){
+			this.gbtjShow = !this.gbtjShow;
+		},
 		// 搜索关键字
 		handleSearch() {
 			this.getProjects(1);

@@ -36,7 +36,7 @@
           </div>
           <div v-if="showCondition == 2" flex>
             <span class="query-title">区域战队:</span>
-            <p class="query-list">
+            <p class="query-list" style="width: 90%;">
               <span data-type="" :class="{'bg-active':gczd == ''}" @click="handleGCZD">全部</span>
               <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':gczd == gcqy.label}" @click="handleGCZD">{{gcqy.mc}}</span>
             </p>
@@ -384,36 +384,43 @@ export default {
     },
 
     handleComplain() {
-      //我要投诉
-      this.complainType = "complain";
-      this.form.title = "";
-      this.form.object = [];
-      $("#summernote").summernote("code", "");
-      this.complainVisible = true;
-      this.$nextTick(() => {
-        $("#summernote").summernote({
-          dialogsInBody: true,
-          placeholder: "请输入投诉内容",
-          height: 200,
-          width: 100 + "%",
-          minHeight: 200,
-          maxHeight: 200,
-          lang: "zh-CN",
-          focus: true,
-          toolbar: [
-            ["style", ["bold", "italic", "underline", "clear"]],
-            ["font", ["strikethrough", "superscript", "subscript"]],
-            ["fontsize", ["fontsize"]],
-            ["color", ["color"]],
-            ["para", ["ul", "ol", "paragraph"]],
-            ["height", ["height"]],
-            ["picture"],
-            ["link", ["linkDialogShow", "unlink"]]
-          ]
-        });
-      });
-
-      this.queryProjectParticipant();
+			 this.$confirm('您可以先进入“问题”页面提问，如处理不满意，可继续投诉处理', '提示', {
+			   cancelButtonText: '继续投诉',
+			  	confirmButtonText: '去提问',
+			   type: 'warning'
+			 }).then(() => {
+					this.$emit('handleComplanit','')
+			 }).catch(() => {
+					//我要投诉
+					this.complainType = "complain";
+					this.form.title = "";
+					this.form.object = [];
+					$("#summernote").summernote("code", "");
+					this.complainVisible = true;
+					this.$nextTick(() => {
+						$("#summernote").summernote({
+							dialogsInBody: true,
+							placeholder: "请输入投诉内容",
+							height: 200,
+							width: 100 + "%",
+							minHeight: 200,
+							maxHeight: 200,
+							lang: "zh-CN",
+							focus: true,
+							toolbar: [
+								["style", ["bold", "italic", "underline", "clear"]],
+								["font", ["strikethrough", "superscript", "subscript"]],
+								["fontsize", ["fontsize"]],
+								["color", ["color"]],
+								["para", ["ul", "ol", "paragraph"]],
+								["height", ["height"]],
+								["picture"],
+								["link", ["linkDialogShow", "unlink"]]
+							]
+						});
+					});
+					this.queryProjectParticipant();
+			})
     },
     // 获取甲方
     queryProjectParticipant() {

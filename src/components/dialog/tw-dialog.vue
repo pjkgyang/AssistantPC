@@ -30,44 +30,38 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="是否紧急" required>
+	<!-- 				<el-form-item label="是否紧急" required>
 						<el-select v-model="question.sfjj" size="mini" placeholder="请选择是否紧急" style="width:330px">
 							<el-option label="是" value="1"></el-option>
 							<el-option label="否" value="0"></el-option>
 						</el-select>
-					</el-form-item>
-					<el-form-item label="问题级别" required v-if="(showCondition==1||showCondition==2)">
+					</el-form-item> -->
+					<el-form-item label="问题级别" required >
 						<el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:330px">
 							<el-option v-for="(wtjb,index) in wtjbList" :key="index" :label="wtjb.mc" :value="wtjb.label"></el-option>
-						<!-- 	<el-option label="不严重" value="不严重"></el-option>
-							<el-option label="一般" value="一般"></el-option>
-							<el-option label="严重" value="严重"></el-option>
-							<el-option label="宕机服务不可用" value="宕机服务不可用"></el-option> -->
 						</el-select>
 					</el-form-item>
+					
 					<el-form-item label="产品" required>
 						<el-select v-model="question.cp" size="mini" filterable  placeholder="请选择产品" style="width:330px" @change="handleChangeCp">
 							<el-option v-for="(cp,index) in xmcpList" :key="index" :label="cp.mc" :value="cp.label">
 							</el-option>
 						</el-select>
 					</el-form-item>
+					
 					<el-form-item label="影响范围" required v-if="(showCondition==1||showCondition==2)">
 						<el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:330px">
 							 <el-option v-for="(yxfw,index) in yxfwList" :key="index" :label="yxfw.mc" :value="yxfw.label"></el-option>
-							<!-- <el-option label="影响局部" value="影响局部"></el-option>
-							<el-option label="影响整体" value="影响整体"></el-option> -->
-							
 						</el-select>
 					</el-form-item>
+					
 					<el-form-item label="是否bug" required v-if="(showCondition==1||showCondition==2)">
 						<el-select v-model="question.sfbug" size="mini" placeholder="请选择是否bug" style="width:330px">
 							<el-option label="是" value="1"></el-option>
 							<el-option label="否" value="0"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="版本号" required v-if="(showCondition==1||showCondition==2)">
-						<el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:330px;"></el-input>
-					</el-form-item>
+					
 
 					<el-form-item label="期望解决日期" required v-if="!accreditShow">
 						<el-date-picker :picker-options="pickerBeginDateQw" :clearable="false" size="mini" v-model="question.qwjjrq" type="date"
@@ -76,21 +70,27 @@
 					<el-form-item label="期望解决日期" required v-if="accreditShow">
 						<el-input size="mini" style="width:330px;" readonly v-model="question.qwjjrqO"></el-input>
 					</el-form-item>
-
+					
+					<el-form-item label="承诺解决日期" required v-if="accreditShow">
+						<el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="question.cnjsrq"
+						 type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:330px;"></el-date-picker>
+					</el-form-item>
+					
+					<el-form-item label="版本号" required v-if="(showCondition==1||showCondition==2)">
+						<el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:800px;"></el-input>
+					</el-form-item>
+					
+					<el-form-item label="标题" required v-if="!accreditShow">
+						<el-input size="mini" v-model="question.title" type="text" placeholder="标题" style="width:800px;"></el-input>
+					</el-form-item>
+					
 					<el-form-item label="环境信息" v-if="isJZuser != 1">
 						<el-upload style="width:510px;" class="upload-demo" ref="upload" :limit='1' :action="uploadAction" :before-upload="beforeUpload"
 						 :on-remove="handleRemove" :on-change="handleChange" :file-list="fileList" :show-file-list="true" :auto-upload="false">
 							<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
 						</el-upload>
 					</el-form-item>
-					<el-form-item label="承诺解决日期" required v-if="accreditShow">
-						<el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="question.cnjsrq"
-						 type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:330px;"></el-date-picker>
-					</el-form-item>
-
-					<el-form-item label="标题" required v-if="!accreditShow">
-						<el-input size="mini" v-model="question.title" type="text" placeholder="标题" style="width:800px;"></el-input>
-					</el-form-item>
+					
 				</el-form>
 				<div class="question-textarea" v-if="!accreditShow">
 					<p>详情</p>
@@ -148,7 +148,7 @@
 					xmzt: "", //项目状态
 					wtly: "", //问题来源
 					sfjj: "",
-					wtjb: "",
+					wtjb: "1",
 					cp: "",
 					yxfw: "",
 					sfbug: "",
@@ -408,8 +408,8 @@
 						});
 						return;
 					} else if (
+				  	// !this.question.sfjj ||
 						!this.question.wtlb ||
-						!this.question.sfjj ||
 						!this.question.wtjb ||
 						!this.question.wtly ||
 						!this.question.cp ||
@@ -430,7 +430,7 @@
 					saveQuestion({
 						wtly: this.question.wtly,
 						wtlb: this.question.wtlb,
-						jjyf: this.question.sfjj,
+						// jjyf: this.question.sfjj,
 						wtjb: this.question.wtjb,
 						cpbh: this.question.cp,
 						yxfw: this.question.yxfw,
@@ -474,7 +474,8 @@
 						!this.question.nr||
 						!this.question.cp||
 						!this.question.qwjjrq||
-						!this.question.sfjj||
+						!this.question.wtjb||
+						// !this.question.sfjj||
 						!this.xmmc
 					) {
 						this.$alert("请将信息填写完整!", "提示", {
@@ -491,7 +492,8 @@
 						cpbh: this.question.cp,
 						qwjjrq: this.question.qwjjrq,
 						hjfjwid: this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
-						jjyf: this.question.sfjj,
+						// jjyf: this.question.sfjj,
+						wtjb:this.question.wtjb,
 						xmmc: this.xmmc, //老师提问新增项目编号
 						xmbh: this.xmbh
 					}).then(({
@@ -641,31 +643,34 @@
 					//提问展示
 					this.showCondition = data.data;
 				});
+				
+				this.wtjbList = [];
+				this.wtlb = [];
+				this.yxfwList = [];
+				this.wtly = [];
+
+
 				if (!getSession("ProblemType")) {
 					getMenu("ProblemType", this.wtlb, "");
 				} else {
-					this.wtlb = [];
 					this.wtlb = getSession("ProblemType");
 				}
 				
 				if (!getSession("ProblemLevel")) {
 					getMenu("ProblemLevel", this.wtjbList, "");
 				} else {
-					this.wtjbList = [];
 					this.wtjbList = getSession("ProblemLevel");
 				}
 				
 				if (!getSession("ProblemEffectScope")) {
 					getMenu("ProblemEffectScope", this.yxfwList, "");
 				} else {
-					this.yxfwList = [];
 					this.yxfwList = getSession("ProblemEffectScope");
 				}
 
 				if (!getSession("ProblemSource")) {
 					getMenu("ProblemSource", this.wtly, "");
 				} else {
-					this.wtly = [];
 					this.wtly = getSession("ProblemSource");
 				}
 
@@ -676,7 +681,7 @@
 					this.xmcpList = [];
 					this.question.wtlb = "";
 					this.question.sfjj = "";
-					this.question.wtjb = "";
+					this.question.wtjb = "1";
 					this.question.cp = "";
 					this.question.yxfw = "";
 					this.question.sfbug = "";

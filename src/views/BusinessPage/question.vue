@@ -71,7 +71,8 @@
             <span data-type="0" :class="{'bg-active':tjkf == '0'}">否</span>
           </p>
         </div>
-
+				
+				
 
         <div v-if="showCondition==1||showCondition==2">
           <p class="query-title">产品线:</p>
@@ -80,6 +81,7 @@
             <span v-for="(cpx,index) in cpline" :data-type="cpx.label" :class="{'bg-active':cpxbg === cpx.label}">{{cpx.mc}}</span>
           </p>
         </div>
+				
         <div>
           <p class="query-title">产品:</p>
           <p class="query-list" @click="handleCP">
@@ -94,6 +96,13 @@
             <span v-for="(wtlbd,index) in wtlb" :data-type="wtlbd.label" :class="{'bg-active':wtlbbg == wtlbd.label}">{{wtlbd.mc}}</span>
           </p>
         </div>
+				<div>
+				  <p class="query-title">问题级别:</p>
+				  <p class="query-list" @click="handleWtjb">
+				    <span data-type="" :class="{'bg-active':wtjb == ''}">全部</span>
+				    <span v-for="(wtjbc,index) in wtjblist" :data-type="wtjbc.label" :class="{'bg-active':wtjb === wtjbc.label}">{{wtjbc.mc}}</span>
+				  </p>
+				</div>
         <!-- <div v-if="showCondition==1||showCondition==2">
               <p class="query-title">是否bug:</p>
               <p class="query-list"  @click="handleSFBUG">
@@ -216,6 +225,7 @@ export default {
         { label: "0", mc: "金智" },
         { label: "2", mc: "合作伙伴" }
       ],
+			wtjblist: [], //问题级别
       wjjztlist: [],
       cpline: [],
       cplist: [],
@@ -241,6 +251,7 @@ export default {
       xmbh: "",
       xmmc: "",
       tjkf: "",
+			wtjb:"",
       accreditShow: false,
       showCondition: "",
       isJZuser: "",
@@ -292,6 +303,15 @@ export default {
       this.cplist = getSession("cp");
       this.cnqxList = getSession("DeadlineStatus");
     }
+		 if (
+		  !getSession("ProblemLevel")
+		) {
+		  getMenu("ProblemLevel", this.wtjblist, "");
+
+		} else {
+		  this.wtjblist = getSession("ProblemLevel");
+		}
+		
   },
 
   methods: {
@@ -542,10 +562,17 @@ export default {
     handleCPX(e) {
       //产品线
       let cpx = e.target.getAttribute("data-type");
-      if (cpx == null) return;
-      this.cpxbg = cpx;
-      this.queryAllQuestions(1);
+     if (cpx == null) return;
+     this.cpxbg = cpx;
+     this.queryAllQuestions(1);
     },
+		// 问题级别
+		handleWtjb(e){
+			let wtjb = e.target.getAttribute("data-type");
+			if (wtjb == null) return;
+			this.wtjb = wtjb;
+			this.queryAllQuestions(1);
+		},
     handleCP(e) {
       //产品
       let cp = e.target.getAttribute("data-type");
@@ -649,6 +676,7 @@ export default {
         dwlx: this.dwlx,
         cb: this.sfcb,
         wtlb: this.wtlbbg,
+				wtjb:this.wtjb,
         sqgb: this.sqgb,
         deadline: this.cnqx,
         starDay: this.starDay,

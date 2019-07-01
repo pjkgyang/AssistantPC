@@ -1,6 +1,6 @@
 <template>
 	<div class="dialog-container xmtz_info">
-		<el-dialog :title="type=='tz'?'停滞申请':'停滞重启'" width="1000px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
+		<el-dialog :title="type=='tz'?'停滞申请':'停滞重启'" width="1100px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
 			<div class="Question pd-10">
 				<table>
 					<tr>
@@ -15,7 +15,7 @@
 						<th>项目状态</th>
 						<td>{{ xmInfo.xmzt }}</td>
 						<th>学校</th>
-						<td>{{ xmInfo.dwmc||xmInfo.xx }}</td>
+						<td>{{ xmInfo.dwmc||xmInfo.yh||xmInfo.xx  }}</td>
 					</tr>
 					<tr v-show="!!formData.xmmc">
 						<th>项目类别</th>
@@ -65,7 +65,7 @@
 					<tr v-if="type == 'cq' && !!formData.xmmc">
 						<th>停滞到</th>
 						<td colspan="3">
-							{{xmInfo.gbsj}}
+							{{xmInfo.tzsj}}
 						</td>
 					</tr>
 					
@@ -76,7 +76,7 @@
 						</td>
 					</tr>
 					<tr>
-						<th class="before-require" style="vertical-align: top;">停滞详情</th>
+						<th class="before-require" style="vertical-align: top;">详情</th>
 						<td colspan="3">
 							<div id="summernote"></div>
 						</td>
@@ -91,7 +91,9 @@
 		</el-dialog>
 
 		<el-dialog title="选择项目" :visible.sync="dialogQuestionVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
-			<div style="padding:10px;"><itemChoose @handleEdit="handleEdit"></itemChoose></div>
+			<div style="padding:10px;">
+				<itemChoose @handleEdit="handleEdit" :isCq="type=='cq'?true:false"></itemChoose>
+			</div>
 		</el-dialog>
 	</div>
 </template>
@@ -226,6 +228,7 @@ export default {
 					this.formData.xmmc = '';
 				}
 			} else {
+				$('#summernote').summernote('destroy');
 				this.isClearFile = !this.isClearFile;
 			}
 		}

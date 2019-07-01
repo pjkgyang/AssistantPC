@@ -85,6 +85,14 @@
             <span v-for="(wtlbd,index) in wtlb" :data-type="wtlbd.label" :class="{'bg-active':wtlbbg == wtlbd.label}">{{wtlbd.mc}}</span>
           </p>
         </div>
+				
+				<div>
+				  <p class="query-title">问题级别:</p>
+				  <p class="query-list" @click="handleWtjb">
+				    <span data-type="" :class="{'bg-active':wtjb == ''}">全部</span>
+				    <span v-for="(wtjbc,index) in wtjblist" :data-type="wtjbc.label" :class="{'bg-active':wtjb === wtjbc.label}">{{wtjbc.mc}}</span>
+				  </p>
+				</div>
         <!-- <div v-if="showCondition==1||showCondition==2">
               <p class="query-title">是否bug:</p>
               <p class="query-list"  @click="handleSFBUG">
@@ -216,12 +224,14 @@ export default {
       cpline: [],
       cplist: [],
       wtlb: [],
+			wtjblist:[],//问题级别
       cnqx: "",
       sfjj: "",
       sfcb: "",
       cpxbg: "",
       cpbg: "",
       wtlbbg: "",
+			wtjb:"",//问题级别
       sfbug: "",
       cxzt: "0",
       sqgb: "",
@@ -335,6 +345,14 @@ export default {
       this.cplist = getSession("cp");
       this.cnqxList = getSession("DeadlineStatus");
     }
+		if (
+		  !getSession("ProblemLevel")
+		) {
+		  getMenu("ProblemLevel", this.wtjblist, "");
+		
+		} else {
+		  this.wtjblist = getSession("ProblemLevel");
+		}
     this.queryAllQuestions(1);
   },
 
@@ -640,6 +658,13 @@ export default {
       this.wtlbbg = wtlb;
       this.queryAllQuestions(1);
     },
+		// 问题级别
+		handleWtjb(e){
+			let wtjb = e.target.getAttribute("data-type");
+			if (wtjb == null) return;
+			this.wtjb = wtjb;
+			this.queryAllQuestions(1);
+		},
     handleSFBUG(e) {
       //是否bug
       let sfbug = e.target.getAttribute("data-type");
@@ -719,6 +744,7 @@ export default {
         dwlx: this.dwlx,
         cb: this.sfcb,
         wtlb: this.wtlbbg,
+				wtjb:this.wtjb,
         sqgb: this.sqgb,
         deadline: this.cnqx,
         starDay: this.starDay,

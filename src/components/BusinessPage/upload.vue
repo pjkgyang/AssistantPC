@@ -71,11 +71,12 @@ export default {
 					headers: { 'Content-Type': 'multipart/form-data' }
 				}).then(res => {
 					if (res.data.state == 'success') {
-						this.files.push(res.data.data.split('|')[0]);
 						if (!this.isCrowd) {
 							this.fileList.push(res.data.data.split('|')[1]);
+							this.files.push(res.data.data);
 						} else {
 							this.fileList.push(file.name);
+							this.files.push(res.data.data.split('|')[0]);
 						}
 						this.$emit('handleUploadFile', this.files);
 					}
@@ -94,7 +95,7 @@ export default {
 		border: 1px solid rgb(235, 234, 234);
 		padding: 2px 6px;
 		border-radius: 3px;
-		width: 900px;
+		max-width:900px;
 		margin-top: 4px !important;
 		&:hover {
 			background: rgba(216, 214, 214, 0.5);

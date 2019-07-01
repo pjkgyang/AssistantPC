@@ -454,6 +454,7 @@ export default {
     this.isJzuser = sessionStorage.isJZuser;
     this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
     this.username = JSON.parse(sessionStorage.userInfo).nickName;
+		// uid 人员编号
   },
   props: {},
   components: { tableLayout, tbfwDialog, qrbhfwDialog, zdsfwFilter, fxdjDialog,wtDialog }

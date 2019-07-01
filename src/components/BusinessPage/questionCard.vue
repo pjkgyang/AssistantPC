@@ -67,10 +67,7 @@
 								<span class="question-info-front">产品 :</span>
 								{{ question.cpmc }}
 							</span>
-							<span>
-								<span class="question-info-front">是否紧急 :</span>
-								{{ question.jjyf == null ? '无' : question.jjyf == '1' ? '是' : '否' }}
-							</span>
+
 							<span>
 								<span class="question-info-front">问题级别 :</span>
 								<span>{{ question.wtjb }}</span>

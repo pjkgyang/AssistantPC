@@ -1,5 +1,6 @@
 
 export default {
+	downloadFile:window.baseurl +'attachment/downloadFile.do',//下载附件
     // 枚举
     getDictEnum:window.baseurl +'dict/getDictEnum.do',
     // 报表
@@ -300,4 +301,5 @@ export default {
 	getProjectStopVO:window.baseurl + 'flow/getProjectStopVO.do',//获取项目停滞重启详情
 	listWorkFlowNodes:window.baseurl + 'flow/listWorkFlowNodes.do',//流程节点列表
 	logs:window.baseurl + 'flow/logs.do',//流程日志列表
+	exportProjectStopWorkflow:window.baseurl + 'flow/exportProjectStopWorkflow.do',//导出项目停滞/重启流程
  }

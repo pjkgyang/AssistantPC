@@ -329,7 +329,7 @@
       <!-- 投诉 -->
       <el-collapse-transition>
         <div v-if="tabsLabel == 'complain'">
-          <complain :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :xmkbInfo="xmkbInfo"></complain>
+          <complain :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :xmkbInfo="xmkbInfo"  @handleComplanit="handleComplanit"></complain>
         </div>
       </el-collapse-transition>
 
@@ -559,6 +559,9 @@ export default {
   },
   mounted() {},
   methods: {
+		handleComplanit(){
+			this.tabsLabel = 'question';
+		},
     // 复选表格
     handleSelectionChange(data) {
       this.lcbrwArr = [];
