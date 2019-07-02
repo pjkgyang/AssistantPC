@@ -137,8 +137,12 @@ img {
 }
 // 表格 格式
 
-
-.table_grid table {
+.table_title h5{
+	border-left: 4px solid blueviolet;
+	padding-left: 5px;
+	font-weight: 700;
+}
+.table_grid  table {
 	width: 100%;
 	border-collapse: collapse;
 	border: 1px solid #e9ecf4;
@@ -148,7 +152,7 @@ img {
 .table_grid table th {
 	font-size: 14px;
 	text-align: center;
-	width: 150px;
+	width: 170px;
 	background: #f4f6f9;
 	color: #4d4d4d;
 }

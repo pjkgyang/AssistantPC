@@ -332,7 +332,7 @@
 				if (
 					(!this.xmbh && !this.isInnerItem) ||
 					!this.question.wtlb ||
-					!this.question.sfjj ||
+					// !this.question.sfjj ||
 					!this.question.wtjb ||
 					!this.question.wtly ||
 					!this.question.cp ||
@@ -362,7 +362,7 @@
 						customerQuestion({
 							wtly: this.question.wtly,
 							wtlb: this.question.wtlb,
-							jjyf: this.question.sfjj,
+							// jjyf: this.question.sfjj,
 							wtjb: this.question.wtjb,
 							cpbh: this.question.cp,
 							yxfw: this.question.yxfw,

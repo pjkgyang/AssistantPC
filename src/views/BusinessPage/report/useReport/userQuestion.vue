@@ -120,6 +120,7 @@ export default {
 			  });
 			  window.open(routeData.href, "_blank");
 		},
+		
 		handleSearchDate(){
 			this.currentPage = 1;
 			this.questionProgressSummaryReport();

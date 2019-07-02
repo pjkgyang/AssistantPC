@@ -275,6 +275,7 @@ export default {
 	jsReview:window.baseurl + 'jsxx/jsReview.do',//结算审核
 	setCz:window.baseurl + 'jsxx/setCz.do',//设置冲账
 	setSettlementFeeAttribution:window.baseurl + 'jsxx/setSettlementFeeAttribution.do',//设置结算费用归属
+	rejectSettlementApplication:window.baseurl + 'jsxx/rejectSettlementApplication.do',//项目结算驳回
 	
 	
 	// 问题
@@ -302,4 +303,8 @@ export default {
 	listWorkFlowNodes:window.baseurl + 'flow/listWorkFlowNodes.do',//流程节点列表
 	logs:window.baseurl + 'flow/logs.do',//流程日志列表
 	exportProjectStopWorkflow:window.baseurl + 'flow/exportProjectStopWorkflow.do',//导出项目停滞/重启流程
+	
+	
+	// 获取成本
+	getCost:window.baseurl + 'project/getCost.do',//获取成本
  }

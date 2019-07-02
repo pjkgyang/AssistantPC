@@ -332,7 +332,7 @@
           <complain :xmbh="xmbh" :xmmc="xmkbInfo.xmmc" :xmkbInfo="xmkbInfo"  @handleComplanit="handleComplanit"></complain>
         </div>
       </el-collapse-transition>
-
+			
       <!-- 团队 -->
       <el-collapse-transition>
         <div v-if="tabsLabel == 'teamwork'">
@@ -346,6 +346,11 @@
           <zdsfw :nxmbh="xmbh" :xmmc="xmkbInfo.xmmc"></zdsfw>
         </div>
       </el-collapse-transition>
+			
+			 <!-- 成本 -->
+			 <el-collapse-transition v-if="tabsLabel == 'cost'">
+		 		<costPannel  :xmbh="xmbh" :xmmc="xmkbInfo.xmmc"></costPannel>
+			</el-collapse-transition>
     </div>
 
     <el-dialog title="钉钉群" :visible.sync="dingdingGroupVisible" width="400px" :close-on-click-modal="false">
@@ -387,6 +392,8 @@ import question from "@/components/BusinessPage/question.vue";
 import complain from "@/components/BusinessPage/complain.vue";
 import overview from "@/components/BusinessPage/overview.vue";
 import teamWork from "@/components/BusinessPage/teamWork.vue";
+import costPannel from "@/components/BusinessPage/cost.vue"; //成本
+
 import zdsfw from "@/components/zdsfw/zdsfw.vue";
 import taskTable from "@/components/BusinessPage/processTaskTable.vue";
 import { getProjectCatalog } from "@/api/xmfz.js";
@@ -1682,6 +1689,7 @@ export default {
     complain,
     overview,
     teamWork,
+		costPannel,
     zdsfw,
     taskTable
   }

@@ -232,7 +232,6 @@
           <div>
             <h5>本次团队结算信息</h5>
             <p style="color:#f00;font-size: 12px;">
-              个人结算二开费用 = 结算二开费用 * 5400 / 8800; 个人结算可变费用 = 结算可变费用 * 70%;
               <br>结算总金额包含团队结算费用; 实际实施费用指二开实施费用；实际二开费用指二开开发费用；实际可变费用指报销费用;
             </p>
             <table class="table_center">
@@ -502,10 +501,7 @@ export default {
     },
     // 保存
     handleSave() {
-      let xmtdData = [],
-        erfy = 0,
-        kbfy = 0;
-      let msg = "";
+      let xmtdData = [],ekfy = 0,kbfy = 0,msg = "";
       this.tdxxData.forEach(ele => {
         xmtdData.push({
           fbbh: this.jssqData.fbbh,
@@ -520,21 +516,22 @@ export default {
           jskbfy: ele.jskbfy,
           jsje: ele.jsje
         });
-        erfy += !ele.jsekfy ? 0 : Number(ele.jsekfy);
+        ekfy += !ele.jsekfy ? 0 : Number(ele.jsekfy);
         kbfy += !ele.jskbfy ? 0 : Number(ele.jskbfy);
       });
       this.$message.close();
+			
       // 个人结算实施费用
-      if (this.jsxx.sjssfy < this.jsssfyTotal) {
-        msg += "分包实施结算费用必须大于等于团队实施结算费用！，";
+      if (this.jsxx.sjssfy != this.jsssfyTotal) {
+        msg += "本次结算实施费用必须等于团队结算实施金额合计！<br>";
       }
       // 个人结算二开费用=结算二开费用 * 5400 / 8800
-      if ((this.jsxx.sjekfy * 5400) / 8800 < erfy) {
-        msg += "分包二开结算费用必须大于等于团队二开结算费用！，";
+      if (this.jsxx.sjekfy != ekfy) {
+        msg += "本次结算二开费用必须等于团队结算二开金额合计！<br>";
       }
       // 个人结算可变费用= 结算可变费用 * 70%;
-      if (this.jsxx.sjkbfy * 0.7 < kbfy) {
-        msg += "分包可变结算费用必须大于等于团队可变结算费用！，";
+      if (this.jsxx.sjkbfy != kbfy) {
+        msg += "本次结算可变费用必须等于团队结算可变金额合计！<br>";
       }
 
       if (!!msg) {

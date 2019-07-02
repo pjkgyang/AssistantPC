@@ -31,10 +31,11 @@
 		</div>
 		<br />
 		<div> 
-	     	<el-table  :data="tableData" border style="width: 100%">
-				<el-table-column fixed="left" label="操作" width="80">
+	     	<el-table  :data="tableData" border style="width: 100%" :max-height="tableHeight">
+				<el-table-column fixed="left" label="操作" width="110">
 					<template slot-scope="scope">
 						<el-button @click="handleClick(scope.row)" type="text" size="small">{{ scope.row.jszt == '未结算' ? '结算' : '详情' }}</el-button>
+						<el-button v-if="scope.row.sfbh == 1" @click="handleReject(scope.row)"  type="text" size="small">驳回</el-button>
 					</template>
 				</el-table-column>
 				<el-table-column prop="fbmc" label="分包名称" min-width="260" fixed="left" show-overflow-tooltip></el-table-column>
@@ -50,8 +51,8 @@
 				<el-table-column prop="fbbh" label="分包编号" width="160"></el-table-column>
 				<el-table-column prop="fbmc" label="分包名称" min-width="160" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="xmbh" label="项目编号" width="120"></el-table-column>
-				<el-table-column prop="htbh" label="合同编号" width="120"></el-table-column>
+				<el-table-column prop="xmbh" label="项目编号" width="130"></el-table-column>
+				<el-table-column prop="htbh" label="合同编号" width="130"></el-table-column>
 				<el-table-column prop="zbssfy" label="中标实施金额" width="110"></el-table-column>
 				<el-table-column prop="zbekfy" label="中标二开金额" width="110"></el-table-column>
 				<el-table-column prop="zbkbfy" label="中标可变金额" width="110"></el-table-column>
@@ -64,24 +65,27 @@
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
 					:current-page="currentPage"
-					:page-sizes="[13, 30, 50, 100]"
+					:page-sizes="[15, 30, 50, 100]"
 					:page-size="pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
 					:total="records"
 				></el-pagination>
 			</div>
 		</div>
+		<smDialog :show.sync="dialogShow" @handleClickSure="handleClickSure"></smDialog>
 	</div>
 </template>
 
 <script>
 import { getMenu, getSession } from '@/utils/util.js';
+import smDialog from '@/components/dialog/smDialog'
 export default {
 	data() {
 		return {
-			height:window.innerHeight - 260,
+			dialogShow:false,
+			tableHeight:window.innerHeight - 240,
 			currentPage: 1,
-			pageSize: 13,
+			pageSize: 15,
 			records: 0,
 			filterData: {
 				keyword: '',
@@ -125,6 +129,33 @@ export default {
 			this.pageSize = data;
 			this.queryJsData();
 		},
+		// 驳回
+		handleReject(data){
+			this.jssqwid = data.jssqwid;
+			this.dialogShow = true;
+		},
+		// 
+		handleClickSure(sm){
+			this.$post(this.API.rejectSettlementApplication,{
+				jssqwid:this.jssqwid,
+				sm:sm
+			}).then(res=>{
+				if(res.state == 'success'){
+					this.$message({
+						message:'驳回成功',
+						type:'success'
+					})
+					this.dialogShow = false;
+					this.queryJsData();
+				}else{
+					this.$message({
+						message:res.msg,
+						type:'error'
+					})
+				}
+			})
+		},
+		// 结算
 		handleClick(data) {
 			let routeData = this.$router.resolve({
 				path: '/projectsettledetail',
@@ -158,7 +189,10 @@ export default {
 				}
 			});
 		}
-	}
+	},
+	components: {
+		smDialog
+	},
 };
 </script>
 

@@ -1,8 +1,8 @@
 <template>
 	<div class="pannelPadding-10">
 		<div class="pannelPaddingBg-10">
-			<h4 text-center>日报工时详情</h4>
-			<h4>【{{$route.query.xmbh}}】{{$route.query.xmmc}}&#x3000;</h4>
+			<h4 v-if="!iscb" text-center>日报工时详情</h4>
+			<h4 v-if="!iscb">【{{$route.query.xmbh}}】{{$route.query.xmmc}}&#x3000;</h4>
 			<tableComponents
 				:tableData="dataList"
 				:pageShow="false"
@@ -31,15 +31,30 @@ export default {
 			total: 0
 		};
 	},
+	props:{
+		iscb:{
+			type:Boolean,
+			default:false
+		},
+		xmbh:{
+			type:String,
+			default:''
+		},
+		xmmc:{
+			type:String,
+			default:''
+		}
+	},
 	methods: {
 		exportTable(){
+			let xmbh = this.$route.query.xmbh||this.xmbh
 			window.open(window.baseurl +'report/exportMilestoneStageWorkHour.do?xmbh='+this.$route.query.xmbh);
 		},
 		
 		handleXxwt(data, i, params) {
 			let obj = {
-		       xmbh:this.$route.query.xmbh,
-			   xmmc:this.$route.query.xmmc,
+		       xmbh:this.$route.query.xmbh || this.xmbh,
+			   xmmc:this.$route.query.xmmc || this.xmmc,
 				cpmc:data[0]
 		    }
 			if (params[i].en.indexOf(",") != -1) {
@@ -66,7 +81,7 @@ export default {
 			this.$get(this.API.queryMilestoneStageWorkHour, {
 				curPage: this.currentPage,
 				pageSize: this.pageSize,
-				xmbh: this.$route.query.xmbh
+				xmbh: this.$route.query.xmbh||this.xmbh
 			}).then(res => {
 				if (res.state == 'success') {
 					this.dataList = res.data;

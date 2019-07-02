@@ -65,7 +65,7 @@
 							</tr>
 							<tr>
 								<th>审核意见</th>
-								<td colspan="5">{{ jssqData.shyj }}</td>
+								<td colspan="5">{{ jssqData.shsm }}</td>
 							</tr>
 						</table>
 					</div>
@@ -74,7 +74,7 @@
 						<table>
 							<tr>
 								<th>本次结算总金额（元）</th>
-								<td colspan="5">{{jsxx.jsje}}</td>
+								<td colspan="5">{{jsxx.sjzfy}}</td>
 							</tr>
 							<tr>
 								<th>中标实施费用（元）</th>
@@ -131,6 +131,32 @@
 								<td colspan="5">{{jsxx.jlsm}}</td>
 							</tr>
 						</table>
+					</div>
+					 <div>
+					  <h5>个人结算信息</h5>
+					  <table class="table_center">
+					    <tr>
+					      <th>工号</th>
+					      <th>姓名</th>
+					      <th>负责业务线</th>
+					      <th>结算实施金额</th>
+					      <th>结算二开金额</th>
+					      <th>结算可变金额</th>
+					      <th>合计</th>
+					    </tr>
+					    <tr v-for="(item,index) in tdywyData" :key="index">
+					      <td :colspan="item.cybh == '合计'?3:0">{{item.cybh}}</td>
+					      <td v-if="item.cybh != '合计'">{{item.cymc}}</td>
+					      <td v-if="item.cybh != '合计'">{{item.ywymc}}</td>
+					      <td>{{item.jsssfy}}</td>
+					      <td>{{item.jsekfy}}</td>
+					      <td>{{item.jskbfy}}</td>
+					      <td>{{!item.jsje?0:item.jsje}}</td>
+					    </tr>
+					    <tr v-if="!tdywyData.length">
+					      <td colspan="7">暂无内容</td>
+					    </tr>
+					  </table>
 					</div>
 					<div>
 						<h5>本次团队结算信息</h5>
@@ -192,6 +218,7 @@ export default {
 			jsxx:{},//结算详情
 			jssqData:{},//结算申请
 			tdxxData: [],
+			tdywyData:[],
 			tbje: null,
 			zbxx: '',
 			
@@ -248,6 +275,7 @@ export default {
 					this.jssqData = res.data.jssqData;
 					this.tdxxData = !res.data.jstdData?[]:res.data.jstdData;
 					this.jsxx = res.data.jsxx;
+					this.tdywyData = !res.data.jstdYwyData ? [] : res.data.jstdYwyData;
 				}
 			})
 		}

@@ -407,6 +407,7 @@ export default {
     // 上个月
      let date = new Date().getFullYear()+'-'+(new Date().getMonth()+1<10?('0'+(new Date().getMonth()+1)):new Date().getMonth()+1)
      this.filterWord.yf = getPreMonth(date);
+		 
     if (!getSession("ProjectCustomStatus") && this.filterList.includes('xmlx')) {
       getMenu("ProjectCustomStatus", this.xmlxList, ""); //获取项目类型
     } else {

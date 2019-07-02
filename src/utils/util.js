@@ -17,7 +17,8 @@ export function encryptByDES(message, key){
         padding: CryptoJS.pad.Pkcs7
      });
     return encrypted.toString();
-  }
+}
+  
 // DES 解密
 export function  decryptByDES(ciphertext, key){
     const keyHex = CryptoJS.enc.Utf8.parse(key);
@@ -153,7 +154,7 @@ export function getMenu(type,Arrlist,isInterface){
                     label:Arr[i],
                     mc:McArr[i]
                   })
-                }
+            }
             sessionStorage.setItem(type,JSON.stringify(Arrlist));
             delCookie(type);
           }

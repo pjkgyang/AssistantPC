@@ -20,6 +20,7 @@
             <el-tab-pane label="配置库" name="files"></el-tab-pane>
             <!-- 学校成员 1  不显示 -->
             <el-tab-pane label="里程碑" name="milestone" v-if="isJZuser != 1"></el-tab-pane>
+						<!-- <el-tab-pane label="成本" name="cost" v-if="isJZuser == 0"></el-tab-pane> -->
             <el-tab-pane label="团队" name="teamwork" v-if="isJZuser != 1 || xmData.jfzrrxm == username"></el-tab-pane>
             <el-tab-pane label="主动式服务" name="zdsfw" v-if="zdsfwVisible"></el-tab-pane>
           </el-tabs>
