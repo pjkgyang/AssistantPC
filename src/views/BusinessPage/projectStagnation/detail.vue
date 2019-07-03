@@ -4,8 +4,13 @@
 			<div>
 				<h5>流程节点</h5>
 				<br />
-				<el-steps  finish-status="success" simple>
-					<el-step v-for="(lc, index) in lcList" :key="index" :status="lc.zt==1?'process ':lc.zt==2?'success':lc.zt==3?'error':'wait'" :title="lc.lcjdmc + '(' + lc.clrxm + ')'"></el-step>
+				<el-steps finish-status="success" simple>
+					<el-step
+						v-for="(lc, index) in lcList"
+						:key="index"
+						:status="lc.zt == 1 ? 'process ' : lc.zt == 2 ? 'success' : lc.zt == 3 ? 'error' : 'wait'"
+						:title="lc.lcjdmc + '(' + lc.clrxm + ')'"
+					></el-step>
 				</el-steps>
 			</div>
 			<el-divider></el-divider>
@@ -25,8 +30,8 @@
 						<td>{{ xmInfo.fqrxm }}</td>
 						<th>申请类别</th>
 						<td>{{ xmInfo.mc }}</td>
-						<th>停滞截止日期</th>
-						<td>{{ xmInfo.tzsj }}</td>
+						<th>整体状态</th>
+						<td>{{ xmInfo.xmztzt }}</td>
 					</tr>
 					<tr>
 						<th>状态</th>
@@ -53,13 +58,12 @@
 						<td>{{ xmInfo.htbh }}</td>
 					</tr>
 					<tr>
-						<th>整体状态</th>
-						<td>{{ xmInfo.xmztzt }}</td>
 						<th>合同性质</th>
 						<td>{{ xmInfo.htxz }}</td>
 					</tr>
 				</table>
 			</div>
+
 			<div class="file_list">
 				<p class="mg-12 filter-weight">附件列表</p>
 				<p v-if="!!xmInfo.files">
@@ -67,8 +71,12 @@
 				</p>
 				<p v-else text-center>暂无附件</p>
 			</div>
+			<div class="file_list mg-12">
+				<span class="filter-weight">停滞截止日期：</span>
+				<span>{{ xmInfo.tzsj }}</span>
+			</div>
 			<div class="file_list">
-				<p class="mg-12 filter-weight">{{xmInfo.lx==1?'停滞详情:':'重启详情:'}}</p>
+				<p class="mg-12 filter-weight">{{ xmInfo.lx == 1 ? '停滞详情:' : '重启详情:' }}</p>
 				<div v-html="xmInfo.sm"></div>
 			</div>
 			<el-divider></el-divider>
@@ -89,7 +97,7 @@
 									<h6>{{ activity.czmc }}</h6>
 									&#x3000;
 									<div v-show="(xmInfo.canOper == 1 || xmInfo.canRestart == 1) && index == activities.length - 1">
-										<el-button type="primary" size="mini" v-show="xmInfo.canOper == 1 " @click="handleApproval('pass')">审批通过</el-button>
+										<el-button type="primary" size="mini" v-show="xmInfo.canOper == 1" @click="handleApproval('pass')">审批通过</el-button>
 										<el-button type="danger" size="mini" v-show="xmInfo.canOper == 1" @click="handleApproval('reject')">审批不通过</el-button>
 										<el-button type="primary" size="mini" v-show="xmInfo.canRestart == 1 && xmInfo.lx == 1" @click="handleApply('tz'.xmInfo)">
 											重启项目停滞
@@ -115,8 +123,8 @@
 </template>
 
 <script>
-	import tzDialog from '@/components/dialog/xmtz/tz-dialog.vue';
-	import smDialog from '@/components/dialog/smDialog.vue';
+import tzDialog from '@/components/dialog/xmtz/tz-dialog.vue';
+import smDialog from '@/components/dialog/smDialog.vue';
 export default {
 	data() {
 		return {
@@ -126,7 +134,7 @@ export default {
 			activities: [],
 			lcList: [],
 			xmInfo: {},
-			type: '', //类型
+			type: '' //类型
 		};
 	},
 	mounted() {
@@ -175,8 +183,8 @@ export default {
 		},
 
 		// 审批通过，不通过，进度
-		handleApproval( type) {
-		   if (type == 'pass') {
+		handleApproval(type) {
+			if (type == 'pass') {
 				this.$confirm('是否确定审批通过?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
@@ -217,7 +225,7 @@ export default {
 					this.getProjectStopVO();
 					this.listWorkFlowNodes();
 					this.logs();
-				}else{
+				} else {
 					this.$message({
 						message: res.msg,
 						type: 'error'
@@ -272,7 +280,7 @@ export default {
 			});
 		}
 	},
-	components: {tzDialog,smDialog}
+	components: { tzDialog, smDialog }
 };
 </script>
 

@@ -4,7 +4,7 @@
       <div class="fb_info">
         <div>
           <h4>项目结算详情</h4>
-          <div text-right v-if="jssqData.jszt == '02' || jssqData.jszt == '01'  ">
+          <div text-right v-if="jssqData.jszt == '02' || jssqData.jszt == '01' || jssqData.jszt == '04' ">
             <el-button size="small" type="danger" @click="handleSave">保存</el-button>
           </div>
           <div>

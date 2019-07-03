@@ -83,7 +83,7 @@ export default {
 	data() {
 		return {
 			dialogShow:false,
-			tableHeight:window.innerHeight - 240,
+			tableHeight:window.innerHeight - 250,
 			currentPage: 1,
 			pageSize: 15,
 			records: 0,

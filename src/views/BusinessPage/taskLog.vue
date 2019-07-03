@@ -282,6 +282,7 @@ export default {
       isedit: true,
       rwbh: "",
       xmbh: "",
+			jdmc:"",//项目阶段名称
       sign: 0,
       nowPage: 1,
       pzList: [],
@@ -342,6 +343,7 @@ export default {
     changeTaskscope() {
       this.queryLogTaskProcess(1);
     },
+		
     // 查看日志详情
     handleTasklogDetail(index, row) {
       this.tasklogDetailVisible = true;
@@ -416,11 +418,13 @@ export default {
       if (this.isedit) {
         this.rwgc.xmbh = this.xmbh == "" ? data.xmbh : this.xmbh;
         this.rwgc.rwbh = this.rwbh == "" ? data.rwbh : this.rwbh;
+				this.rwgc.jdmc = this.jdmc == "" ? data.jdmc : this.jdmc;
         this.addOrUpdateTaskProcess(this.rwgc);
       } else {
         this.rwgc.wid = "";
         this.rwgc.xmbh = this.xmbh;
         this.rwgc.rwbh = this.rwbh;
+				this.rwgc.jdmc = this.jdmc;
         this.addOrUpdateTaskProcess(this.rwgc);
       }
     },
@@ -435,11 +439,12 @@ export default {
       this.dialogTaskVisible = !this.dialogTaskVisible;
     },
     // 选择关联任务
-    chooseRevelenceTask(data) {
+    chooseRevelenceTask(data,jdmc) {
       this.taskName = data.rwmc;
       // this.TaskRelevance = data
       this.xmbh = data.xmbh;
       this.rwbh = data.rwbh;
+			this.jdmc = jdmc;
       this.dialogTaskVisible = !this.dialogTaskVisible;
     },
 

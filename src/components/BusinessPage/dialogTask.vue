@@ -62,7 +62,7 @@
             <div v-if="taskList" style="height:calc(100% - 35px);width:300px;border:1px solid #ccc;float:left;border-left:none">
               <ul v-for="(item,index) in tasksData">
                   <li ><h4 style="overflow:hidden;white-space:nowrap; text-overflow: ellipsis" :title="item.catalog">{{item.catalog}}</h4></li>
-                  <li :title="task.rwmc_display" class="choose-daily-item" v-for="task in item.tasks.rows"  @click="chooseRevelence(task)"><span class="el-icon-info"></span> {{task.rwmc_display}}</li>                 
+                  <li :title="task.rwmc_display" class="choose-daily-item" v-for="task in item.tasks.rows"  @click="chooseRevelence(task,item.lcbjdmc)"><span class="el-icon-info"></span> {{task.rwmc_display}}</li>                 
               </ul>
             </div>
         </transition>
@@ -247,11 +247,11 @@ export default {
     //        console.log(e.target.getAttribute('data-type'))
     //        this.taskList = true
     //   },
-    chooseRevelence(param) {
+    chooseRevelence(param,jdmc) {
       this.bhData.rwmc = this.xmmc + "——" + this.cpmc + "——" + param.rwmc;
       this.bhData.rwbh = param.rwbh;
       this.bhData.lcbbh = param.lcbbh;
-      this.$emit("chooseRevelenceTask", this.bhData);
+      this.$emit("chooseRevelenceTask", this.bhData,jdmc);
     },
 
     // 获取产品目录

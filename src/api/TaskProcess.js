@@ -18,7 +18,8 @@ export function addOrUpdateTaskProcess(obj){
 			hfrbh:obj.hfrbh,
 			hfrxm:obj.hfrxm,
 			fjdata:obj.fjdata||"",
-			wid:obj.wid||""
+			wid:obj.wid||"",
+			jdmc:obj.jdmc //阶段名称
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);
