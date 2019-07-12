@@ -5,6 +5,7 @@
 			<h4 v-if="!iscb">【{{$route.query.xmbh}}】{{$route.query.xmmc}}&#x3000;</h4>
 			<tableComponents
 				:tableData="dataList"
+				:exportShow="exportShow"
 				:pageShow="false"
 				:currentPage="currentPage"
 				:pageSize="pageSize"
@@ -43,6 +44,10 @@ export default {
 		xmmc:{
 			type:String,
 			default:''
+		},
+		exportShow:{
+			type:Boolean,
+			default:true
 		}
 	},
 	methods: {

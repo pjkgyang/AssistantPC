@@ -73,7 +73,7 @@
 							<el-button type="text" size="small" @click="handleClick(scope.row, 'process')">查看进度</el-button>
 						</template>
 					</el-table-column>
-					<el-table-column prop="xmmc" label="项目名称" min-width="300" show-overflow-tooltip></el-table-column>
+					<el-table-column prop="xmmc" fixed="left" label="项目名称" min-width="300" show-overflow-tooltip></el-table-column>
 					<el-table-column prop="xx" label="学校" min-width="260"></el-table-column>
 					<el-table-column prop="fqrxm" label="申请人" width="110"></el-table-column>
 					<el-table-column prop="tzsj" label="停滞截止日期" width="130"></el-table-column>
@@ -95,7 +95,7 @@
 					@current-change="handleCurrentChange"
 					:current-page.sync="currentPage"
 					:page-size="pageSize"
-					layout="prev, pager, next, jumper"
+					layout="total,prev, pager, next, jumper"
 					:total="records"
 				></el-pagination>
 			</div>

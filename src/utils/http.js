@@ -118,23 +118,20 @@ axios.interceptors.response.use(
     },
     error => {
         if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    if (sessionStorage.getItem('Detailpannel') && sessionStorage.getItem('Detailpannel') != '/') {
-                        window.location.href = 'http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=' + encodeURIComponent('http://careful.wisedu.com/#' + sessionStorage.getItem('Detailpannel'));
-                    } else {
-                        window.location.href = 'http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=' + encodeURIComponent('http://careful.wisedu.com/#/');
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (!!getCookie('access_token')) {
-            MessageBox.alert('请求超时...', '提示', {
-                type: 'error',
-                confirmButtonText: '确定',
-            });
+			if(error.response.status == 401){
+				if (sessionStorage.getItem('Detailpannel') && sessionStorage.getItem('Detailpannel') != '/') {
+				    window.location.href = 'http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=' + encodeURIComponent('http://careful.wisedu.com/#' + sessionStorage.getItem('Detailpannel'));
+				} else {
+				    window.location.href = 'http://careful.wisedu.com/emap/sys/assistantauth/home/login.do?redirect_url=' + encodeURIComponent('http://careful.wisedu.com/#/');
+				}
+			}else{
+				 if (!!getCookie('access_token')) {
+				    MessageBox.alert('请求超时...', '提示', {
+				        type: 'error',
+				        confirmButtonText: '确定',
+				    });
+				}
+			}
         }
         tryHideFullScreenLoading();
         return Promise.reject(error);

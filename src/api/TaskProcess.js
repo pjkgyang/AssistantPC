@@ -19,7 +19,9 @@ export function addOrUpdateTaskProcess(obj){
 			hfrxm:obj.hfrxm,
 			fjdata:obj.fjdata||"",
 			wid:obj.wid||"",
-			jdmc:obj.jdmc //阶段名称
+			jdmc:obj.jdmc, //阶段名称
+			gccpmc:obj.gccpmc,
+			gcrwmc:obj.gcrwmc
 	},{
 		transformRequest: [function (data) {
 　　data = Qs.stringify(data);

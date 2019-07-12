@@ -17,7 +17,8 @@ export function getMilestoneCatalog(obj){
 		pageSize:obj.pageSize,
 		taskType:obj.taskType||"",
 		rwzt:obj.rwzt||"",
-		keyword:obj.keyword||""
+		keyword:obj.keyword||"",
+		isMine:obj.rwzt
 		}
 	})
 }

@@ -12,6 +12,11 @@
             <span>{{item.mc}}</span>
           </p>
           <p v-if="item.type == 'fk'" style="font-size:12px">
+						 <span>{{item.mchte}}</span><br>
+							<span class="nums" style="font-size:14px">
+						  {{item.hte<10000?item.hte:item.hte<100000000?(item.hte/10000).toFixed(2):(item.hte/100000000).toFixed(2)}} </span>{{item.hte <10000?'元':item.hte<100000000?'万元':'亿'}}
+							</span>
+							<br>
             <span>{{item.mcyfk}}</span><br>
             <span class="nums" style="font-size:14px">
               {{item.yfk<10000?item.yfk:item.yfk<100000000?(item.yfk/10000).toFixed(2):(item.yfk/100000000).toFixed(2)}} </span>{{item.yfk <10000?'元':item.yfk<100000000?'万元':'亿'}}
@@ -289,7 +294,7 @@ export default {
       detailData: {},
       sortList: [
         { mc: "项目数", value: 0  ,type:'xms'},
-        { mcyfk: "已付款", yfk: 0 ,mcdfk: "待付款", dfk: 0 ,type:'fk'},
+        { mchte: "合同额", hte: 0 ,mcyfk: "已付款", yfk: 0 ,mcdfk: "待付款", dfk: 0 ,type:'fk'},
         { mc: "问题数", value: 0 ,type:'wtzs'},
         { mc: "总工时", value: 0 },
         { mc: "延期任务", value: 0 ,type:'yq'}
@@ -354,7 +359,8 @@ export default {
           this.sortList[0].value = !res.data.wtzs?0:res.data.xmzs;
           this.sortList[1].yfk = !res.data.yfk?0:res.data.yfk;
           this.sortList[1].dfk = !res.data.dfk?0:res.data.dfk;
-
+					this.sortList[1].hte = !res.data.zhtje?0:res.data.zhtje;
+					
           this.sortList[2].value = !res.data.wtzs?0:res.data.wtzs;
           this.sortList[3].value = !res.data.hjgs?0:res.data.hjgs;
           this.sortList[4].value = !res.data.yqrws?0:res.data.yqrws;

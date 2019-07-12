@@ -121,11 +121,13 @@
 				<div flex class="filter">
 					<span class="filter-title">项目状态:</span>
 					<el-checkbox-group v-model="xmztList" @change="handleXMZT">
-						<el-checkbox label="1">在建</el-checkbox>
+						<el-checkbox label="0">未启动</el-checkbox>
 						&#x3000;&#x3000;
-						<el-checkbox label="2">售后</el-checkbox>
-						<el-checkbox label="3">过保</el-checkbox>
-						<el-checkbox label="4">关闭</el-checkbox>
+						<el-checkbox label="1">已启动</el-checkbox>
+						<el-checkbox label="4">已验收</el-checkbox>
+						<el-checkbox label="5">已过保</el-checkbox>
+						<el-checkbox label="6">已停滞</el-checkbox>
+						<el-checkbox label="7">已终止</el-checkbox>
 					</el-checkbox-group>
 				</div>
 			</div>

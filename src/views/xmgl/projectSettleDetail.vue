@@ -37,6 +37,14 @@
                 <th>分包名称</th>
                 <td colspan="5">{{jsxx.fbmc}}</td>
               </tr>
+							 <tr>
+							  <th>分包计划开始日期</th>
+							  <td>{{jsxx.jhksrq}}</td>
+							  <th>分包计划结束日期</th>
+							  <td>{{jsxx.jhjsrq}}</td>
+							  <th>分包日期</th>
+							  <td>{{jsxx.fbrq}}</td>
+							</tr>
               <tr>
                 <th>中标人</th>
                 <td>{{jsxx.zbrmc}}</td>
@@ -172,23 +180,25 @@
               </tr>
               <tr>
                 <th>奖励金额（元）</th>
-                <td>
+								<td>{{!jsxx.jlje?0:jsxx.jlje}}</td>
+               <!-- <td>
                   <input
                     style="width: 100%;"
                     type="number"
                     v-model="jsxx.jlje"
                     @input="handleInputfy"
                   >
-                </td>
+                </td> -->
                 <th>惩罚金额（元）</th>
-                <td colspan="3">
+								<td>{{!jsxx.cfje?0:jsxx.cfje}}</td> 
+            <!--    <td colspan="3">
                   <input
                     style="width: 100%;"
                     type="number"
                     v-model="jsxx.cfje"
                     @input="handleInputfy"
                   >
-                </td>
+                </td> -->
               </tr>
               <tr>
                 <th>奖惩说明</th>
@@ -213,7 +223,13 @@
                 <th>结算实施金额</th>
                 <th>结算二开金额</th>
                 <th>结算可变金额</th>
+								<th>奖励金额</th>
+								<th>惩罚金额</th>
                 <th>合计</th>
+                <th>折算实施费用</th>
+                <th>折算二开费用</th>
+                <th>折算可变费用</th>
+                <th>折算合计费用</th>
               </tr>
               <tr v-for="(item,index) in tdywyData" :key="index">
                 <td :colspan="item.cybh == '合计'?3:0">{{item.cybh}}</td>
@@ -222,9 +238,36 @@
                 <td>{{item.jsssfy}}</td>
                 <td>{{item.jsekfy}}</td>
                 <td>{{item.jskbfy}}</td>
+								
+								<td> 
+								  <input
+                    v-model="item.jlje"
+                    type="number"
+                    style="width: 80px;"
+                    @input="handleChangeJcje(index,'jl')"
+										v-if="item.cybh != '合计'"
+                  >
+									<span v-else>{{item.jlje}}</span>
+								</td>
+								<td>
+									<input
+									  v-model="item.cfje"
+									  type="number"
+									  style="width: 80px;"
+									  @input="handleChangeJcje(index,'cf')"
+										v-if="item.cybh != '合计'"
+									>
+									<span v-else>{{item.cfje}}</span>
+								</td>
+								
                 <td>{{!item.jsje?0:item.jsje}}</td>
+
+                <td>{{ !item.zsssfy?0:item.zsssfy }}</td>
+                <td>{{ !item.zsekfy?0:item.zsekfy }}</td>
+                <td>{{ !item.zskbfy?0:item.zskbfy }}</td>
+                <td>{{ !item.zsje?0:item.zsje }}</td>
               </tr>
-              <tr v-if="!tdywyData.length">
+               <tr v-if="!tdywyData.length">
                 <td colspan="7">暂无内容</td>
               </tr>
             </table>
@@ -249,6 +292,11 @@
                 <th>已结算可变费用(元)</th>
                 <th>本次结算可变费用(元)</th>
                 <th>本次合计结算</th>
+
+                <th>折算实施费用</th>
+                <th>折算二开费用</th>
+                <th>折算可变费用</th>
+                <th>折算合计费用</th>
               </tr>
               <tr v-if="!tdxxData.length">
                 <td colspan="14">暂无内容</td>
@@ -288,6 +336,11 @@
                   >
                 </td>
                 <td>{{ !item.jsje?0:item.jsje }}</td>
+
+                <td>{{ !item.zsssfy?0:item.zsssfy }}</td>
+                <td>{{ !item.zsekfy?0:item.zsekfy }}</td>
+                <td>{{ !item.zskbfy?0:item.zskbfy }}</td>
+                <td>{{ !item.zsje?0:item.zsje }}</td>
               </tr>
             </table>
           </div>
@@ -460,7 +513,7 @@ export default {
       //   Number(this.jsxx.cfje);
       // this.jsxx.jsje = this.jsxx.jsje < 0 ? 0 : this.jsxx.jsje;
 			
-					   // 本次已结算金额加上奖励-惩罚  把奖励和惩罚加到已结算总金额，小于0，不处理。 
+			// 本次已结算金额加上奖励-惩罚  把奖励和惩罚加到已结算总金额，小于0，不处理。 
 			this.jsxx.sjzfy =
 			  Number(this.jsxx.sjssfy) +
 			  Number(this.jsxx.sjekfy) +
@@ -502,6 +555,7 @@ export default {
     // 保存
     handleSave() {
       let xmtdData = [],ekfy = 0,kbfy = 0,msg = "";
+			let grjsData = [];
       this.tdxxData.forEach(ele => {
         xmtdData.push({
           fbbh: this.jssqData.fbbh,
@@ -519,6 +573,21 @@ export default {
         ekfy += !ele.jsekfy ? 0 : Number(ele.jsekfy);
         kbfy += !ele.jskbfy ? 0 : Number(ele.jskbfy);
       });
+			
+			this.tdywyData.forEach(ele => {
+				if(ele.cymc != '合计'){
+					grjsData.push({
+					  fbbh: this.jssqData.fbbh,
+					  lcbbh: this.jssqData.lcbbh,
+					  lcbmc: this.jssqData.lcbmc,
+					  cybh: ele.cybh,
+					  cymc: ele.cymc,
+					  jlje: ele.jlje,
+						cfje: ele.cfje
+					});
+				}
+			});
+			
       this.$message.close();
 			
       // 个人结算实施费用
@@ -567,7 +636,8 @@ export default {
         sjekfy: Number(this.jsxx.sjekfy),
         sjkbfy: Number(this.jsxx.sjkbfy),
 
-        teamFeeList: JSON.stringify(xmtdData)
+        teamFeeList: JSON.stringify(xmtdData),
+				teamJcList: JSON.stringify(grjsData)
       }).then(res => {
         if (res.state == "success") {
           this.$message({
@@ -673,32 +743,86 @@ export default {
         }
       });
     },
+		
+		// 奖励，惩罚 （个人信息结算）
+		handleChangeJcje(index,type){
+			let jljeTotal = 0,
+			    cfjeTotal = 0;
+			  this.tdywyData.forEach((ele, _j, arr) => {
+					if(ele.cybh != '合计'){
+						jljeTotal += Number(ele.jlje);
+						cfjeTotal += Number(ele.cfje);
+					}
+			  // 个人结算信息合计
+			  if (ele.cybh == "合计") {
+						 this.tdywyData[_j].jlje = jljeTotal;
+						 this.tdywyData[_j].cfje = cfjeTotal;
+			  }
+			});
+			this.jsxx.jlje = jljeTotal;
+			this.jsxx.cfje = cfjeTotal;
+			
+		},
+		
+		
     // 实施，二开，可变（团队结算信息）
     handleChangeInput(index, type) {
       this.jsssfyTotal = 0;
       let  jsekfyTotal = 0,
-           jskbfyTotal = 0;
-      // this.jsxx.yjszfy = 0;
-      this.tdxxData[index].jsje =
-        Number(this.tdxxData[index].jsssfy) +
-        Number(this.tdxxData[index].jsekfy) +
-        Number(this.tdxxData[index].jskbfy);
+           jskbfyTotal = 0,
+           zsssfyTotal = 0, //折算实施总费用
+           zsekfyTotal = 0, //折算二开总费用
+           zskbfyTotal = 0, //折算可变总费用
+           zsjeTotal = 0; // 折算合计费用
+      this.tdxxData[index].zsssfy = 0;
+      this.tdxxData[index].zsekfy = 0;
+      this.tdxxData[index].zskbfy = 0;
+      this.tdxxData[index].zsje = 0;
+     
+      this.tdxxData[index].jsje = Number(this.tdxxData[index].jsssfy) + Number(this.tdxxData[index].jsekfy) +Number(this.tdxxData[index].jskbfy);
+      
+      // 折算实施费用
+      this.tdxxData[index].zsssfy = Number(this.tdxxData[index].jsssfy);
+      // 折算实施费用
+      this.tdxxData[index].zsekfy = Math.ceil(Number(this.tdxxData[index].jsekfy) * 5400 / 8800);
+      // 折算实施费用
+      this.tdxxData[index].zskbfy = Math.ceil(Number(this.tdxxData[index].jskbfy) * 0.7);
+      // 折算合计费用
+      this.tdxxData[index].zsje = Number(this.tdxxData[index].zsssfy) + Number(this.tdxxData[index].zsekfy) + Number(this.tdxxData[index].zskbfy);
 
       this.tdxxData.forEach(ele => {
         this.jsssfyTotal += !ele.jsssfy ? 0 : Number(ele.jsssfy);
-        jsekfyTotal += !ele.jsekfy ? 0 : Number(ele.jsekfy); //团队结算二开总费用
-        jskbfyTotal += !ele.jskbfy ? 0 : Number(ele.jskbfy); //团队结算可变总费用
+        jsekfyTotal += !Number(ele.jsekfy) ? 0 : Number(ele.jsekfy); //团队结算二开总费用
+        jskbfyTotal += !Number(ele.jskbfy) ? 0 : Number(ele.jskbfy); //团队结算可变总费用
+
+        zsssfyTotal += !Number(ele.zsssfy) ? 0 : Number(ele.zsssfy);
+        zsekfyTotal += !Number(ele.zsekfy) ? 0 : Number(ele.zsekfy);
+        zskbfyTotal += !Number(ele.zskbfy) ? 0 : Number(ele.zskbfy);
+        zsjeTotal += !Number(ele.zsje) ? 0 : Number(ele.zsje);
         // this.jsxx.yjszfy += Number(ele.jsje); //已结算总费用 计算
       });
 
+
+        // 团队个人结算
       this.tdywyData.forEach((ele, _j, arr) => {
         this.tdywyData[_j].jsssfy = this.tdywyData[_j].jsekfy = this.tdywyData[_j].jskbfy = this.tdywyData[_j].jsje = 0;
+        this.tdywyData[_j].zsssfy = this.tdywyData[_j].zsekfy = this.tdywyData[_j].zskbfy = this.tdywyData[_j].zsje = 0;
         this.tdxxData.forEach((element, i, arr) => {
           if (ele.cybh == element.cybh) {
             this.tdywyData[_j].jsssfy += Number(element.jsssfy);
             this.tdywyData[_j].jsekfy += Number(element.jsekfy);
             this.tdywyData[_j].jskbfy += Number(element.jskbfy);
             this.tdywyData[_j].jsje += Number(this.tdxxData[i].jsje);
+
+            // 折算实施费用
+            this.tdywyData[_j].zsssfy += Number(element.jsssfy);
+            // 折算二开费用
+            this.tdywyData[_j].zsekfy += Math.ceil(Number(element.jsekfy) * 5400 / 8800);
+            // 折算可变费用
+            this.tdywyData[_j].zskbfy += Math.ceil(Number(element.jskbfy) * 0.7);
+            // 折算合计费用
+            this.tdywyData[_j].zsje += Number(this.tdywyData[_j].zsssfy)+Number(this.tdywyData[_j].zsekfy)+Number(this.tdywyData[_j].zskbfy);
+
           }
         });
         // 个人结算信息合计
@@ -706,10 +830,15 @@ export default {
           this.tdywyData[_j].jsssfy = this.jsssfyTotal;
           this.tdywyData[_j].jsekfy = jsekfyTotal;
           this.tdywyData[_j].jskbfy = jskbfyTotal;
-          this.tdywyData[_j].jsje +=
-            this.jsssfyTotal + jsekfyTotal + jskbfyTotal;
+          this.tdywyData[_j].jsje += this.jsssfyTotal + jsekfyTotal + jskbfyTotal;
+
+          this.tdywyData[_j].zsssfy = zsssfyTotal;
+          this.tdywyData[_j].zsekfy = zsekfyTotal;
+          this.tdywyData[_j].zskbfy = zskbfyTotal;
+          this.tdywyData[_j].zsje = zsjeTotal;
         }
       });
+
     },
 
     // 获取结算申请详情

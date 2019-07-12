@@ -1,5 +1,6 @@
 
 export default {
+	getUsers:window.baseurl +'personnel/getUsers.do',// 获取学校成员
 	downloadFile:window.baseurl +'attachment/downloadFile.do',//下载附件
     // 枚举
     getDictEnum:window.baseurl +'dict/getDictEnum.do',
@@ -307,4 +308,26 @@ export default {
 	
 	// 获取成本
 	getCost:window.baseurl + 'project/getCost.do',//获取成本
+
+	afterSalesSettlementQuestion:window.baseurl + 'assessment/afterSalesSettlementQuestion.do',//获取成本售后
+	
+	// 学校服务
+	treeDept:window.baseurl + 'serviceitem/treeDept.do',//部门树
+	enableDept:window.baseurl + 'serviceitem/enableDept.do',//启用部门
+	disableDept:window.baseurl + 'serviceitem/disableDept.do',//禁用部门
+	deleteDept:window.baseurl + 'serviceitem/deleteDept.do',//删除部门
+	saveDept:window.baseurl + 'serviceitem/saveDept.do',//保存部门
+	treeDeptWithUnit:window.baseurl + 'serviceitem/treeDeptWithUnit.do', //获取相关学校部门树
+	serviceObjects:window.baseurl + 'serviceitem/serviceObjects.do', // 获取服务对象下拉列表
+	serviceCatalogs:window.baseurl + 'serviceitem/serviceCatalogs.do', // 获取服务类别下拉列表
+	saveServiceItem:window.baseurl + 'serviceitem/saveServiceItem.do', // 保存服务事项
+	updateServiceItemPlan:window.baseurl + 'serviceitem/updateServiceItemPlan.do', // 编辑实施计划
+	
+	getServiceItemPlan:window.baseurl + 'serviceitem/getServiceItemPlan.do', // 获取服务事项计划
+	getServiceItem:window.baseurl + 'serviceitem/getServiceItem.do', // 获取服务事项
+	
+	pageServiceItem:window.baseurl + 'serviceitem/pageServiceItem.do', // 服务事项分页列表
+	
+	addUserDept:window.baseurl + 'serviceitem/addUserDept.do', // 添加部门关系
+	userDeptChecked:window.baseurl + 'serviceitem/userDeptChecked.do', // 用户已关联部门编号
  }

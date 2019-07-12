@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%;min-height:100%;">
+  <div style="height:100%;min-height:100%;overflow-y:auto;" class="page-component__scroll">
     <div v-if="navshow">
         <div class="main_TopNav" >
             <header-user :userNav="userNav" :userInfo="userInfo" :shown="loginShow" @handleCommand="handleCommand" ></header-user>  
@@ -9,12 +9,13 @@
         <keep-alive>
             <router-view></router-view>
         </keep-alive>
-        <transition name="scroll-fade" mode="out-in">
+     <!--   <transition name="scroll-fade" mode="out-in">
             <div v-if="disabled" class="scrollTop" @click="handleBtn" title="回到顶部">
             <i class="el-icon-arrow-up"></i>
             </div>
-        </transition>
+        </transition> -->
     </div>
+			<el-backtop target=".page-component__scroll" :bottom="100"></el-backtop>
   </div>
 </template>
 <script>
@@ -137,6 +138,10 @@ export default {
     $(".main_page").scroll(function() {
       _this.handleScroll();
     });
+		
+		window.scroll(()=>{
+			console.log(window.scrollTop)
+		})
   },
 
   components: { headerUser }
@@ -144,7 +149,7 @@ export default {
 </script>
 <style scoped>
 .main_page {
-  height: calc(100vh - 50px);
+  /* height: calc(100vh - 50px); */
   overflow-y: auto;
 }
 .main_page-questionDetail {
@@ -152,12 +157,8 @@ export default {
   overflow-y: auto;
 }
 .main_TopNav {
-  /* position: fixed; */
-  /* top: 0; */
-  /* left: 0; */
   width: 100%;
   box-shadow: 0px 1px 6px #ddd;
-  /* z-index: 188; */
   overflow-x: auto;
 }
 .main_Content {

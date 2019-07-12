@@ -48,6 +48,7 @@
 				</el-table-column>
 				<el-table-column prop="shzt" label="结算状态" width="120"></el-table-column>
 				<el-table-column prop="sqjsrxm" label="申请人" width="110"></el-table-column>
+				<el-table-column prop="shrq" label="审核日期" width="160"></el-table-column>
 				<el-table-column prop="sqjsrq" label="申请时间" width="110"></el-table-column>
 				<el-table-column prop="fbbh" label="分包编号" width="160"></el-table-column>
 				<el-table-column prop="xmmc" label="项目名称" min-width="260" show-overflow-tooltip></el-table-column>

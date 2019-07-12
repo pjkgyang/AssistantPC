@@ -142,7 +142,13 @@
 					      <th>结算实施金额</th>
 					      <th>结算二开金额</th>
 					      <th>结算可变金额</th>
+						  <th>奖励金额</th>
+						  <th>惩罚金额</th>
 					      <th>合计</th>
+						  <th>折算实施费用</th>
+						  <th>折算二开费用</th>
+						  <th>折算可变费用</th>
+						  <th>折算合计费用</th>
 					    </tr>
 					    <tr v-for="(item,index) in tdywyData" :key="index">
 					      <td :colspan="item.cybh == '合计'?3:0">{{item.cybh}}</td>
@@ -151,7 +157,13 @@
 					      <td>{{item.jsssfy}}</td>
 					      <td>{{item.jsekfy}}</td>
 					      <td>{{item.jskbfy}}</td>
+						  <td>{{item.jlje}}</td>
+						  <td>{{item.cfje}}</td>
 					      <td>{{!item.jsje?0:item.jsje}}</td>
+						  <td>{{ !item.zsssfy?0:item.zsssfy }}</td>
+							<td>{{ !item.zsekfy?0:item.zsekfy }}</td>
+							<td>{{ !item.zskbfy?0:item.zskbfy }}</td>
+							<td>{{ !item.zsje?0:item.zsje }}</td>
 					    </tr>
 					    <tr v-if="!tdywyData.length">
 					      <td colspan="7">暂无内容</td>
@@ -180,6 +192,10 @@
 								<th>已结算可变费用(元)</th>
 								<th>本次结算可变费用(元)</th>
 								<th>本次合计结算</th>
+								<th>折算实施费用</th>
+								<th>折算二开费用</th>
+								<th>折算可变费用</th>
+								<th>折算合计费用</th>
 							</tr>
 							<tr v-if="!tdxxData.length">
 								<td colspan="14">暂无内容</td>
@@ -198,6 +214,10 @@
 								<td>{{item.yjskbfy}}</td>
 								<td>{{item.jskbfy}}</td>
 								<td>{{ !item.jsje?0:item.jsje }}</td>
+								<td>{{ !item.zsssfy?0:item.zsssfy }}</td>
+								<td>{{ !item.zsekfy?0:item.zsekfy }}</td>
+								<td>{{ !item.zskbfy?0:item.zskbfy }}</td>
+								<td>{{ !item.zsje?0:item.zsje }}</td>
 							</tr>
 						</table>
 					</div>

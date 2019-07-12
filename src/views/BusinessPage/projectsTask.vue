@@ -26,12 +26,22 @@
                 <el-option v-for="item in rwlxOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
               </el-select>
             </div>
-            <div>
+
+            <div style="margin-bottom:5px;">
               任务状态:
               <el-select v-model="rwztValue" placeholder="请选择任务状态" size="mini" @change="handleChangeRwzt">
                 <el-option v-for="item in rwztOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
               </el-select>
             </div>
+
+             <div colcenter class="ismine-radio">
+              <span>负责人:</span>&#x3000;
+               <el-radio-group v-model="isMine" @change="handleChangeMine">
+                  <el-radio :label="1">我的</el-radio>
+                  <el-radio :label="0">全部</el-radio>
+                </el-radio-group>
+            </div>
+
           </div>
           <ul class="task_list">
             <div>
@@ -561,11 +571,25 @@ export default {
       mutipleSelect: [],
       lcbrwArr: [],
       qtrwArr: [],
-      zdsfwVisible: false
+      zdsfwVisible: false,
+      isMine:1 //是否的任务
     };
   },
-  mounted() {},
+  mounted() {
+
+  },
   methods: {
+
+    // 是否我的
+    handleChangeMine(){
+      if (this.radio == "kbst") {
+        this.getProjectCatalog();
+      } else {
+        this.getProductTasks();
+      }
+    },
+
+    // 投诉
 		handleComplanit(){
 			this.tabsLabel = 'question';
 		},
@@ -691,7 +715,8 @@ export default {
         cpmc: this.fbcpmc,
         taskType: this.rwlxValue,
         rwzt: this.rwztValue,
-        sfxg: this.sfxgValue ? 1 : 0
+        sfxg: this.sfxgValue ? 1 : 0,
+        isMine:this.isMine
       }).then(res => {
         if (res.state == "success") {
           if (!res.data.rows) {
@@ -1393,7 +1418,8 @@ export default {
         pageSize: 99999,
         taskType: this.rwlxValue,
         rwzt: this.rwztValue,
-        keyword: ""
+        keyword: "",
+        isMine:this.isMine
       }).then(({ data }) => {
         if (data.state == "success") {
           this.milestones = data.data;
@@ -1623,6 +1649,9 @@ export default {
     }
   },
   activated() {
+  
+
+
     this.fbcpmc = "";
     this.fbcpbh = "";
     this.userListShow = false;
@@ -1669,6 +1698,14 @@ export default {
       }
     }
 
+    if (this.tagGroup.includes("JZGCRY") && (!this.tagGroup.includes("ZDDZ") || 
+    !this.tagGroup.includes("JYGL")||
+    !this.tagGroup.includes("GCZJ")||
+    !this.tagGroup.includes("QYZ")) && window.userName != this.xmkbInfo.yfzrrxm) {
+      this.isMine = 1;
+    } else {
+      this.isMine = 0;
+    }
     this.getItemUserNum(); // 获取项目人员总数
   },
   components: {
@@ -2002,5 +2039,8 @@ export default {
   position: absolute;
   width: 100%;
   z-index: 100;
+}
+.ismine-radio .el-radio{
+  margin-bottom:0 !important;
 }
 </style>

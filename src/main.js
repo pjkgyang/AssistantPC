@@ -23,14 +23,14 @@ Vue.prototype.$post = post;
 // import es6Promise from "es6-promise";
 // es6Promise.polyfill();
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'summernote/dist/summernote.js'
-import 'summernote/dist/summernote.css'
-import 'font-awesome/css/font-awesome.css'
-import 'bootstrap/js/tooltip.js'
-import 'bootstrap/js/modal.js'
-import 'bootstrap/js/dropdown.js'
-import 'summernote/dist/lang/summernote-zh-CN.js'
+import 'bootstrap/dist/css/bootstrap.css';
+import 'summernote/dist/summernote.js';
+import 'summernote/dist/summernote.css';
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap/js/tooltip.js';
+import 'bootstrap/js/modal.js';
+import 'bootstrap/js/dropdown.js';
+import 'summernote/dist/lang/summernote-zh-CN.js';
 
 
 Vue.use(ElementUI)

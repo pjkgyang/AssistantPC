@@ -315,7 +315,53 @@ export default new Router({
 					name: 'schoolList',
 					component: resolve => require(['@/views/BusinessPage/schoolPannel.vue'], resolve),
 				},
+				// 学校服务事项
+				{
+					path: '/schoolseivice/organizeMaintain',
+					name: 'schoolSeiviceXxzz',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/xxzzwh.vue'], resolve),
+				},
+				{
+					path: '/schoolseivice/implementationPlan',
+					name: 'schoolSeiviceSsjh',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/ssjh.vue'], resolve),
+				},
+				{
+					path: '/schoolseivice/serviceStatistic',
+					name: 'schoolSeiviceFwsxtj',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/fwsxtj.vue'], resolve),
+				},
+				{
+					path: '/schoolseivice/fwsxfx',
+					name: 'schoolSeiviceFwsxfx',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/fwsxfx.vue'], resolve),
+				},
+				{
+					path: '/schoolseivice/detail',
+					name: 'schoolSeiviceDetail',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/detail.vue'], resolve),
+				},
+				{
+					path: '/schoolseivice/teacherMaintain',
+					name: 'schoolSeiviceDetail',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/whls.vue'], resolve),
+				},
+				
+				// 需求 
+				{
+					path: '/demand/index',
+					name: 'demandIndex',
+					component: resolve => require(['@/views/BusinessPage/demand/index.vue'], resolve),
+				},
+				{
+					path: '/demand/detail',
+					name: 'demandDetail',
+					component: resolve => require(['@/views/BusinessPage/demand/detail.vue'], resolve),
+				},
+				
+				
 
+				
 				{
 					path: '/businesspage/report',
 					name: 'Report',

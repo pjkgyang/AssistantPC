@@ -20,6 +20,7 @@
 				:pageShow="true"
 				:currentPage="currentPage"
 				:pageSize="pageSize"
+				@handleCurrentChange="handleCurrentChange"
 				:tableData="dataList"
 				@exportTable="exportTable"
 				@handleXxwt="handleXxwt"

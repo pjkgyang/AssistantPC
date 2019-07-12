@@ -90,10 +90,10 @@ export default {
 			filterData: {
 				keyword: '',
 				gcdq: '',
-				jszt: '0'
+				jszt: ''
 			},
 			gcdqList: [{ label: '全部', id: '' }, { label: '南区', id: '南区' }, { label: '北区', id: '北区' }, { label: '其他', id: '其他' }],
-			jsztList: [{ label: '全部', id: '' }, { label: '已结算', id: '1' }, { label: '未结算', id: '0' }],
+			jsztList: [{ label: '全部', id: '' }, { label: '已结算', id: '1' },{ label: '申请中', id: '2' }, { label: '审核不通过', id: '3' }],
 			tableData: [],
 			userGroup: ''
 		};

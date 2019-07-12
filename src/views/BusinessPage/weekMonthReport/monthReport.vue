@@ -180,7 +180,7 @@ export default {
       wtWid: "",
       workTotal: "",
       isBlocked: false,
-      lcbztList: [],
+      lcbztList: [1,2,3,4,6,7,9],
       multipleSelection: [],
       multipleSelectionWt: [],
       groupTag: "",
@@ -464,9 +464,9 @@ export default {
         );
       }
     },
-
+		
+		//获取月工作计划列表
     getMonthWorkList(curPage) {
-      //获取月工作计划列表
       pageMonthWork({
         curPage: curPage,
         pageSize: this.workPageSize,
@@ -502,7 +502,7 @@ export default {
         pageSize: this.questionPageSize,
         qygc: this.qyValue,
         month: this.monthValue,
-        wtzt: this.wtztValue,
+        wtzt: 0,
         yczt: this.ycztValue,
         keyword: this.itemValue
       }).then(({ data }) => {

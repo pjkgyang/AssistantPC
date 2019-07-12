@@ -269,7 +269,9 @@ export default {
       gcqyValue: "", //工程区域
       gczdList: [], //区域
       fwValue: "",
-      TaskRelevance: {},
+      TaskRelevance: {
+
+      },
       rwgc: {},
       total: "",
       baseUrl: "",
@@ -413,6 +415,8 @@ export default {
       this.rwgc.gcms = data.gcms;
       this.rwgc.gcrq = data.gcrq;
       this.rwgc.gs = data.gs;
+      this.rwgc.gccpmc = this.TaskRelevance.gccpmc;
+      this.rwgc.gcrwmc = this.TaskRelevance.gcrwmc;
       this.rwgc.fjdata = data.fjdata.join(",");
       this.rwgc.wid = data.wid;
       if (this.isedit) {
@@ -441,7 +445,7 @@ export default {
     // 选择关联任务
     chooseRevelenceTask(data,jdmc) {
       this.taskName = data.rwmc;
-      // this.TaskRelevance = data
+      this.TaskRelevance = data; //rwmc
       this.xmbh = data.xmbh;
       this.rwbh = data.rwbh;
 			this.jdmc = jdmc;
@@ -564,6 +568,7 @@ export default {
       addOrUpdateTaskProcess(rwgc).then(({ data }) => {
         if (data.state == "success") {
           this.isDisabled = 0;
+          this.dialogDialyVisible = !this.dialogDialyVisible;
           this.$alert("添加成功", "提示", {
             confirmButtonText: "确定",
             type: "success",
@@ -573,7 +578,6 @@ export default {
               this.rwbh = "";
               this.closeDialogNum += 1;
               this.queryLogTaskProcess(1);
-              this.dialogDialyVisible = !this.dialogDialyVisible;
             }
           });
         } else {

@@ -251,6 +251,9 @@ export default {
       this.bhData.rwmc = this.xmmc + "——" + this.cpmc + "——" + param.rwmc;
       this.bhData.rwbh = param.rwbh;
       this.bhData.lcbbh = param.lcbbh;
+      
+      this.bhData.gccpmc = param.cpmc;
+      this.bhData.gcrwmc = param.rwmc;
       this.$emit("chooseRevelenceTask", this.bhData,jdmc);
     },
 
