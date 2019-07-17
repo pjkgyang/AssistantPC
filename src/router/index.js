@@ -332,7 +332,7 @@ export default new Router({
 					component: resolve => require(['@/views/BusinessPage/schoolServices/fwsxtj.vue'], resolve),
 				},
 				{
-					path: '/schoolseivice/fwsxfx',
+					path: '/schoolseivice/serviceAnalysis',
 					name: 'schoolSeiviceFwsxfx',
 					component: resolve => require(['@/views/BusinessPage/schoolServices/fwsxfx.vue'], resolve),
 				},
@@ -346,8 +346,8 @@ export default new Router({
 					name: 'schoolSeiviceDetail',
 					component: resolve => require(['@/views/BusinessPage/schoolServices/whls.vue'], resolve),
 				},
-				
-				// 需求 
+
+				// 需求
 				{
 					path: '/demand/index',
 					name: 'demandIndex',
@@ -358,10 +358,10 @@ export default new Router({
 					name: 'demandDetail',
 					component: resolve => require(['@/views/BusinessPage/demand/detail.vue'], resolve),
 				},
-				
-				
 
-				
+
+
+
 				{
 					path: '/businesspage/report',
 					name: 'Report',
@@ -461,7 +461,7 @@ export default new Router({
 							name: 'BusinessReportShgsjsqd',
 							component: resolve => require(['@/views/BusinessPage/report/khbb/shgsjsqd.vue'], resolve),
 						},
-						
+
 						// 使用报表
 						{
 							path: '/businesspage/report/use/wtslip',
@@ -499,8 +499,8 @@ export default new Router({
 							name: 'gwzrzg',
 							component: resolve => require(['@/views/BusinessPage/report/useReport/Postqualification.vue'], resolve),
 						},
-						
-						
+
+
 						{
 							path: '/businesspage/report/common/:id',
 							name: 'ReportCommon',

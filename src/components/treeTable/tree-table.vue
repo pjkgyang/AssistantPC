@@ -241,7 +241,6 @@ export default {
 		}
 	}
 	> div {
-		position: absolute;
 		width: 100%;
 	}
 	.line-height {

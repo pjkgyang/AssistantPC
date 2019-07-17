@@ -41,7 +41,11 @@ export default {
 		isCrowd: {
 			type: Boolean,
 			default: false
-		}
+		},
+    Type:{
+      type: String,
+      default: ''
+    }
 	},
 	watch: {
 		istb(newValue, oldValue) {
@@ -63,6 +67,10 @@ export default {
 			}
 			this.uploadForm = new FormData();
 			if (!this.isCrowd) {
+        // 开发在线化 上传附件类型 7
+        if(this.Type == 'demand'){
+         this.uploadForm.append('lx', 7);
+        }
 				this.uploadForm.append('fileUpload', file);
 			} else {
 				this.uploadForm.append('uploadCrowd', file);

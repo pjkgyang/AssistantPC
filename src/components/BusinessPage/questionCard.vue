@@ -129,15 +129,15 @@
 					<el-button type="danger" size="mini" @click="handleClose(question, index)">关闭</el-button>
 				</section>
 			</li>
-			<div v-if="questionList.length == 0" style="text-align:center;padding-top:50px;">
-				<img src="static/img/empty.png" alt="" />
-				<p>暂无问题</p>
+			<div v-if="!questionList.length">
+				<emptyContent></emptyContent>
 			</div>
 		</ul>
 	</div>
 </template>
 
 <script>
+import emptyContent from '@/components/BusinessPage/emptyContent';
 export default {
 	data() {
 		return {
@@ -208,7 +208,7 @@ export default {
 			this.$emit('deleteQuestion', params);
 		}
 	},
-	components: {}
+	components: {emptyContent}
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-dialog
-			title="确认需求"
+			title="关联需求"
 			width="700px"
 			top="30px"
 			:visible.sync="visible"
@@ -11,27 +11,9 @@
 			:show="show"
 		>
 			<div class="dialog-xqqr">
-				<section>
-					<div class="mg-12">
-						<span class="filter-weight">附件：</span>
-						<a href="#">xxxxxxxxxx</a>
-					</div>
-					<div >
-						<span class="filter-weight">开发包附件：</span>
-						<a href="#">xxxxxxxxxx</a>
-					</div>
-					<div flex class="mg-12">
-						<span class="filter-weight">评价：</span>
-						<el-rate v-model="filterData.pj" :texts="texts" show-text></el-rate>
-					</div>
-					<p class="pj-content">
-						<span class="filter-weight">备注：</span>
-						<el-input type="textarea" :rows="5" :maxlength="500" style="width:670px" placeholder="请输入备注内容" v-model="filterData.sm"></el-input>
-					</p>
-				</section>
+
 				<section class="pj-btn-group">
-					<el-button size="small" type="primary" @click="handleClickSure">确定</el-button>
-					<el-button size="small" @click="handleClose">取消</el-button>
+					<el-button size="small" @click="visible = false">取消</el-button>
 				</section>
 			</div>
 		</el-dialog>
@@ -42,47 +24,25 @@
 export default {
 	data() {
 		return {
-			visible: this.show,
-			texts:['1分','2分','3分','4分','5分'],
-			filterData: {
-				sm: '',
-				pj: 5
-			}
+			visible: this.show
 		};
 	},
 	methods: {
-		handleClose() {
-			this.visible = false;
-		},
-		handleClickSure() {
-			if (!this.validate()) return;
-			this.$emit('handleClickSure', this.sm);
-		},
-		validate() {
-			if (/^[\s]*$/.test(this.filterData.sm)) {
-				this.$alert('请输入备注内容', '提示', { confirmButtonText: '确定', type: 'warning' });
-				return false;
-			}
-			return true;
-		}
+
 	},
 	props: {
 		show: {
 			type: Boolean,
 			default: false
-		},
-		title: {
-			type: String,
-			default: '说明'
 		}
 	},
 	watch: {
 		show(n, o) {
 			this.visible = this.show;
 			if (!n) {
-			
+
 			} else {
-				
+
 			}
 		}
 	},
@@ -96,7 +56,7 @@ export default {
 	section{
 		div{
 			>span{
-				
+
 			}
 		}
 	}

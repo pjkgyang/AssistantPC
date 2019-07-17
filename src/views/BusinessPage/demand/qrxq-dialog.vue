@@ -58,7 +58,7 @@ export default {
 		},
 		handleClickSure() {
 			if (!this.validate()) return;
-			this.$emit('handleClickSure', this.sm);
+			this.$emit('handleClickSure', this.filterData);
 		},
 		validate() {
 			if (!this.filterData.jfrq) {
@@ -86,9 +86,9 @@ export default {
 		show(n, o) {
 			this.visible = this.show;
 			if (!n) {
-			
+
 			} else {
-				
+
 			}
 		}
 	},
@@ -102,7 +102,7 @@ export default {
 	section{
 		div{
 			>span{
-				
+
 			}
 		}
 	}

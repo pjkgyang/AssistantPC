@@ -158,7 +158,7 @@ export default {
 						this.form = {};
 					}
 				}else{
-					
+
 				}
 			})
 		},
@@ -189,7 +189,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .title {
 	font-weight: 700;
 	padding: 0 10px;

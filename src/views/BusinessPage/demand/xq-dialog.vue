@@ -1,497 +1,470 @@
 <template>
-	<div class="dialog-container">
-		<el-dialog title="我要提需求" width="1000px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
-			<div class="Question">
-				<el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="question" :inline="true" label-width="135px">
-					<el-form-item label="项目名称" required>
-						<el-input size="mini" type="text" :style="{ width: 800 + 'px' }" v-model="xmmc" readonly placeholder="请选择项目">
-							<el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="addQuestiontItem"></el-button>
-						</el-input>
-					</el-form-item>
-					<el-form-item label="项目状态" required><el-input size="mini" type="text" style="width:325px" v-model="xmzt" readonly></el-input></el-form-item>
-					<el-form-item label="需求分类" required>
-						<el-select v-model="question.wtly" size="mini" placeholder="请选择问题来源" style="width:325px">
-							<el-option v-for="(item, index) in wtly" :key="index" :label="item.mc" :value="item.label"></el-option>
-						</el-select>
-					</el-form-item>
-					
-					<el-form-item label="提出老师" required>
-						<el-select v-model="question.wtjb" size="mini" placeholder="请选择问题级别" style="width:800px">
-							<el-option v-for="(wtjb, index) in wtjbList" :key="index" :label="wtjb.mc" :value="wtjb.label"></el-option>
-						</el-select>
-					</el-form-item>
-					
-					<el-form-item label="是否线上" required >
-						<el-select v-model="question.wtlb" size="mini" placeholder="请选择问题类别" style="width:325px">
-							<el-option v-for="(item, index) in wtlb" :key="index" :label="item.mc" :value="item.label"></el-option>
-						</el-select>
-					</el-form-item>
-				
-					<el-form-item label="产品" required>
-						<el-select v-model="question.cp" size="mini" filterable placeholder="请选择产品" style="width:325px" @change="handleChangeCp">
-							<el-option v-for="(cp, index) in xmcpList" :key="index" :label="cp.mc" :value="cp.label"></el-option>
-						</el-select>
-					</el-form-item>
+  <div class="dialog-container">
+    <el-dialog title="我要提需求" width="1000px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)"
+      :show="show">
+      <div class="demand">
+        <el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="demandData" :inline="true" size="mini"
+          label-width="135px">
+          <el-form-item label="项目名称" required>
+            <el-input size="mini" type="text" :style="{ width: 800 + 'px' }" v-model="demandData.xmmc" readonly
+              placeholder="请选择项目">
+              <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="adddemandtItem"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="项目状态" required>
+            <el-input size="mini" type="text" style="width:325px" v-model="xmzt" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="需求分类" required>
+            <el-select v-model="demandData.xqfl" size="mini" placeholder="请选择需求分类" style="width:325px">
+              <el-option v-for="(item, index) in xqflList" :key="index" :label="item.mc" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
 
-					<el-form-item label="CROWD业务线" required >
-						<el-select v-model="question.yxfw" size="mini" placeholder="请选择影响范围" style="width:325px">
-							<el-option v-for="(yxfw, index) in yxfwList" :key="index" :label="yxfw.mc" :value="yxfw.label"></el-option>
-						</el-select>
-					</el-form-item>
+          <el-form-item label="提出老师" required>
+            <el-select v-model="teacherData" size="mini" multiple placeholder="请选择提出老师" style="width:800px"
+              @change="handleChangeTcls">
+              <el-option v-for="(tcls, index) in tclsList" :key="index" :label="tcls.userName" :value="tcls.userId+','+tcls.userName"></el-option>
+            </el-select>
+          </el-form-item>
 
-					<el-form-item label="CROWD产品" required >
-						<el-select v-model="question.sfbug" size="mini" placeholder="请选择是否bug" style="width:325px">
-							<el-option label="是" value="1"></el-option>
-							<el-option label="否" value="0"></el-option>
-						</el-select>
-					</el-form-item>
+          <el-form-item label="是否线上" required>
+            <el-select v-model="demandData.sfxs" size="mini" placeholder="请选择是否线上" style="width:325px">
+              <el-option v-for="(item, index) in sfxsList" :key="index" :label="item.mc" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
 
-					<el-form-item label="期望设计完成日期" required>
-						<el-date-picker
-							:picker-options="pickerBeginDateQw"
-							:clearable="false"
-							size="mini"
-							v-model="question.qwjjrq"
-							type="date"
-							placeholder="选择日期"
-							format="yyyy-MM-dd"
-							value-format="yyyy-MM-dd"
-							style="width:325px;"
-						></el-date-picker>
-					</el-form-item>
+          <el-form-item label="产品" required>
+            <el-cascader size="mini" style="width:325px" v-model="val" :props="defaultProps" :options="options" @change="handleItemChange"
+              :show-all-levels="false"></el-cascader>
+          </el-form-item>
 
-					<el-form-item label="期望开发交付日期" required >
-						<el-date-picker
-							:picker-options="pickerBeginDateBefore"
-							:clearable="false"
-							size="mini"
-							v-model="question.cnjsrq"
-							type="date"
-							placeholder="选择日期"
-							format="yyyy-MM-dd"
-							value-format="yyyy-MM-dd"
-							style="width:325px;"
-						></el-date-picker>
-					</el-form-item>
+          <el-form-item label="CROWD业务线" required>
+            <el-select v-model="demandData.crowdywxbh" size="mini" placeholder="请选择CROWD业务线" style="width:325px"
+              @change="handleChangeCrowdYwx">
+              <el-option v-for="(ywx, index) in crowdywxList" :key="index" :label="ywx.lbmc" :value="ywx.lbdm"></el-option>
+            </el-select>
+          </el-form-item>
 
-					<el-form-item label="关联需求" required >
-						<el-input size="mini" v-model="question.bbh" type="text" placeholder="请填写版本号" style="width:800px;"></el-input>
-					</el-form-item>
+          <el-form-item label="CROWD产品" required>
+            <el-select v-model="demandData.crowdcpbh" size="mini" placeholder="请选择CROWD产品" style="width:325px" @change="handleChangeCrowdCp">
+              <el-option v-for="(cp, index) in crowdcpList" :key="index" :label="cp.lbmc" :value="cp.lbdm"></el-option>
+            </el-select>
+          </el-form-item>
 
-					<el-form-item label="需求标题" required>
-						<el-input size="mini" v-model="question.title" type="text" placeholder="标题" style="width:800px;"></el-input>
-					</el-form-item>
+          <el-form-item label="期望设计完成日期" required>
+            <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="demandData.qwsjwcrq"
+              type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:325px;"></el-date-picker>
+          </el-form-item>
 
-					<el-form-item label="需求附件">
-						<el-upload
-							style="width:510px;"
-							class="upload-demo"
-							ref="upload"
-							:limit="1"
-							:action="uploadAction"
-							:before-upload="beforeUpload"
-							:on-remove="handleRemove"
-							:on-change="handleChange"
-							:file-list="fileList"
-							:show-file-list="true"
-							:auto-upload="false"
-						>
-							<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-						</el-upload>
-					</el-form-item>
-				</el-form>
-				<div class="question-textarea">
-					<p>需求描述</p>
-					<div id="summernote"></div>
-				</div>
+          <el-form-item label="期望开发交付日期" required>
+            <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="demandData.qwkfjfrq"
+              type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:325px;"></el-date-picker>
+          </el-form-item>
 
-				<div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
-					<el-button size="small" type="primary" @click="handleCommit">确认提交</el-button>
-					<el-button size="small" @click="handleCancel">取消</el-button>
-				</div>
-			</div>
-		</el-dialog>
+          <el-form-item label="关联需求" required v-if="demandData.xqfl == 3">
+            <el-input type="text" style="width: 800px" v-model="demandData.glxqWid" readonly placeholder="请选择需求">
+              <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;" @click="handleRelaseDemand"></el-button>
+            </el-input>
+          </el-form-item>
 
-		<el-dialog title="选择项目" :visible.sync="dialogQuestionVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
-			<div style="padding:10px;"><itemChoose @handleEdit="handleEdit"></itemChoose></div>
-		</el-dialog>
-	</div>
+          <el-form-item label="需求标题" required>
+            <el-input size="mini" v-model="demandData.bt" type="text" placeholder="标题" style="width:800px;"></el-input>
+          </el-form-item>
+
+          <el-form-item label="需求附件" required>
+            <uploadFile :Type="'demand'" :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
+          </el-form-item>
+        </el-form>
+        <div class="demand-textarea">
+          <p>需求描述</p>
+          <div id="summernote"></div>
+        </div>
+
+        <div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
+          <el-button size="small" type="primary" @click="handleCommit">确认提交</el-button>
+          <el-button size="small" @click="visible = false">取消</el-button>
+        </div>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="选择项目" :visible.sync="dialogdemandVisible" :close-on-click-modal="false" width="800px" top="30px"
+      append-to-body>
+      <div style="padding:10px;">
+        <itemChoose @handleEdit="handleEdit"></itemChoose>
+      </div>
+    </el-dialog>
+
+    <xqlistDilog :show.sync="demandListVisible" @handleChooseDemand="handleChooseDemand"></xqlistDilog>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
-import itemChoose from "@/components/BusinessPage/itemChoose.vue";
-import {
-	saveQuestion,
-	customerQuestion,
-	showQuestionCondition,
-	queryResponsibleProduct,
-	queryProductSolutionTime
-} from "@/api/xmkb.js";
-import {
-	getProjects
-} from "@/api/xmkb.js";
-import {
-	formatTime,
-	getMenu,
-	getSession,
-	getMyDate,
-	GetDateStr
-} from "@/utils/util.js";
-export default {
-	data() {
-		return {
-			isInnerItem: false, // 是否为内部项目
-			dialogQuestionVisible: false,
-			visible: this.show,
-			xmmc: "",
-			xmbh: "",
-			question: {
-				wtlb: "",
-				xmzt: "", //项目状态
-				wtly: "", //问题来源
-				sfjj: "",
-				wtjb: "1",
-				cp: "",
-				yxfw: "",
-				sfbug: "",
-				bbh: "",
-				title: "",
-				nr: "",
-				wid: "",
-				qwjjrq: "",
-				qwjjrqO: "",
-				cnjsrq: ""
-			},
-			wtjbList:[],//问题级别枚举
-			yxfwList:[],//影响范围
-			cplist: [],
-			wtlb: [],
-			wtly: [], //问题来源
-			uploadAction: "https://jsonplaceholder.typicode.com/posts/",
-			fileList: [],
-			fileData: [],
-			filesData: [],
-			pickerBeginDateBefore: this.handleFocusDate(),
-			pickerBeginDateQw: {
-				disabledDate(time) {
-					let curDate = new Date().getTime();
-					let three = 30 * 24 * 3600 * 1000;
-					let threeMonths = curDate + three;
-					return (
-						time.getTime() < Date.now() - 8.64e7 || time.getTime() > threeMonths
-					);
-				}
-			},
-			isJZuser: null,
-			xmcpList: [],
-			xmData: {}, //选择项目信息
-			xmzt: '' //项目状态
-		};
-	},
-	props: {
-		show: {
-			type: Boolean,
-			default: false
-		},
-	},
-	components: {
-		itemChoose
-	},
-	methods: {
-		// 切换内部项目
-		handleChangeInnerItem(val) {
-			let that = this;
-			if (!!val) {
-				this.xmcpList = [];
-				this.xmmc = '内部项目';
-				this.xmzt = '在建';
-				this.$get(this.API.queryResponsibleProduct, {
-					xmbh: '',
-					internalProject: true
-				}).then(res => {
-					Object.keys(res.data).forEach(function(key) {
-						that.xmcpList.push({
-							mc: res.data[key],
-							label: key
-						})
-					});
-				})
-			} else {
-				this.xmcpList = [];
-				this.xmmc = '';
-				this.xmbh = '';
-			}
-		},
-		// 格式化日期
-		handleFocusDate() {
-			let self = this;
-			return {
-				disabledDate(time) {
-					let curDate = new Date().getTime();
-					let delayHs = JSON.parse(self.questionInfo.cphs) * 24 * 3600 * 1000;
-					let delayDate = curDate + delayHs;
-					return (
-						time.getTime() < Date.now() - 8.64e7 || time.getTime() > delayDate
-					);
-				}
-			};
-		},
-		handleEdit(data) {
-			this.xmzt = data.xmzt;
-			this.xmData = data;
-			if (this.questionTitle == "我要提问") {
-				this.queryResponsibleProduct(data.xmbh);
-			}
-			this.xmbh = data.xmbh;
-			this.xmmc = data.xmmc;
-			this.dialogQuestionVisible = false;
-		},
-		//选择项目
-		addQuestiontItem() {
-			this.dialogQuestionVisible = true;
-		},
-		handleCancel() {
-			//关闭dialog
-			this.visible = false;
-		},
+  import axios from "axios";
+  import itemChoose from "@/components/BusinessPage/itemChoose.vue";
+  import uploadFile from '@/components/BusinessPage/upload.vue';
+  import {
+    getProjects
+  } from "@/api/xmkb.js";
+  import xqlistDilog from '@/views/BusinessPage/demand/xqlist-dialog.vue'
 
-		// 根据产品切换承诺结束日期范围（9.26）
-		handleChangeCp(val) {
-			if (!!this.accreditShow) {
-				queryProductSolutionTime({
-					cpbh: val
-				}).then(({
-					data
-				}) => {
-					if (data.state == "success") {
-						// this.question.cnjsrq = GetDateStr(data.data);
-						this.questionInfo.cphs = data.data;
-						this.question.cnjsrq = "";
-					}
-				});
-			}
-		},
+  import {
+    formatTime,
+    getMenu,
+    getSession,
+    getMyDate,
+    GetDateStr
+  } from "@/utils/util.js";
 
-		//提交问题
-		handleCommit() {
-			this.question.nr = $("#summernote").summernote("code");
-			if (
-					!this.question.wtlb ||
-					!this.question.wtjb ||
-					!this.question.wtly ||
-					!this.question.cp ||
-					!this.question.yxfw ||
-					!this.question.sfbug ||
-					!this.question.bbh ||
-					!this.question.qwjjrq ||
-					!this.question.title ||
-					!this.question.nr ||
-					this.question.nr == "<p><br></p>"
-				) {
-					this.$alert("问题选项全部为必填项，请填写完整", "提示", {
-						confirmButtonText: "确定",
-						type: "warning"
-					});
-					return;
-				}
-				saveQuestion({
-					wtly: this.question.wtly,
-					wtlb: this.question.wtlb,
-					wtjb: this.question.wtjb,
-					cpbh: this.question.cp,
-					yxfw: this.question.yxfw,
-					sfbg: this.question.sfbug,
-					bbh: this.question.bbh,
-					bt: this.question.title,
-					qwjjrq: this.question.qwjjrq,
-					xmmc: !!this.isInnerItem ? '' : this.xmmc,
-					xmbh: !!this.isInnerItem ? '' : this.xmbh,
-					nr: this.question.nr,
-					internalProject: !!this.isInnerItem ? true : '',
-					hjfjwid: this.fileData.length == 0 ? "" : this.fileData[0].split("|")[0],
-					wid: this.question.wid
-				}).then(({
-					data
-				}) => {
-					if (data.state == "success") {
-						this.visible = false;
-						(this.fileList = []),
-						(this.fileData = []),
-						(this.filesData = []),
-						this.$alert("问题提交成功！", "提示", {
-							confirmButtonText: "确定",
-							type: "success",
-							callback: action => {
-								this.$emit("handleTWsuccess", "");
-							}
-						});
-					} else {
-						this.$alert(data.msg + ",提交失败!", "提示", {
-							confirmButtonText: "确定",
-							type: "error"
-						});
-					}
-				});
-		},
-		// 删除文件
-		handleRemove(file, fileList) {
-			this.fileData = [];
-			this.fileList = [];
-			this.filesData = [];
-		},
+  export default {
+    data() {
+      return {
+        isInnerItem: false, // 是否为内部项目
+        dialogdemandVisible: false,
+        demandListVisible: false, //需求列表
+        visible: this.show,
+        isClearFile: false, //清除附件
+        defaultProps: {
+          value:'id',
+          label:'title'
+        },
+        options: [],  //产品树选项
+        xmmc: "",
+        xmbh: "",
+        xmzt: "",
+        xqflList: [],
+        xmcpList: [], //项目产品
+        tclsList: [], //提出老师
+        sfxsList: [{
+          mc: '是',
+          label: 1
+        }, {
+          mc: '否',
+          label: 0
+        }], //是否线上
+        crowdywxList: [], //crowd业务线
+        crowdcpList: [], //crowd产品
+        val: [],
+        teacherData:[],
+        demandData: {
+          xmbh: '',
+          xmmc: '',
+          xqfl: "",
+          teacherData:"",
+          sfsx: 0,
+          cpbjbh:"",
+          cpbjmc:"",
+          crowdywxbh: "", //crowd 业务线编号
+          crowdywxmc: "", //crowd 业务线名称
+          crowdcpbh: "", //crowd 产品编号
+          crowdcpmc: "", //crowd 产品名称
+          qwsjwcrq: "",
+          qwkfjfrq: "",
+          glxqWid: "",
+          bt: "",
+          xqfjwid: "",
+          xqfjmc: ""
+        },
+        pickerBeginDateBefore: {
+          disabledDate(time) {
+            let curDate = new Date().getTime();
+            return (
+              time.getTime() < Date.now() - 8.64e7
+            );
+          }
+        },
+      };
+    },
+    props: {
+      show: {
+        type: Boolean,
+        default: false
+      },
+    },
+    components: {
+      itemChoose,
+      uploadFile,
+      xqlistDilog
+    },
+    methods: {
+      // 选择产品
+      handleItemChange() {
+        let cpData = this.getCascaderObj(this.val, this.options);
+        this.demandData.cpbjbh = cpData[cpData.length -1].id;
+        this.demandData.cpbjmc = cpData[cpData.length -1].title;
+      },
 
-		beforeUpload(file) {
-			let fd = new FormData();
-			fd.append("fileUpload", file);
-			fd.append("xmbh", this.xmbh);
+      getCascaderObj(val, opt) {
+        return val.map(function(value, index, array) {
+          for (var itm of opt) {
+            if (itm.id == value) {
+              opt = itm.children;
+              return itm;
+            }
+          }
+          return null;
+        });
+      },
+      // 上传附件
+      handleUploadFile(data) {
+        if(!!data.length){
+          this.demandData.xqfjwid = data[0].split('|')[0];
+          this.demandData.xqfjmc = data[0].split('|')[1];
+        }else{
+          this.demandData.xqfjwid = '';
+          this.demandData.xqfjmc = '';
+        }
+      },
 
-			axios.post(window.baseurl + "attachment/uploadAttach.do", fd, {
-					headers: {
-						"Content-Type": "multipart/form-data"
-					}
-				})
-				.then(res => {
-					if (res.data.state == "success") {
-						this.fileData.push(res.data.data); //文件 list Arr
-					} else {
-						this.$alert(res.data.msg, "提示", {
-							confirmButtonText: "确定"
-						});
-					}
-				});
-			return true;
-		},
+      // 选择提出老师
+      handleChangeTcls(val) {
+        this.demandData.teacherData = val.join('|');
+        console.log(this.demandData.teacherData);
+      },
 
-		handleChange(file, fileList) {
-			let r = [];
-			this.filesData.push(file);
-			for (var i = 0, l = this.filesData.length; i < l; i++) {
-				for (var j = i + 1; j < l; j++)
-					if (this.filesData[i].name === this.filesData[j].name) j = ++i;
-				r.push(this.filesData[i]);
-			}
-			this.fileList = r;
-			this.$refs.upload.submit();
-		},
-		// 获取项目对应的产品
-		queryResponsibleProduct(xmbh) {
-			let that = this;
-			this.xmcpList = [];
-			queryResponsibleProduct({
-				xmbh: xmbh
-			}).then(res => {
-				if (res.data.state == "success") {
-					// 2018.12.18 修改
-					if (JSON.stringify(res.data.data) == "{}") {
-						let xmjlxm = !this.itemInfo.yfzrrxm ? this.xmData.yfzrrxm : this.itemInfo.yfzrrxm
-						this.$alert(" 您选择的项目没有可提问产品，请联系项目经理 ( " + xmjlxm + ")添加负责业务。", "提示", {
-							confirmButtonText: "确定",
-							type: "warning"
-						});
-					} else {
-						Object.keys(res.data.data).forEach(function(key) {
-							that.xmcpList.push({
-								mc: res.data.data[key],
-								label: key
-							})
-						});
-					}
-				}
-			});
-		},
-		// 获取项目
-		getProjects() {
-			getProjects({
-				curPage: 1,
-				pageSize: 2,
-				keyword: "",
-				xmlb: "",
-				sfgx: "",
-				xmzt: "1,2,3",
-				pl: ""
-			}).then(({
-					data
-				}) => {
-					if (data.state == "success") {
-						if (data.data.records == 1 && data.data.rows[0].xmzt != '过保') {
-							this.xmzt = data.data.rows[0].xmzt;
-							this.xmmc = data.data.rows[0].xmmc;
-							this.xmbh = data.data.rows[0].xmbh;
-							this.queryResponsibleProduct(data.data.rows[0].xmbh);
-						}
-					}
-				})
-	}
-},
-watch: {
-	show() {
-		this.visible = this.show;
-		if (this.show) {
-			this.isJZuser = sessionStorage.getItem('isJZuser');
-			this.$nextTick(() => {
-				$("#summernote").summernote({
-					dialogsInBody: true,
-					placeholder: "请输入内容",
-					focus: true,
-					height: 200,
-					width: 100 + "%",
-					minHeight: 200,
-					lang: "zh-CN",
-					toolbar: [
-						["style", ["bold", "italic", "underline", "clear"]],
-						["font", ["strikethrough", "superscript", "subscript"]],
-						["fontsize", ["fontsize"]],
-						["color", ["color"]],
-						["para", ["ul", "ol", "paragraph"]],
-						["height", ["height"]],
-						["picture"],
-						["link", ["linkDialogShow", "unlink"]]
-					]
-				});
-			});
-			showQuestionCondition().then(({
-				data
-			}) => {
-				//提问展示
-				this.showCondition = data.data;
-			});
+      // 选择crowd业务线
+      handleChangeCrowdYwx(val) {
+        this.crowdywxList.forEach(ele => {
+          if (ele.lbdm == val) {
+            this.demandData.crowdywxmc = ele.lbmc;
+          }
+        })
+        // 获取产品
+        this.getCrowdCp(val);
+      },
 
-			this.fileList = [];
-			this.fileData = [];
-			this.filesData = [];
+      // 选择crowd产品
+      handleChangeCrowdCp(val) {
+        this.crowdcpList.forEach(ele => {
+          if (ele.lbdm == val) {
+            this.demandData.crowdcpmc = ele.lbmc;
+          }
+        })
+      },
 
-		}else{
-			this.isInnerItem = false;
-		}
-	}
-}
-};
+
+      // 添加项目
+      handleEdit(data) {
+        this.xmzt = data.xmzt;
+        this.demandData.xmbh = data.xmbh;
+        this.demandData.xmmc = data.xmmc;
+        this.queryProjectParticipant();
+        this.dialogdemandVisible = false;
+      },
+      // 选择关联需求
+      handleChooseDemand(data) {
+        this.demandData.glxqWid = data.wid;
+      },
+
+      //选择项目
+      adddemandtItem() {
+        this.dialogdemandVisible = true;
+      },
+      // 选择需求
+      handleRelaseDemand() {
+        this.demandListVisible = true;
+      },
+
+      //提交需求
+      handleCommit() {
+        this.demandData.nr = $("#summernote").summernote("code");
+        if(!this.valiDate()) return;
+        this.$post(this.API.submitDemand,this.demandData).then(res=>{
+          if(res.state == 'success'){
+            this.$message({message:'提交成功',type:'success'});
+            this.demandData = {};
+            this.xmzt = '';
+            this.demandData.cpbjbh = '';
+            this.demandData.teacherData = '';
+            $("#summernote").summernote("code",'');
+            this.isClearFile = !this.isClearFile;
+            this.visible = false;
+            this.$emit('handleCommitDemand','')
+          }else{
+            this.$message({message:res.msg,type:'warning'});
+          }
+        })
+      },
+
+      // 获取项目对应的产品
+      queryDemandProductTree() {
+        this.xmcpList = [];
+        this.$get(this.API.demandProductTree, {}).then(res => {
+            if (res.state == 'success') {
+              this.options = res.data;
+            } else {}
+          }),
+          // 获取业务线
+          this.$get(this.API.getCrowdYwx, {}).then(res => {
+            if (res.state == 'success') {
+              this.crowdywxList = res.data;
+            }
+        });
+      },
+
+      // 获取产品
+      getCrowdCp(ywxbm) {
+        this.$get(this.API.getCrowdCp, {
+          ywxbm: ywxbm
+        }).then(res => {
+          if (res.state == 'success') {
+            this.crowdcpList = res.data;
+          }
+        });
+      },
+      // 获取学校老师
+      queryProjectParticipant() {
+        this.$get(this.API.queryProjectParticipant, {
+          xmbh: this.demandData.xmbh,
+          dwlx: 1
+        }).then(res => {
+          if (res.state == 'success') {
+            this.tclsList = res.data;
+          } else {}
+        })
+      },
+
+
+      // 获取项目
+      getProjects() {
+        getProjects({
+          curPage: 1,
+          pageSize: 2,
+          keyword: "",
+          xmlb: "",
+          sfgx: "",
+          xmzt: "1,2,3",
+          pl: ""
+        }).then(({
+          data
+        }) => {
+          if (data.state == "success") {
+            if (data.data.records == 1 && data.data.rows[0].xmzt != '过保') {
+              this.xmzt = data.data.rows[0].xmzt;
+              this.xmmc = data.data.rows[0].xmmc;
+              this.xmbh = data.data.rows[0].xmbh;
+            }
+          }
+        })
+      },
+
+      valiDate(){
+        if(!this.demandData.xmbh){
+          this.$message({message:'请选择项目编号',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.xqfl){
+          this.$message({message:'请选择需求分类',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.teacherData){
+          this.$message({message:'请选择提出老师',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.cpbjbh ){
+          this.$message({message:'请选择产品',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.crowdywxbh){
+          this.$message({message:'请选择CROWD业务线',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.crowdcpbh){
+          this.$message({message:'请选择CROWD产品',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.qwsjwcrq){
+          this.$message({message:'请选择期望设计完成日期',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.qwkfjfrq){
+          this.$message({message:'请选择期望开发交付日期',type:'warning'})
+          return false;
+        }
+        if(this.demandData.xqfl == 3 && !this.demandData.glxqWid){
+          this.$message({message:'请选择关联的需求',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.xqfjwid){
+          this.$message({message:'请上传附件',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.bt){
+          this.$message({message:'请填写需求标题',type:'warning'})
+          return false;
+        }
+        if(!this.demandData.nr || this.demandData.nr == "<p><br></p>"){
+          this.$message({message:'请填写需求内容',type:'warning'})
+          return false;
+        }
+        return true;
+      }
+    },
+    watch: {
+      show() {
+        this.visible = this.show;
+        if (this.show) {
+          this.$nextTick(() => {
+            $("#summernote").summernote({
+              dialogsInBody: true,
+              placeholder: "请输入内容",
+              focus: true,
+              height: 200,
+              width: 100 + "%",
+              minHeight: 200,
+              lang: "zh-CN",
+              toolbar: [
+                ["style", ["bold", "italic", "underline", "clear"]],
+                ["font", ["strikethrough", "superscript", "subscript"]],
+                ["fontsize", ["fontsize"]],
+                ["color", ["color"]],
+                ["para", ["ul", "ol", "paragraph"]],
+                ["height", ["height"]],
+                ["picture"],
+                ["link", ["linkDialogShow", "unlink"]]
+              ]
+            });
+          });
+
+          //获取需求分类
+          if (!getSession('DemandType')) {
+            getMenu('DemandType', this.xqflList); //获取需求分类
+          } else {
+            this.xqflList = getSession('DemandType');
+          }
+
+          this.queryDemandProductTree();
+
+        } else {
+
+        }
+      }
+    }
+  };
 </script>
 <style scoped>
-.Question {
-	padding: 10px 0;
-}
+  .demand {
+    padding: 10px 0;
+  }
 
-div.el-form-item {
-	margin-bottom: 8px !important;
-}
+  div.el-form-item {
+    margin-bottom: 8px !important;
+  }
 
-.question-textarea {
-	width: 950px;
-	margin: 0 auto;
-}
+  .demand-textarea {
+    width: 950px;
+    margin: 0 auto;
+  }
 
-.question-textarea > p {
-	width: 125px;
-	text-align: right;
-	padding-right: 12px;
-	font-weight: 700;
-}
+  .demand-textarea>p {
+    width: 125px;
+    text-align: right;
+    padding-right: 12px;
+    font-weight: 700;
+  }
 
-.question-textarea > p::before {
-	content: '*';
-	color: #f56c6c;
-	margin-right: 4px;
-}
+  .demand-textarea>p::before {
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+  }
 </style>

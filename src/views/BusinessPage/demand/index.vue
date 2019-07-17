@@ -20,9 +20,9 @@
 				<div v-show="queryLJshow">
 					<div class="mg-12">
 						<p class="query-title">需求分类:</p>
-						<p class="query-list">
-							<span data-type="" :class="{ 'bg-active': filterData.xqfl == '' }">全部</span>
-							<span v-for="(xqfl, index) in xqflList" :data-type="xqfl.label" :key="index" :class="{ 'bg-active': filterData.wtfl == xqfl.label }">
+						<p class="query-list" >
+							<span  :class="{ 'bg-active': filterData.xqfl == '' }" @click="handleChangeXqfl('')">全部</span>
+							<span v-for="(xqfl, index) in xqflList" @click="handleChangeXqfl(xqfl.label)" :key="index" :class="{ 'bg-active': filterData.xqfl == xqfl.label }">
 								{{ xqfl.mc }}
 							</span>
 						</p>
@@ -30,36 +30,36 @@
 					<div>
 						<p class="query-title">查询状态:</p>
 						<p class="query-list">
-							<span data-type="" :class="{ 'bg-active': filterData.xqfl == '' }">全部</span>
-							<span v-for="(xqfl, index) in xqflList" :data-type="xqfl.label" :key="index" :class="{ 'bg-active': filterData.wtfl == xqfl.label }">
-								{{ xqfl.mc }}
+              <span  :class="{ 'bg-active': filterData.cxzt == '' }" @click="handleChangeCxzt('')">全部</span>
+							<span v-for="(cxzt, index) in cxztList" @click="handleChangeCxzt(cxzt.label)" :key="index" :class="{ 'bg-active': filterData.cxzt == cxzt.label }">
+								{{ cxzt.mc }}
 							</span>
 						</p>
 					</div>
-					<div class="mg-12">
+					<div class="mg-12" >
 						<p class="query-title">需求类型:</p>
 						<p class="query-list">
-							<span data-type="" :class="{ 'bg-active': filterData.xqfl == '' }">全部</span>
-							<span v-for="(xqfl, index) in xqflList" :data-type="xqfl.label" :key="index" :class="{ 'bg-active': filterData.wtfl == xqfl.label }">
-								{{ xqfl.mc }}
+              <span  :class="{ 'bg-active': filterData.xqlx == '' }" @click="handleChangeXqlx('')">全部</span>
+							<span v-for="(xqlx, index) in xqlxList" @click="handleChangeXqlx(xqlx.label)" :key="index" :class="{ 'bg-active': filterData.xqlx == xqlx.label }">
+								{{ xqlx.mc }}
 							</span>
 						</p>
 					</div>
-					<div>
+					<div flex>
 						<p class="query-title">产品:</p>
-						<p class="query-list">
-							<span data-type="" :class="{ 'bg-active': filterData.xqfl == '' }">全部</span>
-							<span v-for="(xqfl, index) in xqflList" :data-type="xqfl.label" :key="index" :class="{ 'bg-active': filterData.wtfl == xqfl.label }">
-								{{ xqfl.mc }}
+						<p class="query-list"  style="width:90%">
+							<span :class="{ 'bg-active': filterData.cp == '' }" @click="handleChangeCp('')">全部</span>
+							<span v-for="(cp, index) in cplist" @click="handleChangeCp(cp.label)" :key="index" :class="{ 'bg-active': filterData.cp == cp.label }">
+								{{ cp.mc }}
 							</span>
 						</p>
 					</div>
 					<div flex class="mg-12">
 						<p class="query-title">区域工程:</p>
 						<p class="query-list" style="width:90%;">
-							<span data-type="" :class="{ 'bg-active': filterData.gczd == '' }">全部</span>
-							<span v-for="(gcqy, index) in gczdList" :data-type="gcqy.label" :key="index" :class="{ 'bg-active': filterData.gczd == gcqy.label }">
-								{{ gcqy.mc }}
+							<span  :class="{ 'bg-active': filterData.gczd == '' }" @click="handleChangeGczd('')">全部</span>
+							<span v-for="(gczd, index) in gczdList" @click="handleChangeGczd(gczd.label)" :key="index" :class="{ 'bg-active': filterData.gczd == gczd.label }">
+								{{ gczd.mc }}
 							</span>
 						</p>
 					</div>
@@ -69,46 +69,51 @@
 			<div class="pannelPaddingBg-10 mg-12">
 				<ul class="demand-list">
 					<li flex v-for="(item, index) in dataList" :key="index">
-						<div class="demand-list_bgimg" center>学工</div>
+						<div class="demand-list_bgimg" center>{{item.cpjc}}学工</div>
 						<div class="demand-list-info" flex-column spacebetween>
-							<a href="#">背景大学</a>
+							<a href="#/demand/detail?id=11111111" target="_blank">{{item.bt}}</a>
 							<p>
-								2020-20-20 &#x3000; 张三 &#x3000;&#x3000;
+								{{item.tcsj}} &#x3000; {{item.tcrxm}} &#x3000;&#x3000;
 								<span class="title">需求编号：</span>
-								196646546 &#x3000;&#x3000;
-								<el-tag key="1" type="success" effect="plain" size="mini">需求设计-分配开发</el-tag>
+								{{item.xqbh}} &#x3000;&#x3000;
+								<el-tag key="1" type="success" effect="plain" size="mini">{{item.dqlcmc}}</el-tag>
 							</p>
 							<p>
-								<span class="title">提出人：</span>
-								王健&#x3000;华南师范大学 &#x3000;&#x3000;
+								<span class="title">提出老师：</span>
+								{{item.tcls}}&#x3000;{{item.lsdw}} &#x3000;&#x3000;
 								<span class="title">类型：</span>
-								需求&#x3000;&#x3000;
+								{{item.xqfl}}&#x3000;&#x3000;
 								<span class="title">产品：</span>
-								奖学金
+								{{item.cpbjmc}}
 							</p>
 						</div>
 					</li>
 				</ul>
 				<el-pagination
+          v-if="!!dataList.length"
 					@current-change="handleCurrentChange"
 					:current-page.sync="currentPage"
 					:page-size="pageSize"
 					layout="total, prev, pager, next"
 					:total="records"
 				></el-pagination>
+
+        <div v-if="!dataList.length">
+          <emptyContent></emptyContent>
+        </div>
 			</div>
 		</div>
 		<div class="pannelPaddingBg-10 guid pull-right" >
 			<h5>需求工作指南</h5>
-			<div>
-				<step></step>
+			<div >
+				<step :list="stepDatas"></step>
 			</div>
 			<section text-center>
-				<el-button type="small" @click="handleSendDemand">我要提需求</el-button>
+				<el-button size="small" @click="handleSendDemand" type="primary">我要提需求</el-button>
 			</section>
 		</div>
-		
-		<xqDialog :show.sync="xqShow"></xqDialog>
+
+		<xqDialog :show.sync="xqShow" @handleCommitDemand="handleCommitDemand"></xqDialog>
 	</div>
 </template>
 
@@ -116,44 +121,166 @@
 import { getMenu, getSession } from '@/utils/util.js';
 import step from '@/components/demand/step';
 import xqDialog from '@/views/BusinessPage/demand/xq-dialog';
+import emptyContent from '@/components/BusinessPage/emptyContent';
 export default {
 	data() {
 		return {
 			xqShow:false,
 			xqflList: [], //需求分类
 			gczdList: [], //区域工程
+      cxztList:[],//查询状态
+      xqlxList:[],//需求类型
+			cplist:[],//产品
 			queryLJshow: true,
 			currentPage: 1,
 			pageSize: 10,
 			records: 0,
 			dataList: [{}, {}],
+      stepDatas:[],//流程
 			filterData: {
-				xqfl: '',
+				xqfl: '', //需求分类
+        cxzt:'',//查询状态
 				gczd: '',
+        xqlx:'',//需求类型
+				cp:'',
 				keyword: ''
 			}
 		};
 	},
 	mounted() {
+    //获取工程战队
 		if (!getSession('gczd')) {
-			getMenu('gczd', this.gczdList, true); //获取工程战队
+			getMenu('gczd', this.gczdList, true);
 		} else {
 			this.gczdList = getSession('gczd');
 		}
+    //获取产品
+		 if (
+		  !getSession("cp")
+		) {
+		  getMenu("cp", this.cplist, true);
+		} else {
+		  this.cplist = getSession("cp");
+		}
+
+    //获取需求分类
+    if (!getSession('DemandRelatedType')) {
+    	getMenu('DemandRelatedType', this.xqflList);
+    } else {
+    	this.xqflList = getSession('DemandRelatedType');
+    }
+
+    //获取需求状态
+    if (!getSession('DemandStatus')) {
+    	getMenu('DemandStatus', this.cxztList);
+    } else {
+    	this.cxztList = getSession('DemandStatus');
+    }
+
+    //获取需求类型
+    if (!getSession('DemandType')) {
+    	getMenu('DemandType', this.xqlxList);
+    } else {
+    	this.xqlxList = getSession('DemandType');
+    }
+
+    this.queryProcessTemplate();
+    this.queryPagesDemand();
 	},
 	methods: {
+
+    // 提需求
 		handleSendDemand(){
 			this.xqShow = true;
 		},
+
+    // 需求提报成功
+    handleCommitDemand(){
+      this.queryPagesDemand();
+    },
+
+    // 筛选条件显示
 		handleQueryShow() {
 			this.queryLJshow = !this.queryLJshow;
 		},
+    //  查询
+		handleQuery() {
+      this.currentPage = 1;
+      // this.queryPagesDemand();
+    },
 
-		handleQuery() {},
+    // 切换页数
+		handleCurrentChange(data) {
+      this.currentPage = data;
+      // this.queryPagesDemand();
+    },
 
-		handleCurrentChange() {}
+    // 需求分类
+    handleChangeXqfl(data){
+      this.filterData.xqfl = data;
+      this.currentPage = 1;
+      // this.queryPagesDemand();
+    },
+    // 查询状态
+    handleChangeCxzt(data){
+      this.filterData.cxzt = data;
+      this.currentPage = 1;
+      // this.queryPagesDemand();
+    },
+    // 需求类型
+    handleChangeXqlx(data){
+      this.filterData.xqlx = data;
+      this.currentPage = 1;
+      // this.queryPagesDemand();
+    },
+    // 产品
+    handleChangeCp(data){
+      this.filterData.cp = data;
+      this.currentPage = 1;
+      this.queryPagesDemand();
+    },
+    // 工程战队
+    handleChangeGczd(data){
+      this.filterData.gczd = data;
+      this.currentPage = 1;
+      this.queryPagesDemand();
+    },
+
+    //  查询需求列表
+    queryPagesDemand(){
+      this.$get(this.API.queryPageDemands,{
+        curPage:this.currentPage,
+        pageSize:this.pageSize,
+        xqxglx:this.filterData.xqfl,
+        xqlx:this.filterData.xqlx,
+        qygc:this.filterData.gczd,
+        cpbh:this.filterData.cp,
+        keyword:this.filterData.keyword
+      }).then(res=>{
+        if(res.state == 'success'){
+          if(!!res.data.rows){
+            this.dataList = res.data.rows
+          }else{
+            this.dataList = [];
+          }
+          this.records = res.data.records;
+        }else{
+          this.$message({message:res.msg,type:'error'});
+        }
+      })
+    },
+    // 获取流程模板
+    queryProcessTemplate(){
+      this.$get(this.API.demandProcessTemplate,{zbwid:''}).then(res=>{
+        if(res.state == 'success'){
+          this.stepDatas = res.data;
+        }else{
+          this.$message({message:res.msg,type:'error'});
+        }
+      })
+    }
 	},
-	components: {step,xqDialog}
+	components: {step,xqDialog,emptyContent}
 };
 </script>
 
@@ -174,7 +301,7 @@ export default {
 		.demand-list_bgimg {
 			width: 114px;
 			height: 74px;
-			background: url('../../../../static/img/demand-bg.png') no-repeat;
+			background: #999;
 			color: #fff;
 			font-weight: 700;
 			font-size: 18px;
@@ -190,7 +317,7 @@ export default {
 			}
 		}
 	}
-	
+
 	.list{
 		width: 75%;
 	}
@@ -203,7 +330,7 @@ export default {
 			font-weight: 700 !important;
 		}
 		>div{
-			padding:20px 0 0 20px;
+			padding:20px 0 0 40px;
 		}
 	}
 }

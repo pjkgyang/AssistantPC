@@ -30,6 +30,8 @@ export function ylWtReportByCpx(obj){
             wtzt:obj.wtzt,
             gbStartDt:obj.gbStartDt||"",
             gbEndDt:obj.gbEndDt||"",
+            wtStart:obj.wtStart,
+            wtEnd:obj.wtEnd,
             keyword:obj.keyword
           }
     	})

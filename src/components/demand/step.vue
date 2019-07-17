@@ -3,8 +3,12 @@
         <ul v-if="list.length">
           <!-- :style="{'counter-reset':type=='process'?'step':'step ' + (list.length+1)}" -->
           <!-- 'active-1':process.flag == 1 -->
-            <li v-for="(process,index) in list" :key="index" 
-            :class="{'crowdBefore':!!process.index,'active':process.type == 1,'active-1':process.type != 1}"
+            <li v-for="(process,index) in list" :key="index"
+            :class="{'crowdBefore':!!process.index,'active':process.lx == 0,
+            'active-1':process.lx != 0 && process.lczt=='0',
+            'active-2':process.lx != 0 && process.lczt=='1',
+            'active-3':process.lx != 0 && process.lczt=='2'
+            }"
            >
                 <div >{{process.mc}}</div>
             </li>
@@ -49,27 +53,27 @@ export default {
       list-style-type: none;
       font-size: 0.9rem;
       position: relative;
-      padding: 0 0 20px 25px;
+      padding: 0 0 20px 30px;
       z-index: 2;
       color: #999;
       &::before {
         content:"";
         display: block;
         position: absolute;
-        left: 2px;
+        left: 3.8px;
         top: 0;
         // content: counter(step); /*设定计数器内容*/
         // counter-increment: step; /*计数器值递增*/
-        width: 15px;
-        height: 15px;
+        width: 12px;
+        height: 12px;
         background-color: #999;
-        line-height: 15px;
-        border-radius: 15px;
+        line-height: 12px;
+        border-radius: 12px;
         font-size: 12px;
         color: #fff;
         text-align: center;
         margin: 0 auto 8px auto;
-        z-index: 3; 
+        z-index: 3;
       }
       &::after {
         content: "";
@@ -78,8 +82,8 @@ export default {
         background-color: #999;
         position: absolute;
         left: 9px;
-        top: 14px;
-        z-index: 2; 
+        top: 12px;
+        z-index: 2;
       }
       .crowd{
            span:nth-child(1){
@@ -89,9 +93,11 @@ export default {
     }
   }
 
-  
+
   li.active{
       color: #169BD5;
+      font-weight: 700;
+      font-size: 14px;
   }
   ul li.active::before{
     width: 20px;
@@ -105,6 +111,23 @@ export default {
     content: '';
     counter-increment:0;
   }
+
+  ul li.active-2{
+    color: #f00;
+  }
+  ul li.active-2::before{
+    color: #f00;
+    background-color: #f00;
+  }
+
+  ul li.active-3{
+    color: #67c23a;
+  }
+  ul li.active-3::before{
+    color: #67c23a;
+    background-color: #67c23a;
+  }
+
 
 
   // li.active{
