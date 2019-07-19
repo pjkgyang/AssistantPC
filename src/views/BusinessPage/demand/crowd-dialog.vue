@@ -1,53 +1,23 @@
 <template>
   <div>
-    <el-dialog title="提报crowd任务" width="1000px" top="30px" :visible.sync="visible" :append-to-body="true"
+    <el-dialog :title="Type == 'lstd'?'绿色通道':'提报crowd任务'" width="1000px" top="30px" :visible.sync="visible" :append-to-body="true"
       :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
       <div class="pd-10">
         <el-form :model="crowdxqData" :rules="rules" ref="crowdxqData" class="demo-ruleForm">
-          <el-form-item>
-            <div class="send-crowd_topic">分配开发工程师</div>
-          </el-form-item>
-
-          <el-form-item label=""  v-if="Type == 'kfgcs'">
-            <el-select size="mini" v-model="kfgcsData" multiple filterable remote reserve-keyword placeholder="请选择开发工程师(可搜索)"
-              :remote-method="remoteMethod" :loading="loading" style="width:100%;">
-              <el-option v-for="item in kfgcsList" :key="item.uid" :label="item.nickName" :value="item.uid">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="" v-if="Type == 'kfgcs'">
-            <div id="summernoteT"></div>
-          </el-form-item>
-
-          <el-form-item label="">
-            <div class="send-crowd_topic">发布需求流程</div>
-          </el-form-item>
-
-          <el-form-item label="" prop="rwfl">
-            <el-select size="mini" v-model="crowdxqData.rwfl" placeholder="请选择需求分类" style="width: 100%;">
-              <el-option v-for="item in CrowdDemandList" :key="item.label" :label="item.mc" :value="item.label"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item>
             <div class="send-crowd_topic">请完善需求的基本信息</div>
           </el-form-item>
           <el-form-item prop="rwmc">
             <el-input size="mini" v-model="crowdxqData.rwmc" placeholder="一个清晰的名字能帮助开发者快速的了解需求"></el-input>
           </el-form-item>
-          <el-form-item>
-            <el-select size="mini" v-model="crowdxqData.rwlx" placeholder="请选择需求类型" style="width: 100%;">
-              <el-option label="--- 请选择需求类型 ---" value=""></el-option>
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
+
+          <el-form-item >
             <el-select size="mini" v-model="crowdxqData.sfjj" placeholder="请选择需求紧急类型" style="width: 100%;">
               <el-option label="紧急" value="1"></el-option>
               <el-option label="不紧急" value="0"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item>
+          <el-form-item >
             <el-select size="mini" v-model="crowdxqData.sfxyzc" placeholder="请选择是否需要驻场" style="width: 100%;">
               <el-option label="需要驻场" value="1"></el-option>
               <el-option label="不需要驻场" value="0"></el-option>
@@ -66,14 +36,14 @@
             <el-input type="textarea" placeholder="请输入需求描述" v-model="crowdxqData.xqms"></el-input>
           </el-form-item>
 
-          <el-form-item>
+    <!--      <el-form-item >
             <uploadFile :isCrowd="true" @handleUploadFile="handleUploadFile"></uploadFile>
-          </el-form-item>
+          </el-form-item> -->
 
-          <el-form-item>
+          <el-form-item >
             <div class="send-crowd_topic">请选择需求客户/学校/个人的期望交付日期，该日期仅作数据记录使用</div>
           </el-form-item>
-          <el-form-item>
+          <el-form-item >
             <el-date-picker :picker-options="pickerJfrqDateBefore" value-format="yyyy-MM-dd" size="mini" type="date"
               placeholder="请输入学校或个人期望交付日期，仅作数据记录使用 " v-model="crowdxqData.qwjfrq" style="width: 100%;"></el-date-picker>
           </el-form-item>
@@ -92,20 +62,7 @@
             <el-date-picker @change="handleChoosejfDate2" value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore"
               size="mini" type="date" placeholder="请输入预期交付日期日期，中标者将严格按照该日期交付需求相关信息" v-model="crowdxqData.jfrq" style="width: 100%;"></el-date-picker>
           </el-form-item>
-          <el-form-item>
-            <div class="send-crowd_topic">请选择需求的相关项目信息</div>
-          </el-form-item>
-          <el-form-item>
-            <el-select size="mini" v-model="crowdxqData.cpxbh" filterable @change="handleSeleteYwx" placeholder="请选择业务线信息(可搜索)"
-              style="width: 100%;">
-              <el-option v-for="(item, index) in CrowdYwx" :key="index" :label="item.lbmc" :value="item.lbdm"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-select size="mini" filterable v-model="crowdxqData.cpbh" placeholder="请选择产品信息(可搜索)" style="width: 100%;">
-              <el-option v-for="(item, index) in CrowdCp" :key="index" :label="item.lbmc" :value="item.lbdm"></el-option>
-            </el-select>
-          </el-form-item>
+
           <el-form-item text-right>
             <el-button size="mini" type="primary" @click="sendSubmitForm('crowdxqData')">提交</el-button>
           </el-form-item>
@@ -140,7 +97,7 @@
 </template>
 
 <script>
-  import uploadFile from '@/components/BusinessPage/upload.vue';
+  // import uploadFile from '@/components/BusinessPage/upload.vue';
   import {
     getMenu,
     getSession
@@ -166,9 +123,6 @@
         },
         loading:false,//开发工程师查询loading
         kfgcsData: [], //开发工程师
-        CrowdDemandList: [], //需求分类
-        CrowdYwx: [], //业务线
-        CrowdCp: [], //产品
         kfgcsList:[],//开发工程师列表
         options: [{
             value: '1',
@@ -185,11 +139,6 @@
             required: true,
             message: '请输入基本信息',
             trigger: 'blur'
-          }],
-          rwfl: [{
-            required: true,
-            message: '请选择需求分类',
-            trigger: 'change'
           }],
           xmysje: [{
             validator: validatePass,
@@ -220,9 +169,7 @@
           }]
         },
         crowdxqData: {
-          rwfl: '', //需求分类
           rwmc: '', //需求基本信息
-          rwlx: '', //需求类型
           sfjj: '0', //需求紧急
           sfxyzc: '0', //是否需要驻场
           xmysje: 0,
@@ -231,10 +178,8 @@
           zbjzrq: '',
           jfrq: '',
           qwjfrq: '',
-          cpxbh: '', //业务线信息
-          cpbh: '',
           xmbh: '',
-          fjid: ''
+          fjid: '',
         },
       }
     },
@@ -242,10 +187,7 @@
       handleClose() {
         this.visible = false
       },
-      // 上传附件
-      handleUploadFile(data) {
-        this.crowdxqData.fjid = data.join(',');
-      },
+
       // 选择业务线
       handleSeleteYwx(val) {
         this.getCrowdCp(val);
@@ -371,41 +313,12 @@
       show(n, o) {
         this.visible = this.show;
         if (this.show) {
-          this.$nextTick(() => {
-            $("#summernoteT").summernote({
-              dialogsInBody: true,
-              placeholder: "请输入内容",
-              focus: true,
-              height: 200,
-              width: 100+'%',
-              minHeight: 200,
-              lang: "zh-CN",
-              toolbar: [
-                ["style", ["bold", "italic", "underline", "clear"]],
-                ["font", ["strikethrough", "superscript", "subscript"]],
-                ["fontsize", ["fontsize"]],
-                ["color", ["color"]],
-                ["para", ["ul", "ol", "paragraph"]],
-                ["height", ["height"]],
-                ["picture"],
-                ["link", ["linkDialogShow", "unlink"]]
-              ]
-            });
-          });
-
-          if (!getSession('CrowdDemandType')) {
-            getMenu('CrowdDemandType', this.CrowdDemandList); //获取需求分类
-          } else {
-            this.CrowdDemandList = getSession('CrowdDemandType');
-          }
           this.getCrowdYwx();
           this.queryUser();
         }
       }
     },
-    components: {
-      uploadFile
-    }
+    components: {}
   }
 </script>
 

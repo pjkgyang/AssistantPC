@@ -321,18 +321,20 @@ export default {
   serviceObjects: window.baseurl + 'serviceitem/serviceObjects.do', // 获取服务对象下拉列表
   serviceCatalogs: window.baseurl + 'serviceitem/serviceCatalogs.do', // 获取服务类别下拉列表
   saveServiceItem: window.baseurl + 'serviceitem/saveServiceItem.do', // 保存服务事项
-  updateServiceItemPlan: window.baseurl + 'serviceitem/updateServiceItemPlan.do', // 编辑实施计划
+  saveServiceItemPlan: window.baseurl + 'serviceitem/saveServiceItemPlan.do', // 编辑实施计划
 
   getServiceItemPlan: window.baseurl + 'serviceitem/getServiceItemPlan.do', // 获取服务事项计划
   getServiceItem: window.baseurl + 'serviceitem/getServiceItem.do', // 获取服务事项
 
   pageServiceItem: window.baseurl + 'serviceitem/pageServiceItem.do', // 服务事项分页列表
+  pageServiceItemPlan: window.baseurl + 'serviceitem/pageServiceItemPlan.do', // 获取服务事项计划
 
   addUserDept: window.baseurl + 'serviceitem/addUserDept.do', // 添加部门关系
   userDeptChecked: window.baseurl + 'serviceitem/userDeptChecked.do', // 用户已关联部门编号
   serviceItemStat: window.baseurl + 'serviceitem/serviceItemStat.do', //  服务事项分析
 
   // 开发在线化  api/demandDvpt
+  queryDemand:window.baseurl + 'demandDvpt/queryDemand.do', // 获取详情
   demandProcessTemplate: window.baseurl + 'demandDvpt/demandProcessTemplate.do', //  需求流程模板
   demandProductTree: window.baseurl + 'demandDvpt/demandProductTree.do', //  产品树
   submitDemand: window.baseurl + 'demandDvpt/submitDemand.do', //  提报需求
@@ -345,6 +347,8 @@ export default {
   distributionDvpt: window.baseurl + 'demandDvpt/distributionDvpt.do', //  分配开发工程师
   openGreenChannel: window.baseurl + 'demandDvpt/openGreenChannel.do', //  开通绿色通道
   queryPageDemands: window.baseurl + 'demandDvpt/queryPageDemands.do', //  获取需求列表
-  exportDemands: window.baseurl + 'demandDvpt/exportDemands.do' //  导出需求列表
+  exportDemands: window.baseurl + 'demandDvpt/exportDemands.do' ,//  导出需求列表
+  candidateConfirmPersons: window.baseurl + 'demandDvpt/candidateConfirmPersons.do'//  获取确认老师数据
+
 
 }

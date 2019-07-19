@@ -322,10 +322,15 @@ export default new Router({
 					component: resolve => require(['@/views/BusinessPage/schoolServices/xxzzwh.vue'], resolve),
 				},
 				{
-					path: '/schoolseivice/implementationPlan',
-					name: 'schoolSeiviceSsjh',
-					component: resolve => require(['@/views/BusinessPage/schoolServices/ssjh.vue'], resolve),
+					path: '/schoolseivice/serviceitem',
+					name: 'schoolSeiviceSi',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/serviceitem.vue'], resolve),
 				},
+        {
+        	path: '/schoolseivice/implementationPlan',
+        	name: 'schoolSeiviceImplan',
+        	component: resolve => require(['@/views/BusinessPage/schoolServices/implementationPlan.vue'], resolve),
+        },
 				{
 					path: '/schoolseivice/serviceStatistic',
 					name: 'schoolSeiviceFwsxtj',

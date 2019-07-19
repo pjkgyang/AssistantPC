@@ -13,7 +13,7 @@
 								<span class="title">需求编号：</span>
 								{{detailInfo.xqbh}} &#x3000;&#x3000;
 								<span class="title">关联需求编号：</span>
-								{{detailInfo.glxqbh}} &#x3000;&#x3000;
+								{{!detailInfo.glxqbh?'无':detailInfo.glxqbh}} &#x3000;&#x3000;
 							</p>
 							<p>
 								<span class="title">设计编号：</span>
@@ -23,15 +23,17 @@
 							</p>
 							<p>
 								<span class="title">提出老师：</span>
-								{{detailInfo.tcls}}&#x3000;&#x3000;{{detailInfo.lsdw}}
+								{{detailInfo.tcls}} ( {{detailInfo.lsdw}} )&#x3000;&#x3000;
 								<span class="title">需求类型：</span>
-								{{detailInfo.xqfl}}&#x3000;&#x3000;
+								{{detailInfo.xqfl_display}}&#x3000;&#x3000;
 								<span class="title">责任人：</span>
-								{{detailInfo.dqzrr}}
+								{{!detailInfo.dqzrr?'无':detailInfo.dqzrr}}
 							</p>
 							<p>
 								<span class="title">所属项目：</span>
-								{{detailInfo.xmbh}} {{detailInfo.xmmc}}
+								{{detailInfo.xmbh}} {{detailInfo.xmmc}}&#x3000;&#x3000;
+                <span class="title">产品分类：</span>
+                {{detailInfo.cpmc }}
 							</p>
 							<p>
 								<span class="title">期望设计完成日期：</span>
@@ -40,22 +42,27 @@
                 {{detailInfo.qwkfjfrq}} &#x3000;&#x3000;
 								<span class="title">模块：</span>
 								{{detailInfo.cpbjmc}} &#x3000;&#x3000;
-								<span class="title">产品分类：</span>
-								{{detailInfo.cpmc }} &#x3000;&#x3000;
+
 							</p>
 							<p>
 								<span class="title">需求文档：</span>
-                <a href="#">{{detailInfo.xqfjmc}} {{detailInfo.xqfjwid}}</a> &#x3000;&#x3000;
-								<span class="title">原型设计：</span>
-                 <a href="#">{{detailInfo.yxfjmc}} {{detailInfo.yxfjwid}}</a> &#x3000;&#x3000;
-								<span class="title">开发包：</span>
-								<a href="#">{{detailInfo.kffjmc}} {{detailInfo.kffjwid}}</a> &#x3000;&#x3000;
-							</p>
+                <a title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.xqfjwid" target="_blank">{{detailInfo.xqfjmc}}</a> &#x3000;&#x3000;
+                <span>
+                  <span class="title">原型设计：</span>
+                  <a v-if="!!detailInfo.yxfjwid" title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.yxfjwid" target="_blank">{{detailInfo.yxfjmc}}</a>
+                  <span v-if="!detailInfo.yxfjwid">无</span>
+                </span>&#x3000;&#x3000;
+                <span>
+                  <span class="title">开发包：</span>
+                  <a v-if="!!detailInfo.kffjwid" title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.kffjwid" target="_blank">{{detailInfo.kffjmc}}</a>
+                  <span v-if="!detailInfo.kffjwid">无</span>
+                </span>
+              </p>
 						</div>
 				</div>
 				<!-- 内容 -->
 				<div class="detail-content">
-					<div class="content" v-html="detailInfo.content"></div>
+					<div class="content" v-html="detailInfo.nr"></div>
 					<ul>
 						<li colcenter v-for="(reply,index) in replyData" :key="index">
 							<div class="reply-type"><span>{{reply.hflxmc}}</span></div>
@@ -73,26 +80,23 @@
 					</div>
           <!-- 按钮组 -->
 					<div text-right>
-            <el-button size="mini" @click="handleBtnOprate('hf')">回复</el-button>
-            <el-button size="mini" @click="handleBtnOprate('kfgcs')">分配开发工程师</el-button>
-						<el-button size="mini" @click="handleBtnOprate('xqqr')">需求确认</el-button>
-
-
+            <el-button size="mini" type="primary" v-for="(btn,index) in btnData" :key="index" @click="handleBtnOprate(btn)">{{btn.btnabb}}</el-button>
 					</div>
 			   </div>
 		</div>
 		<div class="pannelPaddingBg-10 guid pull-right" >
 			<h5>需求工作指南</h5>
 			<div>
-				<step :list="stepData"></step>
+				<step  :list="stepData"></step>
 			</div>
 		</div>
-
-		<xqqrDialog :show.sync="xqqrShow" @handleClickSure="handleCommitQrxq"></xqqrDialog>
-		<yzDialog :show.sync="yzShow" @handleClickSure="handleClickYzxq"></yzDialog>
-		<gbxqDialog :show.sync="gbxqShow"></gbxqDialog>
-    <crowdDialog :show.sync="crowdShow" :Type="curType"></crowdDialog>
-    <bhDialog :show.sync="bhShow"></bhDialog>
+		<xqqrDialog :show.sync="xqqrShow" @handleClickSure="handleCommitQrxq"></xqqrDialog>    <!-- 需求确认 -->
+		<yzDialog :show.sync="yzShow" :xmbh="detailInfo.xmbh" @handleClickSure="handleClickYzxq"></yzDialog>  <!-- 需求验证 -->
+		<gbxqDialog :show.sync="gbxqShow" @handleClickSure="handleClickGbxq"></gbxqDialog> <!-- 关闭需求 -->
+    <crowdDialog :show.sync="crowdShow" :Type="curType"></crowdDialog>  <!--  crowd -->
+    <bhDialog :show.sync="bhShow"   @handleClickSure="handleRejct"></bhDialog> <!-- 驳回 -->
+    <xqtbDialog :show.sync="xqtbShow" :xmbh="detailInfo.xmbh"></xqtbDialog> <!-- 驳回  -->
+    <fpgcsDialog  :show.sync="fpgcsShow"></fpgcsDialog> <!-- 分配工程师  -->
 	</div>
 </template>
 
@@ -103,6 +107,8 @@ import yzDialog from '@/views/BusinessPage/demand/yz-dialog';
 import gbxqDialog from '@/views/BusinessPage/demand/gbxq-dialog';
 import crowdDialog from '@/views/BusinessPage/demand/crowd-dialog';
 import bhDialog from '@/components/dialog/smDialog';
+import xqtbDialog from '@/views/BusinessPage/demand/xqtb-dialog';
+import fpgcsDialog from '@/views/BusinessPage/demand/fpgcs-dialog';
 
 export default {
 	data() {
@@ -112,34 +118,51 @@ export default {
 			yzShow:false,//需求验证
 			gbxqShow:false,//关闭需求
       crowdShow:false,//crowd dialog
-      curType:'',
+      xqtbShow:false,//需求提报
+      fpgcsShow:false,//分配工程师
+      zbwid:'',
+      curType:'', //crowd 当前类型
       stepData:[],//流程节点
-      btnData:[],//按钮组
-      detailInfo:{
-        content:'<div class="a-info" style="line-height: 20px; color: rgb(153, 153, 153); padding-top: 35px; font-family: &quot;\&quot;PingFang SC\&quot;,Arial,\&quot;Microsoft yahei\&quot;,simsun,\&quot;sans-serif\&quot;&quot;; background-color: rgb(249, 249, 249);"><span class="time" style="margin-right: 20px;">2019-07-15 14:09</span>&nbsp;<span class="original" style="margin-right: 20px;"></span><span class="tag" style="float: right;"></span></div><div class="a-con" style="color: rgb(25, 25, 25); font-size: 16px; padding-top: 5px; overflow: hidden; line-height: 26px; position: relative; font-family: &quot;\&quot;PingFang SC\&quot;,Arial,\&quot;Microsoft yahei\&quot;,simsun,\&quot;sans-serif\&quot;&quot;; background-color: rgb(249, 249, 249);"><p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; word-break: break-all;"><img src="https://t1.huanqiucdn.cn/8ce8a8b95e312439756ad4e4153983f3.jpg" style="border-width: initial; border-style: none; max-width: 100%; display: block; height: auto; margin: 10px auto 20px;"></p><p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; word-break: break-all;">央视网消息（记者 徐辉）7月12日，应急管理部森林消防局直升机支队在黑龙江大庆隆重举行空中突击救援大队入营仪式，由黑龙江总队抽组的空中突击救援大队200名指战员进驻大庆。欢迎仪式上，全体指战员面对“中国消防救援”队旗，庄重宣誓。下一步，直升机支队将以此为契机大力开展空地协同训练，不断提高遂行多样化救援任务能力，切实担当起航空应急救援主力军、国家队的职责。（供图/黎伟）</p><p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; word-break: break-all;"><img src="https://t1.huanqiucdn.cn/c26784a814b01ea475dff4e47a52cb59.jpg" style="border-width: initial; border-style: none; max-width: 100%; display: block; height: auto; margin: 10px auto 20px;"></p><p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; word-break: break-all;">7月12日，应急管理部森林消防局直升机支队在黑龙江大庆隆重举行空中突击救援大队入营仪式，由黑龙江总队抽组的空中突击救援大队200名指战员进驻大庆。欢迎仪式上，全体指战员面对“中国消防救援”队旗，庄重宣誓。下一步，直升机支队将以此为契机大力开展空地协同训练，不断提高遂行多样化救援任务能力，切实担当起航空应急救援主力军、国家队的职责。（供图/黎伟）</p></div>'
-      },
+      btnData:[
+        {btnabb:'回复',btnid:'1'},
+        {btnabb:'受理',btnid:'2'},
+        {btnabb:'驳回',btnid:'3'},
+        {btnabb:'分配开发',btnid:'5'},
+        {btnabb:'催办',btnid:'4'},
+        {btnabb:'绿色通道',btnid:'6'},
+        {btnabb:'需求提报',btnid:'7'},
+        {btnabb:'需求确认',btnid:'8'},
+        {btnabb:'需求开发',btnid:'9'},
+        {btnabb:'完成验证',btnid:'11'},
+        {btnabb:'关闭需求',btnid:'12'}
+      ],//按钮组
+      btnInfo:{},
+
+      detailInfo:{},
 			replyData:[{
 				hfrxm:'张三',
 				hfsj:'2019-09-90',
 				hflxmc:'分配开发',
 				dqlcmc:'需求设计-分配开发',
-				nr:'<p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; font-size: 16px; word-break: break-all; color: rgb(25, 25, 25); font-family: &quot;\&quot;PingFang SC\&quot;,Arial,\&quot;Microsoft yahei\&quot;,simsun,\&quot;sans-serif\&quot;&quot;; background-color: rgb(249, 249, 249);"><img src="https://t1.huanqiucdn.cn/f55f255b738a8c58fce48e8686bb7348.jpg" style="border-width: initial; border-style: none; max-width: 100%; display: block; height: auto; margin: 10px auto 20px;"></p><p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; font-size: 16px; word-break: break-all; color: rgb(25, 25, 25); font-family: &quot;\&quot;PingFang SC\&quot;,Arial,\&quot;Microsoft yahei\&quot;,simsun,\&quot;sans-serif\&quot;&quot;; background-color: rgb(249, 249, 249);">7月12日，应急管理部森林消防局直升机支队在黑龙江大庆隆重举行空中突击救援大队入营仪式，由黑龙江总队抽组的空中突击救援大队200名指战员进驻大庆。欢迎仪式上，全体指战员面对“中国消防救援”队旗，庄重宣誓。下一步，直升机支队将以此为契机大力开展空地协同训练，不断提高遂行多样化救援任务能力，切实担当起航空应急救援主力军、国家队的职责。（供图/黎伟）</p>'
+        nr:'1111'
 			},{
 				hfrxm:'张三',
 				hfsj:'2019-09-90',
 				hflxmc:'分配开发',
 				dqlcmc:'需求设计-分配开发',
-				nr:'<p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; font-size: 16px; word-break: break-all; color: rgb(25, 25, 25); font-family: &quot;\&quot;PingFang SC\&quot;,Arial,\&quot;Microsoft yahei\&quot;,simsun,\&quot;sans-serif\&quot;&quot;; background-color: rgb(249, 249, 249);"><img src="https://t1.huanqiucdn.cn/e6028604c5383216a0b445206647951a.jpg" style="border-width: initial; border-style: none; max-width: 100%; display: block; height: auto; margin: 10px auto 20px;"></p><p style="margin-top: 10px; margin-bottom: 20px; list-style: none; line-height: 30px; font-size: 16px; word-break: break-all; color: rgb(25, 25, 25); font-family: &quot;\&quot;PingFang SC\&quot;,Arial,\&quot;Microsoft yahei\&quot;,simsun,\&quot;sans-serif\&quot;&quot;; background-color: rgb(249, 249, 249);">7月12日，应急管理部森林消防局直升机支队在黑龙江大庆隆重举行空中突击救援大队入营仪式，由黑龙江总队抽组的空中突击救援大队200名指战员进驻大庆。欢迎仪式上，全体指战员面对“中国消防救援”队旗，庄重宣誓。下一步，直升机支队将以此为契机大力开展空地协同训练，不断提高遂行多样化救援任务能力，切实担当起航空应急救援主力军、国家队的职责。（供图/黎伟）</p>'
+        nr:'1111'
 			},{
 				hfrxm:'张三',
 				hfsj:'2019-09-90',
 				hflxmc:'分配开发',
 				dqlcmc:'需求设计-分配开发',
-				nr:'7月12日，应急管理部森林消防局直升机支队在黑龙江大庆隆重举行空中突击救援大队入营仪式，由黑龙江总队抽组的空中突击救援大队200名指战员进驻大庆。欢迎仪式上，全体指战员面对“中国消防救援”队旗，庄重宣誓。下一步，直升机支队将以此为契机大力开展空地协同训练，不断提高遂行多样化救援任务能力，切实担当起航空应急救援主力军、国家队的职责。（供图/黎伟）'
+				nr:'2222'
 			}]
 		};
 	},
+
 	mounted() {
+    this.zbwid = this.$route.query.id;
 		$('#summernote').summernote({
 			dialogsInBody: false,
 			placeholder: '请输入回复内容',
@@ -161,20 +184,67 @@ export default {
 			callbacks: {}
 		});
 
-    this.queryProcessTemplate();
+    this.queryProcessTemplate();//流程
+    this.queryDemand();//详情
+    this.queryDemandBtns();//按钮组
+    this.queryDemandReplys();//回复
 	},
+
 	methods: {
-      handleBtnOprate(type){
-          if(type == 'hf'){
+      handleBtnOprate(params){
+         this.btnInfo = params;
+          if(params.btnid == '1' || params.btnid == '4' || params.btnid == '2'){  //1回复 4催办 2受理
+            if($('#summernote').summernote('code')=='<p><br></p>' && params.btnid == '1'){
+              this.$message({message:'请输入回复内容',type:'warning'});
+              return;
+            }
+            this.$post(params.btnid == '1'?this.API.reply:params.btnid == '4'?this.API.remind:this.API.accept,{
+              zbwid:this.zbwid,
+              nr:$('#summernote').summernote('code'),
+              btnbh:params.btnid
+            }).then(res=>{
+              if(res.state == 'success'){
+                this.$message({message:params.btnid == '1'?'回复成功':params.btnid == '4'?'催办成功':'受理成功',type:'success'});
+                $('#summernote').summernote('code','');
+                this.queryDemandReplys();
+              }else{
+                this.$message({message:res.msg,type:'error'});
+              }
+            })
+          }else if(params.btnid == '3'){  //驳回
+            this.bhShow = true;
+          }else if(params.btnid == '5'){  //分配开发工程
+            this.fpgcsShow = true;
+          }else if(params.btnid == '6'){  //绿色通道
+            this.curType = 'lstd';
             this.crowdShow = true;
-          }else if(type == 'xqqr'){
-
-          }else if(type == 'kfgcs'){
-            this.curType = 'kfgcs';
-            this.crowdShow = true
-           }
+          }else if(params.btnid == '7'){  //需求提报
+            this.xqtbShow = true;
+          }else if(params.btnid == '8'){  //需求确认
+            this.xqqrShow = true;
+          }else if(params.btnid == '9'){  //需求开发
+            this.crowdShow = true;
+          }else if(params.btnid == '11'){  //完成验证
+            this.yzShow = true;
+          }else if(params.btnid == '12'){  //关闭需求
+            this.gbxqShow = true;
+          }
       },
-
+      // 驳回
+      handleRejct(data){
+        this.$post(this.API.reject,{
+          zbwid:this.zbwid,
+          nr:data,
+          btnbh:this.btnInfo.btnid
+        }).then(res=>{
+          if(res.state == 'succes'){
+            this.$message({message:'已驳回',type:'success'});
+            this.queryDemandReplys();
+          }else{
+            this.$message({message:res.msg,type:'error'});
+          }
+        })
+      },
       // 需求确认
       handleCommitQrxq(){
 
@@ -183,14 +253,25 @@ export default {
       handleClickYzxq(){
 
       },
+      // 关闭需求
+      handleClickGbxq(){
+
+      },
       // 获取需求详情
       queryDemand(){
         this.$get(this.API.queryDemand,{
-          zbwid:''
+          zbwid:this.zbwid
         }).then(res=>{
           if(res.state == 'success'){
-            console.log(res);
             this.detailInfo = res.data;
+            this.$get(this.API.getDictEnum,{
+              name: 'DemandType',
+              code: res.data.xqfl
+            }).then(res=>{
+              if(res.state == 'success'){
+                this.detailInfo.xqfl_display = res.data;
+              }
+            })
           }else{}
         })
       },
@@ -198,10 +279,9 @@ export default {
       // 获取回复
       queryDemandReplys(){
         this.$get(this.API.demandReplys,{
-          zbwid:''
+          zbwid:this.zbwid
         }).then(res=>{
           if(res.state == 'success'){
-            console.log(res);
              this.replyData = res.data;
           }else{
 
@@ -212,20 +292,17 @@ export default {
       // 获取按钮
       queryDemandBtns(){
         this.$get(this.API.demandBtns,{
-          zbwid:''
+          zbwid:this.zbwid
         }).then(res=>{
           if(res.state == 'success'){
-            console.log(res);
-            this.btnData = res.data;
-          }else{
-
-          }
+            // this.btnData = res.data;
+          }else{}
         })
       },
 
        // 获取流程模板
       queryProcessTemplate(){
-        this.$get(this.API.demandProcessTemplate,{zbwid:''}).then(res=>{
+        this.$get(this.API.demandProcessTemplate,{zbwid:this.zbwid}).then(res=>{
           if(res.state == 'success'){
             this.stepData = res.data;
           }else{
@@ -236,7 +313,7 @@ export default {
 
 
 	},
-	components: {step,xqqrDialog,yzDialog,gbxqDialog,crowdDialog,bhDialog}
+	components: {step,xqqrDialog,yzDialog,gbxqDialog,crowdDialog,bhDialog,xqtbDialog,fpgcsDialog}
 };
 </script>
 

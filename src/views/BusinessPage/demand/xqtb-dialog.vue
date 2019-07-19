@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-dialog title="完成验证" width="700px" top="30px" :visible.sync="visible" :append-to-body="true"
+    <el-dialog title="需求提报" width="700px" top="30px" :visible.sync="visible" :append-to-body="true"
       :close-on-click-modal="false" @close="$emit('update:show', false)" :show="show">
       <div class="dialog-pj">
         <section>
           <p>
-            <span class="filter-weight">确认老师：</span>
+            <span class="filter-weight">提报老师：</span>
             <el-select v-model="teacherData" size="mini" multiple filterable placeholder="请选择提出老师(可按姓名搜索)" style="width:605px"
               @change="handleChangeTcls">
               <el-option v-for="(tcls, index) in tclsList" :key="index" :label="tcls.username" :value="tcls.userid+','+tcls.username"></el-option>
@@ -17,6 +17,10 @@
               <el-radio :label="1">是</el-radio>
               <el-radio :label="0">否</el-radio>
             </el-radio-group>
+          </p>
+          <p flex>
+             <span class="filter-weight">上传附件：</span>
+             <uploadFile :Type="'demand'" :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
           </p>
           <p class="pj-content">
             <span class="filter-weight">备注：</span>
@@ -33,16 +37,19 @@
 </template>
 
 <script>
+  import uploadFile from '@/components/BusinessPage/upload';
   export default {
     data() {
       return {
         visible: this.show,
+        isClearFile:false,
         tclsList:[],
         teacherData:[],
         filterData: {
           sm: '',
           qrls: '',
-          sfhq:1,
+          sfhq: 1,
+          fjid:'',
           teacherData:[]
         }
       }
@@ -55,6 +62,10 @@
       handleClickSure() {
         if (!this.validate()) return;
         this.$emit('handleClickSure', this.filterData);
+      },
+      // 上传附件
+      handleUploadFile(data){
+
       },
       validate() {
         if (/^[\s]*$/.test(this.sm)) {
@@ -94,13 +105,13 @@
       show(n, o) {
         this.visible = this.show;
         if (!!n) {
-          this.getUsers();
+            this.getUsers();
         } else {
 
         }
       }
     },
-    components: {}
+    components: {uploadFile}
   }
 </script>
 

@@ -108,10 +108,18 @@ export default {
 		&:hover {
 			background: rgba(216, 214, 214, 0.5);
 		}
-		i:hover {
-			cursor: pointer;
-			color: #f00;
-		}
+    i{
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 20px;
+      &:hover {
+      	cursor: pointer;
+      	color: #f00;
+        background:  rgba(255, 0, 0, 0.25);
+      }
+    }
 	}
 }
 </style>

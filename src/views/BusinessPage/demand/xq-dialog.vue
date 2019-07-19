@@ -23,7 +23,7 @@
           <el-form-item label="提出老师" required>
             <el-select v-model="teacherData" size="mini" multiple placeholder="请选择提出老师" style="width:800px"
               @change="handleChangeTcls">
-              <el-option v-for="(tcls, index) in tclsList" :key="index" :label="tcls.userName" :value="tcls.userId+','+tcls.userName"></el-option>
+              <el-option v-for="(tcls, index) in tclsList" :key="index" :label="tcls.username" :value="tcls.userid+','+tcls.username"></el-option>
             </el-select>
           </el-form-item>
 
@@ -218,7 +218,6 @@
       // 选择提出老师
       handleChangeTcls(val) {
         this.demandData.teacherData = val.join('|');
-        console.log(this.demandData.teacherData);
       },
 
       // 选择crowd业务线
@@ -247,7 +246,7 @@
         this.xmzt = data.xmzt;
         this.demandData.xmbh = data.xmbh;
         this.demandData.xmmc = data.xmmc;
-        this.queryProjectParticipant();
+        this.getUsers();
         this.dialogdemandVisible = false;
       },
       // 选择关联需求
@@ -266,6 +265,9 @@
 
       //提交需求
       handleCommit() {
+        if(this.demandData.xqfl != 3){
+          this.demandData.glxqWid = '';
+        }
         this.demandData.nr = $("#summernote").summernote("code");
         if(!this.valiDate()) return;
         this.$post(this.API.submitDemand,this.demandData).then(res=>{
@@ -311,14 +313,17 @@
           }
         });
       },
+
       // 获取学校老师
-      queryProjectParticipant() {
-        this.$get(this.API.queryProjectParticipant, {
+      getUsers() {
+        this.$get(this.API.getUsers, {
+          curPage:1,
+          pageSize:999,
           xmbh: this.demandData.xmbh,
-          dwlx: 1
+          unitType:1
         }).then(res => {
           if (res.state == 'success') {
-            this.tclsList = res.data;
+            this.tclsList = res.data.rows;
           } else {}
         })
       },

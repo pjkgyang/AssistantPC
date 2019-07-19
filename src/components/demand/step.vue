@@ -117,11 +117,13 @@ export default {
   }
   ul li.active-2::before{
     color: #f00;
+    font-weight: 700;
     background-color: #f00;
   }
 
   ul li.active-3{
     color: #67c23a;
+    font-weight: 700;
   }
   ul li.active-3::before{
     color: #67c23a;

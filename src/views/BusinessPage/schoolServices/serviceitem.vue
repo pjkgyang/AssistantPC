@@ -7,12 +7,12 @@
 			<div class="tree"><tree-table ref="recTree" :list.sync="treeDataSource" @handlerExpand="handlerExpand" @handlerChooseModel="handlerChooseModel"></tree-table></div>
 			<div class="form">
 				<div v-if="!!curDept.parentId"><el-button size="mini" type="primary" class="mg-12" @click="handleAddService">添加服务事项</el-button></div>
-				<el-table :data="tableData" border style="width: 100%">
-					<el-table-column fixed="left" label="操作" width="180">
+				<el-table :data="tableData" border :style="{'width':!isPlan?'100%':'850px' }">
+					<el-table-column fixed="left" label="操作" width="110"  >
 						<template slot-scope="scope">
-							<el-button type="text" size="small" @click="handleOperate('edit', scope.row)">编辑</el-button>
-							<el-button type="text" size="small" @click="handleOperate('ssjh', scope.row)">编辑实施计划</el-button>
-							<a :href="'#/schoolSeivice/detail?id='+scope.row.wid" target="_blank">查看</a>
+							<el-button v-if="!isPlan" type="text" size="small" @click="handleOperate('edit', scope.row)">编辑</el-button>
+							<a v-if="!isPlan" :href="'#/schoolSeivice/detail?id='+scope.row.wid" target="_blank">查看</a>
+              <el-button v-if="!!isPlan" type="text" size="small" @click="handleAddSsjh(scope.row)">添加</el-button>
 						</template>
 					</el-table-column>
 					<el-table-column prop="fwmc" label="服务名称" min-width="220"></el-table-column>
@@ -40,23 +40,22 @@
 				</el-pagination>
 			</div>
 		</div>
-		
-		
-		<jbxxDailog :show.sync="jbxxShow" @handleCommitService="handleCommitService" :formData="curData"></jbxxDailog>
-		<ssjhDailog :show.sync="ssjhShow" @handleCommitSSjh="handleCommitSSjh" :zbwid="curData.wid"></ssjhDailog>
+
+
+		<jbxxDailog :show.sync="jbxxShow" @handleCommitService="handleCommitService" :wid="wid" :Type="Type"></jbxxDailog>
 	</div>
 </template>
 
 <script>
 import treeTable from '@/components/tree/tree-table.vue';
 import jbxxDailog from '@/views/BusinessPage/schoolServices/jbxx-dialog.vue';
-import ssjhDailog from '@/views/BusinessPage/schoolServices/ssjh-dialog.vue';
 import chooseSchool from '@/components/BusinessPage/chooseSchool.vue';
 export default {
 	data() {
 		return {
 			jbxxShow: false,
 			ssjhShow:false,
+      Type:'',
 			treeDataSource: [],
 			currentPage:1,
 			pageSize:15,
@@ -64,10 +63,17 @@ export default {
 			tableData: [],
 			unit:{}, //单位
 			curDept:{}, //当前部门
-			curData:{},//当前服务事项
+			wid:'',//当前服务事项
 			prevTree:{}
 		};
 	},
+  props:{
+    isPlan:{
+      type:Boolean,
+      default:false
+
+    }
+  },
 	methods: {
 		// 更换单位
 		handleChangeUnit(params){
@@ -80,7 +86,7 @@ export default {
 		handleCommitSSjh(params){
 			let formData = params;
 			formData.zbwid = this.curData.wid;
-			
+
 			this.$post(this.API.updateServiceItemPlan,params).then(res=>{
 				if(res.state == 'success'){
 					this.pageServiceItem();
@@ -99,7 +105,7 @@ export default {
 			formData.dwmc = this.unit.dwmc;
 			formData.bmbh = this.curDept.id;
 			formData.bmmc = this.curDept.title;
-			
+
 			this.$post(this.API.saveServiceItem,formData).then(res=>{
 				if(res.state == 'success'){
 					this.pageServiceItem();
@@ -110,7 +116,7 @@ export default {
 				}
 			})
 		},
-		
+
 		// 分页
 		handleCurrentChange(data){
 			this.currentPage = data;
@@ -128,16 +134,25 @@ export default {
 			this.$set(m,'Experience','1');
 			this.prevTree = m;
 			this.curDept = m;
+      this.currentPage = 1;
+      this.pageServiceItem();
 		},
 		// 添加服务事项
 		handleAddService(){
-			this.curData = {};
+			this.Type = '';
 			this.jbxxShow = true;
 		},
+
+    // 添加
+    handleAddSsjh(params){
+      this.$emit('handleAddSsjh',params);
+    },
+
     // 编辑，查看，编辑计划
 		handleOperate(type, params) {
-			this.curData = params;
 			if(type == 'edit'){
+        this.wid = params.wid;
+        this.Type = 'edit';
 				this.jbxxShow = true;
 			}else if(type == 'ssjh'){
 				this.ssjhShow = true;
@@ -148,7 +163,8 @@ export default {
 			this.$get(this.API.pageServiceItem,{
 				 curPage:this.currentPage,
 				 pageSize:this.pageSize,
-				 dwbh:this.unit.dwbh
+				 dwbh:this.unit.dwbh,
+         bmbh:!this.curDept.id?'':this.curDept.id
 			}).then(res=>{
 				if(res.state == 'success'){
 					if(!res.data || !res.data.rows ){
@@ -158,7 +174,7 @@ export default {
 					}
 					this.records = res.data.records;
 				}else{
-					
+
 				}
 			})
 		},
@@ -178,7 +194,6 @@ export default {
 	components: {
 		treeTable,
 		jbxxDailog,
-		ssjhDailog,
 		chooseSchool
 	}
 };
