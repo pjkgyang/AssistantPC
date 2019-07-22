@@ -177,9 +177,7 @@
           xqms: '', //需求描述
           zbjzrq: '',
           jfrq: '',
-          qwjfrq: '',
-          xmbh: '',
-          fjid: '',
+          qwjfrq: ''
         },
       }
     },
@@ -232,21 +230,31 @@
           });
           return;
         }
-        this.crowdxqData.xmbh = this.qusetionInfo.xmbh; // 项目编号
         this.$refs[formName].validate(valid => {
           if (valid) {
-            this.$post(this.API.crowdFbrw, this.crowdxqData).then(res => {
-              if (res.state == 'success') {
-                this.addOrUpdateCrowdId('', res.data, '');
-                this.crowdVisible = false;
-                this.crowdxqData.fjid = '';
-              } else {
-                this.$alert(res.msg, '提示', {
-                  confirmButtonText: '确定',
-                  type: 'warning'
-                });
+            this.crowdxqData.zbwid = this.zbwid;
+            this.crowdxqData.btnbh = this.btnbh;
+            this.$post(!this.Type?this.API.projectTeamSubmitDvpt:this.API.openGreenChannel,this.crowdxqData).then(res=>{
+              if(res.state == 'success'){
+                  this.$message({message:'保存成功',type:'success'});
+                  this.$emit('handleCommitCrowd','');
+                  this.crowdxqData.rwmc = '';
+                  this.crowdxqData.sfjj = '0';
+                  this.crowdxqData.sfxyzc = '0';
+                  this.crowdxqData.xmysje = 0;
+                  this.crowdxqData.jmxx = '';
+                  this.crowdxqData.xqms = '';
+                  this.crowdxqData.zbjzrq = '';
+                  this.crowdxqData.jfrq = '';
+                  this.crowdxqData.qwjfrq = '';
+                  this.visible = false;
+
+              }else{
+                  this.$message({message:res.msg,type:'error'});
               }
-            });
+            })
+
+
           } else {
             return false;
           }
@@ -305,6 +313,14 @@
         default: '提报Crwod任务'
       },
       Type:{
+        type:String,
+        default:''
+      },
+      zbwid:{
+        type:String,
+        default:''
+      },
+      btnbh:{
         type:String,
         default:''
       }

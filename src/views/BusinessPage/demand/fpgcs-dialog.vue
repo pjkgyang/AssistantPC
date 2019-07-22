@@ -9,16 +9,16 @@
           </el-form-item>
 
           <el-form-item label="" >
-            <el-select size="mini" v-model="kfgcsData" multiple filterable remote reserve-keyword placeholder="请选择开发工程师(可搜索)"
+            <el-select size="mini" v-model="crowdxqData.kfData"  filterable remote reserve-keyword placeholder="请选择开发工程师(可搜索)"
               :remote-method="remoteMethod" :loading="loading" style="width:100%;">
-              <el-option v-for="item in kfgcsList" :key="item.uid" :label="item.nickName" :value="item.uid">
+              <el-option v-for="(item,index) in kfgcsList" :key="item.uid" :label="item.nickName" :value="item.uid+','+item.nickName">
               </el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="">
             <!-- <div id="summernoteT"></div> -->
-              <el-input type="textarea" placeholder="请输入说明内容" v-model="crowdxqData.sm"></el-input>
+              <el-input type="textarea" placeholder="请输入说明内容" v-model="crowdxqData.nr"></el-input>
           </el-form-item>
 
           <el-form-item>
@@ -96,10 +96,11 @@
           }],
         },
         crowdxqData: {
+          kfData:'',
           rwmc: '', //需求基本信息
           xmysje: 0,
           zbjzrq: '',
-          sm:''
+          nr:''
         },
       }
     },
@@ -121,6 +122,8 @@
           });
           return;
         }
+
+        this.$emit('handleCommitKfgcs',this.crowdxqData);
       },
 
       // 关键字查询
@@ -179,6 +182,12 @@
             });
           });
           this.queryUser();
+        }else{
+          this.crowdxqData.kfData = '';
+          this.crowdxqData.rwmc = '';
+          this.crowdxqData.xmysje = 0;
+          this.crowdxqData.zbjzrq = '';
+          this.crowdxqData.nr = '';
         }
       }
     },

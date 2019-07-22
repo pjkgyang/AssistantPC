@@ -346,9 +346,12 @@ export default {
   remind: window.baseurl + 'demandDvpt/remind.do', //  催办
   distributionDvpt: window.baseurl + 'demandDvpt/distributionDvpt.do', //  分配开发工程师
   openGreenChannel: window.baseurl + 'demandDvpt/openGreenChannel.do', //  开通绿色通道
+  projectTeamSubmitDvpt: window.baseurl + 'demandDvpt/projectTeamSubmitDvpt.do', //  需求开发
   queryPageDemands: window.baseurl + 'demandDvpt/queryPageDemands.do', //  获取需求列表
   exportDemands: window.baseurl + 'demandDvpt/exportDemands.do' ,//  导出需求列表
-  candidateConfirmPersons: window.baseurl + 'demandDvpt/candidateConfirmPersons.do'//  获取确认老师数据
-
-
+  candidateConfirmPersons: window.baseurl + 'demandDvpt/candidateConfirmPersons.do', //  获取确认老师数据
+  submitDetailDesign: window.baseurl + 'demandDvpt/submitDetailDesign.do', //  项目团队提交（需求提报）
+  confirmRequirement: window.baseurl + 'demandDvpt/confirmRequirement.do', //  用户需求确认（需求确认）
+  projectTeamVerifyDvpt: window.baseurl + 'demandDvpt/projectTeamVerifyDvpt.do', //  项目团队验证（完成验证）
+  confirmDvpt: window.baseurl + 'demandDvpt/confirmDvpt.do', //   关闭需求
 }
