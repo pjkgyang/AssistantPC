@@ -4,11 +4,7 @@
         <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight">
           <el-table-column prop="wid" label="单据编号" show-overflow-tooltip  width="140">
           </el-table-column>
-          <el-table-column prop="gczd" label="工程战队" width="200">
-          </el-table-column>
-          <el-table-column prop="xmbh" label="项目编号" show-overflow-tooltip  width="140">
-          </el-table-column>
-          <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip min-width="240">
+          <el-table-column prop="rwmc" label="任务名称" show-overflow-tooltip  min-width="240" >
           </el-table-column>
           <el-table-column prop="kfxzmc" label="开发性质" width="120">
           </el-table-column>

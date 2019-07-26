@@ -20,6 +20,8 @@
           </el-table-column>
           <el-table-column prop="je" label="报销金额" >
           </el-table-column>
+          <el-table-column prop="sy" label="事由" >
+          </el-table-column>
         </el-table>
       </section>
   </div>

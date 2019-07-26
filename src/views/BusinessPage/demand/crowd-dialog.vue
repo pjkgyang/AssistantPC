@@ -100,7 +100,8 @@
   // import uploadFile from '@/components/BusinessPage/upload.vue';
   import {
     getMenu,
-    getSession
+    getSession,
+    GetDateStr
   } from '@/utils/util.js';
   import { queryUser } from "@/api/personal.js";
 
@@ -329,8 +330,10 @@
       show(n, o) {
         this.visible = this.show;
         if (this.show) {
+          this.crowdxqData.zbjzrq = GetDateStr(7);
           this.getCrowdYwx();
           this.queryUser();
+          
         }
       }
     },

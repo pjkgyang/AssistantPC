@@ -11,7 +11,8 @@
           <el-input v-model="filterData.keyword" style="width:493px;" size="mini" placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称"
             @change="handleQuery"></el-input>
           &#x3000;
-          <el-button type="primary" size="mini" @click="handleQuery">查询</el-button>
+          <el-button type="primary" size="mini" @click="handleQuery">查询</el-button>&#x3000;
+          <el-button type="primary" size="mini" @click="handleExport">导出</el-button>
         </div>
         <div v-show="queryLJshow">
           <div class="mg-12">
@@ -26,9 +27,9 @@
           <div>
             <p class="query-title">查询状态:</p>
             <p class="query-list">
-              <span :class="{ 'bg-active': filterData.cxzt == '' }" @click="handleChangeCxzt('')">全部</span>
-              <span v-for="(cxzt, index) in cxztList" @click="handleChangeCxzt(cxzt.label)" :key="index" :class="{ 'bg-active': filterData.cxzt == cxzt.label }">
-                {{ cxzt.mc }}
+              <span :class="{ 'bg-active': filterData.xqzt == '' }" @click="handleChangexqzt('')">全部</span>
+              <span v-for="(xqzt, index) in xqztList" @click="handleChangexqzt(xqzt.label)" :key="index" :class="{ 'bg-active': filterData.xqzt == xqzt.label }">
+                {{ xqzt.mc }}
               </span>
             </p>
           </div>
@@ -42,12 +43,12 @@
             </p>
           </div>
           <div flex>
-            <p class="query-title">产品:</p>
-            <p class="query-list" style="width:90%">
-              <span :class="{ 'bg-active': filterData.cp == '' }" @click="handleChangeCp('')">全部</span>
-              <span v-for="(cp, index) in cplist" @click="handleChangeCp(cp.label)" :key="index" :class="{ 'bg-active': filterData.cp == cp.label }">
-                {{ cp.mc }}
-              </span>
+            <p class="query-title">模块:</p>
+            <p  style="width:90%">
+              <el-cascader size="mini" style="width:325px" v-model="val" :props="defaultProps" :options="xmcpList" @change="handleItemChange"
+              :show-all-levels="false"></el-cascader>
+
+              <!-- <el-button size="mini" type="primary" @click="handleCheckALLcp">查询全部</el-button> -->
             </p>
           </div>
           <div flex class="mg-12">
@@ -67,7 +68,7 @@
           <li flex v-for="(item, index) in dataList" :key="index">
             <div class="demand-list_bgimg" center>{{item.cpjc}}</div>
             <div class="demand-list-info" flex-column spacebetween>
-              <span><a href="#/demand/detail?id=23ad66851de4402885321ede2bbb130c" target="_blank" >{{item.bt}}</a></span>
+              <span><a :href="'#/demand/detail?id='+item.wid" target="_blank" >{{item.bt}}</a></span>
               <p>
                 {{item.tcsj}} &#x3000; {{item.tcrxm}} &#x3000;&#x3000;
                 <span class="title">需求编号：</span>
@@ -93,14 +94,17 @@
         </div>
       </div>
     </div>
+
     <div class="pannelPaddingBg-10 guid pull-right">
       <h5>需求工作指南</h5>
       <div>
         <step :list="stepDatas"></step>
       </div>
-      <section text-center>
-        <el-button size="small" @click="handleSendDemand" type="primary">我要提需求</el-button>
+      <!-- 金智 -->
+      <section text-center v-if="unitType == 0">
+        <el-button @click="handleSendDemand" type="danger">我要提需求</el-button>
       </section>
+      <br>
     </div>
 
     <xqDialog :show.sync="xqShow" @handleCommitDemand="handleCommitDemand"></xqDialog>
@@ -121,18 +125,24 @@
         xqShow: false,
         xqflList: [], //需求分类
         gczdList: [], //区域工程
-        cxztList: [], //查询状态
+        xqztList: [], //查询状态
         xqlxList: [], //需求类型
-        cplist: [], //产品
+        xmcpList: [], //产品
         queryLJshow: true,
         currentPage: 1,
         pageSize: 10,
         records: 0,
         dataList: [],
         stepDatas: [], //流程
+        val:[],
+        unitType:'',//是否为金智
+        defaultProps: {
+          value:'id',
+          label:'title'
+        },
         filterData: {
           xqfl: '', //需求分类
-          cxzt: '', //查询状态
+          xqzt: '', //查询状态
           gczd: '',
           xqlx: '', //需求类型
           cp: '',
@@ -147,14 +157,6 @@
       } else {
         this.gczdList = getSession('gczd');
       }
-      //获取产品
-      if (
-        !getSession("cp")
-      ) {
-        getMenu("cp", this.cplist, true);
-      } else {
-        this.cplist = getSession("cp");
-      }
 
       //获取需求分类
       if (!getSession('DemandRelatedType')) {
@@ -165,9 +167,9 @@
 
       //获取需求状态
       if (!getSession('DemandStatus')) {
-        getMenu('DemandStatus', this.cxztList);
+        getMenu('DemandStatus', this.xqztList);
       } else {
-        this.cxztList = getSession('DemandStatus');
+        this.xqztList = getSession('DemandStatus');
       }
 
       //获取需求类型
@@ -179,9 +181,26 @@
 
       this.queryProcessTemplate();
       this.queryPagesDemand();
+      this.queryDemandProductTree();
+
+      this.unitType = JSON.parse(sessionStorage.getItem('userInfo')).unitType;
+
     },
     methods: {
 
+      // 选择产品
+      handleItemChange() {
+        let cpData = this.getCascaderObj(this.val, this.xmcpList);
+        let length = cpData.length-1;
+        this.filterData.cp =  cpData[length].id;
+        this.currentPage = 1;
+        this.queryPagesDemand();
+      },
+      handleCheckALLcp(){
+        this.filterData.cp = '';
+        this.currentPage = 1;
+        this.queryPagesDemand();
+      },
       // 提需求
       handleSendDemand() {
         this.xqShow = true;
@@ -195,6 +214,22 @@
       // 筛选条件显示
       handleQueryShow() {
         this.queryLJshow = !this.queryLJshow;
+      },
+      // 导出
+      handleExport(){
+        window.open(this.API.exportDemands+'?xqfl='+
+        this.filterData.xqfl+
+        '&xqxglx='+
+        this.filterData.xqlx + 
+        '&xqzt='+
+        this.filterData.xqzt +
+        '&qygc='+
+        this.filterData.gczd +
+        '&cpbh='+
+        this.filterData.cp +
+        '&keyword='+
+        this.filterData.keyword 
+        )
       },
       //  查询
       handleQuery() {
@@ -215,8 +250,8 @@
         this.queryPagesDemand();
       },
       // 查询状态
-      handleChangeCxzt(data) {
-        this.filterData.cxzt = data;
+      handleChangexqzt(data) {
+        this.filterData.xqzt = data;
         this.currentPage = 1;
         this.queryPagesDemand();
       },
@@ -239,15 +274,27 @@
         this.queryPagesDemand();
       },
 
+      getCascaderObj(val, opt) {
+        return val.map(function(value, index, array) {
+          for (var itm of opt) {
+            if (itm.id == value) {
+              opt = itm.children;
+              return itm;
+            }
+          }
+          return null;
+        });
+      },
       //  查询需求列表
       queryPagesDemand() {
         this.$get(this.API.queryPageDemands, {
           curPage: this.currentPage,
           pageSize: this.pageSize,
+          xqzt:this.filterData.xqzt,
           xqxglx: this.filterData.xqfl,
           xqlx: this.filterData.xqlx,
           qygc: this.filterData.gczd,
-          cpbh: this.filterData.cp,
+          mkbh: this.filterData.cp,
           keyword: this.filterData.keyword
         }).then(res => {
           if (res.state == 'success') {
@@ -289,6 +336,26 @@
             });
           }
         })
+      },
+      
+
+      queryDemandProductTree() {
+        this.xmcpList = [];
+        this.$get(this.API.demandProductTree, {}).then(res => {
+            if (res.state == 'success') {
+              this.xmcpList = res.data;
+              this.xmcpList.push({id: "",
+                      isExpand: 0,
+                      isOptional: 0,
+                      level: 0,
+                      parentId: "",
+                      sortCode: 1,
+                      title: "全部"
+                  })
+            } else {
+
+            }
+        })
       }
     },
     components: {
@@ -319,10 +386,10 @@
       .demand-list_bgimg {
         width: 114px;
         height: 74px;
-        background: #999;
+        background:url('../../../../static/img/ywxbk.png');
         color: #fff;
         font-weight: 700;
-        font-size: 18px;
+        font-size: 14px;
         padding: 0 5px;
       }
 

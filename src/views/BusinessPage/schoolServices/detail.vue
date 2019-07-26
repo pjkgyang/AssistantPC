@@ -36,95 +36,129 @@
 			</div>
 			<div>
 				<h5 class="mg-12">服务事项实施计划</h5>
-				<table>
-					<tr >
-						<th>建设年份</th>
-						<td>{{jhData.jsnf}}</td>
-						<th>承建公司</th>
-						<td>{{jhData.cjgs}}</td>
-						<th>建设状态</th>
-						<td>{{jhData.jszt==1?'在建':jhData.jszt==2?'售后':'过保'}}</td>
-					</tr>
-					<tr >
-						<th>信息中心对接老师</th>
-						<td>{{jhData.xxzxdjls}}</td>
-						<th>业务部门对接老师</th>
-						<td>{{jhData.ywbmdjls}}</td>
-						<th>上线时间</th>
-						<td>{{jhData.sxsj}}</td>
-					</tr>
-					<tr >
-						<th>服务指南整理责任人</th>
-						<td>{{jhData.fwznzrr}}</td>
-						<th>服务指南完成状态</th>
-						<td>{{jhData.fwznwczt}}</td>
-						<th>服务指南完成时间</th>
-						<td>{{jhData.fwznwcsj}}</td>
-					</tr>
-					<tr >
-						<th>实施责任人</th>
-						<td>{{jhData.sszrr}}</td>
-						<th>实施完成状态</th>
-						<td>{{jhData.sswczt}}</td>
-						<th>实施完成时间</th>
-						<td>{{jhData.sswcsj}}</td>
-					</tr>
-					<tr >
-						<th>开发责任人</th>
-						<td>{{jhData.kfzrr}}</td>
-						<th>开发完成状态</th>
-						<td>{{jhData.kfwczt}}</td>
-						<th>开发完成时间</th>
-						<td>{{jhData.kfwcsj}}</td>
-					</tr>
-					<tr>
-						<th>实现方式</th>
-						<td colspan="3">{{jhData.sxfs}}</td>
-						<th>使用情况</th>
-						<td colspan="3">{{jhData.syqk}}</td>
-					</tr>
-				</table>
+				<div v-for="jhData in jhList">
+					<br>
+					<span class="filter-weight">填写日期：</span>{{jhData.txrq}}
+					<table style="margin-bottom:10px">
+						<tr >
+							<th>建设年份</th>
+							<td>{{jhData.xxhjsnf}}</td>
+							<th>承建公司</th>
+							<td>{{jhData.xxhcjgs}}</td>
+							<th>建设状态</th>
+							<td>{{jhData.xxhjszt==1?'在建':jhData.jszt==2?'售后':'过保'}}</td>
+						</tr>
+						<tr >
+							<th>信息中心对接老师</th>
+							<td>{{jhData.xxzxdjr}}</td>
+							<th>业务部门对接老师</th>
+							<td>{{jhData.ywbmdjr}}</td>
+							<th>上线时间</th>
+							<td>{{jhData.xxhsxsj}}</td>
+						</tr>
+						<tr >
+							<th>服务指南整理责任人</th>
+							<td>{{jhData.fwznzrr}}</td>
+							<th>服务指南完成状态</th>
+							<td>{{jhData.fwznwczt}}</td>
+							<th>服务指南完成时间</th>
+							<td>{{jhData.fwznwcsj}}</td>
+						</tr>
+						<tr >
+							<th>实施责任人</th>
+							<td>{{jhData.sszrr}}</td>
+							<th>实施完成状态</th>
+							<td>{{jhData.sswczt}}</td>
+							<th>实施完成时间</th>
+							<td>{{jhData.sswcsj}}</td>
+						</tr>
+						<tr >
+							<th>开发责任人</th>
+							<td>{{jhData.kfzrr}}</td>
+							<th>开发完成状态</th>
+							<td>{{jhData.kfwczt}}</td>
+							<th>开发完成时间</th>
+							<td>{{jhData.kfwcsj}}</td>
+						</tr>
+						<tr>
+							<th>实现方式</th>
+							<td colspan="3">{{jhData.sxfs}}</td>
+							<th>使用情况</th>
+							<td colspan="3" width="33%" :title="jhData.syqk">{{!jhData.syqk?'':jhData.syqk.length > 100?jhData.syqk.substring(0,100)+'...':jhData.syqk}}</td>
+						</tr>
+					</table>
+				</div>
+				<emptyContent v-if="records == 0"></emptyContent>
+				<!-- <div v-if="records > 0">
+					<el-pagination
+					@current-change="handleCurrentChange"
+					:current-page.sync="currentPage"
+					:page-size="pageSize"
+					layout="total, prev, pager, next"
+					:total="records">
+					</el-pagination>
+				</div> -->
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-	export default{
-		data(){
-			return{
-				fwData:{},
-				jhData:{}
-			}
-		},
-		mounted(){
-			this.getService();
-		},
-		methods: {
-			getService() {
-				this.$get(this.API.getServiceItem,{
-					wid:this.$route.query.id
-				}).then(res=>{
-					if(res.state == 'success'){
-						this.fwData = res.data;
-					}else{
-						
-					}
-				})
-				this.$get(this.API.getServiceItemPlan,{
-					zbwid:this.$route.query.id
-				}).then(res=>{
-					if(res.state == 'success'){
-						this.jhData = res.data;
-					}else{
-						
-					}
-				})
-			}
-		},
+  import emptyContent from '@/components/BusinessPage/emptyContent';
+  export default {
+  data() {
+    return {
+      fwData: {},
+      currentPage: 1,
+      pageSize: 10,
+      records: 0,
+      jhList: []
+    };
+  },
+  mounted() {
+	this.getService();
+	this.pageServiceItemPlan();
+  },
+  components:{emptyContent},
+  methods: {
+	handleCurrentChange(data){
+		this.currentPage = data;
+		this.pageServiceItemPlan();
+	},
+  getService() {
+      this.$get(this.API.getServiceItem, {
+        wid: this.$route.query.id
+      }).then(res => {
+        if (res.state == "success") {
+					this.fwData = res.data;
+					console.log(res);
+        } else {
+
+        }
+    });
+	},
+	pageServiceItemPlan(){
+ 		this.$get(this.API.pageServiceItemPlan, {
+        curPage: this.currentPage,
+        pageSize: this.pageSize,
+				zbwid: this.$route.query.id,
+				onlyNewest: 1
+      }).then(res => {
+        if (res.state == "success") {
+          if (!!res.data.rows) {
+            this.jhList = res.data.rows;
+          } else {
+            this.jhList = [];
+          }
+          this.records = res.data.records;
+        } else {
+        }
+      });
 	}
+	
+  }
+};
 </script>
 
 <style>
-	
 </style>

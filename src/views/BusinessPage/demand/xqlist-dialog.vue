@@ -60,6 +60,7 @@
           xqlx: '',
           qygc: '',
           cpbh: '',
+          xmbh:this.xmbh,
           keyword: ''
         }).then(res => {
           if (res.state == 'success') {
@@ -82,6 +83,10 @@
       show: {
         type: Boolean,
         default: false
+      },
+      xmbh:{
+        type: String,
+        default: ''
       }
     },
     watch: {

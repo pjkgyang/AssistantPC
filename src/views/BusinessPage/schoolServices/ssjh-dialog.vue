@@ -64,83 +64,93 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        dialogVisible: this.show,
-        form: {
-          jhksrq: '',
-          sxfs: '',
-          fwznzrr: '',
-          fwznwczt: '',
-          fwznwcsj: '',
-          sszrr: '',
-          sswczt: '',
-          sswcsj: '',
-          kfzrr: '',
-          kfwczt: '',
-          kfwcsj: '',
-        },
-        rules: {}
-      };
-    },
-    props: {
-      show: {
-        type: Boolean,
-        default: false
+export default {
+  data() {
+    return {
+      dialogVisible: this.show,
+      form: {
+        jhksrq: "",
+        sxfs: "",
+        fwznzrr: "",
+        fwznwczt: "",
+        fwznwcsj: "",
+        sszrr: "",
+        sswczt: "",
+        sswcsj: "",
+        kfzrr: "",
+        kfwczt: "",
+        kfwcsj: ""
       },
-      zbwid: {
-        type: String,
-        default: ''
-      }
+      rules: {}
+    };
+  },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
     },
-    watch: {
-      show(n, o) {
-        if (!!n) {
 
-        }
-        this.dialogVisible = this.show;
-      }
-    },
-    methods: {
-      submitForm(formName) {
-        if (!this.valiDate()) return;
-        this.$emit('handleCommitSSjh', this.form);
-      },
-      getServicePlan() {
-        this.$get(this.API.getServiceItemPlan, {
-          zbwid: this.zbwid
-        }).then(res => {
-          if (res.state == 'success') {
-            if (!!res.data) {
-              this.form = res.data;
-            } else {
-              this.form = {};
-            }
-          } else {
-
-          }
-        })
-      },
-      valiDate() {
-        if (!this.form.jhksrq) {
-          this.$message({
-            message: '请选择计划开始日期',
-            type: 'warning'
-          })
-          return false;
-        }
-        return true;
+    zbwid: {
+      type: String,
+      default: ""
+    }
+  },
+  watch: {
+    show(n, o) {
+      this.dialogVisible = this.show;
+      if (!n) {
+        this.form.jhksrq = "";
+        this.form.sxfs = "";
+        this.form.fwznzrr = "";
+        this.form.fwznwczt = "";
+        this.form.fwznwcsj = "";
+        this.form.sszrr = "";
+        this.form.sswczt = "";
+        this.form.sswcsj = "";
+        this.form.kfzrr = "";
+        this.form.kfwczt = "";
+        this.form.kfwcsj = "";
       }
     }
-  };
+  },
+  methods: {
+    submitForm(formName) {
+      if (!this.valiDate()) return;
+      this.$emit("handleCommitSSjh", this.form);
+    },
+    getServicePlan() {
+      this.$get(this.API.getServiceItemPlan, {
+        zbwid: this.zbwid
+      }).then(res => {
+        if (res.state == "success") {
+          if (!!res.data) {
+            this.form = res.data;
+          } else {
+            this.form = {};
+          }
+        } else {
+        }
+      });
+    },
+    valiDate() {
+      if (!this.form.jhksrq) {
+        this.$message({
+          message: "请选择计划开始日期",
+          type: "warning"
+        });
+        return false;
+      }
+      return true;
+    }
+  }
+};
 </script>
 
 <style scoped>
-  .title {
-    font-weight: 700;
-    padding: 0 10px;
-    margin: 10px 0;
-    border-left: 4px solid blueviolet;
-  }
+.title {
+  font-weight: 700;
+  padding: 0 10px;
+  margin: 10px 0;
+  border-left: 4px solid blueviolet;
+}
 </style>

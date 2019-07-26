@@ -14,7 +14,14 @@
 				</div>
 			</div>
 			<div class="pd-10">
-				<el-table :data="tableData" border style="width: 100%">
+        <tree-table
+				ref="recTree"
+        :isAna="true"
+				:list.sync="tableData"
+				@handlerExpand="handlerExpand"
+        @handleRouter="handleRouter"
+			></tree-table>
+				<!-- <el-table :data="tableData" border style="width: 100%">
           <el-table-column prop="mc" label="部门" min-width="200"></el-table-column>
 					<el-table-column prop="yfwzn" label="有服务指南">
             <template slot-scope="scope">
@@ -46,7 +53,7 @@
                <a href="#">{{scope.row.xxhfgl}}</a>
             </template>
           </el-table-column>
-				</el-table>
+				</el-table> -->
 			</div>
 		</div>
 	</div>
@@ -54,6 +61,7 @@
 
 <script>
   import chooseSchool from '@/components/BusinessPage/chooseSchool.vue';
+  import treeTable from "@/components/treeTable/tree-table.vue";
   export default {
 	data() {
 		return {
@@ -64,10 +72,36 @@
 		};
 	},
 	methods: {
+    handleRouter(m,type){
+      let query = {
+          id:m.id,
+          bh:this.unitData.dwbh,
+          s:this.qsnf,
+          e:this.jsnf
+        };
+        if(type == 'yfwzn'){
+          query.ffzn = 1;
+        }else if(type == 'wfwzn'){
+          query.ffzn = 0;
+        }else if(type == 'yxxhzc'){
+          query.xxhzc = 1;
+        }else if(type == 'wxxhzc'){
+          query.xxhzc = 0;
+        }
+   
+      let routeData = this.$router.resolve({
+        path: "/schoolseivice/serviceStatistic",
+        query:query
+      });
+      window.open(routeData.href, "_blank");
+      
+    },
+    handlerExpand(m) {
+      m.isExpand = !m.isExpand;
+    },
 		handleSearch() {
       this.serviceItemStat();
     },
-		handleExport() {},
 
     handleChangeUnit(prams){
     	this.unitData = prams;
@@ -77,6 +111,7 @@
     serviceItemStat(){
       this.$get(this.API.serviceItemStat,{
         dwbh:this.unitData.dwbh,
+        dwmc:this.unitData.dwmc,
         jsnfStart:this.qsnf,
         jsnfEnd:this.jsnf
       }).then(res=>{
@@ -93,7 +128,8 @@
     }
 	},
   components: {
-    chooseSchool
+    chooseSchool,
+    treeTable
   },
 };
 </script>

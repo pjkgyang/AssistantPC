@@ -120,7 +120,8 @@ export default {
 		}
 	}
 	.td-border {
-		border-bottom: 1px solid #e8e8e8;
+		margin-top: 10px;
+		border: 1px solid #e8e8e8;
 		.leve {
 			// 屏蔽双击不能选择文本样式
 			-webkit-user-select: none;

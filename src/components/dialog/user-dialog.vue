@@ -91,7 +91,12 @@
 			            this.$emit('addUserSuccess','');
 			         }
 			       });
-			     }
+			     }else{
+                     this.$alert(res.msg, '提示', {
+			         confirmButtonText: '确定',
+			         type:'error'
+			       });
+                 }
 			 })  
 		   }
        },

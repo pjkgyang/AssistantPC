@@ -4,7 +4,7 @@
 		<table>
 			<tr>
 				<td :colspan="colSpan">
-					<table>
+					<table v-if="!isAna">
 						<tr class="leve" :class="levelClass">
 							<td class="td1">
 								<div class="td-title" @dblclick="handlerExpand(model)" colcenter>
@@ -43,12 +43,38 @@
 							</td>
 						</tr>
 					</table>
+
+					<table v-if="!!isAna">
+						<tr class="leve" :class="levelClass">
+							<td class="td1" style="width:400px">
+								<div class="td-title" @dblclick="handlerExpand(model)" colcenter>
+									<span
+										v-if="model.children.length > 0"
+										style="z-index: 100;cursor: pointer;"
+										class="fa fa-folder"
+										:class="{ 'fa fa-folder-open': model.isExpand }"
+										@click="handlerExpand(model)"
+									></span>
+									&nbsp;
+									<a class="ellipsis">
+										<span :title="model.title">{{ model.title }}</span>
+									</a>
+								</div>
+							</td>
+							<td class="td4"><a href="javaScript:;"  @click="handleRouter(model,'yfwzn')">{{ model.yfwzn }}</a></td>
+							<td class="td4"><a href="javaScript:;"  @click="handleRouter(model,'wfwzn')">{{ model.wfwzn}}</a></td>
+							<td class="td4"><a href="javaScript:;"  @click="handleRouter(model,'yxxhzc')">{{ model.yxxhzc}}</a></td>
+							<td class="td4"><a href="javaScript:;"  @click="handleRouter(model,'wxxhzc')">{{ model.wxxhzc}}</a></td>
+							<td class="td4">{{ model.xxhfgl}}</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 		</table>
 
 		<div v-show="model.isExpand" class="other-node" :class="otherNodeClass">
 			<tree-item
+			   :isAna="isAna"
 				v-for="(m, i) in model.children"
 				:key="String('child_node' + i)"
 				:num="i"
@@ -57,6 +83,7 @@
 				@deleteFunc="deleteFunc"
 				@startRejectFunc="startRejectFunc"
 				@handlerExpand="handlerExpand"
+				@handleRouter="handleRouter"
 				:nodes.sync="model.children.length"
 				:trees.sync="trees"
 				:model.sync="m"
@@ -68,7 +95,7 @@
 <script>
 export default {
 	name: 'treeItem',
-	props: ['model', 'num', 'nodes', 'root', 'trees'],
+	props: ['model', 'num', 'nodes', 'root', 'trees','isAna'],
 	data() {
 		return {
 			parentNodeModel: null
@@ -100,6 +127,9 @@ export default {
 		// }
 	},
 	methods: {
+		handleRouter(model,type){
+			this.$emit('handleRouter', model,type);
+		},
 		getParentNode(m) {
 			// 查找点击的子节点
 			var recurFunc = (data, list) => {
@@ -149,7 +179,5 @@ export default {
 .fa {
 	color: #409EFF !important;
 }
-.isActive{
-	background: #;
-}
+
 </style>

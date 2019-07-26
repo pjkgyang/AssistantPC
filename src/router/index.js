@@ -326,11 +326,11 @@ export default new Router({
 					name: 'schoolSeiviceSi',
 					component: resolve => require(['@/views/BusinessPage/schoolServices/serviceitem.vue'], resolve),
 				},
-        {
-        	path: '/schoolseivice/implementationPlan',
-        	name: 'schoolSeiviceImplan',
-        	component: resolve => require(['@/views/BusinessPage/schoolServices/implementationPlan.vue'], resolve),
-        },
+				{
+					path: '/schoolseivice/implementationPlan',
+					name: 'schoolSeiviceImplan',
+					component: resolve => require(['@/views/BusinessPage/schoolServices/implementationPlan.vue'], resolve),
+				},
 				{
 					path: '/schoolseivice/serviceStatistic',
 					name: 'schoolSeiviceFwsxtj',
@@ -363,7 +363,14 @@ export default new Router({
 					name: 'demandDetail',
 					component: resolve => require(['@/views/BusinessPage/demand/detail.vue'], resolve),
 				},
-
+				
+				// 服务台
+				{
+					path: '/servicecounter/index',
+					name: 'serviceCounter',
+					component: resolve => require(['@/views/BusinessPage/serviceCounter/index.vue'], resolve),
+				},
+				
 
 
 

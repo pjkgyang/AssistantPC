@@ -33,15 +33,31 @@
             <el-input size="mini" v-model="crowdxqData.xmysje" placeholder="请输入预算金额(元)"></el-input>
           </el-form-item>
 
+          <!-- 需求描述 -->
+          <el-form-item prop="xqms">
+            <el-input type="textarea" placeholder="请输入需求描述" v-model="crowdxqData.xqms"></el-input>
+          </el-form-item>
+
+          <el-form-item >
+            <div class="send-crowd_topic">请选择需求客户/学校/个人的期望交付日期，该日期仅作数据记录使用</div>
+          </el-form-item>
+          <el-form-item >
+            <el-date-picker :picker-options="pickerJfrqDateBefore" value-format="yyyy-MM-dd" size="mini" type="date"
+              placeholder="请输入学校或个人期望交付日期，仅作数据记录使用 " v-model="crowdxqData.qwjfrq" style="width: 100%;"></el-date-picker>
+          </el-form-item>
           <el-form-item>
             <div class="send-crowd_topic" flex spacebetween>
               <span>请选择需求的招标/交付日期</span>
             </div>
           </el-form-item>
           <el-form-item>
-            <el-date-picker value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore"
+            <el-date-picker @change="handleChoosejfDate" value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore"
               size="mini" type="date" placeholder="请输入需求招标截至日期，到达该日期后，如果没有投标或者选标，需求则会自动关闭" v-model="crowdxqData.zbjzrq"
               style="width: 100%;"></el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-date-picker @change="handleChoosejfDate2" value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore"
+              size="mini" type="date" placeholder="请输入预期交付日期日期，中标者将严格按照该日期交付需求相关信息" v-model="crowdxqData.jfrq" style="width: 100%;"></el-date-picker>
           </el-form-item>
 
           <el-form-item text-right>
@@ -56,6 +72,7 @@
 <script>
   import uploadFile from '@/components/BusinessPage/upload.vue';
   import { queryUser } from "@/api/personal.js";
+  import { GetDateStr } from '@/utils/util.js';
 
   export default {
     data() {
@@ -99,17 +116,20 @@
           kfData:'',
           rwmc: '', //需求基本信息
           xmysje: 0,
-          zbjzrq: '',
+          zbjzrq: '',//招标截止日期
+          qwjfrq:'',//期望交付日期
+          jfrq:'',//交付日期
           nr:''
         },
       }
     },
     methods: {
 
+
       // 提交需求
       sendSubmitForm(formName) {
-        if (!this.crowdxqData.zbjzrq) {
-          this.$alert('请填写招标日期/交付日期', '提示', {
+        if (!this.crowdxqData.rwmc) {
+          this.$alert('请填写需求名称', '提示', {
             confirmButtonText: '确定',
             type: 'warning'
           });
@@ -122,8 +142,43 @@
           });
           return;
         }
+        if (!this.crowdxqData.xqms) {
+          this.$alert('请填写需求描述', '提示', {
+            confirmButtonText: '确定',
+            type: 'warning'
+          });
+          return;
+        }
+        if (!this.crowdxqData.jfrq || !this.crowdxqData.zbjzrq) {
+          this.$alert('请填写招标日期/交付日期', '提示', {
+            confirmButtonText: '确定',
+            type: 'warning'
+          });
+          return;
+        }
 
         this.$emit('handleCommitKfgcs',this.crowdxqData);
+      },
+
+       // 截止日期（1）
+      handleChoosejfDate(val) {
+        if (val > this.crowdxqData.jfrq) {
+          this.$alert('招标截止日期不能大于交付日期，请重新选择', '提示', {
+            confirmButtonText: '确定',
+            type: 'warning'
+          });
+          this.crowdxqData.zbjzrq = '';
+        }
+      },
+      // 交付日期
+      handleChoosejfDate2(val) {
+        if (val < this.crowdxqData.zbjzrq) {
+          this.$alert('招标截止日期不能大于交付日期，请重新选择', '提示', {
+            confirmButtonText: '确定',
+            type: 'warning'
+          });
+          this.crowdxqData.jfrq = '';
+        }
       },
 
       // 关键字查询
@@ -154,12 +209,13 @@
       show: {
         type: Boolean,
         default: false
-      },
+      }
     },
     watch: {
       show(n, o) {
         this.visible = this.show;
         if (this.show) {
+          this.crowdxqData.zbjzrq = GetDateStr(7);
           this.$nextTick(() => {
             $("#summernoteT").summernote({
               dialogsInBody: true,
@@ -186,7 +242,10 @@
           this.crowdxqData.kfData = '';
           this.crowdxqData.rwmc = '';
           this.crowdxqData.xmysje = 0;
+          this.crowdxqData.xqms = '';
           this.crowdxqData.zbjzrq = '';
+          this.crowdxqData.qwjfrq = '';
+          this.crowdxqData.jfrq = '';
           this.crowdxqData.nr = '';
         }
       }

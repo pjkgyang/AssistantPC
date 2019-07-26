@@ -13,18 +13,18 @@
       <div class="dialog-xqqr">
         <section>
           <div class="mg-12">
-            <span class="filter-weight">附件：</span>
+            <span class="filter-weight">原型附件：</span>
             <a
-              v-if="!!demandDetail.xqfjmc"
-              :href="API.downloadFile+'?fjId='+demandDetail.xqfjwid"
-            >{{demandDetail.xqfjmc}}</a>
-            <span v-if="!demandDetail.xqfjmc">无</span>
+              v-if="!!demandDetail.yxfjmc"
+              :href="API.downloadFile+'?fjId='+demandDetail.yxwjbh"
+            >{{demandDetail.yxfjmc}}</a>
+            <span v-if="!demandDetail.yxfjmc">无</span>
           </div>
           <div>
             <span class="filter-weight">开发包附件：</span>
             <a
               v-if="!!demandDetail.kffjmc"
-              :href="API.downloadFile+'?fjId='+demandDetail.kffjwid"
+              :href="API.downloadFile+'?fjId='+demandDetail.kfwjbh"
             >{{demandDetail.kffjmc}}</a>
             <span v-if="!demandDetail.kffjmc">无</span>
           </div>
@@ -77,9 +77,10 @@ export default {
       this.$post(this.API.confirmDvpt, this.filterData).then(res => {
         if (res.state == "success") {
           this.$message({ message: "提交成功", type: "success" });
-          this.$emit("handleClickSure", "");
           this.filterData.nr = "";
           this.filterData.pf = 5;
+          this.visible = false;
+          this.$emit("handleClickSure", "");
         } else {
           this.$message({ message: res.msg, type: "error" });
         }

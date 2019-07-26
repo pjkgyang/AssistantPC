@@ -35,6 +35,7 @@
             <span class="title">产品分类：</span>
             {{detailInfo.cpmc }}
           </p>
+
           <p>
             <span class="title">期望设计完成日期：</span>
             {{detailInfo.qwsjwcrq}} &#x3000;&#x3000;
@@ -42,21 +43,21 @@
             {{detailInfo.qwkfjfrq}} &#x3000;&#x3000;
             <span class="title">模块：</span>
             {{detailInfo.cpbjmc}} &#x3000;&#x3000;
-
           </p>
+
           <p>
             <span class="title">需求文档：</span>
             <a title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.xqfjwid" target="_blank">{{detailInfo.xqfjmc}}</a>
             &#x3000;&#x3000;
             <span>
               <span class="title">原型设计：</span>
-              <a v-if="!!detailInfo.yxfjwid" title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.yxfjwid" target="_blank">{{detailInfo.yxfjmc}}</a>
-              <span v-if="!detailInfo.yxfjwid">无</span>
+              <a v-if="!!detailInfo.yxfjmc" title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.yxwjbh" target="_blank">{{detailInfo.yxfjmc}}</a>
+              <span v-if="!detailInfo.yxfjmc">无</span>
             </span>&#x3000;&#x3000;
             <span>
               <span class="title">开发包：</span>
-              <a v-if="!!detailInfo.kffjwid" title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.kffjwid" target="_blank">{{detailInfo.kffjmc}}</a>
-              <span v-if="!detailInfo.kffjwid">无</span>
+              <a v-if="!!detailInfo.kfwjbh" title="点击下载" :href="API.downloadFile+'?fjId='+detailInfo.kfwjbh" target="_blank">{{detailInfo.kffjmc}}</a>
+              <span v-if="!detailInfo.kfwjbh">无</span>
             </span>
           </p>
         </div>
@@ -72,7 +73,15 @@
                 <span class="title">{{reply.hfrxm}}&#x3000;发表于&#x3000;{{reply.hfsj}}</span>&#x3000;
                 <el-tag key="1" type="success" effect="plain" size="mini">{{reply.dqlcmc}}</el-tag>
               </p><br>
-              <div v-html="reply.nr"></div>
+              <!-- 回复内容 -->
+              <div>
+                <div  v-html="reply.nr"></div>
+                <div>
+                  <br>
+                  <p v-if="!!reply.fbfjmc"><span>附件：</span><a  title="点击下载" :href="API.downloadFile+'?fjId='+reply.fbwjbh" target="_blank">{{reply.fbfjmc}}</a></p>  
+                  <p v-if="!!reply.xxyxfjmc"><span>附件：</span><a  title="点击下载" :href="API.downloadFile+'?fjId='+reply.xxyxfjwid" target="_blank">{{reply.xxyxfjmc}}</a></p>  
+                </div>
+              </div>
             </div>
           </li>
         </ul>
@@ -82,6 +91,7 @@
         <!-- 按钮组 -->
         <div text-right>
           <el-button size="mini" type="primary" v-for="(btn,index) in btnData" :key="index" @click="handleBtnOprate(btn)">{{btn.btnabb}}</el-button>
+
         </div>
       </div>
     </div>
@@ -96,8 +106,13 @@
     <gbxqDialog :show.sync="gbxqShow" :zbwid="zbwid" :btnbh="btnInfo.btnid" :demandDetail="detailInfo" @handleClickSure="handleClickGbxq"></gbxqDialog> <!-- 关闭需求 -->
     <crowdDialog :show.sync="crowdShow" :Type="curType" :zbwid="zbwid" :btnbh="btnInfo.btnid" @handleCommitCrowd="handleCommitCrowd"></crowdDialog> <!--  crowd -->
     <bhDialog :show.sync="bhShow" @handleClickSure="handleRejct"></bhDialog> <!-- 驳回 -->
-    <xqtbDialog :show.sync="xqtbShow" :zbwid="zbwid" :btnbh="btnInfo.btnid" :xmbh="detailInfo.xmbh"></xqtbDialog> <!-- 驳回  -->
+    <xqtbDialog :show.sync="xqtbShow" :zbwid="zbwid" :btnbh="btnInfo.btnid" :xmbh="detailInfo.xmbh" @handleClickSure="handleClickXqtb"></xqtbDialog> <!-- 驳回  -->
     <fpgcsDialog :show.sync="fpgcsShow"  @handleCommitKfgcs="handleCommitKfgcs"></fpgcsDialog> <!-- 分配工程师  -->
+    <!-- 发布需求，编辑 -->
+    <fbxqDialog :show.sync="fbxqShow" :demandInfo="detailInfo" :Type="xqType" :btnbh="btnInfo.btnid" @handleCommitDemand="handleCommitDemand"></fbxqDialog>
+    <!-- 提交开发包  -->
+    <kfbDialog :show.sync="kfbShow" :zbwid="zbwid" :btnbh="btnInfo.btnid"  @handleClickSure="handleClicKfb"></kfbDialog> 
+
   </div>
 </template>
 
@@ -110,6 +125,9 @@
   import bhDialog from '@/components/dialog/smDialog';
   import xqtbDialog from '@/views/BusinessPage/demand/xqtb-dialog';
   import fpgcsDialog from '@/views/BusinessPage/demand/fpgcs-dialog';
+  import fbxqDialog from '@/views/BusinessPage/demand/xq-dialog';
+
+    import kfbDialog from '@/views/BusinessPage/demand/tjkfb-dialog';
 
   export default {
     data() {
@@ -121,8 +139,12 @@
         crowdShow: false, //crowd dialog
         xqtbShow: false, //需求提报
         fpgcsShow: false, //分配工程师
+        fbxqShow:false,//发布需求，编辑
+        kfbShow:false,//开发包
         zbwid: '',
         curType: '', //crowd 当前类型
+
+        xqType:'',// 发布需求
         stepData: [], //流程节点
         btnData: [], //按钮组
         btnInfo: {},
@@ -168,6 +190,7 @@
         this.queryProcessTemplate(); //流程
         this.queryDemandReplys(); //回复
         this.queryDemandBtns(); 
+        this.queryDemand(); //详情
       },
 
       // 提交开发分配工程师
@@ -182,6 +205,7 @@
             this.queryDemandReplys();
             this.queryProcessTemplate();
             this.queryDemandBtns(); 
+            this.queryDemand(); //详情
             this.fpgcsShow = false;
           }else{
             this.$message({message: res.msg,type: 'error'});
@@ -237,10 +261,22 @@
         } else if (params.btnid == '9') { //需求开发
           this.curType = '';
           this.crowdShow = true;
+        } else if (params.btnid == '10') {  //发布需求
+          this.xqType = 'disabled';
+          this.fbxqShow = true;
         } else if (params.btnid == '11') { //完成验证
           this.yzShow = true;
         } else if (params.btnid == '12') { //关闭需求
           this.gbxqShow = true;
+        } else if (params.btnid == '15') { //编辑
+          if(!!this.detailInfo.sfxqbg){
+            this.xqType = 'editDisabled';
+          }else{
+            this.xqType = 'edit';
+          }
+          this.fbxqShow = true;
+        }else{
+          this.kfbShow = true;
         }
       },
       // 驳回
@@ -250,17 +286,14 @@
           nr: data,
           btnbh: this.btnInfo.btnid
         }).then(res => {
-          if (res.state == 'succes') {
-            this.$message({
-              message: '已驳回',
-              type: 'success'
-            });
+          if (res.state == 'success') {
+            this.$message({message: '已驳回',type: 'success'});
+            this.bhShow = false;
             this.queryDemandReplys();
+            this.queryDemandBtns();
+            this.queryProcessTemplate();
           } else {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            });
+            this.$message({message: res.msg,type: 'error'});
           }
         })
       },
@@ -269,18 +302,44 @@
         this.queryDemandReplys();
         this.queryProcessTemplate();
         this.queryDemandBtns();
+        this.queryDemand(); //详情
       },
       // 验证需求
       handleClickYzxq() {
         this.queryDemandReplys();
         this.queryProcessTemplate();
         this.queryDemandBtns();
+        this.queryDemand(); //详情
+      },
+      // 需求提报
+      handleClickXqtb(){
+        this.queryDemandReplys();
+        this.queryProcessTemplate();
+        this.queryDemandBtns();
+        this.queryDemand(); //详情
       },
       // 关闭需求
       handleClickGbxq() {
         this.queryDemandReplys();
         this.queryProcessTemplate();
         this.queryDemandBtns();
+        this.queryDemand(); //详情
+      },
+      // 编辑需求
+      handleCommitDemand(data ){
+        if(data.includes('edit')){
+          this.queryDemandBtns();
+          this.queryDemand(); //详情
+          this.queryProcessTemplate();
+          this.queryDemandReplys();
+        }
+      },
+      // 开发包
+      handleClicKfb(){
+         this.queryDemandBtns();
+          this.queryDemand(); //详情
+          this.queryProcessTemplate();
+          this.queryDemandReplys();
       },
       // 获取需求详情
       queryDemand() {
@@ -351,7 +410,9 @@
       crowdDialog,
       bhDialog,
       xqtbDialog,
-      fpgcsDialog
+      fpgcsDialog,
+      fbxqDialog,
+      kfbDialog
     }
   };
 </script>
@@ -373,11 +434,10 @@
       .demandDetail_bgimg {
         width: 114px;
         height: 74px;
-        // background: url('../../../../static/img/demand-bg.png') no-repeat;
-        background: #999;
+        background: url('../../../../static/img/ywxbk.png') no-repeat;
         color: #fff;
         font-weight: 700;
-        font-size: 18px;
+        font-size: 14px;
         padding: 0 5px;
       }
 

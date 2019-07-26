@@ -237,10 +237,12 @@
                 delete this.form.wid;
                 this.form.fwmc =  this.form.lxr =  this.form.lxfs = this.form.sjbm = '';
                 this.form.bsyj = '';
-                this.form.bsyjfj = '';
+                this.form.bsyjfj = ''; //办事依据附件
                 this.form.fwzn = '0';
                 this.form.fwznsm = '';
-                this.form.fwznfj = '';
+                this.form.fwznfj = '';//服务指南附件
+                this.isClearFileBsyj = !this.isClearFileBsyj; //办事依据清除附件
+                this.isClearFileFwzn = !this.isClearFileFwzn; //服务指南清除附件
                 this.form.fwlb = '';
                 this.form.fwnr = '';
 
@@ -316,7 +318,7 @@
             this.$emit('handleCommitService', this.form);
           },
 
-           getServiceItem(){
+          getServiceItem(){
               this.$get(this.API.getServiceItem,{
               	wid:this.wid
               }).then(res=>{
@@ -325,8 +327,8 @@
               	}else{
 
               	}
-              })
-          },
+            })
+           },
 
 
           valiDate() {

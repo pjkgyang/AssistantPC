@@ -332,6 +332,7 @@ export default {
   addUserDept: window.baseurl + 'serviceitem/addUserDept.do', // 添加部门关系
   userDeptChecked: window.baseurl + 'serviceitem/userDeptChecked.do', // 用户已关联部门编号
   serviceItemStat: window.baseurl + 'serviceitem/serviceItemStat.do', //  服务事项分析
+  deleteServiceItemPlan: window.baseurl + 'serviceitem/deleteServiceItemPlan.do', //  删除服务事项计划
 
   // 开发在线化  api/demandDvpt
   queryDemand:window.baseurl + 'demandDvpt/queryDemand.do', // 获取详情
@@ -354,4 +355,5 @@ export default {
   confirmRequirement: window.baseurl + 'demandDvpt/confirmRequirement.do', //  用户需求确认（需求确认）
   projectTeamVerifyDvpt: window.baseurl + 'demandDvpt/projectTeamVerifyDvpt.do', //  项目团队验证（完成验证）
   confirmDvpt: window.baseurl + 'demandDvpt/confirmDvpt.do', //   关闭需求
+  submitDemandFile: window.baseurl + 'demandDvpt/submitDemandFile.do', //   提交开发包
 }

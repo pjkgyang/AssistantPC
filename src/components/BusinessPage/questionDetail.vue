@@ -1833,7 +1833,7 @@ export default {
 						this.sqjsVisible = true;
 					} else {
 						this.$message({
-							message: '不可重复申请关闭，可驳回已有的再重新申请 ; 已挂起的问题也不可申请关闭！',
+							message: '不可重复申请关闭，可驳回已有的再重新申请； 已挂起的问题请先联系申请人解锁，再申请关闭！',
 							type: 'warning'
 						});
 					}

@@ -1,13 +1,23 @@
 <template>
 	<div class="tree-table">
 		<div class="tree-head">
-			<table>
+			<table v-if="!isAna">
 				<tr>
 					<td class="td1">组织部门</td>
 					<td class="td2">排序</td>
 					<td class="td3">状态</td>
 					<!-- <td class="td5">发布时间</td> -->
 					<td class="td6">操作</td>
+				</tr>
+			</table>
+			<table v-if="!!isAna">
+				<tr>
+					<td class="td1" style="width:400px">组织部门</td>
+					<td class="td4">有服务指南</td>
+					<td class="td4">无服务指南</td>
+					<td class="td4">有信息化支持</td>
+					<td class="td4">无信息化支持</td>
+					<td class="td4">信息化覆盖率</td>
 				</tr>
 			</table>
 		</div>
@@ -18,6 +28,7 @@
 						<tr>
 							<td>
 								<tree-item
+								    :isAna="isAna"
 									v-for="(model, i) in treeDataSource"
 									:key="'root_node_' + i"
 									:root="0"
@@ -26,6 +37,7 @@
 									@deleteFunc="deleteFunc"
 									@startRejectFunc="startRejectFunc"
 									@handlerExpand="handlerExpand"
+									@handleRouter="handleRouter"
 									:nodes="treeDataSource.length"
 									:trees.sync="treeDataSource"
 									:model.sync="model"
@@ -36,7 +48,7 @@
 				</table>
 
 				<table v-else>
-					<tr><td style="text-align: center;">暂无数据</td></tr>
+					<tr><td style="text-align: center;border:1px solid #e8e8e8;">暂无数据</td></tr>
 				</table>
 			</div>
 		</div>
@@ -46,7 +58,7 @@
 <script>
 export default {
 	name: 'treeTable',
-	props: ['list'],
+	props: ['list','isAna'],
 	data() {
 		return {
 			isDesc: false,
@@ -67,6 +79,9 @@ export default {
 	},
 	computed: {},
 	methods: {
+		handleRouter(model,type){
+			this.$emit('handleRouter', model,type);
+		},
 		initTreeData() {
 			// 这里一定要转化，要不然他们的值监听不到变化
 			let tempData = JSON.parse(JSON.stringify(this.list));
@@ -182,8 +197,16 @@ export default {
 		text-align: center;
 		border-bottom: 1px solid #e8e8e8;
 	}
+	.tdbm{
+		width: 400px;
+		padding-left: 30px;
+		border: 1px solid #e8e8e8;
+		border-top: none;
+	}
 	.td4 {
-		width: 220px;
+		width: calc((100vw - 500px)/5);
+		border: 1px solid #e8e8e8;
+		text-align: center;
 	}
 	.td5 {
 		width: 220px;

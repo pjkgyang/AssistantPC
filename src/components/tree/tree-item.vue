@@ -5,7 +5,7 @@
 			<tr>
 				<td :colspan="colSpan">
 					<table>
-						<tr class="leve" :class="levelClass"  :style="{'background':model.Experience==1?'#f7f9ff':'','font-weight':model.Experience==1?'700':''}">
+						<tr class="leve" :class="levelClass"  :style="{'background':model.Experience==1?'#d2dcfa':'','font-weight':model.Experience==1?'700':''}">
 							<td class="td1">
 								<!-- @dblclick="handlerExpand(model)" -->
 								<div :class="{ 'td-title': true }" colcenter>

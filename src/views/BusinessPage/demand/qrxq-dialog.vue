@@ -25,6 +25,7 @@
             <span class="filter-weight">期望开发交付日期：</span>
             <el-date-picker
               size="mini"
+              :picker-options="pickerBeginDateBefore"
               v-model="filterData.qwkfjfrq"
               type="date"
               placeholder="选择日期"
@@ -58,6 +59,14 @@ export default {
   data() {
     return {
       visible: this.show,
+      pickerBeginDateBefore : {
+          disabledDate(time) {
+            let curDate = new Date().getTime();
+            return (
+              time.getTime() < Date.now() - 8.64e7
+            );
+          }
+        },
       texts: ["1分", "2分", "3分", "4分", "5分"],
       filterData: {
         nr: "",
