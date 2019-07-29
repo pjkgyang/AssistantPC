@@ -50,11 +50,11 @@
               <span>请选择需求的招标/交付日期</span>
             </div>
           </el-form-item>
-          <el-form-item>
+          <!-- <el-form-item>
             <el-date-picker @change="handleChoosejfDate" value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore"
               size="mini" type="date" placeholder="请输入需求招标截至日期，到达该日期后，如果没有投标或者选标，需求则会自动关闭" v-model="crowdxqData.zbjzrq"
               style="width: 100%;"></el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-date-picker @change="handleChoosejfDate2" value-format="yyyy-MM-dd" :picker-options="pickerJfrqDateBefore"
               size="mini" type="date" placeholder="请输入预期交付日期日期，中标者将严格按照该日期交付需求相关信息" v-model="crowdxqData.jfrq" style="width: 100%;"></el-date-picker>
@@ -157,7 +157,13 @@
           return;
         }
 
-        this.$emit('handleCommitKfgcs',this.crowdxqData);
+         this.$confirm('您确定分配任务给【王凯】吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$emit('handleCommitKfgcs',this.crowdxqData);
+        }).catch(() => {});
       },
 
        // 截止日期（1）

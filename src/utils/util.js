@@ -18,7 +18,7 @@ export function encryptByDES(message, key){
      });
     return encrypted.toString();
 }
-  
+
 // DES 解密
 export function  decryptByDES(ciphertext, key){
     const keyHex = CryptoJS.enc.Utf8.parse(key);
@@ -31,7 +31,7 @@ export function  decryptByDES(ciphertext, key){
     });
     return decrypted.toString(CryptoJS.enc.Utf8);
   }
-  
+
 //  保留两位小数1
 export function returnFloat(value) {
     var value = Math.round(parseFloat(value) * 100) / 100;
@@ -82,28 +82,28 @@ export function getMyDate(str) {
     return oTime;
 }
 
-export function GetDateStr(DayCount){ 
-    var dd = new Date(); 
-    dd.setDate( dd.getDate() + DayCount);//获取DayCount天后的日期 
-    var y = dd.getFullYear(); 
+export function GetDateStr(DayCount){
+    var dd = new Date();
+    dd.setDate( dd.getDate() + DayCount);//获取DayCount天后的日期
+    var y = dd.getFullYear();
     var m = dd.getMonth()+1;
-    var d = dd.getDate(); 
+    var d = dd.getDate();
     var s = y+"-"+(m<10?('0'+m):m)+"-"+(d<10?('0'+d):d);
     return  s;
 }
 
-export function GetQuestionDateStr(DayCount){ 
-    var dd = new Date(); 
-    dd.setDate( dd.getDate() + DayCount);//获取DayCount天后的日期 
+export function GetQuestionDateStr(DayCount){
+    var dd = new Date();
+    dd.setDate( dd.getDate() + DayCount);//获取DayCount天后的日期
     return dd;
 }
 
-export function GetNextDate(newDate,DayCount){ 
-    var dd = new Date(newDate); 
-    dd.setDate( dd.getDate() + DayCount);//获取DayCount天后的日期 
-    var y = dd.getFullYear(); 
+export function GetNextDate(newDate,DayCount){
+    var dd = new Date(newDate);
+    dd.setDate( dd.getDate() + DayCount);//获取DayCount天后的日期
+    var y = dd.getFullYear();
     var m = dd.getMonth()+1;
-    var d = dd.getDate(); 
+    var d = dd.getDate();
     var s = y+"-"+(m<10?('0'+m):m)+"-"+(d<10?('0'+d):d);
     return  s;
 }
@@ -130,10 +130,10 @@ export function formatTime(time) {
     let unixtime = time
     let unixTimestamp = new Date(unixtime * 1000)
     let Y = unixTimestamp.getFullYear()
-    let M = (unixTimestamp.getMonth()+1) < 10 ? ( '0' + (unixTimestamp.getMonth()+1)):unixTimestamp.getMonth()+1 
+    let M = (unixTimestamp.getMonth()+1) < 10 ? ( '0' + (unixTimestamp.getMonth()+1)):unixTimestamp.getMonth()+1
     let D = (unixTimestamp.getDate() < 10 ? ('0' + unixTimestamp.getDate()) : unixTimestamp.getDate())
     let H = (unixTimestamp.getHours() < 10 ? ('0' + unixTimestamp.getHours()) : unixTimestamp.getHours())
-    let MM = (unixTimestamp.getMinutes() < 10 ? ('0' + unixTimestamp.getMinutes()) : unixTimestamp.getMinutes() );          //分  
+    let MM = (unixTimestamp.getMinutes() < 10 ? ('0' + unixTimestamp.getMinutes()) : unixTimestamp.getMinutes() );          //分
     let S = (unixTimestamp.getSeconds() < 10 ? ('0' + unixTimestamp.getSeconds()) : unixTimestamp.getSeconds());
     let toDay = Y + '-' + M + '-' + D + ' ' + H + ':' + MM + ':' + S
     return toDay
@@ -145,7 +145,7 @@ export function getMenu(type,Arrlist,isInterface){
         name:type,
         isInterface:isInterface||''
     }).then(({data})=>{
-      if (!!data && data.state == "success") {     
+      if (!!data && data.state == "success") {
               let map = data.data;
               let Arr = Object.keys(map);
               let McArr = Object.values(map)
@@ -175,19 +175,20 @@ function delCookie(name){
         return unescape(arr[2]);
     else
         return null;
-} 
+}
 
 // 获取最后一天周几
  function getLastMonthWeekDay(year,month) {
       let myDate = new Date(year, month, 0);
       let lastDay = year + "-" + (month>=10?month:'0'+month) + "-" + myDate.getDate();
-	  let week  = new Data(lastDay).getDay();
+	  let week  = new Date(lastDay).getDay()==0?7:new Date(lastDay).getDay();
 	  return week;
 }
 
+
 export function getSession(name) {
      return JSON.parse(sessionStorage.getItem(name));
-} 
+}
 
 //  排序
 export function compare(prop) {
@@ -204,16 +205,16 @@ export function compare(prop) {
             return 1;
         } else {
             return 0;
-        }            
-    } 
+        }
+    }
 }
 
 function getOffsetDays(time1, time2) {
     return Math.ceil(Math.abs(time1 - time2) / (3600 * 24 * 1e3 * 7));
 }
- 
+
 // 获取周数
-export function  getWeeks(year, month){ 
+export function  getWeeks(year, month){
     var d = new Date();
     let lastMonth = month-1;
     let lastYear = year;
@@ -227,17 +228,17 @@ export function  getWeeks(year, month){
     if (lastMonth < 10) {
         lastMonth = "0" + lastMonth;
     }
-    
-    let myDate = new Date(year, month, 0); 
+
+    let myDate = new Date(year, month, 0);
     let myDay = year + "-" + month + "-" + myDate.getDate();////本月的最后一天
     let firstWeekDay = new Date(myDay).getDay();
     if(firstWeekDay<4){
         firstWeek =  addDate(myDay,-(firstWeekDay));
     }else{
         firstWeek = addDate(myDay,(7-firstWeekDay));
-    } 
+    }
 
-    let lastDate = new Date(lastYear, lastMonth, 0); 
+    let lastDate = new Date(lastYear, lastMonth, 0);
     let lastDay = lastYear + "-" + lastMonth + "-" + lastDate.getDate();//上月的最后一天
     let lastWeekDay = new Date(lastDay).getDay();
     if(lastWeekDay<4){
@@ -251,18 +252,18 @@ export function  getWeeks(year, month){
 }
 
 // 获取 （days 前后日期）
-function addDate(date,days){ 
-    var d=new Date(date); 
-    d.setDate(d.getDate()+days); 
-    var m=d.getMonth()+1; 
-    var tmpDate = d.getFullYear()+ "/" + m + "/" + d.getDate(); 
-    var resultDate = new Date(tmpDate); 
-    var y = resultDate.getFullYear(); 
+function addDate(date,days){
+    var d=new Date(date);
+    d.setDate(d.getDate()+days);
+    var m=d.getMonth()+1;
+    var tmpDate = d.getFullYear()+ "/" + m + "/" + d.getDate();
+    var resultDate = new Date(tmpDate);
+    var y = resultDate.getFullYear();
     var m = resultDate.getMonth()+1;
-    var d = resultDate.getDate(); 
+    var d = resultDate.getDate();
     var s = y+"-"+(m<10?('0'+m):m)+"-"+(d<10?('0'+d):d);
     return  s;
-} 
+}
 
 // 获取每月第几周的周一的日期
 function getMondayTime(year, month,weekday) {
@@ -287,7 +288,7 @@ function getMondayTime(year, month,weekday) {
 export function getLastMonth(year,month){
     var nowdays = new Date();
     let nowMonth;
-    if(month==0)
+    if(month == 0)
     {
         month=12;
         year=year-1;
@@ -296,22 +297,28 @@ export function getLastMonth(year,month){
         nowMonth = '0' + (month+1);
         month = "0" + month;
     }else{
-        nowMonth = month+1 
+        nowMonth = month+1
     }
     var firstDay = year + "-" + month + "-" + "01";//上个月的第一天
     var myDate = new Date(year, month, 0);
     var lastDay = year + "-" + month + "-" + myDate.getDate();//上个月的最后一天
     let lastWeekDay = new Date(lastDay).getDay();
-	
+
     if(lastWeekDay<4){
         return addDate(lastDay,-(lastWeekDay-1));
     }else{
         return getMondayTime(year,nowMonth,1);
-    } 
+    }
 }
 
 // 获取月份最后一天
 export function getLastMonthDay(year,month){
+    let myDate = new Date(year, month, 0);
+    let lastDay = year + "-" + (month>=10?month:'0'+month) + "-" + myDate.getDate();
+    return lastDay;
+}
+// 获取月份最后一天
+function getLastMonthDay(year,month){
     let myDate = new Date(year, month, 0);
     let lastDay = year + "-" + (month>=10?month:'0'+month) + "-" + myDate.getDate();
     return lastDay;
@@ -341,7 +348,7 @@ export function getNextMonth(date) {
         month2 = '0' + month2;
     }
 
-    var t2 = year2 + '-' + month2 
+    var t2 = year2 + '-' + month2
     return t2;
 }
 
@@ -372,40 +379,31 @@ export function  getPreMonth(date) {
     return t2;
 }
 
-export function weekIndexInMonth(str){
+
+export function weekNumInMonth(str){
     let date = new Date();
-    let dateStart = new Date((new Date(str))); // 本月初
-    let firstWeek = 1;
-    if (dateStart.getDay() === 1) {
-        firstWeek = 1;
-    } else if (dateStart.getDay() === 0) {
-        firstWeek = 8 - 7 + 1;
-    } else {
-        firstWeek = 8 - dateStart.getDay() + 1;
+    let year = str.split('/')[0];
+    let month = str.split('/')[1];
+    let firstDay = year + '/'+month+'/'+'01'; //获取当月第一天
+    let firstDayWeek = new Date(firstDay).getDay()==0?7:new Date(firstDay).getDay();//获取第一天周几
+    let lastDay = getLastMonthDay(year,Number(month));//获取当月最后一天
+    let lastDayWeek = getLastMonthWeekDay(year,month);//获取第一天周几
+    let startDate = '',endDate = '';
+
+    if(firstDayWeek <= 4){
+        startDate =  addDate(firstDay,-(firstDayWeek-1));
+    }else{
+        startDate =  addDate(firstDay,7-firstDayWeek);
     }
-	
-    let weekIndex = 1;
-    let c = Math.ceil(Math.abs(Date.now() - (new Date(str)).getTime())/(24*3600*1000));
-    // let c = date.getDate();
-    if (date.getDay() === 1 && date.getDate() < 7) {
-        weekIndex = 1;
-    } else if (c < firstWeek ) {
-        weekIndex = -1;
-    } else {
-        if (c < 7) {
-            weekIndex = Math.ceil(c/7);
-        } else {
-            c =  c - firstWeek + 1;
-            if (c%7 === 0) {
-                if (dateStart.getDay() !== 6) {
-                    weekIndex = c/7;
-                } else {
-                    weekIndex = c/7 + 1;
-                }
-            } else {
-                weekIndex = Math.ceil(c/7);
-            }
-        }
+
+    if(lastDayWeek <= 4){
+        endDate =  addDate(lastDay,-(lastDayWeek-1));
+    }else{
+        endDate =  addDate(lastDay,7-lastDayWeek);
     }
-    return weekIndex;
+
+    let c = (new Date(endDate).getTime() - new Date(startDate).getTime())/(24*3600*1000);
+    let num = Math.ceil(Math.abs(Date.now() - (new Date(startDate)).getTime()) / (24*3600*1000));
+    return Math.ceil(num/7);
+
 }

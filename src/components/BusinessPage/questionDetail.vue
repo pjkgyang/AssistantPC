@@ -625,6 +625,7 @@
 					</el-table>
 				</div>
 			</el-dialog>
+			
 			<el-dialog title="编辑回复内容" :visible.sync="editEplyVisible" :close-on-click-modal="false" width="800px" top="30px" append-to-body>
 				<div style="padding:20px 10px" class="edit-reply">
 					<div v-if="hflx != 7 || hflx != 6 || hflx != 5 || hflx != 9">

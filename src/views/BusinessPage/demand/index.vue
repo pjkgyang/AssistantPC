@@ -15,7 +15,7 @@
           <el-button type="primary" size="mini" @click="handleExport">导出</el-button>
         </div>
         <div v-show="queryLJshow">
-          <div class="mg-12">
+          <div class="mg-12" flex>
             <p class="query-title">需求分类:</p>
             <p class="query-list">
               <span :class="{ 'bg-active': filterData.xqfl == '' }" @click="handleChangeXqfl('')">全部</span>
@@ -24,7 +24,7 @@
               </span>
             </p>
           </div>
-          <div>
+          <div flex>
             <p class="query-title">查询状态:</p>
             <p class="query-list">
               <span :class="{ 'bg-active': filterData.xqzt == '' }" @click="handleChangexqzt('')">全部</span>
@@ -33,7 +33,7 @@
               </span>
             </p>
           </div>
-          <div class="mg-12">
+          <div class="mg-12" flex>
             <p class="query-title">需求类型:</p>
             <p class="query-list">
               <span :class="{ 'bg-active': filterData.xqlx == '' }" @click="handleChangeXqlx('')">全部</span>
@@ -43,15 +43,15 @@
             </p>
           </div>
           <div flex>
-            <p class="query-title">模块:</p>
+            <p class="query-title">产品:</p>
             <p  style="width:90%">
               <el-cascader size="mini" style="width:325px" v-model="val" :props="defaultProps" :options="xmcpList" @change="handleItemChange"
-              :show-all-levels="false"></el-cascader>
+              :show-all-levels="false" change-on-select></el-cascader>
 
               <!-- <el-button size="mini" type="primary" @click="handleCheckALLcp">查询全部</el-button> -->
             </p>
           </div>
-          <div flex class="mg-12">
+          <div flex class="mg-12" v-if="groupTag.includes('JZGCRY')||groupTag.includes('JYGL')">
             <p class="query-title">区域工程:</p>
             <p class="query-list" style="width:90%;">
               <span :class="{ 'bg-active': filterData.gczd == '' }" @click="handleChangeGczd('')">全部</span>
@@ -136,6 +136,7 @@
         stepDatas: [], //流程
         val:[],
         unitType:'',//是否为金智
+        groupTag:'',
         defaultProps: {
           value:'id',
           label:'title'
@@ -184,6 +185,7 @@
       this.queryDemandProductTree();
 
       this.unitType = JSON.parse(sessionStorage.getItem('userInfo')).unitType;
+      this.groupTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
 
     },
     methods: {
@@ -344,7 +346,7 @@
         this.$get(this.API.demandProductTree, {}).then(res => {
             if (res.state == 'success') {
               this.xmcpList = res.data;
-              this.xmcpList.push({id: "",
+              this.xmcpList.unshift({id: "",
                       isExpand: 0,
                       isOptional: 0,
                       level: 0,

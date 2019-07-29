@@ -39,9 +39,11 @@
           <el-form-item label="项目状态" required>
             <el-input size="mini" type="text" style="width:325px" v-model="xmzt" readonly></el-input>
           </el-form-item>
+          <!-- 
+              :disabled="Type == 'editDisabled'"
+           -->
           <el-form-item label="需求分类" required>
             <el-select
-              :disabled="Type == 'disabled'||Type == 'editDisabled'"
               v-model="demandData.xqfl"
               size="mini"
               placeholder="请选择需求分类"
@@ -154,6 +156,7 @@
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
               style="width:325px;"
+              @change="handleChangeQwwcrq"
             ></el-date-picker>
           </el-form-item>
 
@@ -168,6 +171,7 @@
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
               style="width:325px;"
+              @change="handleChangeQwjfrq"
             ></el-date-picker>
           </el-form-item>
 
@@ -344,6 +348,26 @@ export default {
     cpTree
   },
   methods: {
+    handleChangeQwwcrq(){
+      if(!!this.demandData.qwkfjfrq && (new Date(this.demandData.qwsjwcrq) > new Date(this.demandData.qwkfjfrq))){
+        this.$alert('期望设计完成日期必须小于期望开发交付日期', '提示', {
+          confirmButtonText: '确定',
+          type:'warning',
+          callback: action => {}
+        });
+        this.demandData.qwsjwcrq = '';
+      }
+    },
+    handleChangeQwjfrq(){
+       if(!!this.demandData.qwsjwcrq && (new Date(this.demandData.qwsjwcrq) > new Date(this.demandData.qwkfjfrq))){
+        this.$alert('期望设计完成日期必须小于期望开发交付日期', '提示', {
+          confirmButtonText: '确定',
+          type:'warning',
+          callback: action => {}
+        });
+        this.demandData.qwkfjfrq = '';
+      }
+    },
     // 编辑附件
     handleRemoveFwznfj() {
       this.fwznfjMc = "";

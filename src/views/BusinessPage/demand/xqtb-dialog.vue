@@ -35,13 +35,14 @@
             <el-rate v-model="filterData.xysd" :texts="texts" show-text></el-rate>
           </p>
           <p class="pj-content">
-            <span class="filter-weight before-require">内容：</span>
-            <el-input v-model="filterData.nr" type="textarea" :rows="5" :maxlength="500" style="width:680px" placeholder="请输入备注内容" ></el-input>
-          </p>
-          <p class="pj-content">
             <span class="filter-weight before-require">crowd评价说明：</span>
             <el-input v-model="filterData.crowdpjsm" type="textarea" :rows="5" :maxlength="500" style="width:680px" placeholder="请输入crowd评价说明" ></el-input>
           </p>
+          <p class="pj-content">
+            <span class="filter-weight before-require">回复内容：</span>
+            <el-input v-model="filterData.nr" type="textarea" :rows="5" :maxlength="500" style="width:680px" placeholder="请输入回复内容" ></el-input>
+          </p>
+          
         </section>
         <section class="pj-btn-group">
           <el-button size="small" type="primary" @click="handleClickSure">确定</el-button>
@@ -65,12 +66,12 @@
         filterData: {
           nr: '',
           qrls:'',
-          sfhq: 1,
+          sfhq: 0,
           fjwid:'',
           fjmc:'',
-          kfzl:5,
-          fwzl:5,
-          xysd:5,
+          kfzl:0,
+          fwzl:0,
+          xysd:0,
           crowdpjsm:''
         }
       }
@@ -95,9 +96,9 @@
             this.filterData.sfhq =  1;
             this.filterData.fjwid = '';
             this.filterData.fjmc = '';
-            this.filterData.kfzl = 5;
-            this.filterData.fwzl = 5;
-            this.filterData.xysd = 5;
+            this.filterData.kfzl = 0;
+            this.filterData.fwzl = 0;
+            this.filterData.xysd = 0;
             this.filterData.crowdpjsm = '';
           }else{
             this.$message({message:res.msg,type:'error'});

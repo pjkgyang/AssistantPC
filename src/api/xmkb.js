@@ -274,6 +274,7 @@ export function saveQuestion(obj) {
 		nr: obj.nr,
 		qwjjrq: obj.qwjjrq,
 		hjfjwid: obj.hjfjwid || '',
+		internalProject:obj.internalProject,
 		wid: obj.wid,
 	}, {
 			transformRequest: [function (data) {

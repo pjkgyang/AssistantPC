@@ -770,6 +770,10 @@ input[type="file"] {
 	height: 33px;
 	line-height: 33px;
 }
+/* 级联下拉  */
+.el-cascader-menu__wrap{
+	height: 370px;
+}
 
 /* @media screen and (max-width:1400px){
     .report-chooseitem{

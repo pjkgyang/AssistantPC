@@ -12,9 +12,10 @@
     >
       <div class="dialog-xqqr">
         <section>
+          
           <div class="mg-12">
             <span class="filter-weight">附件：</span>
-            <a :href="API.downloadFile+'?fjId='+demandDetail.xqfjwid">{{demandDetail.xqfjmc}}</a>
+            <a :href="API.downloadFile+'?fjId='+demandDetail.xxyxfjwid">{{demandDetail.xxyxfjmc}}</a>
           </div>
 
           <div flex>
