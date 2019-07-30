@@ -221,7 +221,7 @@
       show(n, o) {
         this.visible = this.show;
         if (this.show) {
-          this.crowdxqData.zbjzrq = GetDateStr(7);
+          this.crowdxqData.zbjzrq = GetDateStr(0);
           this.$nextTick(() => {
             $("#summernoteT").summernote({
               dialogsInBody: true,

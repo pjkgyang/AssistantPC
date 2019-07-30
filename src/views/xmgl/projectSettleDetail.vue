@@ -26,6 +26,33 @@
               </tr>
             </table>
           </div>
+
+          <div>
+             <h5>冲账信息</h5>
+             <el-table
+              :data="jsczData"
+              border
+              style="width: 100%"
+            >
+
+              <el-table-column prop="dqjd" label="结算点" min-width="140"></el-table-column>
+              <el-table-column prop="jsrq" label="结算时间" width="100"></el-table-column>
+              <el-table-column prop="cybh" label="工号" width="110"></el-table-column>
+              <el-table-column prop="cymc" label="姓名" width="110"></el-table-column>
+              <el-table-column prop="yjsssfy" label="结算实施金额" width="110"></el-table-column>
+              <el-table-column prop="yjsekfy" label="结算二开金额" width="110"></el-table-column>
+              <el-table-column prop="yjskbfy" label="结算可变金额" width="110"></el-table-column>
+              <el-table-column prop="jlje" label="奖励金额" width="90"></el-table-column>
+              <el-table-column prop="cfje" label="惩罚金额" width="150" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="hj" label="合计" width="90"></el-table-column>
+              <el-table-column prop="zsssfy" label="折算实施费用" width="110" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="zsekfy" label="折算二开费用" width="110" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="zskbfy" label="折算可变费用" width="110" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="zshj" label="折算合计费用" width="110" show-overflow-tooltip></el-table-column>
+
+            </el-table>
+          </div>
+
           <div>
             <h5>结算申请信息</h5>
             <table>
@@ -190,7 +217,7 @@
                   >
                 </td> -->
                 <th>惩罚金额（元）</th>
-								<td>{{!jsxx.cfje?0:jsxx.cfje}}</td> 
+								<td>{{!jsxx.cfje?0:jsxx.cfje}}</td>
             <!--    <td colspan="3">
                   <input
                     style="width: 100%;"
@@ -238,8 +265,8 @@
                 <td>{{item.jsssfy}}</td>
                 <td>{{item.jsekfy}}</td>
                 <td>{{item.jskbfy}}</td>
-								
-								<td> 
+
+								<td>
 								  <input
                     v-model="item.jlje"
                     type="number"
@@ -259,7 +286,7 @@
 									>
 									<span v-else>{{item.cfje}}</span>
 								</td>
-								
+
                 <td>{{!item.jsje?0:item.jsje}}</td>
 
                 <td>{{ !item.zsssfy?0:item.zsssfy }}</td>
@@ -439,6 +466,7 @@ export default {
       jsxx: {}, //结算详情
       jssqData: {}, //结算申请
       tdxxData: [],
+      jsczData:[],
       tbje: null,
       zbxx: "",
       // 承担费用
@@ -512,15 +540,15 @@ export default {
       //   Number(this.jsxx.jlje) -
       //   Number(this.jsxx.cfje);
       // this.jsxx.jsje = this.jsxx.jsje < 0 ? 0 : this.jsxx.jsje;
-			
-			// 本次已结算金额加上奖励-惩罚  把奖励和惩罚加到已结算总金额，小于0，不处理。 
+
+			// 本次已结算金额加上奖励-惩罚  把奖励和惩罚加到已结算总金额，小于0，不处理。
 			this.jsxx.sjzfy =
 			  Number(this.jsxx.sjssfy) +
 			  Number(this.jsxx.sjekfy) +
 			  Number(this.jsxx.sjkbfy);
 			this.jsxx.sjzfy = this.jsxx.sjzfy < 0 ? 0 : this.jsxx.sjzfy;
     },
-		
+
     // 计算本次结算总金额
     handleInputfy(type) {
       switch (type) {
@@ -573,7 +601,7 @@ export default {
         ekfy += !ele.jsekfy ? 0 : Number(ele.jsekfy);
         kbfy += !ele.jskbfy ? 0 : Number(ele.jskbfy);
       });
-			
+
 			this.tdywyData.forEach(ele => {
 				if(ele.cymc != '合计'){
 					grjsData.push({
@@ -587,9 +615,9 @@ export default {
 					});
 				}
 			});
-			
+
       this.$message.close();
-			
+
       // 个人结算实施费用
       if (this.jsxx.sjssfy != this.jsssfyTotal) {
         msg += "本次结算实施费用必须等于团队结算实施金额合计！<br>";
@@ -630,7 +658,7 @@ export default {
         rlssfy: Number(this.jsxx.rlssfy),
         rlekfy: Number(this.jsxx.rlekfy),
         rlkbfy: Number(this.jsxx.rlkbfy),
-        
+
 				// 本次结算实施费用
         sjssfy: Number(this.jsxx.sjssfy),
         sjekfy: Number(this.jsxx.sjekfy),
@@ -729,7 +757,7 @@ export default {
     // 金额计算
     querySettleMoney(type) {
       this.$get(this.url, {
-        xmbh: this.jsxx.xmbh, 
+        xmbh: this.jsxx.xmbh,
         jssqwid: this.jssqData.wid
       }).then(res => {
         if (res.state == "success") {
@@ -743,7 +771,7 @@ export default {
         }
       });
     },
-		
+
 		// 奖励，惩罚 （个人信息结算）
 		handleChangeJcje(index,type){
 			let jljeTotal = 0,
@@ -761,10 +789,10 @@ export default {
 			});
 			this.jsxx.jlje = jljeTotal;
 			this.jsxx.cfje = cfjeTotal;
-			
+
 		},
-		
-		
+
+
     // 实施，二开，可变（团队结算信息）
     handleChangeInput(index, type) {
       this.jsssfyTotal = 0;
@@ -778,9 +806,9 @@ export default {
       this.tdxxData[index].zsekfy = 0;
       this.tdxxData[index].zskbfy = 0;
       this.tdxxData[index].zsje = 0;
-     
+
       this.tdxxData[index].jsje = Number(this.tdxxData[index].jsssfy) + Number(this.tdxxData[index].jsekfy) +Number(this.tdxxData[index].jskbfy);
-      
+
       // 折算实施费用
       this.tdxxData[index].zsssfy = Number(this.tdxxData[index].jsssfy);
       // 折算实施费用
@@ -850,6 +878,7 @@ export default {
         if (res.state == "success") {
           this.jssqData = res.data.jssqData;
           this.tdxxData = !res.data.jstdData ? [] : res.data.jstdData;
+          this.jsczData = !res.data.jsczData ? [] : res.data.jsczData;
           this.tdywyData = !res.data.jstdYwyData ? [] : res.data.jstdYwyData; //个人结算信息
 
           this.jsxx = res.data.jsxx;
@@ -871,6 +900,8 @@ export default {
           this.tdxxData.forEach(ele => {
             this.jsssfyTotal += !ele.jsssfy ? 0 : Number(ele.jsssfy);
           });
+
+
         } else {
           this.$message({
             message: res.msg,

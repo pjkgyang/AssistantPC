@@ -12,7 +12,7 @@
           &#x3000;
           <el-button type="primary" size="mini" @click="handleQuery">查询</el-button>
         </div>
-    
+
         <div v-show="queryLJshow">
           <div class="mg-12">
             <p class="query-title">登记日期:</p>
@@ -60,7 +60,7 @@
 
       <div class="pannelPaddingBg-10 mg-12">
         <div class="pd-10 ">
-           <el-button size="mini" type="danger" @click="bjShow = true">服务登记</el-button>
+           <el-button size="mini" type="danger" @click="yypzxqShow = true">服务登记</el-button>
         </div>
         <ul class="serviceCounter-list">
           <li flex v-for="(item, index) in dataList" :key="index">
@@ -94,8 +94,9 @@
       </div>
 
       <fwdjDialog :show.sync="fwdjShow"></fwdjDialog>
-      <yyzDialog :show.sync="yypzShow"></yyzDialog>
+      <yypzDialog :show.sync="yypzShow"></yypzDialog>
       <BjDialog :show.sync="bjShow"></BjDialog>
+      <yypzxqDialog :show.sync="yypzxqShow"></yypzxqDialog>
   </div>
 </template>
 
@@ -103,8 +104,9 @@
 import { getMenu, getSession } from "@/utils/util.js";
 import emptyContent from "@/components/BusinessPage/emptyContent";
 import fwdjDialog from "@/views/BusinessPage/serviceCounter/fwdj-dialog";
-import yyzDialog from "@/views/BusinessPage/serviceCounter/yypz-dialog";
+import yypzDialog from "@/views/BusinessPage/serviceCounter/yypz-dialog";
 import BjDialog from "@/views/BusinessPage/serviceCounter/bj-dialog";
+import yypzxqDialog from "@/views/BusinessPage/serviceCounter/yypzxq-dialog";
 
 export default {
   data() {
@@ -112,6 +114,7 @@ export default {
       fwdjShow: false,
       yypzShow:false,
       bjShow:false,
+      yypzxqShow:false,//配置详情
       clztList: [], //处理状态
       wtjbList: [], //问题级别
       sfcbList: [
@@ -236,8 +239,9 @@ export default {
   components: {
     emptyContent,
     fwdjDialog,
-    yyzDialog,
-    BjDialog
+    yypzDialog,
+    BjDialog,
+    yypzxqDialog
   }
 };
 </script>
@@ -258,16 +262,6 @@ export default {
       border-bottom: 1px solid #dddddd;
       padding: 20px 12px;
     }
-
-    // .serviceCounter-list_bgimg {
-    //   width: 114px;
-    //   height: 74px;
-    //   background: #999;
-    //   color: #fff;
-    //   font-weight: 700;
-    //   font-size: 16px;
-    //   padding: 0 5px;
-    // }
 
     .serviceCounter-list-info {
       padding: 0 20px;

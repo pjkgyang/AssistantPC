@@ -199,7 +199,8 @@ export function queryAllQuestions(obj) {
 			wtfbq: obj.wtfbq || "",
 			wtgjzt: obj.wtgjzt || "",
 			tjkf: obj.tjkf || "",
-			sqgq:obj.sqgq||""
+			sqgq:obj.sqgq||"",
+      lcbh:obj.lcbh
 		}
 	})
 }
@@ -748,7 +749,7 @@ export function canApplyClose(obj) {
 	})
 }
 
-//  
+//
 export function queryResponsibleProduct(obj) {
 	let url = window.baseurl + quesurl + 'queryResponsibleProduct.do'
 	return axios.get(url, {

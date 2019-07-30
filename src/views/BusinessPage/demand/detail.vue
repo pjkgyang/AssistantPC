@@ -86,8 +86,8 @@
                 <div  v-html="reply.nr"></div>
                 <div>
                   <br>
-                  <p v-if="!!reply.fbfjmc"><span>附件：</span><a  title="点击下载" :href="API.downloadFile+'?fjId='+reply.fbwjbh" target="_blank">{{reply.fbfjmc}}</a></p>  
-                  <p v-if="!!reply.xxyxfjmc"><span>附件：</span><a  title="点击下载" :href="API.downloadFile+'?fjId='+reply.xxyxfjwid" target="_blank">{{reply.xxyxfjmc}}</a></p>  
+                  <p v-if="!!reply.fbfjmc"><span>附件：</span><a  title="点击下载" :href="API.downloadFile+'?fjId='+reply.fbwjbh" target="_blank">{{reply.fbfjmc}}</a></p>
+                  <p v-if="!!reply.xxyxfjmc"><span>附件：</span><a  title="点击下载" :href="API.downloadFile+'?fjId='+reply.xxyxfjwid" target="_blank">{{reply.xxyxfjmc}}</a></p>
                   <p v-if="!!reply.crowdrwbh"><span>任务编号：{{reply.crowdrwbh}} &#x3000; </span><a href="javaScript:;" @click="handleClickRwxq(reply.crowdrwbh)">查看任务详情</a></p>
                   <p v-if="!!reply.fjwid"><span>附件：&#x3000; </span><a  title="点击下载" :href="API.downloadFile+'?fjId='+reply.fjwid" target="_blank">{{reply.fjmc}}</a></p>
                 </div>
@@ -141,7 +141,7 @@
     <!-- 发布需求，编辑 -->
     <fbxqDialog :show.sync="fbxqShow" :demandInfo="detailInfo" :Type="xqType" :btnbh="btnInfo.btnid" @handleCommitDemand="handleCommitDemand"></fbxqDialog>
     <!-- 提交开发包  -->
-    <kfbDialog :show.sync="kfbShow" :zbwid="zbwid" :btnbh="btnInfo.btnid"  @handleClickSure="handleClicKfb"></kfbDialog> 
+    <kfbDialog :show.sync="kfbShow" :zbwid="zbwid" :btnbh="btnInfo.btnid"  @handleClickSure="handleClicKfb"></kfbDialog>
 
   </div>
 </template>
@@ -229,7 +229,7 @@ import { getCrowdId,getCrowdRwxx,getCrowdRwzt} from '@/api/xmkb.js';
       handleCommitCrowd(){
         this.queryProcessTemplate(); //流程
         this.queryDemandReplys(); //回复
-        this.queryDemandBtns(); 
+        this.queryDemandBtns();
         this.queryDemand(); //详情
       },
 
@@ -238,17 +238,17 @@ import { getCrowdId,getCrowdRwxx,getCrowdRwzt} from '@/api/xmkb.js';
         let formData = data;
         formData.zbwid = this.zbwid;
         formData.btnbh = this.btnInfo.btnid;
-        
+
         this.$post(this.API.distributionDvpt,formData).then(res=>{
           if(res.state == 'success'){
             this.$message({message:'保存成功',type:'success'});
             this.queryDemandReplys();
             this.queryProcessTemplate();
-            this.queryDemandBtns(); 
+            this.queryDemandBtns();
             this.queryDemand(); //详情
             this.fpgcsShow = false;
           }else{
-             this.$alert(re.msg, '提示', {
+             this.$alert(res.msg, '提示', {
                 confirmButtonText: '确定',
                 type:'error'
              });

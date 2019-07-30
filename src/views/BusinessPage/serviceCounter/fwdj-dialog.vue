@@ -1,7 +1,7 @@
 <template>
   <div class="dialog-container" @click="hanldeHideCp($event)">
     <el-dialog
-      title="我要提需求"
+      title="服务请求登记"
       width="1000px"
       top="30px"
       :visible.sync="visible"
@@ -149,7 +149,7 @@
             ></el-date-picker>
           </el-form-item>
 
-      
+
           <el-form-item label="标题" required>
             <el-input
               size="mini"

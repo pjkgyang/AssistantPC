@@ -14,7 +14,7 @@
           placeholder="选择日期"
           format="yyyy 年 MM 月 dd 日"
           value-format="yyyy-MM-dd">
-        </el-date-picker> 至 
+        </el-date-picker> 至
          <el-date-picker
           size="mini"
            @change="handleChangeTxrq"
@@ -27,6 +27,7 @@
       </div>
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column prop="txrq" label="填写日期" width="110"></el-table-column>
+        <el-table-column prop="dwmc" label="学校" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="fwmc" label="服务事项名称" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="bmmc" label="部门名称" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="fwdx" label="服务对象" min-width="150" show-overflow-tooltip></el-table-column>
@@ -115,7 +116,7 @@
              this.$message({message:'删除成功',type:'success'});
              this.pageServiceItemPlan();
            }else{
-             this.$message({message: res.msg, type: 'error'}); 
+             this.$message({message: res.msg, type: 'error'});
            }
          })
         }).catch(() => {});

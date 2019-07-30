@@ -1,7 +1,7 @@
 <template>
   <div class="dialog-container">
     <el-dialog
-      title="我要提需求"
+      title="应用配置管理维护"
       width="1000px"
       top="30px"
       :visible.sync="visible"
@@ -105,7 +105,7 @@
             <el-input size="mini" type="text" style="width:325px" v-model="fwdjData.lxfs" ></el-input>
           </el-form-item>
 
-      
+
           <el-form-item label="访问地址" required>
             <el-input
               size="mini"
@@ -256,7 +256,7 @@ export default {
     show() {
       this.visible = this.show;
       if (this.show) {
-      
+
       } else {
       }
     }

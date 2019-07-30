@@ -2,10 +2,10 @@
   <div style="height:100%;min-height:100%;overflow-y:auto;" class="page-component__scroll">
     <div v-if="navshow">
         <div class="main_TopNav" >
-            <header-user :userNav="userNav" :userInfo="userInfo" :shown="loginShow" @handleCommand="handleCommand" ></header-user>  
+            <header-user :userNav="userNav" :userInfo="userInfo" :shown="loginShow" @handleCommand="handleCommand" ></header-user>
         </div>
     </div>
-    <div :class="{'main_page':!hash.includes('questionDetail'),'main_page-questionDetail':hash.includes('questionDetail')}">
+    <div :class="{'main_page':$route.path == '/questionDetail','main_page-questionDetail':$route.path == '/questionDetail'}">
         <keep-alive>
             <router-view></router-view>
         </keep-alive>
@@ -29,8 +29,7 @@ export default {
       userInfo: {},
       userNav: [],
       navshow: true,
-      disabled: false,
-      hash: ""
+      disabled: false
     };
   },
   methods: {
@@ -83,13 +82,8 @@ export default {
     }
   },
   mounted() {
-    this.hash = window.location.hash;
     let _this = this;
-    if (
-      (window.location.hash.includes("questionDetail") ||
-        this.$route.path == "/zdsfw") &&
-      !window.location.hash.includes("h=1")
-    ) {
+    if ((this.$route.path == "/questionDetail" || this.$route.path == "/zdsfw" || this.$route.path == "/zdsfwDetail") && !window.location.hash.includes("h=1")) {
       this.navshow = false;
       return;
     }
@@ -138,7 +132,7 @@ export default {
     $(".main_page").scroll(function() {
       _this.handleScroll();
     });
-		
+
 		window.scroll(()=>{
 			console.log(window.scrollTop)
 		})
