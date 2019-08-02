@@ -83,7 +83,8 @@ export default {
   },
   mounted() {
     let _this = this;
-    if ((this.$route.path == "/questionDetail" || this.$route.path == "/zdsfw" || this.$route.path == "/zdsfwDetail") && !window.location.hash.includes("h=1")) {
+    //  || this.$route.path == "/zdsfw" || this.$route.path == "/zdsfwDetail"
+    if ((this.$route.path == "/questionDetail") && !window.location.hash.includes("h=1")) {
       this.navshow = false;
       return;
     }

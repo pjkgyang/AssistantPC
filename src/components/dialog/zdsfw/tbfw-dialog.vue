@@ -7,7 +7,7 @@
                   <!-- isMultiple -->
                   <div v-if="isMultiple">
                     <div>
-                        <span class="filter-weight before-require">问题：</span>
+                        &#x3000;&#x3000;&#x3000;&#x3000;<span class="filter-weight before-require">问题：</span>
                         <span>
                             <el-button style="padding:10px" size="mini" type="primary" icon="el-icon-plus" circle @click="handleAddOption('wt')"></el-button>
                         </span>
@@ -24,7 +24,7 @@
                     </div><br>
 										
                     <div>
-                        <span class="filter-weight before-require">风险：</span>
+                       &#x3000;&#x3000;&#x3000;&#x3000;<span class="filter-weight before-require">风险：</span>
                         <span>
                             <el-button style="padding:10px" size="mini" type="primary" icon="el-icon-plus" circle @click="handleAddOption('fx')"></el-button>
                         </span>
@@ -43,15 +43,19 @@
                     </div>
                     <form action="">
                         <div>
-                          <span class="filter-weight before-require">巡检工时：</span>
-                          <el-input size="mini"  placeholder="请输入巡检工时(小时)" v-model="form.xjgs" style="width:550px"></el-input>
+                          &#x3000;&#x3000;<span class="filter-weight before-require">巡检工时：</span>
+                          <el-input size="mini"  placeholder="请输入巡检工时(小时)" v-model="form.xjgs" style="width:530px"></el-input>
+                        </div><br>
+                        <div>
+                          <span class="filter-weight before-require">实际完成日期：</span>
+                          <el-date-picker v-model="form.sjjsrq" type="date" size="mini" placeholder="选择日期" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
                         </div><br>
                         <div flex>
-                            <span class="filter-weight before-require">提报说明：</span>
-                            <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="form.sm" style="width:550px"></el-input>
+                           &#x3000;&#x3000; <span class="filter-weight before-require">提报说明：</span>
+                            <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="form.sm" style="width:535px"></el-input>
                         </div><br>
                         <div flex>
-                            &#x3000;&#x3000;&nbsp;&nbsp;
+                            &#x3000;&#x3000;&#x3000;&#x3000;&nbsp;
                             <span class="filter-weight">附件：</span>
                             <div>
                                 <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" 
@@ -91,6 +95,7 @@ export default {
       uploadForm: new FormData(),
       form: {
         sm: "",
+        sjjsrq:"",
         fileList: ""
       },
       files: [],
@@ -259,9 +264,17 @@ export default {
         }
       })
     },
+
     validate() {
       if (!this.form.xjgs) {
         this.$alert("请填写巡检工时", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
+      if (!this.form.sjjsrq) {
+        this.$alert("请选择实际完成日期", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
@@ -302,6 +315,7 @@ export default {
       this.visible = this.show;
       if (!n) {
         this.form.sm = "";
+        this.form.sjjsrq = "";
         this.form.fileList = [];
         this.files = [];
         this.uploadForm = new FormData();

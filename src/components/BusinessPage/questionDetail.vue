@@ -305,6 +305,7 @@
             <el-button size="mini" type="primary" @click="requisitionSettlement" v-if="btnShwon.sqjs">申请关闭</el-button>
             <el-button size="mini" type="primary" @click="remindsQuestion" v-if="btnShwon.cb">催办</el-button>
             <el-button size="mini" type="primary" @click="replyQuestion('hf')" v-if="btnShwon.hf" :disabled="isHF">回复</el-button>
+            <el-button size="mini" type="primary" @click="editQuestion" v-if="btnShwon.bj">编辑</el-button>
             <el-button size="mini" type="danger" @click="closeQuestion" v-if="btnShwon.gb">关闭问题</el-button>
           </div>
         </ul>
@@ -651,7 +652,9 @@
       </el-dialog>
 
       <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :wid="wid" :slContent="slContent"
-        :questionInfo="qusetionInfo" :guid="gsValue" @handleSLsuccess="handleSLsuccess"></twDialog>
+        :questionInfo="qusetionInfo" :guid="gsValue" @handleSLsuccess="handleSLsuccess" 
+        @handleTWsuccess="handleTWsuccess"></twDialog>
+
       <!-- 发送运维消息 -->
       <xxDialog :show.sync="ywxxShow" :tableData="userList" @handleSure="handleSure"></xxDialog>
       <!-- 项目团队成员 -->
@@ -678,6 +681,8 @@
       </el-dialog>
 
       <sqgqwtDialog :show.sync="sqgqShow" :suspend="true"></sqgqwtDialog>
+      <!-- <twDialog :show.sync="showDialog" :questionTitle="'编辑问题'" :accreditShow="false" :questionInfo="questionData"
+      @handleTWsuccess="handleTWsuccess"></twDialog> -->
     </div>
   </div>
 </template>
@@ -761,6 +766,8 @@
         }
       };
       return {
+        showDialog:false,
+        questionData:{},
         pickerJfrqDateBefore: {
           disabledDate(time) {
             return time.getTime() < Date.now() - 8.64e7;
@@ -1051,6 +1058,14 @@
     },
 
     methods: {
+      // 编辑问题成功
+      handleTWsuccess() {
+        this.queryProcess(this.wid);
+        this.queryBtnAuth(this.wid); //获取按钮权限
+        this.queryQuestion(this.wid, 1); // 获取单个问题
+        this.queryAnswers(this.wid); //  获取回复
+      },
+
       // 处理挂起
       handleOperateGq(wid, data) {
         // 能否处理挂起
@@ -1532,8 +1547,9 @@
           }
         });
       },
+
+      // 受理成功
       handleSLsuccess() {
-        // 受理成功
         this.queryAnswers(this.wid);
         this.queryBtnAuth(this.wid);
         this.queryProcess(this.wid);
@@ -1726,7 +1742,13 @@
           }
         });
       },
-
+      // 编辑问题
+      editQuestion(){
+        this.show = true;
+        this.questionTitle = '编辑问题';
+        this.accreditShow = false;
+        this.queryEditQuestion();
+      },
       //受理
       accreditQuestion() {
         if (this.isgcXmtdbyWt) {
@@ -2532,6 +2554,16 @@
           }
         });
       },
+
+      queryEditQuestion(){
+        queryQuestion({
+          wid: this.wid
+        }).then(({data}) => {
+           if (data.state == 'success') {
+             this.qusetionInfo = data.data;
+           }
+        })
+      },
       // 获取问题回复
       queryAnswers(wid) {
         this.questionReply = [];
@@ -2634,7 +2666,7 @@
       xxDialog,
       xmtdcylog,
       uploadFile,
-      sqgqwtDialog
+      sqgqwtDialog,
     }
   };
 </script>

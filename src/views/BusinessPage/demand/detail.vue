@@ -96,7 +96,7 @@
           </li>
         </ul>
         <div v-if="detailInfo.xqzt != 11">
-          <div id="summernote"></div>
+          <div id="summernoteDemand"></div>
         </div>
         <!-- 按钮组 -->
         <div text-right>
@@ -192,12 +192,12 @@ import { getCrowdId,getCrowdRwxx,getCrowdRwzt} from '@/api/xmkb.js';
 
     mounted() {
       this.zbwid = this.$route.query.id;
-      $('#summernote').summernote({
+      $('#summernoteDemand').summernote({
         dialogsInBody: false,
         placeholder: '请输入回复内容',
-        height: 200,
+        height: 290,
         width: 100 + '%',
-        minHeight: 300,
+        minHeight: 295,
         lang: 'zh-CN',
         focus: true,
         toolbar: [
@@ -260,7 +260,7 @@ import { getCrowdId,getCrowdRwxx,getCrowdRwzt} from '@/api/xmkb.js';
       handleBtnOprate(params) {
         this.btnInfo = params;
         if (params.btnid == '1' || params.btnid == '4' || params.btnid == '2') { //1回复 4催办 2受理
-          if ($('#summernote').summernote('code') == '<p><br></p>' && params.btnid == '1') {
+          if ($('#summernoteDemand').summernote('code') == '<p><br></p>' && params.btnid == '1') {
              this.$alert('请输入回复内容', '提示', {
                 confirmButtonText: '确定',
                 type:'warning'
@@ -269,7 +269,7 @@ import { getCrowdId,getCrowdRwxx,getCrowdRwzt} from '@/api/xmkb.js';
           }
           this.$post(params.btnid == '1' ? this.API.reply : params.btnid == '4' ? this.API.remind : this.API.accept, {
             zbwid: this.zbwid,
-            nr: $('#summernote').summernote('code'),
+            nr: $('#summernoteDemand').summernote('code'),
             btnbh: params.btnid
           }).then(res => {
             if (res.state == 'success') {
@@ -277,7 +277,7 @@ import { getCrowdId,getCrowdRwxx,getCrowdRwzt} from '@/api/xmkb.js';
                 message: params.btnid == '1' ? '回复成功' : params.btnid == '4' ? '催办成功' : '受理成功',
                 type: 'success'
               });
-              $('#summernote').summernote('code', '');
+              $('#summernoteDemand').summernote('code', '');
               this.queryDemandReplys();
               if(params.btnid == '2'){
                 this.queryProcessTemplate();

@@ -21,6 +21,7 @@
 									</a>
 								</div>
 							</td>
+							<td class="td2">{{ model.bmdm }}</td>
 							<td class="td2">{{ model.sortCode }}</td>
 							<td class="td3">{{ model.dataStatus == 1 ? '启用' : '禁用' }}</td>
 							<td class="td6">

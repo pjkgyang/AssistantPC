@@ -4,6 +4,7 @@
 			<table v-if="!isAna">
 				<tr>
 					<td class="td1">组织部门</td>
+					<td class="td2">部门编码</td>
 					<td class="td2">排序</td>
 					<td class="td3">状态</td>
 					<!-- <td class="td5">发布时间</td> -->
@@ -187,13 +188,13 @@ export default {
 		border-top: none;
 	}
 	.td2 {
-		width: 20%;
+		width: 15%;
 		text-align: center;
 		border: 1px solid #e8e8e8;
 		border-top: none;
 	}
 	.td3 {
-		width: 20%;
+		width: 15%;
 		text-align: center;
 		border-bottom: 1px solid #e8e8e8;
 	}
@@ -212,7 +213,7 @@ export default {
 		width: 220px;
 	}
 	.td6 {
-		width: 30%;
+		width: 25%;
 		text-align: center;
 		border: 1px solid #e8e8e8;
 		border-top: none;

@@ -16,7 +16,10 @@
             </el-select>
             <!-- <el-input v-model="form.zrrxm" placeholder="请选择责任人" readonly style="width:433px;"></el-input>
             <el-button size="mini" @click="handleChangeZrr">更改责任人</el-button> -->
-          </el-form-item><br>
+          </el-form-item>
+           <el-form-item label="说明" >
+            <el-input type="textarea" :rows="5" placeholder="请输入说明内容" v-model="form.sm" ></el-input>
+          </el-form-item>
           <el-form-item text-right>
             <el-button size="mini" type="primary" @click="handleCommit">保存</el-button>&#x3000;
             <el-button size="mini" @click="handleClose">取消</el-button>
@@ -38,7 +41,8 @@ export default {
         jhksrq: "",
         jhjsrq: "",
         zrrxm: "",
-        zrrbh: ""
+        zrrbh: "",
+        sm:""
       },
       pickerBeginDate: {
         disabledDate(time) {
@@ -113,8 +117,7 @@ export default {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
-        this.form.zrrxm = this.form.zrrbh = this.form.jhksrq = this.form.jhjsrq =
-          "";
+        this.form.zrrxm = this.form.zrrbh = this.form.jhksrq = this.form.jhjsrq = this.form.sm = "";
       } else {
         queryProjectParticipant({
           xmbh: this.xmbh,

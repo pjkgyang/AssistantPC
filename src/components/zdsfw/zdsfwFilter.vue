@@ -11,6 +11,7 @@
       </div>
       <transition name="el-zoom-in-top">
         <section v-if="sfzk" class="query-condition">
+
           <div v-if="filterList.includes('date')">
             <span class="query-title">计划日期:</span>
             <p>
@@ -25,14 +26,15 @@
           </div>
 
           <div v-if="filterList.includes('cp')" flex>
-            <span class="query-title" >产品:</span>
+            <span class="query-title">产品:</span>
             <p class="query-list" style="width:90%" @click="handleCp">
               <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
               <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
             </p>
           </div>
 
-          <div v-if="filterList.includes('fwnr')">
+
+          <div v-if="filterList.includes('fwnr') && unitType == 0" >
             <span class="query-title">服务内容:</span>
             <p class="query-list" @click="handleFwnr">
               <span data-type="" :class="{'bg-active':filterWord.fwnr == ''}">全部</span>
@@ -40,10 +42,10 @@
             </p>
           </div>
 
-          <div flex>
-            <div v-if="filterList.includes('fwzt')" flex style="width: 600px;">
+          <div flex v-if="unitType == 0">
+            <div v-if="filterList.includes('fwzt')" flex>
               <span class="query-title">服务状态:</span>
-              <p class="query-list" @click="handleZt">
+              <p class="query-list" @click="handleZt" style="width: 550px;">
                 <span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
                 <span v-for="(ztl,index) in ztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.fwzt == ztl.lable}">{{ztl.mc}}</span>
               </p>
@@ -57,10 +59,10 @@
             </div>
           </div>
 
-          <div flex>
-            <div v-if="filterList.includes('wtzt')" flex style="width: 600px;">
+          <div flex v-if="unitType == 0">
+            <div v-if="filterList.includes('wtzt')" flex>
               <span class="query-title">问题状态:</span>
-              <p class="query-list">
+              <p class="query-list" style="width: 550px;">
                 <span v-for="(wtzt,index) in wtztList" @click="handleWTZT(wtzt.lable)" :key="index" :class="{'bg-active':filterWord.wtzt == wtzt.lable}">{{wtzt.mc}}</span>
               </p>
             </div>
@@ -73,10 +75,10 @@
             </div>
           </div>
 
-          <div flex>
+          <div flex v-if="unitType == 0">
             <div v-if="filterList.includes('xmzt')" flex>
               <span class="query-title">项目状态:</span>
-              <p class="query-list" @click="handleXmzt">
+              <p class="query-list" @click="handleXmzt" style="width: 550px;">
                 <span data-type="" :class="{'bg-active':filterWord.xmzt == ''}">全部</span>
                 <span v-for="(xmzt,index) in xmztList" :data-type="xmzt.lable" :key="index" :class="{'bg-active':filterWord.xmzt == xmzt.lable}">{{xmzt.mc}}</span>
               </p>
@@ -89,20 +91,14 @@
               </p>
             </div>
           </div>
-          <!--
-          <div v-if="filterList.includes('lb')">
-            <p class="query-title">类别:</p>
-            <p class="query-list" @click="handleLb">
-              <span v-for="(lbl,index) in lbList" :data-type="lbl.lable" :key="index" :class="{'bg-active':filterWord.lb == lbl.lable}">{{lbl.mc}}</span>
-            </p>
-          </div> -->
 
-          <div v-if="filterList.includes('sfgq')">
+          <div v-if="filterList.includes('sfgq') && unitType == 0">
             <span class="query-title">是否过期:</span>
             <p class="query-list" @click="handleSfgq">
               <span v-for="(gq,index) in gqList" :data-type="gq.lable" :key="index" :class="{'bg-active':filterWord.sfgq == gq.lable}">{{gq.mc}}</span>
             </p>
           </div>
+
         </section>
       </transition>
     </div>
@@ -227,6 +223,7 @@
             mc: "已处理"
           },
         ],
+        unitType: '',
         filterWord: {
           keyword: "",
           fwnr: "",
@@ -396,6 +393,7 @@
       if (this.groupTag.includes("ZDSFWGLY")) {
         this.filterWord.jhksrq = this.filterWord.jhjsrq = "";
       }
+      this.unitType = JSON.parse(sessionStorage.getItem('userInfo')).unitType;
     },
     activated() {},
     watch: {},

@@ -5,12 +5,12 @@
 			<div class="Question">
 				<el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="question" :inline="true" label-width="125px">
 					<el-form-item label="项目名称" required v-if="chooseableItem">
-						<el-input :disabled="!!isInnerItem" size="mini" type="text" :style="{width:showCondition==0?800+'px':720+'px',}" v-model="xmmc" readonly
+						<el-input :disabled="!!isInnerItem" size="mini" type="text" :style="{width:showCondition==0||questionInfo.dsfjkly == 6?800+'px':720+'px',}" v-model="xmmc" readonly
 						 placeholder="请选择项目">
 							<el-button :disabled="!!isInnerItem" slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;"
 							 @click="addQuestiontItem"></el-button>
 						</el-input>
-						<el-checkbox v-if="(showCondition==1||showCondition==2)" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox>
+						<el-checkbox v-if="(showCondition==1||showCondition==2) && questionInfo.dsfjkly != 6" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox>
 					</el-form-item>
 					<el-form-item label="项目名称" v-if="!chooseableItem">
 						<el-input size="mini" type="text" style="width:800px"  v-model="xmmc" readonly></el-input>
@@ -291,28 +291,6 @@
 
 			// 根据产品切换承诺结束日期范围（9.26）
 			handleChangeCp(val) {
-				// 非内部项目（2019.05.06）
-				// if(!this.isInnerItem){
-				// 	this.$get(this.API.questionLimitProduct, {
-				// 		xmbh: this.xmbh,
-				// 		cpbh: val
-				// 	}).then(res => {
-				// 		if (res.state == "success") {
-				// 			let cpmc = "";
-				// 			this.xmcpList.forEach(ele => {
-				// 				if (ele.label == val) cpmc = ele.mc;
-				// 			});
-				// 			if (!res.data) {
-				// 				this.$alert("该项目未采购 " + cpmc + " 专项基础环境运维服务,请联系销售采购对应的服务",
-				// 					"提示", {
-				// 						confirmButtonText: "确定",
-				// 						type: "warning"
-				// 					}
-				// 				);
-				// 			}
-				// 		}
-				// 	});
-				// }
 				if (!!this.accreditShow) {
 					queryProductSolutionTime({
 						cpbh: val
@@ -320,7 +298,6 @@
 						data
 					}) => {
 						if (data.state == "success") {
-							// this.question.cnjsrq = GetDateStr(data.data);
 							this.questionInfo.cphs = data.data;
 							this.question.cnjsrq = "";
 						}
@@ -637,9 +614,7 @@
 						]
 					});
 				});
-				showQuestionCondition().then(({
-					data
-				}) => {
+				showQuestionCondition().then(({data}) => {
 					//提问展示
 					this.showCondition = data.data;
 				});
@@ -720,8 +695,8 @@
 						this.xmbh = this.questionInfo.xmbh
 						this.xmzt = this.questionInfo.xmzt;
 					}else{
-						this.isInnerItem = true;
-						this.xmzt = '在建'
+						this.isInnerItem = this.questionInfo.dsfjkly != 6?true:false;
+						this.xmzt = this.questionInfo.dsfjkly != 6?'在建':''; 
 					}
 					this.question.wtly = this.questionInfo.wtly;
 

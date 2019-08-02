@@ -35,29 +35,40 @@
               </template>
             </el-table-column>
 						
-            <el-table-column prop="yh" label="学校名称" min-width="200" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
-						<el-table-column v-if="isJzuser == '0'" prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
-						<el-table-column v-if="isJzuser == '0'" prop="wtgs" label="问题工时(小时)" width="120"></el-table-column>
-						<el-table-column v-if="isJzuser == '0'" prop="fxgs" label="风险工时(小时)" width="120"></el-table-column>
-						<el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="qrsj" label="确认时间" width="160" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="pf" label="评分" width="80"></el-table-column>
-						<el-table-column prop="jhksrq" label="计划开始日期" width="140"></el-table-column>
-						<el-table-column prop="jhjsrq" label="计划结束日期" width="140"></el-table-column>
-						<el-table-column prop="sjjsrq" label="实际结束日期" width="140"></el-table-column>
-						<el-table-column prop="sfgq" label="是否过期" width="100">
-						  <template slot-scope="scope">
-						    <el-tag size="mini" :type="scope.row.sfgq == '0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':scope.row.sfgq=='1'?'过期':'超期完成'}}</el-tag>
-						  </template>
-						</el-table-column>
-						
-						<el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
+           <el-table-column prop="yh" label="学校名称" min-width="200" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="cpmc" label="产品" min-width="240" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>
+            <el-table-column label="服务状态" width="100">
+              <template slot-scope="scope">
+                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="jhksrq" label="计划开始日期" width="150"></el-table-column>
+            <el-table-column prop="jhjsrq" label="计划结束日期" width="150"></el-table-column>
+            <el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sfgq" label="是否过期" width="100">
+              <template slot-scope="scope">
+                <el-tag size="mini" :type="scope.row.sfgq=='0'?'primary':'danger'">{{scope.row.sfgq=='0'?'未过期':scope.row.sfgq=='1'?'过期':'超期完成'}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column v-if="isJzuser == '0'" prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
+            <el-table-column v-if="isJzuser == '0'" prop="fxgs" label="风险工时(小时)" width="120"></el-table-column>
+            <el-table-column v-if="isJzuser == '0'" prop="wtgs" label="问题工时(小时)" width="120"></el-table-column>
+            <el-table-column prop="sjjsrq" label="实际结束日期" width="150"></el-table-column>
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="cpmc" label="产品" min-width="240" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xmlb" label="项目类别" min-width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sfzt" label="合同性质" min-width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sfgx" label="是否购销" min-width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="dkl" label="到款率" min-width="80" show-overflow-tooltip></el-table-column>
+
+            <el-table-column prop="qrrxm" label="确认人" width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="qrsj" label="确认时间" width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="pf" label="评分" width="80"></el-table-column>
+
             <el-table-column label="风险等级" width="150">
               <template slot-scope="scope">
                 <template slot-scope="scope">
@@ -74,13 +85,6 @@
                 <el-tag size="mini" :type="scope.row.zt == '0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>  
-            
-            <el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>
-            <!-- <el-table-column prop="ztztmc" label="项目状态" min-width="100" show-overflow-tooltip></el-table-column> -->
-            <el-table-column prop="xmlb" label="项目类别" min-width="80" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="sfzt" label="合同性质" min-width="80" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="sfgx" label="是否购销" min-width="80" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="dkl" label="到款率" min-width="80" show-overflow-tooltip></el-table-column>
             
           </el-table>
         </section>
@@ -201,7 +205,8 @@ export default {
         wids: this.wids,
         sm: data.sm,
         xjgs:data.xjgs,
-        fjData: data.fileList
+        fjData: data.fileList,
+        sjjsrq:data.sjjsrq
       }).then(res => {
         if (res.state == "success") {
           this.$message({message: '提报成功~',type: 'success'});
@@ -265,7 +270,8 @@ export default {
         this.$post(this.API.updateZrr, {
           zrrbh: data.zrrbh,
           zrrxm: data.zrrxm,
-          wids: this.wids
+          wids: this.wids,
+          sm:data.sm
         }).then(res => {
           if (res.state == "success") {
             this.$message({message: '保存成功~',type: 'success'});

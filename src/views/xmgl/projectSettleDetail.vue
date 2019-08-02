@@ -295,7 +295,7 @@
                 <td>{{ !item.zsje?0:item.zsje }}</td>
               </tr>
                <tr v-if="!tdywyData.length">
-                <td colspan="7">暂无内容</td>
+                <td colspan="13">暂无内容</td>
               </tr>
             </table>
           </div>
@@ -326,7 +326,7 @@
                 <th>折算合计费用</th>
               </tr>
               <tr v-if="!tdxxData.length">
-                <td colspan="14">暂无内容</td>
+                <td colspan="17">暂无内容</td>
               </tr>
               <tr v-for="(item, index) in tdxxData" :key="index">
                 <td>{{item.ywymc}}</td>

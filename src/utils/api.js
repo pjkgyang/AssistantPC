@@ -106,6 +106,7 @@ export default {
   pageProblemSets: window.baseurl + 'activeservice/pageProblemSets.do', //问题库查询
   pageRiskSets: window.baseurl + 'activeservice/pageRiskSets.do', //风险库查询
   getLatestSubmitDescription: window.baseurl + 'activeservice/getLatestSubmitDescription.do', //获取最近一次提交的说明
+  updateActiveServiceFlag: window.baseurl + 'activeservice/updateActiveServiceFlag.do', //更新项目停滞
 
 
   // 修改参与者 中标人
@@ -311,7 +312,7 @@ export default {
 
   afterSalesSettlementQuestion: window.baseurl + 'assessment/afterSalesSettlementQuestion.do', //获取成本售后
 
-  // 学校服务
+  // 学校服务(服务事项)
   treeDept: window.baseurl + 'serviceitem/treeDept.do', //部门树
   enableDept: window.baseurl + 'serviceitem/enableDept.do', //启用部门
   disableDept: window.baseurl + 'serviceitem/disableDept.do', //禁用部门
@@ -322,7 +323,6 @@ export default {
   serviceCatalogs: window.baseurl + 'serviceitem/serviceCatalogs.do', // 获取服务类别下拉列表
   saveServiceItem: window.baseurl + 'serviceitem/saveServiceItem.do', // 保存服务事项
   saveServiceItemPlan: window.baseurl + 'serviceitem/saveServiceItemPlan.do', // 编辑实施计划
-
   getServiceItemPlan: window.baseurl + 'serviceitem/getServiceItemPlan.do', // 获取服务事项计划
   getServiceItem: window.baseurl + 'serviceitem/getServiceItem.do', // 获取服务事项
 
@@ -356,4 +356,16 @@ export default {
   projectTeamVerifyDvpt: window.baseurl + 'demandDvpt/projectTeamVerifyDvpt.do', //  项目团队验证（完成验证）
   confirmDvpt: window.baseurl + 'demandDvpt/confirmDvpt.do', //   关闭需求
   submitDemandFile: window.baseurl + 'demandDvpt/submitDemandFile.do', //   提交开发包
+
+  // 服务台
+  saveCjdw: window.baseurl + 'servicedesk/saveCjdw.do', //   保存承建公司
+  deleteCjdw: window.baseurl + 'servicedesk/deleteCjdw.do', //  删除承建公司
+  pageCjdw: window.baseurl + 'servicedesk/pageCjdw.do', //   承建公司列表
+  getCjdw: window.baseurl + 'servicedesk/getCjdw.do', //   获取承建公司
+  saveApp: window.baseurl + 'servicedesk/saveApp.do', //   保存应用配置
+  deleteApp: window.baseurl + 'servicedesk/deleteApp.do', //   删除应用配置
+  pageApps: window.baseurl + 'servicedesk/pageApps.do', //   获取应用配置分页数据
+  getApp: window.baseurl + 'servicedesk/getApp.do', //   获取应用配置
+  appSelect: window.baseurl + 'servicedesk/appSelect.do', //   应用配置选择列表
+
 }

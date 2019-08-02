@@ -74,7 +74,13 @@
           </p>
         </div>
 
-
+        <div>
+          <p class="query-title">当前环节:</p>
+          <p class="query-list" @click="handleLcbh">
+            <span data-type="" :class="{'bg-active':lcbh == ''}">全部</span>
+            <span v-for="(lcbhx,index) in lcbhList" :data-type="lcbhx.label" :class="{'bg-active':lcbh == lcbhx.label}">{{lcbhx.mc}}</span>
+          </p>
+        </div>
 
         <div v-if="showCondition==1||showCondition==2">
           <p class="query-title">产品线:</p>
@@ -105,14 +111,6 @@
             <span v-for="(wtjbc,index) in wtjblist" :data-type="wtjbc.label" :class="{'bg-active':wtjb === wtjbc.label}">{{wtjbc.mc}}</span>
           </p>
         </div>
-        <!-- <div v-if="showCondition==1||showCondition==2">
-              <p class="query-title">是否bug:</p>
-              <p class="query-list"  @click="handleSFBUG">
-                  <span data-type=""  :class="{'bg-active':sfbug == ''}">全部</span>
-                  <span data-type="1" :class="{'bg-active':sfbug == '1'}">是</span>
-                  <span data-type="0" :class="{'bg-active':sfbug == '0'}">否</span>
-              </p>
-        </div> -->
         <div v-if="showCondition==1||showCondition==2">
           <p class="query-title">未响应状态:</p>
           <p class="query-list" @click="handleWXYZT">
@@ -148,13 +146,6 @@
             <span v-for="(dwlxx,index) in dwlxList" :data-type="dwlxx.label" :class="{'bg-active':dwlx == dwlxx.label}">{{dwlxx.mc}}</span>
           </p>
         </div>
-		<div>
-		  <p class="query-title">流程编号:</p>
-		  <p class="query-list" @click="handleLcbh">
-		    <span data-type="" :class="{'bg-active':lcbh == ''}">全部</span>
-		    <span v-for="(lcbhx,index) in lcbhList" :data-type="lcbhx.label" :class="{'bg-active':lcbh == lcbhx.label}">{{lcbhx.mc}}</span>
-		  </p>
-		</div>
       </div>
     </div>
     <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
@@ -230,7 +221,7 @@
         total: null,
         wxyztlist: [],
         gczdList: [],
-		lcbhList:[],//流程编号
+        lcbhList: [], //流程编号
         wtflList: [{
             label: "1",
             mc: "待我解决问题"
@@ -292,7 +283,7 @@
         xmmc: "",
         tjkf: "",
         wtjb: "",
-        lcbh:"",//流程编号
+        lcbh: "", //流程编号
         accreditShow: false,
         showCondition: "",
         isJZuser: "",
@@ -355,14 +346,14 @@
         this.wtjblist = getSession("ProblemLevel");
       }
 
-	  if (
-	    !getSession("QuestionWorkflow")
-	  ) {
-	    getMenu("QuestionWorkflow", this.lcbhList, "");
+      if (
+        !getSession("QuestionWorkflow")
+      ) {
+        getMenu("QuestionWorkflow", this.lcbhList, "");
 
-	  } else {
-	    this.lcbhList = getSession("QuestionWorkflow");
-	  }
+      } else {
+        this.lcbhList = getSession("QuestionWorkflow");
+      }
 
     },
 
@@ -538,6 +529,7 @@
           }
         });
       },
+      
       deleteQuestion(params) {
         //删除 问题
         this.$confirm("是否删除该条问题?", "提示", {
@@ -710,12 +702,12 @@
         this.dwlx = dwlx;
         this.queryAllQuestions(1);
       },
-	  handleLcbh(e){
-		 let lcbh = e.target.getAttribute("data-type");
-		 if (lcbh == null) return;
-		 this.lcbh = lcbh;
-		 this.queryAllQuestions(1);
-	  },
+      handleLcbh(e) {
+        let lcbh = e.target.getAttribute("data-type");
+        if (lcbh == null) return;
+        this.lcbh = lcbh;
+        this.queryAllQuestions(1);
+      },
       handleZXR(e) {
         //待解决问题
         let wtflx = e.target.getAttribute("data-type");
@@ -750,7 +742,7 @@
           endDay: this.endDay,
           tjkf: this.tjkf,
           sqgq: this.sqgq,
-          lcbh:this.lcbh
+          lcbh: this.lcbh
         }).then(({
           data
         }) => {

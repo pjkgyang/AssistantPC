@@ -1,42 +1,47 @@
 <template>
- <div class="pannelPadding-10">
-	<div class="menus-tree pannelPaddingBg-10">
-		<div>
-			<chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
-		</div>
-		<br />
-		<div>
-			<tree-table
-				ref="recTree"
-				:list.sync="treeDataSource"
-				@actionFunc="actionFunc"
-				@deleteFunc="deleteFunc"
-				@startRejectFunc="startRejectFunc"
-				@handlerExpand="handlerExpand"
-			></tree-table>
-		</div><br>
-	</div>
+  <div class="pannelPadding-10">
+    <div class="menus-tree pannelPaddingBg-10">
+      <div>
+        <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
+      </div>
+      <br />
+      <div>
+        <tree-table
+          ref="recTree"
+          :list.sync="treeDataSource"
+          @actionFunc="actionFunc"
+          @deleteFunc="deleteFunc"
+          @startRejectFunc="startRejectFunc"
+          @handlerExpand="handlerExpand"
+        ></tree-table>
+      </div>
+      <br />
+    </div>
 
-
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="600px">
-			<el-form ref="form" :model="formData" label-width="80px" size="mini" style="padding:12px">
-
-				<el-form-item label="部门名称" required><el-input size="mini" v-model="formData.bmmc"></el-input></el-form-item>
-        <el-form-item label="部门编码" required><el-input size="mini" v-model="formData.bmdm"></el-input></el-form-item>
-				<el-form-item label="是否展开" required>
-					<el-radio-group v-model="formData.sfzk" size="mini">
-						<el-radio :label="1">是</el-radio>
-						<el-radio :label="0">否</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="排序" required size="mini"><el-input type="number" v-model="formData.sortCode"></el-input></el-form-item>
-				<el-form-item text-right>
-					<el-button type="primary" @click="handleCommit">保存</el-button>
-					<el-button @click="dialogVisible = false">取消</el-button>
-				</el-form-item>
-			</el-form>
-		</el-dialog>
-	</div>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="600px">
+      <el-form ref="form" :model="formData" label-width="80px" size="mini" style="padding:12px">
+        <el-form-item label="部门名称" required>
+          <el-input size="mini" v-model="formData.bmmc"></el-input>
+        </el-form-item>
+        <el-form-item label="部门编码" required>
+          <el-input size="mini" v-model="formData.bmdm"></el-input>
+        </el-form-item>
+        <el-form-item label="是否展开" required>
+          <el-radio-group v-model="formData.sfzk" size="mini">
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="排序" required size="mini">
+          <el-input type="number" v-model="formData.sortCode"></el-input>
+        </el-form-item>
+        <el-form-item text-right>
+          <el-button type="primary" @click="handleCommit">保存</el-button>
+          <el-button @click="handleClose">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 <script>
 import treeTable from "@/components/treeTable/tree-table.vue";
@@ -67,6 +72,13 @@ export default {
     chooseSchool
   },
   methods: {
+    handleClose() {
+      this.formData.bmmc = this.formData.bmdm = "";
+      this.formData.sfzk = 1;
+      this.formData.sortCode = "";
+      this.dialogVisible = false;
+    },
+
     // 添加下级
     actionFunc(m, type, parentNode) {
       this.curTreeData = m;
@@ -77,19 +89,20 @@ export default {
         this.parentNode = parentNode; //父节点
         this.isEdit = true;
         this.formData.bmmc = m.title;
+        this.formData.bmdm = m.bmdm;
         this.formData.sfzk = m.isExpand;
         this.formData.sortCode = m.sortCode;
         this.dialogVisible = true;
       }
     },
+    
     // 删除
     deleteFunc(m) {
       this.$confirm("是否删除该部门?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
+      }).then(() => {
           this.$post(this.API.deleteDept, {
             wid: m.id
           }).then(res => {
@@ -141,7 +154,7 @@ export default {
         dwmc: this.dwmc,
         mc: this.formData.bmmc,
         bmdm: this.formData.bmdm,
-        parentid: this.curTreeData.id,
+        parentid: !!this.isEdit?this.curTreeData.parentId:this.curTreeData.id,
         px: this.formData.sortCode,
         sfzk: this.formData.sfzk
       }).then(res => {
@@ -158,10 +171,7 @@ export default {
           } else {
             this.treeDept();
           }
-          this.formData.bmmc = '';
-          this.formData.sfzk = 1;
-          this.formData.sortCode = '';
-          this.dialogVisible = false;
+          this.handleClose();
         } else {
           this.$message({ message: res.msg, type: "error" });
         }

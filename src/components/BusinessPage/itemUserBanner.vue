@@ -37,7 +37,7 @@
           <p style="margin-left:10px !important;height:40px;" title="新建钉钉群" colcenter @click.prevent="handleAddDDgroup" v-if="Operatepower">
             <img src="static/img/dingding.png" alt="" style="width:20px;height:20px;">
           </p>
-  
+
           <el-dropdown trigger="hover" @command="handleCommand" v-if="groupTag.indexOf('JYGL') != -1||groupTag.indexOf('QYZ') != -1||groupTag.indexOf('ProblemAdmin') != -1">
                  <!-- ((username == xmDetail.yfzrrxm || groupTag.indexOf('QYZ') != -1 || groupTag.indexOf('ZDDZ') != -1)) -->
             <p style="margin-left:10px !important;height:40px;" title="设置" colcenter>
@@ -199,7 +199,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   background: rgb(240, 240, 240);
-  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   z-index: 33;
   min-width: 1200px;
 }
