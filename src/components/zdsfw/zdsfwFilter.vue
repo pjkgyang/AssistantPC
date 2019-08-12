@@ -1,37 +1,56 @@
 <template>
   <div>
     <div class="query-condition">
-      <div v-if="filterList.includes('keyword')">
+      <div v-if="filterList.includes('keyword')" flex>
         <p>
           <p class="query-title">
-            <span @click="handleExpand" :title="this.sfzk?'点击收起筛选条件':'点击展开筛选条件'" :class="{'expandIcon':true,'el-icon-arrow-up':this.sfzk==true,'el-icon-arrow-down':this.sfzk == false}"></span>&#x3000;高级搜索:</p>
-          <el-input v-model="filterWord.keyword" size="mini" style="width:348px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
+          <span @click="handleExpand" :title="this.sfzk?'点击收起筛选条件':'点击展开筛选条件'" :class="{'expandIcon':true,'el-icon-arrow-up':this.sfzk==true,'el-icon-arrow-down':this.sfzk == false}"></span>&#x3000;高级搜索:</p>
+          <el-input v-model="filterWord.keyword" size="mini" style="width:487px;" :placeholder="placeholder" @change="handleSearch"></el-input>&#x3000;
           <el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button>
         </p>
+        <div v-if="filterList.includes('ismine') && unitType == 0" colcenter>
+              <span class="query-title">责任人是我:</span>
+              <p>
+                <el-checkbox v-model="filterWord.ismine" true-label="1" false-label="0" @change="handleChangeIsmine">是</el-checkbox>
+              </p>
+        </div>
       </div>
       <transition name="el-zoom-in-top">
         <section v-if="sfzk" class="query-condition">
 
           <div v-if="filterList.includes('date')">
-            <span class="query-title">计划日期:</span>
+            <span class="query-title">计划开始日期:</span>
             <p>
-              <el-date-picker size="mini" @change="changeDate" v-model="filterWord.jhksrq" type="date" placeholder="选择开始日期"
+              <el-date-picker size="mini" @change="changeDate" v-model="filterWord.jhksrqmin" type="date" placeholder="选择开始日期"
                 format="yyyy-MM-dd" value-format="yyyy-MM-dd">
               </el-date-picker>
               &#x3000;至&#x3000;
-              <el-date-picker size="mini" @change="changeDate" v-model="filterWord.jhjsrq" type="date" placeholder="选择结束日期"
+              <el-date-picker size="mini" @change="changeDate" v-model="filterWord.jhksrqmax" type="date" placeholder="选择结束日期"
                 format="yyyy-MM-dd" value-format="yyyy-MM-dd">
               </el-date-picker>
             </p>
           </div>
 
-          <div v-if="filterList.includes('cp')" flex>
+          <div v-if="filterList.includes('date1')">
+            <span class="query-title">计划结束日期:</span>
+            <p>
+              <el-date-picker size="mini" @change="changeDate" v-model="filterWord.jhjsrqmin" type="date" placeholder="选择开始日期"
+                format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+              </el-date-picker>
+              &#x3000;至&#x3000;
+              <el-date-picker size="mini" @change="changeDate" v-model="filterWord.jhjsrqmax" type="date" placeholder="选择结束日期"
+                format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </p>
+          </div>
+
+          <!-- <div v-if="filterList.includes('cp')" flex>
             <span class="query-title">产品:</span>
             <p class="query-list" style="width:90%" @click="handleCp">
               <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
               <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
             </p>
-          </div>
+          </div> -->
 
 
           <div v-if="filterList.includes('fwnr') && unitType == 0" >
@@ -42,38 +61,34 @@
             </p>
           </div>
 
-          <div flex v-if="unitType == 0">
-            <div v-if="filterList.includes('fwzt')" flex>
+            <div v-if="filterList.includes('fwzt') && unitType == 0" flex>
               <span class="query-title">服务状态:</span>
               <p class="query-list" @click="handleZt" style="width: 550px;">
                 <span data-type="" :class="{'bg-active':filterWord.fwzt == ''}">全部</span>
                 <span v-for="(ztl,index) in ztList" :data-type="ztl.lable" :key="index" :class="{'bg-active':filterWord.fwzt == ztl.lable}">{{ztl.mc}}</span>
               </p>
-            </div>
+          </div>
 
-            <div v-if="filterList.includes('fxdj')" flex>
+          <div v-if="filterList.includes('fxdj') && unitType == 0" flex>
               <span class="query-title">风险:</span>
               <p class="query-list" @click="handleFx">
                 <span v-for="(fxdj,index) in fxList" :data-type="fxdj.lable" :key="index" :class="{'bg-active':filterWord.fxdj == fxdj.lable}">{{fxdj.mc}}</span>
               </p>
-            </div>
           </div>
 
-          <div flex v-if="unitType == 0">
-            <div v-if="filterList.includes('wtzt')" flex>
+           <div v-if="filterList.includes('wtzt') && unitType == 0" flex>
               <span class="query-title">问题状态:</span>
               <p class="query-list" style="width: 550px;">
                 <span v-for="(wtzt,index) in wtztList" @click="handleWTZT(wtzt.lable)" :key="index" :class="{'bg-active':filterWord.wtzt == wtzt.lable}">{{wtzt.mc}}</span>
               </p>
             </div>
 
-            <div v-if="filterList.includes('fxzt')" flex>
+            <div v-if="filterList.includes('fxzt') && unitType == 0" flex>
               <span class="query-title">风险状态:</span>
               <p class="query-list">
                 <span v-for="(fxzt,index) in wtztList" @click="handleFXZT(fxzt.lable)" :key="index" :class="{'bg-active':filterWord.fxzt == fxzt.lable}">{{fxzt.mc}}</span>
               </p>
             </div>
-          </div>
 
           <div flex v-if="unitType == 0">
             <div v-if="filterList.includes('xmzt')" flex>
@@ -84,12 +99,7 @@
               </p>
             </div>
 
-            <div v-if="filterList.includes('ismine')" flex>
-              <span class="query-title">责任人是我:</span>
-              <p>
-                <el-checkbox v-model="filterWord.ismine" true-label="1" false-label="0" @change="handleChangeIsmine">是</el-checkbox>
-              </p>
-            </div>
+           
           </div>
 
           <div v-if="filterList.includes('sfgq') && unitType == 0">
@@ -232,17 +242,10 @@
           fwzt: "",
           lb: "",
           xmzt: "",
-          jhksrq: "",
-          jhjsrq: "",
-          // date: [
-          //   this.getFirstDay(),
-          //   getLastMonthDay(
-          //     new Date().getFullYear(),
-          //     new Date().getMonth() + 1 < 10
-          //       ? "0" + (new Date().getMonth() + 1)
-          //       : new Date().getMonth() + 1
-          //   )
-          // ],
+          jhksrqmin: "",
+          jhksrqmax: "",
+          jhjsrqmin:"",
+          jhjsrqmax:"",
           sfgq: "",
           fxdj: "",
           wtzt: "",
@@ -257,7 +260,7 @@
       filterList: {
         type: Array,
         default: () => {
-          return ["keyword", "cp", "fwnr", "fwzt", 'fxdj', "xmzt", "lb", "date", "sfgq", "wtzt", "fxzt", "ismine"];
+          return ["keyword", "cp", "fwnr", "fwzt", 'fxdj', "xmzt", "lb", "date", "date1","sfgq", "wtzt", "fxzt", "ismine"];
         }
       },
       placeholder: {
@@ -284,6 +287,7 @@
         this.$emit("handleChangeFilter", this.filterWord);
       },
       changeDate(val) {
+        
         this.$emit("handleChangeFilter", this.filterWord);
       },
       changeSfcq() {
@@ -368,8 +372,8 @@
       },
       listFwnrByCp() {
         this.$get(this.API.listFwnrByCp, {
-          cpbh: this.filterWord.cpbh,
-          cpmc: this.filterWord.cpmc
+          cpbh:'',
+          cpmc:''
         }).then(res => {
           if (res.state == "success") {
             if (!res.data) {
@@ -388,10 +392,10 @@
       }
     },
     mounted() {
-      this.listXmZdsfwCp();
+      this.listFwnrByCp();//获取服务内容
       this.groupTag = JSON.parse(sessionStorage.getItem("userInfo")).userGroupTag;
       if (this.groupTag.includes("ZDSFWGLY")) {
-        this.filterWord.jhksrq = this.filterWord.jhjsrq = "";
+        this.filterWord.jhksrqmin = this.filterWord.jhksrqmax = "";
       }
       this.unitType = JSON.parse(sessionStorage.getItem('userInfo')).unitType;
     },
@@ -404,4 +408,5 @@
   .nomargin span {
     margin: 3px 0 !important;
   }
+
 </style>

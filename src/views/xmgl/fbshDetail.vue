@@ -119,8 +119,11 @@
 								<th>项目编号</th>
 								<td>{{ $route.query.xmbh }}</td>
 								<th>项目名称</th>
-								<td colspan="3">{{ htjbxx.xmmc }}</td>
+								<td>{{ htjbxx.xmmc }}</td>
+								<th>合同评估费用</th>
+								<td>{{ fbjbxx.xmkbfy }}</td>
 							</tr>
+							
 							<tr>
 								<th>分包名称</th>
 								<td colspan="5">{{ fbjbxx.fbmc }}</td>

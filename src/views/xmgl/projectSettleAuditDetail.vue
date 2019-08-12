@@ -27,6 +27,31 @@
 						</table>
 					</div>
 					<div>
+						<h5>冲账信息</h5>
+						<el-table
+						:data="jsczData"
+						border
+						style="width: 100%"
+						>
+
+						<el-table-column prop="dqjd" label="结算点" min-width="140"></el-table-column>
+						<el-table-column prop="jsrq" label="结算时间" width="100"></el-table-column>
+						<el-table-column prop="cybh" label="工号" width="110"></el-table-column>
+						<el-table-column prop="cymc" label="姓名" width="110"></el-table-column>
+						<el-table-column prop="yjsssfy" label="结算实施金额" width="110"></el-table-column>
+						<el-table-column prop="yjsekfy" label="结算二开金额" width="110"></el-table-column>
+						<el-table-column prop="yjskbfy" label="结算可变金额" width="110"></el-table-column>
+						<el-table-column prop="jlje" label="奖励金额" width="90"></el-table-column>
+						<el-table-column prop="cfje" label="惩罚金额" width="150" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="hj" label="合计" width="90"></el-table-column>
+						<el-table-column prop="zsssfy" label="折算实施费用" width="110" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="zsekfy" label="折算二开费用" width="110" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="zskbfy" label="折算可变费用" width="110" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="zshj" label="折算合计费用" width="110" show-overflow-tooltip></el-table-column>
+
+						</el-table>
+					</div>
+					<div>
 						<h5>结算申请信息</h5>
 						<table>
 							<tr>
@@ -221,6 +246,19 @@
 							</tr>
 						</table>
 					</div>
+					<div>
+						<h5>审核记录</h5> 
+						<el-table
+						:data="shjlList"
+						border
+						style="width: 100%"
+						>
+						<el-table-column prop="czsj" label="时间" width="180"></el-table-column>
+						<el-table-column prop="czrxm" label="操作人" width="100"></el-table-column>
+						<el-table-column prop="czlxmc" label="操作" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="czms" label="说明" show-overflow-tooltip></el-table-column>
+						</el-table>    
+					</div>
 				</div>
 			</div>
 		</div>
@@ -234,11 +272,13 @@ export default {
 			title:'',
 			cdradio: 1, //承担
 			tableData: [],
+			shjlList:[],//分包审核记录
 			multipleSelection: [],
 			jsxx:{},//结算详情
 			jssqData:{},//结算申请
 			tdxxData: [],
 			tdywyData:[],
+			jsczData:[],//结算冲账
 			tbje: null,
 			zbxx: '',
 			
@@ -292,6 +332,8 @@ export default {
 				fbbh:this.$route.query.fbbh
 			}).then(res=>{
 				if(res.state == 'success'){
+					this.jsczData = !res.data.jsczData?[]:res.data.jsczData;
+					this.shjlList = !res.data.fbshjl?[]:res.data.fbshjl;
 					this.jssqData = res.data.jssqData;
 					this.tdxxData = !res.data.jstdData?[]:res.data.jstdData;
 					this.jsxx = res.data.jsxx;

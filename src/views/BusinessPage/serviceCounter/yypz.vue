@@ -8,8 +8,8 @@
       </div>
 			<div class="form">
         <!-- v-if="!!curDept.parentId" -->
-				<div v-if="!!curDept.parentId"><el-button size="mini" type="primary"  @click="handleAddService">添加应用系统</el-button></div>
-				<div style="margin:10px 0"><el-input size="mini" v-model="keyword" placeholder="关键字查询" @change="handleSearch"></el-input></div>
+				<div v-if="!!curDept.parentId" style="margin-bottom:10px"><el-button size="mini" type="primary"  @click="handleAddService">添加应用系统</el-button></div>
+				<div style="margin-bottom:10px"><el-input size="mini" v-model="keyword" placeholder="关键字查询" @change="handleSearch"></el-input></div>
         <el-table :data="tableData" border width="100%">
 					<el-table-column fixed="left" label="操作" width="100"  >
 						<template slot-scope="scope">
@@ -18,7 +18,7 @@
 					</el-table-column>
 					<el-table-column prop="yymc" label="应用系统名称" min-width="160"></el-table-column>
 					<el-table-column prop="bmmc" label="所属部门" width="150"></el-table-column>
-					<el-table-column prop="sydx" label="使用对象" width="120"></el-table-column>
+					<el-table-column prop="fwdx" label="使用对象" width="120"></el-table-column>
           <el-table-column prop="yt_display" label="用途" width="120"></el-table-column>
           <el-table-column prop="fwqip" label="服务器ip" width="120"></el-table-column>
           <el-table-column prop="fwqmc" label="服务器名称" width="100"></el-table-column>
@@ -157,6 +157,7 @@ export default {
 
     // 添加服务事项
     handleAddService() {
+      this.detailInfo = {};
       this.yypzShow = true;
     },
 
@@ -176,7 +177,7 @@ export default {
         curPage: this.currentPage,
         pageSize:!this.isPlan?this.pageSize:10,
         dwbh: this.unit.dwbh,
-        bmbh: !this.curDept.id ? "" : this.curDept.id,
+        bmbh: this.curDept.id=='0' ? "" : this.curDept.id,
         keyword :this.keyword
       }).then(res => {
         if (res.state == "success") {

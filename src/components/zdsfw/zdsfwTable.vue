@@ -1,7 +1,7 @@
 <template>
     <div>
 		<!-- :max-height="tableHeight" -->
-        <el-table :data="tableData" border style="width: 100%" >
+        <el-table :data="tableData" border style="width: 100%" :max-height="tableHeight">
             <el-table-column
                 fixed="left"
                 label="操作"
@@ -19,11 +19,13 @@
             <el-table-column prop="xmbh" label="项目编号" width="140"></el-table-column>
             <el-table-column prop="htbh" label="合同编号" width="140"></el-table-column>
             <el-table-column prop="xmlb" label="项目类别" width="110"></el-table-column>
-            <el-table-column  label="状态" width="100">
+
+            <el-table-column  label="项目状态" width="100"  v-if="zt != '0'">
                 <template slot-scope="scope">
                     <el-tag size="mini"  :type="scope.row.flag == 1 ? 'success' : 'danger'">{{scope.row.flag==1?'已重启':'已停滞'}}</el-tag>
                 </template>
             </el-table-column>
+
             <el-table-column  label="状态" width="100">
                 <template slot-scope="scope">
                     <el-tag size="mini"  :type="scope.row.zt === '已发布' ? 'success' : 'primary'">{{scope.row.zt}}</el-tag>
@@ -46,6 +48,7 @@ export default {
       tableHeight: window.innerHeight - 230
     };
   },
+
   methods: {
     handleCheckDetail(data) {
       let routeData = this.$router.resolve({
@@ -85,6 +88,10 @@ export default {
       default: () => {
         return [];
       }
+    },
+    zt:{
+      type:String,
+      default:''
     }
   },
   components: {}

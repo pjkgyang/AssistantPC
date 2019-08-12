@@ -340,6 +340,7 @@ export default {
 		hanldeFoucs() {
 			this.$refs.inp.type = 'password';
 		},
+
 		// 修改中标人
 		handlemodifyZbr(data) {
 			this.mark = false;
@@ -372,12 +373,13 @@ export default {
 				this.queryUser(1, true);
 			}
 		},
+
 		//修改乙方责任人
 		changeUser(e, data) {
 			this.isAddCyz = false;
 			this.isJF = false;
 			this.jszbr = false; //是否修改中标人
-			this.queryUser(1, true);
+			this.queryUser(1, true,'0');
 			this.dialogVisible = !this.dialogVisible;
 		},
 		//编辑参与者
@@ -415,7 +417,7 @@ export default {
 		},
 		// 修改中标人
 		changeXsr(data) {
-			this.queryUser(1, true);
+			this.queryUser(1, true,'0');
 			this.mark = true;
 			this.dialogVisible = !this.dialogVisible;
 		},
@@ -493,10 +495,9 @@ export default {
 			this.isAddCyz = false;
 			this.isJF = true;
 			this.jszbr = false; //是否修改中标人
-			this.queryUser(1, true);
+			this.queryUser(1, true, 1);
 			this.dialogVisible = !this.dialogVisible;
 		},
-		editJfZrr() {},
 
 		// 删除甲方
 		deleteJfZrr() {
@@ -522,12 +523,12 @@ export default {
 				})
 				.catch(() => {});
 		},
-		queryUser(curPage, needShowCyz) {
+		queryUser(curPage, needShowCyz ,unittype) {
 			queryDwUsers({
 				curPage: curPage,
 				pageSize: this.pageSize,
 				xmbh: this.xmbh,
-				unittype: this.itemJfzrr.userId == this.userId ? 1 : this.rylb,
+				unittype: !!unittype ? unittype : this.rylb,
 				//   onlyxx:onlyxx,
 				needShowCyz: needShowCyz,
 				keyword: this.keyword || ''
@@ -552,6 +553,8 @@ export default {
 			// 学校老师 只能获取学校用户
 			if (this.isJzuser == 1) {
 				this.rylb = 1;
+			}else{
+				this.rylb = '';
 			}
 			this.zbrData = {};
 			this.mark = false;

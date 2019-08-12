@@ -371,6 +371,20 @@
               </tr>
             </table>
           </div>
+
+          <div>
+              <h5>审核记录</h5> 
+              <el-table
+              :data="shjlList"
+              border
+              style="width: 100%"
+            >
+              <el-table-column prop="czsj" label="时间" width="180"></el-table-column>
+              <el-table-column prop="czrxm" label="操作人" width="100"></el-table-column>
+              <el-table-column prop="czlxmc" label="操作" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="czms" label="说明" show-overflow-tooltip></el-table-column>
+            </el-table>    
+          </div>
         </div>
       </div>
     </div>
@@ -467,6 +481,7 @@ export default {
       jssqData: {}, //结算申请
       tdxxData: [],
       jsczData:[],
+      shjlList:[],//审核记录列表
       tbje: null,
       zbxx: "",
       // 承担费用
@@ -876,6 +891,7 @@ export default {
         fbbh: this.$route.query.fbbh
       }).then(res => {
         if (res.state == "success") {
+          this.shjlList =  !res.data.fbshjl?[]:res.data.fbshjl;
           this.jssqData = res.data.jssqData;
           this.tdxxData = !res.data.jstdData ? [] : res.data.jstdData;
           this.jsczData = !res.data.jsczData ? [] : res.data.jsczData;

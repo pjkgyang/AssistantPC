@@ -391,12 +391,7 @@ export default new Router({
           path: '/servicecounter/appstatistics',
           name: 'appconfig',
           component: resolve => require(['@/views/BusinessPage/serviceCounter/xttj.vue'], resolve),
-        },
-
-
-        
-
-
+        },    
 
         {
           path: '/businesspage/report',
@@ -881,6 +876,11 @@ export default new Router({
       name: 'questionPort',
       meta: {},
       component: resolve => require(['@/views/BusinessPage/report/questionReport.vue'], resolve),
+    },
+    {
+      path: '/servicecounter/detail',
+      name: 'servicecounterDetail',
+      component: resolve => require(['@/views/BusinessPage/serviceCounter/detail.vue'], resolve),
     },
     // {
     //   path: "/404",

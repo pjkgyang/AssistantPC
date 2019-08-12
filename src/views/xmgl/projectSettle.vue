@@ -29,7 +29,7 @@
 				<span v-for="jszt in jsztList" :class="{ 'bg-active': jszt.id == filterData.jszt }" :key="jszt.id" @click="CheckSfsh(jszt.id)">{{ jszt.label }}</span>
 			</p>
 		</div>
-		<br />
+		<br>
 		<div> 
 	     	<el-table  :data="tableData" border style="width: 100%" :max-height="tableHeight">
 				<el-table-column fixed="left" label="操作" width="110">

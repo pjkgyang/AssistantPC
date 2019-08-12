@@ -32,7 +32,7 @@
 		<br />
 		<div>
 			<!-- :max-height="height" -->
-			<el-table  :data="tableData" border style="width: 100%">
+			<el-table  :data="tableData" border style="width: 100%"  :max-height="tableHeight">
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
 						<el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.shzt == '已审核'?'详情':'审核'}}</el-button>
@@ -43,6 +43,8 @@
 						<el-tag size="mini" :type="scope.row.shzt == '已审核' ? 'success' : 'info'">{{ scope.row.shzt }}</el-tag>
 					</template>
 				</el-table-column>
+				<el-table-column prop="shrmc" label="审核人" width="100"></el-table-column>
+				<el-table-column prop="shrq" label="审核时间" width="150"></el-table-column>
 				<el-table-column  label="分包状态" width="120">
 					<template slot-scope="scope">
 						{{ scope.row.fbzt=='02'?'审核中':scope.row.fbzt=='03'?'招标中':scope.row.fbzt=='04'?'审核未通过':scope.row.fbzt=='05'?'分包结束':'分包关闭' }}
@@ -78,7 +80,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
-			height:window.innerHeight - 280,
+			tableHeight:window.innerHeight - 280,
 			currentPage: 1,
 			pageSize: 15,
 			records: 0,

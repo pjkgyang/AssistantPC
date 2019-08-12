@@ -1,70 +1,84 @@
 <template>
-  <div class="dialog-container" @click="hanldeHideCp($event)">
+  <div class="dialog-container">
     <el-dialog title="服务请求登记" width="1000px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)"
       :show="show">
       <div class="demand">
         <el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="fwdjData" :inline="true" size="mini"
           label-width="135px">
-          <el-form-item label="项目名称" required>
-            <el-input size="mini" type="text" :style="{ width: 800 + 'px' }" v-model="fwdjData.xmmc" readonly
-              placeholder="请选择项目">
-              <el-button slot="append" icon="el-icon-circle-plus-outline" style="width:30px;padding:0 12px;"></el-button>
-            </el-input>
+          <el-form-item label="学校名称" required>
+            <el-select
+                v-if="userInfo.unitType == 0"
+                style="width:800px"
+                v-model="dwmc"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请输入学校名称查询"
+                :remote-method="remoteMethod"
+                @change="changeUnit"
+                >
+                <el-option
+                  v-for="item in unitList"
+                  :key="item.wid"
+                  :label="item.mc"
+                  :value="item.wid">
+                </el-option>
+              </el-select>
           </el-form-item>
           <el-form-item label="提报人" required>
-            <el-input size="mini" type="text" style="width:325px" v-model="fwdjData.tbr"></el-input>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请输入提报人姓名" v-model="fwdjData.tbr"></el-input>
           </el-form-item>
-          <el-form-item label="提报方式" required>
-            <el-input size="mini" type="text" style="width:325px" v-model="fwdjData.tbfs"></el-input>
+          <el-form-item label="提报联系方式" required>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请输入提报联系方式"  v-model="fwdjData.lxfs"></el-input>
           </el-form-item>
 
           <el-form-item label="提报人部门" required>
-            <el-select v-model="fwdjData.xqfl" size="mini" placeholder="请选择需求分类" style="width:325px">
-              <el-option v-for="(item, index) in xqflList" :key="index" :label="item.mc" :value="item.label"></el-option>
-            </el-select>
+              <el-input placeholder="请选择" readonly v-model="fwdjData.bmmc" style="width:325px" >
+                <el-button slot="append" icon="el-icon-circle-plus-outline" @click="tbrbmShow = true"></el-button>
+              </el-input>
           </el-form-item>
           <el-form-item label="提报人职务" required>
-            <el-input size="mini" type="text" style="width:325px" v-model="fwdjData.tbfs"></el-input>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请输入提报人职务" v-model="fwdjData.tbrzw"></el-input>
           </el-form-item>
 
 
           <el-form-item label="提报时间" required>
-            <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="fwdjData.qwsjwcrq"
+            <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="fwdjData.tbsj"
               type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:325px;"></el-date-picker>
           </el-form-item>
 
           <el-form-item label="服务请求来源" required>
-            <el-select v-model="fwdjData.sfsx" size="mini" placeholder="请选择服务请求来源" style="width:325px">
-              <el-option v-for="(item, index) in sfxsList" :key="index" :label="item.mc" :value="item.label"></el-option>
+            <el-select v-model="fwdjData.qqly" size="mini" placeholder="请选择服务请求来源" style="width:325px">
+              <el-option v-for="(item, index) in fwqqlyList" :key="index" :label="item.mc" :value="item.label"></el-option>
             </el-select>
           </el-form-item>
 
 
           <el-form-item label="信息系统" required>
-            <el-select v-model="fwdjData.crowdywxbh" size="mini" placeholder="请选择CROWD业务线" style="width:325px">
-              <el-option v-for="(ywx, index) in crowdywxList" :key="index" :label="ywx.lbmc" :value="ywx.lbdm"></el-option>
+            <el-select v-model="fwdjData.yybh" size="mini" placeholder="请选择信息系统" style="width:325px" @change="handleChangeYyxt">
+              <el-option v-for="(xxxt, index) in xxxtList" :key="index" :label="xxxt.yymc" :value="xxxt.yybh"></el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="承建单位" required>
-            <el-input size="mini" type="text" style="width:325px" v-model="fwdjData.cjdw"></el-input>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请选择信息系统" readonly v-model="fwdjData.cjdw"></el-input>
           </el-form-item>
           <el-form-item label="单位联系人" required>
-            <el-input size="mini" type="text" style="width:325px" v-model="fwdjData.dwlxr"></el-input>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请优先选择信息系统"  v-model="fwdjData.dwlxr"></el-input>
           </el-form-item>
-          <el-form-item label="联系方式" required>
-            <el-input size="mini" type="text" style="width:325px" v-model="fwdjData.lxfs"></el-input>
+          <el-form-item label="单位联系方式" required>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请优先选择信息系统"   v-model="fwdjData.dwlxfs"></el-input>
           </el-form-item>
 
 
           <el-form-item label="问题级别" required>
-            <el-select v-model="fwdjData.crowdcpbh" size="mini" placeholder="请选择CROWD产品" style="width:325px">
-              <el-option v-for="(cp, index) in crowdcpList" :key="index" :label="cp.lbmc" :value="cp.lbdm"></el-option>
+            <el-select v-model="fwdjData.wtjb" size="mini" placeholder="请选择问题级别" style="width:325px">
+              <el-option v-for="(wtjb, index) in wtjbList" :key="index" :label="wtjb.mc" :value="wtjb.label"></el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="期望解决日期" required>
-            <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="fwdjData.qwsjwcrq"
+            <el-date-picker :picker-options="pickerBeginDateBefore" :clearable="false" size="mini" v-model="fwdjData.qwjjrq"
               type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width:325px;"></el-date-picker>
           </el-form-item>
 
@@ -93,34 +107,35 @@
       </div>
     </el-dialog>
 
+    <tbrbmDialog :show.sync="tbrbmShow" :dwbh="fwdjData.dwbh" :dwmc="fwdjData.dwmc" @handleChooseDept="handleChooseDept"></tbrbmDialog>
   </div>
 </template>
 
 <script>
-  import axios from "axios";
-  import uploadFile from "@/components/BusinessPage/upload.vue";
 
+  import uploadFile from "@/components/BusinessPage/upload.vue";
+  import tbrbmDialog from "@/views/BusinessPage/serviceCounter/tbrbm-dialog.vue";
 
   export default {
     data() {
       return {
-        isInnerItem: false, // 是否为内部项目
-        dialogdemandVisible: false,
-        demandListVisible: false, //需求列表
+        tbrbmShow:false,
+        userInfo:{},
         visible: this.show,
         isClearFile: false, //清除附件
-        cpTreeShow: false,
-        defaultProps: {
-          value: "id",
-          label: "title"
-        },
-        options: [], //产品树选项
-        xmmc: "",
-        xmbh: "",
-        xmzt: "",
+        unitList:[],
+        wtjbList:[{mc:'一般',label:'0'},{mc:'紧急',label:'1'},{mc:'宕机',label:'2'}], // 问题级别
+        xxxtList:[], // 信息系统
+        fwqqlyList:[
+          { mc: "电话", label: '0' },
+          { mc: "邮件", label: '1' },
+          { mc: "面谈", label: '2' },
+          { mc: "QQ", label: '3'},
+          { mc: "微信", label: '4' },
+          { mc: "短信", label: '5' }
+        ], // 服务请求来源
+
         xqflList: [],
-        xmcpList: [], //项目产品
-        tclsList: [], //提出老师
         sfxsList: [{
             mc: "是",
             label: "1"
@@ -130,31 +145,30 @@
             label: "0"
           }
         ], //是否线上
-        crowdywxList: [], //crowd业务线
-        crowdcpList: [], //crowd产品
-        cpData: [], //当前产品树 选择产品
-        val: [],
-        teacherData: [],
         fwznfjMc: "", //编辑附件名称
-        glxqMc: "", //关联需求名称
+
+        dwmc: "",
         fwdjData: {
-          xmbh: "",
-          xmmc: "",
-          xqfl: "",
-          teacherData: "",
-          sfsx: "0",
-          cpbjbh: "",
-          cpbjmc: "",
-          crowdywxbh: "", //crowd 业务线编号
-          crowdywxmc: "", //crowd 业务线名称
-          crowdcpbh: "", //crowd 产品编号
-          crowdcpmc: "", //crowd 产品名称
-          qwsjwcrq: "",
-          qwkfjfrq: "",
-          glxqWid: "",
-          bt: "",
-          xqfjwid: "",
-          xqfjmc: ""
+          dwbh:"",
+          dwmc:"",
+          tbr:"",
+          lxfs:"",
+          tbrzw:"",
+          tbsj:"",//提报时间
+          bmmc:"",//提报人部门
+          bmbh:"",//提报人部门编号
+          qqly:"",//请求来源
+          yymc:"",
+          yybh:"",
+          cjdw:"",//承建单位
+          cjdwbh:"",//承建单位编号
+          dwlxr:"",//单位联系人
+          dwlxfs:"",//单位联系方式
+          wtjb:"",
+          qwjjrq:"",
+          bt:"",
+          fjStr:"",//附件
+          sm:""
         },
         pickerBeginDateBefore: {
           disabledDate(time) {
@@ -171,25 +185,62 @@
       }
     },
     components: {
-      uploadFile
+      uploadFile,
+      tbrbmDialog
     },
     methods: {
+      // 选择部门
+      handleChooseDept(data){
+        this.fwdjData.bmmc = data.title;
+        this.fwdjData.bmbh = data.id;
+        this.getApp(data.id);
+        this.tbrbmShow = false;
+      },
+
+      // 更换应用系统
+      handleChangeYyxt(val){
+        if(!val)  return;
+				let obj = {};
+				obj = this.xxxtList.find((item)=>{
+				    return item.yybh === val;
+				});
+        this.fwdjData.yymc = obj.yymc; //应用名称
+        this.fwdjData.cjdw = obj.cjdw;
+        this.fwdjData.cjdwbh = obj.cjdwbh;
+        this.fwdjData.dwlxr = obj.dwlxr;
+        this.fwdjData.dwlxrgh = obj.dwlxrgh;
+        this.fwdjData.dwlxfs = obj.dwlxfs;
+      },
+      // 更换单位
+			changeUnit(val){
+				if(!val)  return;
+				let obj = {};
+				obj = this.unitList.find((item)=>{
+				    return item.wid === val;
+				});
+        this.fwdjData.dwbh = obj.wid;
+        this.fwdjData.dwmc = obj.mc;
+        this.fwdjData.bmmc = '';
+			},
+      // 关键字搜索
+      remoteMethod(val){
+        this.getDwUser(val);
+      },
       // 上传附件
       handleUploadFile(data) {
         this.fwznfjMc = "";
         if (!!data.length) {
-          this.fwdjData.xqfjwid = data[0].split("|")[0];
-          this.fwdjData.xqfjmc = data[0].split("|")[1];
+          this.fwdjData.fjStr = data[0];
         } else {
-          this.fwdjData.xqfjwid = "";
-          this.fwdjData.xqfjmc = "";
+          this.fwdjData.fjStr = "";
         }
       },
 
       //提交需求
       handleCommit() {
+        this.fwdjData.sm = $("#summernoteTT").summernote("code");
         if (!this.valiDate()) return;
-        this.$post(this.API.submitDemand, this.fwdjData).then(res => {
+        this.$post(this.API.saveServiceDesk, this.fwdjData).then(res => {
           if (res.state == "success") {
             this.$message({
               message: "提交成功",
@@ -198,7 +249,7 @@
             $("#summernoteTT").summernote("code", "");
             this.isClearFile = !this.isClearFile;
             this.visible = false;
-            this.$emit("handleCommitDemand", this.Type);
+            this.$emit("handleCommitFwdj",'');
           } else {
             this.$message({
               message: res.msg,
@@ -208,85 +259,101 @@
         });
       },
 
+      // 获取信息系统
+      getApp(bmbh){
+        this.$get(this.API.appSelect,{
+          bmbh:bmbh
+        }).then(res=>{
+          if(res.state == 'success'){
+            this.xxxtList = res.data;
+          }else{}
+        })
+      },
+      getDwUser(keyword){
+        this.$get(this.API.getDwByUser,{
+          dwlx: "",
+			    curPage: 1,
+			    pageSize: 20,
+			    keyword:keyword
+        }).then(res=>{
+          if(res.state == 'success'){
+            if(!!res.data.rows){
+             this.unitList = res.data.rows;
+            }else{
+              this.unitList = [];
+            }
+          }else{
+
+          }
+        })
+      },
+
       valiDate() {
-        if (!this.fwdjData.xmbh) {
+        if (!this.fwdjData.dwmc) {
           this.$message({
-            message: "请选择项目编号",
+            message: "请选择学校",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.xqfl) {
+        if (!this.fwdjData.tbr) {
           this.$message({
-            message: "请选择需求分类",
+            message: "请输入提报人姓名",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.teacherData) {
+        if (!/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(this.fwdjData.lxfs) || !(/^1[3|4|5|6|7|8|9]\d{9}$/.test(this.fwdjData.lxfs))) {
           this.$message({
-            message: "请选择提出老师",
+            message: "请填写正确提报人联系方式",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.cpbjbh) {
+        if (!this.fwdjData.bmmc) {
           this.$message({
-            message: "请选择产品或产品选择有误（请注意需选择到模块级~）",
+            message: "请选择提报人部门",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.crowdywxbh) {
+        if (!this.fwdjData.tbsj) {
           this.$message({
-            message: "请选择CROWD业务线",
+            message: "请选择提报时间",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.crowdcpbh) {
+        if (!this.fwdjData.qqly) {
           this.$message({
-            message: "请选择CROWD产品",
+            message: "请选择服务请求来源",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.qwsjwcrq) {
+        if (!this.fwdjData.yymc) {
           this.$message({
-            message: "请选择期望设计完成日期",
+            message: "请选择信息系统",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.qwkfjfrq) {
+
+        if (!this.fwdjData.wtjb) {
           this.$message({
-            message: "请选择期望开发交付日期",
-            type: "warning"
-          });
-          return false;
-        }
-        if (this.fwdjData.xqfl != 1 && !this.fwdjData.glxqWid) {
-          this.$message({
-            message: "请选择关联的需求",
-            type: "warning"
-          });
-          return false;
-        }
-        if (!this.fwdjData.xqfjwid) {
-          this.$message({
-            message: "请上传附件",
+            message: "请选择问题级别",
             type: "warning"
           });
           return false;
         }
         if (!this.fwdjData.bt) {
           this.$message({
-            message: "请填写需求标题",
+            message: "请填写标题",
             type: "warning"
           });
           return false;
         }
-        if (!this.fwdjData.nr || this.fwdjData.nr == "<p><br></p>") {
+        if (!this.fwdjData.sm || this.fwdjData.sm == "<p><br></p>") {
           this.$message({
             message: "请填写需求内容",
             type: "warning"
@@ -321,6 +388,12 @@
               ]
             });
           });
+
+          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo')); 
+          if(this.userInfo.unitType != 0){
+            this.fwdjData.dwbh = this.userInfo.unitnum;
+            this.fwdjData.dwmc = this.userInfo.unit;
+          }
         } else {}
       }
     }

@@ -1,5 +1,6 @@
 <template>
-  <div style="height:100%;min-height:100%;overflow-y:auto;" class="page-component__scroll">
+ <!-- style="height:100%;min-height:100%;overflow-y:auto;" -->
+  <div  class="page-component__scroll">
     <div v-if="navshow">
         <div class="main_TopNav" >
             <header-user :userNav="userNav" :userInfo="userInfo" :shown="loginShow" @handleCommand="handleCommand" ></header-user>
@@ -9,13 +10,8 @@
         <keep-alive>
             <router-view></router-view>
         </keep-alive>
-     <!--   <transition name="scroll-fade" mode="out-in">
-            <div v-if="disabled" class="scrollTop" @click="handleBtn" title="回到顶部">
-            <i class="el-icon-arrow-up"></i>
-            </div>
-        </transition> -->
     </div>
-			<el-backtop target=".page-component__scroll" :bottom="100"></el-backtop>
+			<!-- <el-backtop target=".page-component__scroll" :bottom="100"></el-backtop> -->
   </div>
 </template>
 <script>
@@ -33,33 +29,7 @@ export default {
     };
   },
   methods: {
-    handleScroll() {
-      var scrollTop =
-        window.pageYOffset ||
-        $(".main_page").scrollTop() ||
-        document.body.scrollTop;
-      if (scrollTop > 200) {
-        this.disabled = true;
-      } else {
-        this.disabled = false;
-      }
-    },
-    handleBtn() {
-      //滚动到顶部
-      var gotoTop = function() {
-        var currentPosition =
-          $(".main_page").scrollTop() || document.body.scrollTop;
-        currentPosition -= 50;
-        if (currentPosition > 0) {
-          $(".main_page").scrollTop(currentPosition);
-        } else {
-          $(".main_page").scrollTop(0);
-          clearInterval(timer);
-          timer = null;
-        }
-      };
-      var timer = setInterval(gotoTop, 0.1);
-    },
+
     handleCommand(data) {
       if (data.split("&&")[0] == "退出") {
         window.location.href =
@@ -130,27 +100,12 @@ export default {
         }
       }
     });
-    $(".main_page").scroll(function() {
-      _this.handleScroll();
-    });
-
-		window.scroll(()=>{
-			console.log(window.scrollTop)
-		})
   },
-
   components: { headerUser }
 };
 </script>
 <style scoped>
-.main_page {
-  /* height: calc(100vh - 50px); */
-  overflow-y: auto;
-}
-.main_page-questionDetail {
-  height: 100vh;
-  overflow-y: auto;
-}
+
 .main_TopNav {
   width: 100%;
   box-shadow: 0px 1px 6px #ddd;
@@ -161,26 +116,5 @@ export default {
   margin: 0 auto;
   box-shadow: 0 1px 2px #ccc;
 }
-.scrollTop {
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  line-height: 40px;
-  position: fixed;
-  right: 35px;
-  bottom: 50px;
-  font-size: 20px;
-  background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0px 3px #666;
-  border-radius: 50%;
-  z-index: 333;
-}
-.scrollTop:hover {
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0.4);
-}
-.el-icon-arrow-up {
-  color: #fff;
-  /* #409eff; */
-}
+
 </style>

@@ -2,41 +2,35 @@
      <div class="choose-daily-tasks">
         <div class="search-dialog-task" flex >
                  <el-input v-model="xmValue" size="mini" style="width:286px" placeholder="请输入项目名称" @change="handleQueryItem"></el-input>&#x3000;
-                 <el-button size="mini" type="primary" style="height:30px;margin-top:2px" @click="handleLogItem">查询</el-button>
+                 <el-checkbox v-model="ywxg">我相关的项目</el-checkbox>&#x3000;
+                 <el-button size="mini" type="primary" style="height:30px;margin-top:2px" @click="handleQueryItem">查询</el-button>
         </div>
          <div class="choose-daily-alltask" >
              <el-collapse v-model="activeNames" v-if="shown" @change="handleCollapse" accordion>
                  <el-collapse-item title="收藏项目" name="1" >
                    <ul>
-                        <li class="choose-daily-item" v-for="(item,index) in xbData" :title="item.xmmc" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>
+                        <li class="choose-daily-item" v-for="(item,index) in xbData" :title="item.xmmc" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">【{{item.xmbh}}】 {{item.xmmc}}</li>
                         <li class="choose-daily-more"><a href="javascript:void(0)" @click="handleMoreitem(index)" v-if="xbCurPage < xbTotal && xbTotal > 1">加载更多...</a></li>
                         <li class="choose-daily-emptyItem"  v-if="xbData.length == 0">暂无项目</li>
                     </ul>
                 </el-collapse-item>
                 <el-collapse-item title="我负责的项目" name="3" >
                    <ul>
-                        <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in wfzData" :data-xmmc="item.xmmc" :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>
+                        <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in wfzData" :data-xmmc="item.xmmc" :data-xmbh="item.xmbh" @click="handleNext">【{{item.xmbh}}】 {{item.xmmc}}</li>
                         <li class="choose-daily-more"><a href="javascript:void(0)" @click="handleMoreitem(3)" v-if="wyyCurPage < wyyTotal && wyyTotal > 1">加载更多...</a></li>
                         <li class="choose-daily-emptyItem"  v-if="wfzData.length == 0">暂无项目</li>
                     </ul>
                 </el-collapse-item>
                 <el-collapse-item title="我参与项目" name="4"  >
                     <ul>
-                        <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in wcyData" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>
+                        <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in wcyData" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">【{{item.xmbh}}】 {{item.xmmc}}</li>
                         <li class="choose-daily-more"><a href="javascript:void(0)" @click="handleMoreitem(4)" v-if="wcyCurPage < wcyTotal && wcyTotal > 1">加载更多...</a></li>    
                         <li class="choose-daily-emptyItem"  v-if="wcyData.length == 0">暂无项目</li>
                     </ul>
                 </el-collapse-item>
-             <!--   <el-collapse-item title="已关闭项目" name="5" >
-                    <ul>
-                        <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in ygbData" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>
-                        <li class="choose-daily-more"><a href="javascript:void(0)" @click="handleMoreitem(5)" v-if="ygbCurPage < ygbTotal && ygbTotal > 1">加载更多...</a></li>
-                        <li class="choose-daily-emptyItem"  v-if="ygbData.length == 0">暂无项目</li>
-                    </ul>
-                </el-collapse-item> -->
                 <el-collapse-item title="其他 ( 非项目任务 ) " name="6" >
                     <ul>
-                        <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in otherData" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>
+                        <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in otherData" :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">【{{item.xmbh}}】 {{item.xmmc}}</li>
                         <li class="choose-daily-more"><a href="javascript:void(0)" @click="handleMoreitem(6)" v-if="otherCurPage < otherTotal && otherTotal > 1">加载更多...</a></li>
                         <li class="choose-daily-emptyItem"  v-if="otherData.length == 0">暂无项目</li>
                     </ul>
@@ -62,7 +56,7 @@
             <div v-if="taskList" style="height:calc(100% - 35px);width:300px;border:1px solid #ccc;float:left;border-left:none">
               <ul v-for="(item,index) in tasksData">
                   <li ><h4 style="overflow:hidden;white-space:nowrap; text-overflow: ellipsis" :title="item.catalog">{{item.catalog}}</h4></li>
-                  <li :title="task.rwmc_display" class="choose-daily-item" v-for="task in item.tasks.rows"  @click="chooseRevelence(task,item.lcbjdmc)"><span class="el-icon-info"></span> {{task.rwmc_display}}</li>                 
+                  <li :title="task.rwmc_display" class="choose-daily-item" v-for="task in item.tasks.rows"  @click="chooseRevelence(task,item.lcbjdmc)"><span class="el-icon-info"></span>{{task.rwmc_display}}</li>                 
               </ul>
             </div>
         </transition>
@@ -85,6 +79,7 @@ import { getMilestoneCatalog } from "@/api/milestone.js";
 export default {
   data() {
     return {
+      ywxg:true,
       collapseList: [
         "收藏项目",
         "高风险",
@@ -202,18 +197,7 @@ export default {
           this.getProjects();
       }
     },
-    handleLogItem() {
-      //查询项目
-      if (this.xmValue == "") {
-        this.shown = true;
-      } else {
-        this.shown = false;
-        this.allCurpage = 1;
-        this.getProjects();
-      }
-      this.taskGroup = false;
-      this.taskList = false;
-    },
+
     handleQueryItem() {
       // enter 查询
       if (this.xmValue == "") {
@@ -347,7 +331,7 @@ export default {
         xmzt: "",
         xmlb: "",
         sfgx: "",
-        pl: "",
+        pl:!!this.ywxg?4:"",
         isAll: true
       }).then(({ data }) => {
         if (data.state == "success") {

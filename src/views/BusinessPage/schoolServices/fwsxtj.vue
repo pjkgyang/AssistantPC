@@ -7,7 +7,7 @@
         </div>
         <div flex >
           <span class="query-title" style="padding:2px 4px;margin-right:10px">高级查询:</span>
-          <el-input style="width:500px" class="search-input" placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校" prefix-icon="el-icon-search"
+          <el-input style="width:300px" class="search-input" placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校" prefix-icon="el-icon-search"
             size="mini" v-model="filterData.keyword" @change="handleSearch"></el-input>
           &#x3000;
           <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
@@ -76,7 +76,7 @@
           <el-table-column prop="fwmc" label="服务名称" min-width="220"></el-table-column>
           <el-table-column prop="bmmc" label="部门名称" width="120"></el-table-column>
           <el-table-column prop="bsyj" label="办事依据" min-width="150"></el-table-column>
-          <el-table-column prop="fwdx" label="服务对象" min-width="150"></el-table-column>
+          <el-table-column prop="fwdx" label="服务对象" min-width="180"></el-table-column>
           <el-table-column prop="fwlb" label="服务类别" width="120"></el-table-column>
           <el-table-column prop="fwzn" label="服务指南" width="120">
             <template slot-scope="scope">
@@ -90,7 +90,7 @@
           </el-table-column>
           <el-table-column prop="xxhsxsj" label="上线时间" width="120"></el-table-column>
           <el-table-column prop="xxhjszt" label="建设状态" width="120"></el-table-column>
-          <el-table-column prop="cjgs" label="承建公司"></el-table-column>
+          <el-table-column prop="cjgs" label="承建公司" width="180"></el-table-column>
           <el-table-column prop="syqk" label="使用情况" width="200" show-overflow-tooltip></el-table-column>
         </el-table>
         <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pageSize"

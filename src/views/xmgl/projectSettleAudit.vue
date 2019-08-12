@@ -32,7 +32,7 @@
 		<div>
 			<el-button size="mini" type="danger" @click="handleSetCz" :disabled="!jssqwidArr.length">设置冲账</el-button><br><br>
 			<!-- :max-height="height" -->
-			<el-table  :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+			<el-table  :data="tableData" border style="width: 100%" :max-height="tableHeight" @selection-change="handleSelectionChange">
 				<el-table-column type="selection" width="55" :selectable="checkboxInit"></el-table-column>
 				<el-table-column fixed="left" label="操作" width="80">
 					<template slot-scope="scope">
@@ -81,7 +81,7 @@ import { getMenu, getSession } from '@/utils/util.js';
 export default {
 	data() {
 		return {
-			height:window.innerHeight - 310,
+			tableHeight:window.innerHeight - 310,
 			currentPage: 1,
 			pageSize: 15,
 			records: 0,

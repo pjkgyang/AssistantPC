@@ -775,6 +775,15 @@ input[type="file"] {
 	height: 370px;
 }
 
+/* 服务台 收缩看板 */
+.el-collapse-item__header{
+   background: rgba(134, 184, 179, 0.1) !important;
+}
+.el-collapse-item__header:hover{
+	background: rgba(134, 184, 179, 0.3) !important;
+	color: rgba(134, 184, 179, 1)
+}
+
 /* @media screen and (max-width:1400px){
     .report-chooseitem{
         width:290px !important;

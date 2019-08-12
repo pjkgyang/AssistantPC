@@ -31,7 +31,6 @@
           <div class="mg-12">
             <p class="query-title">处理状态:</p>
             <p class="query-list">
-              <span :class="{ 'bg-active': filterData.clzt == '' }" @click="handleChangeclzt('')">全部</span>
               <span v-for="(clzt, index) in clztList" @click="handleChangeclzt(clzt.label)" :key="index" :class="{ 'bg-active': filterData.clzt == clzt.label }">
                 {{ clzt.mc }}
               </span>
@@ -41,7 +40,6 @@
           <div>
             <p class="query-title">问题级别:</p>
             <p class="query-list">
-              <span :class="{ 'bg-active': filterData.wtjb == '' }" @click="handleChangewtjb('')">全部</span>
               <span v-for="(wtjb, index) in wtjbList" @click="handleChangewtjb(wtjb.label)" :key="index" :class="{ 'bg-active': filterData.wtjb == wtjb.label }">
                 {{ wtjb.mc }}
               </span>
@@ -60,27 +58,27 @@
 
       <div class="pannelPaddingBg-10 mg-12">
         <div class="pd-10 ">
-           <el-button size="mini" type="danger" @click="yypzxqShow = true">服务登记</el-button>
+           <el-button size="mini" type="danger" @click="fwdjShow = true">服务登记</el-button>
         </div>
         <ul class="serviceCounter-list">
           <li flex v-for="(item, index) in dataList" :key="index">
             <!-- <div class="serviceCounter-list_bgimg" center>服务</div> -->
             <div class="serviceCounter-list-info" flex-column spacebetween>
               <span><a :href="'#/serviceCounter/detail?id='+item.wid" target="_blank" >{{item.bt}}</a></span>
-              <p>
-                <span class="title">服务编号：{{item.fwbh}}</span>
-                <span class="title">提报日期：{{item.tbrq}}</span>
-                <span class="title">期望解决日期：{{item.qwjjrq}}</span>
+              <p class="serviceCounter-list_info">
+                <span><span class="title">服务编号：</span>{{item.fwbh}}</span>
+                <span><span class="title">提报日期：</span>{{item.tbsj}}</span>
+                <span><span class="title">期望解决日期：</span>{{item.qwjjrq}}</span>
               </p>
-              <p>
-                <span class="title">提报人：{{item.tbr}}</span>
-                <span class="title">提报人单位：{{item.tbrdw}}</span>
-                <span class="title">问题级别：{{item.wtjb}}</span>
+              <p class="serviceCounter-list_info">
+                <span><span class="title">提报人：</span>{{item.tbr}}</span>
+                <span><span class="title">提报人单位：</span>{{item.dwmc}}</span>
+                <span><span class="title">问题级别：</span>{{item.wtjb_display}}</span>
               </p>
-              <p>
-                <span class="title">信息系统：{{item.xxxt}}</span>
-                <span class="title">承建单位：{{item.cjdw}}</span>
-                <span class="title">延期3天解决：{{item.tbrq}}</span>
+              <p class="serviceCounter-list_info">
+                <span><span class="title">信息系统：</span>{{item.yymc}}</span>
+                <span><span class="title">承建单位：</span>{{item.cjdw}}</span>
+                <span><span class="title"  v-if="item.delayState == 3||item.delayState == 4">延期3天解决：</span></span>
               </p>
             </div>
           </li>
@@ -93,7 +91,7 @@
         </div>
       </div>
 
-      <fwdjDialog :show.sync="fwdjShow"></fwdjDialog>
+      <fwdjDialog :show.sync="fwdjShow" @handleCommitFwdj="handleCommitFwdj"></fwdjDialog>
       <yypzDialog :show.sync="yypzShow"></yypzDialog>
       <BjDialog :show.sync="bjShow"></BjDialog>
       <yypzxqDialog :show.sync="yypzxqShow"></yypzxqDialog>
@@ -115,8 +113,8 @@ export default {
       yypzShow:false,
       bjShow:false,
       yypzxqShow:false,//配置详情
-      clztList: [], //处理状态
-      wtjbList: [], //问题级别
+      clztList: [{mc:'全部',label:''},{mc:'处理中',label:'1'},{mc:'待验证',label:'2'},{mc:'办结',label:'3'}], //处理状态
+      wtjbList: [{mc:'全部',label:''},{mc:'一般',label:'1'},{mc:'紧急',label:'2'},{mc:'宕机',label:'3'}], //问题级别
       sfcbList: [
         { mc: "全部", label: "" },
         { mc: "是", label: "1" },
@@ -127,44 +125,24 @@ export default {
       currentPage: 1,
       pageSize: 10,
       records: 0,
-      dataList: [
-        {
-          bt: "404错误",
-          fwbh: "fw123123",
-          tbrq: "2018-08-08",
-          qwjjrq: "2018-08-08",
-          tbr: "张三",
-          tbrdw: "学工处",
-          wtjb: "当即",
-          xxxt: "学工",
-          cjdw: "金智",
-          yq: 3
-        },
-        {
-          bt: "404错误",
-          fwbh: "fw123123",
-          tbrq: "2018-08-08",
-          qwjjrq: "2018-08-08",
-          tbr: "张三",
-          tbrdw: "学工处",
-          wtjb: "当即",
-          xxxt: "学工",
-          cjdw: "金智",
-          yq: 3
-        }
-      ],
+      dataList: [],
 
       filterData: {
-        clzt: "", //需求分类
-        wtjb: "", //查询状态
+        clzt: "", //处理状态
+        wtjb: "", //问题级别
         date:[],
-        sfcb: "", //需求类型
+        sfcb: "", //是否催办
         keyword: ""
       }
     };
   },
-  mounted() {},
+  mounted() {
+    this.pageServiceDesk();
+  },
   methods: {
+
+
+
     // 提需求
     handleSendserviceCounter() {
       this.fwdjShow = true;
@@ -177,50 +155,43 @@ export default {
     //  查询
     handleQuery() {
       this.currentPage = 1;
-      this.queryPagesserviceCounter();
+      this.pageServiceDesk();
     },
 
     // 切换页数
     handleCurrentChange(data) {
       this.currentPage = data;
-      this.queryPagesserviceCounter();
+      this.pageServiceDesk();
     },
 
-    // 需求分类
+    // 处理状态
     handleChangeclzt(data) {
       this.filterData.clzt = data;
       this.currentPage = 1;
-      this.queryPagesserviceCounter();
     },
-    // 查询状态
+    // 问题级别
     handleChangewtjb(data) {
       this.filterData.wtjb = data;
       this.currentPage = 1;
-      this.queryPagesserviceCounter();
     },
-    // 需求类型
+    // 是否催办
     handleChangesfcb(data) {
       this.filterData.sfcb = data;
       this.currentPage = 1;
-      this.queryPagesserviceCounter();
     },
-
-    // 工程战队
-    handleChangeGczd(data) {
-      this.filterData.gczd = data;
-      this.currentPage = 1;
-      this.queryPagesserviceCounter();
+    handleCommitFwdj(){
+      this.pageServiceDesk();
     },
-
     //  查询需求列表
-    queryPagesserviceCounter() {
-      this.$get(this.API.queryPageserviceCounters, {
+    pageServiceDesk() {
+      this.$get(this.API.pageServiceDesk, {
         curPage: this.currentPage,
         pageSize: this.pageSize,
-        xqxglx: this.filterData.clzt,
+        djrqStart: !this.filterData.date[0]?"":this.filterData.date[0],
+        djrqEnd: !this.filterData.date[1]?"":this.filterData.date[1],
+        zt: this.filterData.clzt,
+        wtjb: this.filterData.wtjb,
         sfcb: this.filterData.sfcb,
-        qygc: this.filterData.gczd,
-        mkbh: this.filterData.cp,
         keyword: this.filterData.keyword
       }).then(res => {
         if (res.state == "success") {
@@ -248,7 +219,7 @@ export default {
 
 <style scoped lang="scss">
 .serviceCounter-pannel {
-  width: 85%;
+  width: 95%;
   margin: 20px auto 0;
 
   .isshown-query {
@@ -276,11 +247,14 @@ export default {
           color: rgb(74, 131, 197);
         }
       }
-
+      .serviceCounter-list_info{
+        >span{
+          display: inline-block;
+          min-width: 300px;
+        }
+      }
       .title {
-        color: rgb(41, 41, 41);
-        display: inline-block;
-        width: 260px;
+        color: rgb(184, 184, 184);
       }
     }
   }

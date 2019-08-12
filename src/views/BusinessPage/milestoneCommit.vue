@@ -377,8 +377,8 @@ export default {
 			xmbwShow: false,
 			lcbbh: '',
 			qygcList: [], //区域工程列表
-			checkList: ['3', '5', '9'],
-			xmlbList: ['软件', '软件服务'], //项目类别
+			checkList: [],//'3', '5', '9'
+			xmlbList: [], //项目类别'软件', '软件服务'
 			xmztList: [], //项目状态
 			htxzList: [], //合同性质
 			keyword: '',
@@ -872,8 +872,6 @@ export default {
 		filterShow(n, o) {
 			if (!n) {
 				this.htbhKeyword = this.xmbhKeyword = this.xmmcKeyword = this.xmnrKeyword = this.lcbmsKeyword = this.xmjlKeyword = this.zrrKeyword = '';
-				this.currentPage = 1;
-				this.queryMilestoneData();
 			}
 		}
 	},

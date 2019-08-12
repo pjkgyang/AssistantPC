@@ -26,13 +26,17 @@
 		methods:{
 			// 更换单位
 			changeUnit(val){
-				if(!val)  return;
-				let obj = {};
-				obj = this.schoolNamesOptions.find((item)=>{
-				    return item.wid === val;
-				});
-				this.unit.dwbh = obj.wid;
-				this.unit.dwmc = obj.mc;
+				if(!!val){
+					let obj = {};
+					obj = this.schoolNamesOptions.find((item)=>{
+						return item.wid === val;
+					});
+					this.unit.dwbh = obj.wid;
+					this.unit.dwmc = obj.mc;
+				}else{
+					this.unit.dwbh = '';
+					this.unit.dwmc = '';
+				}
 				this.$emit('handleChangeUnit',this.unit);
 			},
 			remoteMethod(val) {  //远程搜索

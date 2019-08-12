@@ -13,12 +13,12 @@
       </div>
       <div class="task-detail-scenario-infos-wrap" v-if="lcbType != 3">
         <p><span style="display:inline-block;width:120px" class="el-icon-date"> 签字日期</span><span>
-            <el-date-picker v-if="lcbType != 3" size="small" v-model="signDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
+            <el-date-picker v-if="lcbType != 3" size="small" :picker-options="curMonth==4||curMonth==6?pickerOptionsCurMonth:pickerOptionsQzrq" v-model="signDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
           </span>
         </p>
         <div v-if="lcbType != 3 && lcbType != 2">
           <p><span style="display:inline-block;width:120px" class="el-icon-date"> 服务开始时间</span><span>
-              <el-date-picker size="small" v-model="startDate" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-date-picker size="small" v-model="startDate" :picker-options="pickerOptionsFwrq" type="date" placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
             </span>
           </p>
           <p><span style="display:inline-block;width:120px" class="el-icon-edit-outline"> 销售确认人</span><span>
@@ -99,6 +99,9 @@ import Qs from "qs";
 import { getLcbFolders, getChildren } from "@/api/TaskProcess.js";
 import { getMilestoneSubmitType, submitMilestone } from "@/api/milestone.js";
 import { queryProjectParticipant } from "@/api/personal.js";
+import { GetDateStr } from "@/utils/util.js";
+
+
 export default {
   data() {
     return {
@@ -132,7 +135,36 @@ export default {
           ekgzl: 0,
           kbgzl: 0
         }
-      ]
+      ],
+      curMonth:"",
+      // 签字日期 6月和12月
+      pickerOptionsCurMonth: {
+          disabledDate(time) {
+            let year = new Date().getFullYear();
+            let month = (new Date().getMonth()+1)<10?'0'+(new Date().getMonth()+1):new Date().getMonth()+1;
+            let lastDay = new Date(year,month,0).getTime();
+            let firstDay = new Date('2019-08-01').getTime();
+            return time.getTime() < firstDay - 8.64e7 || time.getTime() > lastDay;;
+          }
+        },  
+      // 签字日期 两个月之前
+      pickerOptionsQzrq:{
+        disabledDate(time) {
+            let curDate = (new Date()).getTime();
+            let two = -60 * 24 * 3600 * 1000;
+            let twoMonths = curDate + two;
+            return time.getTime() > twoMonths;
+          }
+      },
+      // 服务日期 大于等于当日并小于当日+1个月
+      pickerOptionsFwrq:{
+        disabledDate(time) {
+            let curDate = (new Date()).getTime();
+            let one = 31 * 24 * 3600 * 1000;
+            let oneMonths = curDate + one;
+            return time.getTime() < Date.now() - 8.64e7 || time.getTime() > oneMonths;
+          }
+      },
     };
   },
   props: {
@@ -161,7 +193,11 @@ export default {
       default: ""
     }
   },
+
   mounted() {
+
+    this.curMonth = new Date().getMonth()+1;
+
     // 获取里程碑类型
     this.valueXSQRR = "";
     this.startDate = "";
@@ -173,6 +209,33 @@ export default {
     }
   },
   methods: {
+    // 6月和12月，签字日期必须是当月，服务开始时期必须大于等于当日并小于当日+1个月
+    // 其他月份，签字日期必须<当月-2个月，服务开始时期必须大于等于当日并小于当日+1个月
+    handleQzrqDate(){
+      let self = this;
+        return {
+          disabledDate(time) {
+            let curDate = (new Date()).getTime();
+            let two = -60 * 24 * 3600 * 1000;
+            let twoMonths = curDate + two;
+            return time.getTime() > twoMonths;
+          }
+        };
+    },
+    // 
+    handleFocusDate() {
+        let self = this;
+        return {
+          disabledDate(time) {
+            let curDate = (new Date()).getTime();
+            let one = 31 * 24 * 3600 * 1000;
+            let oneMonths = curDate + one;
+            return time.getTime() < Date.now()  || time.getTime() > oneMonths;
+          }
+        };
+    },
+
+
     handleClose() {
       this.$emit("handleClose", "");
     },

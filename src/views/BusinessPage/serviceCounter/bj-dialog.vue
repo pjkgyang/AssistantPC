@@ -13,7 +13,7 @@
       <div class="dialog-bj">
         <section>
 
-          <div flex>
+          <div flex class="mg-12">
             <span class="filter-weight">服务评价：</span>
             <el-rate v-model="filterData.pf" :texts="texts" show-text></el-rate>
           </div>
@@ -51,9 +51,37 @@ export default {
       }
     };
   },
+  props:{
+    show: {
+      type: Boolean,
+      default: false
+    },
+    wid:{
+      type:String,
+      default:''
+    }
+  },
   methods: {
     handleClickSure() {
       if (!this.validate()) return;
+      this.$post(this.API.completed,{
+        zbwid:this.wid,
+        sm:this.filterData.nr,
+        pf:this.filterData.pf
+      }).then(res=>{
+        if(res.state == 'success'){
+           this.$message({message: "提交成功",type: "success" });
+           this.filterData.nr = '';
+           this.filterData.pf = 5;
+           this.visible = false;
+           this.$emit('handleCommitBj','')
+        }else{
+          this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+          });
+        }
+      })
     },
     validate() {
       if (/^[\s]*$/.test(this.filterData.nr)) {
@@ -64,13 +92,6 @@ export default {
         return false;
       }
       return true;
-    }
-  },
-
-  props: {
-    show: {
-      type: Boolean,
-      default: false
     }
   },
   watch: {

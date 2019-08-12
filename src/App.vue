@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <!-- <keep-alive>     -->
-      <router-view/>
-    <!-- </keep-alive> -->
-    <div class="footerBar">
+      <!-- <keep-alive>     -->
+        <router-view/>
+        <!-- </keep-alive> -->
+        <el-backtop target="#app" :bottom="100"></el-backtop>
     </div>
   </div>
 </template>
@@ -31,12 +31,9 @@ export default {
     position:relative;  
     width:100%;
     height:100%; 
+    overflow-y: auto;
 }
-.footerBar{
-    position:absolute;
-    bottom:0px;
-    left:0px;
-    width: 100%;
+.el-icon-arrow-up {
+  color: #fff;
 }
-
 </style>

@@ -22,7 +22,7 @@
             <el-table-column fixed="left" label="操作" width="150">
               <template slot-scope="scope">
                 <!-- 关闭 2，完成待确认 1  -->
-                <el-button v-if="scope.row.zt != '1' && scope.row.zt != '2' && isJzuser == '0' && username == scope.row.zrrxm"
+                <el-button v-if="scope.row.zt != '1' && scope.row.zt != '2' && isJzuser == '0' && username == scope.row.zrrxm && scope.row.flag == '1'"
                   type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
                 <el-button v-if="scope.row.zt == '1' && isJzuser == '1'" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
                 <el-button v-if="scope.row.zt == '1' && (userGroupTag.includes('ZDSFWGLY') || scope.row.jffzrxm == username)"
@@ -39,8 +39,8 @@
                 <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="jhksrq" label="计划开始日期" width="150"></el-table-column>
-            <el-table-column prop="jhjsrq" label="计划结束日期" width="150"></el-table-column>
+            <el-table-column prop="jhksrqmin" label="计划开始日期" width="150"></el-table-column>
+            <el-table-column prop="jhksrqmax" label="计划结束日期" width="150"></el-table-column>
             <el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="sfgq" label="是否过期" width="100">
@@ -51,7 +51,7 @@
             <el-table-column v-if="isJzuser == '0'" prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
             <el-table-column v-if="isJzuser == '0'" prop="fxgs" label="风险工时(小时)" width="120"></el-table-column>
             <el-table-column v-if="isJzuser == '0'" prop="wtgs" label="问题工时(小时)" width="120"></el-table-column>
-            <el-table-column prop="sjjsrq" label="实际结束日期" width="150"></el-table-column>
+            <el-table-column prop="jhjsrqmax" label="实际结束日期" width="150"></el-table-column>
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
@@ -90,7 +90,7 @@
         </section>
         <div text-right style="margin-top:2px">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
-            :page-sizes="[10, 30, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+            :page-sizes="[15, 30, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
             :total="total">
           </el-pagination>
         </div>
@@ -125,7 +125,7 @@
         fxdjShow: false,
         title: "",
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 15,
         total: 0,
         tableData: [],
         multipleSelection: [],
@@ -141,8 +141,10 @@
           fwzt: "",
           lb: "",
           xmzt: "",
-          jhksrq: "",
-          jhjsrq: "",
+          jhksrqmin: "",
+          jhksrqmax: "",
+          jhjsrqmin:"",
+          jhjsrqmax:"",
           sfgq: "",
           fxdj: "",
           wtzt: "",
@@ -204,7 +206,7 @@
           sm: data.sm,
           xjgs: data.xjgs,
           fjData: data.fileList,
-          sjjsrq:data.sjjsrq
+          jhjsrqmax:data.jhjsrqmax
         }).then(res => {
           if (res.state == "success") {
             this.$message({
@@ -342,6 +344,10 @@
               .catch(() => {});
             break;
           case "export":
+                let jhksrqmin = !this.filterData.jhksrqmin?'':this.filterData.jhksrqmin,
+                jhksrqmax = !this.filterData.jhksrqmax?'':this.filterData.jhksrqmax,
+                jhjsrqmin = !this.filterData.jhjsrqmin?'':this.filterData.jhjsrqmin,
+                jhjsrqmax = !this.filterData.jhjsrqmax?'':this.filterData.jhjsrqmax; 
             window.open(
               window.baseurl +
               "activeservice/exportActiveService.do?cpbh=" +
@@ -354,10 +360,14 @@
               this.filterData.fwzt +
               "&xmzt=" +
               this.filterData.xmzt +
-              "&jhksrq=" +
-              this.filterData.jhksrq +
-              "&jhjsrq=" +
-              this.filterData.jhjsrq +
+              "&jhksrqmin=" +
+              jhksrqmin +
+              "&jhksrqmax=" +
+              jhksrqmax +
+              "&jhjsrqmin=" +
+              jhjsrqmin +
+              "&jhjsrqmax=" +
+              jhjsrqmax +
               "&sfgq=" +
               this.filterData.sfgq +
               "&keyword=" +
@@ -447,8 +457,10 @@
           zt: this.filterData.fwzt,
           lb: this.filterData.lb,
           xmzt: this.filterData.xmzt,
-          jhksrq: this.filterData.jhksrq,
-          jhjsrq: this.filterData.jhjsrq,
+          jhksrqmin: this.filterData.jhksrqmin,
+          jhksrqmax: this.filterData.jhksrqmax,
+          jhjsrqmin:this.filterData.jhjsrqmin,
+          jhjsrqmax: this.filterData.jhjsrqmax,
           sfgq: this.filterData.sfgq,
           keyword: this.filterData.keyword,
           sffb: 1,

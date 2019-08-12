@@ -3,7 +3,7 @@
     <div class="zdsfw-xmlist pannelPaddingBg-10">
       <filterCondition :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'学校名称/项目名称/项目编号/合同编号'"></filterCondition>
       <div>
-        <zdsfwTable :tableData="tableData" @handleRestar="handleRestar"></zdsfwTable>
+        <zdsfwTable :tableData="tableData" :zt="filterData.zdsfwzt" @handleRestar="handleRestar"></zdsfwTable>
       </div>
       <div text-right>
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[15, 30, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">

@@ -2,6 +2,9 @@ export default {
   getUsers: window.baseurl + 'personnel/getUsers.do', // 获取学校成员
   queryProjectParticipant: window.baseurl + 'personnel/queryProjectParticipant.do', //获取项目参与者
   downloadFile: window.baseurl + 'attachment/downloadFile.do', //下载附件
+
+  exportEktbDetail: window.baseurl + 'report/exportEktbDetail.do', //导出二开提报（成本）
+  exportBxbDetail: window.baseurl + 'report/exportBxbDetail.do', //导出可变提报（成本）
   // 枚举
   getDictEnum: window.baseurl + 'dict/getDictEnum.do',
   // 报表
@@ -367,5 +370,16 @@ export default {
   pageApps: window.baseurl + 'servicedesk/pageApps.do', //   获取应用配置分页数据
   getApp: window.baseurl + 'servicedesk/getApp.do', //   获取应用配置
   appSelect: window.baseurl + 'servicedesk/appSelect.do', //   应用配置选择列表
-
+  pageServiceDesk: window.baseurl + 'servicedesk/pageServiceDesk.do', //  服务台分页列表
+  saveServiceDesk: window.baseurl + 'servicedesk/saveServiceDesk.do', //  保存
+  deleteServiceDesk: window.baseurl + 'servicedesk/deleteServiceDesk.do', //  删除
+  getServiceDesk: window.baseurl + 'servicedesk/getServiceDesk.do', //  获取服务台
+  updatePromisedTime: window.baseurl + 'servicedesk/updatePromisedTime.do', //  更新承诺结束日期
+  reply: window.baseurl + 'servicedesk/reply.do', //  回复
+  completed: window.baseurl + 'servicedesk/completed.do', // 办结
+  remind: window.baseurl + 'servicedesk/remind.do', // 催办
+  returnVisit: window.baseurl + 'servicedesk/returnVisit.do', // 用户回访
+  becomeAssistantQuestion: window.baseurl + 'servicedesk/becomeAssistantQuestion.do', // 转入小助手问题
+  waitForUserVerification: window.baseurl + 'servicedesk/waitForUserVerification.do', // 等待用户验证
+  pageServiceDeskWithoutAuth: window.baseurl + 'servicedesk/pageServiceDeskWithoutAuth.do', // 等待用户验证
 }

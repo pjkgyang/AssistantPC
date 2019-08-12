@@ -10,11 +10,11 @@
             @close="$emit('update:show', false)"
             :show="show">
             <div class="dialog-pj">
+                
                 <section> 
-                    <p class="pj-content">
-                       <el-input type="textarea" :rows="5" :maxlength="500" style="width:670px"  placeholder="请输入说明内容" v-model="sm"></el-input>
-                    </p>
+                 
                 </section>
+
                 <section class="pj-btn-group">
                     <el-button size="small" type="primary"  @click="handleClickSure">确定</el-button>
                     <el-button size="small" @click="handleClose">取消</el-button>

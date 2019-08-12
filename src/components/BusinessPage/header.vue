@@ -4,7 +4,7 @@
     <div class="header-left">
       <div class="title_menu">
         <p>
-          <img src="static/img/logo2.png" alt="logo">&#x3000;
+          <img src="static/img/logo2.png" alt="logo" />&#x3000;
           <span>金智教育共创小助手</span>
         </p>
       </div>
@@ -15,17 +15,45 @@
           </li>
         </ul>
         <div class="header-navmenu-elmenu">
-          <el-menu text-color="#708087" :active-text-color="'#CD3333'" ref="navbar" :router='true' :default-active="onRoutes" @select="handleSelect" mode="horizontal" menu-trigger="hover" unique-opened>
-            <nav-item :routes="menuList" navIndex=""></nav-item>
+          <el-menu
+            text-color="#708087"
+            :active-text-color="'#CD3333'"
+            ref="navbar"
+            :router="true"
+            :default-active="onRoutes"
+            @select="handleSelect"
+            mode="horizontal"
+            menu-trigger="hover"
+            unique-opened
+          >
+            <nav-item :routes="menuList" navIndex></nav-item>
           </el-menu>
         </div>
       </div>
     </div>
     <div style="display:flex;align-items:center;">
       <div style="margin-right:15px;position:relative">
-        <input v-if="title == '/businesspage/dataTab'" type="text" class="searchKeyword" v-model="inputValue" placeholder="请输入搜索内容" @keyup="getInputVal">
-        <input v-if="title == '/businesspage/projects'" type="text" class="searchKeyword" v-model="inputValue" placeholder="请输入搜索内容" @keyup="getInputXmKB">
-        <span v-if="title == '/businesspage/dataTab' ||title == '/businesspage/projects'" class="el-icon-search" style="position:absolute;top:6px;left:5px;"></span>
+        <input
+          v-if="title == '/businesspage/dataTab'"
+          type="text"
+          class="searchKeyword"
+          v-model="inputValue"
+          placeholder="请输入搜索内容"
+          @keyup="getInputVal"
+        />
+        <input
+          v-if="title == '/businesspage/projects'"
+          type="text"
+          class="searchKeyword"
+          v-model="inputValue"
+          placeholder="请输入搜索内容"
+          @keyup="getInputXmKB"
+        />
+        <span
+          v-if="title == '/businesspage/dataTab' ||title == '/businesspage/projects'"
+          class="el-icon-search"
+          style="position:absolute;top:6px;left:5px;"
+        ></span>
       </div>
       <div>
         <p class="notice" @click="handleNotice">
@@ -36,11 +64,12 @@
       </div>
 
       <div style="margin:0 8px;font-size:13px;color:#f00" v-if="jf != -1">
-        <span>积分:</span>{{jf}}
+        <span>积分:</span>
+        {{jf}}
       </div>
 
       <div v-if="shown" class="userLogin">
-        <img src="static/img/avatar1.png">
+        <img src="static/img/avatar1.png" />
         <a href="javascript:;;" @click="homeLogin">登录</a>
       </div>
 
@@ -48,15 +77,17 @@
         <el-col :span="12">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-              <img :src="userInfo.logo" :onerror="errorImg">
+              <img :src="userInfo.logo" :onerror="errorImg" />
               <span style="color:#000;white-space:nowrap;">&nbsp;{{userInfo.nickName}}</span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="(sys,index) in userNav" :key='index' :command="sys.homepage+'&&'+sys.privid">{{sys.privname}}</el-dropdown-item>
+              <el-dropdown-item
+                v-for="(sys,index) in userNav"
+                :key="index"
+                :command="sys.homepage+'&&'+sys.privid"
+              >{{sys.privname}}</el-dropdown-item>
               <el-dropdown-item command="个人中心" :divided="userNav.length != 0">个人中心</el-dropdown-item>
-              <el-dropdown-item command="退出" :divided="userNav.length != 0">
-                退出
-              </el-dropdown-item>
+              <el-dropdown-item command="退出" :divided="userNav.length != 0">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -217,11 +248,11 @@ export default {
     handleSelect(index, indexPath) {
       // 路由日志
       this.$post(this.API.log, {
-        route: indexPath.length==1?indexPath[0]:indexPath[1]
+        route: indexPath.length == 1 ? indexPath[0] : indexPath[1]
       }).then(res => {});
 
       if (index.indexOf("http://") != -1 || index.indexOf("https://") != -1) {
-          let des = encryptByDES("assistant" + window.userId, "WISEDUUSER");
+        let des = encryptByDES("assistant" + window.userId, "WISEDUUSER");
         window.open(
           index.includes("?") ? index + "&sign=" + des : index + "?sign=" + des
         );
@@ -234,7 +265,7 @@ export default {
         }
       });
     },
-    
+
     handleNotice() {
       this.$router.push({ path: "/businesspage/systemMsg" });
       this.title = "/businesspage/systemMsg";

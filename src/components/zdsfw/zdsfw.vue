@@ -1,10 +1,10 @@
 <template>
   <div class="myitem-zdsfw">
     <tableLayout class="zdsfw-content" flex-column>
-      <section slot="top" style="border-bottom:1px solid #EBEEF5" col=1>
+      <!-- <section slot="top" style="border-bottom:1px solid #EBEEF5" col=1>
         <zdsfwFilter :placeholder="'学校名称/项目名称/项目编号/合同编号'" :xmbh="this.xmbh" @handleChangeFilter="handleChangeFilter"></zdsfwFilter>
-      </section>
-      <section slot="bottom" col=2>
+      </section> -->
+      <section slot="top" col=1>
         <section>
           <div flex spacebetween class="mb-12">
             <div>
@@ -21,12 +21,12 @@
               <el-button type="primary" size="mini" @click="handleClick('export')">导出</el-button>
             </div>
           </div>
-          <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border @selection-change="handleSelectionChange">
+          <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border :max-height="tableHeight" @selection-change="handleSelectionChange">
             <el-table-column fixed="left" type="selection" width="55"></el-table-column>
             <el-table-column fixed="left" label="操作" width="210">
               <template slot-scope="scope">
                 <!-- v-if="scope.row.zt == '1' && (xmData.jfzrrxm == username||groupTag.includes('ZDSFWGLY'))" -->
-                <el-button v-if="scope.row.zt != '1' && scope.row.zt != '2' && isJzuser == '0' && username == scope.row.zrrxm" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
+                <el-button v-if="scope.row.zt != '1' && scope.row.zt != '2' && isJzuser == '0' && scope.row.flag == '1' && username == scope.row.zrrxm" type="text" size="mini" @click="handleClick('tbfw',scope.row)">提报</el-button>
                 <el-button v-if="scope.row.zt == '1' && (isJzuser == '1'||groupTag.includes('ZDSFWGLY'))" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
                 <el-button v-if="scope.row.zt == '1' && (isJzuser == '1'||groupTag.includes('ZDSFWGLY'))" type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
                 <el-button v-if="groupTag.includes('ZDSFWGLY')" type="text" size="mini" @click="handleClick('edit',scope.row)">编辑</el-button>
@@ -70,7 +70,6 @@
             <el-table-column prop="pf" label="评分" width="80"></el-table-column>
 
             <el-table-column label="风险等级" width="150">
-              <template slot-scope="scope">
                 <template slot-scope="scope">
                   <a href="javaScript:;;" v-if="scope.row.fxdj != '-'" @click="handleCheck(scope.row)">
                     <el-tag size="mini" :class="{'zdsfw-fxdj-s1':scope.row.fxdj==1,'zdsfw-fxdj-s2':scope.row.fxdj==2,'zdsfw-fxdj-s3':scope.row.fxdj==3}" >{{scope.row.fxdj==1?'S1':scope.row.fxdj==2?'S2':'S3'}}</el-tag>&nbsp;
@@ -78,13 +77,21 @@
                   <span v-if="scope.row.fxdj == '-'">{{scope.row.fxdj}}</span>
                   <span style="font-size:12px">{{scope.row.fxsfcl==0?'(未处理)':scope.row.fxsfcl==1?'(已处理)':scope.row.fxsfcl}}</span>
               </template>
-              </template>
             </el-table-column>
             <el-table-column label="服务状态" width="100">
               <template slot-scope="scope">
                 <el-tag size="mini" :type="scope.row.zt == '0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'已完成':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>  
+            <el-table-column label="问题总数" width="150">
+              <template slot-scope="scope">
+                <a href="javaScript:;;" v-if="scope.row.wtzs != '0' && scope.row.wtzs != '-'" @click="handleCheckWt(scope.row)">
+                  {{scope.row.wtzs}}
+                </a>
+                <span v-if="scope.row.wtzs == '-' || scope.row.wtzs == '0' || !scope.row.wtzs">- -</span>
+                <span v-if="scope.row.wtzs != '0' && scope.row.wtzs != '-'" style="font-size:12px">({{scope.row.wtsfcl}})</span>
+              </template>
+            </el-table-column>
             
           </el-table>
         </section>
@@ -101,6 +108,7 @@
     <fwjhDialog :show.sync='fwjhShow' :xmbh="xmbh" @handleCommitFWJH="handleCommitFWJH"></fwjhDialog>
     <sc-dialog :show.sync='scShow' :xmData="xmData" @handleScSuccess="handleScSuccess"></sc-dialog>
     <fxdjDialog :show.sync='fxdjShow' :rowData="rowData" @handleSave="handleSave"></fxdjDialog>
+    <wtDialog :show.sync='wtShow' :rowData="rowData" @handleSave="handleSave"></wtDialog>
   </div>
 </template>
 
@@ -114,6 +122,7 @@ import fwjhDialog from "@/components/dialog/zdsfw/fwjh-dialog.vue";
 import zdsfwFilter from "@/components/zdsfw/zdsfwFilter.vue";
 import scDialog from "@/components/dialog/zdsfw/sc-dailog.vue";
 import fxdjDialog from "@/components/dialog/zdsfw/fxdjcommit.vue";
+import wtDialog from "@/components/dialog/zdsfw/wtcommit.vue";
 
 import { getLastMonthDay } from "@/utils/util.js";
 import { getProject } from "@/api/xmkb.js";
@@ -121,15 +130,17 @@ import { getLoginUser } from "@/api/system.js";
 export default {
   data() {
     return {
+      tableHeight:window.innerHeight - 240,
       tbfwShow: false,
       editShow: false,
       qrbhfwShow: false,
       fwjhShow: false,
       fxdjShow:false, //风险等级处理
       scShow: false,
+      wtShow:false,
       title: "",
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 30,
       total: 0,
       tableData: [],
       multipleSelection: [],
@@ -150,8 +161,11 @@ export default {
         fwzt: "",
         lb: "",
         xmzt: "",
-        jhksrq: "",
-        jhjsrq: "",
+        jhksrqmin: "",
+        jhksrqmax: "",
+        jhjsrqmin:"",
+        jhjsrqmax:"",
+
         // date: [
         //   this.getFirstDay(),
         //   getLastMonthDay(
@@ -163,7 +177,7 @@ export default {
         // ],
         sfgq: "",
         fxdj:'',
-				ismine:"1"
+				ismine:0
       },
       xmbh: this.nxmbh,
       plxgZrr: false,
@@ -172,6 +186,11 @@ export default {
     };
   },
   methods: {
+    //添加问题
+      handleCheckWt(data) {
+        this.rowData = data;
+        this.wtShow = !this.wtShow;
+      },
     // 点击风险等级列
     handleCheck(data){
       this.fxdjDialog = !this.fxdjDialog
@@ -381,11 +400,13 @@ export default {
             .catch(() => {});
           break;
         case "export":
-          window.open(
-            window.baseurl +
-              "activeservice/exportActiveService.do?xmbh=" +
-              this.xmbh +
-              "&cpbh=" +
+         let jhksrqmin = !this.filterData.jhksrqmin?'':this.filterData.jhksrqmin,
+                jhksrqmax = !this.filterData.jhksrqmax?'':this.filterData.jhksrqmax,
+                jhjsrqmin = !this.filterData.jhjsrqmin?'':this.filterData.jhjsrqmin,
+                jhjsrqmax = !this.filterData.jhjsrqmax?'':this.filterData.jhjsrqmax; 
+            window.open(
+              window.baseurl +
+              "activeservice/exportActiveService.do?cpbh=" +
               this.filterData.cpbh +
               "&cpmc=" +
               this.filterData.cpmc +
@@ -395,20 +416,30 @@ export default {
               this.filterData.fwzt +
               "&xmzt=" +
               this.filterData.xmzt +
-              "&jhksrq=" +
-              this.filterData.jhksrq +
-              "&jhjsrq=" +
-              this.filterData.jhjsrq +
+              "&jhksrqmin=" +
+              jhksrqmin +
+              "&jhksrqmax=" +
+              jhksrqmax +
+              "&jhjsrqmin=" +
+              jhjsrqmin +
+              "&jhjsrqmax=" +
+              jhjsrqmax +
               "&sfgq=" +
               this.filterData.sfgq +
               "&keyword=" +
               this.filterData.keyword +
               "&lb=" +
-              this.filterData.lb,
+              this.filterData.lb +
+              "&sffb=1" +
               "&fxdj=" +
-              this.filterData.fxdj 
-							
-          );
+              this.filterData.fxdj +
+              "&wtzt=" +
+              this.filterData.wtzt +
+              "&fxzt=" +
+              this.filterData.fxzt +
+              "&ismine=" +
+              this.filterData.ismine
+            );
           break;
         case "edit": //编辑
           this.editShow = true;
@@ -513,10 +544,13 @@ export default {
         zt: this.filterData.fwzt,
         lb: this.filterData.lb,
         xmzt: this.filterData.xmzt,
-        jhksrq: this.filterData.jhksrq,
-        jhjsrq: this.filterData.jhjsrq,
+        jhksrqmin: this.filterData.jhksrqmin,
+        jhksrqmax: this.filterData.jhksrqmax,
+        jhjsrqmin:this.filterData.jhjsrqmin,
+        jhjsrqmax: this.filterData.jhjsrqmax,
         sfgq: this.filterData.sfgq,
         fxdj:this.filterData.fxdj,
+        ismine:this.isJzuser == '0'?this.filterData.ismine:0,
         keyword: this.filterData.keyword
       }).then(res => {
         if (res.state == "success") {
@@ -537,11 +571,6 @@ export default {
     }
   },
   mounted() {
-    // if (window.location.hash.includes("h=1")) {
-    //   sessionStorage.setItem("Detailpannel", window.location.hash);
-    // } else {
-    //   sessionStorage.removeItem("Detailpannel");
-    // }
     if (!sessionStorage.userInfo) {
       getLoginUser().then(res => {
         if (res.status == 200) {
@@ -597,7 +626,8 @@ export default {
     fwjhDialog,
     zdsfwFilter,
     scDialog,
-    fxdjDialog
+    fxdjDialog,
+    wtDialog
   }
 };
 </script>

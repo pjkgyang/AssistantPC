@@ -12,7 +12,7 @@
       <div class="layout">
         <!-- 
           :rules="rules"
-         -->
+        -->
         <el-form
           style="width:950px;margin:0 auto"
           class="demo-ruleForm"
@@ -42,26 +42,21 @@
               style="width:325px"
               v-model="yypzData.ssbm"
             ></el-input>
-          </el-form-item> -->
-
-          <el-form-item label="承建单位" required >
-            <el-select
-              v-model="yypzData.cjdw"
+          </el-form-item>-->
+          <el-form-item label="上线日期">
+            <el-date-picker
+              :clearable="false"
               size="mini"
-              placeholder="请选择承建单位"
-              style="width:325px"
-              @change="handleChangeCjdw"
-            >
-              <el-option
-                v-for="(item, index) in cjdwList"
-                :key="index"
-                :label="item.mc"
-                :value="item.wid"
-              ></el-option>
-            </el-select>
+              v-model="yypzData.sxrq"
+              type="date"
+              placeholder="选择日期"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              style="width:325px;"
+            ></el-date-picker>
           </el-form-item>
 
-          <el-form-item label="使用对象" required >
+          <el-form-item label="使用对象" required>
             <el-select v-model="yypzData.sydx" multiple placeholder="请选择使用对象" style="width:325px">
               <el-option
                 v-for="(sfdx,index) in sydxList"
@@ -88,24 +83,25 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="上线日期">
-            <el-date-picker
-              :picker-options="pickerBeginDateBefore"
-              :clearable="false"
+          <el-form-item label="承建单位" required>
+            <el-select
+              v-model="yypzData.cjdw"
               size="mini"
-              v-model="yypzData.sxrq"
-              type="date"
-              placeholder="选择日期"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              style="width:325px;"
-            ></el-date-picker>
+              placeholder="请选择承建单位"
+              style="width:325px"
+              @change="handleChangeCjdw"
+            >
+              <el-option
+                v-for="(item, index) in cjdwList"
+                :key="index"
+                :label="item.mc"
+                :value="item.wid"
+              ></el-option>
+            </el-select>
           </el-form-item>
-
 
           <el-form-item label="服务到期日期">
             <el-date-picker
-              :picker-options="pickerBeginDateBefore"
               :clearable="false"
               size="mini"
               v-model="yypzData.fwdqrq"
@@ -116,14 +112,33 @@
               style="width:325px;"
             ></el-date-picker>
           </el-form-item>
-          <el-form-item label="单位联系人">
+
+          <el-form-item label="承建单位联系人">
             <el-input
+              v-if="sfjz != '1'"
               size="mini"
               type="text"
               placeholder="请输入单位联系方式"
               style="width:325px"
               v-model="yypzData.cjdwlxr"
             ></el-input>
+
+            <el-select
+              v-if="sfjz == 1"
+              v-model="yypzData.cjdwlxrgh"
+              size="mini"
+              placeholder="请选择单位联系人(可搜索)"
+              style="width:325px"
+              filterable
+              @change="handleChangeDwlxr"
+            >
+              <el-option
+                v-for="(item, index) in userList"
+                :key="index"
+                :label="item.username"
+                :value="item.usercode"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="单位联系方式">
             <el-input
@@ -144,7 +159,7 @@
               v-model="yypzData.ywbmlxr"
             ></el-input>
           </el-form-item>
-          <el-form-item label="业务部门联系方式" >
+          <el-form-item label="业务部门联系方式">
             <el-input
               size="mini"
               type="text"
@@ -162,7 +177,7 @@
               v-model="yypzData.xxzxlxr"
             ></el-input>
           </el-form-item>
-          <el-form-item label="信息中心联系方式" >
+          <el-form-item label="信息中心联系方式">
             <el-input
               size="mini"
               type="text"
@@ -181,8 +196,6 @@
               placeholder="必须是(http或https)地址"
             ></el-input>
           </el-form-item>
-
-       
 
           <div class="table_title">
             <h5>部署信息</h5>
@@ -267,6 +280,7 @@
 </template>
 
 <script>
+import { getMenu, getSession } from "@/utils/util.js";
 export default {
   data() {
     // var fwdzValid = (rule, value, callback) => {
@@ -289,29 +303,30 @@ export default {
       sydxList: [], //使用对象
       cjdwList: [], //承建单位列表
       czxtList: [
-        { mc: "UNIX", label: '1' },
-        { mc: "LINUX", label: '2' },
-        { mc: "MacOS", label: '3' },
-        { mc: "Windows", label: '4' }
+        { mc: "UNIX", label: "1" },
+        { mc: "LINUX", label: "2" },
+        { mc: "MacOS", label: "3" },
+        { mc: "Windows", label: "4" }
       ], //操作系统列表
       ytList: [
-        { mc: "应用服务", label: '1' },
-        { mc: "数据库服", label: '2' },
-        { mc: "文件服务", label: '3' },
-        { mc: "备份", label: '4' }
+        { mc: "应用服务", label: "1" },
+        { mc: "数据库服", label: "2" },
+        { mc: "文件服务", label: "3" },
+        { mc: "备份", label: "4" }
       ],
       xxztList: [{ label: "0", mc: "已完成" }, { label: "1", mc: "未完成" }],
+      userList: [],
       yypzData: {
         yymc: "",
         ssbm: "",
         sxrq: "", //上线日期
         fwdqrq: "", //服务到期日期
-        sydx:[],
+        sydx: [],
         cjdw: "",
         cjdwbh: "",
         cjdwlxr: "", //承建单位联系人
         cjdwlxfs: "", //承建单位联系方式
-        fwdz: "", //访问地址
+        fwdz: "http://", //访问地址
         xtzt: "", //系统状态
 
         ywbmlxr: "", //业务部门联系人
@@ -327,6 +342,7 @@ export default {
         fwqdk: "", //服务器端口
         fwqyhm: "" //服务器用户名
       },
+      sfjz: "", //是否金智
       // rules: {
       //   yymc: [{ required: true, message: "请输入应用名称", trigger: "blur" }],
       //   ssbm: [{ required: true, message: "请输入所属部门", trigger: "blur" }],
@@ -353,34 +369,63 @@ export default {
       type: Boolean,
       default: false
     },
-    detailInfo:{
-      type:Object,
-      default:()=>{
-        return {}
+    detailInfo: {
+      type: Object,
+      default: () => {
+        return {};
       }
     }
   },
   components: {},
   methods: {
-
     submitForm(formName) {
-
-      if(!this.valiDate()) return;
+      if (!this.valiDate()) return;
       this.yypzData.bz = $("#summernoteYy").summernote("code");
-      this.$emit('handleCommitYypz',this.yypzData);
+      this.$emit("handleCommitYypz", this.yypzData);
+
+    },
+    // 单位联系人
+    handleChangeDwlxr(val) {
+      let obj = {};
+      obj = this.userList.find(item => {
+        return item.usercode == val; //筛选出匹配数据
+      });
+      this.yypzData.cjdwlxr = obj.username;
+      this.yypzData.cjdwlxfs = obj.mobile;
     },
 
     // 选择承建单位
     handleChangeCjdw(val) {
-      let obj  = {};
+      let obj = {};
       obj = this.cjdwList.find(item => {
-        //cjdwList就是上面的数据源
         return item.wid == val; //筛选出匹配数据
       });
       this.yypzData.cjdw = obj.mc;
       this.yypzData.cjdwbh = obj.wid;
-    },
+      this.sfjz = obj.sfjz;
+      this.yypzData.cjdwlxr = ""; //承建单位联系人
+      this.yypzData.cjdwlxrgh = ""; //承建单位联系人工号
+      this.yypzData.cjdwlxfs = ""; //承建单位联系方式
 
+      if (obj.sfjz == "1") {
+        this.getUsers();
+      }
+    },
+    getUsers() {
+      this.$get(this.API.getUsers, {
+        curPage: 1,
+        pageSize: 9999,
+        unitType: 0,
+        keyword: "",
+        dept: "01AM"
+      }).then(res => {
+        if (res.state == "success") {
+          this.userList = res.data.rows;
+        } else {
+        }
+      });
+    },
+    //获取承建单位列表
     pageCjdw() {
       this.$get(this.API.serviceObjects, {}).then(res => {
         if (res.state == "success") {
@@ -405,34 +450,49 @@ export default {
       });
     },
 
-    valiDate(){
-       if(!this.yypzData.yymc){
-         this.$message({message:'请输入应用名称',type:'warning'});
-         return false;
-       }
-       if(!this.yypzData.sydx.length){
-         this.$message({message:'请选择使用对象',type:'warning'});
-         return false;
-       }
-       if(!this.yypzData.cjdw){
-         this.$message({message:'请选择承建单位',type:'warning'});
-         return false;
-       }
-       if(!!this.yypzData.fwdz && !/(http|https):\/\/([\w.]+\/?)\S*/.test(this.yypzData.fwdz)){
-         this.$message({message:'请输入正确访问地址',type:'warning'});
-         return false;
-       }
-       if(!!this.yypzData.ywbmlxfs && (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.yypzData.ywbmlxfs) || !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(this.yypzData.ywbmlxfs))
-        ){
-         this.$message({message:'请输入正确业务部门联系方式',type:'warning'});
-         return false;
-       }
-       if(!!this.yypzData.xxzxlxfs && (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.yypzData.xxzxlxfs) || !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(this.yypzData.xxzxlxfs))
-        ){
-         this.$message({message:'请输入正确信息中心联系方式',type:'warning'});
-         return false;
-       }
-       return true;
+    valiDate() {
+      if (!this.yypzData.yymc) {
+        this.$message({ message: "请输入应用名称", type: "warning" });
+        return false;
+      }
+      if (!this.yypzData.sydx.length) {
+        this.$message({ message: "请选择使用对象", type: "warning" });
+        return false;
+      }
+      if (!this.yypzData.cjdw) {
+        this.$message({ message: "请选择承建单位", type: "warning" });
+        return false;
+      }
+      if (
+        !!this.yypzData.fwdz &&
+        !/(http|https):\/\/([\w.]+\/?)\S*/.test(this.yypzData.fwdz)
+      ) {
+        this.$message({ message: "请输入正确访问地址", type: "warning" });
+        return false;
+      }
+      if (
+        !!this.yypzData.ywbmlxfs &&
+        (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.yypzData.ywbmlxfs) ||
+          !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(this.yypzData.ywbmlxfs))
+      ) {
+        this.$message({
+          message: "请输入正确业务部门联系方式",
+          type: "warning"
+        });
+        return false;
+      }
+      if (
+        !!this.yypzData.xxzxlxfs &&
+        (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.yypzData.xxzxlxfs) ||
+          !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(this.yypzData.xxzxlxfs))
+      ) {
+        this.$message({
+          message: "请输入正确信息中心联系方式",
+          type: "warning"
+        });
+        return false;
+      }
+      return true;
     }
   },
 
@@ -460,10 +520,13 @@ export default {
               ["link", ["linkDialogShow", "unlink"]]
             ]
           });
+          if (JSON.stringify(this.detailInfo) != "{}") {
+            $("#summernoteYy").summernote("code", this.detailInfo.bz);
+          }
         });
         this.pageCjdw();
 
-        if(JSON.stringify(this.detailInfo) != "{}" ){
+        if (JSON.stringify(this.detailInfo) != "{}") {
           this.yypzData.yymc = this.detailInfo.yymc;
           this.yypzData.ssbm = this.detailInfo.ssbm;
           this.yypzData.sxrq = this.detailInfo.sxrq;
@@ -473,6 +536,7 @@ export default {
           this.yypzData.cjdwlxr = this.detailInfo.cjdwlxr;
           this.yypzData.cjdwlxfs = this.detailInfo.cjdwlxfs;
           this.yypzData.fwdz = this.detailInfo.fwdz;
+          this.yypzData.sydx = this.detailInfo.fwdxwid.split(",");
 
           this.yypzData.xtzt = this.detailInfo.xtzt;
           this.yypzData.ywbmlxr = this.detailInfo.ywbmlxr;
@@ -488,11 +552,34 @@ export default {
           this.yypzData.fwqdk = this.detailInfo.fwqdk;
           this.yypzData.fwqyhm = this.detailInfo.fwqyhm;
           this.yypzData.wid = this.detailInfo.wid;
-
-          $("#summernoteYy").summernote("code", this.detailInfo.bz);
         }
       } else {
-         this.$refs['ruleForm'].resetFields();
+          this.yypzData.yymc = "";
+          this.yypzData.ssbm = "";
+          this.yypzData.sxrq = "";
+          this.yypzData.fwdqrq = "";
+          this.yypzData.cjdw = "";
+          this.yypzData.cjdwbh = "";
+          this.yypzData.cjdwlxr = "";
+          this.yypzData.cjdwlxfs = "";
+          this.yypzData.fwdz = "";
+          this.yypzData.sydx = [];
+
+          this.yypzData.xtzt = "";
+          this.yypzData.ywbmlxr = "";
+          this.yypzData.ywbmlxfs = "";
+          this.yypzData.xxzxlxr = "";
+          this.yypzData.xxzxlxfs = "";
+
+          this.yypzData.yt = "";
+          this.yypzData.czxtlx = "";
+          this.yypzData.fwqip = "";
+
+          this.yypzData.fwqmc = "";
+          this.yypzData.fwqdk = "";
+          this.yypzData.fwqyhm = "";
+          this.yypzData.wid = "";
+          $("#summernoteYy").summernote("code", '');
       }
     }
   }

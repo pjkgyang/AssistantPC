@@ -2,7 +2,10 @@
     <div class="pannelPadding-10">
         <div class="pannelPaddingBg-10">
             <h4 text-center>{{$route.query.xz=='0'?'二开调用详情':$route.query.xz=='1'?'实施调用详情':'报销提报详情'}}</h4>
-            <h4 v-if="tableData[0].xmbh">[{{tableData[0].xmbh}}]{{tableData[0].xmmc}}</h4>
+            <h4 v-if="!!tableData.length && tableData[0].xmbh ">[{{tableData[0].xmbh}}]{{tableData[0].xmmc}}</h4>
+            <div class="mg-12" text-right v-if="$route.query.xz != '1'">
+              <el-button size="mini" type="primary" @click="handleExport">导出</el-button>
+            </div>
             <ekdyTable :tableData="tableData" v-if="$route.query.xz == '0'"></ekdyTable>
             <ekssTable :tableData="tableData" v-if="$route.query.xz == '1'"></ekssTable>
             <bxfyTable :tableData="tableData" v-if="!$route.query.xz"></bxfyTable>
@@ -28,6 +31,16 @@ export default {
     };
   },
   methods: {
+    //导出
+    handleExport(){
+   
+      if(!this.$route.query.xz){   // 报销
+        window.open(this.API.exportBxbDetail+'?xmbh='+this.$route.query.xmbh);
+      }else{ //调用
+        window.open(this.API.exportEktbDetail+'?xmbh='+this.$route.query.xmbh+'&xz=0');
+      }
+    },
+    // 页码分页
     handleSizeChange(data) {
       this.currentPage = 1;
       this.pageSize = data;
@@ -53,7 +66,11 @@ export default {
         xz: this.$route.query.xz
       }).then(res => {
         if (res.state == "success") {
-          this.tableData = res.data.rows;
+          if(!!res.data.rows){
+            this.tableData = res.data.rows;
+          }else{
+            this.tableData =  [];
+          }
           this.total = res.data.records;
         }
       });
@@ -65,7 +82,11 @@ export default {
         xmbh: this.$route.query.xmbh
       }).then(res => {
         if (res.state == "success") {
-          this.tableData = res.data.rows;
+         if(!!res.data.rows){
+            this.tableData = res.data.rows;
+          }else{
+            this.tableData =  [];
+          }
           this.total = res.data.records;
         }
       });

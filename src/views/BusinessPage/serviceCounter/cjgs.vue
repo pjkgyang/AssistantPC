@@ -94,7 +94,6 @@
         this.pageCjdw();
       },
 
-      // 获取服务事项计划列表
       pageCjdw() {
         this.$get(this.API.pageCjdw, {
           curPage: this.currentPage,

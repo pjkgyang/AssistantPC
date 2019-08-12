@@ -26,7 +26,7 @@ if (RTCPeerConnection) (function () {
                 i--;
             }
         }
-        // console.log(displayAddrs[0]);      //打印出内网ip
+        console.log(displayAddrs[0]);   
         setCookie('intranetIp',displayAddrs[0]);
     }
     
