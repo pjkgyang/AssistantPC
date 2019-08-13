@@ -9,8 +9,8 @@
           <div flex spacebetween class="mb-12">
             <div>
               <!-- <el-button v-if="isJzuser == '0'" :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('tbfw')">提报服务</el-button> -->
-              <el-button :disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('qrfw')">确认服务</el-button>
-              <el-button :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('bhfw')">驳回服务</el-button>
+              <el-button v-if="isJzuser == '1'":disabled="!multipleSelection.length" type="primary" size="mini" @click="handleClick('qrfw')">确认服务</el-button>
+              <el-button v-if="isJzuser == '1'" :disabled="!multipleSelection.length" type="danger" size="mini" @click="handleClick('bhfw')">驳回服务</el-button>
             </div>
             <div>
               <el-button type="primary" size="mini" @click="handleClick('export')">导出</el-button>
@@ -39,8 +39,8 @@
                 <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="jhksrqmin" label="计划开始日期" width="150"></el-table-column>
-            <el-table-column prop="jhksrqmax" label="计划结束日期" width="150"></el-table-column>
+            <el-table-column prop="jhksrq" label="计划开始日期" width="150"></el-table-column>
+            <el-table-column prop="jhjsrq" label="计划结束日期" width="150"></el-table-column>
             <el-table-column prop="tbrxm" label="提报人" width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="tbsj" label="提报时间" width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="sfgq" label="是否过期" width="100">
@@ -51,7 +51,7 @@
             <el-table-column v-if="isJzuser == '0'" prop="xjgs" label="巡检工时(小时)" width="120"></el-table-column>
             <el-table-column v-if="isJzuser == '0'" prop="fxgs" label="风险工时(小时)" width="120"></el-table-column>
             <el-table-column v-if="isJzuser == '0'" prop="wtgs" label="问题工时(小时)" width="120"></el-table-column>
-            <el-table-column prop="jhjsrqmax" label="实际结束日期" width="150"></el-table-column>
+            <el-table-column prop="sjjsrq" label="实际结束日期" width="150"></el-table-column>
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
@@ -199,6 +199,7 @@
         this.currentPage = 1;
         this.pageActiveService();
       },
+
       //提报
       handleCommitTB(data) {
         this.$post(this.API.submitActiveService, {
@@ -206,7 +207,7 @@
           sm: data.sm,
           xjgs: data.xjgs,
           fjData: data.fileList,
-          jhjsrqmax:data.jhjsrqmax
+          sjjsrq:data.sjjsrq
         }).then(res => {
           if (res.state == "success") {
             this.$message({

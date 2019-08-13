@@ -5,7 +5,7 @@
       <div class="title_menu">
         <p>
           <img src="static/img/logo2.png" alt="logo" />&#x3000;
-          <span>金智教育共创小助手</span>
+          <span v-if="titleShow">金智教育共创小助手</span>
         </p>
       </div>
       <div class="header-navmenu">
@@ -124,7 +124,8 @@ export default {
       menuList: [],
       jf: "",
       menuData: [],
-      routesArr: ""
+      routesArr: "",
+      titleShow:true
     };
   },
   computed: {
@@ -202,11 +203,20 @@ export default {
             }
           }
           sessionStorage.setItem("menuList", JSON.stringify(this.menuList));
+
+           // 导航标题是否显示
+          if(window.screen.width < 1400 && this.menuList.length > 8){
+            this.titleShow = false;
+          }
         } else {
           this.$router.push({ path: "/" });
         }
       }
     });
+
+   
+  
+    
 
     //获取积分
     queryIntegral().then(({ data }) => {

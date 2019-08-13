@@ -28,15 +28,15 @@
               <el-option v-for="(fwlb,index) in fwlbList" :key="index" :label="fwlb.text" :value="fwlb.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="涉及部门" required>
+          <el-form-item label="涉及部门" >
             <el-input v-model="form.sjbm" placeholder="请输入涉及部门" style="width:355px"></el-input>
           </el-form-item>
         </div>
 
-        <el-form-item label="服务内容" required>
+        <el-form-item label="服务内容" >
           <el-input type="textarea" placeholder="请输入服务内容" v-model="form.fwnr"></el-input>
         </el-form-item>
-        <el-form-item label="办事依据" required>
+        <el-form-item label="办事依据" >
           <el-input v-model="form.bsyj" placeholder="请输入办事依据" style="width:100%"></el-input>
         </el-form-item>
         <el-form-item label="办事依据附件">
@@ -93,7 +93,7 @@
             </el-form-item>
           </div>
 
-          <div flex>
+          <!-- <div flex>
             <el-form-item label="信息中心对接老师" >
               <el-input v-model="form.xxzxdjls" placeholder="请输入信息中心对接老师" style="width:355px"></el-input>
             </el-form-item>
@@ -116,7 +116,7 @@
             <el-form-item label="联系方式" >
               <el-input v-model="form.cjgsdjrlxfs" type="number" placeholder="请输入联系方式" style="width:355px"></el-input>
             </el-form-item>
-          </div>
+          </div> -->
         </div>
 
 
@@ -354,18 +354,18 @@
               this.$message({message: '请选择服务类别',type: 'warning'})
               return false;
             }
-             if (!/\S/.test(this.form.sjbm)) {
-              this.$message({message: '请填写涉及部门',type: 'warning'})
-              return false;
-            }
-            if (!/\S/.test(this.form.fwnr)) {
-              this.$message({message: '请填写服务内容',type: 'warning'})
-              return false;
-            }
-            if (!/\S/.test(this.form.bsyj)) {
-              this.$message({message: '请填写办事依据',type: 'warning'})
-              return false;
-            }
+            //  if (!/\S/.test(this.form.sjbm)) {
+            //   this.$message({message: '请填写涉及部门',type: 'warning'})
+            //   return false;
+            // }
+            // if (!/\S/.test(this.form.fwnr)) {
+            //   this.$message({message: '请填写服务内容',type: 'warning'})
+            //   return false;
+            // }
+            // if (!/\S/.test(this.form.bsyj)) {
+            //   this.$message({message: '请填写办事依据',type: 'warning'})
+            //   return false;
+            // }
 
             // if (!!this.form.fwzn && !this.form.fwznsm) {
             //   this.$message({message: '请填写服务指南说明',type: 'warning'})

@@ -5,25 +5,10 @@
       <div class="demand">
         <el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="fwdjData" :inline="true" size="mini"
           label-width="135px">
-          <el-form-item label="学校名称" required>
-            <el-select
-                v-if="userInfo.unitType == 0"
-                style="width:800px"
-                v-model="dwmc"
-                filterable
-                remote
-                reserve-keyword
-                placeholder="请输入学校名称查询"
-                :remote-method="remoteMethod"
-                @change="changeUnit"
-                >
-                <el-option
-                  v-for="item in unitList"
-                  :key="item.wid"
-                  :label="item.mc"
-                  :value="item.wid">
-                </el-option>
-              </el-select>
+          <el-form-item label="学校名称" required  v-if="userInfo.unitType == '0'">
+              <el-input placeholder="请选择" readonly v-model="fwdjData.dwmc" style="width:800px" >
+                <el-button slot="append" icon="el-icon-circle-plus-outline" @click="schoolShow = true"></el-button>
+              </el-input>
           </el-form-item>
           <el-form-item label="提报人" required>
             <el-input size="mini" type="text" style="width:325px" placeholder="请输入提报人姓名" v-model="fwdjData.tbr"></el-input>
@@ -108,6 +93,8 @@
     </el-dialog>
 
     <tbrbmDialog :show.sync="tbrbmShow" :dwbh="fwdjData.dwbh" :dwmc="fwdjData.dwmc" @handleChooseDept="handleChooseDept"></tbrbmDialog>
+    <schoolList :show.sync="schoolShow"  @handleCommit="handleCommitSchool"></schoolList>  
+
   </div>
 </template>
 
@@ -115,11 +102,13 @@
 
   import uploadFile from "@/components/BusinessPage/upload.vue";
   import tbrbmDialog from "@/views/BusinessPage/serviceCounter/tbrbm-dialog.vue";
+  import schoolList from "@/views/BusinessPage/serviceCounter/schoolList.vue";
 
   export default {
     data() {
       return {
         tbrbmShow:false,
+        schoolShow:false,
         userInfo:{},
         visible: this.show,
         isClearFile: false, //清除附件
@@ -146,8 +135,6 @@
           }
         ], //是否线上
         fwznfjMc: "", //编辑附件名称
-
-        dwmc: "",
         fwdjData: {
           dwbh:"",
           dwmc:"",
@@ -186,7 +173,8 @@
     },
     components: {
       uploadFile,
-      tbrbmDialog
+      tbrbmDialog,
+      schoolList
     },
     methods: {
       // 选择部门
@@ -212,20 +200,14 @@
         this.fwdjData.dwlxfs = obj.dwlxfs;
       },
       // 更换单位
-			changeUnit(val){
-				if(!val)  return;
-				let obj = {};
-				obj = this.unitList.find((item)=>{
-				    return item.wid === val;
-				});
-        this.fwdjData.dwbh = obj.wid;
-        this.fwdjData.dwmc = obj.mc;
+			handleCommitSchool(data){
+        if(!data) return;
+        this.fwdjData.dwbh = data.wid;
+        this.fwdjData.dwmc = data.mc;
         this.fwdjData.bmmc = '';
+        this.schoolShow = false;
 			},
-      // 关键字搜索
-      remoteMethod(val){
-        this.getDwUser(val);
-      },
+
       // 上传附件
       handleUploadFile(data) {
         this.fwznfjMc = "";
@@ -267,24 +249,6 @@
           if(res.state == 'success'){
             this.xxxtList = res.data;
           }else{}
-        })
-      },
-      getDwUser(keyword){
-        this.$get(this.API.getDwByUser,{
-          dwlx: "",
-			    curPage: 1,
-			    pageSize: 20,
-			    keyword:keyword
-        }).then(res=>{
-          if(res.state == 'success'){
-            if(!!res.data.rows){
-             this.unitList = res.data.rows;
-            }else{
-              this.unitList = [];
-            }
-          }else{
-
-          }
         })
       },
 
@@ -390,7 +354,7 @@
           });
 
           this.userInfo = JSON.parse(sessionStorage.getItem('userInfo')); 
-          if(this.userInfo.unitType != 0){
+          if(this.userInfo.unitType != '0'){
             this.fwdjData.dwbh = this.userInfo.unitnum;
             this.fwdjData.dwmc = this.userInfo.unit;
           }

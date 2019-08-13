@@ -124,7 +124,7 @@
             ></el-input>
 
             <el-select
-              v-if="sfjz == 1"
+              v-if="sfjz == '1'"
               v-model="yypzData.cjdwlxrgh"
               size="mini"
               placeholder="请选择单位联系人(可搜索)"
@@ -426,7 +426,7 @@ export default {
       });
     },
     //获取承建单位列表
-    pageCjdw() {
+    pageCjdw(doSuccess) {
       this.$get(this.API.serviceObjects, {}).then(res => {
         if (res.state == "success") {
           this.sydxList = res.data;
@@ -445,6 +445,7 @@ export default {
           } else {
             this.cjdwList = res.data.rows;
           }
+          doSuccess(this.cjdwList);
         } else {
         }
       });
@@ -524,15 +525,27 @@ export default {
             $("#summernoteYy").summernote("code", this.detailInfo.bz);
           }
         });
-        this.pageCjdw();
+
+        
+        this.pageCjdw((data)=>{
+          if(JSON.stringify(this.detailInfo) != "{}"){
+            let obj = data.find(item=>{
+              return item.wid == this.detailInfo.cjdwbh;
+            })
+            this.sfjz = obj.sfjz;
+          }
+        });
 
         if (JSON.stringify(this.detailInfo) != "{}") {
+          this.getUsers();
           this.yypzData.yymc = this.detailInfo.yymc;
           this.yypzData.ssbm = this.detailInfo.ssbm;
           this.yypzData.sxrq = this.detailInfo.sxrq;
           this.yypzData.fwdqrq = this.detailInfo.fwdqrq;
           this.yypzData.cjdw = this.detailInfo.cjdw;
           this.yypzData.cjdwbh = this.detailInfo.cjdwbh;
+          this.yypzData.cjdwlxrgh = this.detailInfo.cjdwlxrgh;; //承建单位联系人工号
+          
           this.yypzData.cjdwlxr = this.detailInfo.cjdwlxr;
           this.yypzData.cjdwlxfs = this.detailInfo.cjdwlxfs;
           this.yypzData.fwdz = this.detailInfo.fwdz;

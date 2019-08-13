@@ -232,6 +232,13 @@ export default {
     //        this.taskList = true
     //   },
     chooseRevelence(param,jdmc) {
+      if(param.zt == 5){
+        this.$alert('该任务已关闭，请重新选择', '提示', {
+          confirmButtonText: '确定',
+          type:'warning'
+        });
+        return;
+      }
       this.bhData.rwmc = this.xmmc + "——" + this.cpmc + "——" + param.rwmc;
       this.bhData.rwbh = param.rwbh;
       this.bhData.lcbbh = param.lcbbh;

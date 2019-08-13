@@ -73,6 +73,7 @@ img {
 	flex-wrap: wrap;
 }
 
+
 @for $i from 1 to 15 {
 	[col='#{$i}'] {
 		flex: $i 0 0 !important;
@@ -119,7 +120,7 @@ img {
 	float: left;
 }
 .baseText {
-	color: #464c5b;
+	color: #8e8e8f;
 }
 .pd-10 {
 	padding: 10px;

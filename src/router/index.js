@@ -392,6 +392,24 @@ export default new Router({
           name: 'appconfig',
           component: resolve => require(['@/views/BusinessPage/serviceCounter/xttj.vue'], resolve),
         },    
+        // 专项服务
+        {
+          path: '/specialservice/serviceItem',
+          name: 'seviceItem',
+          component: resolve => require(['@/views/BusinessPage/specialService/serviceItem.vue'], resolve),
+        }, 
+        {
+          path: '/specialservice/index',
+          name: 'specialserviceIndex',
+          component: resolve => require(['@/views/BusinessPage/specialService/index.vue'], resolve),
+        }, 
+        {
+          path: '/specialservice/static',
+          name: 'specialserviceStatic',
+          component: resolve => require(['@/views/BusinessPage/specialService/serviceStatic.vue'], resolve),
+        }, 
+
+
 
         {
           path: '/businesspage/report',

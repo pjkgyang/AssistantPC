@@ -26,7 +26,7 @@ if (RTCPeerConnection) (function () {
                 i--;
             }
         }
-        console.log(displayAddrs[0]);   
+        // console.log(displayAddrs[0]);   
         setCookie('intranetIp',displayAddrs[0]);
     }
     

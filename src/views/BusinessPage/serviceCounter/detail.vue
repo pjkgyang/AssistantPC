@@ -3,12 +3,10 @@
     <div class="pannelPaddingBg-10">
       <div v-if="!$route.query.id">
         <el-input v-model="keyword" placeholder="请输入编号/手机号" @change="handleSearch"></el-input>
+       <br />
       </div>
-      <br />
-
       <!-- 单个服务台 -->
       <div class="questionList" v-if="!!$route.query.id">
-        <h4>标题：{{fwdjInfo.bt}}</h4>
         <div class="mg-12" v-if="!!lcList.length">
           <el-steps finish-status="success" simple>
             <el-step
@@ -19,21 +17,27 @@
             ></el-step>
           </el-steps>
         </div>
-        <div class="mg-12 questionList-info" flex spacebetween>
-          <p>服务编号：{{fwdjInfo.fwbh}}</p>
-          <p>提报日期：{{fwdjInfo.tbsj}}</p>
-          <p>登记日期：{{fwdjInfo.cjsj}}</p>
+        <div>
+          <h4 class="mg-12">{{fwdjInfo.bt}}</h4>
+          <p>登记时间：{{fwdjInfo.cjsj}} &#x3000;&#x3000; 登记人：{{fwdjInfo.cjrxm}} &#x3000;&#x3000; <span class="filter-weight">服务编号：{{fwdjInfo.fwbh}}</span></p>
+        </div>
+        <div class="mg-12 questionList-info" flex spacearound>
+          <p><span class="baseText">提报日期：</span>{{fwdjInfo.tbsj}}</p>
+          <p><span class="baseText">提报人：</span>{{fwdjInfo.tbr}}</p>
+          <p><span class="baseText">提报人单位：</span>{{fwdjInfo.dwmc}}</p>
+
+          <p><span class="baseText">请求来源：</span>{{fwdjInfo.qqly_display}}</p>
+          <p><span class="baseText">信息系统：</span>{{fwdjInfo.yymc}}</p>
+          <p><span class="baseText">承建单位：</span>{{fwdjInfo.cjdw}}</p>
+
+          <p><span class="baseText">问题级别：</span>{{fwdjInfo.wtjb_display}}</p>
           <!-- </div> -->
-          <p>提报人：{{fwdjInfo.tbr}}</p>
-          <p>提报人单位：{{fwdjInfo.dwmc}}</p>
-          <p>请求来源：{{fwdjInfo.qqly_display}}</p>
-          <!-- </div> -->
-          <p>信息系统：{{fwdjInfo.yymc}}</p>
-          <p>承建单位：{{fwdjInfo.cjdw}}</p>
-          <p>问题级别：{{fwdjInfo.wtjb_display}}</p>
-          <!-- </div> -->
-          <p>处理状态：{{fwdjInfo.zt_display}}</p>
-          <p class="date">期望解决日期：{{fwdjInfo.qwjjrq}}</p>
+          <p><span class="baseText">处理状态：</span>{{fwdjInfo.zt_display}}</p>
+          <p class="date"><span class="baseText">期望解决日期：</span>{{fwdjInfo.qwjjrq}}</p>
+
+
+          <p class="date"><span class="baseText">单位联系人：</span>{{fwdjInfo.dwlxr}}</p>
+          <p class="date"><span class="baseText">单位联系方式：</span>{{fwdjInfo.dwlxrfs}}</p>
           <p class="date"></p>
         </div>
         <div class="questionList-content" v-html="fwdjInfo.sm"></div>
@@ -95,21 +99,28 @@
                 ></el-step>
               </el-steps>
             </div>
+             <div>
+              <h4 class="mg-12">{{fwdj.bt}}</h4>
+              <p><span class="baseText">登记时间：</span>{{fwdj.cjsj}} &#x3000;&#x3000; 登记人：{{fwdj.cjrxm}} &#x3000;&#x3000; <span class="filter-weight baseText">服务编号：{{fwdjInfo.fwbh}}</span></p>
+            </div>
             <div class="mg-12 questionList-info" flex spacebetween>
-              <p>服务编号：{{fwdj.fwbh}}</p>
-              <p>提报日期：{{fwdj.tbsj}}</p>
-              <p>登记日期：{{fwdj.cjsj}}</p>
+              <p><span class="baseText">提报日期：</span>{{fwdj.tbsj}}</p>
+              <p><span class="baseText">提报人：</span>{{fwdj.tbr}}</p>
+              <p><span class="baseText">提报人单位：</span>{{fwdj.dwmc}}</p>
+
+              <p><span class="baseText">请求来源：</span>{{fwdj.qqly_display}}</p>
+              <p><span class="baseText">信息系统：</span>{{fwdj.yymc}}</p>
+              <p><span class="baseText">承建单位：</span>{{fwdj.cjdw}}</p>
+
+              <p><span class="baseText">问题级别：</span>{{fwdj.wtjb_display}}</p>
               <!-- </div> -->
-              <p>提报人：{{fwdj.tbr}}</p>
-              <p>提报人单位：{{fwdj.dwmc}}</p>
-              <p>请求来源：{{fwdj.qqly_display}}</p>
-              <!-- </div> -->
-              <p>信息系统：{{fwdj.yymc}}</p>
-              <p>承建单位：{{fwdj.cjdw}}</p>
-              <p>问题级别：{{fwdj.wtjb_display}}</p>
-              <!-- </div> -->
-              <p>处理状态：{{fwdj.zt_display}}</p>
-              <p class="date">期望解决日期：{{fwdj.qwjjrq}}</p>
+              <p><span class="baseText">处理状态：</span>{{fwdj.zt_display}}</p>
+              <p class="date"><span class="baseText">期望解决日期：</span>{{fwdj.qwjjrq}}</p>
+
+
+              <p class="date"><span class="baseText">单位联系人：</span>{{fwdj.dwlxr}}</p>
+              <p class="date"><span class="baseText">单位联系方式：</span>{{fwdj.dwlxrfs}}</p>
+              <p class="date"></p>
             </div>
             <div class="questionList-content" v-html="fwdj.sm"></div>
             <div class="questionList-reply" v-for="(item,index) in fwdj.logs">
@@ -389,8 +400,12 @@ export default {
     border-top: 1px solid rgb(236, 235, 235);
     padding: 20px 0;
     p {
-      width: 33%;
-      text-align: center;
+      width: 30%;
+      span{
+        display: inline-block;  
+        width: 110px;
+        text-align: left;
+      }
     }
   }
   .questionList-content {
