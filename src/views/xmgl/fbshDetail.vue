@@ -120,7 +120,7 @@
 								<td>{{ $route.query.xmbh }}</td>
 								<th>项目名称</th>
 								<td>{{ htjbxx.xmmc }}</td>
-								<th>合同评估费用</th>
+								<th>合同评估可变费用</th>
 								<td>{{ fbjbxx.xmkbfy }}</td>
 							</tr>
 							

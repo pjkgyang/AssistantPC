@@ -24,7 +24,10 @@
                 <div>
                   <span style="color:#000">
                     <span class="question-info-front">所属项目 &#x3000;</span>
-                    {{ qusetionInfo.xmmc == '' ? '无' : qusetionInfo.xmmc }}
+                    {{ qusetionInfo.xmmc == '' ? '无' : qusetionInfo.xmmc }}&#x3000;&#x3000;
+
+                     <span class="question-info-front">学校 &#x3000;</span>
+                    {{ qusetionInfo.xx == '' ? '无' : qusetionInfo.xx }}
                   </span>
                 </div>
                 <p>
@@ -660,13 +663,13 @@
       <!-- 项目团队成员 -->
       <xmtdcylog :show.sync="xmtdcyShow" :xmbh="qusetionInfo.xmbh" @hanldeCommitUser="hanldeCommitUser"></xmtdcylog>
 
-      <el-dialog title="提示" :visible.sync="dialogVisibleGq" width="500px" :before-close="handleClose">
+      <el-dialog title="提示" :visible.sync="dialogVisibleGq" width="500px" >
         <div class="mg15">
           <div v-show="suspendType == 'gq'">
             <span class="filter-bt before-require">截止日期 :</span>
             <el-date-picker :picker-options="pickerJfrqDateBefore" v-model="gqData.date" type="date" placeholder="选择日期"
-              format="yyyy-MM-dd" value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
-          </div>
+              format="yyyy-MM-dd" style="width:350px" value-format="yyyy-MM-dd" :clearable="false" size="mini"></el-date-picker>
+          </div> 
           <br />
           <div>
             <span class="filter-bt before-require">说明 :</span>
@@ -675,8 +678,8 @@
           <div></div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button size="mini" @click="dialogVisibleGq = false">取 消</el-button>
           <el-button size="mini" type="primary" @click="handleCommitGq">确 定</el-button>
+          <el-button size="mini" type="info" @click="dialogVisibleGq = false">取 消</el-button>
         </span>
       </el-dialog>
 

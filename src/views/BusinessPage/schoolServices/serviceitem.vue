@@ -6,12 +6,20 @@
 		</div> -->
 		<div>
 			<div class="tree">
-        <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
+        <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool> <br>
+         <div flex spacebetween>
+           <el-input size="mini" v-model="keywordTree" placeholder="请输入部门名称" @change="handleChangeTree" style="width:300px"></el-input>
+            <el-button size="mini" type="primary" @change="handleChangeTree">查询</el-button>
+         </div>
         <tree-table ref="recTree" :list.sync="treeDataSource" @handlerExpand="handlerExpand" @handlerChooseModel="handlerChooseModel"></tree-table>
       </div>
 			<div class="form">
 				<div v-if="!!curDept.parentId" style="padding-bottom:10px"><el-button size="mini" type="primary"  @click="handleAddService">添加服务事项</el-button></div>
-				<el-table :data="tableData" border :style="{'width':!isPlan?'100%':'760px' }">
+			  <div>
+           <el-input size="mini" v-model="keyword" placeholder="请输入服务名称" @change="handleChangeFwsx" style="width:500px"></el-input>
+           <el-button size="mini" type="primary" @change="handleChangeFwsx">查询</el-button>
+        </div><br>
+      	<el-table :data="tableData" border :max-height="tableHeight" :style="{'width':!isPlan?'100%':'760px' }">
 					<el-table-column fixed="left" label="操作" width="110"  >
 						<template slot-scope="scope">
 							<el-button v-if="!isPlan" type="text" size="small" @click="handleOperate('edit', scope.row)">编辑</el-button>
@@ -58,6 +66,7 @@ import chooseSchool from "@/components/BusinessPage/chooseSchool.vue";
 export default {
   data() {
     return {
+      tableHeight:window.innerHeight - 200,
       jbxxShow: false,
       ssjhShow: false,
       Type: "",
@@ -65,6 +74,8 @@ export default {
       currentPage: 1,
       pageSize: 15,
       records: 0,
+      keywordTree:"",
+      keyword:"",//服务事项关键字
       tableData: [],
       unit: {}, //单位
       curDept: {}, //当前部门
@@ -79,6 +90,14 @@ export default {
     }
   },
   methods: {
+  
+    // 关键字查询
+    handleChangeFwsx(){
+      this.pageServiceItem();
+    },
+    handleChangeTree(){
+      this.treeDept();
+    },
     // 更换单位
     handleChangeUnit(params) {
       this.curDept = {};
@@ -168,7 +187,8 @@ export default {
         curPage: this.currentPage,
         pageSize:!this.isPlan?this.pageSize:10,
         dwbh: this.unit.dwbh,
-        bmbh: !this.curDept.id ? "" : this.curDept.id
+        bmbh: this.curDept.id=='0' ? "" : this.curDept.id,
+        keyword:this.keyword
       }).then(res => {
         if (res.state == "success") {
           if (!res.data || !res.data.rows) {
@@ -181,12 +201,14 @@ export default {
         }
       });
     },
+
     // 获取树
     treeDept() {
       this.$get(this.API.treeDeptWithUnit, {
         dwbh: this.unit.dwbh,
         dwmc: this.unit.dwmc,
-        zts: "1,3"
+        zts: "1,3",
+        keyword:this.keywordTree
       }).then(res => {
         if (res.state == "success") {
           this.treeDataSource = res.data;

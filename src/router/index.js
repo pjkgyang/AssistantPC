@@ -356,7 +356,7 @@ export default new Router({
         },
         {
           path: '/schoolseivice/teacherMaintain',
-          name: 'schoolSeiviceDetail',
+          name: 'teacherMaintain',
           component: resolve => require(['@/views/BusinessPage/schoolServices/whls.vue'], resolve),
         },
         // 需求
@@ -389,7 +389,7 @@ export default new Router({
         },
         {
           path: '/servicecounter/appstatistics',
-          name: 'appconfig',
+          name: 'appstatistics',
           component: resolve => require(['@/views/BusinessPage/serviceCounter/xttj.vue'], resolve),
         },    
         // 专项服务
@@ -408,7 +408,37 @@ export default new Router({
           name: 'specialserviceStatic',
           component: resolve => require(['@/views/BusinessPage/specialService/serviceStatic.vue'], resolve),
         }, 
-
+        {
+          path: '/specialservice/detail',
+          name: 'specialserviceDetail',
+          component: resolve => require(['@/views/BusinessPage/specialService/planDetail.vue'], resolve),
+        }, 
+        // 会议在线化
+        {
+          path: '/meeting/index',
+          name: 'meetingIndex',
+          component: resolve => require(['@/views/BusinessPage/meetOnline/index.vue'], resolve),
+        }, 
+        {
+          path: '/meeting/tracking',
+          name: 'meetingTracking',
+          component: resolve => require(['@/views/BusinessPage/meetOnline/index.vue'], resolve),
+        }, 
+        {
+          path: '/meeting/itemdetail',
+          name: 'itemDetail',
+          component: resolve => require(['@/views/BusinessPage/meetOnline/dbsxfk.vue'], resolve),
+        }, 
+        {
+          path: '/meeting/meetstatic',
+          name: 'meetingStatic',
+          component: resolve => require(['@/views/BusinessPage/meetOnline/static.vue'], resolve),
+        }, 
+        {
+          path: '/meeting/staticdetail',
+          name: 'meetingStaticDetail',
+          component: resolve => require(['@/views/BusinessPage/meetOnline/staticDetail.vue'], resolve),
+        }, 
 
 
         {
@@ -587,6 +617,17 @@ export default new Router({
               name: 'fbjsReport',
               component: resolve => require(['@/views/BusinessPage/report/fbxx/fbjs.vue'], resolve),
             },
+            // 问题异常跟踪
+            {
+              path: '/businesspage/report/wtycgz',
+              name: 'wtycgzReport',
+              component: resolve => require(['@/views/BusinessPage/report/question/wtycgz.vue'], resolve),
+            },
+            {
+              path: '/businesspage/report/wtyyzb',
+              name: 'wtyyzbReport',
+              component: resolve => require(['@/views/BusinessPage/report/question/wtyyzb.vue'], resolve),
+            },
           ],
         },
         {
@@ -691,7 +732,7 @@ export default new Router({
         // 销售确认验收
         {
           path: '/businesspage/saleConfirm',
-          name: 'TeamVindicate',
+          name: 'saleConfirm',
           component: resolve => require(['@/views/BusinessPage/salesConfirm.vue'], resolve),
         },
         {
@@ -727,7 +768,7 @@ export default new Router({
             },
             {
               path: '/businesspage/personalSetting/shgs',
-              name: 'personalSetting-xmjs',
+              name: 'personalSetting-shgs',
               component: resolve => require(['@/views/BusinessPage/personalSetting/shgscx.vue'], resolve),
             },
             {

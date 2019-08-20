@@ -4,6 +4,11 @@
 		<div>
 			<div class="tree">
         <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
+        <br>
+         <div flex spacebetween>
+           <el-input size="mini" v-model="keywordTree" placeholder="请输入部门名称" @change="handleChangeTree" style="width:300px"></el-input>
+            <el-button size="mini" type="primary" @change="handleChangeTree">查询</el-button>
+         </div>
         <tree-table ref="recTree" :list.sync="treeDataSource" @handlerExpand="handlerExpand" @handlerChooseModel="handlerChooseModel"></tree-table>
       </div>
 			<div class="form">
@@ -65,6 +70,7 @@ export default {
       currentPage: 1,
       pageSize: 15,
       records: 0,
+      keywordTree:"",//树关键字
       tableData: [],
       unit: {}, //单位
       curDept: {}, //当前部门
@@ -85,6 +91,10 @@ export default {
     this.userInfo = JSON.parse( sessionStorage.getItem('userInfo'));
   },
   methods: {
+    // 树查询
+     handleChangeTree(){
+      this.treeDept();
+    },
     // 更换单位
     handleChangeUnit(params) {
       this.curDept = {};
@@ -115,9 +125,8 @@ export default {
       formData.dwmc = this.unit.dwmc;
       formData.bmbh = this.curDept.id;
       formData.bmmc = this.curDept.title;
-    
-      formData.cjdwlxrgh = this.userInfo.unitType==0?this.userInfo.userName:'';
-
+      
+      // formData.cjdwlxrgh = this.userInfo.unitType==0?this.userInfo.userName:'';
       this.$post(this.API.saveApp, formData).then(res => {
         if (res.state == "success") {
           this.pageApps();
@@ -196,7 +205,8 @@ export default {
       this.$get(this.API.treeDeptWithUnit, {
         dwbh: this.unit.dwbh,
         dwmc: this.unit.dwmc,
-        zts: "1,3"
+        zts: "1,3",
+        keyword:this.keywordTree
       }).then(res => {
         if (res.state == "success") {
           this.treeDataSource = res.data;

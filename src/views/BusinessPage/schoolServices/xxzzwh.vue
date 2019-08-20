@@ -90,7 +90,7 @@ export default {
         this.isEdit = true;
         this.formData.bmmc = m.title;
         this.formData.bmdm = m.bmdm;
-        this.formData.sfzk = m.isExpand;
+        this.formData.sfzk = m.sfzk;
         this.formData.sortCode = m.sortCode;
         this.dialogVisible = true;
       }
@@ -163,6 +163,7 @@ export default {
           if (!!this.isEdit) {
             this.$set(this.curTreeData, "title", this.formData.bmmc);
             this.$set(this.curTreeData, "isExpand", this.formData.sfzk);
+            this.$set(this.curTreeData, "sfzk", this.formData.sfzk);
             this.$set(this.curTreeData, "sortCode", this.formData.sortCode);
             this.$set(this.curTreeData, "bmdm", this.formData.bmdm);
             this.parentNode.children.sort(function(a, b) {

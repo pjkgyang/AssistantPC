@@ -52,11 +52,11 @@
 			    }).then(({ data }) => {
 			    if (data.state == "success") {
 			          if(data.data.rows){
-			              this.schoolNamesOptions = data.data.rows;
-			              this.schoolNames = this.schoolNamesOptions[0].jc
-			              this.unit.dwbh = data.data.rows[0].wid;
-						  this.unit.dwmc = data.data.rows[0].mc;
+						  this.schoolNamesOptions = data.data.rows;
 						  if(!!init){
+							this.schoolNames = this.schoolNamesOptions[0].jc
+							this.unit.dwbh = data.data.rows[0].wid;
+							this.unit.dwmc = data.data.rows[0].mc;
 							this.$emit('handleChangeUnit',this.unit);
 						  }
 			          }else{

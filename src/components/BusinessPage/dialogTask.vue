@@ -38,7 +38,7 @@
             </el-collapse>
             <div v-if="!shown">
                 <ul>
-                    <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in allxmData"  :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">{{item.xmmc}}</li>
+                    <li class="choose-daily-item" :title="item.xmmc" v-for="(item,index) in allxmData"  :data-xmmc="item.xmmc"  :data-xmbh="item.xmbh" @click="handleNext">【{{item.xmbh}}】 {{item.xmmc}}</li>
                     <li class="choose-daily-more"><a href="javascript:void(0)" @click="handleMoreitem(7)" v-if="allCurpage < allTotal && allTotal > 1">加载更多...</a></li>
                     <li class="choose-daily-emptyItem" v-if="allxmData.length == 0">暂无项目</li>
                 </ul>
@@ -56,7 +56,7 @@
             <div v-if="taskList" style="height:calc(100% - 35px);width:300px;border:1px solid #ccc;float:left;border-left:none">
               <ul v-for="(item,index) in tasksData">
                   <li ><h4 style="overflow:hidden;white-space:nowrap; text-overflow: ellipsis" :title="item.catalog">{{item.catalog}}</h4></li>
-                  <li :title="task.rwmc_display" class="choose-daily-item" v-for="task in item.tasks.rows"  @click="chooseRevelence(task,item.lcbjdmc)"><span class="el-icon-info"></span>{{task.rwmc_display}}</li>                 
+                  <li :title="task.rwmc_display" class="choose-daily-item" v-for="task in item.tasks.rows" :style="{'color':task.zt==5 && !task.rwmc.includes('售后服务期满')?'#aaa':'#333'}" @click="chooseRevelence(task,item.lcbjdmc)"><span class="el-icon-info"></span>{{task.rwmc_display}}</li>                 
               </ul>
             </div>
         </transition>
@@ -232,7 +232,7 @@ export default {
     //        this.taskList = true
     //   },
     chooseRevelence(param,jdmc) {
-      if(param.zt == 5){
+      if(param.zt == 5 && !param.rwmc.includes('售后服务期满')){
         this.$alert('该任务已关闭，请重新选择', '提示', {
           confirmButtonText: '确定',
           type:'warning'

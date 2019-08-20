@@ -28,8 +28,8 @@
           <div v-if="filterList.includes('cp')" flex>
             <span class="query-title">产品:</span>
             <p class="query-list" style="width:90%" @click="handleCp">
-              <span data-type="" :class="{'bg-active':filterWord.cpbh == ''}">全部</span>
-              <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.id" :key="index" :class="{'bg-active':filterWord.cpbh == cpx.id&&filterWord.cpmc == cpx.text}">{{cpx.text}}</span>
+              <span data-type="" :class="{'bg-active':filterWord.cpxbh == ''}">全部</span>
+              <span v-for="(cpx,index) in cpList" :data-index="index" :data-type="cpx.cpxwid" :key="index" :class="{'bg-active':filterWord.cpxbh == cpx.cpxwid}">{{cpx.cpxmc}}</span>
             </p>
           </div>
 
@@ -142,8 +142,8 @@
           }
         ],
         filterWord: {
-          cpmc:"",
-          cpbh:"",
+          cpxmc:"",
+          cpxbh:"",
           fwzt:"",
           gqzt:"",
           jhksrq:"",//计划开始日期
@@ -164,7 +164,7 @@
       filterList: {
         type: Array,
         default: () => {
-          return ["date","cp","fwzt","sfgq"];
+          return ["keyword","date","cp","fwzt","sfgq"];
         }
       },
       placeholder: {
@@ -205,7 +205,6 @@
           this.filterWord.cpmc = this.cpList[index].text;
         }
         this.filterWord.fwnr = "";
-        this.listFwnrByCp();
         this.$emit("handleChangeFilter", this.filterWord);
       },
 
@@ -222,30 +221,21 @@
         this.filterWord.sfgq = gq;
         this.$emit("handleChangeFilter", this.filterWord);
       },
+      
+            // 获取服务类型
+      getSpecialServiceCPX(){
+        this.$get(this.API.getSpecialServiceCPX,{}).then(res=>{
+          if(res.state == 'success'){
+             this.cpList = res.data;
+             sessionStorage.setItem('fwlx',JSON.stringify(this.cpList));
+          }else{
 
-      listXmZdsfwCp() {
-        this.$get(this.API.listXmZdsfwCp, {
-          xmbh: this.xmbh
-        }).then(res => {
-          if (res.state == "success") {
-            if (!res.data) {
-              this.cpList = [];
-            } else {
-              this.cpList = res.data;
-            }
           }
-        });
+        })
       },
- 
-      getFirstDay() {
-        let year = new Date().getFullYear();
-        let month = new Date().getMonth() + 1;
-        month = month < 10 ? "0" + month : month;
-        return year + "-" + month + "-" + "01";
-      }
     },
     mounted() {
-
+     this.getSpecialServiceCPX();
     },
     activated() {},
     watch: {},

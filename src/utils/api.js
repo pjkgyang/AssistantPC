@@ -5,6 +5,8 @@ export default {
 
   exportEktbDetail: window.baseurl + 'report/exportEktbDetail.do', //导出二开提报（成本）
   exportBxbDetail: window.baseurl + 'report/exportBxbDetail.do', //导出可变提报（成本）
+
+  queryDwUsers: window.baseurl + 'report/queryDwUsers.do', //查询相关用户
   // 枚举
   getDictEnum: window.baseurl + 'dict/getDictEnum.do',
   // 报表
@@ -30,6 +32,8 @@ export default {
   listXxdk: window.baseurl + 'project/listXxdk.do', //获取学校到款明细
   queryMilestoneStageWorkHour: window.baseurl + 'report/queryMilestoneStageWorkHour.do', //获取日报工时详情
   getPersonalWorkLog: window.baseurl + 'process/getPersonalWorkLog.do', //获取日报
+  questionAbnormalTrack: window.baseurl + 'report/questionAbnormalTrack.do', //获取问题异常跟踪
+  questionOperatIndicator: window.baseurl + 'report/questionOperatIndicator.do', //获取问题运营指标
 
 
   // 用户学习报表
@@ -382,4 +386,37 @@ export default {
   becomeAssistantQuestion: window.baseurl + 'servicedesk/becomeAssistantQuestion.do', // 转入小助手问题
   waitForUserVerification: window.baseurl + 'servicedesk/waitForUserVerification.do', // 等待用户验证
   pageServiceDeskWithoutAuth: window.baseurl + 'servicedesk/pageServiceDeskWithoutAuth.do', // 等待用户验证
+
+  // 专项服务
+  pageSpecialService: window.baseurl + 'specialservice/pageSpecialService.do', // 专项服务分页列表
+  generateSpecialService: window.baseurl + 'specialservice/generateSpecialService.do', //  生成专项服务
+  updateZxfws: window.baseurl + 'specialservice/updateZxfws.do', //  更新责任人和时间
+  deleteSpecialService: window.baseurl + 'specialservice/deleteSpecialService.do', //  删除专项服务
+  releaseSpecialService: window.baseurl + 'specialservice/releaseSpecialService.do', //  发布专项服务
+  submitSpecialService: window.baseurl + 'specialservice/submitSpecialService.do', //  提报专项服务
+  confirmSpecialService: window.baseurl + 'specialservice/confirmSpecialService.do', //  提报专项服务
+  rejectSpecialService: window.baseurl + 'specialservice/rejectSpecialService.do', //  驳回专项服务
+  exportSpecialService: window.baseurl + 'specialservice/exportSpecialService.do', //  导出专项服务
+  getSpecialService: window.baseurl + 'specialservice/getSpecialService.do', //  获取专项服务
+  recordSpecialService: window.baseurl + 'specialservice/recordSpecialService.do', //  记录专项服务
+  getSpecialServiceCPX: window.baseurl + 'specialservice/getSpecialServiceCPX.do', // 获取服务类型
+  listOperationLogZxfw: window.baseurl + 'specialservice/listOperationLog.do', // 获取日志
+  getSpecialServiceFWX: window.baseurl + 'specialservice/getSpecialServiceFWX.do', // 获取服务项
+
+  // 会议在线化
+  saveMeeting:window.baseurl + 'meeting/saveMeeting.do', // 保存会议
+  pageMeeting:window.baseurl + 'meeting/pageMeeting.do', // 获取分页分页
+  exportMeeting:window.baseurl + 'meeting/exportMeeting.do', // 导出会议
+  deleteMeeting:window.baseurl + 'meeting/deleteMeeting.do', // 删除
+  saveDealtMatter:window.baseurl + 'meeting/saveDealtMatter.do', // 保存处理项
+  deleteMatter:window.baseurl + 'meeting/deleteMatter.do', // 删除处理项
+  pageMatter:window.baseurl + 'meeting/pageMatter.do', // 获取会议事项 分页
+  exportMatter:window.baseurl + 'meeting/exportMatter.do', // 导出会议事项 
+  saveMatterFeedback:window.baseurl + 'meeting/saveMatterFeedback.do', // 保存事项反馈
+  pageMatterFeedback:window.baseurl + 'meeting/pageMatterFeedback.do', // 获取事项反馈
+  queryMeetingStat:window.baseurl + 'meeting/queryMeetingStat.do', // 获取会议统计
+  queryMeetingStatDetail:window.baseurl + 'meeting/queryMeetingStatDetail.do', // 获取会议统计详情
+  exportMeetingStatDetail:window.baseurl + 'meeting/exportMeetingStatDetail.do', // 导出会议统计详情
+  queryMatter:window.baseurl + 'meeting/queryMatter.do', // 获取单个待处理事项详情
+  queryMeeting:window.baseurl + 'meeting/queryMeeting.do' // 获取单个会议详情
 }

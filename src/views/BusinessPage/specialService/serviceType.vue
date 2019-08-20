@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       title="选择服务类型"
-      width="400px"
+      width="600px"
       top="30px"
       :visible.sync="visible"
       :append-to-body="true"
@@ -12,14 +12,39 @@
     >
       <div class="dialog-bj">
         <section>
-          <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column fixed="left" label="操作" width="100">
-              <template slot-scope="scope">
-                <el-button type="text" size="small">编辑</el-button>
-              </template>
-            </el-table-column>
-            <el-table-column prop="fwmc" label="服务类型"></el-table-column>
+          <div>
+            <span class="pj-title before-require">计划开始日期：</span>
+            <el-date-picker
+             :picker-options="pickerBeginDateBefore"
+              size="mini"
+              v-model="filterData.jhksrq"
+              type="date"
+              placeholder="选择日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+            ></el-date-picker>
+          </div><br>
+          <!-- <div>
+            <span class="pj-title before-require">计划结束日期：</span>
+            <el-date-picker
+              :picker-options="pickerBeginDateBefore"
+              size="mini"
+              v-model="filterData.jhjsrq"
+              type="date"
+              placeholder="选择日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+            ></el-date-picker>
+          </div> -->
+
+          <el-table
+            :data="tableData"
+            border
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="55" :selectable="checkboxInit"></el-table-column>
+            <el-table-column prop="cpxmc" label="服务类型"></el-table-column>
           </el-table>
         </section>
         <section class="pj-btn-group" text-right>
@@ -36,27 +61,73 @@ export default {
   data() {
     return {
       visible: this.show,
-      multipleSelection:[]
+      filterData:{
+        jhksrq:"",
+        jhjsrq:""
+      },
+      pickerBeginDateBefore: {
+          disabledDate(time) {
+            let curDate = new Date().getTime();
+            return time.getTime() < Date.now() - 8.64e7;
+          }
+      },
+      tableData: [],
+      cpxids: []
     };
   },
   props: {
     show: {
       type: Boolean,
       default: false
+    },
+    xmbh: {
+      type: String,
+      default: ""
     }
   },
   methods: {
-    handleSelectionChange(val) {
-        this.multipleSelection = val;
+    checkboxInit(row, index) {
+      if (row.flag == "1") {
+        return false;
+      } else {
+        return true;
+      }
     },
-    handleClickSure() {
+    // 选择服务类型
+    handleSelectionChange(val) {
+      this.cpxids = [];
+      val.forEach((ele, i, arr) => {
+        this.cpxids.push(ele.cpxwid);
+      });
+    },
 
+    // 提交服务
+    handleClickSure() {
+      if(!this.filterData.jhksrq){
+        this.$message({message:'请选择计划日期',type:'warning'});
+        return;
+      }
+      this.$emit("handleAddservice", this.cpxids,this.filterData);
+    },
+
+    // 获取服务类型
+    getSpecialServiceCPX() {
+      this.$get(this.API.getSpecialServiceCPX, { xmbh: this.xmbh }).then(
+        res => {
+          if (res.state == "success") {
+            console.log(res);
+            this.tableData = res.data;
+          } else {
+          }
+        }
+      );
     }
   },
   watch: {
     show(n, o) {
       this.visible = this.show;
-      if (!n) {
+      if (!!n) {
+        this.getSpecialServiceCPX();
       } else {
       }
     }

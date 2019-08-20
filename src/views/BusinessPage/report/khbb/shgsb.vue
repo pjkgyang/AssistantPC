@@ -161,27 +161,5 @@ export default {
 };
 </script>
 <style scope>
-.query-condition > div {
-  display: flex;
-  align-items: flex-start;
-  margin: 10px 0;
-  font-size: 13px;
-}
-.query-list {
-  width: 95%;
-}
-.query-list span:hover {
-  cursor: pointer;
-}
-.query-list span {
-  display: inline-block;
-  padding: 0px 5px;
-  color: #637d8a;
-  border-radius: 3px;
-  margin: 5px 10px 0 0;
-}
-.bg-active {
-  background: #1997d7;
-  color: #fff !important;
-}
+
 </style>

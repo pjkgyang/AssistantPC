@@ -400,45 +400,10 @@ export default {
             .catch(() => {});
           break;
         case "export":
-         let jhksrqmin = !this.filterData.jhksrqmin?'':this.filterData.jhksrqmin,
-                jhksrqmax = !this.filterData.jhksrqmax?'':this.filterData.jhksrqmax,
-                jhjsrqmin = !this.filterData.jhjsrqmin?'':this.filterData.jhjsrqmin,
-                jhjsrqmax = !this.filterData.jhjsrqmax?'':this.filterData.jhjsrqmax; 
+           let xmbh = !!this.$route.query.xmbh?this.$route.query.xmbh:this.nxmbh;
             window.open(
               window.baseurl +
-              "activeservice/exportActiveService.do?cpbh=" +
-              this.filterData.cpbh +
-              "&cpmc=" +
-              this.filterData.cpmc +
-              "&fwnr=" +
-              this.filterData.fwnr +
-              "&zt=" +
-              this.filterData.fwzt +
-              "&xmzt=" +
-              this.filterData.xmzt +
-              "&jhksrqmin=" +
-              jhksrqmin +
-              "&jhksrqmax=" +
-              jhksrqmax +
-              "&jhjsrqmin=" +
-              jhjsrqmin +
-              "&jhjsrqmax=" +
-              jhjsrqmax +
-              "&sfgq=" +
-              this.filterData.sfgq +
-              "&keyword=" +
-              this.filterData.keyword +
-              "&lb=" +
-              this.filterData.lb +
-              "&sffb=1" +
-              "&fxdj=" +
-              this.filterData.fxdj +
-              "&wtzt=" +
-              this.filterData.wtzt +
-              "&fxzt=" +
-              this.filterData.fxzt +
-              "&ismine=" +
-              this.filterData.ismine
+              "activeservice/exportActiveService.do?xmbh="+xmbh
             );
           break;
         case "edit": //编辑

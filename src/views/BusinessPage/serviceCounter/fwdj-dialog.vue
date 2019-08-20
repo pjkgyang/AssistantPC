@@ -3,7 +3,7 @@
     <el-dialog title="服务请求登记" width="1000px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)"
       :show="show">
       <div class="demand">
-        <el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="fwdjData" :inline="true" size="mini"
+        <el-form style="width:950px;margin:0 auto" class="demo-ruleForm" ref="fwdjForm" :model="fwdjData" :inline="true" size="mini"
           label-width="135px">
           <el-form-item label="学校名称" required  v-if="userInfo.unitType == '0'">
               <el-input placeholder="请选择" readonly v-model="fwdjData.dwmc" style="width:800px" >
@@ -13,7 +13,7 @@
           <el-form-item label="提报人" required>
             <el-input size="mini" type="text" style="width:325px" placeholder="请输入提报人姓名" v-model="fwdjData.tbr"></el-input>
           </el-form-item>
-          <el-form-item label="提报联系方式" required>
+          <el-form-item label="提报人联系方式" required>
             <el-input size="mini" type="text" style="width:325px" placeholder="请输入提报联系方式"  v-model="fwdjData.lxfs"></el-input>
           </el-form-item>
 
@@ -49,7 +49,7 @@
             <el-input size="mini" type="text" style="width:325px" placeholder="请选择信息系统" readonly v-model="fwdjData.cjdw"></el-input>
           </el-form-item>
           <el-form-item label="单位联系人" required>
-            <el-input size="mini" type="text" style="width:325px" placeholder="请优先选择信息系统"  v-model="fwdjData.dwlxr"></el-input>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请优先选择信息系统" readonly v-model="fwdjData.dwlxr"></el-input>
           </el-form-item>
           <el-form-item label="单位联系方式" required>
             <el-input size="mini" type="text" style="width:325px" placeholder="请优先选择信息系统"   v-model="fwdjData.dwlxfs"></el-input>
@@ -72,18 +72,19 @@
             <el-input size="mini" v-model="fwdjData.bt" type="text" placeholder="标题" style="width:800px;"></el-input>
           </el-form-item>
 
-          <el-form-item label="需求附件" required>
+          <el-form-item label="附件" >
             <uploadFile :Type="'demand'" :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
-            <p class="file" v-if="!!fwznfjMc && Type.includes('edit')">
-              {{fwznfjMc}}
-              <i class="el-icon-close" @click="handleRemoveFwznfj"></i>
+            <p class="file" v-if="!!fjList.length && !!wid"  v-for="(fj,index) in fjList">
+              {{fj.fjmc}} <i class="el-icon-close" @click="handleRemovefj(index)"></i>
             </p>
           </el-form-item>
+
+           <el-form-item label="详情" required>
+             <div style="width:800px;"> 
+              <div id="summernoteTT"></div>
+             </div>
+          </el-form-item>
         </el-form>
-        <div class="demand-textarea">
-          <p>需求描述</p>
-          <div id="summernoteTT"></div>
-        </div>
 
         <div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
           <el-button size="small" type="primary" @click="handleCommit">确认提交</el-button>
@@ -134,7 +135,7 @@
             label: "0"
           }
         ], //是否线上
-        fwznfjMc: "", //编辑附件名称
+        fjList:[], //编辑附件名称
         fwdjData: {
           dwbh:"",
           dwmc:"",
@@ -169,6 +170,10 @@
       show: {
         type: Boolean,
         default: false
+      },
+      wid:{
+        type:String,
+        default:''
       }
     },
     components: {
@@ -177,11 +182,13 @@
       schoolList
     },
     methods: {
+      handleRemovefj(){
+
+      },
       // 选择部门
       handleChooseDept(data){
         this.fwdjData.bmmc = data.title;
         this.fwdjData.bmbh = data.id;
-        this.getApp(data.id);
         this.tbrbmShow = false;
       },
 
@@ -205,12 +212,12 @@
         this.fwdjData.dwbh = data.wid;
         this.fwdjData.dwmc = data.mc;
         this.fwdjData.bmmc = '';
+        this.getApp(this.fwdjData.dwbh);
         this.schoolShow = false;
 			},
-
       // 上传附件
       handleUploadFile(data) {
-        this.fwznfjMc = "";
+        this.fjList = [];
         if (!!data.length) {
           this.fwdjData.fjStr = data[0];
         } else {
@@ -242,15 +249,60 @@
       },
 
       // 获取信息系统
-      getApp(bmbh){
+      getApp(dwbh){
+        this.xxxtList = [];
         this.$get(this.API.appSelect,{
-          bmbh:bmbh
+          dwbh:dwbh
         }).then(res=>{
           if(res.state == 'success'){
             this.xxxtList = res.data;
           }else{}
         })
       },
+
+          // 获取单个服务台
+      getServiceDesk(wid) {
+        this.$get(this.API.getServiceDesk, {
+          wid: wid
+        }).then(res => {
+          if (res.state == "success") {
+            let files = [];
+            res.data.files.forEach(element => {
+              files.push(element.fjbh+'|'+element.fjmc);
+            });
+            this.getApp(res.data.dwbh);
+            this.fwdjData.wid = res.data.wid;
+            this.fwdjData.dwbh = res.data.dwbh;
+            this.fwdjData.dwmc = res.data.dwmc;
+            this.fwdjData.tbr = res.data.tbr;
+            this.fwdjData.lxfs = res.data.lxfs;
+            this.fwdjData.tbrzw = res.data.tbrzw;
+            this.fwdjData.tbsj = res.data.tbsj;//提报时间
+            this.fwdjData.bmmc = res.data.bmmc;//提报人部门
+            this.fwdjData.bmbh = res.data.bmbh;//提报人部门编号
+            this.fwdjData.qqly = res.data.qqly;//请求来源
+            this.fwdjData.yymc = res.data.yymc;
+            this.fwdjData.yybh = res.data.yybh;
+            this.fwdjData.cjdw = res.data.cjdw;//承建单位
+            this.fwdjData.cjdwbh = res.data.cjdwbh;//承建单位编号
+            this.fwdjData.dwlxr = res.data.dwlxr;//单位联系人
+            this.fwdjData.dwlxfs = res.data.dwlxfs;//单位联系方式
+            this.fwdjData.wtjb = res.data.wtjb;
+            this.fwdjData.qwjjrq = res.data.qwjjrq;
+            this.fwdjData.bt = res.data.bt;
+            this.fwdjData.fjStr = files.join(',');//附件
+            this.fwdjData.sm = res.data.sm;
+            this.fjList = res.data.files;
+            $("#summernoteTT").summernote('code',res.data.sm);
+          } else {
+            this.$alert(res.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
+          }
+        });
+      },
+
 
       valiDate() {
         if (!this.fwdjData.dwmc) {
@@ -310,6 +362,13 @@
           });
           return false;
         }
+        if (!this.fwdjData.qwjjrq) {
+          this.$message({
+            message: "请选择期望解决日期",
+            type: "warning"
+          });
+          return false;
+        }
         if (!this.fwdjData.bt) {
           this.$message({
             message: "请填写标题",
@@ -353,12 +412,25 @@
             });
           });
 
-          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo')); 
-          if(this.userInfo.unitType != '0'){
-            this.fwdjData.dwbh = this.userInfo.unitnum;
-            this.fwdjData.dwmc = this.userInfo.unit;
+          if(!this.wid){
+            this.userInfo = JSON.parse(sessionStorage.getItem('userInfo')); 
+            if(this.userInfo.unitType != '0'){
+              this.fwdjData.dwbh = this.userInfo.unitnum;
+              this.fwdjData.dwmc = this.userInfo.unit;
+            }
+          }else{
+            this.getServiceDesk(this.wid);
           }
-        } else {}
+        } else {
+           this.fwdjData.wid = '';
+           this.fwdjData.dwbh = this.fwdjData.dwmc = this.fwdjData.tbr = this.fwdjData.lxfs =
+           this.fwdjData.tbrzw =  this.fwdjData.tbsj = this.fwdjData.bmmc = this.fwdjData.bmbh = 
+           this.fwdjData.qqly =  this.fwdjData.yymc = this.fwdjData.yybh = this.fwdjData.cjdw =
+           this.fwdjData.cjdwbh = this.fwdjData.dwlxr = this.fwdjData.dwlxfs =  this.fwdjData.wtjb =
+           this.fwdjData.qwjjrq = this.fwdjData.bt = this.fwdjData.fjStr = this.fwdjData.sm = '';
+           $("#summernoteTT").summernote('code','');
+           this.isClearFile = !this.isClearFile;
+        }
       }
     }
   };

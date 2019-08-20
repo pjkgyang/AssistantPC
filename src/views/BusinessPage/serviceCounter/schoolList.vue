@@ -81,12 +81,12 @@ export default {
       this.$emit("handleCommit", row);
     },
 
-    getDwUser(keyword) {
+    getDwUser() {
       this.$get(this.API.getDwByUser, {
         curPage: this.currentPage,
         pageSize: this.pageSize,
         dwlx: "",
-        keyword: keyword
+        keyword: this.keyword
       }).then(res => {
         if (res.state == "success") {
           if (!!res.data.rows) {

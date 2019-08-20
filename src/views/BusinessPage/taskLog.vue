@@ -97,7 +97,7 @@
         </el-table-column>
         <el-table-column prop="cjrxm" label="填写人" width="80"></el-table-column>
         <el-table-column prop="xmbh" label="项目编号"  sortable width="110"></el-table-column>
-        <el-table-column prop="xmmc" label="项目名称"  width="260"></el-table-column>
+        <el-table-column prop="xmmc" label="项目名称"  width="260" show-overflow-tooltip></el-table-column>
         <el-table-column prop="gcms" label="内容" width="500" ></el-table-column>
         <el-table-column prop="cpmc_display" label="产品名称"  width="180"></el-table-column>
         <el-table-column prop="rwmc_display" label="任务名称"  width="150"></el-table-column>

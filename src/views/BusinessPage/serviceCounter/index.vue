@@ -14,7 +14,7 @@
         </div>
 
         <div v-show="queryLJshow">
-          <div class="mg-12">
+          <div class="mg-12" flex>
             <p class="query-title">登记日期:</p>
             <p class="query-list">
                 <el-date-picker
@@ -28,7 +28,7 @@
             </p>
           </div>
 
-          <div class="mg-12">
+          <div class="mg-12" flex>
             <p class="query-title">处理状态:</p>
             <p class="query-list">
               <span v-for="(clzt, index) in clztList" @click="handleChangeclzt(clzt.label)" :key="index" :class="{ 'bg-active': filterData.clzt == clzt.label }">
@@ -37,7 +37,7 @@
             </p>
           </div>
 
-          <div>
+          <div flex>
             <p class="query-title">问题级别:</p>
             <p class="query-list">
               <span v-for="(wtjb, index) in wtjbList" @click="handleChangewtjb(wtjb.label)" :key="index" :class="{ 'bg-active': filterData.wtjb == wtjb.label }">
@@ -45,7 +45,8 @@
               </span>
             </p>
           </div>
-          <div class="mg-12">
+
+          <div class="mg-12" flex>
             <p class="query-title">是否催办:</p>
             <p class="query-list">
               <span v-for="(sfcb, index) in sfcbList" @click="handleChangesfcb(sfcb.label)" :key="index" :class="{ 'bg-active': filterData.sfcb == sfcb.label }">
@@ -53,6 +54,7 @@
               </span>
             </p>
           </div>
+          
         </div>
       </div>
 
@@ -61,7 +63,7 @@
            <el-button size="mini" type="danger" @click="fwdjShow = true">服务登记</el-button>
         </div>
         <ul class="serviceCounter-list">
-          <li flex v-for="(item, index) in dataList" :key="index">
+          <li  v-for="(item, index) in dataList" :key="index" @mouseover="editOrdelete = index"  @mouseout="editOrdelete = null">
             <!-- <div class="serviceCounter-list_bgimg" center>服务</div> -->
             <div class="serviceCounter-list-info" flex-column spacebetween>
               <span><a :href="'#/serviceCounter/detail?id='+item.wid" target="_blank" >{{item.bt}}</a></span>
@@ -71,15 +73,19 @@
                 <span><span class="title">期望解决日期：</span>{{item.qwjjrq}}</span>
               </p>
               <p class="serviceCounter-list_info">
-                <span><span class="title">提报人：</span>{{item.tbr}}</span>
+                <span><span class="title">提报人：</span>{{item.tbr}} ({{!item.lxfs?'无':item.lxfs}})</span>
                 <span><span class="title">提报人单位：</span>{{item.dwmc}}</span>
                 <span><span class="title">问题级别：</span>{{item.wtjb_display}}</span>
               </p>
               <p class="serviceCounter-list_info">
                 <span><span class="title">信息系统：</span>{{item.yymc}}</span>
                 <span><span class="title">承建单位：</span>{{item.cjdw}}</span>
-                <span><span class="title"  v-if="item.delayState == 3||item.delayState == 4">延期3天解决：</span></span>
+                <span><span class="title" :style="{'color':item.delayState == 3||item.delayState == 4?'#f00':'#333'}">{{item.delayDesc}}</span></span>
               </p>
+            </div>
+            <div class="serviceCounter-list-info" v-show="editOrdelete == index">
+                <el-button size="mini" icon="el-icon-delete" type="text" style="color:#f00" @click="handleOprate('delete',index,item)">删除</el-button>
+                <el-button size="mini" icon="el-icon-edit" type="text" @click="handleOprate('edit',index,item)">编辑</el-button>
             </div>
           </li>
         </ul>
@@ -91,7 +97,7 @@
         </div>
       </div>
 
-      <fwdjDialog :show.sync="fwdjShow" @handleCommitFwdj="handleCommitFwdj"></fwdjDialog>
+      <fwdjDialog :show.sync="fwdjShow" :wid="wid" @handleCommitFwdj="handleCommitFwdj"></fwdjDialog>
       <yypzDialog :show.sync="yypzShow"></yypzDialog>
       <BjDialog :show.sync="bjShow"></BjDialog>
       <yypzxqDialog :show.sync="yypzxqShow"></yypzxqDialog>
@@ -125,7 +131,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       records: 0,
-      dataList: [],
+      dataList: [], //列表
+      wid:'',//当前记录
 
       filterData: {
         clzt: "", //处理状态
@@ -133,7 +140,9 @@ export default {
         date:[],
         sfcb: "", //是否催办
         keyword: ""
-      }
+      },
+
+      editOrdelete:null
     };
   },
   mounted() {
@@ -141,10 +150,31 @@ export default {
   },
   methods: {
 
-
+    handleOprate(type,index,params){
+      if(type == 'delete'){
+       this.$confirm('是否删除此条记录?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$post(this.API.deleteServiceDesk,{
+            wid:params.wid
+          }).then(res=>{
+            if(res.state == 'success'){
+              this.$message({message: '删除成功', type: 'success'});
+              this.dataList.splice(index,1);
+            }
+          })
+        }).catch(() => {});
+      }else{
+        this.wid = params.wid;
+        this.fwdjShow = true;
+      }
+    },
 
     // 提需求
     handleSendserviceCounter() {
+      this.wid = '';
       this.fwdjShow = true;
     },
 

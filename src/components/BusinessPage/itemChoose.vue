@@ -6,7 +6,15 @@
       <el-button size="mini" type="primary" @click="queryItem">查询</el-button>
     </div>
     <el-table :data="allfbData" style="width: 100%" border>
-      <el-table-column label="项目名称" show-overflow-tooltip>
+      <el-table-column
+        fixed="left"
+        label="操作"
+        width="60">
+        <template slot-scope="scope">
+          <el-button @click="handleEdit(scope.$index, scope.row)" type="text" size="small">选择</el-button>
+        </template>
+    </el-table-column>
+      <!-- <el-table-column label="项目名称" show-overflow-tooltip>
         <template slot-scope="scope">
           <div slot="reference" style="display:flex">
             <p @click="handleEdit(scope.$index, scope.row)" :title="scope.row.xmmc" class="name-wrapper">
@@ -14,11 +22,12 @@
             </p>
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
+      <el-table-column prop="xmmc" label="项目名称" min-width="160" show-overflow-tooltip></el-table-column>
       <el-table-column prop="xmzt" label="项目状态" width="90"></el-table-column>
-      <el-table-column prop="dwmc" label="学校" width="200" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="htbh" label="合同编号" width="150" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="xmbh" label="项目编号" width="110"></el-table-column>
+      <el-table-column prop="dwmc" label="学校" width="150" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="htbh" label="合同编号" width="120" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="xmbh" label="项目编号" width="110" show-overflow-tooltip></el-table-column>
     </el-table>
     <div style="text-align:right;padding:10px 0 0 0;">
       <pagination :currentPage="currentPage" v-if="xMtotal>10 && xMtotal != null" :total="xMtotal" :pageSize="xMpageSize" @handleCurrentChange="handleChooseItem"></pagination>

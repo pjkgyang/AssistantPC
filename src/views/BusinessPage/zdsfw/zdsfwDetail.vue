@@ -6,6 +6,12 @@
           <h5>产品内容</h5>
           <div class="contentMark">
             <table>
+               <tr>
+                <td class="contenTitle">学校名称</td>
+                <td>{{cpData.xxmc}}</td>
+                <td class="contenTitle">合同名称</td>
+                <td>{{cpData.xmmc}}</td>
+              </tr>
               <tr>
                 <td class="contenTitle">产品</td>
                 <td>{{cpData.cpmc}}</td>
@@ -119,13 +125,13 @@
             <h5>计划进度</h5>
             <div class="contentMark">
               <!-- <el-scrollbar style="height:calc(100vh - 300px);"> -->
-              <div v-if="jdList.length" v-for="(jd,index) in jdList" :class="{'progress-dot':true,'progress-dot-last':index == (jdList.length-1)}">
+              <div v-if="!!jdList.length" v-for="(jd,index) in jdList" :class="{'progress-dot':true,'progress-dot-last':index == (jdList.length-1)}">
                 <div>
                   <span>{{jd.cjsj}}&#x3000;<span style="color:rgb(21, 145, 202)">{{!jd.czrxm?'':jd.czrxm}}</span>&#x3000;{{jd.czlxmc}}</span>
                   <div :class="{'jd-content':jd.czlx == 4}" v-html="jd.cznr"></div>
                 </div>
               </div>
-              <div v-else class="emptyContent">
+              <div v-if="!jdList.length" class="emptyContent">
                 <img src="static/img/empty.png" alt="">
                 <p>暂无日志记录</p>
               </div>

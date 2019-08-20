@@ -14,7 +14,7 @@
         <section>
 
           <div flex class="mg-12">
-            <span class="filter-weight">服务评价：</span>
+            <span class="filter-weight before-require">服务评价：</span>
             <el-rate v-model="filterData.pf" :texts="texts" show-text></el-rate>
           </div>
 
@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     handleClickSure() {
-      if (!this.validate()) return;
+      // if (!this.validate()) return;
       this.$post(this.API.completed,{
         zbwid:this.wid,
         sm:this.filterData.nr,

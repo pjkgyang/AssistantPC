@@ -89,7 +89,12 @@ export default {
       type: Boolean,
       default: false
     },
-
+    curData:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
+    },
     zbwid: {
       type: String,
       default: ""
@@ -99,6 +104,7 @@ export default {
     show(n, o) {
       this.dialogVisible = this.show;
       if (!n) {
+        this.form.wid = "";
         this.form.jhksrq = "";
         this.form.sxfs = "";
         this.form.fwznzrr = "";
@@ -110,6 +116,21 @@ export default {
         this.form.kfzrr = "";
         this.form.kfwczt = "";
         this.form.kfwcsj = "";
+      }else{
+        if(JSON.stringify(this.curData) != {}){
+          this.form.wid = this.curData.wid;
+          this.form.jhksrq = this.curData.jhksrq;
+          this.form.sxfs = this.curData.sxfs;
+          this.form.fwznzrr = this.curData.fwznzrr
+          this.form.fwznwczt = this.curData.fwznwczt;
+          this.form.fwznwcsj = this.curData.fwznwcsj;
+          this.form.sszrr = this.curData.sszrr;
+          this.form.sswczt = this.curData.sswczt;
+          this.form.sswcsj = this.curData.sswcsj;
+          this.form.kfzrr = this.curData.kfzrr;
+          this.form.kfwczt = this.curData.kfwczt;
+          this.form.kfwcsj = this.curData.kfwcsj;  
+        }
       }
     }
   },

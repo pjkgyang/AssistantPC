@@ -45,8 +45,8 @@
 							<td>{{jhData.xxhjsnf}}</td>
 							<th>承建公司</th>
 							<td>{{jhData.xxhcjgs}}</td>
-							<th>建设状态</th>
-							<td>{{jhData.xxhjszt==1?'在建':jhData.jszt==2?'售后':'过保'}}</td>
+							<th>实现方式</th>
+							<td colspan="3">{{jhData.sxfs}}</td>
 						</tr>
 						<tr >
 							<th>信息中心对接老师</th>
@@ -60,7 +60,7 @@
 							<th>服务指南整理责任人</th>
 							<td>{{jhData.fwznzrr}}</td>
 							<th>服务指南完成状态</th>
-							<td>{{jhData.fwznwczt}}</td>
+							<td>{{jhData.fwznwczt==1?'已完成':'未完成'}}</td>
 							<th>服务指南完成时间</th>
 							<td>{{jhData.fwznwcsj}}</td>
 						</tr>
@@ -68,7 +68,7 @@
 							<th>实施责任人</th>
 							<td>{{jhData.sszrr}}</td>
 							<th>实施完成状态</th>
-							<td>{{jhData.sswczt}}</td>
+							<td>{{jhData.sswczt==1?'已完成':'未完成'}}</td>
 							<th>实施完成时间</th>
 							<td>{{jhData.sswcsj}}</td>
 						</tr>
@@ -76,15 +76,13 @@
 							<th>开发责任人</th>
 							<td>{{jhData.kfzrr}}</td>
 							<th>开发完成状态</th>
-							<td>{{jhData.kfwczt}}</td>
+							<td>{{jhData.kfwczt==1?'已完成':'未完成'}}</td>
 							<th>开发完成时间</th>
 							<td>{{jhData.kfwcsj}}</td>
 						</tr>
 						<tr>
-							<th>实现方式</th>
-							<td colspan="3">{{jhData.sxfs}}</td>
 							<th>使用情况</th>
-							<td colspan="3" width="33%" :title="jhData.syqk">{{!jhData.syqk?'':jhData.syqk.length > 100?jhData.syqk.substring(0,100)+'...':jhData.syqk}}</td>
+							<td colspan="5"  :title="jhData.syqk">{{!jhData.syqk?'':jhData.syqk.length > 100?jhData.syqk.substring(0,100)+'...':jhData.syqk}}</td>
 						</tr>
 					</table>
 				</div>
@@ -130,8 +128,7 @@
         wid: this.$route.query.id
       }).then(res => {
         if (res.state == "success") {
-					this.fwData = res.data;
-					console.log(res);
+			this.fwData = res.data;
         } else {
 
         }

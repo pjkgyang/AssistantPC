@@ -1,13 +1,13 @@
 <template>
   <div class="fwsxtj-pannel">
     <div class="pannelPaddingBg-10">
-      <div v-if="!$route.query.id">
+      <div v-if="!$route.query.bh">
         <div style="padding: 12px 40px;">
           <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
         </div>
         <div flex >
           <span class="query-title" style="padding:2px 4px;margin-right:10px">高级查询:</span>
-          <el-input style="width:300px" class="search-input" placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校" prefix-icon="el-icon-search"
+          <el-input style="width:300px" class="search-input" placeholder="请输入服务事项名称" prefix-icon="el-icon-search"
             size="mini" v-model="filterData.keyword" @change="handleSearch"></el-input>
           &#x3000;
           <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>

@@ -74,7 +74,7 @@
 	methods: {
     handleRouter(m,type){
       let query = {
-          id:m.id,
+          id:m.id=='0'?'':m.id,
           bh:this.unitData.dwbh,
           s:this.qsnf,
           e:this.jsnf

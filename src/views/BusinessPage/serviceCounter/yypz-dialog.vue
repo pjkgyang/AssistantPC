@@ -326,6 +326,7 @@ export default {
         cjdwbh: "",
         cjdwlxr: "", //承建单位联系人
         cjdwlxfs: "", //承建单位联系方式
+        cjdwlxrgh:"",
         fwdz: "http://", //访问地址
         xtzt: "", //系统状态
 
@@ -526,7 +527,6 @@ export default {
           }
         });
 
-        
         this.pageCjdw((data)=>{
           if(JSON.stringify(this.detailInfo) != "{}"){
             let obj = data.find(item=>{
@@ -549,7 +549,7 @@ export default {
           this.yypzData.cjdwlxr = this.detailInfo.cjdwlxr;
           this.yypzData.cjdwlxfs = this.detailInfo.cjdwlxfs;
           this.yypzData.fwdz = this.detailInfo.fwdz;
-          this.yypzData.sydx = this.detailInfo.fwdxwid.split(",");
+          this.yypzData.sydx = !this.detailInfo.fwdxwid?[]:this.detailInfo.fwdxwid.split(",");
 
           this.yypzData.xtzt = this.detailInfo.xtzt;
           this.yypzData.ywbmlxr = this.detailInfo.ywbmlxr;
@@ -575,6 +575,8 @@ export default {
           this.yypzData.cjdwbh = "";
           this.yypzData.cjdwlxr = "";
           this.yypzData.cjdwlxfs = "";
+
+          this.yypzData.cjdwlxrgh = "";
           this.yypzData.fwdz = "";
           this.yypzData.sydx = [];
 

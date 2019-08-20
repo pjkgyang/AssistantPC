@@ -153,7 +153,7 @@ export default {
             let curDate = (new Date()).getTime();
             let two = -60 * 24 * 3600 * 1000;
             let twoMonths = curDate + two;
-            return time.getTime() > twoMonths;
+            return time.getTime() < twoMonths;
           }
       },
       // 服务日期 大于等于当日并小于当日+1个月

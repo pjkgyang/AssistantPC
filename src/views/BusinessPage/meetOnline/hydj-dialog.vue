@@ -1,0 +1,548 @@
+<template>
+  <div class="dialog-container">
+    <el-dialog title="会议登记" width="1000px" top="30px" :visible.sync="visible" :close-on-click-modal="false" @close="$emit('update:show', false)"
+      :show="show">
+      <div class="demand">
+        <el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="hydjData" :inline="true" size="mini"
+          label-width="135px">
+          
+          <el-form-item label="会议主题" required>
+            <el-input size="mini" type="text" style="width:800px" placeholder="请输入会议主题" v-model="hydjData.hybt"></el-input>
+          </el-form-item>
+
+          <el-form-item label="会议开始时间" required>
+            <el-date-picker v-model="hydjData.hykssj" type="datetime" placeholder="选择会议开始时间"
+            align="right"
+            :picker-options="pickerOptions"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            style="width:325px;"  >
+            </el-date-picker>
+   
+          </el-form-item>
+
+          <el-form-item label="会议结束时间" required>
+            <el-date-picker v-model="hydjData.hyjssj" type="datetime" placeholder="选择会议开始时间"
+            align="right"
+            :picker-options="pickerOptions"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            style="width:325px;"  >
+            </el-date-picker>
+          </el-form-item>
+
+          <el-form-item label="会议地点" required>
+            <el-input size="mini" type="text" style="width:325px" placeholder="请填写会议地点"  v-model="hydjData.hydd"></el-input>
+          </el-form-item>
+
+          <el-form-item label="会议记录人" required>
+             <el-select v-model="hydjData.hyjlrbh" filterable size="mini" placeholder="请选择会议记录人（可按姓名搜索）" style="width:325px" @change="handleChangeHyjlr">
+              <el-option v-for="(item, index) in userList" :key="index" :label="item.username" :value="item.userid"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="会议类型" required>
+            <el-select v-model="hydjData.hylx" size="mini" placeholder="请选择会议类型" style="width:325px">
+              <el-option v-for="(item, index) in hylxList" :key="index" :label="item.mc" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="会议形式" required>
+            <el-select v-model="hydjData.hyxs" size="mini" placeholder="请选择会议形式" style="width:325px">
+              <el-option v-for="(item, index) in hyxsList" :key="index" :label="item.mc" :value="item.label"></el-option>
+            </el-select>
+          </el-form-item>
+
+           <el-form-item label="所属项目"  >
+              <el-input placeholder="请选择" readonly v-model="hydjData.xmmc" style="width:800px" >
+                <el-button slot="append" icon="el-icon-circle-plus-outline" @click="chooseItemShow = true"></el-button>
+              </el-input>
+          </el-form-item>
+
+          <el-form-item label="是否内部会议" required>
+             <el-radio-group v-model="hydjData.sfnbhy" style="width:800px">
+                <el-radio label="1">是</el-radio>
+                <el-radio label="0">否</el-radio>
+             </el-radio-group>
+          </el-form-item>
+
+           <el-form-item label="是否有待处理事项" required>
+             <el-radio-group v-model="hydjData.sfyclsx" @change="handleChangeSfdcl" :style="{width:hydjData.sfyclsx == '0'?'325px':'800px'}">
+                <el-radio label="1">有</el-radio>
+                <el-radio label="0">无</el-radio>
+             </el-radio-group>
+          </el-form-item>
+
+          <el-form-item label="是否完成" required v-if="hydjData.sfyclsx == '0'">
+             <el-radio-group v-model="hydjData.hyzt" style="width:325px">
+                <el-radio label="1">是</el-radio>
+                <el-radio label="0">否</el-radio>
+             </el-radio-group>
+          </el-form-item>
+
+          <el-form-item label="参会学校老师" v-if="hydjData.sfnbhy=='0'">
+            <el-input size="mini" type="text" style="width:325px" placeholder="请填写参会学校老师"  v-model="hydjData.chls"></el-input>
+          </el-form-item>
+
+          <el-form-item label="参会学校部门" v-if="hydjData.sfnbhy=='0'">
+            <el-input size="mini" type="text" style="width:325px" placeholder="请填写参会学校部门"  v-model="hydjData.chlsbm"></el-input>
+          </el-form-item>
+          
+          <el-form-item label="参会第三方" v-if="hydjData.sfnbhy=='0'">
+            <el-input size="mini" type="text" style="width:800px" placeholder="请填写参会第三方"  v-model="hydjData.chdsf"></el-input>
+          </el-form-item>
+
+          <el-form-item label="参会公司人员" >
+             <el-select v-model="jzchry" filterable multiple  size="mini" placeholder="请选择参会公司人员（可按姓名搜索）" style="width:800px" @change="handleChangeGsry">
+              <el-option v-for="(item, index) in userList" :key="index" :label="item.username" :value="item.userid+','+item.username"></el-option>
+            </el-select>
+             <!-- <el-input placeholder="请选择" readonly v-model="hydjData.chgsry" style="width:800px" >
+                <el-button slot="append" icon="el-icon-circle-plus-outline" @click="schoolShow = true"></el-button>
+              </el-input> -->
+          </el-form-item>
+
+           <el-form-item label="会议结论" >
+                 <div style="width:800px">
+                    <div id="summernoteHyjl"></div>
+                 </div>
+            </el-form-item>
+
+            <el-form-item label="会议纪要" >
+                 <div  style="width:800px">
+                    <div id="summernoteHyjy"></div>
+                 </div>
+            </el-form-item>
+
+          <el-form-item label="会议纪要材料" >
+            <div   style="width:800px">
+              <uploadFile :Type="'meet'" :isMultiple="true" :istb="isClearFileHyjy" @handleUploadFile="handleUploadFileHyjy"></uploadFile>
+              <p class="upload-file" v-if="!!hyjyfjList.length && !!wid"  v-for="(fj,index) in hyjyfjList">
+                <span>{{fj.fjmc}}</span> <i class="el-icon-close" @click="handleRemovefj(index)"></i>
+              </p>
+            </div>
+          </el-form-item>   
+
+          <el-form-item label="会议汇报材料" >
+            <div   style="width:800px">
+              <uploadFile :Type="'meet'" :isMultiple="true" :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
+              <p class="upload-file" v-if="!!hbclfjList.length && !!wid"  v-for="(fj,index) in hbclfjList">
+                <span>{{fj.fjmc}}</span> <i class="el-icon-close" @click="handleRemovehbclfj(index)"></i>
+              </p>
+            </div>
+          </el-form-item>
+        </el-form>
+      
+
+        <div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
+          <el-button size="small" type="primary" @click="handleCommit">确认提交</el-button>
+          <el-button size="small" @click="visible = false">取消</el-button>
+        </div>
+      </div>
+    </el-dialog>
+
+      <el-dialog title="选择项目" :visible.sync="chooseItemShow" :close-on-click-modal="false" width="800px" top="30px"
+		 append-to-body>
+			<div style="padding:10px;">
+				<itemChoose @handleEdit="handleChooseItem"></itemChoose>
+			</div>
+	  </el-dialog>
+  </div>
+</template>
+
+<script>
+  import { getSession} from "@/utils/util.js";
+  import uploadFile from "@/components/BusinessPage/upload.vue";
+  import itemChoose from "@/components/BusinessPage/itemChoose.vue";
+
+  export default {
+    data() {
+      return {
+        chooseItemShow:false,
+        visible: this.show,
+        isClearFile: false, //清除附件
+        isClearFileHyjy:false,//会议纪要
+        userList:[],
+
+        hyxsList:[], 
+        hylxList:[], 
+        hyjyfjList:[],//会议纪要附件
+        hbclfjList:[], //汇报材料名称
+        hyjyfj:[],//会议纪要附件
+        hbclfj:[],//汇报材料名称
+
+        jzchry:[],//金智参会人员
+        hydjData: {
+          hybt:"",
+          hykssj:"",
+          hyjssj:"",
+          hydd:"",
+          hyjlrbh:"",//会议记录人编号
+          hyjlrxm:"",//会议记录人名称
+          hylx:"",
+          hyxs:"",
+          xmmc:"",
+          xmbh:"",
+          sfnbhy:"0",
+          sfyclsx:"0",//是否有处理事项
+          hyzt:"0", //是否完成
+          chls:"",
+          chlsbm:"",
+          chdsf:"",
+          hyjl:"",
+          hyjy:"",
+          jzchry:"",//金智参会人员
+          hyjyfj:"",//会议纪要附件
+          hbclfj:"",//汇报材料附件
+        },
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+      };
+    },
+    props: {
+      show: {
+        type: Boolean,
+        default: false
+      },
+      wid:{
+        type:String,
+        default:''
+      }
+    },
+    components: {
+      uploadFile,
+      itemChoose
+    },
+    methods: {
+      //是否有待处理事项
+      handleChangeSfdcl(val){
+        this.hydjData.hyzt = val=='1'?'0':this.hydjData.hyzt;
+        if(!!this.wid && val == '0'){
+            this.$confirm('您已经填写了待处理事项,改为【无】会删除已录入的待处理事项。确定要改为无待处理事项吗?', '提示', {
+              cancelButtonText: '取消',
+              confirmButtonText: '确定',
+              type: 'warning'
+          }).then(() => {
+            
+          }).catch(() => {
+            this.hydjData.sfyclsx = '1';
+          }); 
+        }
+      },  
+      // 选择会议记录人
+      handleChangeHyjlr(val){
+        let obj = this.userList.find(ele=>{
+          return ele.userid == val;
+        })
+        this.hydjData.hyjlrxm = obj.username;
+      },
+        // 选择公司人员
+      handleChangeGsry(val){
+        this.hydjData.jzchry = val.join('|');
+      } ,
+      // 选择项目
+      handleChooseItem(data){
+        this.hydjData.xmmc = data.xmmc;
+        this.hydjData.xmbh = data.xmbh;
+        this.chooseItemShow = false;
+      },
+        // 移除附件
+      handleRemovefj(index){
+        this.hyjyfjList.splice(index,1);
+        this.hyjyfj.splice(index,1);
+      },
+      // 移除附件 汇报材料
+      handleRemovehbclfj(index){
+        this.hbclfjList.splice(index,1);
+        this.hbclfj.splice(index,1);
+      },
+
+      //  会议纪要附件
+      handleUploadFileHyjy(data){
+        if (!!data.length) {
+          data.forEach(ele=>{
+          this.hyjyfjList.push({
+            fjwid:ele.split('|')[0],
+            fjmc:ele.split('|')[1]
+          })
+          this.hyjyfj.push(ele);
+        })
+        } else {
+          this.hyjyfj = [];
+        }
+        if(!!this.wid){
+           this.isClearFileHyjy = !this.isClearFileHyjy;
+        }
+      },
+      // 上传附件（汇报材料）
+      handleUploadFile(data) {
+       if (!!data.length) {
+        data.forEach(ele=>{
+          this.hbclfjList.push({
+            fjwid:ele.split('|')[0],
+            fjmc:ele.split('|')[1]
+          })
+         this.hbclfj.push(ele);
+        })
+        } else {
+          this.hbclfj = [];
+        }
+        if(!!this.wid){
+         this.isClearFile = !this.isClearFile;
+        }
+      },
+
+      //提交需求
+      handleCommit() {
+        this.hydjData.hyjyfj = this.hyjyfj.join(',');
+        this.hydjData.hbclfj = this.hbclfj.join(',');
+        this.hydjData.hyjl = $("#summernoteHyjl").summernote("code");
+        this.hydjData.hyjy = $("#summernoteHyjy").summernote("code");
+        if (!this.valiDate()) return;
+        this.$post(this.API.saveMeeting, this.hydjData).then(res => {
+          if (res.state == "success") {
+            this.$message({
+              message: "保存成功",
+              type: "success"
+            });
+            $("#summernoteHyjl").summernote("code", "");
+            $("#summernoteHyjy").summernote("code", "");
+            this.isClearFile = !this.isClearFile;
+            this.isClearFileHyjy = !this.isClearFileHyjy;
+            this.visible = false;
+            this.$emit("handleCommitHydj",this.hydjData.sfyclsx,res.data);
+          } else {
+            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+          }
+        });
+      },
+
+    //  获取金智用户
+     getUsers() {
+      this.$get(this.API.getUsers, {
+        curPage: 1,
+        pageSize: 9999,
+        unitType: 0,
+        keyword: "",
+        dept: "01AM"
+      }).then(res => {
+        if (res.state == "success") {
+          this.userList = res.data.rows;
+        } else {
+        }
+      });
+    },
+
+    // 获取会议详情
+    queryMeeting(){
+      this.hbclfj =  [];this.hyjyfj = [];
+      this.$get(this.API.queryMeeting,{
+        wid:this.wid
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.hydjData.hybt = res.data.hybt;
+          this.hydjData.hykssj = res.data.hykssj;
+          this.hydjData.hyjssj = res.data.hyjssj;
+          this.hydjData.hydd = res.data.hydd;
+          this.hydjData.hyjlrbh = res.data.hyjlrbh;//会议记录人编号
+          this.hydjData.hyjlrxm = res.data.hyjlrxm;//会议记录人名称
+          this.hydjData.hylx = res.data.hylx;
+          this.hydjData.hyxs = res.data.hyxs;
+          this.hydjData.xmmc = res.data.xmmc;
+          this.hydjData.xmbh = res.data.xmbh;
+          this.hydjData.sfnbhy = res.data.sfnbhy;
+          this.hydjData.sfyclsx = res.data.sfyclsx;//是否有处理事项
+          this.hydjData.hyzt = res.data.hyzt; //是否完成
+          this.hydjData.chls = res.data.chls;
+          this.hydjData.chlsbm = res.data.chlsbm;
+          this.hydjData.chdsf = res.data.chdsf;
+          this.hydjData.hyjl = res.data.hyjl=='-'?'':res.data.hyjl;
+          this.hydjData.hyjy = res.data.hyjy=='-'?'':res.data.hyjy;
+          $("#summernoteHyjl").summernote("code",res.data.hyjl=='-'?'':res.data.hyjl);
+          $("#summernoteHyjy").summernote("code", res.data.hyjy=='-'?'':res.data.hyjy);
+          this.jzchry = res.data.chry.split('|');
+          this.hydjData.jzchry = res.data.chry;//金智参会人员
+
+          this.hyjyfjList = !res.data.hyjyfj?[]:res.data.hyjyfj;//会议纪要附件
+          this.hbclfjList = !res.data.hbclfj?[]:res.data.hbclfj; //汇报材料名称
+
+          this.hydjData.wid = res.data.wid;
+
+          res.data.hbclfj.forEach((ele,i,arr)=>{
+             this.hbclfj.push(ele.fjwid+"|"+ele.fjmc);
+          })
+
+          res.data.hyjyfj.forEach((ele,i,arr)=>{
+             this.hyjyfj.push(ele.fjwid+"|"+ele.fjmc);
+          })
+        }else{
+
+        }
+      })
+    },
+
+      valiDate() {
+        if (/^[\s]*$/.test(this.hydjData.hybt)) {
+          this.$message({
+            message: "请填写会议主题",
+            type: "warning"
+          });
+          return false;
+        }
+        if (!this.hydjData.hykssj) {
+          this.$message({
+            message: "请选择会议开始时间",
+            type: "warning"
+          });
+          return false;
+        }
+        if (!this.hydjData.hyjssj) {
+          this.$message({
+            message: "请选择会议结束时间",
+            type: "warning"
+          });
+          return false;
+        }
+        if (/^[\s]*$/.test(this.hydjData.hydd)) {
+          this.$message({
+            message: "请填写会议地点",
+            type: "warning"
+          });
+          return false;
+        }
+        if (/^[\s]*$/.test(this.hydjData.hyjlr)) {
+          this.$message({
+            message: "请填写会议记录人",
+            type: "warning"
+          });
+          return false;
+        }
+        if (!this.hydjData.hylx) {
+          this.$message({
+            message: "请选择会议类型",
+            type: "warning"
+          });
+          return false;
+        }
+        if (!this.hydjData.hyxs) {
+          this.$message({
+            message: "请选择会议形式",
+            type: "warning"
+          });
+          return false;
+        }
+        return true;
+      }
+    },
+    watch: {
+      show(n,o) {
+        this.visible = this.show;
+        if (!!n) {
+          this.hylxList = this.hyxsList  =  [];
+          this.hylxList = getSession("MeetingType");
+          this.hyxsList = getSession("MeetingFormat");
+
+          this.$nextTick(() => {
+            $("#summernoteHyjl").summernote({
+              dialogsInBody: true,
+              placeholder: "请输入内容",
+              focus: true,
+              height: 200,
+              width: 100 + "%",
+              minHeight: 300,
+              lang: "zh-CN",
+              toolbar: [
+                ["style", ["bold", "italic", "underline", "clear"]],
+                ["font", ["strikethrough", "superscript", "subscript"]],
+                ["fontsize", ["fontsize"]],
+                ["color", ["color"]],
+                ["para", ["ul", "ol", "paragraph"]],
+                ["height", ["height"]],
+                ["picture"],
+                ["link", ["linkDialogShow", "unlink"]]
+              ]
+            });
+
+            $("#summernoteHyjy").summernote({
+              dialogsInBody: true,
+              placeholder: "请输入内容",
+              focus: true,
+              height: 200,
+              width: 100 + "%",
+              minHeight: 300,
+              lang: "zh-CN",
+              toolbar: [
+                ["style", ["bold", "italic", "underline", "clear"]],
+                ["font", ["strikethrough", "superscript", "subscript"]],
+                ["fontsize", ["fontsize"]],
+                ["color", ["color"]],
+                ["para", ["ul", "ol", "paragraph"]],
+                ["height", ["height"]],
+                ["picture"],
+                ["link", ["linkDialogShow", "unlink"]]
+              ]
+            });
+          });
+          if(!this.userList.length){
+           this.getUsers();
+          }
+          if(!!this.wid){
+            this.queryMeeting();
+          }
+        } else {
+          this.hydjData.wid = "";
+          this.hydjData.hybt = "";
+          this.hydjData.hykssj = "";
+          this.hydjData.hyjssj = "";
+          this.hydjData.hydd  = "";
+          this.hydjData.hyjlrbh  = "";//会议记录人编号
+          this.hydjData.hyjlrxm = "";//会议记录人名称
+          this.hydjData.hylx =  "";
+          this.hydjData.hyxs = "";
+          this.hydjData.xmmc =  "";
+          this.hydjData.xmbh =  "";
+          this.hydjData.sfnbhy =  "0";
+          this.hydjData.sfyclsx = "0"//是否有处理事项
+          this.hydjData.hyzt = "0" //是否完成
+          this.hydjData.chls = "";
+          this.hydjData.chlsbm = "";
+          this.hydjData.chdsf = "";
+          this.hydjData.hyjl = "";
+          this.hydjData.hyjy = "";
+          $("#summernoteHyjl").summernote("code","");
+          $("#summernoteHyjy").summernote("code","");
+
+          this.hyjyfjList = [];//会议纪要附件
+          this.hbclfjList = []; //汇报材料名称
+          this.hbclfj = [];
+          this.hyjyfj = [];
+          this.hydjData.hyjyfj = "";//会议纪要附件
+          this.hydjData.hbclfj = "";//汇报材料附件
+
+          this.hydjData.jzchry = "";//金智参会人员
+          this.jzchry = [];
+        }
+      }
+    }
+  };
+</script>
+<style scoped lang="scss">
+ 
+</style>

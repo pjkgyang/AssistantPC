@@ -9,19 +9,27 @@
           <el-form-item label="计划结束日期" required v-if="!plxgZrr">
             <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.jhjsrq" style="width:100%;"></el-date-picker>
           </el-form-item>
-          <el-form-item label="责任人" required>
-            <el-select v-model="form.zrrbh" placeholder="请选择责任人" style="width:100%;" @change="handleChangeZrr">
-              <el-option v-for="item in zrrList" :key="item.value" :label="item.userName+' ( '+ item.userCode +' )'" :value="item.userId">
+          <el-form-item label="金智责任人" >
+            <el-select v-model="form.jzzrrbh" placeholder="请选择责任人(可按姓名搜索)" filterable style="width:100%;" @change="handleChangeZrr">
+              <el-option v-for="item in jzzrrList" :key="item.userid" :label="item.username+' ( '+ item.usercode +' )'" :value="item.userid">
               </el-option>
             </el-select>
             <!-- <el-input v-model="form.zrrxm" placeholder="请选择责任人" readonly style="width:433px;"></el-input>
             <el-button size="mini" @click="handleChangeZrr">更改责任人</el-button> -->
           </el-form-item>
-           <el-form-item label="说明" >
-            <el-input type="textarea" :rows="5" placeholder="请输入说明内容" v-model="form.sm" ></el-input>
+          <el-form-item label="学校责任人" >
+            <el-select v-model="form.xxzrrbh" placeholder="请选择责任人(可按姓名搜索)" filterable style="width:100%;" @change="handleChangeZrr">
+              <el-option v-for="item in xxzrrList" :key="item.userid" :label="item.username+' ( '+ item.usercode +' )'" :value="item.userid">
+              </el-option>
+            </el-select>
+            <!-- <el-input v-model="form.zrrxm" placeholder="请选择责任人" readonly style="width:433px;"></el-input>
+            <el-button size="mini" @click="handleChangeZrr">更改责任人</el-button> -->
           </el-form-item>
+           <!-- <el-form-item label="说明" >
+            <el-input type="textarea" :rows="5" placeholder="请输入说明内容" v-model="form.sm" ></el-input>
+          </el-form-item> -->
           <el-form-item text-right>
-            <el-button size="mini" type="primary" @click="handleCommit">保存</el-button>&#x3000;
+            <el-button size="mini" type="primary" @click="handleCommit">提交</el-button>
             <el-button size="mini" @click="handleClose">取消</el-button>
           </el-form-item>
         </el-form>
@@ -31,17 +39,19 @@
 </template>
 
 <script>
-import { queryProjectParticipant } from "@/api/personal.js";
 export default {
   data() {
     return {
       visible: this.show,
-      zrrList: [],
+      jzzrrList: [],
+      xxzrrList: [],
       form: {
         jhksrq: "",
         jhjsrq: "",
-        zrrxm: "",
-        zrrbh: "",
+        jzzrrxm: "",
+        jzzrrbh: "",
+        xxzrrxm:"",
+        xxzrrbh:"",
         sm:""
       },
       pickerBeginDate: {
@@ -53,6 +63,7 @@ export default {
     };
   },
   methods: {
+    // 更换责任人
     handleChangeZrr(val) {
       this.form.zrrbh = val;
       this.zrrList.forEach(ele => {
@@ -63,10 +74,28 @@ export default {
     },
     handleCommit() {
       if (!this.validate()) return;
-      this.$emit("handleEdit", this.form);
+      this.$emit("handleCommitEdit", this.form);
     },
     handleClose() {
       this.visible = false;
+    },
+    getUsers(unitType) {
+      this.$get(this.API.getUsers, {
+        curPage: 1,
+        pageSize: 9999,
+        unitType: unitType,
+        keyword: "",
+        dept: ""
+      }).then(res => {
+        if (res.state == "success") {
+          if(unitType == 1){
+             this.xxzrrList = res.data.rows;
+          }else{
+             this.jzzrrList = res.data.rows;
+          }
+        } else {
+        }
+      });
     },
     validate() {
       if (!this.form.jhksrq && !this.plxgZrr) {
@@ -83,7 +112,7 @@ export default {
         });
         return false;
       }
-      if (!this.form.zrrbh) {
+      if (!!this.plxgZrr && !this.form.zrrbh) {
         this.$alert("请选择责任人", "提示", {
           confirmButtonText: "确定",
           type: "warning"
@@ -98,19 +127,15 @@ export default {
       type: Boolean,
       default: false
     },
-    data: {
-      type: Object,
-      default: () => {
-        return {};
-      }
-    },
-    plxgZrr: {
+    plxgZrr:{
       type: Boolean,
       default: false
     },
-    xmbh: {
-      type: String,
-      default: ""
+    dataInfo:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
     }
   },
   watch: {
@@ -119,25 +144,14 @@ export default {
       if (!n) {
         this.form.zrrxm = this.form.zrrbh = this.form.jhksrq = this.form.jhjsrq = this.form.sm = "";
       } else {
-        queryProjectParticipant({
-          xmbh: this.xmbh,
-          sfjz: 1
-        }).then(({ data }) => {
-          if (data.state == "success") {
-            this.zrrList = data.data;
-          } else {
-            this.$alert(data.msg, "提示", {
-              confirmButtonText: "确定",
-              type:'error'
-            });
-          }
-        });
-        if (!this.plxgZrr) {
-          this.form.zrrxm = this.data.zrrxm;
-          this.form.zrrbh = this.data.zrrbh;
-          this.form.jhksrq = this.data.jhksrq;
-          this.form.jhjsrq = this.data.jhjsrq;
-        }
+        this.getUsers(0);
+        this.getUsers(1);
+
+        this.form.jzzrrbh = this.dataInfo.jzfzrbh;
+        this.form.jzzrrxm = this.dataInfo.jzfzrxm;
+        this.form.xxzrrbh = this.dataInfo.xxfzrbh=='-'?'':this.dataInfo.xxfzrbh;
+        this.form.xxzrrxm = this.dataInfo.xxfzrxm=='-'?'':this.dataInfo.xxfzrxm;
+
       }
     }
   },

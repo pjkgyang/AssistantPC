@@ -61,7 +61,7 @@
         <serviceItem :isPlan="true" @handleAddSsjh="handleAddSsjh"></serviceItem>
       </div>
     </el-dialog>
-    <ssjhDailog :show.sync="ssjhShow" @handleCommitSSjh="handleCommitSSjh" :zbwid="curData.zbwid"></ssjhDailog>
+    <ssjhDailog :show.sync="ssjhShow" :curData="curData" @handleCommitSSjh="handleCommitSSjh" :zbwid="curData.zbwid"></ssjhDailog>
   </div>
 </template>
 
@@ -81,7 +81,7 @@
           txrqEnd:''
         },
         tableData: [],
-        curData: {}
+        curData: {} //当前计划
       }
     },
     mounted() {
@@ -94,9 +94,11 @@
       },
       // 添加服务事项计划
       handleAddSsjh(data) {
+        this.curData = {};
         this.curData.zbwid = data.wid;
         this.ssjhShow = true;
       },
+
       // 编辑实施计划
       handleEditSsjh(data) {
         this.curData = data;
@@ -121,6 +123,7 @@
          })
         }).catch(() => {});
       },
+      
       // 提交计划
       handleCommitSSjh(params) {
         let formData = params;
@@ -148,8 +151,11 @@
               message: '保存成功',
               type: 'success'
             });
-            this.ssjhShow = false;
-            this.dialogVisible = false;
+            if(JSON.stringify(this.curData) != '{}'){
+                this.ssjhShow = false;
+            }
+            // this.ssjhShow = false;
+            // this.dialogVisible = false;
           } else {
             this.$message({message: res.msg, type: 'error'});
           }

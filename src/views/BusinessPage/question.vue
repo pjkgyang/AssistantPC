@@ -358,6 +358,7 @@
     },
 
     methods: {
+      // 驳回 申请关闭
       handleReject(params, index, sm) {
         applyDismiss({
           wid: "",
@@ -382,8 +383,8 @@
           }
         });
       },
+     //关闭问题
       handleClose(params, index) {
-        //关闭问题
         this.wtInfo = params;
         this.index = index;
         this.gxrShow = !this.gxrShow;
@@ -393,6 +394,52 @@
         this.gxrShow = !this.gxrShow;
         this.questionList[this.index].fbzt = 1;
         this.questionList[this.index].sqgbCount = 0;
+      },
+      // 驳回 挂起
+      handleRejectGq(params, index, sm){
+        this.$post(this.API.dealSuspend,{
+          wid: params.wid,
+          isagree:1,
+          sm: sm
+        }).then(res=>{
+          if (data.state == "success") {
+            this.$alert("已成功驳回！", "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.questionList[index].sqgqz = 0;
+              }
+            });
+          } else {
+            this.$alert(data.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
+          }
+        })
+      },
+      // 同意 挂起
+      handleAgreeGq(params, index){
+          this.$post(this.API.dealSuspend,{
+          wid: params.wid,
+          isagree:0,
+          sm: ''
+        }).then(res=>{
+          if (data.state == "success") {
+             this.$alert("已同意挂起！", "提示", {
+              confirmButtonText: "确定",
+              type: "success",
+              callback: action => {
+                this.questionList[index].sqgqz = 0;
+              }
+            });
+          } else {
+            this.$alert(data.msg, "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
+          }
+        })
       },
 
       handleExport() {
@@ -463,7 +510,7 @@
               this.$alert(
                 "您有" +
                 data.data +
-                "个问题已解决申请待确认，如果已解决请点击“关闭”，如果未解决请点击“驳回”，所有申请处理后可以提新问题，谢谢支持！",
+                "个问题已申请关闭或挂起，如果同意请点击“关闭”或“同意”，如果不同意请点击“驳回”，所有申请关闭或挂起处理后可以提新问题，谢谢支持！",
                 " 提示", {
                   confirmButtonText: "确定",
                   type: "warning",

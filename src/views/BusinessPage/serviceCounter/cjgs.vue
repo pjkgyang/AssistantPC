@@ -2,6 +2,8 @@
   <div class="pannelPadding-10">
     <div class="pannelPaddingBg-10">
       <div class="mg-12">
+        <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>  
+        <br>
         <el-button size="mini" type="primary" @click="handleAddCjgs">添加承建单位</el-button>
       </div>
       <el-table :data="tableData" border style="width: 100%">
@@ -26,12 +28,14 @@
       </el-pagination>
     </div>
 
-	<cjgsDiloag :show.sync="cjgsShow" :dataInfo="curData" @handleCommit="handleCommit"></cjgsDiloag>
+	<cjgsDiloag :show.sync="cjgsShow" :dataInfo="curData" :curDept="curDept" @handleCommit="handleCommit"></cjgsDiloag>
+  
   </div>
 </template>
 
 <script>
-	import cjgsDiloag from '@/views/BusinessPage/serviceCounter/cjgs-dialog'
+  import cjgsDiloag from '@/views/BusinessPage/serviceCounter/cjgs-dialog';
+  import chooseSchool from "@/components/BusinessPage/chooseSchool.vue";
   export default {
     data() {
       return {
@@ -44,14 +48,18 @@
           txrqEnd:''
         },
         tableData: [],
-        curData: {}
+        curData: {},
+        curDept:{}
       }
     },
     mounted() {
       this.pageCjdw();
     },
     methods: {
-
+       // 更换单位
+      handleChangeUnit(params) {
+        this.curDept = params;
+      },
       // 添加承建公司
       handleCommit(){
         this.currentPage = 1;
@@ -97,7 +105,9 @@
       pageCjdw() {
         this.$get(this.API.pageCjdw, {
           curPage: this.currentPage,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          dwmc:this.curDept.dwmc,
+          dwbh:this.curDept.dwbh
         }).then(res => {
           if (res.state == 'success') {
             if (!res.data.rows) {
@@ -112,7 +122,7 @@
         })
       }
     },
-    components: {cjgsDiloag},
+    components: {cjgsDiloag,chooseSchool},
   }
 </script>
 

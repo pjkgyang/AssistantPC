@@ -42,7 +42,8 @@
 
       handleCommit() {
         if (!this.validate()) return;
-
+        this.form.dwmc = this.curDept.dwmc;
+        this.form.dwbh = this.curDept.dwbh;
         this.$post(this.API.saveCjdw,this.form).then(res=>{
           if(res.state == 'success'){
             this.$message({message:'保存成功',type:'success'});
@@ -80,7 +81,13 @@
         default:()=>{
           return {}
         }
-      }
+      },
+      curDept:{
+        type:Object,
+        default:()=>{
+          return {}
+        }
+      },
     },
     watch: {
       show(n, o) {

@@ -70,6 +70,8 @@
            this.getUsers();
        },
        handleAdd(index,row){        //添加
+          if(!this.unitType){
+
 	       if(!this.isdept){
 			   this.userDatas[index].ytj = 0;
 			   this.$set(this.tableData,index, this.userDatas[index]);
@@ -98,13 +100,16 @@
 			       });
                  }
 			 })  
-		   }
+           }
+          }else{
+             this.$emit('addUserSuccess',this.unitType,row); 
+          }
        },
        getUsers(){
            getUsers({
             curPage: this.currentPage,
             pageSize: this.pageSize,
-            unitType:0,
+            unitType:!this.unitType?0:this.unitType,
             keyword: this.keyword,
             dept:!!this.isdept?'01AM':''
         }).then(({ data }) => {
@@ -136,7 +141,11 @@
 	   isdept:{
 		   type:Boolean,
 		   default:true
-	   }
+       },
+       unitType:{
+		   type:String,
+		   default:''
+       },
    },
      watch: {
         show (n,o) {
