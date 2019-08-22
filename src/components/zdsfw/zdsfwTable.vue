@@ -20,9 +20,11 @@
             <el-table-column prop="htbh" label="合同编号" width="140"></el-table-column>
             <el-table-column prop="xmlb" label="项目类别" width="110"></el-table-column>
 
-            <el-table-column  label="项目状态" width="100"  v-if="zt != '0'">
+            <el-table-column prop="ztztmc" label="项目整体状态" width="110"></el-table-column>
+
+            <el-table-column  label="项目服务状态" width="110" >
                 <template slot-scope="scope">
-                    <el-tag size="mini"  :type="scope.row.flag == 1 ? 'success' : 'danger'">{{scope.row.flag==1?'已重启':'已停滞'}}</el-tag>
+                    <el-tag size="mini"  :type="scope.row.flag == 1 ? 'success' : 'danger'" v-if="scope.row.zt != '待生成'">{{scope.row.flag==1?'已启动':'已停滞'}}</el-tag>
                 </template>
             </el-table-column>
 

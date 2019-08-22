@@ -200,7 +200,8 @@ export function queryAllQuestions(obj) {
 			wtgjzt: obj.wtgjzt || "",
 			tjkf: obj.tjkf || "",
 			sqgq:obj.sqgq||"",
-      lcbh:obj.lcbh
+			lcbh:obj.lcbh,
+			dtwrcl:obj.dtwrcl
 		}
 	})
 }

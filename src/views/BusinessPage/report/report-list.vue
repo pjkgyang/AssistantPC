@@ -1,12 +1,17 @@
 <template>
-  <div class="project-question">
-    <div class="project-question-detailList">
-      <questionCard :questionList="questionList" @handleQuestionDetail="handleQuestionDetail" @handleReject="handleReject" @handleClose="handleClose"></questionCard>
-      <div style="padding:5px 10px 10px 0;text-align:right" v-if="total > 10">
-        <pagination :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+  <div class="pannelPadding-10">
+    <div class="project-question pannelPaddingBg-10">
+      <div class="mg-12" text-right v-if="userGroupTag.includes('ProblemAdmin')">
+        <el-button size="mini" type="primary" @click="handleExport">导出</el-button>
       </div>
+      <div class="project-question-detailList">
+        <questionCard :questionList="questionList" @handleQuestionDetail="handleQuestionDetail" @handleReject="handleReject" @handleClose="handleClose"></questionCard>
+        <div style="padding:5px 10px 10px 0;text-align:right" v-if="total > 10">
+          <pagination :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+        </div>
+      </div>
+      <gxrDialog :show.sync="gxrShow" :wtInfo="wtInfo" @closeQuestion="closeQuestion"></gxrDialog>
     </div>
-    <gxrDialog :show.sync="gxrShow" :wtInfo="wtInfo" @closeQuestion="closeQuestion"></gxrDialog>
   </div>
 </template>
 <script>
@@ -26,16 +31,22 @@ export default {
       CurrentPage: 1,
       total: null,
       Data: {},
-      queryId: ""
+      queryId: "",
+      userGroupTag:""
+
     };
   },
   props: {},
   mounted() {
     this.queryId = this.$route.params.id;
     this.getReportQuestion(1); //获取报表问题
+    this.userGroupTag = JSON.parse(sessionStorage.getItem('userInfo')).userGroupTag;
   },
 
   methods: {
+    handleExport(){
+      window.open(this.API.exportReportQuestionLst+'?'+window.location.hash.split('?')[1]);
+    },
     handleReject(params, index) {
       // 驳回
       this.$confirm("确定驳回该申请, 是否继续?", "提示", {
@@ -78,7 +89,6 @@ export default {
       this.questionList[this.index].sqgbCount = 0;
     },
     getReportQuestion(curPage) {
-			console.log(this.Data)
       this.Data = this.$route.query;
       this.Data.curPage = curPage;
       this.Data.pageSize = this.pageSize;

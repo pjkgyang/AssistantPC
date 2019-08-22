@@ -62,7 +62,7 @@
 					<el-button size="mini" type="primary" @click="handleExport">导出</el-button>
 				</div>
 				<!--  @selection-change="handleSelectionChange" -->
-				<el-table :data="tableData" style="width: 100%" border>
+				<el-table :data="tableData" style="width: 100%" border :max-height="tableHeight">
 					<!-- <el-table-column type="selection" width="55"></el-table-column> -->
 					<el-table-column fixed="left" label="操作" width="220">
 						<template slot-scope="scope">
@@ -112,6 +112,7 @@ import smDialog from '@/components/dialog/smDialog.vue';
 export default {
 	data() {
 		return {
+			tableHeight:window.innerHeight - 360,
 			show: false,
 			smShow: false,
 			currentPage: 1,
@@ -263,7 +264,7 @@ export default {
 			this.show = true;
 		},
 		agreeOrreject(type, lcwid, sm) {
-			this.$post(type == 'pass' ? this.API.agree : this.API.reject, {
+			this.$post(type == 'pass' ? this.API.agreeProjectStop : this.API.rejectProjectStop, {
 				wid: this.wid,
 				lcwid: lcwid,
 				sm: sm

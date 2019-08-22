@@ -15,7 +15,7 @@
             <el-button type="primary" size="mini" @click="handleQuery">查询</el-button>
           </div>
 
-          <div class="mg-12">
+          <div class="mg-12" flex>
             <p class="query-title">状态:</p>
             <p class="query-list">
               <span
@@ -101,7 +101,6 @@ export default {
       this.chooseItemShow = !this.chooseItemShow;
     },
     handleChooseItem(data){
-      console.log(data);
       this.chooseItemShow = !this.chooseItemShow;
     },
     // 状态 筛选

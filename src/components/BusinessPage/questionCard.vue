@@ -8,15 +8,15 @@
               :class="{ 'el-icon-question': question.fbzt != 1, 'el-icon-success': question.fbzt == 1 }"
             ></span>
             <p class="questionOperate" v-if="bjscShow">
-              <!-- <span
+              <span
                 class="el-icon-edit"
                 :data-wid="question.wid"
-                v-if="question.isdel"
+                v-if="question.isedit"
                 @click="editQuestion(question)"
               >
                 <span style="color:#409EFF">编辑</span>
               </span>
-              &nbsp; -->
+              &nbsp;
               <span
                 class="el-icon-delete"
                 :data-wid="question.wid"
@@ -166,7 +166,7 @@
           <el-button type="danger" size="mini" @click="handleClose(question, index)">关闭</el-button>
         </section>
 
-		<section
+	  	<section
           text-center
           class="pull-right"
           style="width:15%"

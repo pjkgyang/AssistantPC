@@ -69,6 +69,7 @@ export default {
       let arr = params[i].en.split(",");
       if (params[i].en.indexOf(",") != -1 && !!params[i].canRedirect) {
           obj[arr[0]] = data[i];
+          obj['cpbh'] = data[0];
       }
       let routeData = this.$router.resolve({
         path: "/report-list/detail.html",

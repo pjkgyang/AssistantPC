@@ -121,19 +121,17 @@
 
           <transition name="el-zoom-in-top">
             <div v-if="radio == 'bgst' && ViewTransition" style="background:#fff;margin:0 10px;border-radius:5px">
-              <div style="border-bottom:2px solid rgb(228, 231, 237);margin:0 10px 5px;padding:5px 0">
-                <!-- <el-select v-model="bglx" placeholder="请选择" size="mini" style="width:160px;border:1px solid #ddd;border-radius:3px">
-                  <el-option
-                    v-for="item in bgOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>  -->
-                <el-checkbox v-model="sfxgValue" label="和我相关" size="medium" @change="handleChangeCheckbox"></el-checkbox>&#x3000;
-                <el-button v-if="rwztValue == '1' && radio == 'bgst' " type="danger" size="mini" @click="handleCloseBatchlot">批量关闭</el-button>
-                <el-button v-if="rwztValue == '2' && radio == 'bgst'" type="primary" size="mini" @click="handleCloseConfirm">批量确认</el-button>
+              <div flex spacebetween style="border-bottom:2px solid rgb(228, 231, 237);margin:0 10px 5px;padding:5px 0">
+                <div>
+                    <el-checkbox v-model="sfxgValue" label="和我相关" size="medium" @change="handleChangeCheckbox"></el-checkbox>&#x3000;
+                    <el-button v-if="rwztValue == '1' && radio == 'bgst' " type="danger" size="mini" @click="handleCloseBatchlot">批量关闭</el-button>
+                    <el-button v-if="rwztValue == '2' && radio == 'bgst'" type="primary" size="mini" @click="handleCloseConfirm">批量确认</el-button>
+                </div> 
+                <div>
+                  <el-button size="mini" type="primary" @click="hanldeExport">导出</el-button>
+                </div>
               </div>
+
               <taskTable :tableData="bgstList" :rwzt="rwztValue" @handlejfqr="handleDialog" @handletask="handleDialog"
                 @handleSelectionChange="handleSelectionChange"></taskTable>
               <div text-right style="margin:0 11px;padding:5px 0">
@@ -653,7 +651,12 @@
 
     },
     methods: {
-
+      
+      hanldeExport(){
+        let sfxgValue =  this.sfxgValue ? 1 : 0;
+        window.open(this.API.exportProductTasks+'?xmbh='+this.xmbh+'&cpbh='+this.fbcpbh+'&cpmc='+this.fbcpmc+
+        '&taskType='+this.rwlxValue+'&rwzt='+this.rwzt+'&sfxg='+sfxgValue +'&ismine='+this.isMine)
+      },
       // 是否我的
       handleChangeMine() {
         if (this.radio == "kbst") {

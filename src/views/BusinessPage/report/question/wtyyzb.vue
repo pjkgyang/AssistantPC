@@ -5,7 +5,7 @@
     </div>
     <div>
       <tableComponents :tableData="dataList" :pageShow="false" :exportShow="false" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" 
-			:indexArr='[20]' :widthArr="[1]" :Width="'130'" :Height="250"  ></tableComponents>
+			:indexArr='[]' :widthArr="[1]" :Width="'130'" :Height="250"  ></tableComponents>
     </div>
   </div>
 </template>

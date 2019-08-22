@@ -209,7 +209,7 @@ export default {
 		},
 		// 审批通过、不通过
 		agreeOrreject(type, sm) {
-			this.$post(type == 'pass' ? this.API.agree : this.API.reject, {
+			this.$post(type == 'pass' ? this.API.agreeProjectStop : this.API.rejectProjectStop, {
 				wid: this.$route.query.wid,
 				lcwid: this.xmInfo.dqlcwid,
 				sm: sm

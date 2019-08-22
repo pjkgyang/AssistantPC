@@ -393,11 +393,11 @@ export default new Router({
           component: resolve => require(['@/views/BusinessPage/serviceCounter/xttj.vue'], resolve),
         },    
         // 专项服务
-        {
-          path: '/specialservice/serviceItem',
-          name: 'seviceItem',
-          component: resolve => require(['@/views/BusinessPage/specialService/serviceItem.vue'], resolve),
-        }, 
+        // {
+        //   path: '/specialservice/serviceItem',
+        //   name: 'seviceItem',
+        //   component: resolve => require(['@/views/BusinessPage/specialService/serviceItem.vue'], resolve),
+        // }, 
         {
           path: '/specialservice/index',
           name: 'specialserviceIndex',
@@ -440,6 +440,13 @@ export default new Router({
           component: resolve => require(['@/views/BusinessPage/meetOnline/staticDetail.vue'], resolve),
         }, 
 
+
+        {
+          path: '/report-list/:id.html',
+          name: 'reportList',
+          meta: {},
+          component: resolve => require(['@/views/BusinessPage/report/report-list.vue'], resolve),
+        },
 
         {
           path: '/businesspage/report',
@@ -805,12 +812,7 @@ export default new Router({
         },
       ]
     },
-    {
-      path: '/report-list/:id.html',
-      name: 'reportList',
-      meta: {},
-      component: resolve => require(['@/views/BusinessPage/report/report-list.vue'], resolve),
-    },
+
     {
       path: '/qyxxyhReport/:id',
       name: 'qyxxyhDetail',

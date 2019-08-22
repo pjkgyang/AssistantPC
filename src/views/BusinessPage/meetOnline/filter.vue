@@ -12,11 +12,11 @@
       <transition name="el-zoom-in-top">
         <section v-if="sfzk" class="query-condition">
 
-          <div flex> 
+          <div flex>
             <span class="query-title">会议开始时间:</span>
             <p>
               <el-date-picker size="mini"  v-model="filterWord.startDateTime" type="date" placeholder="选择开始日期"
-                format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                format="yyyy-MM-dd"  value-format="yyyy-MM-dd">
               </el-date-picker>
               &#x3000;至&#x3000;
               <el-date-picker size="mini"  v-model="filterWord.endDateTime" type="date" placeholder="选择结束日期"
@@ -25,7 +25,7 @@
             </p>&#x3000;
             <span v-if="type == 'meetingStatic'"><el-button size="mini" type="primary" @click="handleSearchBtn">查询</el-button></span>
           </div>
-          
+
 
           <div flex v-if="filterArr.includes('hylx')">
             <span class="query-title">会议类型:</span>
@@ -41,22 +41,22 @@
               <span class="query-title">会议形式:</span>
               <p class="query-list">
                 <span :class="{'bg-active':filterWord.meetingFormat == ''}" @click="handleHyxs('')">全部</span>
-                <span v-for="(hyxs,index) in hyxsList"  :key="index" :class="{'bg-active':filterWord.meetingFormat == hyxs.lable}" @click="handleHyxs(hyxs.lable)">{{hyxs.mc}}</span>
+                <span v-for="(hyxs,index) in hyxsList"  :key="index" :class="{'bg-active':filterWord.meetingFormat == hyxs.label}" @click="handleHyxs(hyxs.label)">{{hyxs.mc}}</span>
               </p>
           </div>
 
           <div flex>
-            <span class="query-title">完成状态:</span>
+            <span class="query-title">事项完成状态:</span>
             <p class="query-list" >
               <span :class="{'bg-active':filterWord.meetingStatus == ''}" @click="handleWczt('')">全部</span>
-              <span v-for="(zt,index) in ztList" :key="index" :class="{'bg-active':filterWord.meetingStatus == zt.lable}" @click="handleWczt(zt.lable)">{{zt.mc}}</span>
+              <span v-for="(zt,index) in ztList" :key="index" :class="{'bg-active':filterWord.meetingStatus == zt.label}" @click="handleWczt(zt.label)">{{zt.mc}}</span>
             </p>
           </div>
 
           <div flex>
             <span class="query-title">内部会议:</span>
             <p class="query-list" >
-              <span v-for="(nbhy,index) in nbhyList" :key="index" :class="{'bg-active':filterWord.internalMeeting == nbhy.lable}" @click="handleNbhy(nbhy.lable)">{{nbhy.mc}}</span>
+              <span v-for="(nbhy,index) in nbhyList" :key="index" :class="{'bg-active':filterWord.internalMeeting == nbhy.label}" @click="handleNbhy(nbhy.label)">{{nbhy.mc}}</span>
             </p>
           </div>
         </section>
@@ -84,15 +84,15 @@
         ztList: [],
         nbhyList:[
           {
-            lable: "",
+            label: "",
             mc: "全部"
           },
           {
-            lable: "1",
+            label: "1",
             mc: "是"
           },
           {
-            lable: "0",
+            label: "0",
             mc: "否"
           }
         ],
@@ -107,7 +107,7 @@
           internalMeeting:"",
           startDateTime:"",//计划开始日期
           endDateTime:"",//计划结束日期
-       
+
         },
         groupTag: "",
         sfzk: true
@@ -135,6 +135,7 @@
       handleSearch() {
         this.$emit("handleChangeFilter", this.filterWord);
       },
+
       handleCheckAllChange(val) {
         if(val){
           this.hylx =  this.hylxList.map(ele=>{
@@ -150,6 +151,7 @@
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.hylxList.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.hylxList.length;
+        this.filterWord.meetingTypes = value.join(',');
       },
       // 内部会议
       handleNbhy(data){

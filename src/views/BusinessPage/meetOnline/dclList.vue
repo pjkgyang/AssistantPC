@@ -11,13 +11,13 @@
     >
       <div class="pd-10">
         <div>
-          <el-button size="mini" type="success" @click="handleAddDclsx">添加待处理事项</el-button>
+          <el-button size="mini" type="success" @click="handleAddDclsx" v-if="zt == '0'">添加待处理事项</el-button>
         </div><br>
         <el-table :data="tableData" border style="width: 100%">
             <el-table-column fixed="left" label="操作" width="100">
               <template slot-scope="scope">
-                  <el-button  type="text" size="mini" @click="handleOprate('edit',scope.row,scope.$index)">编辑</el-button>
-                  <el-button  type="text" size="mini" style="color:#f00" @click="handleOprate('delete',scope.row,scope.$index)">删除</el-button>
+                  <el-button v-if="scope.row.editBtn == '1'" type="text" size="mini" @click="handleOprate('edit',scope.row,scope.$index)">编辑</el-button>
+                  <el-button v-if="scope.row.delBtn == '1'" type="text" size="mini" style="color:#f00" @click="handleOprate('delete',scope.row,scope.$index)">删除</el-button>
               </template>
            </el-table-column>
           <el-table-column prop="clsxmc" label="待处理事项" min-width="180"></el-table-column>
@@ -26,7 +26,7 @@
           <el-table-column prop="dsfzrr" label="第三方责任人" width="120" show-overflow-tooltip></el-table-column>
           <el-table-column prop="jhwcsj" label="计划完成时间" width="150" show-overflow-tooltip></el-table-column>
           <el-table-column prop="sjwcsj" label="实际完成时间" width="150" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="wczt" label="完成状态" width="110" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="sxwczt_display" label="完成状态" width="110" show-overflow-tooltip></el-table-column>
           <el-table-column prop="gzr" label="关注人" width="180" show-overflow-tooltip></el-table-column>
         </el-table>
 
@@ -61,7 +61,11 @@ export default {
     wid: {
       type: String,
       default: ""
-    }
+    },
+	zt: {
+	  type: String,
+	  default: ""
+	}
   },
   mounted(){
    

@@ -61,6 +61,7 @@
         let arr = params[i].en.split(",");
         if (params[i].en.indexOf(",") != -1 && !!params[i].canRedirect) {
           obj[arr[0]] = data[i];
+          obj['hylx'] = data[0];
           // if (arr[0] == arr[1]) {
           //   obj[arr[0]] = data[i];
           // } else {
@@ -71,6 +72,7 @@
           //   });
           // }
         }else if(!params[i].canRedirect) return;
+
         let routeData = this.$router.resolve({
           path: '/meeting/staticdetail',
           query:obj
@@ -93,8 +95,8 @@
         this.currentPage = data;
         this.queryMeetingStat();
       },
-     
-     // 获取专项服务列表  
+
+     // 获取专项服务列表
       queryMeetingStat() {
         this.$get(this.API.queryMeetingStat, {
           curPage: this.currentPage,

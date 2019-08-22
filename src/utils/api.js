@@ -9,6 +9,8 @@ export default {
   queryDwUsers: window.baseurl + 'report/queryDwUsers.do', //查询相关用户
   // 枚举
   getDictEnum: window.baseurl + 'dict/getDictEnum.do',
+
+  exportProductTasks: window.baseurl + 'task/exportProductTasks.do', //导出任务
   // 报表
   queryReportQuestionLst: window.baseurl + 'report/queryReportQuestionLst.do',
   WtReportOrderStar: window.baseurl + 'report/WtReportOrderStar.do',
@@ -34,6 +36,8 @@ export default {
   getPersonalWorkLog: window.baseurl + 'process/getPersonalWorkLog.do', //获取日报
   questionAbnormalTrack: window.baseurl + 'report/questionAbnormalTrack.do', //获取问题异常跟踪
   questionOperatIndicator: window.baseurl + 'report/questionOperatIndicator.do', //获取问题运营指标
+
+  exportReportQuestionLst: window.baseurl + 'report/exportReportQuestionLst.do', // 导出跳转问题列表
 
 
   // 用户学习报表
@@ -248,10 +252,8 @@ export default {
   getCrowdYwx: window.baseurl + 'external/getCrowdYwx.do', // 获取crowd业务线
   getCrowdCp: window.baseurl + 'external/getCrowdCp.do', // 获取crowd产品
   crowdFbrw: window.baseurl + 'external/crowdFbrw.do',
-
   projectFeedback: window.baseurl + 'project/projectFeedback.do', //项目反馈
   queryResponsibleProduct: window.baseurl + 'question/queryResponsibleProduct.do', //获取负责的产品
-
   getDwByUser: window.baseurl + 'sys/getDwByUser.do', //获取单位列表
 
 
@@ -306,8 +308,8 @@ export default {
   startProjectRestartProgress: window.baseurl + 'flow/startProjectRestartProgress.do', //发起项目重启流程
   restartProjectStopProgress: window.baseurl + 'flow/restartProjectStopProgress.do', //重新发起项目停滞
   restartProjectRestartProgress: window.baseurl + 'flow/restartProjectRestartProgress.do', //重新发起项目重启
-  agree: window.baseurl + 'flow/agree.do', //审批同意
-  reject: window.baseurl + 'flow/reject.do', //审批驳回
+  agreeProjectStop: window.baseurl + 'flow/agree.do', //审批同意
+  rejectProjectStop: window.baseurl + 'flow/reject.do', //审批驳回
   getProjectStopVO: window.baseurl + 'flow/getProjectStopVO.do', //获取项目停滞重启详情
   listWorkFlowNodes: window.baseurl + 'flow/listWorkFlowNodes.do', //流程节点列表
   logs: window.baseurl + 'flow/logs.do', //流程日志列表
@@ -379,13 +381,15 @@ export default {
   deleteServiceDesk: window.baseurl + 'servicedesk/deleteServiceDesk.do', //  删除
   getServiceDesk: window.baseurl + 'servicedesk/getServiceDesk.do', //  获取服务台
   updatePromisedTime: window.baseurl + 'servicedesk/updatePromisedTime.do', //  更新承诺结束日期
-  reply: window.baseurl + 'servicedesk/reply.do', //  回复
+  replyServiceDesk: window.baseurl + 'servicedesk/reply.do', //  回复
   completed: window.baseurl + 'servicedesk/completed.do', // 办结
-  remind: window.baseurl + 'servicedesk/remind.do', // 催办
+  remindServiceDesk: window.baseurl + 'servicedesk/remind.do', // 催办
   returnVisit: window.baseurl + 'servicedesk/returnVisit.do', // 用户回访
   becomeAssistantQuestion: window.baseurl + 'servicedesk/becomeAssistantQuestion.do', // 转入小助手问题
   waitForUserVerification: window.baseurl + 'servicedesk/waitForUserVerification.do', // 等待用户验证
   pageServiceDeskWithoutAuth: window.baseurl + 'servicedesk/pageServiceDeskWithoutAuth.do', // 等待用户验证
+  deleteServiceDeskProcess: window.baseurl + 'servicedesk/deleteServiceDeskProcess.do', //删除回复
+  updateServiceDeskProcess: window.baseurl + 'servicedesk/updateServiceDeskProcess.do', //编辑回复
 
   // 专项服务
   pageSpecialService: window.baseurl + 'specialservice/pageSpecialService.do', // 专项服务分页列表
@@ -402,7 +406,9 @@ export default {
   getSpecialServiceCPX: window.baseurl + 'specialservice/getSpecialServiceCPX.do', // 获取服务类型
   listOperationLogZxfw: window.baseurl + 'specialservice/listOperationLog.do', // 获取日志
   getSpecialServiceFWX: window.baseurl + 'specialservice/getSpecialServiceFWX.do', // 获取服务项
-
+  addSpecailServiceJL: window.baseurl + 'specialservice/addSpecailServiceJL.do',//添加专项服务记录
+  findSpecailServiceJL: window.baseurl + 'specialservice/findSpecailServiceJL.do',//查询专项服务记录项
+  
   // 会议在线化
   saveMeeting:window.baseurl + 'meeting/saveMeeting.do', // 保存会议
   pageMeeting:window.baseurl + 'meeting/pageMeeting.do', // 获取分页分页

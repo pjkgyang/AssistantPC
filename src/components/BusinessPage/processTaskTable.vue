@@ -19,10 +19,13 @@
             <el-button size="mini" type="text" @click="handletask(scope.row)">填写日报</el-button>
         </template>
         </el-table-column>
-        <el-table-column prop="lcbms_display" label="里程碑名称"  width="300" show-overflow-tooltip> </el-table-column>
+        <el-table-column prop="cpmc" label="产品名称"  width="200" show-overflow-tooltip> </el-table-column>
+        <el-table-column prop="jdmc" label="里程碑名称"  width="300" show-overflow-tooltip> </el-table-column>
         <el-table-column prop="rwmc_display" label="任务名称" min-width="300" show-overflow-tooltip></el-table-column>
         <el-table-column prop="lx_dispaly" label="任务类型" width="120"></el-table-column>
         <el-table-column prop="ssrxm" label="责任人" width="90" ></el-table-column>
+        <el-table-column prop="cjrxm" label="创建人" width="90" ></el-table-column>
+        <el-table-column prop="rwqrr" label="确认人" width="90" ></el-table-column>
         <el-table-column  label="状态" width="90" >
            <template slot-scope="scope">
               <el-tag :type="scope.row.zt == 5 ? 'danger' :scope.row.zt == 3?'success': 'primary'"  size="mini"
@@ -39,7 +42,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="yxj_display" label="优先级" width="90"></el-table-column>
-        <el-table-column prop="jhksrq" label="计划开始日期" width="120"></el-table-column>
+        <el-table-column prop="sjjsrq" label="实际结束日期" width="120"></el-table-column>
         <el-table-column prop="jhjsrq" label="计划结束日期" width="120"></el-table-column>
     </el-table>
   <div>

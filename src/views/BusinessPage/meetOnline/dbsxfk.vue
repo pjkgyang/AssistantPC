@@ -16,11 +16,11 @@
           </tr>
           <tr>
             <th>责任方</th>
-            <td colspan="3">{{dataInfo.zrf}}</td>
+            <td colspan="3">{{dataInfo.sfdsfzr=='1'?'第三方':''}}<span v-if="dataInfo.sfjzzr == '1' && dataInfo.sfdsfzr=='1'">,</span>{{dataInfo.sfjzzr=='1'?'公司':''}}<span v-if="dataInfo.sfxxzr == '1' && dataInfo.sfjzzr=='1'">,</span>{{dataInfo.sfxxzr==1?'学校':''}}</td>
           </tr>
           <tr>
             <th>公司责任人</th>
-            <td colspan="3">{{dataInfo.gszrr}}</td>
+            <td colspan="3">{{gszrr.join(',')}}</td>
           </tr>
           <tr>
             <th>学校责任人</th>
@@ -32,7 +32,7 @@
           </tr>
           <tr>
             <th>关注人</th>
-            <td colspan="3">{{dataInfo.gzr}}</td>
+            <td colspan="3">{{gzr.join(',')}}</td>
           </tr>
         </table>
       </div>
@@ -41,7 +41,7 @@
          <h5 class="mg-12">待办事项反馈</h5>
         </div>
         <div>
-          <el-button class="mg-12" size="mini" type="success" @click="fkShow = true">添加反馈</el-button>
+          <el-button class="mg-12" size="mini" type="success" @click="fkShow = true" v-if="dataInfo.wczt == '0'">添加反馈</el-button>
           <el-table :data="fkList" border style="width: 100%">
             <el-table-column prop="cjsj" label="反馈时间"></el-table-column>
             <el-table-column prop="cjrxm" label="反馈人" ></el-table-column>
@@ -70,7 +70,7 @@
       </div>
     </div>
 
-     <fkDialog :show.sync="fkShow" :wid="$route.query.wid" @handleCommitFk="handleCommitFk"></fkDialog>   
+     <fkDialog :show.sync="fkShow" :wid="$route.query.wid" @handleCommitFk="handleCommitFk"></fkDialog>
   </div>
 </template>
 
@@ -84,7 +84,10 @@ export default {
       currentPage: 1,
       pageSize: 10,
       records: 0,
-      fkList: []
+      fkList: [],
+
+      gszrr:[],//公司责任人
+      gzr:[],
     };
   },
   mounted() {
@@ -95,8 +98,11 @@ export default {
 
   methods: {
     //   反馈成功
-    handleCommitFk(){
-       this.pageMatterFeedback();
+    handleCommitFk(data){
+      if( data.wczt == '1'){
+         this.queryMatter();
+      }
+      this.pageMatterFeedback();
     },
     //  分页
     handleCurrentChange(data) {
@@ -111,6 +117,16 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           this.dataInfo = res.data;
+
+          let gszrrList = this.dataInfo.gszrr.split('|');
+          gszrrList.forEach(ele=>{
+            this.gszrr.push(ele.split(',')[1]);
+          })
+
+          let gzrList = this.dataInfo.gzr.split('|');
+          gzrList.forEach(ele=>{
+            this.gzr.push(ele.split(',')[1]);
+          })
         } else {
         }
       });
@@ -129,6 +145,7 @@ export default {
           } else {
             this.fkList = [];
           }
+
           this.records = res.data.records;
         } else {
         }

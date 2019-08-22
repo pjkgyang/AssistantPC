@@ -27,6 +27,7 @@
                 <el-button v-if="scope.row.zt == '1' && isJzuser == '1'" type="text" size="mini" @click="handleClick('qrfw',scope.row)">确认</el-button>
                 <el-button v-if="scope.row.zt == '1' && (userGroupTag.includes('ZDSFWGLY') || scope.row.jffzrxm == username)"
                   type="text" size="mini" @click="handleClick('bhfw',scope.row)">驳回</el-button>
+
                 <el-button type="text" size="mini" @click="handleCheckDetail(scope.row)">详情</el-button>
               </template>
             </el-table-column>
@@ -34,9 +35,9 @@
             <el-table-column prop="cpmc" label="产品" min-width="240" show-overflow-tooltip></el-table-column>
             <el-table-column prop="fwnr" label="服务内容" min-width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>
-            <el-table-column label="服务状态" width="100">
+            <el-table-column label="项目服务状态" width="170">
               <template slot-scope="scope">
-                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}</el-tag>
+                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}{{scope.row.flag=='0'?'（已停滞）':''}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="jhksrq" label="计划开始日期" width="150"></el-table-column>
@@ -56,6 +57,7 @@
             <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="280" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmlb" label="项目类别" min-width="80" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="ztztmc" label="项目整体状态" width="110"></el-table-column>
             <el-table-column prop="sfzt" label="合同性质" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="sfgx" label="是否购销" min-width="80" show-overflow-tooltip></el-table-column>
             <el-table-column prop="dkl" label="到款率" min-width="80" show-overflow-tooltip></el-table-column>

@@ -73,7 +73,9 @@ export function queryMilestoneData(obj){
 			xmbh:obj.xmbh||"",
 			htxz:obj.htxz,
 			sfgx:obj.sfgx,
-			cxlx:obj.cxlx
+			cxlx:obj.cxlx,
+			cn:obj.cn,
+			xmxz:obj.xmxz
 		}
 	})
 }

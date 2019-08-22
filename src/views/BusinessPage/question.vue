@@ -395,52 +395,8 @@
         this.questionList[this.index].fbzt = 1;
         this.questionList[this.index].sqgbCount = 0;
       },
-      // 驳回 挂起
-      handleRejectGq(params, index, sm){
-        this.$post(this.API.dealSuspend,{
-          wid: params.wid,
-          isagree:1,
-          sm: sm
-        }).then(res=>{
-          if (data.state == "success") {
-            this.$alert("已成功驳回！", "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.questionList[index].sqgqz = 0;
-              }
-            });
-          } else {
-            this.$alert(data.msg, "提示", {
-              confirmButtonText: "确定",
-              type: "error"
-            });
-          }
-        })
-      },
-      // 同意 挂起
-      handleAgreeGq(params, index){
-          this.$post(this.API.dealSuspend,{
-          wid: params.wid,
-          isagree:0,
-          sm: ''
-        }).then(res=>{
-          if (data.state == "success") {
-             this.$alert("已同意挂起！", "提示", {
-              confirmButtonText: "确定",
-              type: "success",
-              callback: action => {
-                this.questionList[index].sqgqz = 0;
-              }
-            });
-          } else {
-            this.$alert(data.msg, "提示", {
-              confirmButtonText: "确定",
-              type: "error"
-            });
-          }
-        })
-      },
+ 
+
 
       handleExport() {
         this.keyword = !this.keyword ? "" : this.keyword;

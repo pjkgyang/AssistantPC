@@ -7,31 +7,31 @@
           <div class="contentMark">
             <table>
               <tr>
-                <td class="contenTitle">项目名称</td>
+                <th class="contenTitle">项目名称</th>
                 <td>{{planData.xmmc}}</td>
-                <td class="contenTitle">项目编号</td>
+                <th class="contenTitle">项目编号</th>
                 <td>{{planData.xmbh}}</td>
               </tr>
               <tr>
-                <td class="contenTitle">计划开始日期</td>
+                <th class="contenTitle">计划开始日期</th>
                 <td>{{planData.jhkssj}}</td>
-                <td class="contenTitle">计划结束日期</td>
+                <th class="contenTitle">计划结束日期</th>
                 <td>{{planData.jhjssj}}</td>
               </tr>
               <tr>
-                <td class="contenTitle">服务阶段</td>
+                <th class="contenTitle">服务阶段</th>
                 <td>{{planData.fwjd}}</td>
-                <td class="contenTitle">服务项</td>
+                <th class="contenTitle">服务项</th>
                 <td>{{planData.fwx}}</td>
               </tr>
               <tr>
-                <td class="contenTitle">金智责任人</td>
+                <th class="contenTitle">金智责任人</th>
                 <td>{{planData.jzfzrxm}}</td>
-                <td class="contenTitle">学校责任人</td>
+                <th class="contenTitle">学校责任人</th>
                 <td>{{planData.xxfzrxm}}</td>
               </tr>
               <tr>
-                <td class="contenTitle">服务内容</td>
+                <th class="contenTitle">服务内容</th>
                 <td colspan="3">{{planData.fwnr}}</td>
               </tr>
             </table>
@@ -59,6 +59,34 @@
                 </div>
               </div>
               <div v-if="!jdList.length" class="emptyContent">
+                <img src="static/img/empty.png" alt />
+                <p>暂无日志记录</p>
+              </div>
+              <!-- </el-scrollbar> -->
+            </div>
+          </div>
+
+          <div class="contetnProgress">
+            <h5>记录项</h5>
+            <div class="contentMark">
+              <!-- <el-scrollbar style="height:calc(100vh - 300px);"> -->
+              <div
+                v-if="!!jlList.length"
+                v-for="(jl,index) in jlList"
+                :class="{'progress-dot':true,'progress-dot-last':index == (jlList.length-1)}"
+              >
+                <div>
+                  <span>
+                    {{jl.cjsj}}&#x3000;
+                    <span
+                      style="color:rgb(21, 145, 202)"
+                    >{{!jl.czrxm?'':jl.czrxm}}</span>
+                    &#x3000;{{jl.czlxmc}}
+                  </span>
+                  <div :class="{'jd-content':jl.czlx == 4}" v-html="jl.cznr"></div>
+                </div>
+              </div>
+              <div v-if="!jlList.length" class="emptyContent">
                 <img src="static/img/empty.png" alt />
                 <p>暂无日志记录</p>
               </div>
@@ -117,7 +145,8 @@ export default {
   data() {
     return {
       baseUrl: "",
-      jdList: [],
+      jdList: [],//进度
+      jlList:[],//记录
       planData: {},
       formData: {
         fwrq: "",
@@ -128,10 +157,9 @@ export default {
   },
   methods: {
     handleClick(type) {
-      return;
       switch (type) {
         case "tj":
-          this.$post(this.API.recordSpecialService, {
+          this.$post(this.API.addSpecailServiceJL, {
             wid: this.$route.query.wid,
             jl: this.formData.jl,
             fwrq: this.formData.fwrq,
@@ -139,7 +167,7 @@ export default {
           }).then(res => {
             if (res.state == "success") {
               this.$message({ message: "保存成功", type: "success" });
-              this.listOperationLog();
+              this.findSpecailServiceJL();
             } else {
               this.$alert(res.msg, "提示", {
                 confirmButtonText: "确定",
@@ -185,11 +213,27 @@ export default {
         }
       });
     },
+    // 获取记录日志
+     findSpecailServiceJL() {
+       this.$get(this.API.findSpecailServiceJL, {
+        wid: this.$route.query.wid
+      }).then(res => {
+        if (res.state == "success") {
+          this.jlList = res.data;
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
+        }
+      });
+    },
   },
 
   mounted() {
-    // this.getSpecialService();
-    // this.listOperationLog();
+    this.getSpecialService();
+    this.listOperationLog();
+    this.findSpecailServiceJL();
   },
   components: {
     tableLayout
@@ -248,10 +292,12 @@ export default {
       width: 100%;
       border-color: #ccc;
 
-      td {
-        text-align: center;
+      td,th {
         border: 1px solid rgb(233, 230, 230);
-        padding: 5px 0;
+        padding: 5px;
+      }
+      th{
+        text-align: center;
       }
 
       tr > td:nth-child(even) {

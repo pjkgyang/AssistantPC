@@ -72,24 +72,24 @@
       <div v-if="form.xxhzc == 1">
         <div flex>
             <el-form-item label="建设年份" required>
-              <el-date-picker v-model="form.jsnf" align="right" type="year" placeholder="选择年" style="width:355px">
+              <el-date-picker v-model="form.xxhjsnf" align="right" type="year" placeholder="选择年" style="width:355px">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="承建公司" required>
-              <el-input v-model="form.cjgs" placeholder="请输入承建公司" style="width:355px"></el-input>
+              <el-input v-model="form.xxhcjgs" placeholder="请输入承建公司" style="width:355px"></el-input>
             </el-form-item>
           </div>
 
           <div flex>
             <el-form-item label="建设状态" required>
-              <el-select v-model="form.jszt" placeholder="请选择建设状态" style="width:355px">
+              <el-select v-model="form.xxhjszt" placeholder="请选择建设状态" style="width:355px">
                 <el-option label="在建" value="1"></el-option>
                 <el-option label="售后" value="2"></el-option>
                 <el-option label="服务" value="3"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="上线时间" required>
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.sxsj" style="width: 355px;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.xxhsxsj" style="width: 355px;"></el-date-picker>
             </el-form-item>
           </div>
 
@@ -164,10 +164,10 @@
           fwlb: '',
           fwnr: '',
           xxhzc: '0', //信息化支持
-          jsnf: '', //建设年份
-          cjgs: '', //承建公司
-          jszt: '', //建设状态
-          sxsj: '', //上线时间
+          xxhjsnf: '', //建设年份
+          xxhcjgs: '', //承建公司
+          xxhjszt: '', //建设状态
+          xxhsxsj: '', //上线时间
           xxzxdjls: '', //信息中心对接人
           xxzxdjlslxfs: '', //信息中心对接人  联系方式
           ywbmdjls: '', //业务部门对接人
@@ -218,10 +218,10 @@
                         this.form.fwlb = this.fwData.fwlbwid;
                         this.form.fwnr = this.fwData.fwnr;
                         this.form.xxhzc = this.fwData.xxhzc; //信息化支持
-                        this.form.jsnf = this.fwData.jsnf; //建设年份
-                        this.form.cjgs = this.fwData.cjgs; //承建公司
-                        this.form.jszt = this.fwData.jszt;//建设状态
-                        this.form.sxsj = this.fwData.sxsj; //上线时间
+                        this.form.xxhjsnf = this.fwData.xxhjsnf; //建设年份
+                        this.form.xxhcjgs = this.fwData.xxhcjgs; //承建公司
+                        this.form.xxhjszt = this.fwData.xxhjszt;//建设状态
+                        this.form.xxhsxsj = this.fwData.xxhsxsj; //上线时间
                         this.form.xxzxdjls = this.fwData.xxzxdjls; //信息中心对接人
                         this.form.xxzxdjlslxfs = this.fwData.xxzxdjlslxfs;//信息中心对接人  联系方式
                         this.form.ywbmdjls = this.fwData.ywbmdjls;//业务部门对接人
@@ -247,10 +247,10 @@
                 this.form.fwnr = '';
 
                 this.form.xxhzc = '0';
-                this.form.jsnf = '';
-                this.form.cjgs = '';
-                this.form.jszt = '';
-                this.form.sxsj = '';
+                this.form.xxhjsnf = '';
+                this.form.xxhcjgs = '';
+                this.form.xxhjszt = '';
+                this.form.xxhsxsj = '';
 
                 this.form.xxzxdjls = '';
                 this.form.xxzxdjlslxfs = '';
@@ -373,19 +373,19 @@
             // }
 
             // 有信息化支持
-            if (this.form.xxhzc==1 && !this.form.jsnf) {
+            if (this.form.xxhzc==1 && !this.form.xxhjsnf) {
               this.$message({message: '请选择建设年份',type: 'warning'})
               return false;
             }
-            if (this.form.xxhzc==1 && !this.form.cjgs) {
+            if (this.form.xxhzc==1 && !this.form.xxhcjgs) {
               this.$message({message: '请输入承建公司',type: 'warning'})
               return false;
             }
-            if (this.form.xxhzc==1 && !this.form.jszt) {
+            if (this.form.xxhzc==1 && !this.form.xxhjszt) {
               this.$message({message: '请选择建设状态',type: 'warning'})
               return false;
             }
-            if (this.form.xxhzc==1 && !this.form.sxsj) {
+            if (this.form.xxhzc==1 && !this.form.xxhsxsj) {
               this.$message({message: '请选择上线时间',type: 'warning'})
               return false;
             }

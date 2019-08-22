@@ -132,7 +132,6 @@
     methods: {
       // 确认提交
       handleClickSureQrfw(data){
-        return;
         this.$post(this.API.confirmSpecialService,{
           wids:!!this.curRow.wid?this.curRow.wid:this.widsArr,
           pf:data.pf,
@@ -150,7 +149,6 @@
 
       // 驳回服务
       handleClickSureBhfw(data){
-        return;
          this.$post(this.API.rejectSpecialService,{
           wids:!!this.curRow.wid?this.curRow.wid:this.widsArr,
           sm:data.sm
@@ -166,7 +164,6 @@
       },
       // 编辑提交
       handleCommitEdit(data){
-        return;
         this.$post(this.API.updateZxfws,{
           wids:!this.plxgZrr?this.curRow.wid:this.widsArr,
           jzfzrbh:data.jzfzrbh,

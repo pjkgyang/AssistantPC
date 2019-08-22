@@ -2,7 +2,7 @@
   <div class="myitem-meet">
     <tableLayout class="meet-content" flex-column>
       <section slot="top" style="border-bottom:1px solid #EBEEF5" col=1>
-        <meetFilter :placeholder="'学校名称/项目名称/项目编号/合同编号'"  @handleChangeFilter="handleChangeFilter"></meetFilter>
+        <meetFilter :placeholder="'请输入会议主题，会议人员，会议地点'"  @handleChangeFilter="handleChangeFilter"></meetFilter>
       </section>
       <section slot="bottom" col=2>
         <section>
@@ -14,9 +14,9 @@
           <el-table v-if="$route.name == 'meetingIndex'" ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border>
             <el-table-column fixed="left" label="操作" width="180" v-if="$route.name != 'meetingTracking'">
               <template slot-scope="scope">
-                  <el-button  type="text" size="mini" @click="handleClick(scope.row,scope.$index,'dcl')">待处理事项</el-button>
-                  <el-button  type="text" size="mini" @click="handleClick(scope.row,scope.$index,'edit')">编辑</el-button>
-                  <el-button  type="text" size="mini" style="color:#f00" @click="handleClick(scope.row,scope.$index,'delete')">删除</el-button>
+                  <el-button v-if="scope.row.addMatterBtn=='1'"  type="text" size="mini" @click="handleClick(scope.row,scope.$index,'dcl')">待处理事项</el-button>
+                  <el-button v-if="scope.row.editBtn=='1'" type="text" size="mini" @click="handleClick(scope.row,scope.$index,'edit')">编辑</el-button>
+                  <el-button v-if="scope.row.delBtn=='1'" type="text" size="mini" style="color:#f00" @click="handleClick(scope.row,scope.$index,'delete')">删除</el-button>
               </template>
             </el-table-column>
             <el-table-column prop="hylx_display" label="会议类型" width="130" show-overflow-tooltip></el-table-column>
@@ -37,7 +37,7 @@
           <el-table v-if="$route.name == 'meetingTracking'" ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" border>
             <el-table-column fixed="left" label="操作" width="80" >
               <template slot-scope="scope">
-                  <el-button  type="text" size="mini" >
+                  <el-button  type="text" size="mini" v-if="scope.row.feedbackbtn == '1'">
                       <a :href="'#/meeting/itemdetail'+'?wid='+scope.row.matterWid" target="_blank">反馈</a>
                   </el-button>
               </template>
@@ -49,7 +49,7 @@
             <el-table-column prop="hyjssj" label="结束时间" width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="clsxmc" label="待处理事项" width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop="gszrr" label="公司责任人"  min-width="130" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="wczt" label="完成状态" min-width="130" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sxwczt_display" label="完成状态" min-width="130" show-overflow-tooltip></el-table-column>
             <el-table-column prop="jhwcsj" label="计划完成时间" min-width="130" show-overflow-tooltip></el-table-column>
           </el-table>
         </section>
@@ -62,9 +62,9 @@
       </section>
     </tableLayout>
 
-  
+
     <hydjDialog :show.sync="hydjShow" :wid="curWid" @handleCommitHydj="handleCommitHydj"></hydjDialog>
-    <dclsxList :show.sync="dclShow" :wid="curWid" @handleAddDclsx="handleAddDclsx"></dclsxList>
+    <dclsxList :show.sync="dclShow" :wid="curWid" :zt="curInfo.hyzt" @handleAddDclsx="handleAddDclsx"></dclsxList>
     <dclsxDialog :show.sync="dcldialogShow" :wid="curWid" :matterWid="matterWid" @handleCloseDcl="handleCloseDcl"></dclsxDialog>
   </div>
 </template>
@@ -91,6 +91,7 @@
 
         curWid:"",//当前wid  会议wid
         matterWid:"",//事项wid
+        curInfo:{},
 
         filterData: {
           keyword:"",
@@ -107,9 +108,9 @@
       };
     },
     methods: {
-      
+
       handleExport(){
-        let url = this.$route.name == 'meetingTracking'?this.API.exportMatter:this.APi.exportMeeting;
+        let url = this.$route.name == 'meetingTracking'?this.API.exportMatter:this.API.exportMeeting;
         window.open(
           url+'?startDateTime'+this.filterData.startDateTime+'&endDateTime='+this.filterData.endDateTime+
           '&meetingTypes='+this.filterData.meetingTypes+'&meetingFormat='+this.filterData.meetingFormat+
@@ -130,8 +131,8 @@
           }).then(() => {
             this.curWid = wid;
             this.dclShow = true;
-            this.dcldialogShow = true;  
-          }).catch(() => {}); 
+            this.dcldialogShow = true;
+          }).catch(() => {});
         }
         if(this.$route.name == 'meetingTracking'){
           this.pageMatter();
@@ -141,6 +142,7 @@
       },
       // 添加待处理事项
       handleAddDclsx(data){
+
         if(!!data){
           this.matterWid = data;
         }
@@ -158,6 +160,7 @@
      // 按钮操作
      handleClick(params,index,type){
          this.curWid = params.wid; // 会议wid
+         this.curInfo = params;
          switch (type) {
              case 'dcl':
                 this.dclShow = !this.dclShow;
@@ -181,7 +184,7 @@
                        this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
                      }
                    })
-                  }).catch(() => {}); 
+                  }).catch(() => {});
                  break;
              default:
                  break;
@@ -236,8 +239,8 @@
         });
         window.open(href, "_blank");
       },
-     
-     // 获取会议列表  
+
+     // 获取会议列表
       pageMeeting() {
         this.$get(this.API.pageMeeting, {
           curPage: this.currentPage,
@@ -285,14 +288,12 @@
             }
             this.total = res.data.records;
           }else{
-             this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});  
+             this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
           }
         })
       }
     },
-
-
-    mounted() {
+    activated() {
       if(this.$route.name == 'meetingTracking'){
         this.pageMatter();
       }else{

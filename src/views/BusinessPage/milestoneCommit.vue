@@ -11,7 +11,7 @@
 					@change="searchLcbContent"
 				></el-input>
 				&#x3000;
-				<el-radio-group v-model="cxlx" @change="handleChooseCxlx">
+				<el-radio-group v-model="cxlx" >
 					<el-radio label="0" style="margin-bottom: 0;">完工查询</el-radio>
 					<el-radio label="1" style="margin-bottom: 0;">验收查询</el-radio>
 				</el-radio-group>
@@ -59,7 +59,6 @@
 
 			<!-- 经营管理可见 -->
 			<div class="filter colcenter milestone-filter" v-if="groupTag.includes('JYGL') || groupTag.includes('GCZJ')">
-				<!-- <el-checkbox :indeterminate="isIndeterminate" v-model="qygc" @change="handleCheckAllChange">全选</el-checkbox> -->
 				<span class="filter-title">区域工程:</span>
 				<div style="width:90%">
 					<el-checkbox v-model="checkAll" @change="handleCheckAllChange" style="font-weight:700">全选(区域)</el-checkbox>
@@ -67,35 +66,42 @@
 						<el-checkbox v-for="item in qygcList" :label="item" :key="item">{{ item }}</el-checkbox>
 					</el-checkbox-group>
 				</div>
-				<!-- <span class="filter-title">区域工程:</span>
-        <el-select v-model="qygc" placeholder="请选择" size="mini" multiple style="width:400px"  @change="handleChangeFilter">
-          <el-option label="全部" value=""> </el-option>
-          <el-option v-for="item in gczdList" :key="item.label" :label="item.mc" :value="item.label"> </el-option>
-        </el-select>&#x3000;&#x3000; -->
 			</div>
+
 			<div class="filter">
 				<span>
 					<span class="filter-weight">&#x3000;&#x3000;&nbsp;&nbsp;&nbsp;是否有项目经理 :</span>
-					<el-radio-group v-model="sfxmjl" @change="handleChooseXmjl">
+					<el-radio-group v-model="sfxmjl" >
 						<el-radio label="">全部</el-radio>
 						<el-radio label="1">是</el-radio>
 						<el-radio label="0">否</el-radio>
 					</el-radio-group>
 				</span>
+				&#x3000;&#x3000;
 				<span>
-					&#x3000;&#x3000;
 					<span class="filter-weight">是否有责任人:</span>
-					<el-radio-group v-model="sfzrr" @change="handleChooseZrr">
+					<el-radio-group v-model="sfzrr">
 						<el-radio label="">全部</el-radio>
 						<el-radio label="1">是</el-radio>
 						<el-radio label="0">否</el-radio>
 					</el-radio-group>
+				</span>
+				&#x3000;&#x3000;
+				<span>
+					 <span class="filter-weight">财年:</span>
+					 <el-date-picker
+						v-model="cn"
+						type="year"
+						size="mini"
+						value-format="yyyy"
+						placeholder="选择年">
+					</el-date-picker>
 				</span>
 			</div>
 			<!-- </div> -->
 			<div flex class="filter">
 				<span class="filter-title">里程碑状态:</span>
-				<el-checkbox-group v-model="checkList" @change="handleCheckbox">
+				<el-checkbox-group v-model="checkList">
 					<el-checkbox label="1">计划中</el-checkbox>
 					<el-checkbox label="2">处理中</el-checkbox>
 					<el-checkbox label="3">已完成</el-checkbox>
@@ -110,7 +116,7 @@
 			<div flex>
 				<div flex class="filter">
 					<span class="filter-title">项目类别:</span>
-					<el-checkbox-group v-model="xmlbList" @change="handleXMlb">
+					<el-checkbox-group v-model="xmlbList" >
 						<el-checkbox label="软件">软件</el-checkbox>
 						<el-checkbox label="集成">集成</el-checkbox>
 						<el-checkbox label="软件服务">软件服务</el-checkbox>
@@ -120,7 +126,7 @@
 
 				<div flex class="filter">
 					<span class="filter-title">项目状态:</span>
-					<el-checkbox-group v-model="xmztList" @change="handleXMZT">
+					<el-checkbox-group v-model="xmztList">
 						<el-checkbox label="0">未启动</el-checkbox>
 						&#x3000;&#x3000;
 						<el-checkbox label="1">已启动</el-checkbox>
@@ -133,20 +139,27 @@
 			</div>
 
 			<div flex class="filter milestone-filter">
-				<span flex style="margin-right:259px">
+				<span flex style="margin-right:150px">
 					<span class="filter-title">合同性质:</span>
-					<el-checkbox-group v-model="htxzList" @change="handleHtxz">
+					<el-checkbox-group v-model="htxzList" >
 						<el-checkbox label="A">正式</el-checkbox>
 						<el-checkbox label="C">在谈</el-checkbox>
 					</el-checkbox-group>
-				</span>
+			 	</span>
 
 				<span class="filter-weight">是否购销:</span>
-				&nbsp;
-				<el-radio-group v-model="sfgx" @change="handleChooseSfgx">
+				<el-radio-group v-model="sfgx" >
 					<el-radio label="">全部</el-radio>
 					<el-radio label="1">是</el-radio>
 					<el-radio label="0">否</el-radio>
+				</el-radio-group>
+				&#x3000;&#x3000;&#x3000;
+
+				<span class="filter-weight">项目性质:</span>
+				<el-radio-group v-model="xmxz">
+						<el-radio label="">全部</el-radio>
+						<el-radio label="当年项目"></el-radio>
+						<el-radio label="往年项目"></el-radio>
 				</el-radio-group>
 			</div>
 			<div flex>
@@ -160,7 +173,6 @@
 						placeholder="开始日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeJhStartDate"
 					></el-date-picker>
 					&nbsp;至&nbsp;
 					<el-date-picker
@@ -171,7 +183,6 @@
 						placeholder="结束日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeJhEndDate"
 					></el-date-picker>
 				</div>
 
@@ -185,7 +196,6 @@
 						placeholder="开始日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeCnStartDate"
 					></el-date-picker>
 					&nbsp;至&nbsp;
 					<el-date-picker
@@ -196,7 +206,6 @@
 						placeholder="结束日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeCnEndDate"
 					></el-date-picker>
 				</div>
 			</div>
@@ -211,7 +220,6 @@
 						placeholder="开始日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeSjStartDate"
 					></el-date-picker>
 					&nbsp;至&nbsp;
 					<el-date-picker
@@ -222,7 +230,6 @@
 						placeholder="结束日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeSjEndDate"
 					></el-date-picker>
 				</div>
 				<div class="filter">
@@ -235,7 +242,6 @@
 						placeholder="开始日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeSjStartDate"
 					></el-date-picker>
 					&nbsp;至&nbsp;
 					<el-date-picker
@@ -246,7 +252,6 @@
 						placeholder="结束日期"
 						format="yyyy-MM-dd"
 						value-format="yyyy-MM-dd"
-						@change="changeSjEndDate"
 					></el-date-picker>
 				</div>
 			</div>
@@ -312,19 +317,15 @@
 					<el-table-column prop="wglg" label="完工量(元)" width="100" v-if="ishow && cxlx == '0'" :key="Math.random()"></el-table-column>
 					<!-- 验收 -->
 					<el-table-column prop="htje" label="合同金额" width="100" v-if="cxlx == '1'" :key="Math.random()"></el-table-column>
-
 					<el-table-column prop="cnjssj" sortable label="承诺结束时间" width="150" :key="Math.random()"></el-table-column>
 					<el-table-column prop="sjjssj" sortable label="实际结束时间" width="150" :key="Math.random()"></el-table-column>
 					<el-table-column prop="rdsj" sortable label="认定结束时间" width="160" :key="Math.random()"></el-table-column>
-
 					<el-table-column prop="dwmc" min-width="200" label="学校名称" show-overflow-tooltip :key="Math.random()"></el-table-column>
 					<el-table-column prop="yfzrrxm" min-width="100" label="项目经理" show-overflow-tooltip :key="Math.random()"></el-table-column>
 					<el-table-column prop="zzrxm" label="责任人" width="100" :key="Math.random()"></el-table-column>
-
 					<el-table-column prop="htbh" min-width="150" label="合同编号" :key="Math.random()"></el-table-column>
 					<!-- 验收 -->
 					<el-table-column prop="xsjl" label="销售经理" width="100" v-if="cxlx == '1'" :key="Math.random()"></el-table-column>
-
 					<el-table-column prop="sfzt" min-width="100" label="是否在谈" show-overflow-tooltip :key="Math.random()"></el-table-column>
 					<el-table-column prop="sfgx" min-width="100" label="是否购销" show-overflow-tooltip :key="Math.random()"></el-table-column>
 					<el-table-column prop="dkl" min-width="100" label="到款率" show-overflow-tooltip :key="Math.random()"></el-table-column>
@@ -416,6 +417,8 @@ export default {
 			sfxmjl: '',
 			sfzrr: '',
 			sfgx: '',
+			cn:'',//财年
+			xmxz:'',//项目性质
 			filterShow: false,
 			htbhKeyword: '',
 			xmbhKeyword: '',
@@ -679,7 +682,11 @@ export default {
 					'&sfgx=' +
 					this.sfgx +
 					'&cxlx=' +
-					this.cxlx
+					this.cxlx +
+					'&cn=' +
+					this.cn +
+					'&xmxz=' +
+					this.xmxz
 			);
 		},
 		//查询里程碑
@@ -701,79 +708,8 @@ export default {
 			this.pageSize = data;
 			this.queryMilestoneData();
 		},
-		//选择里程碑状态
-		handleCheckbox(val) {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		//查询项目类别
-		handleXMlb(val) {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		handleXMZT(val) {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		handleHtxz(val) {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		//承诺开始时间
-		changeCnStartDate() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		//承诺结束时间
-		changeCnEndDate() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		//实际开始时间
-		changeSjStartDate() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		//实际结束时间
-		changeSjEndDate() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		// 计划开始日期
-		changeJhStartDate() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		// 计划结束日期
-		changeJhEndDate() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		handleChooseXmjl() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		handleChooseZrr() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		// 是否购销
-		handleChooseSfgx() {
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
-		// 查看里程碑操作记录
-		handleCheckRrecord(data) {
-			this.lcbbh = data.lcbbh;
-			this.lcbjlShow = !this.lcbjlShow;
-		},
+	
 
-		// 查询类型
-		handleChooseCxlx(val) {
-			this.cxlx = val;
-			// this.currentPage = 1;
-			// this.queryMilestoneData();
-		},
 		// 提报里程碑
 		handleCommitMilestone() {
 			this.milestoneVisible = false;
@@ -832,7 +768,9 @@ export default {
 				xmbh: this.xmbhKeyword,
 				htxz: this.htxzList.join(','),
 				sfgx: this.sfgx,
-				cxlx: this.cxlx //
+				cxlx: this.cxlx, // 操作类型
+				cn:this.cn,
+				xmxz:this.xmxz
 			}).then(({ data }) => {
 				if (data.state == 'success') {
 					this.totalWgl = !data.data.totalWgl ? 0 : data.data.totalWgl;

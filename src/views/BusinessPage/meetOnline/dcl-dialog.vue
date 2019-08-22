@@ -5,7 +5,7 @@
       <div class="demand">
         <el-form style="width:950px;margin:0 auto" class="demo-ruleForm" :model="hydjData" :inline="true" size="mini"
           label-width="135px">
-          
+
           <el-form-item label="待处理事项" required>
             <el-input size="mini" type="text" style="width:800px" placeholder="请输入待处理事项" v-model="hydjData.clsxmc"></el-input>
           </el-form-item>
@@ -23,27 +23,49 @@
             </el-checkbox-group>
           </el-form-item>
 
-          <el-form-item label="公司责任人" >
-             <el-select v-model="gszrrData" filterable multiple  size="mini" placeholder="请选择公司责任人（可按姓名搜索）" style="width:800px" @change="handleChangeGsry">
-              <el-option v-for="(item, index) in JzUserList" :key="index" :label="item.username" :value="item.userid+','+item.username"></el-option>
-            </el-select>
+          <el-form-item label="公司责任人" :required="zrf.includes('0')">
+            <div flex spacebetween class="jzcyry" >
+                <div>
+                  <el-tag
+                    v-for="(item,index) in gszrrData"
+                    :key="index"
+                    size="mini"
+                    closable
+                    @close="handleCloseTag(index)"
+                    type="info">
+                    {{item}}
+                  </el-tag>
+                </div>
+                <el-button slot="append" icon="el-icon-circle-plus-outline" @click="handleAddGszrr"></el-button>
+            </div>
           </el-form-item>
 
-          <el-form-item label="学校责任人" >
+          <el-form-item label="学校责任人" :required="zrf.includes('1')">
             <el-input size="mini" type="text" style="width:800px" placeholder="请填写学校责任人"  v-model="hydjData.xxzrr"></el-input>
           </el-form-item>
-          
-          <el-form-item label="第三方责任人" >
+
+          <el-form-item label="第三方责任人" :required="zrf.includes('2')">
             <el-input size="mini" type="text" style="width:800px" placeholder="请填写第三方责任人"  v-model="hydjData.dsfzrr"></el-input>
           </el-form-item>
 
           <el-form-item label="关注人" >
-             <el-select v-model="gzrData" filterable multiple  remote reserve-keyword :remote-method="remoteMethod" size="mini" placeholder="请选择关注人（可按姓名搜索）" style="width:800px" @change="handleChangeGzr">
-              <el-option v-for="(item, index) in userList" :key="index" :label="item.username" :value="item.userid+','+item.username"></el-option>
-            </el-select>
+            <div flex spacebetween class="jzcyry" >
+                <div>
+                  <el-tag
+                    v-for="(item,index) in gzrData"
+                    :key="index"
+                    size="mini"
+                    closable
+                    @close="handleCloseTagGzr(index)"
+                    type="info">
+                    {{item}}
+                  </el-tag>
+                </div>
+                <el-button slot="append" icon="el-icon-circle-plus-outline" @click="handleAddGzr"></el-button>
+            </div>
           </el-form-item>
         </el-form>
-      
+
 
         <div style="text-align:right;width:100%;margin:10px 0;padding:0 20px;">
           <el-button size="small" type="primary" @click="handleCommit">保存</el-button>
@@ -51,20 +73,25 @@
         </div>
       </div>
     </el-dialog>
+
+     <userChoose  :show.sync="userShow" :unitType="unitType" @handleAdduser="handleAdduser"></userChoose>
   </div>
 </template>
 
 <script>
   import { EventBus } from "@/utils/util.js";
+  import userChoose from "@/components/public/userChoose.vue";
+
   export default {
     data() {
       return {
+        userShow:false,
         visible: this.show,
 
-        JzUserList:[],
-        userList:[],
         gszrrData:[],//公司责任人
+        gszrrDataCode:[],
         gzrData:[],//关注人
+        gzrDataCode:[],
         zrf:[],
         hydjData: {
          clsxmc:"",
@@ -77,7 +104,8 @@
          xxzrr:"",
          dsfzrr:""
         },
-       sxwid:this.matterWid
+        unitType:'0',
+        sxwid:this.matterWid
       };
     },
     props: {
@@ -91,12 +119,43 @@
       },
       matterWid:{
         type:String,
-        default:''  
+        default:''
       }
     },
-    components: {},
+    components: {userChoose},
 
     methods: {
+      handleAddGszrr(){
+        this.unitType = '0';
+        this.userShow = true;
+      },
+      handleAddGzr(){
+        this.unitType = '';
+        this.userShow = true;
+      },
+      // 添加公司参与人
+      handleAdduser(data){
+        if(!!this.unitType && !this.gszrrData.includes(data.username)){
+          this.gszrrData.push(data.username);
+          this.gszrrDataCode.push(data.userid+','+data.username);
+        }
+
+        if(!this.unitType && !this.gzrData.includes(data.username)){
+          this.gzrData.push(data.username);
+          this.gzrDataCode.push(data.userid+','+data.username);
+        }
+      },
+      // 删除金智参会人员
+      handleCloseTag(index){
+           this.gszrrData.splice(index,1);
+           this.gszrrDataCode.splice(index,1);
+      },
+       // 删除关注人
+      handleCloseTagGzr(index){
+           this.gzrData.splice(index,1);
+           this.gzrDataCode.splice(index,1);
+      },
+
       // 选择责任方
       handleCheckZrf(val){
         this.hydjData.sfjzzr = this.hydjData.sfxxzr =  this.hydjData.sfdsfzr = '';
@@ -110,23 +169,12 @@
           }
         })
       },
-      // 公司人员
-      handleChangeGsry(val){
-        this.hydjData.gszrrData = val.join('|');
-      },
-      // 关注人
-      handleChangeGzr(val){
-        this.hydjData.gzrData = val.join('|');
-      },
-      remoteMethod(val){
-        if(!val) return;
-        this.getUsers('',100,val);
-      },
 
       //提交待处理事项
       handleCommit() {
-
         this.hydjData.sm = $("#summernoteTT").summernote("code");
+        this.hydjData.gszrrData = this.gszrrDataCode.join('|');
+        this.hydjData.gzrData = this.gzrDataCode.join('|');
         if (!this.valiDate()) return;
         this.hydjData.wid = this.matterWid;
         this.hydjData.zbwid = this.wid;
@@ -141,27 +189,7 @@
         });
       },
 
-    
-      //  获取金智用户
-      getUsers(unitType,pageSize,keyword) {
-        this.$get(this.API.getUsers, {
-          curPage: 1,
-          pageSize: pageSize,
-          unitType: unitType,
-          keyword:keyword,
-          dept:"01AM"
-        }).then(res => {
-          if (res.state == "success") {
-            if(unitType == '0'){
-              this.JzUserList = res.data.rows;
-            }else if(!unitType){
-              this.userList = res.data.rows;
-            }
-          } else {
-            this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
-          }
-        });
-      },
+
       // 获取待处理事项
       queryMatter() {
         this.zrf = [];
@@ -225,6 +253,28 @@
           });
           return false;
         }
+        if (this.zrf.includes('0') && !this.hydjData.sfjzzr) {
+          this.$message({
+            message: "请填写公司责任人",
+            type: "warning"
+          });
+          return false;
+        }
+        if (this.zrf.includes('1') && !this.hydjData.sfxxzr) {
+          this.$message({
+            message: "请填写学校责任人",
+            type: "warning"
+          });
+          return false;
+        }
+        if (this.zrf.includes('2') && !this.hydjData.sfdsfzr) {
+          this.$message({
+            message: "请填写第三方责任人",
+            type: "warning"
+          });
+          return false;
+        }
+        
         return true;
       }
     },
@@ -232,21 +282,16 @@
       show() {
         this.visible = this.show;
         if (this.show) {
-          if(!this.JzUserList.length){
-             this.getUsers('0',9999,'');
-          }
-
-          if(!this.userList.length){
-            this.getUsers('',100,'');
-          }
-
           if(!!this.matterWid){
             this.queryMatter();
           }
         } else {
+            
             this.zrf = [];
             this.gszrrData = [];//公司责任人
             this.gzrData = [];//关注人
+            this.gszrrDataCode = [];
+            this.gzrDataCode = [];
             this.hydjData.clsxmc = "";
             this.hydjData.jhwcsj = "";
             this.hydjData.sfjzzr = "";//是否金智责任
@@ -265,51 +310,10 @@
   };
 </script>
 <style scoped lang="scss">
-  .demand {
-    padding: 10px 0;
-  }
-
-  div.el-form-item {
-    margin-bottom: 8px !important;
-  }
-
-
-  .file {
-    padding: 2px 6px;
-    border-radius: 3px;
-    margin-top: 4px !important;
-
-    &:hover {
-      background: rgba(216, 214, 214, 0.5);
-    }
-
-    i {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 20px;
-
-      &:hover {
-        color: #f00;
-        cursor: pointer;
-        background: rgba(255, 0, 0, 0.25);
-      }
-    }
-  }
-
-  .cptree {
-    position: absolute;
-    top: 0;
-    background: #fff;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    border: 1px solid #e4e7ed;
-    border-radius: 4px;
-    top: 40px;
-    z-index: 10200;
-    width: 325px;
-    max-height: 400px;
-    overflow-y: auto;
-    overflow-x: auto;
-  }
+.jzcyry{
+ width:800px;border:1px solid #DCDFE6;border-radius:4px;padding:0 0 0 15px;
+ .el-tag{
+   margin-right: 10px;
+ }
+}
 </style>
