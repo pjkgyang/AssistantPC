@@ -1,60 +1,106 @@
 <template>
   <div class="sys-notice">
-      <div class="sys-notice-list">
-            <div class="sys-notice-operate">
-                <span data-type="0" :class="{'btn-active':showIndex == 0}" @click="handleNoticeType">未读</span>&#x3000;
-                <span data-type="1" :class="{'btn-active':showIndex == 1}" @click="handleNoticeType">已读</span>&#x3000;
-                <span data-type="2" :class="{'btn-active':showIndex == 2}" @click="handleNoticeType">全部</span>
-                <el-button size="mini" style="float:right" @click="handleReadAllMsg">全部标记为已读</el-button>
-            </div>
-                <div class="notice-list"  id="scrollbar">
-                    <div>
-                        <section :class="{'list-bg':notice.wid == wid }" v-for="notice in noticeList" :data-wid="notice.wid" @click="handleNoticeDetail">
-                            <div class="notice-list-top">
-                                <span style="font-weight:700;font-size:15px;color:#666;float:left;width">{{notice.title}}</span><br>
-                                <span style="font-size:12px;color:#aaa;float:left;">发送人:{{notice.fsrxm}}</span>
-                                <span style="font-size:12px;color:#aaa;float:right">{{notice.sendTime}}</span>
-                            </div>     
-                            <div>
-                                <span class="sys-notice-tip" >{{notice.summary}}</span>
-                            </div> 
-                        </section>
-
-                        <div style="text-align:center;padding:20px;" v-if="noticeList.length == 0">
-                           暂无通知
-                        </div>
-                      </div>
-                </div>
-            <div class="paginate-btn" v-if="noticeList.length != 0">
-                <el-button-group>
-                  <el-button size="mini" type="info"  round :disabled="curPage == 1" icon="el-icon-arrow-left" @click="handlePrev">上一页</el-button>
-                  <el-button size="mini" type="info"  round :disabled="curPage == total" @click="handleNext">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
-                </el-button-group>
-            </div>
-            
-       </div>
-      <div class="sys-notice-detail">
-          <div v-if="JSON.stringify(noticeDeatil) != '{}' && noticeList.length != 0">
-            <div class="sys-notice-detail-head">
-                <h3>{{noticeDeatil.tzbt}}</h3>
-                <p>发送人 : <span>{{noticeDeatil.fsrxm}}</span></p>
-                <p>接收人 : <span>{{noticeDeatil.jsrxm}}</span></p>
-                <p>时间 : <span>{{noticeDeatil.fssj}}</span></p>
-                <p v-if="noticeDeatil.xmmc">项目名称 : <span>{{noticeDeatil.xmmc}}</span></p>
-                <p v-if="noticeDeatil.rwmc">任务名称 : <span>{{noticeDeatil.rwmc_display}}</span></p>
-                <p v-if="noticeDeatil.lcbms">里程碑名称 : <span>{{noticeDeatil.lcbms_display}}</span></p>
-            </div>
-            <div class="sys-notice-detail-content">
-                 <h5>内容：</h5>
-                 <div style="color:#000;" v-html="noticeDeatil.tznr"></div>
-            </div>
-          </div>
-          <div v-if="JSON.stringify(noticeDeatil) == '{}' || noticeList.length == 0" style="text-align:center;padding-top:100px">
-              <img src="static/img/empty.png" alt="">
-              <p>暂无通知</p>
-          </div>
-          <div class="sysNotice-close" title="关闭" @click="closeNotice"><span class="el-icon-close"></span></div>
+    <div class="sys-notice-list">
+      <div class="sys-notice-operate">
+        <span data-type="0" :class="{'btn-active':showIndex == 0}" @click="handleNoticeType">未读</span>&#x3000;
+        <span
+          data-type="1"
+          :class="{'btn-active':showIndex == 1}"
+          @click="handleNoticeType"
+        >已读</span>&#x3000;
+        <span
+          data-type="2"
+          :class="{'btn-active':showIndex == 2}"
+          @click="handleNoticeType"
+        >全部</span>
+        <el-button size="mini" style="float:right" @click="handleReadAllMsg">全部标记为已读</el-button>
       </div>
+      <div class="notice-list" id="scrollbar">
+        <div>
+          <section
+            :class="{'list-bg':notice.wid == wid }"
+            v-for="notice in noticeList"
+            :data-wid="notice.wid"
+            @click="handleNoticeDetail"
+          >
+            <div class="notice-list-top">
+              <span
+                style="font-weight:700;font-size:15px;color:#666;float:left;width"
+              >{{notice.title}}</span>
+              <br />
+              <span style="font-size:12px;color:#aaa;float:left;">发送人:{{notice.fsrxm}}</span>
+              <span style="font-size:12px;color:#aaa;float:right">{{notice.sendTime}}</span>
+            </div>
+            <div>
+              <span class="sys-notice-tip">{{notice.summary}}</span>
+            </div>
+          </section>
+
+          <div style="text-align:center;padding:20px;" v-if="noticeList.length == 0">暂无通知</div>
+        </div>
+      </div>
+      <div class="paginate-btn" v-if="noticeList.length != 0">
+        <el-button-group>
+          <el-button
+            size="mini"
+            type="info"
+            round
+            :disabled="curPage == 1"
+            icon="el-icon-arrow-left"
+            @click="handlePrev"
+          >上一页</el-button>
+          <el-button size="mini" type="info" round :disabled="curPage == total" @click="handleNext">
+            下一页
+            <i class="el-icon-arrow-right el-icon--right"></i>
+          </el-button>
+        </el-button-group>
+      </div>
+    </div>
+    <div class="sys-notice-detail">
+      <div v-if="JSON.stringify(noticeDeatil) != '{}' && noticeList.length != 0">
+        <div class="sys-notice-detail-head">
+          <h3>{{noticeDeatil.tzbt}}</h3>
+          <p>
+            发送人 :
+            <span>{{noticeDeatil.fsrxm}}</span>
+          </p>
+          <p>
+            接收人 :
+            <span>{{noticeDeatil.jsrxm}}</span>
+          </p>
+          <p>
+            时间 :
+            <span>{{noticeDeatil.fssj}}</span>
+          </p>
+          <p v-if="noticeDeatil.xmmc">
+            项目名称 :
+            <span>{{noticeDeatil.xmmc}}</span>
+          </p>
+          <p v-if="noticeDeatil.rwmc">
+            任务名称 :
+            <span>{{noticeDeatil.rwmc_display}}</span>
+          </p>
+          <p v-if="noticeDeatil.lcbms">
+            里程碑名称 :
+            <span>{{noticeDeatil.lcbms_display}}</span>
+          </p>
+        </div>
+        <div class="sys-notice-detail-content">
+          <h5>内容：</h5>
+          <div style="color:#000;" v-html="noticeDeatil.tznr"></div>
+        </div>
+      </div>
+      <div
+        v-if="JSON.stringify(noticeDeatil) == '{}' || noticeList.length == 0"
+        style="text-align:center;padding-top:100px"
+      >
+        <img src="static/img/empty.png" alt />
+        <p>暂无通知</p>
+      </div>
+      <div class="sysNotice-close" title="关闭" @click="closeNotice">
+        <span class="el-icon-close"></span>
+      </div>
+    </div>
   </div>
 </template>
 <script>

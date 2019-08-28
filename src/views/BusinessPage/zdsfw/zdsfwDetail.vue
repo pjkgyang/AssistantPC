@@ -8,7 +8,7 @@
             <table>
                <tr>
                 <td class="contenTitle">学校名称</td>
-                <td>{{cpData.xxmc}}</td>
+                <td>{{cpData.xx}}</td>
                 <td class="contenTitle">合同名称</td>
                 <td>{{cpData.xmmc}}</td>
               </tr>

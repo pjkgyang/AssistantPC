@@ -1,55 +1,102 @@
-<template>  
+<template>
   <div class="project-question">
-       <div class="project-question-query">
-           <div>
-                <span class="query-title"><span :class="{'isshown-query':true,'el-icon-arrow-down':!queryLJshow,'el-icon-arrow-up':queryLJshow}" @click="handleQueryShow"></span>&nbsp;高级查询</span>
-                <el-input v-model="keyword" style="width:493px;" size="small" placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称" @change="searchQuestion"></el-input>&#x3000;
-                <el-button type="primary" size="mini" @click="handlequeryQuestion">查询</el-button>
-           </div>
-            <div class="query-condition" v-if="queryLJshow">
-            <div>
-              <p class="query-title">提问时间:</p>
-              <p class="query-list" >
-                 <el-date-picker @change="changeStarDay" v-model="starDay" size="mini" type="date" placeholder="选择开始日期"  value-format="yyyy-MM-dd"></el-date-picker> &#x3000; 至 &#x3000; 
-                 <el-date-picker @change="changeEndDay" v-model="endDay" size="mini" type="date" placeholder="选择结束日期"  value-format="yyyy-MM-dd"></el-date-picker>
-              </p>
-           </div>
-            <div>
-              <p class="query-title">产品线:</p>
-              <p class="query-list" @click="handleCPX">
-                  <span data-type="" :class="{'bg-active':cpxbg == ''}">全部</span>
-                  <span v-for="(cpx,index) in cpline" :data-type="cpx.label" :class="{'bg-active':cpxbg === cpx.label}">{{cpx.mc}}</span>
-              </p>
-           </div>
-            <div>
-              <p class="query-title">产品:</p>
-              <p class="query-list" @click="handleCP">
-                  <span data-type="" :class="{'bg-active':cpbg == ''}">全部</span>
-                  <span v-for="(cp,index) in cplist" :data-type="cp.label" :class="{'bg-active':cpbg == cp.label}">{{cp.mc}}</span>
-                  </p>
-           </div>
-            <div>
-              <p class="query-title">问题类别:</p>
-              <p class="query-list" @click="handleWTLB">
-                  <span data-type="" :class="{'bg-active':wtlbbg == ''}">全部</span>
-                  <span v-for="(wtlbd,index) in wtlb" :data-type="wtlbd.label" :class="{'bg-active':wtlbbg == wtlbd.label}">{{wtlbd.mc}}</span>
-                  </p>
-           </div>
-            <div v-if="isJZuser == 0">
-              <p class="query-title">单位类型:</p>
-              <p class="query-list" @click="handleDWLX">
-                  <span data-type="" :class="{'bg-active':dwlx == ''}">全部</span>
-                  <span v-for="(dwlxx,index) in dwlxList" :data-type="dwlxx.label" :class="{'bg-active':dwlx == dwlxx.label}">{{dwlxx.mc}}</span>
-                  </p>
-           </div>
-       </div>
-       </div>
-       <div style="background:#fff;margin-top:10px;box-shadow:0 0 5px #ccc;border-radius:5px;padding:10px;">
-         <questionCard :questionList="questionList" :isShow="false" @handleQuestionDetail="handleQuestionDetail"></questionCard>
-      <div style="margin-top:10px;text-align:right" v-if="total > 10">
-        <pagination  :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+    <div class="project-question-query">
+      <div>
+        <span class="query-title">
+          <span
+            :class="{'isshown-query':true,'el-icon-arrow-down':!queryLJshow,'el-icon-arrow-up':queryLJshow}"
+            @click="handleQueryShow"
+          ></span>&nbsp;高级查询
+        </span>
+        <el-input
+          v-model="keyword"
+          style="width:493px;"
+          size="small"
+          placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称"
+          @change="searchQuestion"
+        ></el-input>&#x3000;
+        <el-button type="primary" size="mini" @click="handlequeryQuestion">查询</el-button>
       </div>
-  </div>
+      <div class="query-condition" v-if="queryLJshow">
+        <div>
+          <p class="query-title">提问时间:</p>
+          <p class="query-list">
+            <el-date-picker
+              @change="changeStarDay"
+              v-model="starDay"
+              size="mini"
+              type="date"
+              placeholder="选择开始日期"
+              value-format="yyyy-MM-dd"
+            ></el-date-picker>&#x3000; 至 &#x3000;
+            <el-date-picker
+              @change="changeEndDay"
+              v-model="endDay"
+              size="mini"
+              type="date"
+              placeholder="选择结束日期"
+              value-format="yyyy-MM-dd"
+            ></el-date-picker>
+          </p>
+        </div>
+        <div>
+          <p class="query-title">产品线:</p>
+          <p class="query-list" @click="handleCPX">
+            <span data-type :class="{'bg-active':cpxbg == ''}">全部</span>
+            <span
+              v-for="(cpx,index) in cpline"
+              :data-type="cpx.label"
+              :class="{'bg-active':cpxbg === cpx.label}"
+            >{{cpx.mc}}</span>
+          </p>
+        </div>
+        <div>
+          <p class="query-title">产品:</p>
+          <p class="query-list" @click="handleCP">
+            <span data-type :class="{'bg-active':cpbg == ''}">全部</span>
+            <span
+              v-for="(cp,index) in cplist"
+              :data-type="cp.label"
+              :class="{'bg-active':cpbg == cp.label}"
+            >{{cp.mc}}</span>
+          </p>
+        </div>
+        <div>
+          <p class="query-title">问题类别:</p>
+          <p class="query-list" @click="handleWTLB">
+            <span data-type :class="{'bg-active':wtlbbg == ''}">全部</span>
+            <span
+              v-for="(wtlbd,index) in wtlb"
+              :data-type="wtlbd.label"
+              :class="{'bg-active':wtlbbg == wtlbd.label}"
+            >{{wtlbd.mc}}</span>
+          </p>
+        </div>
+        <div v-if="isJZuser == 0">
+          <p class="query-title">单位类型:</p>
+          <p class="query-list" @click="handleDWLX">
+            <span data-type :class="{'bg-active':dwlx == ''}">全部</span>
+            <span
+              v-for="(dwlxx,index) in dwlxList"
+              :data-type="dwlxx.label"
+              :class="{'bg-active':dwlx == dwlxx.label}"
+            >{{dwlxx.mc}}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      style="background:#fff;margin-top:10px;box-shadow:0 0 5px #ccc;border-radius:5px;padding:10px;"
+    >
+      <questionCard
+        :questionList="questionList"
+        :isShow="false"
+        @handleQuestionDetail="handleQuestionDetail"
+      ></questionCard>
+      <div style="margin-top:10px;text-align:right" v-if="total > 10">
+        <pagination :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+      </div>
+    </div>
   </div>
 </template>
 <script>

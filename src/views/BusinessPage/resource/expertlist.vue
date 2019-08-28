@@ -1,5 +1,7 @@
 <template>
-  <div style="width:90%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;">
+  <div
+    style="width:90%;margin:10px auto 0;padding:20px 10px;background:#fff;border-radius:5px;box-shadow:0 0 5px #ccc;"
+  >
     <ul class="item-list">
       <div class="item-header" flex spacebetween>
         <p class="item-name">产品</p>
@@ -10,51 +12,69 @@
       <div class="list_content" v-if="itemList.length">
         <li v-for="(item,index) in itemList" flex spacebetween @mouseover="listIndex = index">
           <p class="item-name textellipsis" :title="item.cpx">{{item.cpmc}}</p>
-          <p class="item-size textellipsis" :title="item.gczj">{{item.gczj}}
-            <a href="javaScript:;;" @click="handleCheckDetail(item.cpbh,'0')" v-if="listIndex == index && item.gczj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+          <p class="item-size textellipsis" :title="item.gczj">
+            {{item.gczj}}
+            <a
+              href="javaScript:;;"
+              @click="handleCheckDetail(item.cpbh,'0')"
+              v-if="listIndex == index && item.gczj != '-'"
+            >
+              <img src="static/img/pj.png" alt />评价及查看
+            </a>
           </p>
           <p class="item-cpzj textellipsis" :title="item.cpzj">
             {{item.cpzj}}
-            <a href="javaScript:;;" @click="handleCheckDetail(item.cpbh,'1')" v-if="listIndex == index && item.cpzj != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+            <a
+              href="javaScript:;;"
+              @click="handleCheckDetail(item.cpbh,'1')"
+              v-if="listIndex == index && item.cpzj != '-'"
+            >
+              <img src="static/img/pj.png" alt />评价及查看
+            </a>
           </p>
           <p class="item-cpjl textellipsis" :title="item.cpjl">
             {{item.cpjl}}
-            <a href="javaScript:;;" @click="handleCheckDetail(item.cpbh,'2')" v-if="listIndex == index && item.cpjl != '-'"><img src="static/img/pj.png" alt="">评价及查看</a>
+            <a
+              href="javaScript:;;"
+              @click="handleCheckDetail(item.cpbh,'2')"
+              v-if="listIndex == index && item.cpjl != '-'"
+            >
+              <img src="static/img/pj.png" alt />评价及查看
+            </a>
           </p>
         </li>
       </div>
       <div v-if="!itemList.length" class="emptyContent">
-        <img src="static/img/kong.png" alt="">
+        <img src="static/img/kong.png" alt />
         <p>暂无数据</p>
       </div>
     </ul>
 
     <zjpjDialog :show.sync="zjpjShow" :tableData="tableData" @handlePraise="handlePraise"></zjpjDialog>
     <pjsmDialog :show.sync="pjsmShow" :title="title" @handleClickSure="handleClickSure"></pjsmDialog>
-    
   </div>
 </template>
 
 
 <script>
 import { downloadXmFile } from "@/api/TaskProcess.js";
-import zjpjDialog from '@/components/dialog/resource/zjpj-dialog';
-import pjsmDialog from '@/components/dialog/resource/pjsm-dialog';
+import zjpjDialog from "@/components/dialog/resource/zjpj-dialog";
+import pjsmDialog from "@/components/dialog/resource/pjsm-dialog";
 
 export default {
   data() {
     return {
-      zjpjShow:false,
-      pjsmShow:false,
+      zjpjShow: false,
+      pjsmShow: false,
       itemList: [],
       fjbh: "",
       fjobj: {},
       baseUrl: null,
       listIndex: 9999,
-      tableData:[],
-      rylx:'',
-      title:'',
-      type:''//评价类型
+      tableData: [],
+      rylx: "",
+      title: "",
+      type: "" //评价类型
     };
   },
   props: {
@@ -83,55 +103,62 @@ export default {
         }
       });
     },
-    getExperts(cpbh){
-      this.$get(this.API.experts,{
-        cpbh:cpbh,
-        rylx:this.rylx
-      }).then(res=>{
-        if(res.state == 'success'){
-           if(!res.data){
-            this.tableData = []
-           }else{
-            this.tableData = res.data
-           }
-         }
-      })
+    getExperts(cpbh) {
+      this.$get(this.API.experts, {
+        cpbh: cpbh,
+        rylx: this.rylx
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data) {
+            this.tableData = [];
+          } else {
+            this.tableData = res.data;
+          }
+        }
+      });
     },
     // 查看详情
-    handleCheckDetail(params,data){
+    handleCheckDetail(params, data) {
       this.rylx = data;
       this.getExperts(params);
-      this.zjpjShow = !this.zjpjShow
+      this.zjpjShow = !this.zjpjShow;
     },
-    // 
-    handlePraise(params,type){
+    //
+    handlePraise(params, type) {
       this.xminfo = params;
-      this.title = type == 1?"好评说明":'优化建议';
+      this.title = type == 1 ? "好评说明" : "优化建议";
       this.type = type;
-      this.pjsmShow = !this.pjsmShow
+      this.pjsmShow = !this.pjsmShow;
     },
     // 评价确定
-    handleClickSure(sm){
-       this.$post(this.type=='1'?this.API.expertgood:this.API.expertbad,{
-        rylx:this.rylx,
-        sm:sm,
-        rybh:this.xminfo.bh,
-        ryxm:this.xminfo.xm,
-        cpbh:this.xminfo.cpbh,
-        cpmc:this.xminfo.cpx
-      }).then(res=>{
-        if(res.state == 'success'){
-          this.pjsmShow = !this.pjsmShow
-          this.$alert('评价成功', "提示", {confirmButtonText: "确定",type:'success',callback:action=>{
-             this.getExperts(this.xminfo.cpbh);
-          }});
-        }else{
-          this.$alert(res.msg, "提示", {confirmButtonText: "确定",type:'error'});
+    handleClickSure(sm) {
+      this.$post(this.type == "1" ? this.API.expertgood : this.API.expertbad, {
+        rylx: this.rylx,
+        sm: sm,
+        rybh: this.xminfo.bh,
+        ryxm: this.xminfo.xm,
+        cpbh: this.xminfo.cpbh,
+        cpmc: this.xminfo.cpx
+      }).then(res => {
+        if (res.state == "success") {
+          this.pjsmShow = !this.pjsmShow;
+          this.$alert("评价成功", "提示", {
+            confirmButtonText: "确定",
+            type: "success",
+            callback: action => {
+              this.getExperts(this.xminfo.cpbh);
+            }
+          });
+        } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
-      })
+      });
     }
   },
-  components:{zjpjDialog,pjsmDialog}
+  components: { zjpjDialog, pjsmDialog }
 };
 </script>
 
@@ -188,9 +215,9 @@ export default {
     width: 32%;
     text-align: center;
   }
-  .item-cpjl{
-   width: 16%; 
-   text-align: center;
+  .item-cpjl {
+    width: 16%;
+    text-align: center;
   }
 }
 </style>

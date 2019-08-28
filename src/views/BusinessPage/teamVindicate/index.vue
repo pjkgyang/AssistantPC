@@ -1,44 +1,58 @@
 <template>
-    <div>
-        <div class="layout-bgf">
-            <el-card shadow="hover">
-                 <filterComponent :filterList="filterList" :placeholder="'请输入战队队长工号/姓名'" @handleChangeFilter="handleChangeFilter"></filterComponent>
-            </el-card>
-        </div>
-        <div class="layout-bgf" >
-             <el-card shadow="hover" style="padding:0 20px">
-               <div class="mb-12" v-if="limitShow">
-                  <el-button type="primary" size="small" @click="handleAddzd">添加战队</el-button>
-               </div>
-                <el-table :data="tableData" border >
-                    <el-table-column fixed="left" label="操作" width="220">
-                        <template slot-scope="scope">
-                            <el-button @click="handleClickDelete(scope.row)" type="danger" size="mini" v-if="limitShow">删除</el-button>
-                            <el-button @click="handleClickEdit(scope.row)" size="mini" v-if="limitShow">编辑</el-button>
-                            <el-button @click="handleClickMaintain(scope.row)" size="mini">维护</el-button>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="qygc" label="区域工程" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="qyzd" label="战队名称" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="qyzddzxm" label="战队队长" width="120"></el-table-column>
-                    <el-table-column prop="sjzgxm" label="上级领导姓名" width="120"></el-table-column>
-                </el-table>
-                <div text-right class="pd-10">
-                    <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="currentPage"
-                        :page-sizes="[15, 30, 50, 100]"
-                        :page-size="pageSize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="total">
-                      </el-pagination>
-                </div>
-            </el-card>
-        </div>
-        <zdwh-dialog :show.sync="show" :qyzdwid="qyzdwid" ></zdwh-dialog>
-        <addzd-dialog :show.sync="addzdShow" :data="zdData" :title="title" @handleAddSuccess="handleAddSuccess"></addzd-dialog>
+  <div>
+    <div class="layout-bgf">
+      <el-card shadow="hover">
+        <filterComponent
+          :filterList="filterList"
+          :placeholder="'请输入战队队长工号/姓名'"
+          @handleChangeFilter="handleChangeFilter"
+        ></filterComponent>
+      </el-card>
     </div>
+    <div class="layout-bgf">
+      <el-card shadow="hover" style="padding:0 20px">
+        <div class="mb-12" v-if="limitShow">
+          <el-button type="primary" size="small" @click="handleAddzd">添加战队</el-button>
+        </div>
+        <el-table :data="tableData" border>
+          <el-table-column fixed="left" label="操作" width="220">
+            <template slot-scope="scope">
+              <el-button
+                @click="handleClickDelete(scope.row)"
+                type="danger"
+                size="mini"
+                v-if="limitShow"
+              >删除</el-button>
+              <el-button @click="handleClickEdit(scope.row)" size="mini" v-if="limitShow">编辑</el-button>
+              <el-button @click="handleClickMaintain(scope.row)" size="mini">维护</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="qygc" label="区域工程" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="qyzd" label="战队名称" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="qyzddzxm" label="战队队长" width="120"></el-table-column>
+          <el-table-column prop="sjzgxm" label="上级领导姓名" width="120"></el-table-column>
+        </el-table>
+        <div text-right class="pd-10">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[15, 30, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+          ></el-pagination>
+        </div>
+      </el-card>
+    </div>
+    <zdwh-dialog :show.sync="show" :qyzdwid="qyzdwid"></zdwh-dialog>
+    <addzd-dialog
+      :show.sync="addzdShow"
+      :data="zdData"
+      :title="title"
+      @handleAddSuccess="handleAddSuccess"
+    ></addzd-dialog>
+  </div>
 </template>
 
 <script>
@@ -67,7 +81,11 @@ export default {
   },
   mounted() {
     this.userGroupTag = JSON.parse(sessionStorage.userInfo).userGroupTag;
-    if (this.userGroupTag.indexOf("JYGL") != -1 || this.userGroupTag.indexOf("ZDDZ") != -1 || this.userGroupTag.indexOf("QYZ") == -1) {
+    if (
+      this.userGroupTag.indexOf("JYGL") != -1 ||
+      this.userGroupTag.indexOf("ZDDZ") != -1 ||
+      this.userGroupTag.indexOf("QYZ") == -1
+    ) {
       this.limitShow = true;
     }
     if (this.userGroupTag.indexOf("JYGL") != -1) {

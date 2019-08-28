@@ -56,7 +56,7 @@
                         </div><br>
                         <div flex>
                             &#x3000;&#x3000;&#x3000;&#x3000;&nbsp;
-                            <span class="filter-weight">附件：</span>
+                            <span class="filter-weight before-require">附件：</span>
                             <div>
                                 <el-upload class="upload-demo" ref="uploadfile" :action="upload_url" :auto-upload="false" 
                                 :before-upload="newFiles" :on-remove="handleRemove" multiple :file-list="files">
@@ -287,6 +287,14 @@ export default {
         });
         return false;
       }
+      if (!this.files.length) {
+        this.$alert("请上传巡检附件", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
+      
       return true;
     }
   },

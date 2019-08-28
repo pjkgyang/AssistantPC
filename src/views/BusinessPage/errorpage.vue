@@ -1,13 +1,13 @@
 <template>
   <div class="dp-errorpage">
     <div class="main-content" flex>
-      <section col="1" center >
-        <img src="static/img/san.png" alt>
+      <section col="1" center>
+        <img src="static/img/san.png" alt />
       </section>
       <section col="1" flex-column spacearound>
         <div class="rightText" flex-column spacearound>
           <h2>页面好像丢失了，404！</h2>
-          <hr>
+          <hr />
           <div>
             <span class="fontGreen">
               页面即将

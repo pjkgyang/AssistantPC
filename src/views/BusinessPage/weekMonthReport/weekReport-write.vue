@@ -1,165 +1,379 @@
 <template>
- <div>
-     <layout :title="''" :shown="shown">
-          <!-- v-if="dayNum > 1 && dayNum < 4"  -->
-          <div slot="btn">
-            <el-button  type="danger" size="small" @click="handleFormulate">保存</el-button>
+  <div>
+    <layout :title="''" :shown="shown">
+      <!-- v-if="dayNum > 1 && dayNum < 4"  -->
+      <div slot="btn">
+        <el-button type="danger" size="small" @click="handleFormulate">保存</el-button>
+      </div>
+      <header slot="header"></header>
+      <article slot="content">
+        <section class="weekly-now">
+          <h4 class="filter-weight">
+            本周工作总结
+            <span
+              class="weekly-now-date"
+            >( {{monthly}} {{'第'+(zcValue==1?'一':zcValue==2?'二':zcValue==3?'三':zcValue==4?'四':'五')+'周'}} {{weekDay}})</span>
+          </h4>
+          <hr class="weekly-hr" />
+          <div>
+            <tableLayout :title="'里程碑工作总结'">
+              <div slot="bottom">
+                <div flex class="mg-12">
+                  <el-input
+                    style="width:300px"
+                    @change="handleEnterSearch"
+                    size="small"
+                    v-model="keyword"
+                    placeholder="请输入项目编号/项目名称"
+                  ></el-input>&#x3000;
+                  <div class="colcenter">
+                    <span class="filter-weight">里程碑状态:&nbsp;</span>
+                    <lcbztSelect
+                      :multipleLcbztList="BzlcbztList"
+                      @handleChangeLcbzt="handleChangeLcbzt"
+                    ></lcbztSelect>&#x3000;
+                  </div>
+                </div>
+                <section class="month-plan-condition mg-12">
+                  <!-- <el-button type="primary" size="small" @click="handleAdded('lcb-bz')">新增</el-button> -->
+                  <el-button
+                    v-if="!isBlocked"
+                    :disabled="!multipleBzLcb.length"
+                    size="small"
+                    @click="handleEditofBatch('bz')"
+                  >批量编辑</el-button>
+                </section>
+                <WeekLcbTable
+                  :tableData="LcbList"
+                  @handleClickPz="handleBzLcbPz"
+                  @handleClickCheck="handleBzLcbCheck"
+                  @handleCurrentChange="handleBzLcbChange"
+                  @handleSizeChange="handleBzlcbSizeChange"
+                  @handleSelectionChange="handleSelectionBzlcb"
+                  @handleClickDelete="handleDeleteBzLcb"
+                  @handleClickEdit="handleEditBzLcb"
+                  :wordShow="true"
+                  :gznrShow="true"
+                  :isSelect="true"
+                  :ispz="false"
+                  :pageSize="bzlcbPageSize"
+                  :records="LcbRecords"
+                  :currentPage="currentNowLcbPage"
+                  :bjWordShow="!isBlocked"
+                  :isDelete="false"
+                ></WeekLcbTable>
+              </div>
+            </tableLayout>
+            <tableLayout :title="'进度任务总结'">
+              <div slot="bottom">
+                <div class="weekly-addbtn">
+                  <el-button type="primary" size="small" @click="handleAdded('rwjd-bz')">新增</el-button>
+                </div>
+                <processTable
+                  :tableData="ProcessList"
+                  @handleClickEdit="handleEditBzJd"
+                  @handleClickPz="handleBzJdPz"
+                  @handleClickCheck="handleBzJdCheck"
+                  @handleCurrentChange="handleBzJdChange"
+                  @handleSizeChange="handleBzjdSizeChange"
+                  @handleClickDelete="handleDeleteBzjd"
+                  :isPz="false"
+                  :pageSize="bzjdPageSize"
+                  :records="JdRecords"
+                  :gznrShow="true"
+                  :currentPage="currentNextLcbPage"
+                  :bjWordShow="!isBlocked"
+                  :deleteShow="!isBlocked"
+                  :wordShow="true"
+                ></processTable>
+              </div>
+            </tableLayout>
+            <tableLayout :title="'问题处理总结'">
+              <div slot="bottom">
+                <section class="mg-12">
+                  <el-input
+                    style="width:300px"
+                    @change="handleBzWtEnterSearch"
+                    size="small"
+                    v-model="bzwtKeyword"
+                    placeholder="请输入项目编号/项目名称/问题标题/提问人"
+                  ></el-input>&#x3000;
+                  <span>
+                    <span class="filter-weight">问题状态：</span>
+                    <el-select
+                      v-model="wtztValue"
+                      size="small"
+                      placeholder="请选择"
+                      multiple
+                      @change="handleSelectWtzt"
+                    >
+                      <el-option
+                        v-for="item in wtztList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
+                  </span>
+                  <span>
+                    <span class="filter-weight">异常状态：</span>
+                    <el-select
+                      v-model="ycztValue"
+                      size="small"
+                      placeholder="请选择"
+                      @change="handleSelectYczt"
+                    >
+                      <el-option
+                        v-for="item in ycztList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
+                  </span>
+                </section>
+                <section class="month-plan-condition mg-12">
+                  <el-button type="primary" size="small" @click="handleAdded('wtcl-bz')">新增</el-button>
+                  <el-button
+                    v-if="!isBlocked"
+                    :disabled="!multipleBzWt.length"
+                    size="small"
+                    @click="handleEditofBatchWt"
+                  >批量编辑</el-button>
+                </section>
+                <div class="weekly-addbtn"></div>
+                <MonthWeekQuestionTable
+                  :tableData="QuestionList"
+                  @handleClickDelete="handleDeleteBzwt"
+                  @handleClickEdit="handleEditBzWt"
+                  @handleClickCheck="handleBzWtCheck"
+                  @handleSizeChange="handleBzwtSizeChange"
+                  @handleCurrentChange="handleBzwtChange"
+                  @handleSelectionChange="handleSelectionBzwt"
+                  :isSelect="true"
+                  :isPz="false"
+                  :bjWordShow="!isBlocked"
+                  :deleteShow="!isBlocked"
+                  :show="false"
+                  :pageSize="bzwtPageSize"
+                  :records="WtRecords"
+                  :currentPage="currentNowWtPage"
+                ></MonthWeekQuestionTable>
+              </div>
+            </tableLayout>
           </div>
-          <header slot="header"> 
-         </header>   
-         <article slot="content">
-             <section class="weekly-now">
-                 <h4 class="filter-weight">本周工作总结  <span class="weekly-now-date">( {{monthly}}　{{'第'+(zcValue==1?'一':zcValue==2?'二':zcValue==3?'三':zcValue==4?'四':'五')+'周'}}　{{weekDay}})</span> </h4>
-                 <hr class="weekly-hr">
-                 <div>
-                      <tableLayout :title="'里程碑工作总结'">
-                        <div slot="bottom">
-                            <div flex class="mg-12">
-                                <el-input style="width:300px" @change="handleEnterSearch"  size="small" v-model="keyword" placeholder="请输入项目编号/项目名称"></el-input>&#x3000;
-                                    <div class="colcenter">
-                                        <span class="filter-weight">里程碑状态:&nbsp;</span>
-                                        <lcbztSelect :multipleLcbztList="BzlcbztList" @handleChangeLcbzt="handleChangeLcbzt"></lcbztSelect>&#x3000;
-                                    </div>
-                           </div> 
-                           <section class="month-plan-condition mg-12" >
-                            <!-- <el-button type="primary" size="small" @click="handleAdded('lcb-bz')">新增</el-button> -->
-                            <el-button v-if="!isBlocked" :disabled="!multipleBzLcb.length" size="small" @click="handleEditofBatch('bz')">批量编辑</el-button>
-                          </section>
-                            <WeekLcbTable :tableData="LcbList" @handleClickPz="handleBzLcbPz" @handleClickCheck="handleBzLcbCheck" @handleCurrentChange="handleBzLcbChange" 
-                         @handleSizeChange="handleBzlcbSizeChange" @handleSelectionChange="handleSelectionBzlcb" @handleClickDelete="handleDeleteBzLcb" @handleClickEdit="handleEditBzLcb" :wordShow="true" 
-                         :gznrShow="true" :isSelect="true"  :ispz='false' :pageSize="bzlcbPageSize" :records="LcbRecords" :currentPage="currentNowLcbPage"
-                         :bjWordShow="!isBlocked" :isDelete="false"></WeekLcbTable>
-                        </div>
-                    </tableLayout>    
-                    <tableLayout :title="'进度任务总结'">
-                        <div slot="bottom">
-                             <div class="weekly-addbtn"><el-button type="primary" size="small" @click="handleAdded('rwjd-bz')">新增</el-button></div>
-                            <processTable :tableData="ProcessList"  @handleClickEdit="handleEditBzJd" @handleClickPz="handleBzJdPz" @handleClickCheck="handleBzJdCheck" @handleCurrentChange="handleBzJdChange"
-                        @handleSizeChange="handleBzjdSizeChange" @handleClickDelete="handleDeleteBzjd" :isPz="false" :pageSize="bzjdPageSize" :records="JdRecords" :gznrShow="true" :currentPage="currentNextLcbPage"
-                         :bjWordShow="!isBlocked" :deleteShow="!isBlocked" :wordShow="true"></processTable>
-                        </div>
-                    </tableLayout>    
-                    <tableLayout :title="'问题处理总结'">
-                        <div slot="bottom">
-                          <section class="mg-12">
-                            <el-input style="width:300px" @change="handleBzWtEnterSearch"  size="small" v-model="bzwtKeyword" placeholder="请输入项目编号/项目名称/问题标题/提问人"></el-input>&#x3000;
-                            <span>
-                                <span class="filter-weight">问题状态：</span>
-                                <el-select v-model="wtztValue" size="small" placeholder="请选择" multiple @change="handleSelectWtzt">
-                                    <el-option v-for="item in wtztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                </el-select>
-                            </span>
-                            <span>
-                                <span class="filter-weight">异常状态：</span>
-                                <el-select v-model="ycztValue" size="small" placeholder="请选择" @change="handleSelectYczt">
-                                    <el-option v-for="item in ycztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                </el-select>
-                            </span>
-                          </section>
-                          <section class="month-plan-condition mg-12" >
-                            <el-button type="primary" size="small" @click="handleAdded('wtcl-bz')">新增</el-button>
-                            <el-button v-if="!isBlocked" :disabled="!multipleBzWt.length" size="small" @click="handleEditofBatchWt">批量编辑</el-button>
-                          </section>
-                            <div class="weekly-addbtn"></div>
-                            <MonthWeekQuestionTable :tableData="QuestionList" @handleClickDelete="handleDeleteBzwt" @handleClickEdit="handleEditBzWt" @handleClickCheck="handleBzWtCheck"
-                        @handleSizeChange="handleBzwtSizeChange" @handleCurrentChange="handleBzwtChange"  @handleSelectionChange="handleSelectionBzwt" :isSelect="true" :isPz="false" 
-                        :bjWordShow="!isBlocked" :deleteShow="!isBlocked" :show="false" :pageSize="bzwtPageSize" :records="WtRecords" :currentPage="currentNowWtPage"></MonthWeekQuestionTable>
-                        </div>
-                    </tableLayout>  
-                 </div>
-             </section>
-         </article> 
-         
-          <article slot="contentBottom">
-              <section class="weekly-next">
-                 <h4 class="filter-weight">下周工作计划 <span class="weekly-now-date">( {{NextMonth}}　{{'第'+(NextweekValue==1?'一':NextweekValue==2?'二':NextweekValue==3?'三':NextweekValue==4?'四':'五')+'周'}}　{{nextWeekDay}})</span> </h4>
-                 <hr class="weekly-hr">
-                 <div>
-                      <tableLayout :title="'里程碑工作计划'">
-                        <div slot="bottom">
-                            <section class="monthReport-plan-filter mg-12" flex>
-                                <div>
-                                    <el-input style="width:300px" @change="handleXzLcbEnterSearch"  size="small" v-model="xzlcbkeyword" placeholder="请输入项目编号/项目名称"></el-input>&#x3000;
-                                    <span class="filter-weight">项目类别:</span>
-                                    <el-select v-model="xmlbValue" size="small" placeholder="请选择" collapse-tags multiple @change="handleSelectXmlb">
-                                        <el-option v-for="(xmlb,i) in xmlbList" :key="i" :label="xmlb" :value="xmlb"></el-option>
-                                    </el-select>
-                                </div>&#x3000;
-                                <!-- <div>
-                                    <span class="filter-weight">产品线:</span>
-                                    <el-select v-model="cpxValue" size="small" placeholder="请选择" collapse-tags multiple @change="handleSelectCpx">
-                                        <el-option v-for="cpx in cpxList" :key="cpx.id" :label="cpx.name" :value="cpx.id"></el-option>
-                                    </el-select>
-                                </div>&#x3000; -->
-                                    <div class="colcenter">
-                                        <span class="filter-weight">里程碑状态:&nbsp;</span>
-                                        <lcbztSelect :multipleLcbztList="XzlcbztList" @handleChangeLcbzt="handleChangeXzLcbzt"></lcbztSelect>&#x3000;
-                                    </div>
-                           </section> 
-                           <section class="month-plan-condition mg-12" >
-                               <el-button type="primary" size="small" @click="handleAdded('lcb-xz')">新增</el-button>
-                                <el-button v-if="!isNextBlocked" :disabled="!multipleXzLcb.length" size="small" @click="handleEditofBatch('xz')">批量编辑</el-button>
-                          </section>
-                            <WeekLcbTable :tableData="nextLcbList" :pageSize="xzlcbPageSize" :records="nextLcbRecords" @handleClickPz="handleXzLcbPz" @handleClickCheck="handleXzLcbCheck" @handleCurrentChange="handleXzLcbChange"
-                          @handleClickEdit="handleEditXzLcb" @handleSelectionChange="handleSelectionXzlcb" @handleSizeChange="handleXzlcbSizeChange" @handleClickDelete="handleDeleteXzLcb" :isSelect="true"  :gznrShow="true"  :wordShow="false" :ispz='false' 
-                        :bjWordShow="false" :isZj="false" :isDelete="!isNextBlocked"  :currentPage="currentNextLcbPage"></WeekLcbTable>
-                        </div>
-                    </tableLayout>    
-                    <tableLayout :title="'进度任务计划'">
-                        <div slot="bottom">
-                            <div class="weekly-addbtn"><el-button type="primary" size="small" @click="handleAdded('rwjd-xz')">新增</el-button></div>
-                            <processTable :tableData="nextProcessList"  @handleClickPz="handleXzJdPz"  @handleClickEdit="handleEditXzJd" @handleClickCheck="handleXzJdCheck" @handleCurrentChange="handleXzJdChange"
-                          @handleSizeChange="handleXzjdSizeChange" @handleClickDelete="handleDeleteXzjd" :isPz="false" :pageSize="xzjdPageSize" :records="nextJdRecords" :currentPage="currentNextJdPage"
-                          :bjWordShow="!isNextBlocked" :isZj="false" :deleteShow="!isNextBlocked" ></processTable>
-                        </div>
-                    </tableLayout>    
-                    <tableLayout :title="'问题处理计划'">
-                        <div slot="bottom">
-                            <section class="mg-12">
-                                    <el-input style="width:300px" @change="handleXzWtEnterSearch"  size="small" v-model="xzwtKeyword" placeholder="请输入项目编号/项目名称/问题标题/提问人"></el-input>&#x3000;
-                            <span>
-                                <span class="filter-weight">问题状态：</span>
-                                <el-select v-model="xzwtztValue" size="small" placeholder="请选择" multiple @change="handleSelectXzWtzt">
-                                    <el-option v-for="item in wtztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                </el-select>
-                            </span>
-                            <span>
-                                <span class="filter-weight">异常状态：</span>
-                                <el-select v-model="xzycztValue" size="small" placeholder="请选择" @change="handleSelectXzYczt">
-                                    <el-option v-for="item in ycztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                </el-select>
-                            </span>
-                          </section>
-                            <div class="weekly-addbtn"></div>
-                            <section class="month-plan-condition mg-12" >
-                                <el-button type="primary" size="small" @click="handleAdded('wtcl-xz')">新增</el-button>
-                                <el-button v-if="!isNextBlocked" :disabled="!multipleXzWt.length"  size="small" @click="handleEditofBatchNextWt">批量编辑</el-button>
-                            </section>
-                             <!-- v-if="!isNextBlocked" -->
-                            <MonthWeekQuestionTable :tableData="nextQuestionList" @handleClickDelete="handleDeleteXzwt" @handleCurrentChange="handleXzwtChange" @handleClickEdit="handleEditXzWt" @handleClickCheck="handleXzWtCheck" :currentPage="currentNextWtPage"
-                           @handleSizeChange="handleXzwtSizeChange" @handleSelectionChange="handleSelectionXzwt" :othShow="false" :isSelect="true" :pageSize="xzwtPageSize" :records="nextWtRecords"  :isPz="false"  :show="false"
-                           :bjWordShow="!isNextBlocked" :isZj="false" :deleteShow="!isNextBlocked" ></MonthWeekQuestionTable>
-                        </div>
-                    </tableLayout>  
-                    <tableLayout :title="''">
-                        <div slot="bottom">
-                            <div  style="text-align:right">
-                              <el-button  type="danger" size="small" @click="handleFormulate">保存</el-button>
-                            </div>
-                        </div>
-                    </tableLayout>  
-                 </div>
-             </section>
-         </article>    
-     </layout>
+        </section>
+      </article>
 
-     <wtDialog :show.sync="wtShow" :lastDay="cnjssj" @handleClickSure="handleWtClickSure"></wtDialog>
-     <jdDialog :taskInfo="taskInfo"  :show.sync="jdShow" @handleSubmit="handleSubmit" :isweekzj="isweekzj" :isaddTask="isaddTask"></jdDialog>
-     <pzDialog :show.sync="pzShow"></pzDialog>
-     <lcbDialog :show.sync="lcbShow" :lastDay="cnjssj"  :month="monthly" @handleClickSure="handleLCbClickSure"></lcbDialog>
-     <bjDialog :data="bjInfo" :isShow="gznrShow" :isCljh="isCljh" :yycsShow="yycsShow" :show.sync="editShow" @handleClickSure="handleClickEditSure"></bjDialog>
-     <detailDialog :show.sync="detailShow" :title="detailTitle" :detailType="detailType"></detailDialog>
- </div>
+      <article slot="contentBottom">
+        <section class="weekly-next">
+          <h4 class="filter-weight">
+            下周工作计划
+            <span
+              class="weekly-now-date"
+            >( {{NextMonth}} {{'第'+(NextweekValue==1?'一':NextweekValue==2?'二':NextweekValue==3?'三':NextweekValue==4?'四':'五')+'周'}} {{nextWeekDay}})</span>
+          </h4>
+          <hr class="weekly-hr" />
+          <div>
+            <tableLayout :title="'里程碑工作计划'">
+              <div slot="bottom">
+                <section class="monthReport-plan-filter mg-12" flex>
+                  <div>
+                    <el-input
+                      style="width:300px"
+                      @change="handleXzLcbEnterSearch"
+                      size="small"
+                      v-model="xzlcbkeyword"
+                      placeholder="请输入项目编号/项目名称"
+                    ></el-input>&#x3000;
+                    <span class="filter-weight">项目类别:</span>
+                    <el-select
+                      v-model="xmlbValue"
+                      size="small"
+                      placeholder="请选择"
+                      collapse-tags
+                      multiple
+                      @change="handleSelectXmlb"
+                    >
+                      <el-option v-for="(xmlb,i) in xmlbList" :key="i" :label="xmlb" :value="xmlb"></el-option>
+                    </el-select>
+                  </div>&#x3000;
+     
+                  <div class="colcenter">
+                    <span class="filter-weight">里程碑状态:&nbsp;</span>
+                    <lcbztSelect
+                      :multipleLcbztList="XzlcbztList"
+                      @handleChangeLcbzt="handleChangeXzLcbzt"
+                    ></lcbztSelect>&#x3000;
+                  </div>
+                </section>
+                <section class="month-plan-condition mg-12">
+                  <el-button type="primary" size="small" @click="handleAdded('lcb-xz')">新增</el-button>
+                  <el-button
+                    v-if="!isNextBlocked"
+                    :disabled="!multipleXzLcb.length"
+                    size="small"
+                    @click="handleEditofBatch('xz')"
+                  >批量编辑</el-button>
+                </section>
+                <WeekLcbTable
+                  :tableData="nextLcbList"
+                  :pageSize="xzlcbPageSize"
+                  :records="nextLcbRecords"
+                  @handleClickPz="handleXzLcbPz"
+                  @handleClickCheck="handleXzLcbCheck"
+                  @handleCurrentChange="handleXzLcbChange"
+                  @handleClickEdit="handleEditXzLcb"
+                  @handleSelectionChange="handleSelectionXzlcb"
+                  @handleSizeChange="handleXzlcbSizeChange"
+                  @handleClickDelete="handleDeleteXzLcb"
+                  :isSelect="true"
+                  :gznrShow="true"
+                  :wordShow="false"
+                  :ispz="false"
+                  :bjWordShow="false"
+                  :isZj="false"
+                  :isDelete="!isNextBlocked"
+                  :currentPage="currentNextLcbPage"
+                ></WeekLcbTable>
+              </div>
+            </tableLayout>
+            <tableLayout :title="'进度任务计划'">
+              <div slot="bottom">
+                <div class="weekly-addbtn">
+                  <el-button type="primary" size="small" @click="handleAdded('rwjd-xz')">新增</el-button>
+                </div>
+                <processTable
+                  :tableData="nextProcessList"
+                  @handleClickPz="handleXzJdPz"
+                  @handleClickEdit="handleEditXzJd"
+                  @handleClickCheck="handleXzJdCheck"
+                  @handleCurrentChange="handleXzJdChange"
+                  @handleSizeChange="handleXzjdSizeChange"
+                  @handleClickDelete="handleDeleteXzjd"
+                  :isPz="false"
+                  :pageSize="xzjdPageSize"
+                  :records="nextJdRecords"
+                  :currentPage="currentNextJdPage"
+                  :bjWordShow="!isNextBlocked"
+                  :isZj="false"
+                  :deleteShow="!isNextBlocked"
+                ></processTable>
+              </div>
+            </tableLayout>
+            <tableLayout :title="'问题处理计划'">
+              <div slot="bottom">
+                <section class="mg-12">
+                  <el-input
+                    style="width:300px"
+                    @change="handleXzWtEnterSearch"
+                    size="small"
+                    v-model="xzwtKeyword"
+                    placeholder="请输入项目编号/项目名称/问题标题/提问人"
+                  ></el-input>&#x3000;
+                  <span>
+                    <span class="filter-weight">问题状态：</span>
+                    <el-select
+                      v-model="xzwtztValue"
+                      size="small"
+                      placeholder="请选择"
+                      multiple
+                      @change="handleSelectXzWtzt"
+                    >
+                      <el-option
+                        v-for="item in wtztList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
+                  </span>
+                  <span>
+                    <span class="filter-weight">异常状态：</span>
+                    <el-select
+                      v-model="xzycztValue"
+                      size="small"
+                      placeholder="请选择"
+                      @change="handleSelectXzYczt"
+                    >
+                      <el-option
+                        v-for="item in ycztList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
+                  </span>
+                </section>
+                <div class="weekly-addbtn"></div>
+                <section class="month-plan-condition mg-12">
+                  <el-button type="primary" size="small" @click="handleAdded('wtcl-xz')">新增</el-button>
+                  <el-button
+                    v-if="!isNextBlocked"
+                    :disabled="!multipleXzWt.length"
+                    size="small"
+                    @click="handleEditofBatchNextWt"
+                  >批量编辑</el-button>
+                </section>
+                <!-- v-if="!isNextBlocked" -->
+                <MonthWeekQuestionTable
+                  :tableData="nextQuestionList"
+                  @handleClickDelete="handleDeleteXzwt"
+                  @handleCurrentChange="handleXzwtChange"
+                  @handleClickEdit="handleEditXzWt"
+                  @handleClickCheck="handleXzWtCheck"
+                  :currentPage="currentNextWtPage"
+                  @handleSizeChange="handleXzwtSizeChange"
+                  @handleSelectionChange="handleSelectionXzwt"
+                  :othShow="false"
+                  :isSelect="true"
+                  :pageSize="xzwtPageSize"
+                  :records="nextWtRecords"
+                  :isPz="false"
+                  :show="false"
+                  :bjWordShow="!isNextBlocked"
+                  :isZj="false"
+                  :deleteShow="!isNextBlocked"
+                ></MonthWeekQuestionTable>
+              </div>
+            </tableLayout>
+            <tableLayout :title="''">
+              <div slot="bottom">
+                <div style="text-align:right">
+                  <el-button type="danger" size="small" @click="handleFormulate">保存</el-button>
+                </div>
+              </div>
+            </tableLayout>
+          </div>
+        </section>
+      </article>
+    </layout>
+
+    <wtDialog :show.sync="wtShow" :lastDay="cnjssj" @handleClickSure="handleWtClickSure"></wtDialog>
+    <jdDialog
+      :taskInfo="taskInfo"
+      :show.sync="jdShow"
+      @handleSubmit="handleSubmit"
+      :isweekzj="isweekzj"
+      :isaddTask="isaddTask"
+    ></jdDialog>
+    <pzDialog :show.sync="pzShow"></pzDialog>
+    <lcbDialog
+      :show.sync="lcbShow"
+      :lastDay="cnjssj"
+      :month="monthly"
+      @handleClickSure="handleLCbClickSure"
+    ></lcbDialog>
+    <bjDialog
+      :data="bjInfo"
+      :isShow="gznrShow"
+      :isCljh="isCljh"
+      :yycsShow="yycsShow"
+      :show.sync="editShow"
+      @handleClickSure="handleClickEditSure"
+    ></bjDialog>
+    <detailDialog :show.sync="detailShow" :title="detailTitle" :detailType="detailType"></detailDialog>
+  </div>
 </template>
 
 <script>
@@ -926,8 +1140,8 @@ export default {
       this.detailType.wid = data.zgzWid;
       this.detailShow = true;
     },
-    handleBzWtCheck(data) {
       // 问题 查看
+    handleBzWtCheck(data) {
       this.detailTitle = "问题处理详情";
       this.detailType.type = "zbjhbzWt";
       this.detailType.wid = data.zwtWid;

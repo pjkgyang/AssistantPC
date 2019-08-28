@@ -74,19 +74,19 @@
 	methods: {
     handleRouter(m,type){
       let query = {
-          id:m.id=='0'?'':m.id,
+          id:m.id,
           bh:this.unitData.dwbh,
           s:this.qsnf,
           e:this.jsnf
         };
         if(type == 'yfwzn'){
-          query.ffzn = 1;
+          query.fwzn = 1;
         }else if(type == 'wfwzn'){
-          query.ffzn = 0;
+          query.fwzn = 0;
         }else if(type == 'yxxhzc'){
-          query.xxhzc = 1;
+          query.xxh = 1;
         }else if(type == 'wxxhzc'){
-          query.xxhzc = 0;
+          query.xxh = 0;
         }
    
       let routeData = this.$router.resolve({

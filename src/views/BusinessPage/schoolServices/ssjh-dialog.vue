@@ -129,7 +129,7 @@ export default {
           this.form.sswcsj = this.curData.sswcsj;
           this.form.kfzrr = this.curData.kfzrr;
           this.form.kfwczt = this.curData.kfwczt;
-          this.form.kfwcsj = this.curData.kfwcsj;  
+          this.form.kfwcsj = this.curData.kfwcsj; 
         }
       }
     }

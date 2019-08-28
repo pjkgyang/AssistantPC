@@ -3,38 +3,64 @@
     <div class="project-question-query">
       <div>
         <span class="query-title">
-          <span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&nbsp;高级查询</span>
-        <el-input v-model="keyword" style="width:493px;" size="small" placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称" @change="searchQuestion"></el-input>&#x3000;
+          <span
+            :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}"
+            @click="handleQueryShow"
+          ></span>&nbsp;高级查询
+        </span>
+        <el-input
+          v-model="keyword"
+          style="width:493px;"
+          size="small"
+          placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称"
+          @change="searchQuestion"
+        ></el-input>&#x3000;
         <el-button type="primary" size="mini" @click="handlequeryQuestion">查询</el-button>
       </div>
       <div class="query-condition" v-if="queryLJshow">
         <div>
           <p class="query-title">提问时间:</p>
           <p>
-            <el-date-picker  v-model="date" size="mini" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" @change="handleDatepick">
-          </el-date-picker>
-            <!-- <el-date-picker @change="changeStarDay" v-model="starDay" size="mini" type="date" placeholder="选择开始日期" value-format="yyyy-MM-dd"></el-date-picker> &#x3000; 至&#x3000;
-            <el-date-picker @change="changeEndDay" v-model="endDay" size="mini" type="date" placeholder="选择结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
+            <el-date-picker
+              v-model="date"
+              size="mini"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd"
+              @change="handleDatepick"
+            ></el-date-picker>
           </p>
         </div>
         <div>
           <p class="query-title">问题分类:</p>
           <p class="query-list" @click="handleZXR">
-            <span data-type="" :class="{'bg-active':wtfl == ''}">全部</span>
-            <span v-for="(zxr,index) in zzrList" :data-type="zxr.label" :key="index" :class="{'bg-active':wtfl == zxr.label}">{{zxr.mc}}</span>
+            <span data-type :class="{'bg-active':wtfl == ''}">全部</span>
+            <span
+              v-for="(zxr,index) in zzrList"
+              :data-type="zxr.label"
+              :key="index"
+              :class="{'bg-active':wtfl == zxr.label}"
+            >{{zxr.mc}}</span>
           </p>
         </div>
         <div>
           <p class="query-title">标签来源:</p>
           <p class="query-list" @click="handleBQLY">
-            <span data-type="" :class="{'bg-active':bqly == ''}">全部</span>
-            <span v-for="(bqlyl,index) in bqlyList" :data-type="bqlyl.label" :key="index" :class="{'bg-active':bqly == bqlyl.label}">{{bqlyl.mc}}</span>
+            <span data-type :class="{'bg-active':bqly == ''}">全部</span>
+            <span
+              v-for="(bqlyl,index) in bqlyList"
+              :data-type="bqlyl.label"
+              :key="index"
+              :class="{'bg-active':bqly == bqlyl.label}"
+            >{{bqlyl.mc}}</span>
           </p>
         </div>
         <div>
           <p class="query-title">查询状态:</p>
           <p class="query-list" @click="handleCXZT">
-            <span data-type="" :class="{'bg-active':cxzt == ''}">全部</span>
+            <span data-type :class="{'bg-active':cxzt == ''}">全部</span>
             <span data-type="0" :class="{'bg-active':cxzt == '0'}">处理中</span>
             <span data-type="1" :class="{'bg-active':cxzt == '1'}">已关闭</span>
           </p>
@@ -42,7 +68,7 @@
         <div>
           <p class="query-title">申请关闭:</p>
           <p class="query-list" @click="handleSQGB">
-            <span data-type="" :class="{'bg-active':sqgb == ''}">全部</span>
+            <span data-type :class="{'bg-active':sqgb == ''}">全部</span>
             <span data-type="1" :class="{'bg-active':sqgb == '1'}">是</span>
             <span data-type="0" :class="{'bg-active':sqgb == '0'}">否</span>
           </p>
@@ -51,75 +77,133 @@
         <div>
           <p class="query-title">问题标签分类:</p>
           <p class="query-list" @click="handleWTFBQ">
-            <span data-type="" :class="{'bg-active':wtfbq == ''}">全部</span>
-            <span v-for="(wtfbql,index) in wtfbqlist" :data-type="wtfbql.label" :class="{'bg-active':wtfbq === wtfbql.label}">{{wtfbql.mc}}</span>
+            <span data-type :class="{'bg-active':wtfbq == ''}">全部</span>
+            <span
+              v-for="(wtfbql,index) in wtfbqlist"
+              :data-type="wtfbql.label"
+              :class="{'bg-active':wtfbq === wtfbql.label}"
+            >{{wtfbql.mc}}</span>
           </p>
         </div>
         <div>
           <p class="query-title">改进状态:</p>
           <p class="query-list" @click="handleGJZT">
-            <span data-type="" :class="{'bg-active':gjzt == ''}">全部</span>
-            <span v-for="(wtgjzt,index) in wtgjztlist" :data-type="wtgjzt.label" :class="{'bg-active':gjzt === wtgjzt.label}">{{wtgjzt.mc}}</span>
+            <span data-type :class="{'bg-active':gjzt == ''}">全部</span>
+            <span
+              v-for="(wtgjzt,index) in wtgjztlist"
+              :data-type="wtgjzt.label"
+              :class="{'bg-active':gjzt === wtgjzt.label}"
+            >{{wtgjzt.mc}}</span>
           </p>
         </div>
 
         <div>
           <p class="query-title">问题标签:</p>
           <p class="query-list" @click="handleWTBQ">
-            <span data-type="" :class="{'bg-active':wtbq == ''}">全部</span>
-            <span v-for="(wtbql,index) in wtbqlist" :data-type="wtbql.label" :class="{'bg-active':wtbq === wtbql.label}">{{wtbql.mc}}</span>
+            <span data-type :class="{'bg-active':wtbq == ''}">全部</span>
+            <span
+              v-for="(wtbql,index) in wtbqlist"
+              :data-type="wtbql.label"
+              :class="{'bg-active':wtbq === wtbql.label}"
+            >{{wtbql.mc}}</span>
             <span data-type="-1" :class="{'bg-active':wtbq == '-1'}">无</span>
           </p>
         </div>
         <div>
           <p class="query-title">产品线:</p>
           <p class="query-list" @click="handleCPX">
-            <span data-type="" :class="{'bg-active':cpxbg == ''}">全部</span>
-            <span v-for="(cpx,index) in cpline" :data-type="cpx.label" :class="{'bg-active':cpxbg === cpx.label}">{{cpx.mc}}</span>
+            <span data-type :class="{'bg-active':cpxbg == ''}">全部</span>
+            <span
+              v-for="(cpx,index) in cpline"
+              :data-type="cpx.label"
+              :class="{'bg-active':cpxbg === cpx.label}"
+            >{{cpx.mc}}</span>
           </p>
         </div>
         <div>
           <p class="query-title">产品:</p>
           <p class="query-list" @click="handleCP">
-            <span data-type="" :class="{'bg-active':cpbg == ''}">全部</span>
-            <span v-for="(cp,index) in cplist" :data-type="cp.label" :class="{'bg-active':cpbg == cp.label}">{{cp.mc}}</span>
+            <span data-type :class="{'bg-active':cpbg == ''}">全部</span>
+            <span
+              v-for="(cp,index) in cplist"
+              :data-type="cp.label"
+              :class="{'bg-active':cpbg == cp.label}"
+            >{{cp.mc}}</span>
           </p>
         </div>
         <div>
           <p class="query-title">问题类别:</p>
           <p class="query-list" @click="handleWTLB">
-            <span data-type="" :class="{'bg-active':wtlbbg == ''}">全部</span>
-            <span v-for="(wtlbd,index) in wtlb" :data-type="wtlbd.label" :class="{'bg-active':wtlbbg == wtlbd.label}">{{wtlbd.mc}}</span>
+            <span data-type :class="{'bg-active':wtlbbg == ''}">全部</span>
+            <span
+              v-for="(wtlbd,index) in wtlb"
+              :data-type="wtlbd.label"
+              :class="{'bg-active':wtlbbg == wtlbd.label}"
+            >{{wtlbd.mc}}</span>
           </p>
         </div>
 
         <div>
           <p class="query-title">单位类型:</p>
           <p class="query-list" @click="handleDWLX">
-            <span data-type="" :class="{'bg-active':dwlx == ''}">全部</span>
-            <span v-for="(dwlxx,index) in dwlxList" :data-type="dwlxx.label" :class="{'bg-active':dwlx == dwlxx.label}">{{dwlxx.mc}}</span>
+            <span data-type :class="{'bg-active':dwlx == ''}">全部</span>
+            <span
+              v-for="(dwlxx,index) in dwlxList"
+              :data-type="dwlxx.label"
+              :class="{'bg-active':dwlx == dwlxx.label}"
+            >{{dwlxx.mc}}</span>
           </p>
         </div>
       </div>
     </div>
-    <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
+    <div
+      style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;"
+    >
       <div style="padding:0 10px;text-align:right">
         <el-button size="mini" type="primary" @click="handleExport" style="margin-top:8px">导出</el-button>
       </div>
-      <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
-      <questionCard :questionList="questionList" :isShow="false" @editQuestion="editQuestion" @deleteQuestion="deleteQuestion" 
-      @handleQuestionDetail="handleQuestionDetail" :wtbqShow="true" :bjscShow="false" @handleImprovementPlan="handleImprovementPlan"
-      :gjjhShow="gjjhShow" :wtfbq="wtfbq"></questionCard>
+      <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important" />
+      <questionCard
+        :questionList="questionList"
+        :isShow="false"
+        @editQuestion="editQuestion"
+        @deleteQuestion="deleteQuestion"
+        @handleQuestionDetail="handleQuestionDetail"
+        :wtbqShow="true"
+        :bjscShow="false"
+        @handleImprovementPlan="handleImprovementPlan"
+        :gjjhShow="gjjhShow"
+        :wtfbq="wtfbq"
+      ></questionCard>
       <div style="margin-top:10px;text-align:right" v-if="total > 10">
-        <pagination :currentPage="CurrentPage" :total="total" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange"></pagination>
+        <pagination
+          :currentPage="CurrentPage"
+          :total="total"
+          :pageSize="pageSize"
+          @handleCurrentChange="handleCurrentChange"
+        ></pagination>
       </div>
     </div>
 
-    <twDialog :show.sync="show" :questionTitle="questionTitle" :accreditShow="accreditShow" :questionInfo="qusetionInfo" @handleTWsuccess="handleTWsuccess"></twDialog>
+    <twDialog
+      :show.sync="show"
+      :questionTitle="questionTitle"
+      :accreditShow="accreditShow"
+      :questionInfo="qusetionInfo"
+      @handleTWsuccess="handleTWsuccess"
+    ></twDialog>
 
     <el-dialog title="改进计划" :visible.sync="dialogTableVisible" :width="'80vw'">
-      <gjjhcpl v-if="wtfbq =='W05' || this.wtfbqO == 'W05'" :questionData="quesData" :show.sync="dialogTableVisible" ></gjjhcpl>
-      <gjjhssl v-if="wtfbq =='W03' || this.wtfbqO == 'W03'" :questionData="quesData" :show.sync="dialogTableVisible" ></gjjhssl>
+      <gjjhcpl
+        v-if="wtfbq =='W05' || this.wtfbqO == 'W05'"
+        :questionData="quesData"
+        :show.sync="dialogTableVisible"
+      ></gjjhcpl>
+      <gjjhssl
+        v-if="wtfbq =='W03' || this.wtfbqO == 'W03'"
+        :questionData="quesData"
+        :show.sync="dialogTableVisible"
+      ></gjjhssl>
     </el-dialog>
   </div>
 </template>

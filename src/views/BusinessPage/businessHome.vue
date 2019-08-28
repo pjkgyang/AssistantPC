@@ -1,17 +1,22 @@
 <template>
- <!-- style="height:100%;min-height:100%;overflow-y:auto;" -->
-  <div  class="page-component__scroll">
+  <div class="page-component__scroll">
     <div v-if="navshow">
-        <div class="main_TopNav" >
-            <header-user :userNav="userNav" :userInfo="userInfo" :shown="loginShow" @handleCommand="handleCommand" ></header-user>
-        </div>
+      <div class="main_TopNav">
+        <header-user
+          :userNav="userNav"
+          :userInfo="userInfo"
+          :shown="loginShow"
+          @handleCommand="handleCommand"
+        ></header-user>
+      </div>
     </div>
-    <div :class="{'main_page':$route.path == '/questionDetail','main_page-questionDetail':$route.path == '/questionDetail'}">
-        <keep-alive>
-            <router-view></router-view>
-        </keep-alive>
+    <div
+      :class="{'main_page':$route.path == '/questionDetail','main_page-questionDetail':$route.path == '/questionDetail'}"
+    >
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
-			<!-- <el-backtop target=".page-component__scroll" :bottom="100"></el-backtop> -->
   </div>
 </template>
 <script>
@@ -29,7 +34,6 @@ export default {
     };
   },
   methods: {
-
     handleCommand(data) {
       if (data.split("&&")[0] == "退出") {
         window.location.href =
@@ -54,7 +58,10 @@ export default {
   mounted() {
     let _this = this;
     //  || this.$route.path == "/zdsfw" || this.$route.path == "/zdsfwDetail"
-    if ((this.$route.path == "/questionDetail") && !window.location.hash.includes("h=1")) {
+    if (
+      this.$route.path == "/questionDetail" &&
+      !window.location.hash.includes("h=1")
+    ) {
       this.navshow = false;
       return;
     }
@@ -75,7 +82,7 @@ export default {
         } else {
           this.$alert(res.data.msg + "获取用户失败,请联系管理员 ", "提示", {
             confirmButtonText: "确定",
-            type: 'error',
+            type: "error",
             callback: action => {
               window.location.href =
                 window.baseurl +
@@ -105,7 +112,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .main_TopNav {
   width: 100%;
   box-shadow: 0px 1px 6px #ddd;
@@ -116,5 +122,4 @@ export default {
   margin: 0 auto;
   box-shadow: 0 1px 2px #ccc;
 }
-
 </style>

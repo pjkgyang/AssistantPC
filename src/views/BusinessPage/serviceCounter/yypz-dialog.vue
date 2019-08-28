@@ -10,9 +10,6 @@
       :show="show"
     >
       <div class="layout">
-        <!-- 
-          :rules="rules"
-        -->
         <el-form
           style="width:950px;margin:0 auto"
           class="demo-ruleForm"
@@ -34,15 +31,7 @@
               v-model="yypzData.yymc"
             ></el-input>
           </el-form-item>
-          <!-- <el-form-item label="所属部门" required >
-            <el-input
-              size="mini"
-              type="text"
-              placeholder="请输入所属部门"
-              style="width:325px"
-              v-model="yypzData.ssbm"
-            ></el-input>
-          </el-form-item>-->
+
           <el-form-item label="上线日期">
             <el-date-picker
               :clearable="false"
@@ -197,6 +186,13 @@
             ></el-input>
           </el-form-item>
 
+          <el-form-item label="使用情况">
+            <el-radio-group v-model="yypzData.syqk">
+              <el-radio label="好">好</el-radio>
+              <el-radio label="差">差</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
           <div class="table_title">
             <h5>部署信息</h5>
           </div>
@@ -329,6 +325,7 @@ export default {
         cjdwlxrgh:"",
         fwdz: "http://", //访问地址
         xtzt: "", //系统状态
+        syqk:"",
 
         ywbmlxr: "", //业务部门联系人
         ywbmlxfs: "", //业务部门联系方式
@@ -546,6 +543,7 @@ export default {
           this.yypzData.cjdwbh = this.detailInfo.cjdwbh;
           this.yypzData.cjdwlxrgh = this.detailInfo.cjdwlxrgh;; //承建单位联系人工号
           
+          this.yypzData.syqk = this.detailInfo.syqk;
           this.yypzData.cjdwlxr = this.detailInfo.cjdwlxr;
           this.yypzData.cjdwlxfs = this.detailInfo.cjdwlxfs;
           this.yypzData.fwdz = this.detailInfo.fwdz;
@@ -575,6 +573,8 @@ export default {
           this.yypzData.cjdwbh = "";
           this.yypzData.cjdwlxr = "";
           this.yypzData.cjdwlxfs = "";
+          this.yypzData.syqk = "";
+
 
           this.yypzData.cjdwlxrgh = "";
           this.yypzData.fwdz = "";

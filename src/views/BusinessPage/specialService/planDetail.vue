@@ -3,7 +3,7 @@
     <div class="fwjh-Detail-content">
       <tableLayout>
         <section slot="top">
-          <h5>迎新专项服务</h5>
+          <h5>专项服务</h5>
           <div class="contentMark">
             <table>
               <tr>
@@ -65,25 +65,27 @@
               <!-- </el-scrollbar> -->
             </div>
           </div>
-
+          <br />
           <div class="contetnProgress">
             <h5>记录项</h5>
             <div class="contentMark">
               <!-- <el-scrollbar style="height:calc(100vh - 300px);"> -->
-              <div
-                v-if="!!jlList.length"
-                v-for="(jl,index) in jlList"
-                :class="{'progress-dot':true,'progress-dot-last':index == (jlList.length-1)}"
-              >
+              <div v-if="!!jlList.length">
+                <div                  
+                  v-for="(jl,index) in jlList"
+                  :class="{'progress-dot':true,'progress-dot-last':index == (jlList.length-1)}"
+                  :key="index"
+                >
+              </div>
                 <div>
                   <span>
-                    {{jl.cjsj}}&#x3000;
+                    {{jl.jlsj}}&#x3000;
                     <span
                       style="color:rgb(21, 145, 202)"
-                    >{{!jl.czrxm?'':jl.czrxm}}</span>
-                    &#x3000;{{jl.czlxmc}}
+                    >{{!jl.jlrxm?'':jl.jlrxm}}</span>
+                    &#x3000;服务日期：{{jl.fwrq}}&#x3000;工时：{{jl.trgs}}
                   </span>
-                  <div :class="{'jd-content':jl.czlx == 4}" v-html="jl.cznr"></div>
+                  <div v-html="jl.nr"></div>
                 </div>
               </div>
               <div v-if="!jlList.length" class="emptyContent">
@@ -95,9 +97,9 @@
           </div>
 
           <div class="mg-12" v-if="!!$route.query.jl">
-            <div flex >
+            <div flex>
               <p>
-                <span class="filter-weight">服务日期：</span>
+                <span class="filter-weight before-require">服务日期：</span>
                 <el-date-picker
                   type="date"
                   size="mini"
@@ -107,19 +109,14 @@
                 ></el-date-picker>
               </p>&#x3000;&#x3000;
               <p colcenter>
-                <span class="filter-weight" style="width:100px">投入工时：</span>
-                <el-input
-                  size="mini"
-                  type="text"
-                  placeholder="请填写投入工时"
-                  v-model="formData.trgs"
-                ></el-input>
+                <span class="filter-weight before-require" style="width:110px">投入工时：</span>
+                <el-input size="mini" type="text" placeholder="请填写投入工时" v-model="formData.trgs"></el-input>
               </p>
             </div>
             <div>
               <span class="filter-weight">过程记录：</span>
               <el-input
-                v-model="formData.jl"
+                v-model="formData.nr"
                 type="textarea"
                 :rows="3"
                 :maxlength="500"
@@ -145,13 +142,13 @@ export default {
   data() {
     return {
       baseUrl: "",
-      jdList: [],//进度
-      jlList:[],//记录
+      jdList: [], //进度
+      jlList: [], //记录
       planData: {},
       formData: {
         fwrq: "",
         trgs: 0,
-        jl: ""
+        nr: ""
       }
     };
   },
@@ -159,14 +156,21 @@ export default {
     handleClick(type) {
       switch (type) {
         case "tj":
+          if (!/^\d+(\.\d+)?$/.test(this.formData.trgs)) {
+            this.$message({ message: "请填写正确工时", type: "warning" });
+            return;
+          }
           this.$post(this.API.addSpecailServiceJL, {
             wid: this.$route.query.wid,
-            jl: this.formData.jl,
+            nr: this.formData.nr,
             fwrq: this.formData.fwrq,
-            gstr: this.formData.trgs
+            trgs: this.formData.trgs
           }).then(res => {
             if (res.state == "success") {
               this.$message({ message: "保存成功", type: "success" });
+              this.formData.fwrq = "";
+              this.formData.trgs = 0;
+              this.formData.nr = "";
               this.findSpecailServiceJL();
             } else {
               this.$alert(res.msg, "提示", {
@@ -199,12 +203,16 @@ export default {
       });
     },
     // 获取记录日志
-     listOperationLog() {
-       this.$get(this.API.listOperationLogZxfw, {
+    listOperationLog() {
+      this.$get(this.API.listOperationLogZxfw, {
         wid: this.$route.query.wid
       }).then(res => {
         if (res.state == "success") {
-          this.jdList = res.data;
+          if (!!res.data) {
+            this.jdList = res.data;
+          } else {
+            this.jdList = [];
+          }
         } else {
           this.$alert(res.msg, "提示", {
             confirmButtonText: "确定",
@@ -214,12 +222,16 @@ export default {
       });
     },
     // 获取记录日志
-     findSpecailServiceJL() {
-       this.$get(this.API.findSpecailServiceJL, {
+    findSpecailServiceJL() {
+      this.$get(this.API.findSpecailServiceJL, {
         wid: this.$route.query.wid
       }).then(res => {
         if (res.state == "success") {
-          this.jlList = res.data;
+          if (!!res.data) {
+            this.jlList = res.data;
+          } else {
+            this.jlList = [];
+          }
         } else {
           this.$alert(res.msg, "提示", {
             confirmButtonText: "确定",
@@ -227,7 +239,7 @@ export default {
           });
         }
       });
-    },
+    }
   },
 
   mounted() {
@@ -246,7 +258,6 @@ export default {
   padding: 10px 0;
   height: 100%;
 
-  //    background: linear-gradient(to right bottom,rgb(237, 243, 245),rgb(227, 246, 250));
   .fwjh-Detail-content {
     width: 90%;
     background: #fff;
@@ -292,11 +303,12 @@ export default {
       width: 100%;
       border-color: #ccc;
 
-      td,th {
+      td,
+      th {
         border: 1px solid rgb(233, 230, 230);
         padding: 5px;
       }
-      th{
+      th {
         text-align: center;
       }
 

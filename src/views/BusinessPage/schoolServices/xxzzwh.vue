@@ -2,7 +2,7 @@
   <div class="pannelPadding-10">
     <div class="menus-tree pannelPaddingBg-10">
       <div>
-        <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
+        <chooseSchool @handleChangeUnit="handleChangeUnit" :isClear="false"></chooseSchool>
       </div>
       <br />
       <div>

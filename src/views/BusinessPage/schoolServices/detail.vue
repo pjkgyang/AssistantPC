@@ -17,7 +17,7 @@
 						<td>{{ fwData.bsyj }}</td>
 						<th>服务指南</th>
 						<td>{{ fwData.fwzn=='0'?'无':'有' }}</td>
-						<th>联系方式</th>
+						<th>信息化支持</th>
 						<td>{{ fwData.xxhzc=='0'?'无':'有' }}</td>
 					</tr>
 					<tr v-if="fwData.fwzn=='1'">

@@ -3,8 +3,9 @@
     <div>
       <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入姓名/工号'"></filterComponent>
     </div>
+    
     <div>
-      <tableComponents :tableData="dataList" :pageShow="false" :exportShow="false" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" 
+      <tableComponents :tableData="dataList" :pageShow="false" :exportShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" @exportTable="exportTable" 
 			:indexArr='[20]' :widthArr="[1]" :Width="'130'" :Height="250"  ></tableComponents>
     </div>
   </div>
@@ -30,7 +31,9 @@ export default {
   },
   methods: {
     exportTable() {
-     
+      var startDt = !this.filterData.date[0] ? "" : this.filterData.date[0];
+      var endDt = !this.filterData.date[1] ? "" : this.filterData.date[1];
+     window.open(window.baseurl+'report/exportQuestionAbnormalTrack.do?dwlx='+this.filterData.dwlx+'&qyzd='+this.filterData.gczd+'&startDt='+startDt+'&endDt='+endDt);
     },
     handleCurrentChange(data) {
       this.currentPage = data;

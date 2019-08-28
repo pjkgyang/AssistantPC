@@ -38,6 +38,8 @@ export default {
   questionOperatIndicator: window.baseurl + 'report/questionOperatIndicator.do', //获取问题运营指标
 
   exportReportQuestionLst: window.baseurl + 'report/exportReportQuestionLst.do', // 导出跳转问题列表
+  exportOperatIndicator: window.baseurl + 'report/exportOperatIndicator.do', // 导出
+
 
 
   // 用户学习报表
@@ -342,6 +344,7 @@ export default {
   userDeptChecked: window.baseurl + 'serviceitem/userDeptChecked.do', // 用户已关联部门编号
   serviceItemStat: window.baseurl + 'serviceitem/serviceItemStat.do', //  服务事项分析
   deleteServiceItemPlan: window.baseurl + 'serviceitem/deleteServiceItemPlan.do', //  删除服务事项计划
+  deleteServiceItem: window.baseurl + 'serviceitem/deleteServiceItem.do', //  删除服务事项
 
   // 开发在线化  api/demandDvpt
   queryDemand:window.baseurl + 'demandDvpt/queryDemand.do', // 获取详情

@@ -5,11 +5,17 @@
         <div style="padding: 12px 40px;">
           <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
         </div>
-        <div flex >
+        <div flex>
           <span class="query-title" style="padding:2px 4px;margin-right:10px">高级查询:</span>
-          <el-input style="width:500px" class="search-input" placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校" prefix-icon="el-icon-search"
-            size="mini" v-model="filterData.keyword" @change="handleSearch"></el-input>
-          &#x3000;
+          <el-input
+            style="width:500px"
+            class="search-input"
+            placeholder="请输入项目编号/项目名称/合同编号/项目经理/学校"
+            prefix-icon="el-icon-search"
+            size="mini"
+            v-model="filterData.keyword"
+            @change="handleSearch"
+          ></el-input>&#x3000;
           <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
           <el-button type="primary" size="mini" @click="handleExport">导出</el-button>
         </div>
@@ -18,7 +24,11 @@
           <span class="query-title">服务对象:</span>
           <p style="width:90%" flex>
             <el-checkbox-group v-model="filterData.fwdx" @change="handleCheckedFwdxChange">
-              <el-checkbox v-for="(fwdx,index) in fwdxList" :label="fwdx.id" :key="index">{{fwdx.text}}</el-checkbox>
+              <el-checkbox
+                v-for="(fwdx,index) in fwdxList"
+                :label="fwdx.id"
+                :key="index"
+              >{{fwdx.text}}</el-checkbox>
             </el-checkbox-group>
           </p>
         </div>
@@ -27,39 +37,65 @@
           <span class="query-title">服务类别:</span>
           <p class="query-list">
             <span :class="{ 'bg-active':filterData.fwlb == '' }">全部</span>
-            <span v-for="(fwlb,index) in fwlbList" :class="{ 'bg-active': fwlb.id == filterData.fwlb }" :key="index"
-              @click="CheckFwlb(fwlb.id)">{{ fwlb.text }}</span>
+            <span
+              v-for="(fwlb,index) in fwlbList"
+              :class="{ 'bg-active': fwlb.id == filterData.fwlb }"
+              :key="index"
+              @click="CheckFwlb(fwlb.id)"
+            >{{ fwlb.text }}</span>
           </p>
         </div>
 
         <div flex class="mg-12">
           <span class="query-title">服务指南:</span>
           <p class="query-list">
-            <span v-for="(fwzn,index) in fwznList" :class="{ 'bg-active': fwzn.id == filterData.fwzn }" :key="index"
-              @click="CheckFwzn(fwzn.id)">{{ fwzn.label }}</span>
+            <span
+              v-for="(fwzn,index) in fwznList"
+              :class="{ 'bg-active': fwzn.id == filterData.fwzn }"
+              :key="index"
+              @click="CheckFwzn(fwzn.id)"
+            >{{ fwzn.label }}</span>
           </p>
         </div>
         <div flex class="mg-12">
           <span class="query-title">信息化支持:</span>
           <p class="query-list">
-            <span v-for="(xxhzc,index) in xxhzcList" :class="{ 'bg-active': xxhzc.id == filterData.xxhzc }" :key="index"
-              @click="CheckXxhzc(xxhzc.id)">{{ xxhzc.label }}</span>
+            <span
+              v-for="(xxhzc,index) in xxhzcList"
+              :class="{ 'bg-active': xxhzc.id == filterData.xxhzc }"
+              :key="index"
+              @click="CheckXxhzc(xxhzc.id)"
+            >{{ xxhzc.label }}</span>
           </p>
         </div>
         <div flex class="mg-12">
           <span class="query-title">在建状态:</span>
           <p class="query-list">
-            <span v-for="(jszt,index) in jsztList" :class="{ 'bg-active': jszt.id == filterData.jszt }" :key="index"
-              @click="CheckZt(jszt.id)">{{ jszt.label }}</span>
+            <span
+              v-for="(jszt,index) in jsztList"
+              :class="{ 'bg-active': jszt.id == filterData.jszt }"
+              :key="index"
+              @click="CheckZt(jszt.id)"
+            >{{ jszt.label }}</span>
           </p>
         </div>
         <div flex class="mg-12">
           <span class="query-title">建设年份:</span>
           <p class="query-list">
-            <el-date-picker size="mini" v-model="filterData.jsnfStart" align="right" type="year" placeholder="选择开始年">
-            </el-date-picker> 到
-            <el-date-picker size="mini" v-model="filterData.jsnfEnd" align="right" type="year" placeholder="选择结束年">
-            </el-date-picker>
+            <el-date-picker
+              size="mini"
+              v-model="filterData.jsnfStart"
+              align="right"
+              type="year"
+              placeholder="选择开始年"
+            ></el-date-picker>到
+            <el-date-picker
+              size="mini"
+              v-model="filterData.jsnfEnd"
+              align="right"
+              type="year"
+              placeholder="选择结束年"
+            ></el-date-picker>
           </p>
         </div>
       </div>
@@ -85,9 +121,13 @@
           <el-table-column prop="cjgs" label="承建公司"></el-table-column>
           <el-table-column prop="syqk" label="使用情况" width="200" show-overflow-tooltip></el-table-column>
         </el-table>
-        <el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pageSize"
-          layout="total, prev, pager, next" :total="records">
-        </el-pagination>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
+          layout="total, prev, pager, next"
+          :total="records"
+        ></el-pagination>
       </div>
     </div>
   </div>
@@ -106,11 +146,11 @@ export default {
           label: "全部"
         },
         {
-          id: '1',
+          id: "1",
           label: "有"
         },
         {
-          id: '0',
+          id: "0",
           label: "无"
         }
       ], //服务指南
@@ -120,11 +160,11 @@ export default {
           label: "全部"
         },
         {
-          id: '1',
+          id: "1",
           label: "有"
         },
         {
-          id: '0',
+          id: "0",
           label: "无"
         }
       ],

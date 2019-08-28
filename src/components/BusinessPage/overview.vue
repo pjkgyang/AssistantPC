@@ -54,15 +54,6 @@
         </card>
           <div col=3 style="margin-left:36px;" v-if="!syqkLis || syqkLis.length == 0"></div>
       </div>
-      <!-- <div class="pannel1-bottom" col=3 flex>
-        <card col=3>
-          <div class="card-head" slot="head">
-            <h3 class="pull-left">项目成本</h3>
-            <span class="pull-right card-head__more">查看工程服务（投标，分包，结算）</span></div>
-            <pannel-xmcb slot="body" :xmcb="xmtj"></pannel-xmcb>
-        </card>
-        <card col=3 style="visibility: hidden;"></card>
-      </div> -->
     </div>
   </div>
 </template>

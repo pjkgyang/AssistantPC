@@ -20,11 +20,12 @@
            <el-button size="mini" type="primary" @change="handleChangeFwsx">查询</el-button>
         </div><br>
       	<el-table :data="tableData" border :max-height="tableHeight" :style="{'width':!isPlan?'100%':'760px' }">
-					<el-table-column fixed="left" label="操作" width="110"  >
+					<el-table-column fixed="left" label="操作" width="130"  >
 						<template slot-scope="scope">
 							<el-button v-if="!isPlan" type="text" size="small" @click="handleOperate('edit', scope.row)">编辑</el-button>
 							<a v-if="!isPlan" :href="'#/schoolSeivice/detail?id='+scope.row.wid" target="_blank">查看</a>
               <el-button v-if="!!isPlan" type="text" size="small" @click="handleAddSsjh(scope.row)">添加</el-button>
+              <el-button  type="text" size="small" style="color:#f00" @click="handleDelSsjh(scope.row,scoped.$index)">删除</el-button>
 						</template>
 					</el-table-column>
 					<el-table-column prop="fwmc" label="服务名称" min-width="220"></el-table-column>
@@ -170,6 +171,25 @@ export default {
     handleAddSsjh(params) {
       this.$emit("handleAddSsjh", params);
     },
+    // 删除
+    handleDelSsjh(params,index){
+      this.$confirm('是否确定删除此条记录?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$post(this.API.deleteServiceItem,{
+            wid:params.wid
+          }).then(res=>{
+            if(res.state == 'success'){
+              this.$message({message:'删除成功',type:'success'});
+              this.tableData.splice(index,1);
+            }else{
+               this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
+            }
+          })
+        }).catch(() => {});
+    },
 
     // 编辑，查看，编辑计划
     handleOperate(type, params) {
@@ -198,6 +218,7 @@ export default {
           }
           this.records = res.data.records;
         } else {
+           this.$alert(res.msg, "提示", {confirmButtonText: "确定",type: "error"});
         }
       });
     },

@@ -11,25 +11,58 @@
         <section flex spacebetween>
           <div>
             <span>
-              <el-date-picker @change="changeMonthDate" v-model="monthValue" format="yyyy年MM月" value-format="yyyy-MM" size="small" type="month" placeholder="选择月"></el-date-picker>
+              <el-date-picker
+                @change="changeMonthDate"
+                v-model="monthValue"
+                format="yyyy年MM月"
+                value-format="yyyy-MM"
+                size="small"
+                type="month"
+                placeholder="选择月"
+              ></el-date-picker>
             </span>&#x3000;
             <span v-if="groupTag.indexOf('JYGL') != -1">
               <span class="filter-weight">区域:&nbsp;</span>
               <el-select v-model="qyValue" size="small" placeholder="请选择" @change="handleSelectQy">
-                <el-option v-for="item in gczdList" :key="item.id" :label="item.text" :value="item.id"></el-option>
+                <el-option
+                  v-for="item in gczdList"
+                  :key="item.id"
+                  :label="item.text"
+                  :value="item.id"
+                ></el-option>
               </el-select>
             </span>
             <span>
               <span class="filter-weight">项目:&nbsp;</span>
-              <el-select style="width:300px" v-model="itemValue" clearable filterable remote :remote-method="remoteMethod" @change="changeProject" placeholder="请选择/搜索项目名称/项目编号" size="small">
-                <el-option v-for="item in itemList" :key="item.xmbh" :label="'['+item.xmbh+'] '+item.xmmc" :value="item.xmmc"></el-option>
+              <el-select
+                style="width:300px"
+                v-model="itemValue"
+                clearable
+                filterable
+                remote
+                :remote-method="remoteMethod"
+                @change="changeProject"
+                placeholder="请选择/搜索项目名称/项目编号"
+                size="small"
+              >
+                <el-option
+                  v-for="item in itemList"
+                  :key="item.xmbh"
+                  :label="'['+item.xmbh+'] '+item.xmmc"
+                  :value="item.xmmc"
+                ></el-option>
               </el-select>
             </span>
           </div>
           <!-- 2018-9-25 修改 !isBlocked &&-->
           <div>
             <el-button type="primary" size="mini" @click="exportMonth">导出</el-button>
-            <el-button v-if="otherShow &&  groupTag.indexOf('QYZ') != -1" size="small" type="danger" @click="handleClickYdjh">制订月度计划</el-button>
+            <el-button
+              v-if="otherShow &&  groupTag.indexOf('QYZ') != -1"
+              size="small"
+              type="danger"
+              @click="handleClickYdjh"
+            >制订月度计划</el-button>
           </div>
         </section>
       </header>
@@ -40,49 +73,117 @@
             <section class="month-plan-condition month-hwys">
               <div flex colcenter>
                 <section v-if="isJzuser != 1">
-                  <span class="filter-weight">( 合计完工:
+                  <span class="filter-weight">
+                    ( 合计完工:
                     <span style="color:#f00">{{workTotal.hjwg}}</span>
                   </span>&#x3000;
-                  <span class="filter-weight">合计验收:
+                  <span class="filter-weight">
+                    合计验收:
                     <span style="color:#f00">{{workTotal.hjys}}</span>
                   </span>&#x3000;
-                  <span class="filter-weight">合计完工率:
+                  <span class="filter-weight">
+                    合计完工率:
                     <span style="color:#f00">{{workTotal.hjwgl}}</span>
                   </span>&#x3000;
-                  <span class="filter-weight">合计验收率:
-                    <span style="color:#f00">{{workTotal.hjysl}}</span> )</span>
+                  <span class="filter-weight">
+                    合计验收率:
+                    <span style="color:#f00">{{workTotal.hjysl}}</span> )
+                  </span>
                 </section>&#x3000;
                 <span class="colcenter">
                   <span class="filter-weight">计划类别:&nbsp;</span>
-                  <el-select style="width:200px" v-model="ztValue" size="mini" placeholder="请选择" @change="handleSelectZt">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                  <el-select
+                    style="width:200px"
+                    v-model="ztValue"
+                    size="mini"
+                    placeholder="请选择"
+                    @change="handleSelectZt"
+                  >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
                   </el-select>
                 </span>&#x3000;
               </div>
             </section>
             <section class="month-plan-condition" flex spacebetween>
-              <el-button :disabled="!multipleSelection.length" size="mini" @click="handlePzofBatch">批量批注</el-button>
+              <el-button
+                :disabled="!multipleSelection.length"
+                size="mini"
+                @click="handlePzofBatch"
+              >批量批注</el-button>
             </section>
-            <MonthTable :tableData="monthWorkList" :otherShow="otherShow && isJzuser != 1" :ispz="true" :isEdit="false" @handleClickPz="handleYdjhPz" @handleClickEdit="handleYdjhEdit" @handleCurrentChange="handleYdjhChange" @handleSizeChange="handleSizeChange" @handleClickCheck="handleYdjhCheck" @handleSelectionChange="handleSelectionChange" :isSelect="true" :pageSize="workPageSize" :records="records" :currentPage="currentPage"></MonthTable>
+            <MonthTable
+              :tableData="monthWorkList"
+              :otherShow="otherShow && isJzuser != 1"
+              :ispz="true"
+              :isEdit="false"
+              @handleClickPz="handleYdjhPz"
+              @handleClickEdit="handleYdjhEdit"
+              @handleCurrentChange="handleYdjhChange"
+              @handleSizeChange="handleSizeChange"
+              @handleClickCheck="handleYdjhCheck"
+              @handleSelectionChange="handleSelectionChange"
+              :isSelect="true"
+              :pageSize="workPageSize"
+              :records="records"
+              :currentPage="currentPage"
+            ></MonthTable>
           </div>
         </tableLayout>
         <tableLayout :title="'月度问题处理'+textTitle">
           <div slot="bottom">
             <div style="margin:12px 0">
-              <el-button :disabled="!multipleSelectionWt.length" size="mini" @click="handlePzofBatchWt">批量批注</el-button>
+              <el-button
+                :disabled="!multipleSelectionWt.length"
+                size="mini"
+                @click="handlePzofBatchWt"
+              >批量批注</el-button>
             </div>
-            <MonthWeekQuestionTable :tableData="monthQuestionList" @handleClickPz="handleQuestionPz" @handleClickEdit="handleQuestionEdit" @handleClickCheck="handleQuestionCheck" @handleSizeChange="handleSizeWtChange" @handleSelectionChange="handleSelectWtChange" @handleCurrentChange="handleQuestionPageChange" :isSelect="true" :ideleteShow="!isBlocked" :othShow="otherShow" :isEdit="!isBlocked && groupTag.indexOf('JYGL') == -1" :pageSize="questionPageSize" :records="QuestionRecords" :currentPage="questionPage"></MonthWeekQuestionTable>
+            <MonthWeekQuestionTable
+              :tableData="monthQuestionList"
+              @handleClickPz="handleQuestionPz"
+              @handleClickEdit="handleQuestionEdit"
+              @handleClickCheck="handleQuestionCheck"
+              @handleSizeChange="handleSizeWtChange"
+              @handleSelectionChange="handleSelectWtChange"
+              @handleCurrentChange="handleQuestionPageChange"
+              :isSelect="true"
+              :ideleteShow="!isBlocked"
+              :othShow="otherShow"
+              :isEdit="!isBlocked && groupTag.indexOf('JYGL') == -1"
+              :pageSize="questionPageSize"
+              :records="QuestionRecords"
+              :currentPage="questionPage"
+            ></MonthWeekQuestionTable>
           </div>
         </tableLayout>
       </article>
     </layout>
 
-    <bjDialog :isShow='isShow' :isCljh="true" :show.sync='bjShow' @handleClickSure="handleClickBjSure"></bjDialog>
-    <pzDialog :pzlbShow="pzlsShow" :tableData="pzList" :show.sync='pzShow' @handleClickSure="handleClickPzSure"></pzDialog>
+    <bjDialog
+      :isShow="isShow"
+      :isCljh="true"
+      :show.sync="bjShow"
+      @handleClickSure="handleClickBjSure"
+    ></bjDialog>
+    <pzDialog
+      :pzlbShow="pzlsShow"
+      :tableData="pzList"
+      :show.sync="pzShow"
+      @handleClickSure="handleClickPzSure"
+    ></pzDialog>
     <detailDialog :show.sync="detailShow" :title="detailTitle" :detailType="detailType"></detailDialog>
-    <zdzjhDialog :show.sync='jhzdShow' :title="'月度计划制订'">
+    <zdzjhDialog :show.sync="jhzdShow" :title="'月度计划制订'">
       <div slot="content">
-        <monthReportFill @handleFormulate="handleFormulate" :jhzdShow="jhzdShow" :dateParam="monthValue"></monthReportFill>
+        <monthReportFill
+          @handleFormulate="handleFormulate"
+          :jhzdShow="jhzdShow"
+          :dateParam="monthValue"
+        ></monthReportFill>
       </div>
     </zdzjhDialog>
   </div>
@@ -180,7 +281,7 @@ export default {
       wtWid: "",
       workTotal: "",
       isBlocked: false,
-      lcbztList: [1,2,3,4,6,7,9],
+      lcbztList: [1, 2, 3, 4, 6, 7, 9],
       multipleSelection: [],
       multipleSelectionWt: [],
       groupTag: "",
@@ -464,8 +565,8 @@ export default {
         );
       }
     },
-		
-		//获取月工作计划列表
+
+    //获取月工作计划列表
     getMonthWorkList(curPage) {
       pageMonthWork({
         curPage: curPage,
@@ -631,13 +732,6 @@ export default {
         if (data.state == "success") {
           this.isBlocked = data.data;
           let _this = this;
-          // setTimeout(function(){
-          //     if(_this.groupTag.indexOf('QYZ') != -1 && _this.monthWorkList.length && !data.data){
-          //         _this.ToastMessage(wfcContent);
-          //     }else if(_this.groupTag.indexOf('QYZ') != -1 && _this.monthWorkList.length  && data.data){
-          //         _this.ToastMessage(yfcContent);
-          //     }
-          // },1000)
         }
       });
     },

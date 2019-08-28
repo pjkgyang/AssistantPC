@@ -77,37 +77,38 @@
               </el-input>
           </el-form-item>
 
-          <el-form-item label="是否内部会议" required>
-             <el-radio-group v-model="hydjData.sfnbhy" style="width:800px">
+          <el-form-item label="是否内部会议" required v-if="hydjData.hylx!='1' && hydjData.hylx!='2'">
+             <el-radio-group v-model="hydjData.sfnbhy" style="width:325px">
                 <el-radio label="1">是</el-radio>
                 <el-radio label="0">否</el-radio>
              </el-radio-group>
           </el-form-item>
 
            <el-form-item label="是否有待处理事项" required>
-             <el-radio-group v-model="hydjData.sfyclsx" @change="handleChangeSfdcl" :style="{width:hydjData.sfyclsx == '1'?'325px':'800px'}">
+             <el-radio-group v-model="hydjData.sfyclsx" @change="handleChangeSfdcl" :style="{width:hydjData.hylx!='1' && hydjData.hylx!='2'?'325px':'800px'}">
                 <el-radio label="1">有</el-radio>
                 <el-radio label="0">无</el-radio>
              </el-radio-group>
           </el-form-item>
 
+        <!-- 
           <el-form-item label="是否完成" required v-if="hydjData.sfyclsx == '1'">
              <el-radio-group v-model="hydjData.hyzt" style="width:325px">
                 <el-radio label="1">是</el-radio>
                 <el-radio label="0">否</el-radio>
              </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
 
           <!-- 区域工程例会和区域协同例会，不显示参会学校老师和参会学校部门和参会第三方 -->
-          <el-form-item label="参会学校老师" v-if="hydjData.hylx!='1' && hydjData.hylx!='2'">
+          <el-form-item label="参会学校老师" v-if="!!hydjData.hylx && hydjData.hylx!='1' && hydjData.hylx!='2'">
             <el-input size="mini" type="text" style="width:325px" placeholder="请填写参会学校老师"  v-model="hydjData.chls"></el-input>
           </el-form-item>
 
-          <el-form-item label="参会学校部门" v-if="hydjData.hylx!='1' && hydjData.hylx!='2'">
+          <el-form-item label="参会学校部门" v-if="!!hydjData.hylx && hydjData.hylx!='1' && hydjData.hylx!='2'">
             <el-input size="mini" type="text" style="width:325px" placeholder="请填写参会学校部门"  v-model="hydjData.chlsbm"></el-input>
           </el-form-item>
 
-          <el-form-item label="参会第三方" v-if="hydjData.hylx!='1' && hydjData.hylx!='2'">
+          <el-form-item label="参会第三方" v-if="!!hydjData.hylx && hydjData.hylx!='1' && hydjData.hylx!='2'">
             <el-input size="mini" type="text" style="width:800px" placeholder="请填写参会第三方"  v-model="hydjData.chdsf"></el-input>
           </el-form-item>
 
@@ -117,6 +118,7 @@
             </el-select> -->
             <div flex spacebetween class="jzcyry" >
                 <div>
+                  <span v-if="!jzchry.length" class="placeholder">请选择参会人员</span>
                   <el-tag
                     v-for="(item,index) in jzchry"
                     :key="index"
@@ -226,7 +228,7 @@
           xmbh:"",
           sfnbhy:"1",
           sfyclsx:"1",//是否有处理事项
-          hyzt:"1", //是否完成
+          hyzt:"0", //是否完成
           chls:"",
           chlsbm:"",
           chdsf:"",
@@ -256,6 +258,7 @@
     methods: {
       //是否有待处理事项
       handleChangeSfdcl(val){
+        this.hydjData.hyzt = val == '1'?'0':'1';
         if(!!this.wid && val == '0'){
             this.$confirm('您已经填写了待处理事项,改为【无】会删除已录入的待处理事项。确定要改为无待处理事项吗?', '提示', {
               cancelButtonText: '否',
@@ -484,7 +487,7 @@
           });
           return false;
         }
-        if (/^[\s]*$/.test(this.hydjData.hydd)) {
+        if (this.hydjData.hyxs != '1' && /^[\s]*$/.test(this.hydjData.hydd)) {
           this.$message({
             message: "请填写会议地点",
             type: "warning"
@@ -530,7 +533,7 @@
               focus: true,
               height: 200,
               width: 100 + "%",
-              minHeight: 300,
+              minHeight: 285,
               lang: "zh-CN",
               toolbar: [
                 ["style", ["bold", "italic", "underline", "clear"]],
@@ -550,7 +553,7 @@
               focus: true,
               height: 200,
               width: 100 + "%",
-              minHeight: 300,
+              minHeight: 285,
               lang: "zh-CN",
               toolbar: [
                 ["style", ["bold", "italic", "underline", "clear"]],
@@ -616,8 +619,19 @@
 <style scoped lang="scss">
 .jzcyry{
  width:800px;border:1px solid #DCDFE6;border-radius:4px;padding:0 0 0 15px;
+ overflow: hidden;
+ .placeholder{
+   color: rgb(206, 206, 206);
+   font-size: 12px;
+ }
  .el-tag{
    margin-right: 10px;
+ }
+ button{
+   background: #F5F7FA;
+   border:none;
+   border-radius: 0;
+   border-left: 1px solid #DCDFE6;
  }
 }
 </style>

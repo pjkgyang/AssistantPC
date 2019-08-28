@@ -12,31 +12,6 @@
     >
       <div class="dialog-bj">
         <section>
-          <div>
-            <span class="pj-title before-require">计划开始日期：</span>
-            <el-date-picker
-             :picker-options="pickerBeginDateBefore"
-              size="mini"
-              v-model="filterData.jhksrq"
-              type="date"
-              placeholder="选择日期"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd"
-            ></el-date-picker>
-          </div><br>
-          <!-- <div>
-            <span class="pj-title before-require">计划结束日期：</span>
-            <el-date-picker
-              :picker-options="pickerBeginDateBefore"
-              size="mini"
-              v-model="filterData.jhjsrq"
-              type="date"
-              placeholder="选择日期"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd"
-            ></el-date-picker>
-          </div> -->
-
           <el-table
             :data="tableData"
             border
@@ -61,15 +36,11 @@ export default {
   data() {
     return {
       visible: this.show,
-      filterData:{
-        jhksrq:"",
-        jhjsrq:""
-      },
       pickerBeginDateBefore: {
-          disabledDate(time) {
-            let curDate = new Date().getTime();
-            return time.getTime() < Date.now() - 8.64e7;
-          }
+        disabledDate(time) {
+          let curDate = new Date().getTime();
+          return time.getTime() < Date.now() - 8.64e7;
+        }
       },
       tableData: [],
       cpxids: []
@@ -103,11 +74,7 @@ export default {
 
     // 提交服务
     handleClickSure() {
-      if(!this.filterData.jhksrq){
-        this.$message({message:'请选择计划日期',type:'warning'});
-        return;
-      }
-      this.$emit("handleAddservice", this.cpxids,this.filterData);
+      this.$emit("handleAddservice", this.cpxids);
     },
 
     // 获取服务类型
@@ -115,7 +82,6 @@ export default {
       this.$get(this.API.getSpecialServiceCPX, { xmbh: this.xmbh }).then(
         res => {
           if (res.state == "success") {
-            console.log(res);
             this.tableData = res.data;
           } else {
           }

@@ -11,7 +11,7 @@
     >
       <div class="pd-10">
         <div>
-          <el-button size="mini" type="success" @click="handleAddDclsx" v-if="zt == '0'">添加待处理事项</el-button>
+          <el-button size="mini" type="success" @click="handleAddDclsx" v-if="!!zt && zt == '0' ">添加待处理事项</el-button>
         </div><br>
         <el-table :data="tableData" border style="width: 100%">
             <el-table-column fixed="left" label="操作" width="100">

@@ -1,64 +1,77 @@
 <template>
-	<div class="pannelPadding-10">
-	<div class="pannelPaddingBg-10 jh-pannel ">
-		<div>
-			<div class="tree">
-        <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
-        <br>
-         <div flex spacebetween>
-           <el-input size="mini" v-model="keywordTree" placeholder="请输入部门名称" @change="handleChangeTree" style="width:300px"></el-input>
+  <div class="pannelPadding-10">
+    <div class="pannelPaddingBg-10 jh-pannel">
+      <div>
+        <div class="tree">
+          <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
+          <br />
+          <div flex spacebetween>
+            <el-input
+              size="mini"
+              v-model="keywordTree"
+              placeholder="请输入部门名称"
+              @change="handleChangeTree"
+              style="width:300px"
+            ></el-input>
             <el-button size="mini" type="primary" @change="handleChangeTree">查询</el-button>
-         </div>
-        <tree-table ref="recTree" :list.sync="treeDataSource" @handlerExpand="handlerExpand" @handlerChooseModel="handlerChooseModel"></tree-table>
+          </div>
+          <tree-table
+            ref="recTree"
+            :list.sync="treeDataSource"
+            @handlerExpand="handlerExpand"
+            @handlerChooseModel="handlerChooseModel"
+          ></tree-table>
+        </div>
+        <div class="form">
+          <div v-if="!!curDept.parentId" style="margin-bottom:10px">
+            <el-button size="mini" type="primary" @click="handleAddService">添加应用系统</el-button>
+          </div>
+          <div style="margin-bottom:10px">
+            <el-input size="mini" v-model="keyword" placeholder="关键字查询" @change="handleSearch"></el-input>
+          </div>
+          <el-table :data="tableData" border width="100%">
+            <el-table-column fixed="left" label="操作" width="100">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="handleOperate('edit', scope.row)">编辑</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column prop="yymc" label="应用系统名称" min-width="160"></el-table-column>
+            <el-table-column prop="bmmc" label="所属部门" width="150"></el-table-column>
+            <el-table-column prop="fwdx" label="使用对象" width="120"></el-table-column>
+            <el-table-column prop="yt_display" label="用途" width="120"></el-table-column>
+            <el-table-column prop="fwqip" label="服务器ip" width="120"></el-table-column>
+            <el-table-column prop="fwqmc" label="服务器名称" width="100"></el-table-column>
+            <el-table-column prop="czxtlx_display" label="操作系统" width="100"></el-table-column>
+            <el-table-column prop="sxrq" label="上线日期" width="100"></el-table-column>
+            <el-table-column prop="fwdqrq" label="服务到期日期" width="130"></el-table-column>
+            <el-table-column prop="cjdw" label="承建公司" width="120"></el-table-column>
+            <el-table-column prop="fwdz" label="访问地址" width="150" show-overflow-tooltip></el-table-column>
+
+            <el-table-column prop="ywbmlxr" label="业务部门联系人" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="ywbmlxfs" label="业务部门联系方式" width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xxzxlxr" label="信息化部门联系人" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="xxzxlxfs" label="信息化部门联系方式" width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="cjdwlxr" label="承建公司联系人" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="cjdwlxfs" label="承建公司联系方式" width="160" show-overflow-tooltip></el-table-column>
+          </el-table>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-size="pageSize"
+            layout="total, prev, pager, next"
+            :total="records"
+          ></el-pagination>
+        </div>
       </div>
-			<div class="form">
-        <!-- v-if="!!curDept.parentId" -->
-				<div v-if="!!curDept.parentId" style="margin-bottom:10px"><el-button size="mini" type="primary"  @click="handleAddService">添加应用系统</el-button></div>
-				<div style="margin-bottom:10px"><el-input size="mini" v-model="keyword" placeholder="关键字查询" @change="handleSearch"></el-input></div>
-        <el-table :data="tableData" border width="100%">
-					<el-table-column fixed="left" label="操作" width="100"  >
-						<template slot-scope="scope">
-							<el-button type="text" size="small" @click="handleOperate('edit', scope.row)">编辑</el-button>
-						</template>
-					</el-table-column>
-					<el-table-column prop="yymc" label="应用系统名称" min-width="160"></el-table-column>
-					<el-table-column prop="bmmc" label="所属部门" width="150"></el-table-column>
-					<el-table-column prop="fwdx" label="使用对象" width="120"></el-table-column>
-          <el-table-column prop="yt_display" label="用途" width="120"></el-table-column>
-          <el-table-column prop="fwqip" label="服务器ip" width="120"></el-table-column>
-          <el-table-column prop="fwqmc" label="服务器名称" width="100"></el-table-column>
-					<el-table-column prop="czxtlx_display" label="操作系统" width="100"></el-table-column>
-          <el-table-column prop="sxrq" label="上线日期" width="100"></el-table-column>
-					<el-table-column prop="fwdqrq" label="服务到期日期" width="130"></el-table-column>
-					<el-table-column prop="cjdw" label="承建公司" width="120"></el-table-column>
-					<el-table-column prop="fwdz" label="访问地址" width="150" show-overflow-tooltip></el-table-column>
+    </div>
 
-          <el-table-column prop="ywbmlxr" label="业务部门联系人" width="150" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="ywbmlxfs" label="业务部门联系方式" width="160" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xxzxlxr" label="信息化部门联系人" width="150" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="xxzxlxfs" label="信息化部门联系方式" width="160" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="cjdwlxr" label="承建公司联系人" width="150" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="cjdwlxfs" label="承建公司联系方式" width="160" show-overflow-tooltip></el-table-column>
-				</el-table>
-				 <el-pagination
-					@current-change="handleCurrentChange"
-					:current-page.sync="currentPage"
-					:page-size="pageSize"
-					layout="total, prev, pager, next"
-					:total="records">
-				</el-pagination>
-			</div>
-		</div>
-		</div>
-
-
-		<yypzDiloag :show.sync="yypzShow" :detailInfo="detailInfo" @handleCommitYypz="handleCommitYypz" ></yypzDiloag>
-	</div>
+    <yypzDiloag :show.sync="yypzShow" :detailInfo="detailInfo" @handleCommitYypz="handleCommitYypz"></yypzDiloag>
+  </div>
 </template>
 
 <script>
 import treeTable from "@/components/tree/tree-table.vue";
-import yypzDiloag from '@/views/BusinessPage/serviceCounter/yypz-dialog';
+import yypzDiloag from "@/views/BusinessPage/serviceCounter/yypz-dialog";
 import chooseSchool from "@/components/BusinessPage/chooseSchool.vue";
 
 export default {
@@ -70,15 +83,15 @@ export default {
       currentPage: 1,
       pageSize: 15,
       records: 0,
-      keywordTree:"",//树关键字
+      keywordTree: "", //树关键字
       tableData: [],
       unit: {}, //单位
       curDept: {}, //当前部门
       wid: "", //当前服务事项
       prevTree: {},
-      detailInfo:{},
-      keyword:'',
-      userInfo:{}
+      detailInfo: {},
+      keyword: "",
+      userInfo: {}
     };
   },
   props: {
@@ -87,12 +100,12 @@ export default {
       default: false
     }
   },
-  mounted(){
-    this.userInfo = JSON.parse( sessionStorage.getItem('userInfo'));
+  mounted() {
+    this.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
   },
   methods: {
     // 树查询
-     handleChangeTree(){
+    handleChangeTree() {
       this.treeDept();
     },
     // 更换单位
@@ -120,12 +133,12 @@ export default {
     // 提交服务
     handleCommitYypz(params) {
       let formData = params;
-      formData.sydx = params.sydx.join(',');
+      formData.sydx = params.sydx.join(",");
       formData.dwbh = this.unit.dwbh;
       formData.dwmc = this.unit.dwmc;
       formData.bmbh = this.curDept.id;
       formData.bmmc = this.curDept.title;
-      
+
       // formData.cjdwlxrgh = this.userInfo.unitType==0?this.userInfo.userName:'';
       this.$post(this.API.saveApp, formData).then(res => {
         if (res.state == "success") {
@@ -159,7 +172,7 @@ export default {
       this.pageApps();
     },
 
-    handleSearch(){
+    handleSearch() {
       this.currentPage = 1;
       this.pageApps();
     },
@@ -184,10 +197,10 @@ export default {
     pageApps() {
       this.$get(this.API.pageApps, {
         curPage: this.currentPage,
-        pageSize:!this.isPlan?this.pageSize:10,
+        pageSize: !this.isPlan ? this.pageSize : 10,
         dwbh: this.unit.dwbh,
-        bmbh: this.curDept.id=='0' ? "" : this.curDept.id,
-        keyword :this.keyword
+        bmbh: this.curDept.id == "0" ? "" : this.curDept.id,
+        keyword: this.keyword
       }).then(res => {
         if (res.state == "success") {
           if (!res.data || !res.data.rows) {
@@ -206,7 +219,7 @@ export default {
         dwbh: this.unit.dwbh,
         dwmc: this.unit.dwmc,
         zts: "1,3",
-        keyword:this.keywordTree
+        keyword: this.keywordTree
       }).then(res => {
         if (res.state == "success") {
           this.treeDataSource = res.data;

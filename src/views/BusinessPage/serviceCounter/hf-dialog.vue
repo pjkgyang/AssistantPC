@@ -12,20 +12,13 @@
     >
       <div class="dialog-bj">
         <section>
-          
           <div flex>
-              <span class="filter-weight before-require">是否解决：</span>
-              <el-radio-group v-model="filterData.sfjj">
-                <el-radio label="1">是</el-radio>
-                <el-radio label="0">否</el-radio>
-              </el-radio-group>
+            <span class="filter-weight before-require">是否解决：</span>
+            <el-radio-group v-model="filterData.sfjj">
+              <el-radio label="1">是</el-radio>
+              <el-radio label="0">否</el-radio>
+            </el-radio-group>
           </div>
-
-          <!-- <div flex class="mg-12  before-require">
-            <span class="filter-weight">服务评价：</span>
-            <el-rate v-model="filterData.pf" :texts="texts" show-text></el-rate>
-          </div> -->
-
           <p class="pj-content">
             <span class="filter-weight">说明：</span>
             <el-input
@@ -56,43 +49,43 @@ export default {
       filterData: {
         nr: "",
         pf: 5,
-        sfjj:"1"
+        sfjj: "1"
       }
     };
   },
-  props:{
+  props: {
     show: {
       type: Boolean,
       default: false
     },
-    wid:{
-      type:String,
-      default:''
+    wid: {
+      type: String,
+      default: ""
     }
   },
   methods: {
     handleClickSure() {
       // if (!this.validate()) return;
-      this.$post(this.API.returnVisit,{
-        zbwid:this.wid,
-        sm:this.filterData.nr,
+      this.$post(this.API.returnVisit, {
+        zbwid: this.wid,
+        sm: this.filterData.nr,
         // pf:this.filterData.pf,
-        sfjj:this.filterData.sfjj
-      }).then(res=>{
-        if(res.state == 'success'){
-           this.$message({message: "提交成功",type: "success" });
-           this.filterData.nr = '';
-           this.filterData.pf = 5;
-           this.filterData.sfjj = "1";
-           this.visible = false;
-           this.$emit('handleCommitHf','')
-        }else{
+        sfjj: this.filterData.sfjj
+      }).then(res => {
+        if (res.state == "success") {
+          this.$message({ message: "提交成功", type: "success" });
+          this.filterData.nr = "";
+          this.filterData.pf = 5;
+          this.filterData.sfjj = "1";
+          this.visible = false;
+          this.$emit("handleCommitHf", "");
+        } else {
           this.$alert(res.msg, "提示", {
-              confirmButtonText: "确定",
-              type: "error"
+            confirmButtonText: "确定",
+            type: "error"
           });
         }
-      })
+      });
     },
     validate() {
       if (/^[\s]*$/.test(this.filterData.nr)) {
@@ -132,5 +125,4 @@ export default {
 .pj-content {
   width: 86%;
 }
-
 </style>

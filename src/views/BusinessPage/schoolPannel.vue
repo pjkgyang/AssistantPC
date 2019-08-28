@@ -10,24 +10,37 @@
       ></el-input>
     </div>
     <div flex>
-      <div v-for="item in schools" class="project-school_card" flex colcenter @click="handleCheckDetail(item)">
+      <div
+        v-for="item in schools"
+        class="project-school_card"
+        flex
+        colcenter
+        @click="handleCheckDetail(item)"
+      >
         <div class="logo">
-          <img :src="item.logo" :onerror="errorImg">
+          <img :src="item.logo" :onerror="errorImg" />
         </div>
         <h4>{{item.mc}}</h4>
       </div>
     </div>
     <div v-if="total == 0">
-       <div style="width:100%;text-align:center;padding:20px 0;">
-           <img src="static/img/kong.png" alt="" style="width:300px;">
-           <p style="font-size:18px">暂 无 项 目</p>
-       </div>
+      <div style="width:100%;text-align:center;padding:20px 0;">
+        <img src="static/img/kong.png" alt style="width:300px;" />
+        <p style="font-size:18px">暂 无 项 目</p>
+      </div>
     </div>
-    <div v-if="total > 0 && !!schools.length"> 
-      <el-pagination background layout="total, sizes, prev, pager, next, jumper"  :current-page="currentPage" :page-size="pageSize" :page-sizes="[50, 100, 150, 200]" :total="total"
-      @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
+    <div v-if="total > 0 && !!schools.length">
+      <el-pagination
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :page-sizes="[50, 100, 150, 200]"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      ></el-pagination>
     </div>
-
   </div>
 </template>
 
@@ -38,7 +51,7 @@ export default {
       errorImg: 'this.src="' + require("../../../static/img/timg.png") + '"',
       schools: [],
       currentPage: 1,
-      pageSize:50,
+      pageSize: 50,
       total: 1,
       keyword: ""
     };
@@ -47,19 +60,19 @@ export default {
     this.getDwByUser();
   },
   methods: {
-    handleCheckDetail(params){
+    handleCheckDetail(params) {
       let { href } = this.$router.resolve({
         path: "/xxtsql",
-        query: {dwmc:params.mc,bh:params.wid}
+        query: { dwmc: params.mc, bh: params.wid }
       });
       window.open(href, "_blank");
     },
-    handleSizeChange(data){
+    handleSizeChange(data) {
       this.currentPage = 1;
       this.pageSize = data;
       this.getDwByUser();
     },
-    handleCurrentChange(data){
+    handleCurrentChange(data) {
       this.currentPage = data;
       this.getDwByUser();
     },
@@ -80,7 +93,7 @@ export default {
           } else {
             this.schools = res.data.rows;
           }
-            this.total = res.data.records;
+          this.total = res.data.records;
         }
       });
     }
@@ -123,7 +136,7 @@ export default {
   h4 {
     padding: 0 10px;
     font-weight: 700;
-		font-size: 14px;
+    font-size: 14px;
   }
 }
 </style>

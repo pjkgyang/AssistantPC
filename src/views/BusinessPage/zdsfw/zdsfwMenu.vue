@@ -37,7 +37,7 @@
             <el-table-column prop="zrrxm" label="责任人" width="80"></el-table-column>
             <el-table-column label="项目服务状态" width="170">
               <template slot-scope="scope">
-                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}{{scope.row.flag=='0'?'（已停滞）':''}}</el-tag>
+                <el-tag size="mini" :type="scope.row.zt=='0'?'primary':scope.row.zt=='1'?'success':'danger'">{{scope.row.zt=='0'?'计划中':scope.row.zt==1?'完成待确认':scope.row.zt==3?'已驳回':'关闭'}}{{scope.row.flag=='0'?'（已暂停）':''}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="jhksrq" label="计划开始日期" width="150"></el-table-column>

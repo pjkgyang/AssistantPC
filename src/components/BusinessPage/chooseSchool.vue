@@ -1,7 +1,7 @@
 <template>
 	<div  colcenter>
 		<span class="filter-weight">选择学校：</span>
-		<el-select v-model="schoolNames" filterable remote clearable placeholder="请选择" size="mini" @change="changeUnit" :remote-method="remoteMethod" style="width:300px">
+		<el-select v-model="schoolNames" filterable remote :clearable="isClear" placeholder="请选择" size="mini" @change="changeUnit" :remote-method="remoteMethod" style="width:300px">
 			<el-option v-for="(item, index) in schoolNamesOptions" :key="index" :label="item.mc" :value="item.wid"></el-option>
 		</el-select>
 	</div>
@@ -18,6 +18,12 @@
 					dwbh:'',
 					dwmc:''
 				}
+			}
+		},
+		props:{
+			isClear:{
+				type:Boolean,
+				default:true
 			}
 		},
 		mounted(){

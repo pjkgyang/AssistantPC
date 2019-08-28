@@ -16,7 +16,7 @@
             <span class="filter-weight">原型附件：</span>
             <a
               v-if="!!demandDetail.yxfjmc"
-              :href="API.downloadFile+'?fjId='+demandDetail.yxwjbh"
+               :href="demandDetail.yxfjurl+'&USERID='+userInfo.userName+'&USRNAME='+userInfo.nickName+'&SIGN='+des+'#/fbxq'"
             >{{demandDetail.yxfjmc}}</a>
             <span v-if="!demandDetail.yxfjmc">无</span>
           </div>
@@ -24,7 +24,7 @@
             <span class="filter-weight">开发包附件：</span>
             <a
               v-if="!!demandDetail.kffjmc"
-              :href="API.downloadFile+'?fjId='+demandDetail.kfwjbh"
+              :href="demandDetail.kffjurl+'&USERID='+userInfo.userName+'&USRNAME='+userInfo.nickName+'&SIGN='+des+'#/fbxq'"
             >{{demandDetail.kffjmc}}</a>
             <span v-if="!demandDetail.kffjmc">无</span>
           </div>
@@ -62,7 +62,9 @@ export default {
       filterData: {
         nr: "",
         pf: 5
-      }
+      },
+      userInfo:{},
+      des:''
     };
   },
   methods: {
@@ -70,8 +72,8 @@ export default {
       this.visible = false;
     },
     handleClickSure() {
-		this.filterData.zbwid = this.zbwid;
-		this.filterData.btnbh = this.btnbh;
+      this.filterData.zbwid = this.zbwid;
+      this.filterData.btnbh = this.btnbh;
       if (!this.validate()) return;
 
       this.$post(this.API.confirmDvpt, this.filterData).then(res => {
@@ -101,8 +103,8 @@ export default {
     show: {
       type: Boolean,
       default: false
-	},
-	zbwid: {
+    },
+    zbwid: {
       type: String,
       default: ""
     },
@@ -120,7 +122,9 @@ export default {
   watch: {
     show(n, o) {
       this.visible = this.show;
-      if (!n) {
+      if (!!n) {
+          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+          this.des = encryptByDES("assistant" + this.userInfo.userName, "WISEDUUSER");
       } else {
       }
     }

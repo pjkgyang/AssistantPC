@@ -44,7 +44,7 @@
           <div v-if="filterList.includes('sfgq')">
             <span class="query-title">是否过期:</span>
             <p class="query-list" @click="handleSfgq">
-              <span v-for="(gq,index) in gqList" :data-type="gq.lable" :key="index" :class="{'bg-active':filterWord.gqzt == gq.lable}">{{gq.mc}}</span>
+              <span v-for="(gq,index) in gqList" :data-type="gq.lable" :key="index" :class="{'bg-active':filterWord.sfgq == gq.lable}">{{gq.mc}}</span>
             </p>
           </div>
 
@@ -145,7 +145,7 @@
           cpxmc:"",
           cpxbh:"",
           fwzt:"",
-          gqzt:"",
+          sfgq:"",
           jhksrq:"",//计划开始日期
           jhjsrq:"",//计划结束日期
 
@@ -198,13 +198,12 @@
         let cpbh = e.target.getAttribute("data-type");
         let index = e.target.getAttribute("data-index");
         if (!cpbh) {
-          this.filterWord.cpbh = "";
-          this.filterWord.cpmc = "";
+          this.filterWord.cpxbh = "";
+          this.filterWord.cpxmc = "";
         } else {
-          this.filterWord.cpbh = cpbh;
-          this.filterWord.cpmc = this.cpList[index].text;
+          this.filterWord.cpxbh = cpbh;
+          this.filterWord.cpxmc = this.cpList[index].cpxmc;
         }
-        this.filterWord.fwnr = "";
         this.$emit("handleChangeFilter", this.filterWord);
       },
 
@@ -246,5 +245,4 @@
   .nomargin span {
     margin: 3px 0 !important;
   }
-
 </style>

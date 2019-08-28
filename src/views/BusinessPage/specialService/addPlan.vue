@@ -9,7 +9,7 @@
       @close="$emit('update:show', false)"
       :show="show"
     >
-      <div class="demand">
+      <div class="addPlan">
         <el-form
           style="width:950px;margin:0 auto"
           class="demo-ruleForm"
@@ -18,7 +18,6 @@
           size="mini"
           label-width="135px"
         >
-        
           <el-form-item label="项目名称" required>
             <el-input placeholder="请选择" readonly v-model="fwdjData.xmmc" style="width:800px">
               <el-button
@@ -41,7 +40,7 @@
           </el-form-item>
 
           <el-form-item label="服务类型" required>
-           <el-select
+            <el-select
               v-model="fwdjData.cpxwids"
               size="mini"
               placeholder="请选择服务类型"
@@ -58,23 +57,6 @@
             </el-select>
           </el-form-item>
           
-
-          <!-- <el-form-item label="计划开始日期" required>
-            <el-date-picker
-              :picker-options="pickerBeginDateBefore"
-              :clearable="false"
-              size="mini"
-              v-model="fwdjData.jhksrq"
-              type="date"
-              placeholder="选择日期"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              style="width:325px;"
-            ></el-date-picker>
-          </el-form-item> -->
-
-          
-
           <el-form-item label="服务项" required>
             <el-select
               v-model="fwdjData.fwxwid"
@@ -92,8 +74,8 @@
             </el-select>
           </el-form-item>
 
-           <el-form-item label="服务阶段" required>
-             <el-input
+          <el-form-item label="服务阶段" required>
+            <el-input
               size="mini"
               type="text"
               style="width:325px"
@@ -138,7 +120,13 @@
           </el-form-item>
 
           <el-form-item label="服务内容" required>
-            <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="fwdjData.fwnr" style="width:800px"></el-input>
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入内容"
+              v-model="fwdjData.fwnr"
+              style="width:800px"
+            ></el-input>
           </el-form-item>
         </el-form>
 
@@ -149,41 +137,47 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="选择项目" :visible.sync="chooseItemShow" :close-on-click-modal="false" width="800px" top="30px"
-		 append-to-body>
-			<div style="padding:10px;">
-				<itemChoose @handleEdit="handleChooseItem"></itemChoose>
-			</div>
-	  </el-dialog>
+    <el-dialog
+      title="选择项目"
+      :visible.sync="chooseItemShow"
+      :close-on-click-modal="false"
+      width="800px"
+      top="30px"
+      append-to-body
+    >
+      <div style="padding:10px;">
+        <itemChoose @handleEdit="handleChooseItem"></itemChoose>
+      </div>
+    </el-dialog>
 
-    <userDialog :show.sync='userShow' :unitType="unitType" @addUserSuccess="addUserSuccess"></userDialog>
+    <userDialog :show.sync="userShow" :unitType="unitType" @addUserSuccess="addUserSuccess"></userDialog>
   </div>
 </template>
 
 <script>
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
-import userDialog from '@/components/dialog/user-dialog.vue';
+import userDialog from "@/components/dialog/user-dialog.vue";
 
 export default {
   data() {
     return {
-      chooseItemShow:false,
-      userShow:false,//
-      unitType:'',
+      chooseItemShow: false,
+      userShow: false, //
+      unitType: "",
       visible: this.show,
-      itemInfo:{},
+      itemInfo: {},
       fwlxList: [], // 服务类型
       fwxList: [], // 服务项
       fwjdList: [], // 服务阶段
-      jzzrrList:[],
-      xxzrrList:[],//学校责任人
-      curPage:1,
-      pageSize:12,
+      jzzrrList: [],
+      xxzrrList: [], //学校责任人
+      curPage: 1,
+      pageSize: 12,
       fwdjData: {
         xmmc: "",
         xmbh: "",
-        cpxwids:"",
-        fwxwid:"",//服务项wid
+        cpxwids: "",
+        fwxwid: "", //服务项wid
         jhjsrq: "",
         zrrxm: "",
         zrrbh: "",
@@ -211,30 +205,28 @@ export default {
   },
   methods: {
     // 选择项目
-    handleChooseItem(data){
+    handleChooseItem(data) {
       this.fwdjData.xmmc = data.xmmc;
       this.fwdjData.xmbh = data.xmbh;
       this.chooseItemShow = !this.chooseItemShow;
     },
     // 添加成功
-    addUserSuccess(params,user){
-      if(params == '0'){
+    addUserSuccess(params, user) {
+      if (params == "0") {
         this.fwdjData.zrrbh = user.username;
         this.fwdjData.zrrxm = user.userid;
-      }else{
+      } else {
         this.fwdjData.xxfzrxm = user.username;
         this.fwdjData.xxfzrbh = user.userid;
       }
-       this.userShow = false;
+      this.userShow = false;
     },
     // 选择服务类型
-    handleChangeFwlx(val){
-      this.getSpecialServiceFWX(val.join(','));
+    handleChangeFwlx(val) {
+      this.getSpecialServiceFWX(val.join(","));
     },
-    handleChangeFwx(){
-
-    },
-    handleChooseUser(data){
+    handleChangeFwx() {},
+    handleChooseUser(data) {
       this.unitType = data;
       this.userShow = true;
     },
@@ -258,19 +250,19 @@ export default {
         }
       });
     },
-    
-    // 获取服务项
-    getSpecialServiceFWX(cpxwid){
-      this.fwxList = [];
-      this.$get(this.API.getSpecialServiceFWX,{
-        cpxwid:cpxwid
-      }).then(res=>{
-        if(res.state == 'success'){
-          this.fwxList = res.data;
-        }else{}
-      })
-    },
 
+    // 获取服务项
+    getSpecialServiceFWX(cpxwid) {
+      this.fwxList = [];
+      this.$get(this.API.getSpecialServiceFWX, {
+        cpxwid: cpxwid
+      }).then(res => {
+        if (res.state == "success") {
+          this.fwxList = res.data;
+        } else {
+        }
+      });
+    },
 
     valiDate() {
       if (!this.fwdjData.xmbh) {
@@ -324,7 +316,7 @@ export default {
     show() {
       this.visible = this.show;
       if (this.show) {
-        this.fwlxList = JSON.parse(sessionStorage.getItem('fwlx'));
+        this.fwlxList = JSON.parse(sessionStorage.getItem("fwlx"));
       } else {
         this.fwlxList = [];
       }
@@ -333,7 +325,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.demand {
+.addPlan {
   padding: 10px 0;
 }
 
@@ -341,45 +333,21 @@ div.el-form-item {
   margin-bottom: 8px !important;
 }
 
-.demand-textarea {
+.addPlan-textarea {
   width: 950px;
   margin: 0 auto;
 }
 
-.demand-textarea > p {
+.addPlan-textarea > p {
   width: 125px;
   text-align: right;
   padding-right: 12px;
   font-weight: 700;
 }
 
-.demand-textarea > p::before {
+.addPlan-textarea > p::before {
   content: "*";
   color: #f56c6c;
   margin-right: 4px;
-}
-
-.file {
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-top: 4px !important;
-
-  &:hover {
-    background: rgba(216, 214, 214, 0.5);
-  }
-
-  i {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 20px;
-
-    &:hover {
-      color: #f00;
-      cursor: pointer;
-      background: rgba(255, 0, 0, 0.25);
-    }
-  }
 }
 </style>

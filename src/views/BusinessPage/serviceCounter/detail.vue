@@ -22,7 +22,9 @@
           <div>
             <p>
               登记时间：{{fwdjInfo.cjsj}} &#x3000;&#x3000; 登记人：{{fwdjInfo.cjrxm}} &#x3000;&#x3000;
-              <span class="filter-weight">服务编号：{{fwdjInfo.fwbh}}</span>
+              <span
+                class="filter-weight"
+              >服务编号：{{fwdjInfo.fwbh}}</span>
             </p>
           </div>
         </div>
@@ -104,7 +106,7 @@
                 </p>
                 <div v-if="groupTag.includes('FWTGLRY')">
                   <el-button size="mini" type="primary" @click="handleOprateFwt('edit',item)">编辑</el-button>
-                  <el-button size="mini" type="danger"  @click="handleOprateFwt('del',item)">删除</el-button>
+                  <el-button size="mini" type="danger" @click="handleOprateFwt('del',item)">删除</el-button>
                 </div>
               </div>
 
@@ -161,7 +163,9 @@
               <p>
                 <span class="baseText">登记时间：</span>
                 {{fwdj.cjsj}} &#x3000;&#x3000; 登记人：{{fwdj.cjrxm}} &#x3000;&#x3000;
-                <span class="filter-weight baseText">服务编号：{{fwdjInfo.fwbh}}</span>
+                <span
+                  class="filter-weight baseText"
+                >服务编号：{{fwdjInfo.fwbh}}</span>
               </p>
             </div>
             <div class="mg-12 questionList-info" flex spacebetween>
@@ -286,18 +290,8 @@
     <hfDialog :show.sync="hfShow" :wid="fwdjInfo.wid" @handleCommitHf="handleCommitHf"></hfDialog>
     <!-- 回访 -->
 
-        
-    <el-dialog
-      title="编辑"
-      :visible.sync="editVisible"
-      width="700px"
-      >
-      <el-input
-        type="textarea"
-        :rows="4"
-        placeholder="请输入内容"
-        v-model="editContent">
-      </el-input>
+    <el-dialog title="编辑" :visible.sync="editVisible" width="700px">
+      <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="editContent"></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="handleCommitEdit">确 定</el-button>
@@ -315,7 +309,7 @@ export default {
   data() {
     return {
       dialogVisible: false, //承诺结束日期显示
-      editVisible:false,
+      editVisible: false,
       bjShow: false, //办结显示
       hfShow: false, //回访
       keyword: "",
@@ -323,7 +317,7 @@ export default {
       date: "",
       sfls: false,
 
-      editContent:"",//编辑内容
+      editContent: "", //编辑内容
       // chaxun
       currentPage: 1,
       pageSize: 10,
@@ -353,8 +347,8 @@ export default {
         }
       ],
       activeName: 1,
-      groupTag:'',
-      curLog:{},
+      groupTag: "",
+      curLog: {},
       pickerBeginDateBefore: {
         disabledDate(time) {
           let curDate = new Date().getTime();
@@ -371,62 +365,62 @@ export default {
       this.sfls = true;
     }
 
-    if (
-      !!sessionStorage.getItem("userInfo")
-    ) {
-      this.groupTag = JSON.parse(sessionStorage.getItem("userInfo")).userGroupTag;
+    if (!!sessionStorage.getItem("userInfo")) {
+      this.groupTag = JSON.parse(
+        sessionStorage.getItem("userInfo")
+      ).userGroupTag;
     }
-
-
 
     if (!!this.$route.query.id) {
       this.getServiceDesk();
     }
   },
   methods: {
-    handleCommitEdit(){
-      this.$post(this.API.updateServiceDeskProcess,{
-        wid:this.curLog.wid,
-        content:this.editContent
-      }).then(res=>{
-        if(res.state == 'success'){
-          this.$message({message:'保存成功',type:'success'});
+    handleCommitEdit() {
+      this.$post(this.API.updateServiceDeskProcess, {
+        wid: this.curLog.wid,
+        content: this.editContent
+      }).then(res => {
+        if (res.state == "success") {
+          this.$message({ message: "保存成功", type: "success" });
           this.getServiceDesk();
-          this.editContent = '';
+          this.editContent = "";
           this.editVisible = false;
-        }else{
+        } else {
           this.$alert(res.msg, "提示", {
             confirmButtonText: "确定",
             type: "error"
           });
         }
-      })
+      });
     },
     // 编辑 删除
-    handleOprateFwt(type,params){
-      if(type == 'edit'){
+    handleOprateFwt(type, params) {
+      if (type == "edit") {
         this.curLog = params;
         this.editVisible = true;
-      }else{
-        this.$confirm('是否删除此条回复?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$post(this.API.deleteServiceDeskProcess,{
-            wid:item.wid
-          }).then(res=>{
-            if(res.state == 'success'){
-              this.$message({message:'删除成功',type:'success'});
-              this.getServiceDesk();
-            }else{
-              this.$alert(res.msg, "提示", {
-                confirmButtonText: "确定",
-                type: "error"
-              });
-            }
+      } else {
+        this.$confirm("是否删除此条回复?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$post(this.API.deleteServiceDeskProcess, {
+              wid: item.wid
+            }).then(res => {
+              if (res.state == "success") {
+                this.$message({ message: "删除成功", type: "success" });
+                this.getServiceDesk();
+              } else {
+                this.$alert(res.msg, "提示", {
+                  confirmButtonText: "确定",
+                  type: "error"
+                });
+              }
+            });
           })
-        }).catch(() => {});
+          .catch(() => {});
       }
     },
     // 折叠板子

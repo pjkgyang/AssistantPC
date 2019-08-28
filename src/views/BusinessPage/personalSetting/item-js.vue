@@ -1,12 +1,30 @@
 <template>
   <div>
     <div>
-      <filterComponent :filterList="filterList" @handleChangeFilter="handleChangeFilter" :placeholder="'请输入项目编号/项目名称/分包编号'"></filterComponent>
+      <filterComponent
+        :filterList="filterList"
+        @handleChangeFilter="handleChangeFilter"
+        :placeholder="'请输入项目编号/项目名称/分包编号'"
+      ></filterComponent>
     </div>
     <div text-right>
       <el-button size="mini" type="primary" @click="handleExport">导出</el-button>
     </div>
-    <tableComponents :tableData="dataList" :pageShow="true" :currentPage="currentPage" :pageSize="pageSize" @handleCurrentChange="handleCurrentChange" @handleXxwt="handleXxwt" :indexArr='[0]' :widthArr="[2,5]" :Width="'130'" :Height="250" :rowWidth="'260'" :archiveShow="false" :exportShow="false"></tableComponents>
+    <tableComponents
+      :tableData="dataList"
+      :pageShow="true"
+      :currentPage="currentPage"
+      :pageSize="pageSize"
+      @handleCurrentChange="handleCurrentChange"
+      @handleXxwt="handleXxwt"
+      :indexArr="[0]"
+      :widthArr="[2,5]"
+      :Width="'130'"
+      :Height="250"
+      :rowWidth="'260'"
+      :archiveShow="false"
+      :exportShow="false"
+    ></tableComponents>
     <xmjsDialog :show.sync="show" :data="rowData" @handleClickSure="handleClickSure"></xmjsDialog>
     <jssqcxDialog :show.sync="jscxShow" :fbbh="rowData.fbbh"></jssqcxDialog>
   </div>
@@ -64,7 +82,7 @@ export default {
               callback: action => {
                 if (!!key) {
                   _this.show = false;
-									_this.getSettlementApplication();
+                  _this.getSettlementApplication();
                 }
               }
             });
@@ -77,13 +95,13 @@ export default {
       this.getSettlementApplication();
     },
     handleXxwt(data, i, params) {
-			// if(data[3] == '已终止' && params == "sqjs"){
-			// 	 this.$message({
-   //        message: '该项目已经终止，不允许提交结算申请！',
-   //        type: 'warning'
-   //      });
-			// 	return;
-			// }
+      // if(data[3] == '已终止' && params == "sqjs"){
+      // 	 this.$message({
+      //        message: '该项目已经终止，不允许提交结算申请！',
+      //        type: 'warning'
+      //      });
+      // 	return;
+      // }
       this.rowData.fbmc = data[5];
       this.rowData.fbbh = data[4];
       this.rowData.xmbh = data[1];
@@ -93,7 +111,7 @@ export default {
         this.jscxShow = !this.jscxShow;
       }
     },
-		
+
     getSettlementApplication() {
       this.$get(this.API.settlementApplication, {
         curPage: this.currentPage,

@@ -26,6 +26,7 @@
             <el-table-column prop="hyjssj" label="结束时间" width="160" show-overflow-tooltip></el-table-column>
             <el-table-column prop="hysc" label="时长" width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop="hydd" label="会议地点"  min-width="130" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="hyzt_display" label="完成状态"  width="110" show-overflow-tooltip></el-table-column>
             <el-table-column prop="chry" label="参会人员" min-width="130" show-overflow-tooltip></el-table-column>
             <el-table-column label="内部会议" width="100" show-overflow-tooltip>
               <template slot-scope="scope">

@@ -96,11 +96,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="cjrxm" label="填写人" width="80"></el-table-column>
-        <el-table-column prop="xmbh" label="项目编号"  sortable width="110"></el-table-column>
-        <el-table-column prop="xmmc" label="项目名称"  width="260" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="gcms" label="内容" width="500" ></el-table-column>
-        <el-table-column prop="cpmc_display" label="产品名称"  width="180"></el-table-column>
-        <el-table-column prop="rwmc_display" label="任务名称"  width="150"></el-table-column>
+        <el-table-column prop="xmbh" label="项目编号" sortable width="110"></el-table-column>
+        <el-table-column prop="xmmc" label="项目名称" width="260" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="gcms" label="内容" width="500"></el-table-column>
+        <el-table-column prop="cpmc_display" label="产品名称" width="180"></el-table-column>
+        <el-table-column prop="rwmc_display" label="任务名称" width="150"></el-table-column>
         <el-table-column prop="gcrq" label="日报日期" width="110" sortable></el-table-column>
         <el-table-column prop="cjsj" label="填写时间" width="160" sortable></el-table-column>
         <el-table-column prop="gs" label="工时(小时)" width="90"></el-table-column>
@@ -269,9 +269,7 @@ export default {
       gcqyValue: "", //工程区域
       gczdList: [], //区域
       fwValue: "",
-      TaskRelevance: {
-
-      },
+      TaskRelevance: {},
       rwgc: {},
       total: "",
       baseUrl: "",
@@ -284,7 +282,7 @@ export default {
       isedit: true,
       rwbh: "",
       xmbh: "",
-			jdmc:"",//项目阶段名称
+      jdmc: "", //项目阶段名称
       sign: 0,
       nowPage: 1,
       pzList: [],
@@ -345,7 +343,7 @@ export default {
     changeTaskscope() {
       this.queryLogTaskProcess(1);
     },
-		
+
     // 查看日志详情
     handleTasklogDetail(index, row) {
       this.tasklogDetailVisible = true;
@@ -422,13 +420,13 @@ export default {
       if (this.isedit) {
         this.rwgc.xmbh = this.xmbh == "" ? data.xmbh : this.xmbh;
         this.rwgc.rwbh = this.rwbh == "" ? data.rwbh : this.rwbh;
-				this.rwgc.jdmc = this.jdmc == "" ? data.jdmc : this.jdmc;
+        this.rwgc.jdmc = this.jdmc == "" ? data.jdmc : this.jdmc;
         this.addOrUpdateTaskProcess(this.rwgc);
       } else {
         this.rwgc.wid = "";
         this.rwgc.xmbh = this.xmbh;
         this.rwgc.rwbh = this.rwbh;
-				this.rwgc.jdmc = this.jdmc;
+        this.rwgc.jdmc = this.jdmc;
         this.addOrUpdateTaskProcess(this.rwgc);
       }
     },
@@ -443,27 +441,26 @@ export default {
       this.dialogTaskVisible = !this.dialogTaskVisible;
     },
     // 选择关联任务
-    chooseRevelenceTask(data,jdmc) {
+    chooseRevelenceTask(data, jdmc) {
       this.taskName = data.rwmc;
       this.TaskRelevance = data; //rwmc
       this.xmbh = data.xmbh;
       this.rwbh = data.rwbh;
-			this.jdmc = jdmc;
+      this.jdmc = jdmc;
       this.dialogTaskVisible = !this.dialogTaskVisible;
     },
 
     handleCloseDialy() {},
 
-    
     handleExport() {
-      let startDate = !this.startDate?'':this.startDate;
-      let endDate = !this.endDate?'':this.endDate;
+      let startDate = !this.startDate ? "" : this.startDate;
+      let endDate = !this.endDate ? "" : this.endDate;
       window.open(
         this.baseUrl +
           "process/exportPersonnelLog.do?startDay=" +
-           startDate +
+          startDate +
           "&endDay=" +
-           endDate +
+          endDate +
           "&isRead=" +
           this.ydztValue +
           "&gcqy=" +
@@ -519,8 +516,8 @@ export default {
       queryLogTaskProcess({
         curPage: curPage,
         pageSize: this.pageSize,
-        startDay: !this.startDate?'':this.startDate,
-        endDay: !this.endDate?'':this.endDate,
+        startDay: !this.startDate ? "" : this.startDate,
+        endDay: !this.endDate ? "" : this.endDate,
         cybh: this.value,
         isRead: this.ydztValue,
         qygc: this.gcqyValue,

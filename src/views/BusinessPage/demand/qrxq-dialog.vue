@@ -12,7 +12,6 @@
     >
       <div class="dialog-xqqr">
         <section>
-          
           <div class="mg-12">
             <span class="filter-weight">附件：</span>
             <a :href="API.downloadFile+'?fjId='+demandDetail.xxyxfjwid">{{demandDetail.xxyxfjmc}}</a>
@@ -60,14 +59,12 @@ export default {
   data() {
     return {
       visible: this.show,
-      pickerBeginDateBefore : {
-          disabledDate(time) {
-            let curDate = new Date().getTime();
-            return (
-              time.getTime() < Date.now() - 8.64e7
-            );
-          }
-        },
+      pickerBeginDateBefore: {
+        disabledDate(time) {
+          let curDate = new Date().getTime();
+          return time.getTime() < Date.now() - 8.64e7;
+        }
+      },
       texts: ["1分", "2分", "3分", "4分", "5分"],
       filterData: {
         nr: "",

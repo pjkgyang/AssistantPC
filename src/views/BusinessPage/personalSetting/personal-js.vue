@@ -4,68 +4,156 @@
       <section slot="top">
         <div class="personalJs-top" flex-column spacearound>
           <section class="pd-10">
-            <el-date-picker v-model="year" type="year" placeholder="选择年" value-format="yyyy" format="yyyy 年" @change="handleChangeDate"></el-date-picker>
+            <el-date-picker
+              v-model="year"
+              type="year"
+              placeholder="选择年"
+              value-format="yyyy"
+              format="yyyy 年"
+              @change="handleChangeDate"
+            ></el-date-picker>
           </section>
           <section style="color:#555;text-align:center">
-            <span style="font-size:20px">{{username}}<br><span style="font-size:18px">{{data.khmc}}</span></span>
+            <span style="font-size:20px">
+              {{username}}
+              <br />
+              <span style="font-size:18px">{{data.khmc}}</span>
+            </span>
           </section>
           <section flex spacearound class="personalJs-top-month" style="height:45%">
             <div v-for="monthly in monthList">
               <p :class="{'monthprocessmc':true,'colorActive':month == monthly.val}">{{monthly.mc}}</p>
               <div class="monthprocess" colcenter>
                 <span class="processLine"></span>
-                <span @click="handleCheckJS(monthly)" :class="{'processDot':true,'widthActive':month == monthly.val}"></span>
+                <span
+                  @click="handleCheckJS(monthly)"
+                  :class="{'processDot':true,'widthActive':month == monthly.val}"
+                ></span>
               </div>
             </div>
           </section>
-
         </div>
       </section>
       <section slot="bottom" class="personalJs-bottom" flex spacearound>
         <div class="personalJs-menu">
-          <h5><span class="filter-weight">结算清单</span><br>Settlement list</h5>
+          <h5>
+            <span class="filter-weight">结算清单</span>
+            <br />Settlement list
+          </h5>
           <div class="personalJs-menu-dl">
             <h5>我的账户:</h5>
             <dl>
-              <dt class="bordeBottom">本月收入:<span class="colorActive">{{!data.sfgz?0:data.sfgz}} 元</span></dt>
-              <dd>本月项目实发:<span>{{data.xmsf}} 元</span></dd>
-              <dd>本月非项目实发:<span>{{data.fxmsf}} 元</span></dd>
-              <dd>冲入奖金池:<span>{{data.crjjc}} 元</span></dd>
-              <dd>本月奖金池领取:<span>{{data.jjclq}} 元</span></dd>
-              <dt class="bordeTopBottom">项目结余:<span>{{data.byjy}} 元</span></dt>
-              <dt>奖金池结余:<span>{{data.wfjj}} 元</span></dt>
+              <dt class="bordeBottom">
+                本月收入:
+                <span class="colorActive">{{!data.sfgz?0:data.sfgz}} 元</span>
+              </dt>
+              <dd>
+                本月项目实发:
+                <span>{{data.xmsf}} 元</span>
+              </dd>
+              <dd>
+                本月非项目实发:
+                <span>{{data.fxmsf}} 元</span>
+              </dd>
+              <dd>
+                冲入奖金池:
+                <span>{{data.crjjc}} 元</span>
+              </dd>
+              <dd>
+                本月奖金池领取:
+                <span>{{data.jjclq}} 元</span>
+              </dd>
+              <dt class="bordeTopBottom">
+                项目结余:
+                <span>{{data.byjy}} 元</span>
+              </dt>
+              <dt>
+                奖金池结余:
+                <span>{{data.wfjj}} 元</span>
+              </dt>
             </dl>
             <h5>项目结算:</h5>
             <dl>
-              <dt class="bordeBottom">上月结算余额:<span>{{data.syjs}} 元</span></dt>
-              <dt>本月项目结算:<span><a @click="handleCheckJs('xmjs')" href="javaScript:;;">{{data.xmjs}} 元</a></span></dt>
-              <dt>本月CROWD结算:<span><a @click="handleCheckJs('ekjs')" href="javaScript:;;">{{data.crowdjs}} 元</a></span></dt>
-              <dt>本月售前调用:<span><a @click="handleCheckJs('sqdy')" href="javaScript:;;">{{data.sqjs}} 元</a></span></dt>
-              <dt>本月售后结算:<span>{{data.shjs}} 元</span></dt>
-              <dt>非服务调用:<span>{{data.ffwjs}} 元</span></dt>
-              <dt>本月其他结算:<span>{{data.qtjs}} 元</span></dt>
+              <dt class="bordeBottom">
+                上月结算余额:
+                <span>{{data.syjs}} 元</span>
+              </dt>
+              <dt>
+                本月项目结算:
+                <span>
+                  <a @click="handleCheckJs('xmjs')" href="javaScript:;;">{{data.xmjs}} 元</a>
+                </span>
+              </dt>
+              <dt>
+                本月CROWD结算:
+                <span>
+                  <a @click="handleCheckJs('ekjs')" href="javaScript:;;">{{data.crowdjs}} 元</a>
+                </span>
+              </dt>
+              <dt>
+                本月售前调用:
+                <span>
+                  <a @click="handleCheckJs('sqdy')" href="javaScript:;;">{{data.sqjs}} 元</a>
+                </span>
+              </dt>
+              <dt>
+                本月售后结算:
+                <span>{{data.shjs}} 元</span>
+              </dt>
+              <dt>
+                非服务调用:
+                <span>{{data.ffwjs}} 元</span>
+              </dt>
+              <dt>
+                本月其他结算:
+                <span>{{data.qtjs}} 元</span>
+              </dt>
               <p>{{data.qtjssm}}</p>
               <!-- <dt class="bordeBottom">本月结算合计:<span>{{data.jshj}} 元</span></dt> -->
-              <dt>本月项目实发:<span>{{data.xmsf}} 元</span></dt>        
-              <dt>本月项目结余:<span>{{data.byjy}} 元</span></dt>
+              <dt>
+                本月项目实发:
+                <span>{{data.xmsf}} 元</span>
+              </dt>
+              <dt>
+                本月项目结余:
+                <span>{{data.byjy}} 元</span>
+              </dt>
             </dl>
             <h5>非项目结算:</h5>
             <dl>
-              <dt>讲师费:<span>{{data.jsjs}} 元</span></dt>
-              <dt>安装部署:<span>{{data.azbs}} 元</span></dt>
-              <dt>本月奖惩:<span>{{data.jc}} 元</span></dt>
+              <dt>
+                讲师费:
+                <span>{{data.jsjs}} 元</span>
+              </dt>
+              <dt>
+                安装部署:
+                <span>{{data.azbs}} 元</span>
+              </dt>
+              <dt>
+                本月奖惩:
+                <span>{{data.jc}} 元</span>
+              </dt>
               <p>说明:{{!data.jcsm?'无':data.jcsm}}</p>
             </dl>
 
             <h5>奖金池:</h5>
             <dl>
-              <dt>上月结余:<span>{{data.syjyjj}} 元</span></dt>
-              <dt>本月结余:<span>{{data.wfjj}} 元</span></dt>
+              <dt>
+                上月结余:
+                <span>{{data.syjyjj}} 元</span>
+              </dt>
+              <dt>
+                本月结余:
+                <span>{{data.wfjj}} 元</span>
+              </dt>
             </dl>
           </div>
         </div>
         <div class="personalJs-menu" style="padding-left: 20px;">
-          <h5><span class="filter-weight">分包结算说明</span><br>Description</h5>
+          <h5>
+            <span class="filter-weight">分包结算说明</span>
+            <br />Description
+          </h5>
           <div class="personalJs-menu-sm">
             <section>
               <p>【规则】</p>
@@ -93,20 +181,27 @@
               <p>7.实发工资:24136 > 12000,按24136发放,24136其中12000为工资,12136元为奖金金额;</p>
             </section>
             <section>
-               <p style="color:#f00;font-size:12px">说明:非项目考核人员按实际工资结算</p>
+              <p style="color:#f00;font-size:12px">说明:非项目考核人员按实际工资结算</p>
             </section>
           </div>
         </div>
       </section>
     </tableLayout>
-    <sydetailDialog :show.sync="show" :title="title" :sm="sm" :currentPage="queryObj.curPage" :pageSize="queryObj.pageSize"
-    @handleCurrentChange="handleCurrentChange" :tableData="tableData"></sydetailDialog>
+    <sydetailDialog
+      :show.sync="show"
+      :title="title"
+      :sm="sm"
+      :currentPage="queryObj.curPage"
+      :pageSize="queryObj.pageSize"
+      @handleCurrentChange="handleCurrentChange"
+      :tableData="tableData"
+    ></sydetailDialog>
   </div>
 </template>
 
 <script>
 import tableLayout from "@/components/layout/tableLayout.vue";
-import { getPreMonth,getNextMonth } from "@/utils/util.js";
+import { getPreMonth, getNextMonth } from "@/utils/util.js";
 import sydetailDialog from "@/components/dialog/sydetail-dialog.vue";
 export default {
   data() {
@@ -127,32 +222,33 @@ export default {
         { mc: "十一月", val: "11" },
         { mc: "十二月", val: "12" }
       ],
-      tableData:{},
+      tableData: {},
       month: "",
       markYear: "",
       data: {},
       username: "",
       show: false,
       title: "",
-      sm:"",
-      queryObj:{},
-      type:'',
+      sm: "",
+      queryObj: {},
+      type: "",
 
-      lastMonth:"",
-      nowData:""
+      lastMonth: "",
+      nowData: ""
     };
   },
   mounted() {
     let month = new Date().getMonth() + 1;
-    this.nowData = new Date().getFullYear() + "-" + (month < 10 ? "0" + month : month);
-    this.year =  getPreMonth(this.nowData).split('-')[0];
-    this.month =  getPreMonth(this.nowData).split('-')[1];
+    this.nowData =
+      new Date().getFullYear() + "-" + (month < 10 ? "0" + month : month);
+    this.year = getPreMonth(this.nowData).split("-")[0];
+    this.month = getPreMonth(this.nowData).split("-")[1];
     this.username = sessionStorage.username;
-    this.lastMonth = getPreMonth(this.nowData);//获取上一个月
+    this.lastMonth = getPreMonth(this.nowData); //获取上一个月
     this.personalSettlement();
   },
   methods: {
-    handleCurrentChange(data){
+    handleCurrentChange(data) {
       this.queryObj.curPage = data;
       this.getDetail(this.type);
     },
@@ -163,36 +259,37 @@ export default {
       switch (params) {
         case "ekjs":
           this.title = "Crowd结算";
-          this.sm = '';
+          this.sm = "";
           this.queryObj.yf = this.lastMonth;
           delete this.queryObj.startDt;
           delete this.queryObj.endDt;
           break;
         case "xmjs":
           this.title = "项目结算";
-          this.sm = '说明：团队收入为正数是表示收入，负数表示支出给团队成员费用';
+          this.sm =
+            "说明：团队收入为正数是表示收入，负数表示支出给团队成员费用";
           this.queryObj.yf = this.lastMonth;
           delete this.queryObj.startDt;
           delete this.queryObj.endDt;
           break;
         case "sqdy":
           this.title = "售前调用结算";
-          this.sm = '说明：售前调用按500/800结算个人收入';
-          this.queryObj.startDt = this.lastMonth+'-01';
-          this.queryObj.endDt = getNextMonth(this.lastMonth)+'-01';
+          this.sm = "说明：售前调用按500/800结算个人收入";
+          this.queryObj.startDt = this.lastMonth + "-01";
+          this.queryObj.endDt = getNextMonth(this.lastMonth) + "-01";
           delete this.queryObj.yf;
-        break;
+          break;
       }
       this.getDetail(params);
       this.show = !this.show;
     },
     handleChangeDate(val) {
-      this.lastMonth = val +'-'+this.month
+      this.lastMonth = val + "-" + this.month;
       this.personalSettlement();
     },
     handleCheckJS(data) {
-      this.month = data.val
-      this.lastMonth = this.year +'-'+ this.month
+      this.month = data.val;
+      this.lastMonth = this.year + "-" + this.month;
       this.personalSettlement();
     },
     personalSettlement() {
@@ -204,14 +301,14 @@ export default {
         }
       });
     },
-    getDetail(type){
+    getDetail(type) {
       this.$get(
         type == "ekjs"
           ? this.API.crowdSettlement
           : type == "xmjs"
-            ? this.API.projectSettlement
-            : this.API.presaleCallSettlement,
-         this.queryObj
+          ? this.API.projectSettlement
+          : this.API.presaleCallSettlement,
+        this.queryObj
       ).then(res => {
         if (res.state == "success") {
           this.tableData = res.data;

@@ -6,24 +6,9 @@
                 <nav-bar-item v-for="(item, n) in navList" :urlIndex="item.url" :item="item" :navIndex="String(n+1)" :key="n"></nav-bar-item>
                 <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/gwzrzg'}"><i class="el-icon-menu"></i> <span slot="title">gww</span></el-menu-item> -->
                 <!-- <el-menu-item index="7" :route="{path:'/businesspage/report/userstudy'}"><i class="el-icon-menu"></i> <span slot="title">学习行为</span></el-menu-item> -->
-								<el-menu-item index="6" :route="{path:'/businesspage/report/wtycgz'}"><i class="el-icon-menu"></i> <span slot="title">问题异常跟踪</span></el-menu-item>
-                <el-menu-item index="7" :route="{path:'/businesspage/report/wtyyzb'}"><i class="el-icon-menu"></i> <span slot="title">问题运营指标</span></el-menu-item>
+								<!-- <el-menu-item index="6" :route="{path:'/businesspage/report/wtycgz'}"><i class="el-icon-menu"></i> <span slot="title">问题异常跟踪</span></el-menu-item> -->
+                <!-- <el-menu-item index="7" :route="{path:'/businesspage/report/wtyyzb'}"><i class="el-icon-menu"></i> <span slot="title">问题运营指标</span></el-menu-item> -->
 
-                <!-- <el-menu-item index="6" :route="{path:'/businesspage/report/ydjs'}"><i class="el-icon-menu"></i> <span slot="title">月度分包计算</span></el-menu-item> -->
-                <!-- <el-menu-item index="5" :route="{path:'/businesspage/report/userphi'}"><i class="el-icon-menu"></i> <span slot="title">cccc</span></el-menu-item> -->
-            
-                <!-- <el-submenu index="8">
-                  <template slot="title">
-                    <i class="el-icon-menu"></i>
-                    <span>完工验收</span>
-                  </template>
-                  <el-menu-item index="8-1" :route="{path:'/businesspage/toplist/qareport/qyyswg'}"><i class="el-icon-menu"></i> <span slot="title">区域验收</span></el-menu-item>
-                  <el-menu-item index="8-2" :route="{path:'/businesspage/toplist/qareport/xxyswg'}"><i class="el-icon-menu"></i> <span slot="title">学校验收</span></el-menu-item> 
-                  <el-menu-item index="8-3" :route="{path:'/businesspage/toplist/qareport/xmyswg'}"><i class="el-icon-menu"></i> <span slot="title">项目验收</span></el-menu-item> 
-                  <el-menu-item index="8-4" :route="{path:'/businesspage/toplist/qareport/gryswg'}"><i class="el-icon-menu"></i> <span slot="title">个人验收</span></el-menu-item> 
-                </el-submenu> -->
-
-                
             </el-menu>
         </div>
           <div slot="content" class="layout-content">

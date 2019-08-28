@@ -399,6 +399,7 @@ export default {
     //   },
   },
   mounted() {
+    this.fbxzList = [];
 		let month = new Date().getMonth();
 		month = month + 1;
 		if(!!this.dateTip){

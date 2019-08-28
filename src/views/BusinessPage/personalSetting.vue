@@ -1,21 +1,38 @@
 <template>
- <div>
+  <div>
     <layout>
-        <div slot="menu" class="personal-setting-menu">
-           <el-menu  background-color="#fff" text-color="#708087"  :active-text-color="'#409EFF'" ref="navbar" :router='true' @select="hanldeSelete" :default-active='defActive'  :default-openeds='openeds' menu-trigger="click"   unique-opened>
-                <nav-bar-item v-for="(item, n) in navList" :urlIndex="item.url" :item="item" :navIndex="String(n+1)" :key="n"
-                v-if="!item.tag || tagGroup.indexOf(item.tag) != -1"></nav-bar-item>
-            </el-menu>
+      <div slot="menu" class="personal-setting-menu">
+        <el-menu
+          background-color="#fff"
+          text-color="#708087"
+          :active-text-color="'#409EFF'"
+          ref="navbar"
+          :router="true"
+          @select="hanldeSelete"
+          :default-active="defActive"
+          :default-openeds="openeds"
+          menu-trigger="click"
+          unique-opened
+        >
+          <nav-bar-item
+            v-for="(item, n) in navList"
+            :urlIndex="item.url"
+            :item="item"
+            :navIndex="String(n+1)"
+            :key="n"
+            v-if="!item.tag || tagGroup.indexOf(item.tag) != -1"
+          ></nav-bar-item>
+        </el-menu>
+      </div>
+      <div slot="content" class="personal-setting-content">
+        <div>
+          <transition name="el-zoom-in-center">
+            <router-view></router-view>
+          </transition>
         </div>
-        <div slot="content"  class="personal-setting-content">
-              <div>
-                 <transition name="el-zoom-in-center">
-                     <router-view></router-view>
-                  </transition>
-             </div>
-        </div>
+      </div>
     </layout>
- </div>
+  </div>
 </template>
 
 <script>
@@ -81,7 +98,7 @@ export default {
   methods: {
     hanldeSelete(index, indexPath) {
       this.$post(this.API.log, {
-        name: this.navList[index-1].privname
+        name: this.navList[index - 1].privname
       }).then(res => {});
     }
   },
@@ -89,10 +106,10 @@ export default {
   activated() {
     this.tagGroup = JSON.parse(sessionStorage.userInfo).userGroupTag;
     this.navContent = "个人信息";
-		// 记录日志
+    // 记录日志
     this.$post(this.API.log, {
-        name: this.navContent
-      }).then(res => {});
+      name: this.navContent
+    }).then(res => {});
   },
   components: { layout, NavBarItem }
 };
@@ -102,5 +119,4 @@ export default {
 .personal-setting-content {
   padding: 10px 20px;
 }
-
 </style>

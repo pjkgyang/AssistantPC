@@ -4,16 +4,25 @@
       <div class="complain-query">
         <p style="font-size:14px !important;margin-bottom:10px  !important;">
           &#x3000;&nbsp;
-          <span :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}" @click="handleQueryShow"></span>&nbsp;
+          <span
+            :class="{'isshown-query':true,'el-icon-arrow-up':!queryLJshow,'el-icon-arrow-down':queryLJshow}"
+            @click="handleQueryShow"
+          ></span>&nbsp;
           <span style="font-weight:700">高级查询</span>&nbsp;&nbsp;
-          <el-input v-model="keyword" size="mini" style="width:300px" placeholder="请输入投诉人工号/手机号/项目编号/项目名称" @change="searchComplant"></el-input>&#x3000;
+          <el-input
+            v-model="keyword"
+            size="mini"
+            style="width:300px"
+            placeholder="请输入投诉人工号/手机号/项目编号/项目名称"
+            @change="searchComplant"
+          ></el-input>&#x3000;
           <el-button size="mini" type="primary" @click="handlequeryComplant">查询</el-button>
         </p>
         <div v-if="queryLJshow">
           <div flex colcenter>
             <span class="query-title">查询状态:</span>
             <p class="query-list">
-              <span data-type="" :class="{'bg-active':cxzt == ''}" @click="handleCXZT">全部</span>
+              <span data-type :class="{'bg-active':cxzt == ''}" @click="handleCXZT">全部</span>
               <span data-type="1" :class="{'bg-active':cxzt == '1'}" @click="handleCXZT">未处理</span>
               <span data-type="2" :class="{'bg-active':cxzt == '2'}" @click="handleCXZT">处理中</span>
               <span data-type="3" :class="{'bg-active':cxzt == '3'}" @click="handleCXZT">已关闭</span>
@@ -23,7 +32,7 @@
           <div flex colcenter>
             <span class="query-title">是否催办:</span>
             <p class="query-list">
-              <span data-type="" :class="{'bg-active':sfcb == ''}" @click="handleSFCB">全部</span>
+              <span data-type :class="{'bg-active':sfcb == ''}" @click="handleSFCB">全部</span>
               <span data-type="1" :class="{'bg-active':sfcb == '1'}" @click="handleSFCB">是</span>
               <span data-type="0" :class="{'bg-active':sfcb == '0'}" @click="handleSFCB">否</span>
             </p>
@@ -31,27 +40,41 @@
           <div flex colcenter>
             <span class="query-title">投诉类别:</span>
             <p class="query-list">
-              <span data-type="" :class="{'bg-active':tslb == ''}" @click="handleTSLB">全部</span>
-              <span v-for="(complain,index) in complaintType" :data-type="complain.label" :key="index" :class="{'bg-active':tslb == complain.label}" @click="handleTSLB">{{complain.mc}}</span>
+              <span data-type :class="{'bg-active':tslb == ''}" @click="handleTSLB">全部</span>
+              <span
+                v-for="(complain,index) in complaintType"
+                :data-type="complain.label"
+                :key="index"
+                :class="{'bg-active':tslb == complain.label}"
+                @click="handleTSLB"
+              >{{complain.mc}}</span>
             </p>
           </div>
           <div v-if="showCondition == 2" flex colcenter>
             <span class="query-title">区域战队:</span>
             <p class="query-list">
-              <span data-type="" :class="{'bg-active':gczd == ''}" @click="handleGCZD">全部</span>
-              <span v-for="(gcqy,index) in gczdList" :data-type="gcqy.label" :key="index" :class="{'bg-active':gczd == gcqy.label}" @click="handleGCZD">{{gcqy.mc}}</span>
+              <span data-type :class="{'bg-active':gczd == ''}" @click="handleGCZD">全部</span>
+              <span
+                v-for="(gcqy,index) in gczdList"
+                :data-type="gcqy.label"
+                :key="index"
+                :class="{'bg-active':gczd == gcqy.label}"
+                @click="handleGCZD"
+              >{{gcqy.mc}}</span>
             </p>
           </div>
         </div>
       </div>
 
-      <div style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;">
+      <div
+        style="background:#fff;margin-top:10px;box-shadow:0 2px 12px 0 rgba(0,0,0,.1);border-radius:4px;padding:10px 0;"
+      >
         <el-button type="danger" @click="handleComplain" style="margin:10px 0 0 10px;">我要投诉</el-button>
-        <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important">
+        <hr style="border-top:1px solid #eee;margin:8px 0 0 0 !important" />
         <ul>
           <li v-for="(complain,index) in complainList">
             <div class="complain-logo">
-              <img src="static/img/tousu.png" alt="" v-if="complain.zt == 1 || complain.zt == 2">
+              <img src="static/img/tousu.png" alt v-if="complain.zt == 1 || complain.zt == 2" />
               <span class="el-icon-success" v-if="complain.zt == 3"></span>
             </div>
             <div class="complain-content">
@@ -61,68 +84,143 @@
               <p style="color:#363748;font-size:12px">{{complain.tssj}}</p>
               <p style="white-space:nowrap;">
                 <span style="display:inline-block;width:50%">
-                  <span class="complain-content-info-front">投诉人单位：</span>{{complain.ssdwmc}}</span>
+                  <span class="complain-content-info-front">投诉人单位：</span>
+                  {{complain.ssdwmc}}
+                </span>
                 <span style="display:inline-block;width:50%">
-                  <span class="complain-content-info-front">投诉人：</span>{{complain.tsrxm}}</span>
+                  <span class="complain-content-info-front">投诉人：</span>
+                  {{complain.tsrxm}}
+                </span>
               </p>
               <p class="complain-content-info">
                 <span class="complain-content-tscp" :title="complain.cpmc">
-                  <span class="complain-content-info-front">投诉产品 : </span>{{complain.cpmc}}</span>
+                  <span class="complain-content-info-front">投诉产品 :</span>
+                  {{complain.cpmc}}
+                </span>
                 <span>
-                  <span class="complain-content-info-front">投诉类别 : </span>{{complain.tslbmc}}</span>
+                  <span class="complain-content-info-front">投诉类别 :</span>
+                  {{complain.tslbmc}}
+                </span>
               </p>
               <p>
-                <span style="display:inline-block;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" :title="complain.xmmc">
-                  <span class="complain-content-info-front">投诉项目 : </span>{{complain.xmmc}}</span>
+                <span
+                  style="display:inline-block;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis"
+                  :title="complain.xmmc"
+                >
+                  <span class="complain-content-info-front">投诉项目 :</span>
+                  {{complain.xmmc}}
+                </span>
               </p>
               <p class="complainOprater">
                 <span class="el-icon-edit" v-if="complain.edita" @click="complainEdit(index)">
-                  <span style="color:#409EFF"> 编辑</span>
+                  <span style="color:#409EFF">编辑</span>
                 </span>&#x3000;
-                <span class="el-icon-delete" v-if="complain.edita" :data-wid="complain.wid" @click="complainDelect">
-                  <span style="color:#f00"> 删除</span>
+                <span
+                  class="el-icon-delete"
+                  v-if="complain.edita"
+                  :data-wid="complain.wid"
+                  @click="complainDelect"
+                >
+                  <span style="color:#f00">删除</span>
                 </span>
               </p>
             </div>
             <div class="complain-oprate">
-              <span style="font-size:16px;color:#f00;" :class="{'lx-wcl':complain.zt==1,'lx-clz':complain.zt == 2,'lx-ycl':complain.zt == 3}">{{complain.zt == 1?'未处理':complain.zt == 2?'处理中':'已关闭'}}</span><br>
-              <!-- <span v-if="windowUnitType==0||windowUnitType==2" style="font-size:14px;color:#7ECE64;margin-top:5px;"><span style="font-size:12px;color:#A8A8A8">回复数</span> &#x3000;{{complain.commentCount}}</span> -->
+              <span
+                style="font-size:16px;color:#f00;"
+                :class="{'lx-wcl':complain.zt==1,'lx-clz':complain.zt == 2,'lx-ycl':complain.zt == 3}"
+              >{{complain.zt == 1?'未处理':complain.zt == 2?'处理中':'已关闭'}}</span>
+              <br />
             </div>
           </li>
           <div style="text-align:right;padding-top:10px;">
-            <pagination v-if="total>8 && total != null" :total="total" :pageSize="pageSize" :currentPage="currentPage" @handleCurrentChange="handleCurrentChange"></pagination>
+            <pagination
+              v-if="total>8 && total != null"
+              :total="total"
+              :pageSize="pageSize"
+              :currentPage="currentPage"
+              @handleCurrentChange="handleCurrentChange"
+            ></pagination>
           </div>
-          <div v-if="complainList.length == 0" style="text-align:center;font-size:20px;padding-top:100px">
-            <img src="static/img/empty.png" alt="">
+          <div
+            v-if="complainList.length == 0"
+            style="text-align:center;font-size:20px;padding-top:100px"
+          >
+            <img src="static/img/empty.png" alt />
             <p>暂无投诉</p>
           </div>
         </ul>
       </div>
     </div>
 
-    <el-dialog title="投诉内容" :close-on-click-modal="false" :visible.sync="complainVisible" width="800px">
+    <el-dialog
+      title="投诉内容"
+      :close-on-click-modal="false"
+      :visible.sync="complainVisible"
+      width="800px"
+    >
       <div style="padding:10px;" class="complain-cplist">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="投诉类别" style="margin-bottom:15px;" required>
             <el-select v-model="form.tslb" placeholder="请选择投诉类别" size="mini" style="width:100%">
-              <el-option v-for="(complain,index) in complaintType" :key="complain.label" :label="complain.mc" :value="complain.label"></el-option>
+              <el-option
+                v-for="(complain,index) in complaintType"
+                :key="complain.label"
+                :label="complain.mc"
+                :value="complain.label"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="项目名称" style="margin-bottom:15px;" required>
-            <el-input :disabled="!!isInnerItem" size="mini" placeholder="请选择项目" v-model="form.xmmc" readonly style="width:100%">
-              <el-button :disabled="!!isInnerItem" slot="append" icon="el-icon-circle-plus" @click="addComplaintItem"></el-button>
+            <el-input
+              :disabled="!!isInnerItem"
+              size="mini"
+              placeholder="请选择项目"
+              v-model="form.xmmc"
+              readonly
+              style="width:100%"
+            >
+              <el-button
+                :disabled="!!isInnerItem"
+                slot="append"
+                icon="el-icon-circle-plus"
+                @click="addComplaintItem"
+              ></el-button>
             </el-input>
-             <!-- <el-checkbox v-if="" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox> -->
+            <!-- <el-checkbox v-if="" v-model="isInnerItem" @change="handleChangeInnerItem">内部项目</el-checkbox> -->
           </el-form-item>
           <el-form-item label="产品" style="margin-bottom:15px;">
-            <el-select ref="selects" v-model="form.cp" placeholder="请选择产品 / 搜索产品名称" size="mini" filterable style="width:100%" @change="handleChoose">
-              <el-option v-for="(cp,index) in xmcpList" :key="index" :label="cp.mc" :value="cp.mc+'&'+cp.label" ></el-option>
+            <el-select
+              ref="selects"
+              v-model="form.cp"
+              placeholder="请选择产品 / 搜索产品名称"
+              size="mini"
+              filterable
+              style="width:100%"
+              @change="handleChoose"
+            >
+              <el-option
+                v-for="(cp,index) in xmcpList"
+                :key="index"
+                :label="cp.mc"
+                :value="cp.mc+'&'+cp.label"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="投诉对象" style="margin-bottom:15px;">
-            <el-select v-model="form.object" multiple placeholder="请选择投诉对象（可多选）" size="mini" style="width:100%">
-              <el-option v-for="(item,index) in tsdxList" :key="index" :label="item.userName" :value="item.userName+','+item.userId">
-              </el-option>
+            <el-select
+              v-model="form.object"
+              multiple
+              placeholder="请选择投诉对象（可多选）"
+              size="mini"
+              style="width:100%"
+            >
+              <el-option
+                v-for="(item,index) in tsdxList"
+                :key="index"
+                :label="item.userName"
+                :value="item.userName+','+item.userId"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="标题" style="margin-bottom:15px;line-height:3" required>
@@ -131,14 +229,21 @@
         </el-form>
         <div class="complain-textarea">
           <span>投诉内容</span>
-          <div id="summernote"> </div>
+          <div id="summernote"></div>
         </div>
         <div style="width:100%;text-align:right">
           <el-button type="primary" @click="submitForm">提交</el-button>
         </div>
       </div>
     </el-dialog>
-    <el-dialog title="选择项目" :close-on-click-modal="false" :visible.sync="dialogComplainVisible" width="800px" top="50px" append-to-body>
+    <el-dialog
+      title="选择项目"
+      :close-on-click-modal="false"
+      :visible.sync="dialogComplainVisible"
+      width="800px"
+      top="50px"
+      append-to-body
+    >
       <div style="padding:10px;">
         <itemChoose @handleEdit="handleChooseItem" :sfts="true"></itemChoose>
       </div>
@@ -153,14 +258,14 @@ import {
   editComplain,
   deleteComplain
 } from "@/api/complain.js";
-import { showQuestionCondition,queryResponsibleProduct } from "@/api/xmkb.js";
+import { showQuestionCondition, queryResponsibleProduct } from "@/api/xmkb.js";
 import { queryProjectParticipant } from "@/api/personal.js";
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import { getMenu, getSession } from "@/utils/util.js";
 export default {
   data() {
     return {
-      isInnerItem:false,//内部项目
+      isInnerItem: false, //内部项目
       note: {
         backgroundImage:
           "url(" + require("../../../static/img/replyIcon.png") + ")"
@@ -195,7 +300,7 @@ export default {
       tsdxList: [],
       gczdList: [],
       cpList: [],
-      xmcpList:[],
+      xmcpList: [],
       zdTitle: "指定产品接口人",
       showCondition: "",
       queryLJshow: true
@@ -225,20 +330,23 @@ export default {
   computed: {},
   methods: {
     // 切换内部项目
-    handleChangeInnerItem(val){
+    handleChangeInnerItem(val) {
       let that = this;
-      if(!!val){
+      if (!!val) {
         this.xmcpList = [];
-        this.form.xmmc = '内部项目';
-        this.$get(this.API.queryResponsibleProduct,{xmbh:'',internalProject:true}).then(res=>{
-          Object.keys(res.data).forEach(function(key){
-              that.xmcpList.push({mc:res.data[key],label:key})
+        this.form.xmmc = "内部项目";
+        this.$get(this.API.queryResponsibleProduct, {
+          xmbh: "",
+          internalProject: true
+        }).then(res => {
+          Object.keys(res.data).forEach(function(key) {
+            that.xmcpList.push({ mc: res.data[key], label: key });
           });
-        })
-      }else{
+        });
+      } else {
         this.xmcpList = [];
-        this.form.xmmc = ''; 
-        this.form.xmbh = ''; 
+        this.form.xmmc = "";
+        this.form.xmbh = "";
       }
     },
     searchComplant() {
@@ -282,17 +390,19 @@ export default {
     },
 
     //  产品
-    handleChoose(val){
+    handleChoose(val) {
       this.$get(this.API.questionLimitProduct, {
-        xmbh:this.form.xmbh,
-        cpbh: val.split('&')[1]
+        xmbh: this.form.xmbh,
+        cpbh: val.split("&")[1]
       }).then(res => {
         if (res.state == "success") {
           if (!res.data) {
             this.$alert(
-              "该项目未采购 " + val.split('&')[0] + " 专项基础环境运维服务,请联系销售采购对应的服务",
+              "该项目未采购 " +
+                val.split("&")[0] +
+                " 专项基础环境运维服务,请联系销售采购对应的服务",
               "提示",
-              {confirmButtonText: "确定",type: "warning"}
+              { confirmButtonText: "确定", type: "warning" }
             );
             this.$refs.selects.blur();
           }
@@ -371,7 +481,7 @@ export default {
       this.form.cpbh = "";
       this.form.object = [];
       // this.getMenu('cp',this.cpList,true);//获取产品
-      this.queryResponsibleProduct(data.xmbh,data);
+      this.queryResponsibleProduct(data.xmbh, data);
 
       queryProjectParticipant({
         xmbh: data.xmbh
@@ -384,7 +494,7 @@ export default {
             }
           });
         }
-      })
+      });
       this.dialogComplainVisible = false;
     },
     // 选择项目
@@ -392,31 +502,37 @@ export default {
       this.dialogComplainVisible = true;
     },
 
-     // 获取项目对应的产品
-      queryResponsibleProduct(xmbh,data){
-        this.xmcpList = [];
-        queryResponsibleProduct({
-          xmbh: xmbh
-        }).then(res => {
-          if (res.data.state == "success") {
-            if (JSON.stringify(res.data.data) == "{}") {
-              // this.xmcpList = this.cpList;
-              this.$alert(" 您选择的项目没有可提问产品，请联系项目经理 ( " + data.yfzrrxm  +")添加负责业务。", "提示", {
+    // 获取项目对应的产品
+    queryResponsibleProduct(xmbh, data) {
+      this.xmcpList = [];
+      queryResponsibleProduct({
+        xmbh: xmbh
+      }).then(res => {
+        if (res.data.state == "success") {
+          if (JSON.stringify(res.data.data) == "{}") {
+            // this.xmcpList = this.cpList;
+            this.$alert(
+              " 您选择的项目没有可提问产品，请联系项目经理 ( " +
+                data.yfzrrxm +
+                ")添加负责业务。",
+              "提示",
+              {
                 confirmButtonText: "确定",
                 type: "warning"
-              });
-            } else {
-              let Arr = Object.keys(res.data.data);
-              let McArr = Object.values(res.data.data);
-              for (var i = 0; i < Arr.length; i++) {
-                this.xmcpList.push({
-                  label: Arr[i],
-                  mc: McArr[i]
-                });
               }
+            );
+          } else {
+            let Arr = Object.keys(res.data.data);
+            let McArr = Object.values(res.data.data);
+            for (var i = 0; i < Arr.length; i++) {
+              this.xmcpList.push({
+                label: Arr[i],
+                mc: McArr[i]
+              });
             }
           }
-        })
+        }
+      });
     },
     // 删除评论
     complainDelect(e) {
@@ -456,42 +572,48 @@ export default {
     },
 
     handleComplain() {
-			 this.$confirm('您可以先进入“问题”页面提问，如处理不满意，可继续投诉处理', '提示', {
-          cancelButtonText: '继续投诉',
-					confirmButtonText: '去提问',
-          type: 'warning'
-        }).then(() => {
-					this.$router.push({path:'/businesspage/question'});
-        }).catch(() => {
-					//我要投诉
-					this.complainType = "complain";
-					this.form.title = "";
-					this.form.object = [];
-					$("#summernote").summernote("code", "");
-					this.complainVisible = true;
-					this.$nextTick(() => {
-						$("#summernote").summernote({
-							dialogsInBody: true,
-							placeholder: "请输入投诉内容",
-							height: 200,
-							width: 100 + "%",
-							minHeight: 200,
-							maxHeight: 200,
-							lang: "zh-CN",
-							focus: true,
-							toolbar: [
-								["style", ["bold", "italic", "underline", "clear"]],
-								["font", ["strikethrough", "superscript", "subscript"]],
-								["fontsize", ["fontsize"]],
-								["color", ["color"]],
-								["para", ["ul", "ol", "paragraph"]],
-								["height", ["height"]],
-								["picture"],
-								["link", ["linkDialogShow", "unlink"]]
-							]
-						});
-					});
-			});
+      this.$confirm(
+        "您可以先进入“问题”页面提问，如处理不满意，可继续投诉处理",
+        "提示",
+        {
+          cancelButtonText: "继续投诉",
+          confirmButtonText: "去提问",
+          type: "warning"
+        }
+      )
+        .then(() => {
+          this.$router.push({ path: "/businesspage/question" });
+        })
+        .catch(() => {
+          //我要投诉
+          this.complainType = "complain";
+          this.form.title = "";
+          this.form.object = [];
+          $("#summernote").summernote("code", "");
+          this.complainVisible = true;
+          this.$nextTick(() => {
+            $("#summernote").summernote({
+              dialogsInBody: true,
+              placeholder: "请输入投诉内容",
+              height: 200,
+              width: 100 + "%",
+              minHeight: 200,
+              maxHeight: 200,
+              lang: "zh-CN",
+              focus: true,
+              toolbar: [
+                ["style", ["bold", "italic", "underline", "clear"]],
+                ["font", ["strikethrough", "superscript", "subscript"]],
+                ["fontsize", ["fontsize"]],
+                ["color", ["color"]],
+                ["para", ["ul", "ol", "paragraph"]],
+                ["height", ["height"]],
+                ["picture"],
+                ["link", ["linkDialogShow", "unlink"]]
+              ]
+            });
+          });
+        });
     },
 
     // 提交 投诉

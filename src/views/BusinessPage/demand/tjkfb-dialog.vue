@@ -14,32 +14,31 @@
         <section>
           <div class="mg-12">
             <p class="pj-content" flex>
-            <span class="filter-weight before-require">发包原因：</span>
-            <el-input
-              size="mini"
-              type="text"
-              style="width:650px"
-              placeholder="请输入发包原因"
-              v-model="filterData.fbyy"
-            ></el-input>
-           </p>     
-           <p class="pj-content">
-            <span class="filter-weight before-require">发包说明：</span>
-            <el-input
-              type="textarea"
-              :rows="5"
-              :maxlength="500"
-              style="width:670px"
-              placeholder="请输入备注内容"
-              v-model="filterData.fbsm"
-            ></el-input>
-           </p>
-           <p class="pj-content">
-            <span class="filter-weight before-require">附件：</span>
-            <uploadFile :Type="'demand'" :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
+              <span class="filter-weight before-require">发包原因：</span>
+              <el-input
+                size="mini"
+                type="text"
+                style="width:650px"
+                placeholder="请输入发包原因"
+                v-model="filterData.fbyy"
+              ></el-input>
+            </p>
+            <p class="pj-content">
+              <span class="filter-weight before-require">发包说明：</span>
+              <el-input
+                type="textarea"
+                :rows="5"
+                :maxlength="500"
+                style="width:670px"
+                placeholder="请输入备注内容"
+                v-model="filterData.fbsm"
+              ></el-input>
+            </p>
+            <p class="pj-content">
+              <span class="filter-weight before-require">附件：</span>
+              <uploadFile :Type="'demand'" :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
             </p>
           </div>
-
         </section>
         <section class="pj-btn-group">
           <el-button size="small" type="primary" @click="handleClickSure">确定</el-button>
@@ -56,31 +55,31 @@ export default {
   data() {
     return {
       visible: this.show,
-      isClearFile:false,
+      isClearFile: false,
       filterData: {
         fbyy: "",
-        fbsm:"",
-        fjwid:"",
-        fjmc:""
+        fbsm: "",
+        fjwid: "",
+        fjmc: ""
       }
     };
   },
   methods: {
     handleUploadFile(data) {
-        this.filterData.fjwid = data[0].split('|')[0];
-        this.filterData.fjmc = data[0].split('|')[1];
+      this.filterData.fjwid = data[0].split("|")[0];
+      this.filterData.fjmc = data[0].split("|")[1];
     },
 
     handleClickSure() {
-		this.filterData.zbwid = this.zbwid;
-		this.filterData.btnbh = this.btnbh;
+      this.filterData.zbwid = this.zbwid;
+      this.filterData.btnbh = this.btnbh;
       if (!this.validate()) return;
 
       this.$post(this.API.submitDemandFile, this.filterData).then(res => {
         if (res.state == "success") {
           this.$message({ message: "提交成功", type: "success" });
-          this.filterData.fbyy =  this.filterData.fbsm = "";
-          this.filterData.fjwid =  this.filterData.fjmc = "";
+          this.filterData.fbyy = this.filterData.fbsm = "";
+          this.filterData.fjwid = this.filterData.fjmc = "";
           this.visible = false;
           this.isClearFile = !this.isClearFile;
           this.$emit("handleClickSure", "");
@@ -118,8 +117,8 @@ export default {
     show: {
       type: Boolean,
       default: false
-	},
-	zbwid: {
+    },
+    zbwid: {
       type: String,
       default: ""
     },
@@ -136,7 +135,7 @@ export default {
       }
     }
   },
-  components: {uploadFile}
+  components: { uploadFile }
 };
 </script>
 
@@ -158,9 +157,9 @@ export default {
   width: 14%;
 }
 .pj-content {
-  >span{
-      display: inline-block;
-      width: 100px;
+  > span {
+    display: inline-block;
+    width: 100px;
   }
 }
 .pj-btn-group {

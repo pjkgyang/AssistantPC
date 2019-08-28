@@ -1,162 +1,295 @@
 <template>
- <div>
-   <layout :title="''" :shown='true'>
-        <!-- v-if="dayNum > 1 && dayNum < 4"  -->
-        <!-- v-if="isAllowSave &&  -->
-       <div slot="btn"  v-if="groupTag.indexOf('JYGL') == -1">
-            <el-button  type="danger" size="mini" @click="handleFormulate">保存</el-button>
-       </div>
-        <header slot="header" v-if="groupTag.indexOf('JYGL') != -1"> 
-              <section>
-                    <span>
-                      <span class="filter-weight">区域:&nbsp;</span>
-                      <el-select v-model="qyValue" size="mini" placeholder="请选择" @change="handleSelectQy">
-                        <el-option v-for="item in gczdList" :key="item.label" :label="item.mc" :value="item.label"></el-option>
-                     </el-select>
-                    </span>&#x3000;
+  <div>
+    <layout :title="''" :shown="true">
+      <!-- v-if="dayNum > 1 && dayNum < 4"  -->
+      <!-- v-if="isAllowSave &&  -->
+      <div slot="btn" v-if="groupTag.indexOf('JYGL') == -1">
+        <el-button type="danger" size="mini" @click="handleFormulate">保存</el-button>
+      </div>
+      <header slot="header" v-if="groupTag.indexOf('JYGL') != -1">
+        <section>
+          <span>
+            <span class="filter-weight">区域:&nbsp;</span>
+            <el-select v-model="qyValue" size="mini" placeholder="请选择" @change="handleSelectQy">
+              <el-option
+                v-for="item in gczdList"
+                :key="item.label"
+                :label="item.mc"
+                :value="item.label"
+              ></el-option>
+            </el-select>
+          </span>&#x3000;
+        </section>
+      </header>
+      <article slot="content">
+        <h4 class="filter-weight">
+          上月工作总结
+          <span style="font-size:15px;color:#999">( {{lastMonth}} )</span>
+        </h4>
+        <hr class="weekly-hr" />
+        <div>
+          <tableLayout :title="'月度工作总结'">
+            <div slot="bottom">
+              <section class="monthReport-plan-filter">
+                <div flex>
+                  <el-input
+                    style="width:300px;"
+                    @change="handleEnterSearch"
+                    size="mini"
+                    v-model="keyword"
+                    placeholder="请输入项目编号/项目名称"
+                  ></el-input>&#x3000;
+                  <div class="colcenter">
+                    <span class="filter-weight">里程碑状态:</span>
+                    <lcbztSelect
+                      :multipleLcbztList="prevlcbztList"
+                      @handleChangeLcbzt="handleChangePrevLcbzt"
+                    ></lcbztSelect>&nbsp;
+                  </div>
+                  <div class="colcenter">
+                    <span class="filter-weight">计划类别：&nbsp;</span>
+                    <el-select
+                      style="width:200px"
+                      v-model="ztValue"
+                      size="mini"
+                      placeholder="请选择"
+                      @change="handleSelectZt"
+                    >
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
+                  </div>&#x3000;
+                </div>
               </section>
-         </header>  
-         <article slot="content">
-                 <h4 class="filter-weight">上月工作总结 <span style="font-size:15px;color:#999">( {{lastMonth}} )</span></h4>
-                 <hr class="weekly-hr">
-                 <div>
-                     <tableLayout :title="'月度工作总结'">
-                        <div slot="bottom">
-                             <section class="monthReport-plan-filter">
-                                <div flex>
-                                    <el-input style="width:300px;" @change="handleEnterSearch"  size="mini" v-model="keyword" placeholder="请输入项目编号/项目名称"></el-input>&#x3000;
-                                    <div class="colcenter">
-                                        <span class="filter-weight">里程碑状态:</span>
-                                        <lcbztSelect :multipleLcbztList="prevlcbztList"  @handleChangeLcbzt="handleChangePrevLcbzt"></lcbztSelect>&nbsp;
-                                    </div>
-                                    <div class="colcenter">
-                                        <span class="filter-weight">计划类别：&nbsp;</span>
-                                        <el-select style="width:200px" v-model="ztValue" size="mini" placeholder="请选择" @change="handleSelectZt">
-                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                        </el-select>
-                                    </div>&#x3000;
-                                </div> 
-                           </section>
-                            <section style="margin:12px 0" v-if="!isBlockedOfsy && groupTag.indexOf('JYGL') == -1">
-                                <el-button  :disabled="!multiplePrevPlan.length"  size="mini" @click="handleEditofBatchPrevPlan">批量编辑</el-button>
-                            </section>
-                            <WeekLcbTable :tableData="PrevmonthWorkList"  @handleClickCheck="handleCheckDetail" @handleCurrentChange="handlePrevPlanChange" @handleSizeChange="handlePrevPlanSizeChange" @handleSelectionChange="handleSelectPrevPlan" 
-                           @handleClickEdit="handleEditPrevPlan"  :pageSize="prevPlanpageSize" :records="records" :currentPage="currentPrevPlanPage"
-                           :otherShow="true" :isEdit="false" :bjWordShow="true" :wordShow="true" :ispz="false" :isSelect="true" ></WeekLcbTable>
-                        </div>
-                    </tableLayout>  
-                    <tableLayout :title="'月度问题处理总结'">
-                        <div slot="bottom">
-                             <section style="margin:10px 0">
-                                  <el-input style="width:300px" @change="handleEnterPrevWtSearch"  size="mini" v-model="prevWtKeyword" placeholder="请输入项目编号/项目名称/问题标题/提问人"></el-input>&#x3000;
-                                 <span>
-                                    <span class="filter-weight">问题状态：</span>
-                                    <el-select v-model="wtztValue" size="mini" placeholder="请选择" multiple @change="handleSelectWtzt">
-                                        <el-option v-for="item in wtztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </span>
-                                <span>
-                                    <span class="filter-weight">异常状态：</span>
-                                    <el-select v-model="ycztValue" size="mini" placeholder="请选择" @change="handleSelectYczt">
-                                        <el-option v-for="item in ycztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </span>&nbsp;
-                            </section>
-                            <section style="margin:12px 0" v-if="!isBlockedOfsy && groupTag.indexOf('JYGL') == -1">
-                                <el-button  :disabled="!multiplePrevWt.length"  size="mini" @click="handleEditofBatchPrevWt">批量编辑</el-button>
-                            </section>
-                            <MonthWeekQuestionTable :tableData="PrevquestionList" @handleClickPz="handleQuestionPz" @handleClickEdit="handleEditPrevWt" @handleClickCheck="handleQuestionDetail"  @handleCurrentChange="handlePrevWtChange" @handleSizeChange="handlePrevWtSizeChange"
-                            @handleSelectionChange="handleSelectPrevWt"  :isSelect="true" :show="false" :othShow="true"  :pageSize="prevWtpageSize" :records="PrevQuestionRecords" :isPz="false" :deleteShow="false" 
-                           :bjWordShow="true" :isEdit="true" :currentPage="currentPrevQuestionPage" ></MonthWeekQuestionTable>
-                        </div>
-                    </tableLayout>  
-                 </div>
-         </article>  
+              <section
+                style="margin:12px 0"
+                v-if="!isBlockedOfsy && groupTag.indexOf('JYGL') == -1"
+              >
+                <el-button
+                  :disabled="!multiplePrevPlan.length"
+                  size="mini"
+                  @click="handleEditofBatchPrevPlan"
+                >批量编辑</el-button>
+              </section>
+              <WeekLcbTable
+                :tableData="PrevmonthWorkList"
+                @handleClickCheck="handleCheckDetail"
+                @handleCurrentChange="handlePrevPlanChange"
+                @handleSizeChange="handlePrevPlanSizeChange"
+                @handleSelectionChange="handleSelectPrevPlan"
+                @handleClickEdit="handleEditPrevPlan"
+                :pageSize="prevPlanpageSize"
+                :records="records"
+                :currentPage="currentPrevPlanPage"
+                :otherShow="true"
+                :isEdit="false"
+                :bjWordShow="true"
+                :wordShow="true"
+                :ispz="false"
+                :isSelect="true"
+              ></WeekLcbTable>
+            </div>
+          </tableLayout>
+          <tableLayout :title="'月度问题处理总结'">
+            <div slot="bottom">
+              <section style="margin:10px 0">
+                <el-input
+                  style="width:300px"
+                  @change="handleEnterPrevWtSearch"
+                  size="mini"
+                  v-model="prevWtKeyword"
+                  placeholder="请输入项目编号/项目名称/问题标题/提问人"
+                ></el-input>&#x3000;
+                <span>
+                  <span class="filter-weight">问题状态：</span>
+                  <el-select
+                    v-model="wtztValue"
+                    size="mini"
+                    placeholder="请选择"
+                    multiple
+                    @change="handleSelectWtzt"
+                  >
+                    <el-option
+                      v-for="item in wtztList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </span>
+                <span>
+                  <span class="filter-weight">异常状态：</span>
+                  <el-select
+                    v-model="ycztValue"
+                    size="mini"
+                    placeholder="请选择"
+                    @change="handleSelectYczt"
+                  >
+                    <el-option
+                      v-for="item in ycztList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </span>&nbsp;
+              </section>
+              <section
+                style="margin:12px 0"
+                v-if="!isBlockedOfsy && groupTag.indexOf('JYGL') == -1"
+              >
+                <el-button
+                  :disabled="!multiplePrevWt.length"
+                  size="mini"
+                  @click="handleEditofBatchPrevWt"
+                >批量编辑</el-button>
+              </section>
+              <MonthWeekQuestionTable
+                :tableData="PrevquestionList"
+                @handleClickPz="handleQuestionPz"
+                @handleClickEdit="handleEditPrevWt"
+                @handleClickCheck="handleQuestionDetail"
+                @handleCurrentChange="handlePrevWtChange"
+                @handleSizeChange="handlePrevWtSizeChange"
+                @handleSelectionChange="handleSelectPrevWt"
+                :isSelect="true"
+                :show="false"
+                :othShow="true"
+                :pageSize="prevWtpageSize"
+                :records="PrevQuestionRecords"
+                :isPz="false"
+                :deleteShow="false"
+                :bjWordShow="true"
+                :isEdit="true"
+                :currentPage="currentPrevQuestionPage"
+              ></MonthWeekQuestionTable>
+            </div>
+          </tableLayout>
+        </div>
+      </article>
 
-         <article slot="contentBottom">
-                <div>
-                    <h4 class="filter-weight">本月工作计划 <span style="font-size:15px;color:#999">( {{monthly}} )</span></h4> 
-                </div>
-                 <hr class="weekly-hr">
+      <article slot="contentBottom">
+        <div>
+          <h4 class="filter-weight">
+            本月工作计划
+            <span style="font-size:15px;color:#999">( {{monthly}} )</span>
+          </h4>
+        </div>
+        <hr class="weekly-hr" />
 
-                   <div  flex >
-                       <el-input style="width:300px;" @change="handleEnterPlanSearch"  size="mini" v-model="gzKeyword" placeholder="请输入项目编号/项目名称"></el-input>
-                        <div class="colcenter">
-                            <span class="filter-weight"> 计划类别：</span>
-                            <el-select style="width:180px" v-model="byztValue" size="mini" placeholder="请选择" @change="handleSelectByZt">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                            </el-select>
-                      </div>&#x3000;              
-                    <!-- <div>
-                        <span class="filter-weight">项目类别:</span>
-                        <el-select v-model="xmlbValue" size="mini" placeholder="请选择" collapse-tags multiple @change="handleSelectXmlb">
-                            <el-option v-for="(xmlb,i) in xmlbList" :key="i" :label="xmlb" :value="xmlb"></el-option>
-                        </el-select>
-                    </div>&#x3000;
-                    <div>
-                        <span class="filter-weight">产品线:</span>
-                        <el-select v-model="cpxValue" size="mini" placeholder="请选择" collapse-tags multiple @change="handleSelectCpx">
-                            <el-option v-for="cpx in cpxList" :key="cpx.id" :label="cpx.name" :value="cpx.id"></el-option>
-                        </el-select>
-                    </div>&#x3000;
-                    <div class="colcenter" >
-                        <span class="filter-weight">里程碑状态:</span>
-                        <lcbztSelect :multipleLcbztList="nowlcbztList"  @handleChangeLcbzt="handleChangeNowLcbzt"></lcbztSelect>
-                    </div>&nbsp; -->
-                </div>
-                <div style="padding:10px 0">
-                    <p class="month-plan-explain" >查询仅供当前查看，不影响最终月度计划的指定</p>  
-                </div>
-                 <div>
-                     <tableLayout :title="'月度工作计划 '+'( 合计完工: '+'<span style=color:#f00>'+Nowwg+'</span>'+'　 合计验收：'+'<span style=color:#f00>'+Nowys+'</span>'+' )'">
-                        <div slot="bottom">
-                            <WeekLcbTable :tableData="NowmonthWorkList"  @handleClickCheck="handleCheckDetailPlan" @handleCurrentChange="handleNowPlanChange" 
-                            @handleSizeChange="handleNowPlanSizeChange" :selectShow="true" :pageSize="NowPlanpageSize" :records="Nowrecords" :currentPage="currentNowPlanPage"
-                            :otherShow="true" :wordShow="false" :ispz="false"></WeekLcbTable>
-                        </div>
-                    </tableLayout>  
-                    <tableLayout :title="'月度问题处理计划'">
-                        <div slot="bottom">
-                            <section style="margin:10px 0">
-                                <el-input style="width:300px" @change="handleEnterWtSearch"  size="mini" v-model="wtKeyword" placeholder="请输入项目编号/项目名称/问题标题/提问人"></el-input>&#x3000;
-                                <!-- <span>
-                                    <span class="filter-weight">问题状态：</span>
-                                    <el-select v-model="NowwtztValue" size="mini" placeholder="请选择" multiple @change="handleSelectNowWtzt">
-                                        <el-option v-for="item in wtztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </span> -->
-                                <!-- <span>
-                                    <span class="filter-weight">异常状态：</span>
-                                    <el-select v-model="NowycztValue" size="mini" placeholder="请选择" @change="handleSelectNowYczt">
-                                        <el-option v-for="item in ycztList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                    </el-select>
-                                </span> -->
-                            </section>
-                            <section style="margin:12px 0" v-if="!isBlocked && groupTag.indexOf('JYGL') == -1"> 
-                                <el-button  :disabled="!multipleNowWt.length"  size="mini" @click="handleEditofBatchNowWt">批量编辑</el-button>
-                            </section>
-                            <MonthQuestionForPlan :tableData="NowquestionList" @handleClickPz="handleQuestionPz" @handleClickEdit="handleEditNowWt" @handleClickCheck="handleByQuestionDetail"  @handleCurrentChange="handleNowWtChange"
-                            @handleSelectionChange="handleSelectNowWt"  @handleSizeChange="handleNowWtSizeChange" :isSelect="true" :show="false" :pageSize="NowWtpageSize" :records="NowQuestionRecords" :isPz="false" :deleteShow="false" :currentPage="currentNowQuestionPage"
-                            :isEdit="!isBlocked && groupTag.indexOf('JYGL') == -1"></MonthQuestionForPlan>
-                        </div>
-                    </tableLayout>  
-                    <tableLayout :title="''"  v-if="isAllowSave && groupTag.indexOf('JYGL') == -1">
-                        <div slot="bottom">
-                            <div style="text-align:right">
-                               <el-button  type="danger" size="mini" @click="handleFormulate">保存</el-button>
-                            </div>
-                        </div>
-                    </tableLayout>  
+        <div flex>
+          <el-input
+            style="width:300px;"
+            @change="handleEnterPlanSearch"
+            size="mini"
+            v-model="gzKeyword"
+            placeholder="请输入项目编号/项目名称"
+          ></el-input>
+          <div class="colcenter">
+            <span class="filter-weight">计划类别：</span>
+            <el-select
+              style="width:180px"
+              v-model="byztValue"
+              size="mini"
+              placeholder="请选择"
+              @change="handleSelectByZt"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </div>&#x3000;
+        </div>
+        <div style="padding:10px 0">
+          <p class="month-plan-explain">查询仅供当前查看，不影响最终月度计划的指定</p>
+        </div>
+        <div>
+          <tableLayout
+            :title="'月度工作计划 '+'( 合计完工: '+'<span style=color:#f00>'+Nowwg+'</span>'+'　 合计验收：'+'<span style=color:#f00>'+Nowys+'</span>'+' )'"
+          >
+            <div slot="bottom">
+              <WeekLcbTable
+                :tableData="NowmonthWorkList"
+                @handleClickCheck="handleCheckDetailPlan"
+                @handleCurrentChange="handleNowPlanChange"
+                @handleSizeChange="handleNowPlanSizeChange"
+                :selectShow="true"
+                :pageSize="NowPlanpageSize"
+                :records="Nowrecords"
+                :currentPage="currentNowPlanPage"
+                :otherShow="true"
+                :wordShow="false"
+                :ispz="false"
+              ></WeekLcbTable>
+            </div>
+          </tableLayout>
+          <tableLayout :title="'月度问题处理计划'">
+            <div slot="bottom">
+              <section style="margin:10px 0">
+                <el-input
+                  style="width:300px"
+                  @change="handleEnterWtSearch"
+                  size="mini"
+                  v-model="wtKeyword"
+                  placeholder="请输入项目编号/项目名称/问题标题/提问人"
+                ></el-input>&#x3000;
+              </section>
+              <section style="margin:12px 0" v-if="!isBlocked && groupTag.indexOf('JYGL') == -1">
+                <el-button
+                  :disabled="!multipleNowWt.length"
+                  size="mini"
+                  @click="handleEditofBatchNowWt"
+                >批量编辑</el-button>
+              </section>
+              <MonthQuestionForPlan
+                :tableData="NowquestionList"
+                @handleClickPz="handleQuestionPz"
+                @handleClickEdit="handleEditNowWt"
+                @handleClickCheck="handleByQuestionDetail"
+                @handleCurrentChange="handleNowWtChange"
+                @handleSelectionChange="handleSelectNowWt"
+                @handleSizeChange="handleNowWtSizeChange"
+                :isSelect="true"
+                :show="false"
+                :pageSize="NowWtpageSize"
+                :records="NowQuestionRecords"
+                :isPz="false"
+                :deleteShow="false"
+                :currentPage="currentNowQuestionPage"
+                :isEdit="!isBlocked && groupTag.indexOf('JYGL') == -1"
+              ></MonthQuestionForPlan>
+            </div>
+          </tableLayout>
+          <tableLayout :title="''" v-if="isAllowSave && groupTag.indexOf('JYGL') == -1">
+            <div slot="bottom">
+              <div style="text-align:right">
+                <el-button type="danger" size="mini" @click="handleFormulate">保存</el-button>
+              </div>
+            </div>
+          </tableLayout>
+        </div>
+      </article>
+    </layout>
+    <!-- <addwtDialog :show.sync="wtShow" :lastDay="lastDay"   @handleClickSure="handleQuestionSure" ></addwtDialog> -->
+    <bjDialog
+      :yycsShow="yycsShow"
+      :isShow="!yycsShow"
+      :isCljh="true"
+      :show.sync="bjShow"
+      :data="data"
+      @handleClickSure="handleBjSure"
+    ></bjDialog>
+    <pzDialog :show.sync="pzShow" @handleClickSure="handlePzSure"></pzDialog>
 
-                 </div>
-         </article> 
-    </layout> 
-     <!-- <addwtDialog :show.sync="wtShow" :lastDay="lastDay"   @handleClickSure="handleQuestionSure" ></addwtDialog> -->
-     <bjDialog :yycsShow="yycsShow"  :isShow="!yycsShow" :isCljh='true' :show.sync="bjShow" :data="data" @handleClickSure="handleBjSure"></bjDialog>
-     <pzDialog :show.sync="pzShow" @handleClickSure="handlePzSure"></pzDialog>
-
-     <detailDialog :show.sync="detailShow" :title="detailTitle" :detailType="detailType"></detailDialog>
- </div>
+    <detailDialog :show.sync="detailShow" :title="detailTitle" :detailType="detailType"></detailDialog>
+  </div>
 </template>
 
 <script>
@@ -319,13 +452,7 @@ export default {
       this.getMonthWorkList(1); // 月工作计划
       this.currentPrevPlanPage = 1;
     },
-    // handleChangeDate(val){               //月度日期
-    //    this.isMonthPlanBlocked(val);     //是否封存
-    //    this.lastDay = getLastMonthDay(val.split('-')[0],Number(val.split('-')[1]));
-    //    this.mapLcbxxForPlan(1);          //获取月工作;
-    //    this.getMonthQuestionList(1);     //获取月制作 问题;
-    //    this.currentPrevPlanPage = 1
-    // },
+
     handleSelectQy() {
       this.mapLcbxxForPlan(1); //获取本月(计划)工作;
       this.getMonthWorkList(1); //获取上月工作;
@@ -600,22 +727,6 @@ export default {
         }
       }
     },
-    // handleDeleteQuestion(data){  // 删除问题
-    //         this.$confirm('是否删除该问题?', '提示', {
-    //             confirmButtonText: '确定',
-    //             cancelButtonText: '取消',
-    //             type: 'warning'
-    //         }).then(() => {
-    //             deleteMonthQuestion({
-    //                 ywtWid:data.ywtWid
-    //             }).then(({data})=>{
-    //                 if(data.state == 'success'){
-    //                    this.$alert('删除成功！', '提示', {confirmButtonText: '确定',type:'success'});
-    //                    this.getMonthQuestionList(this.currentPrevQuestionPage);
-    //                 }
-    //             })
-    //     }).catch(() => {});
-    // },
 
     handlePzSure(param) {
       //(批注) 提交

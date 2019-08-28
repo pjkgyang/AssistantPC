@@ -2,124 +2,201 @@
   <div class="view-pannel3 height100" flex-column>
     <div class="total-select">
       <div class="select-group">
-        <span class="select-group__title">学校名称<span style="color:#999">( 注 : 可输入学校名称查询 )</span></span>
-        <el-select  v-model="schoolNames" filterable remote  clearable  placeholder="请选择" size="small" @change="changeUnit" :remote-method="remoteMethod">
-          <el-option v-for="(item,index) in schoolNamesOptions" :key="index" :label="item.mc" :value="item.wid">
-         </el-option>
+        <span class="select-group__title">
+          学校名称
+          <span style="color:#999">( 注 : 可输入学校名称查询 )</span>
+        </span>
+        <el-select
+          v-model="schoolNames"
+          filterable
+          remote
+          clearable
+          placeholder="请选择"
+          size="small"
+          @change="changeUnit"
+          :remote-method="remoteMethod"
+        >
+          <el-option
+            v-for="(item,index) in schoolNamesOptions"
+            :key="index"
+            :label="item.mc"
+            :value="item.wid"
+          ></el-option>
         </el-select>
         <span class="select-group__title">项目名称</span>
-        <el-input v-model="xmmcValue" placeholder="请输入项目名称/项目编号" size="small" style="width:210px" @change="queryItemEnter"></el-input>
+        <el-input
+          v-model="xmmcValue"
+          placeholder="请输入项目名称/项目编号"
+          size="small"
+          style="width:210px"
+          @change="queryItemEnter"
+        ></el-input>
         <el-button size="mini" type="primary" @click="queryItem">查询项目</el-button>
       </div>
     </div>
     <div flex-1 flex>
-      <div class="pannel3-left" col=1 flex-column>
-        <card col=4>
+      <div class="pannel3-left" col="1" flex-column>
+        <card col="4">
           <div class="card-head" slot="head">
-            <h3>综合统计</h3></div>
+            <h3>综合统计</h3>
+          </div>
           <div class="card-body card-body__zhtj height100" slot="body" flex-column>
-            <div class="zhtj-card__item zhtj-card__item01" colcenter spacebetween col=3 @click="handlecheckDwXmtj(0)">
-              <div><img :src="zhtjCardIcon1" alt="" width="20" height="20"><span class="text">在建项目数</span></div>
+            <div
+              class="zhtj-card__item zhtj-card__item01"
+              colcenter
+              spacebetween
+              col="3"
+              @click="handlecheckDwXmtj(0)"
+            >
+              <div>
+                <img :src="zhtjCardIcon1" alt width="20" height="20" />
+                <span class="text">在建项目数</span>
+              </div>
               <span class="nums">{{statisticsList.zjxmzs}}</span>
             </div>
-            <div class="zhtj-card__item zhtj-card__item02" colcenter spacebetween col=3 @click="handlecheckDwXmtj(1)">
-              <div><img :src="zhtjCardIcon2" alt="" width="20" height="20"><span class="text">售后项目数</span></div>
+            <div
+              class="zhtj-card__item zhtj-card__item02"
+              colcenter
+              spacebetween
+              col="3"
+              @click="handlecheckDwXmtj(1)"
+            >
+              <div>
+                <img :src="zhtjCardIcon2" alt width="20" height="20" />
+                <span class="text">售后项目数</span>
+              </div>
               <span class="nums">{{statisticsList.shxmzs}}</span>
             </div>
-            <div class="zhtj-card__item zhtj-card__item03" colcenter spacebetween col=3 @click="handlecheckDwXmtj(2)">
-              <div><img :src="zhtjCardIcon4" alt="" width="20" height="20"><span class="text">过保项目数</span></div>
+            <div
+              class="zhtj-card__item zhtj-card__item03"
+              colcenter
+              spacebetween
+              col="3"
+              @click="handlecheckDwXmtj(2)"
+            >
+              <div>
+                <img :src="zhtjCardIcon4" alt width="20" height="20" />
+                <span class="text">过保项目数</span>
+              </div>
               <span class="nums">{{statisticsList.gbxmzs}}</span>
             </div>
-            <div class="zhtj-card__item zhtj-card__item04" colcenter spacebetween col=3 @click="handlecheckDwXmtj(3)">
-              <div><img :src="zhtjCardIcon3" alt="" width="20" height="20"><span class="text">已关闭项目数</span></div>
+            <div
+              class="zhtj-card__item zhtj-card__item04"
+              colcenter
+              spacebetween
+              col="3"
+              @click="handlecheckDwXmtj(3)"
+            >
+              <div>
+                <img :src="zhtjCardIcon3" alt width="20" height="20" />
+                <span class="text">已关闭项目数</span>
+              </div>
               <span class="nums">{{statisticsList.ygbxmzs}}</span>
             </div>
           </div>
         </card>
-        <card col=5>
+        <card col="5">
           <div class="card-head" slot="head">
-            <h3>热门应用TOP5</h3></div>
+            <h3>热门应用TOP5</h3>
+          </div>
           <div class="card-body card-body__syqk" slot="body" flex>
             <top5-app :items="top5List"></top5-app>
           </div>
-           <div slot="body" v-if="!top5List.length" style="text-align:center;padding:10px 0;">
-                <img src="static/img/none.png" alt="">
-                <p class="empty_content">暂无内容</p>
-            </div>
-        </card>
-        <card col=1 hidden>
-          <div class="card-head" slot="head">
-            <h3>综合统计</h3></div>
-          <div class="card-body card-body__syqk" slot="body" flex>
-            综合统计
+          <div slot="body" v-if="!top5List.length" style="text-align:center;padding:10px 0;">
+            <img src="static/img/none.png" alt />
+            <p class="empty_content">暂无内容</p>
           </div>
         </card>
-      </div>
-      <div class="pannel3-mid" col=3 flex-column>
-        <card col=1 v-for="(xmtj,index) in xmtjList" :key="index">
+        <card col="1" hidden>
           <div class="card-head" slot="head">
-          <h3  @click="checkItemDetails(xmtj)" class="home-xmmc">[{{xmtj.xmbh}}]{{xmtj.xmmc}}</h3></div>
-          <div class="card-body card-body__syqk height100" slot="body" >
+            <h3>综合统计</h3>
+          </div>
+          <div class="card-body card-body__syqk" slot="body" flex>综合统计</div>
+        </card>
+      </div>
+      <div class="pannel3-mid" col="3" flex-column>
+        <card col="1" v-for="(xmtj,index) in xmtjList" :key="index">
+          <div class="card-head" slot="head">
+            <h3 @click="checkItemDetails(xmtj)" class="home-xmmc">[{{xmtj.xmbh}}]{{xmtj.xmmc}}</h3>
+          </div>
+          <div class="card-body card-body__syqk height100" slot="body">
             <pannel3-xgyx :xmtj="xmtj"></pannel3-xgyx>
           </div>
         </card>
-         <div v-if="shown"  col=1 center>
-             <p><img src="static/img/none.png" alt=""><br><span style="font-weight:700;font-size:16px">暂无项目</span></p>
-         </div>
-        <!-- <card col=1>
-          <div class="card-head" slot="head">
-            <h3>学工迎新项目</h3></div>
-          <div class="card-body card-body__syqk height100" slot="body">
-            <pannel3-xgyx></pannel3-xgyx>
-          </div>
-        </card> -->
+        <div v-if="shown" col="1" center>
+          <p>
+            <img src="static/img/none.png" alt />
+            <br />
+            <span style="font-weight:700;font-size:16px">暂无项目</span>
+          </p>
+        </div>
+
         <div class="pannel3_pagation" v-if="total>3">
-           <pagination :pageSize="pageSize" :total="total" @handleCurrentChange="handleCurrentChange"></pagination>
+          <pagination
+            :pageSize="pageSize"
+            :total="total"
+            @handleCurrentChange="handleCurrentChange"
+          ></pagination>
         </div>
       </div>
-      <div class="pannel3-right" col=1 flex-column >
-        <card col=1  style="overflow-y:hidden;">
+      <div class="pannel3-right" col="1" flex-column>
+        <card col="1" style="overflow-y:hidden;">
           <div class="card-head" slot="head">
             <h3 class="pull-left">问题</h3>
             <span class="pull-right card-head__more" @click="checkAllQuestion">查看更多...</span>
-            <!-- ({{questionAll}}) -->
           </div>
-          <div class="card-body card-body__wt" slot="body" flex-column >
+          <div class="card-body card-body__wt" slot="body" flex-column>
             <div class="list__item right-split" v-for="(item,i) in problems" :key="i">
-              <h5 ><a  href="javaScript:void(0)"  @click="handleOpenQuestionDetail(item.wid)">{{item.bt}}</a></h5>
-              <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
-              <span class="time">{{item.fbrq}}</span><br>
-              <span>&nbsp;<span class="time"> 承诺结束日期 : {{!item.cnjsrq?'无':item.cnjsrq}}</span></span>
+              <h5>
+                <a href="javaScript:void(0)" @click="handleOpenQuestionDetail(item.wid)">{{item.bt}}</a>
+              </h5>
+              <span
+                :class="{tag:true,'tag-green':item.zt=='已受理','tag-ywc':item.zt=='已完成','tag-yellow':item.zt=='已延期','tag-red':item.zt=='未受理'}"
+              >{{item.zt}}</span>
+              <span class="time">{{item.fbrq}}</span>
+              <br />&nbsp;
+              <span>
+                <span class="time">承诺结束日期 : {{!item.cnjsrq?'无':item.cnjsrq}}</span>
+              </span>
             </div>
-            <div v-if="problems.length == 0||problems==null" style="text-align:center;padding:10px 0">
-                <img src="static/img/none.png" alt="">
-                <p class="empty_content">暂无内容</p>
+            <div
+              v-if="problems.length == 0||problems==null"
+              style="text-align:center;padding:10px 0"
+            >
+              <img src="static/img/none.png" alt />
+              <p class="empty_content">暂无内容</p>
             </div>
           </div>
         </card>
-        <card col=1 style="overflow-y:hidden">
+        <card col="1" style="overflow-y:hidden">
           <div class="card-head" slot="head">
             <h3 class="pull-left">投诉</h3>
             <span class="pull-right card-head__more" @click="checkAllComplaint">查看更多...</span>
           </div>
           <div class="card-body card-body__ts" slot="body" flex-column>
             <div class="list__item right-split" v-for="item in complaint">
-              <h5><a href="javaScript:void(0)"  @click="handleOpenComplainDetail(item.wid)">{{item.bt}}</a></h5>
-              <span :class='{tag:true,"tag-green":item.zt=="已受理","tag-ywc":item.zt=="已完成","tag-yellow":item.zt=="已延期","tag-red":item.zt=="未受理"}'>{{item.zt}}</span>
+              <h5>
+                <a href="javaScript:void(0)" @click="handleOpenComplainDetail(item.wid)">{{item.bt}}</a>
+              </h5>
+              <span
+                :class="{tag:true,'tag-green':item.zt=='已受理','tag-ywc':item.zt=='已完成','tag-yellow':item.zt=='已延期','tag-red':item.zt=='未受理'}"
+              >{{item.zt}}</span>
               <span class="time">{{item.fbrq}}</span>
             </div>
-            <div v-if="complaint.length == 0||complaint==null" style="text-align:center;padding:10px 0">
-                <img src="static/img/none.png" alt="">
-                <p class="empty_content">暂无内容</p>
+            <div
+              v-if="complaint.length == 0||complaint==null"
+              style="text-align:center;padding:10px 0"
+            >
+              <img src="static/img/none.png" alt />
+              <p class="empty_content">暂无内容</p>
             </div>
           </div>
         </card>
-        <card col=1 hidden>
+        <card col="1" hidden>
           <div class="card-head" slot="head">
-            <h3>综合统计</h3></div>
-          <div class="card-body card-body__syqk" slot="body" flex>
-            111
+            <h3>综合统计</h3>
           </div>
+          <div class="card-body card-body__syqk" slot="body" flex>111</div>
         </card>
       </div>
     </div>
@@ -152,7 +229,7 @@ export default {
       zhtjCardIcon3,
       zhtjCardIcon4,
       loading: false,
-      schoolNames:"",
+      schoolNames: "",
       schoolNamesOptions: [
         {
           value: "选项1",
@@ -175,17 +252,18 @@ export default {
       zsdm: "",
       pageSize: 3,
       total: null,
-      data:{},
-      shown:false,
-      xmmcValue:""
+      data: {},
+      shown: false,
+      xmmcValue: ""
     };
   },
   mounted() {
     //    获取用户单位
-   this.getDwByUser(true,'');
+    this.getDwByUser(true, "");
   },
   methods: {
-    handleOpenQuestionDetail(param){  // 打开问题详情
+    handleOpenQuestionDetail(param) {
+      // 打开问题详情
       let routeData = this.$router.resolve({
         name: "questionDetail",
         query: {
@@ -194,7 +272,8 @@ export default {
       });
       window.open(routeData.href, "_blank");
     },
-    handleOpenComplainDetail(param){  // 打开投诉详情
+    handleOpenComplainDetail(param) {
+      // 打开投诉详情
       let routeData = this.$router.resolve({
         name: "complaintDetail",
         query: {
@@ -203,77 +282,80 @@ export default {
       });
       window.open(routeData.href, "_blank");
     },
-    handlecheckDwXmtj(param){
-        let routeData = this.$router.resolve({
+    handlecheckDwXmtj(param) {
+      let routeData = this.$router.resolve({
         name: "DwxmList",
         query: {
-          dwmc:this.dwmc,
-          xmfl:param
+          dwmc: this.dwmc,
+          xmfl: param
         }
       });
       window.open(routeData.href, "_blank");
-    }, 
-    queryItemEnter(val){
-        this.getDwXmTjRT(1,val);
     },
-    queryItem(){
-        this.getDwXmTjRT(1,this.xmmcValue);
+    queryItemEnter(val) {
+      this.getDwXmTjRT(1, val);
     },
-		//查看项目详情
-    checkItemDetails(params){ 
-       this.data.xmbh = params.xmbh;
-       this.data.xmmc = params.xmmc;
-       this.data.isAll = true;
-       this.data.ztztmc = params.ztztmc;
-       this.data.gcfwzt = params.gcfwzt;
-       this.data.xx = params.xx;
-       this.data.yh = params.yh;
-       this.data.sfzq = params.sfzq;
-			 this.data.xmzt = params.xmzt;
-       this.$router.push({ name: 'Task',params:{data:this.data}});
+    queryItem() {
+      this.getDwXmTjRT(1, this.xmmcValue);
     },
-    checkAllQuestion(){
-       this.$router.push({ name: 'Question',params:{dwmc:this.dwmc}});
+    //查看项目详情
+    checkItemDetails(params) {
+      this.data.xmbh = params.xmbh;
+      this.data.xmmc = params.xmmc;
+      this.data.isAll = true;
+      this.data.ztztmc = params.ztztmc;
+      this.data.gcfwzt = params.gcfwzt;
+      this.data.xx = params.xx;
+      this.data.yh = params.yh;
+      this.data.sfzq = params.sfzq;
+      this.data.xmzt = params.xmzt;
+      this.$router.push({ name: "Task", params: { data: this.data } });
     },
-    checkAllComplaint(){
-       this.$router.push({ name: 'Complaint'});
+    checkAllQuestion() {
+      this.$router.push({ name: "Question", params: { dwmc: this.dwmc } });
     },
-    handleCurrentChange(data){  // 分页切换
-       this.getDwXmTjRT(data);
+    checkAllComplaint() {
+      this.$router.push({ name: "Complaint" });
     },
-    changeUnit(val) {  //切换学校
-        if(!val)  return;
-        let obj = {};
-        obj = this.schoolNamesOptions.find((item)=>{
-            return item.wid === val;
-        });
-        this.dwbh = obj.wid
-        this.dwmc = obj.mc
-        this.zsdm = obj.ampxxdm
-        if(this.zsdm != ''){
-          this.getTop5(this.zsdm);
-        }else{
-          this.top5List = []
-        }
-        this.getDwXmTj();
-        this.getDwXmTjRT(1);
-        this.queryRecentQuestions();
-        this.queryRecentComplaints();
+    handleCurrentChange(data) {
+      // 分页切换
+      this.getDwXmTjRT(data);
     },
-    remoteMethod(val) {  //远程搜索
-      this.getDwByUser(false,val);
+    changeUnit(val) {
+      //切换学校
+      if (!val) return;
+      let obj = {};
+      obj = this.schoolNamesOptions.find(item => {
+        return item.wid === val;
+      });
+      this.dwbh = obj.wid;
+      this.dwmc = obj.mc;
+      this.zsdm = obj.ampxxdm;
+      if (this.zsdm != "") {
+        this.getTop5(this.zsdm);
+      } else {
+        this.top5List = [];
+      }
+      this.getDwXmTj();
+      this.getDwXmTjRT(1);
+      this.queryRecentQuestions();
+      this.queryRecentComplaints();
+    },
+    remoteMethod(val) {
+      //远程搜索
+      this.getDwByUser(false, val);
     },
 
     // 获取top5
     getTop5(zsdm) {
       getTop5({
-        dwzsdm:zsdm
+        dwzsdm: zsdm
       }).then(({ data }) => {
         if (data.state == "success") {
-          if(!data.data){
-             this.top5List = [];
-          }else{
-            this.top5List = data.data
+          if (!data.data) {
+            this.top5List = [];
+          } else {
+            this.top5List = data.data;
           }
         }
       });
@@ -281,7 +363,7 @@ export default {
     //   获取单位项目统计
     getDwXmTj() {
       getDwXmTj({
-        dwmc: this.dwmc,
+        dwmc: this.dwmc
       }).then(({ data }) => {
         if (data.state == "success") {
           this.statisticsList = data.data;
@@ -289,18 +371,19 @@ export default {
       });
     },
 
+    // 查询问题
     queryRecentQuestions() {
       queryRecentQuestions({
         curPage: 1,
-        pageSize:5,
+        pageSize: 5,
         unitNum: this.dwbh,
-        isAll:true
+        isAll: true
       }).then(({ data }) => {
         if (data.state == "success") {
           this.questionAll = data.data.records;
           if (data.data.rows.length != 0 && data.data.rows != null) {
             this.problems = data.data.rows;
-          }else{
+          } else {
             this.problems = [];
           }
         }
@@ -312,92 +395,91 @@ export default {
         curPage: 1,
         pageSize: 5,
         unitNum: this.dwbh,
-        isAll:true
+        isAll: true
       }).then(({ data }) => {
         if (data.state == "success") {
           this.complaintAll = data.data.records;
           if (data.data.rows.length != 0 && data.data.rows != null) {
             this.complaint = data.data.rows;
-          }else{
-            this.complaint = []
+          } else {
+            this.complaint = [];
           }
         }
       });
     },
-    getDwXmTjRT(curPage,keyword) {
+    getDwXmTjRT(curPage, keyword) {
       getDwXmTjRT({
         dwmc: this.dwmc,
         curPage: curPage,
         pageSize: this.pageSize,
-        keyword:keyword||"",
-        xmfl:""
+        keyword: keyword || "",
+        xmfl: ""
       }).then(({ data }) => {
         if (data.state == "success") {
           this.total = data.data.records;
-          if (data.data.rows != null && data.data.rows.length != 0 ) {
+          if (data.data.rows != null && data.data.rows.length != 0) {
             this.xmtjList = data.data.rows;
-            this.shown = false
-          }else{
-            this.xmtjList = []
-            this.shown = true
+            this.shown = false;
+          } else {
+            this.xmtjList = [];
+            this.shown = true;
           }
-        }else{
-          this.$alert(data.msg, '提示', {
-          confirmButtonText: '确定',
-          type:'error',
-          callback: action => {}
-        });
+        } else {
+          this.$alert(data.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error",
+            callback: action => {}
+          });
         }
       });
     },
 
-    getDwByUser(type,keyword){
-        getDwByUser({
+    getDwByUser(type, keyword) {
+      getDwByUser({
         dwlx: "",
         curPage: 1,
         pageSize: 9,
-        keyword:keyword
-        }).then(({ data }) => {
+        keyword: keyword
+      }).then(({ data }) => {
         if (data.state == "success") {
-            if(type){
-              if(data.data.rows){
-                  this.schoolNamesOptions = data.data.rows;
-                  this.schoolNames = this.schoolNamesOptions[0].jc
-                  this.dwbh = data.data.rows[0].wid;
-                  this.dwmc = data.data.rows[0].mc;
-                  this.zsdm = data.data.rows[0].ampxxdm;
-                  if(this.zsdm != ''){
-                    this.getTop5(this.zsdm);
-                  }else{
-                    this.top5List = []
-                  }
-                    this.getDwXmTj();
-                    this.getDwXmTjRT(1);
-                    this.queryRecentQuestions();
-                    this.queryRecentComplaints();
+          if (type) {
+            if (data.data.rows) {
+              this.schoolNamesOptions = data.data.rows;
+              this.schoolNames = this.schoolNamesOptions[0].jc;
+              this.dwbh = data.data.rows[0].wid;
+              this.dwmc = data.data.rows[0].mc;
+              this.zsdm = data.data.rows[0].ampxxdm;
+              if (this.zsdm != "") {
+                this.getTop5(this.zsdm);
+              } else {
+                this.top5List = [];
               }
-              if(!data.data.rows){
-                this.$alert('您暂无任何单位~', '提示', {
-                  confirmButtonText: '确定',
-                  type:"warning",
-                  callback: action => {}
-                });
-              }
-            }else{
-              if(!!data.data.rows){
-                 this.schoolNamesOptions = data.data.rows;  
-              }
-              if(!data.data.rows){
-                this.$alert('您暂无任何单位~', '提示', {
-                  confirmButtonText: '确定',
-                  type:"warning",
-                  callback: action => {}
-                });
-              }
-
+              this.getDwXmTj();
+              this.getDwXmTjRT(1);
+              this.queryRecentQuestions();
+              this.queryRecentComplaints();
+            }
+            if (!data.data.rows) {
+              this.$alert("您暂无任何单位~", "提示", {
+                confirmButtonText: "确定",
+                type: "warning",
+                callback: action => {}
+              });
+            }
+          } else {
+            if (!!data.data.rows) {
+              this.schoolNamesOptions = data.data.rows;
+            }
+            if (!data.data.rows) {
+              this.$alert("您暂无任何单位~", "提示", {
+                confirmButtonText: "确定",
+                type: "warning",
+                callback: action => {}
+              });
             }
           }
-        });
+        }
+      });
     }
   },
   components: {
@@ -417,11 +499,11 @@ export default {
 .pannel3-mid {
   min-height: 1150px;
 }
-.home-xmmc:hover{
- color: rgb(96, 172, 248);
- text-decoration: underline;
- text-underline-position: auto;
- cursor:pointer;
+.home-xmmc:hover {
+  color: rgb(96, 172, 248);
+  text-decoration: underline;
+  text-underline-position: auto;
+  cursor: pointer;
 }
 .pannel3-mid .card-box {
   max-height: 380px !important;
@@ -430,7 +512,7 @@ export default {
   background: #fff;
   border-radius: 4px;
   text-align: right;
-  margin:2px 6px 6px;
+  margin: 2px 6px 6px;
 }
 .card-head__more {
   color: #1989fa;
@@ -481,8 +563,8 @@ export default {
       font-size: 14px;
     }
   }
-  .zhtj-card__item:hover{
-    box-shadow:0 2px 12px 0 rgba(0,0,0,.5);
+  .zhtj-card__item:hover {
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
     cursor: pointer;
   }
   .zhtj-card__item01 {
@@ -501,7 +583,6 @@ export default {
 
 .card-body__wt,
 .card-body__ts {
- 
   margin-top: 8px;
   .list__item {
     padding: 4px;
@@ -512,7 +593,7 @@ export default {
     font-size: 14px;
     color: #464c5b;
     font-weight: normal;
-    padding:0 5px;
+    padding: 0 5px;
   }
 
   .wt-list__left {
@@ -523,8 +604,8 @@ export default {
     color: #9ea7b4;
   }
 }
-.textElipase{
-    overflow: hidden;
+.textElipase {
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   width: 100%;

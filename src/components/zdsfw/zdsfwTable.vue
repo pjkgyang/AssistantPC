@@ -24,7 +24,7 @@
 
             <el-table-column  label="项目服务状态" width="110" >
                 <template slot-scope="scope">
-                    <el-tag size="mini"  :type="scope.row.flag == 1 ? 'success' : 'danger'" v-if="scope.row.zt != '待生成'">{{scope.row.flag==1?'已启动':'已停滞'}}</el-tag>
+                    <el-tag size="mini"  :type="scope.row.flag == 1 ? 'success' : 'danger'" v-if="scope.row.zt != '待生成'">{{scope.row.flag==1?'已启动':'已暂停'}}</el-tag>
                 </template>
             </el-table-column>
 

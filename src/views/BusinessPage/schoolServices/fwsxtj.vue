@@ -2,12 +2,12 @@
   <div class="fwsxtj-pannel">
     <div class="pannelPaddingBg-10">
       <div v-if="!$route.query.bh">
-        <div style="padding: 12px 40px;">
+        <div style="padding: 12px 40px;" v-if="isJz == '0'">
           <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
         </div>
         <div flex >
           <span class="query-title" style="padding:2px 4px;margin-right:10px">高级查询:</span>
-          <el-input style="width:300px" class="search-input" placeholder="请输入服务事项名称" prefix-icon="el-icon-search"
+          <el-input style="width:300px" class="search-input" placeholder="请输入服务事项名称/部门名称" prefix-icon="el-icon-search"
             size="mini" v-model="filterData.keyword" @change="handleSearch"></el-input>
           &#x3000;
           <el-button type="primary" size="mini" @click="handleSearch">搜索</el-button>
@@ -176,13 +176,25 @@ export default {
       options: [], //部门
       currentPage: 1,
       pageSize: 15,
-      records: 0
+      records: 0,
+
+      userInfo:'',
+      isJz:''
     };
   },
   mounted() {
+     this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+     this.isJz = sessionStorage.getItem('isJZuser');
+     if(!this.$route.query.id && sessionStorage.getItem('isJZuser') == '1'){
+        this.unitData.dwbh = this.userInfo.unitnum;
+        this.unitData.dwmc = this.userInfo.unit;
+        this.unitData.bmbh = '';
+     }
+     this.treeDept();
+
     if (this.$route.query.id) {
       this.pageSize = 20;
-      this.filterData.bmbh = this.$route.query.id;
+      this.filterData.bmbh = this.$route.query.id==0?'':this.$route.query.id;
       this.unitData.dwbh = this.$route.query.bh; //单位编号
       this.filterData.xxhzc = !this.$route.query.xxh
         ? ""
@@ -239,7 +251,6 @@ export default {
     // 选择单位
     handleChangeUnit(prams) {
       this.unitData = prams;
-      this.treeDept();
       this.pageServiceItem();
     },
     pageServiceItem() {
