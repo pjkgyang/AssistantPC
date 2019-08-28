@@ -31,8 +31,7 @@
 		</div>
 		<br />
 		<div>
-			<!--  :max-height="height" -->
-			<el-table :data="tableData" border style="width: 100%">
+			<el-table :data="tableData" border style="width: 100%" :max-height="height">
 				<el-table-column fixed="left" label="操作" width="120">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="handleClick(scope.row)">详情</el-button>

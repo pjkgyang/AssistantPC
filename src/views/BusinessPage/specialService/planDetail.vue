@@ -34,6 +34,13 @@
                 <th class="contenTitle">服务内容</th>
                 <td colspan="3">{{planData.fwnr}}</td>
               </tr>
+               <tr>
+                <th class="contenTitle">附件</th>
+                <td colspan="3">
+                  <span v-show="!!planData.fjList"><a :href="API.downloadFile+'?fjId='+fj.fjbh" v-for="fj in planData.fjList">{{fj.fjmc}}</a></span>
+                  <span v-show="!planData.fjList">无</span>
+                </td>
+              </tr>
             </table>
           </div>
         </section>

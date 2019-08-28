@@ -13,7 +13,7 @@
                      <el-input size="mini"  placeholder="请搜索人员姓名/工号/部门"  suffix-icon="el-icon-search" v-model="keyword" @change="handleSearchUser"></el-input>
                 </section>
                 <section slot="bottom">
-                <el-table :data="tableData" style="width: 100%" :max-height="580" border>
+                <el-table :data="tableData" style="width: 100%" :max-height="500" border>
                     <el-table-column prop="username" label="姓名" ></el-table-column>
                     <el-table-column prop="usercode" label="工号" ></el-table-column>
                     <el-table-column prop="dept" label="部门" ></el-table-column>

@@ -2,6 +2,9 @@
 	<div style="padding:20px;">
 		<div class="pannelPaddingBg-10">
 			<h4 text-center class="filter-weight">[{{ $route.query.xmmc }}] 中标详情</h4>
+			<div class="mg-12" text-right v-if="tbxxData.zbedite == 1">
+				<el-button size="mini" type="primary" @click="handleChangeZbxx">修改中标信息</el-button>
+			</div>
 			<div>
 				<p>
 					<span class="filter-weight tips">投标说明：</span>
@@ -90,25 +93,42 @@
 				</p>
 			</div>
 		</div>
+
+		<toubiaoDialog :show.sync="toubiaoShow" :title="'编辑投标信息'" :zbedite="'1'" :type="curType" :fbbh="$route.query.fbbh" :tbbh="$route.query.tbbh" @handleCommitToubiao="handleCommitToubiao"></toubiaoDialog>
 	</div>
 </template>
 
 <script>
+import toubiaoDialog from '@/components/dialog/toubiao-dialog.vue';
 import { tbxq } from '@/api/toubiao.js';
+
 export default {
 	data() {
 		return {
+			toubiaoShow:false,
 			tbxxData: {},
+			fbxxData:{},
 			userData: [],
 			ywyData: [],
 			fjmc: '',
-			baseUrl: ''
+			baseUrl: '',
+			curType:"edit"
 		};
 	},
-	methods: {},
+	methods: {
+		// 中标信息
+		handleChangeZbxx(){
+			this.toubiaoShow = true;
+		},
+		//提交成功
+		handleCommitToubiao(){
+			 this.toubiaoShow = false;
+		},
+	},
 	mounted() {
 		let userList = [];
 		this.baseUrl = window.baseurl;
+		console.log(this.$route.query.tbbh)
 		tbxq({ fbbh: this.$route.query.fbbh, tbbh: this.$route.query.tbbh }).then(({ data }) => {
 			if (data.state == 'success') {
 				this.ywyData = !data.data.htnrfy ? [] : data.data.htnrfy;
@@ -132,7 +152,9 @@ export default {
 				}
 			}
 		});
-	}
+	},
+	components:{toubiaoDialog}
+	
 };
 </script>
 

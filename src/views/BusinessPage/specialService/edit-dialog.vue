@@ -12,7 +12,7 @@
     >
       <div class="dialog-qrfw">
         <el-form ref="form" :model="form" label-width="110px" size="mini">
-          <el-form-item label="计划开始日期" required v-if="!plxgZrr">
+          <!-- <el-form-item label="计划开始日期" required v-if="!plxgZrr">
             <el-date-picker
               type="date"
               placeholder="选择日期"
@@ -20,7 +20,7 @@
               v-model="form.jhksrq"
               style="width:100%;"
             ></el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="计划结束日期" required v-if="!plxgZrr">
             <el-date-picker
               type="date"
@@ -80,7 +80,7 @@ export default {
       jzzrrList: [],
       xxzrrList: [],
       form: {
-        jhksrq: "",
+        // jhksrq: "",
         jhjsrq: "",
         jzzrrxm: "",
         jzzrrbh: "",
@@ -132,13 +132,13 @@ export default {
       });
     },
     validate() {
-      if (!this.form.jhksrq && !this.plxgZrr) {
-        this.$alert("请选择计划开始日期", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
-        return false;
-      }
+      // if (!this.form.jhksrq && !this.plxgZrr) {
+      //   this.$alert("请选择计划开始日期", "提示", {
+      //     confirmButtonText: "确定",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // }
       if (!this.form.jhjsrq && !this.plxgZrr) {
         this.$alert("请填写计划结束日期", "提示", {
           confirmButtonText: "确定",

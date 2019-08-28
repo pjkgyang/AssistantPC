@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="说明"
+      title="选择人员"
       width="800px"
       top="30px"
       :visible.sync="visible"
@@ -37,7 +37,7 @@
              </el-pagination>
         </div>
         <section class="pj-btn-group">
-          <el-button size="small" @click="visible = false">取消</el-button>
+          <el-button size="small" @click="visible = false">关闭</el-button>
         </section>
       </div>
     </el-dialog>

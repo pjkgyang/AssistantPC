@@ -152,7 +152,7 @@
               size="mini"
               icon="el-icon-edit"
               type="text"
-              v-if="item.zt!='0'"
+              v-if="item.zt == '0'"
               @click="handleOprate('edit',index,item)"
             >编辑</el-button>
           </div>          

@@ -45,7 +45,6 @@
               size="mini"
               placeholder="请选择服务类型"
               style="width:325px"
-              multiple
               @change="handleChangeFwlx"
             >
               <el-option
@@ -58,20 +57,13 @@
           </el-form-item>
           
           <el-form-item label="服务项" required>
-            <el-select
-              v-model="fwdjData.fwxwid"
+            <el-input
               size="mini"
-              placeholder="请选择服务项"
+              type="text"
               style="width:325px"
-              @change="handleChangeFwx"
-            >
-              <el-option
-                v-for="(fwx, index) in fwxList"
-                :key="index"
-                :label="fwx.yymc"
-                :value="fwx.yybh"
-              ></el-option>
-            </el-select>
+              placeholder="请填写服务项"
+              v-model="fwdjData.fwxmc"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="服务阶段" required>
@@ -79,14 +71,13 @@
               size="mini"
               type="text"
               style="width:325px"
-              placeholder="请选择服务项"
-              readonly
-              v-model="fwdjData.fwxwid"
+              placeholder="请填写服务阶段"
+              v-model="fwdjData.fwjd"
             ></el-input>
           </el-form-item>
 
           <el-form-item label="金智责任人" required>
-            <el-input placeholder="请选择" readonly v-model="fwdjData.zrrbxm" style="width:325px">
+            <el-input placeholder="请选择" readonly v-model="fwdjData.zrrxm" style="width:325px">
               <el-button
                 slot="append"
                 icon="el-icon-circle-plus-outline"
@@ -126,6 +117,16 @@
               placeholder="请输入内容"
               v-model="fwdjData.fwnr"
               style="width:800px"
+            ></el-input>
+          </el-form-item>
+
+          <el-form-item label="交付物" required>
+             <el-input
+              size="mini"
+              type="text"
+              style="width:325px"
+              placeholder="请填写服务项"
+              v-model="fwdjData.jfw"
             ></el-input>
           </el-form-item>
         </el-form>
@@ -177,13 +178,16 @@ export default {
         xmmc: "",
         xmbh: "",
         cpxwids: "",
-        fwxwid: "", //服务项wid
+        fwxmc: "", //服务项
+        fwjd:"",
         jhjsrq: "",
         zrrxm: "",
         zrrbh: "",
         xxfzrxm: "",
         xxfzrbh: "",
-        fwnr: ""
+        fwnr: "",
+        jfw:'',
+        jhlx:0
       },
       pickerBeginDateBefore: {
         disabledDate(time) {
@@ -213,19 +217,18 @@ export default {
     // 添加成功
     addUserSuccess(params, user) {
       if (params == "0") {
-        this.fwdjData.zrrbh = user.username;
-        this.fwdjData.zrrxm = user.userid;
+        this.fwdjData.zrrbh = user.userid;
+        this.fwdjData.zrrxm = user.username;
       } else {
         this.fwdjData.xxfzrxm = user.username;
         this.fwdjData.xxfzrbh = user.userid;
       }
       this.userShow = false;
     },
-    // 选择服务类型
+    // // 选择服务类型
     handleChangeFwlx(val) {
-      this.getSpecialServiceFWX(val.join(","));
+      // this.getSpecialServiceFWX(val.join(","));
     },
-    handleChangeFwx() {},
     handleChooseUser(data) {
       this.unitType = data;
       this.userShow = true;
@@ -251,18 +254,18 @@ export default {
       });
     },
 
-    // 获取服务项
-    getSpecialServiceFWX(cpxwid) {
-      this.fwxList = [];
-      this.$get(this.API.getSpecialServiceFWX, {
-        cpxwid: cpxwid
-      }).then(res => {
-        if (res.state == "success") {
-          this.fwxList = res.data;
-        } else {
-        }
-      });
-    },
+    // // 获取服务项
+    // getSpecialServiceFWX(cpxwid) {
+    //   this.fwxList = [];
+    //   this.$get(this.API.getSpecialServiceFWX, {
+    //     cpxwid: cpxwid
+    //   }).then(res => {
+    //     if (res.state == "success") {
+    //       this.fwxList = res.data;
+    //     } else {
+    //     }
+    //   });
+    // },
 
     valiDate() {
       if (!this.fwdjData.xmbh) {
@@ -280,9 +283,17 @@ export default {
         return false;
       }
 
-      if (!this.fwdjData.fwxwid) {
+      if (!this.fwdjData.fwxmc) {
         this.$message({
-          message: "请选择服务项",
+          message: "请填写服务项",
+          type: "warning"
+        });
+        return false;
+      }
+
+      if (!this.fwdjData.fwjd) {
+        this.$message({
+          message: "请填写服务阶段",
           type: "warning"
         });
         return false;

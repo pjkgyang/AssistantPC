@@ -4,7 +4,13 @@
       <div class="mg-12">
         <el-button size="mini" type="primary" @click="handleAddFwsx">添加服务事项计划</el-button>
       </div>
-      <chooseSchool @handleChangeUnit="handleChangeUnit"></chooseSchool>
+      <div flex>
+        <chooseSchool @handleChangeUnit="handleChangeUnit" ></chooseSchool>&#x3000;
+        <div>
+          <span class="filter-weight before-require">部门：</span>
+          <selectTree :options="treeOptions" @getValue="getValue"></selectTree>
+        </div>
+      </div>
       <div class="mg-12">
         <span class="filter-weight">计划年份：</span>
         <el-date-picker
@@ -81,6 +87,7 @@
 import serviceItem from "@/views/BusinessPage/schoolServices/serviceitem";
 import ssjhDailog from "@/views/BusinessPage/schoolServices/ssjh-dialog.vue";
 import chooseSchool from "@/components/BusinessPage/chooseSchool.vue";
+import selectTree from "@/components/public/selectTree.vue";
 export default {
   data() {
     return {
@@ -96,6 +103,7 @@ export default {
         txrqStart: "",
         txrqEnd: ""
       },
+      treeOptions:[],//部门树
       tableData: [],
       curData: {} //当前计划
     };
@@ -110,7 +118,16 @@ export default {
       this.unit = params;
       this.currentPage = 1;
       this.pageServiceItemPlan();
+      this.treeDept();
     },
+
+    getValue(data){
+      if(this.curDept.bmbh != data){
+        this.curDept.bmbh = !data?'':data;
+        this.pageServiceItemPlan();
+      }
+    },
+
     handleChangeTxrq() {
       if (!!this.year) {
         this.filterData.txrqStart = this.year + "-00-00";
@@ -200,6 +217,7 @@ export default {
         curPage: this.currentPage,
         pageSize: this.pageSize,
         dwbh: this.unit.dwbh,
+        bmbh: this.curDept.bmbh=='0' ? "" : this.curDept.bmbh,
         txrqStart: !this.filterData.txrqStart ? "" : this.filterData.txrqStart,
         txrqEnd: !this.filterData.txrqEnd ? "" : this.filterData.txrqEnd
       }).then(res => {
@@ -213,12 +231,25 @@ export default {
         } else {
         }
       });
+    },
+ 
+    treeDept() {
+      this.$get(this.API.treeDeptWithUnit, {
+        dwbh: this.unit.dwbh,
+        dwmc: this.unit.dwmc,
+        zts: "1,3"
+      }).then(res => {
+        if (res.state == "success") {
+          this.treeOptions = res.data;
+        }
+      });
     }
   },
   components: {
     serviceItem,
     ssjhDailog,
-    chooseSchool
+    chooseSchool,
+    selectTree
   }
 };
 </script>

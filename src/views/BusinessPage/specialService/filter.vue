@@ -106,7 +106,8 @@
       return {
         cpList: [],
         fwnrList: [],
-        ztList: [{
+        ztList: [
+          {
             lable: "0",
             mc: "计划中"
           },

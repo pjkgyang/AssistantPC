@@ -37,7 +37,12 @@
               >删除</el-button>
               <!-- <el-button :disabled="!widsArr.length" type="primary" size="mini" @click="handleClick('qr')">批量确认</el-button> -->
               <!-- <el-button :disabled="!widsArr.length" type="danger" size="mini" @click="handleClick('bh')">批量驳回</el-button> -->
-              <!-- <el-button :disabled="!widsArr.length" type="primary" size="mini" @click="handleClick('fb')">发布</el-button> -->
+              <el-button
+                :disabled="!widsArr.length"
+                type="primary"
+                size="mini"
+                @click="handleClick('fb')"
+              >发布</el-button>
             </div>
             <div>
               <el-button type="primary" size="mini" @click="handleClick('export')">导出</el-button>
@@ -60,13 +65,14 @@
               <template slot-scope="scope">
                 <!-- 专项服务管理员 , 金智负责人 -->
                 <el-button
-                  v-if="userGroupTag.includes('ZXFWGLY') || userid == scope.row.jzfzrbh"
+                  v-if="(userGroupTag.includes('ZXFWGLY') || userid == scope.row.jzfzrbh) && scope.row.fwzt == -1"
                   type="text"
                   size="mini"
                   @click="handleOprater(scope.row,'fb')"
                 >发布</el-button>
+                <!-- 确认2记录不显示 -->
                 <el-button
-                  v-if="userGroupTag.includes('ZXFWGLY') || userid == scope.row.jzfzrbh"
+                  v-if="(userGroupTag.includes('ZXFWGLY') || userid == scope.row.jzfzrbh) && scope.row.fwzt != 2"
                   type="text"
                   size="mini"
                 >
@@ -75,8 +81,10 @@
                     target="_blank"
                   >记录</a>
                 </el-button>
+
+                <!-- 发布后待提报（0） -->
                 <el-button
-                  v-if="userGroupTag.includes('ZXFWGLY') || userid == scope.row.jzfzrbh"
+                  v-if="(userGroupTag.includes('ZXFWGLY') || userid == scope.row.jzfzrbh) && scope.row.fwzt == '0'"
                   type="text"
                   size="mini"
                   @click="handleOprater(scope.row,'tb')"
@@ -90,15 +98,22 @@
                 <el-button type="text" size="mini">
                   <a :href="'#/specialservice/detail'+'?wid='+scope.row.wid" target="_blank">详情</a>
                 </el-button>
-                <!-- 没有确认，当前用户为学校责任人 -->
+                 <el-button
+                  v-if="scope.row.fwzt=='-1'"
+                  type="text"
+                  size="mini"
+                  style="color:#f00"
+                  @click="handleOprater(scope.row,'sc')"
+                >删除</el-button>
+                <!-- 没有确认，当前用户为学校责任人 提报后待确认（1） -->
                 <el-button
-                  v-if="scope.row.fwzt!='2' && scope.row.fwzt!='3' && userid == scope.row.xxfzrbh"
+                  v-if="scope.row.fwzt=='1' && userid == scope.row.xxfzrbh"
                   type="text"
                   size="mini"
                   @click="handleOprater(scope.row,'qr')"
                 >确认</el-button>
                 <el-button
-                  v-if="scope.row.fwzt!='2' && scope.row.fwzt!='3' && userid == scope.row.xxfzrbh"
+                  v-if="scope.row.fwzt=='1'&& userid == scope.row.xxfzrbh"
                   type="text"
                   size="mini"
                   @click="handleOprater(scope.row,'bh')"
@@ -108,12 +123,19 @@
             <el-table-column prop="yh" label="学校名称" min-width="200" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmmc" label="项目名称" min-width="200" show-overflow-tooltip></el-table-column>
             <el-table-column prop="xmbh" label="项目编号" min-width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="htbh" label="合同编号" min-width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="htbh" label="合同编号" min-width="130" show-overflow-tooltip></el-table-column>
             <el-table-column prop="cpxmc" label="产品" min-width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="fwzt_display" label="服务状态" min-width="120" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="fwjd" label="服务阶段" min-width="80" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="fwx" label="服务项" min-width="80" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="fwnr" label="服务内容" min-width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="fwzt" label="服务状态" min-width="120" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-tag
+                  size="mini"
+                  :type="scope.row.fwzt==1?'success':scope.row.fwzt==2?'danger':scope.row.fwzt==-1?'info':'primary'"
+                >{{scope.row.fwzt==0?'计划中':scope.row.fwzt==1?'已完成':scope.row.fwzt==2?'关闭':scope.row.fwzt==3?'驳回':'待发布'}}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="fwjd" label="服务阶段" min-width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="fwx" label="服务项" min-width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="fwnr" label="服务内容" min-width="220" show-overflow-tooltip></el-table-column>
             <el-table-column prop="jhkssj" label="开始日期" min-width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop="jhjssj" label="结束日期" min-width="100" show-overflow-tooltip></el-table-column>
           </el-table>
@@ -144,25 +166,28 @@
         <itemChoose @handleEdit="handleChooseItem"></itemChoose>
       </div>
     </el-dialog>
+
+    <!-- 服务类型 -->
     <serviceType
       :show.sync="serviceTypeShow"
       :xmbh="curItem.xmbh"
       @handleAddservice="handleAddservice"
     ></serviceType>
-    <!-- 服务类型 -->
+    <!-- 编辑 -->
     <editDialog
       :show.sync="editShow"
       :plxgZrr="plxgZrr"
       :dataInfo="curRow"
       @handleCommitEdit="handleCommitEdit"
     ></editDialog>
-    <!-- 编辑 -->
-    <qrfwDialog :show.sync="qrfwShow" @handleClickSure="handleClickSureQrfw"></qrfwDialog>
     <!-- 确认 -->
-    <addplan :show.sync="zjyShow" @handleCommitZdyjh="handleCommitZdyjh"></addplan>
+    <qrfwDialog :show.sync="qrfwShow" @handleClickSure="handleClickSureQrfw"></qrfwDialog>
     <!-- 添加计划 -->
-    <bhDialog :show.sync="bhShow" @handleClickSure="handleClickSureBhfw"></bhDialog>
+    <addplan :show.sync="zjyShow" @handleCommitZdyjh="handleCommitZdyjh"></addplan>
     <!-- 驳回 -->
+    <bhDialog :show.sync="bhShow" @handleClickSure="handleClickSureBhfw"></bhDialog>
+    <!-- 提报 -->
+    <tbDialog :show.sync="tbShow" :wid="curRow.wid" @handleCommitTb="handleCommitTb"></tbDialog>
   </div>
 </template>
 
@@ -173,6 +198,7 @@ import serviceType from "@/views/BusinessPage/specialService/serviceType.vue";
 import addplan from "@/views/BusinessPage/specialService/addPlan.vue";
 import editDialog from "@/views/BusinessPage/specialService/edit-dialog.vue";
 import qrfwDialog from "@/views/BusinessPage/specialService/qrfw-dialog.vue";
+import tbDialog from "@/views/BusinessPage/specialService/tb-dialog.vue"; //提报附件
 import bhDialog from "@/components/dialog/smDialog.vue";
 import itemChoose from "@/components/BusinessPage/itemChoose.vue";
 import { getLastMonthDay } from "@/utils/util.js";
@@ -186,6 +212,7 @@ export default {
       qrfwShow: false, //确认服务
       bhShow: false, //驳回服务
       zjyShow: false, //自定义计划
+      tbShow: false, //提报显示
       title: "",
       currentPage: 1,
       pageSize: 15,
@@ -252,6 +279,10 @@ export default {
           });
         }
       });
+    },
+    // 提报
+    handleCommitTb() {
+      this.pageSpecialService();
     },
     // 编辑提交
     handleCommitEdit(data) {
@@ -351,23 +382,7 @@ export default {
 
         // 提报
         case "tb":
-          this.$confirm("是否确定提交该项服务计划?", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          })
-            .then(() => {
-              this.$post(this.API.submitSpecialService, {
-                wids: params.wid
-              }).then(res => {
-                if (res.state == "success") {
-                  this.$message({ message: "提报成功", type: "success" });
-                  this.pageSpecialService();
-                } else {
-                }
-              });
-            })
-            .catch(() => {});
+          this.tbShow = !this.tbShow;
           break;
         // 发布
         case "fb":
@@ -380,6 +395,17 @@ export default {
         // 驳回
         case "bh":
           this.bhShow = true;
+          break;
+        // 删除
+        case "sc":
+          this.$post(this.API.deleteSpecialService, {
+            wids: params.wid
+          }).then(res => {
+            if (res.state == "success") {
+              this.$message({ message: "删除成功", type: "success" });
+              this.pageSpecialService();
+            }
+          });
           break;
         default:
           break;
@@ -473,7 +499,7 @@ export default {
         curPage: this.currentPage,
         pageSize: this.pageSize,
         cpxmc: this.filterData.cpxmc,
-        zt: this.filterData.fwzt,
+        fwzt: this.filterData.fwzt,
         jhksrqmax: this.filterData.jhksrq,
         jhjsrqmax: this.filterData.jhjsrq,
         sfgq: this.filterData.sfgq,
@@ -519,7 +545,8 @@ export default {
     itemChoose,
     addplan,
     qrfwDialog,
-    bhDialog
+    bhDialog,
+    tbDialog
   }
 };
 </script>

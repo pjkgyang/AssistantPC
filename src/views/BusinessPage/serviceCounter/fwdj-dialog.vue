@@ -180,7 +180,7 @@
           </el-form-item>
 
           <el-form-item label="附件">
-            <uploadFile :Type="'demand'" :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
+            <uploadFile :istb="isClearFile" @handleUploadFile="handleUploadFile"></uploadFile>
             <p class="file" v-if="!!fjList.length && !!wid" v-for="(fj,index) in fjList">
               {{fj.fjmc}}
               <i class="el-icon-close" @click="handleRemovefj(index)"></i>
