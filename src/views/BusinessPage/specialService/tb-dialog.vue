@@ -18,12 +18,12 @@
           size="mini"
           label-width="135px"
         >
-          <el-form-item label="计划结束日期" required>
+          <el-form-item label="实际结束日期" required>
             <el-date-picker
               :picker-options="pickerBeginDateBefore"
               :clearable="false"
               size="mini"
-              v-model="tbjhData.jhjsrq"
+              v-model="tbjhData.sjjsrq"
               type="date"
               placeholder="选择日期"
               format="yyyy-MM-dd"
@@ -66,14 +66,14 @@
 </template>
 
 <script>
-import uploadFiles from "@/components/businessPage/upload.vue";
+import uploadFiles from "@/components/BusinessPage/upload.vue";
 export default {
   data() {
     return {
       visible: this.show,
       clearFile: false,
       tbjhData: {
-        jhjsrq: "",
+        sjjsrq: "",
         gstr: 0,
         sm: "",
         fjData: ""
@@ -113,7 +113,7 @@ export default {
       if (!this.valiDate()) return;
       this.$post(this.API.submitSpecialService, {
         wids: this.wid,
-        jhjsrq:this.tbjhData.jhjsrq,
+        sjjsrq:this.tbjhData.sjjsrq,
         gstr:this.tbjhData.gstr,
         fjData:this.tbjhData.fjData,
         sm:this.tbjhData.sm
@@ -122,7 +122,7 @@ export default {
           this.$message({ message: "提报成功", type: "success" });
           this.$emit('handleCommitTb','');
           this.clearFile = !this.clearFile;
-          this.tbjhData.jhjsrq = "";
+          this.tbjhData.sjjsrq = "";
           this.tbjhData.gstr = 0;
           this.tbjhData.fjData = "";
           this.tbjhData.sm = "";
@@ -154,7 +154,7 @@ export default {
     },
 
     valiDate() {
-      if (!this.tbjhData.jhjsrq) {
+      if (!this.tbjhData.sjjsrq) {
         this.$message({
           message: "请选择计划结束日期",
           type: "warning"

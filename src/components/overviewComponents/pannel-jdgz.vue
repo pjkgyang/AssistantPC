@@ -3,7 +3,7 @@
     <div col=1>
       <span class="introText mr-20">甲方负责人</span><span class="baseText mr-20">{{xmtj.jfxm == ''?'暂无':xmtj.jfxm}}</span>
       <span class="introText mr-20">项目经理</span><span class="baseText mr-20">{{xmtj.xmjl == ''?'暂无':xmtj.xmjl}}</span>
-      <span class="introText mr-20">项目建设周期</span><span class="baseText">{{xmtj.xmksrq==''?'无':xmtj.xmksrq}} 至 {{xmtj.xmjsrq==''?'无':xmtj.xmjsrq}}</span><br>
+      <!-- <span class="introText mr-20">项目建设周期</span><span class="baseText">{{xmtj.xmksrq==''?'无':xmtj.xmksrq}} 至 {{xmtj.xmjsrq==''?'无':xmtj.xmjsrq}}</span><br> -->
       <span class="introText mr-20">项目状态</span><span class="baseText mr-20">{{xmtj.ztztmc}}</span>
       <span class="introText mr-20">服务期限</span><span class="baseText mr-20">{{xmtj.fwqx}} 月</span>
       <span class="introText mr-20">服务开始日期</span><span class="baseText">{{!xmtj.fwksrq?'无':xmtj.fwksrq}}</span>

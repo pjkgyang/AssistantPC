@@ -7,6 +7,7 @@ export default {
   exportBxbDetail: window.baseurl + 'report/exportBxbDetail.do', //导出可变提报（成本）
 
   queryDwUsers: window.baseurl + 'report/queryDwUsers.do', //查询相关用户
+  getProjectUsers: window.baseurl + 'personnel/getProjectUsers.do', //获取项目相关用户
   // 枚举
   getDictEnum: window.baseurl + 'dict/getDictEnum.do',
 

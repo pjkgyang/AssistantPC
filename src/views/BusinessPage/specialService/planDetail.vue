@@ -13,8 +13,8 @@
                 <td>{{planData.xmbh}}</td>
               </tr>
               <tr>
-                <th class="contenTitle">计划开始日期</th>
-                <td>{{planData.jhkssj}}</td>
+                <th class="contenTitle">产品名称</th>
+                <td>{{planData.cpxmc}}</td>
                 <th class="contenTitle">计划结束日期</th>
                 <td>{{planData.jhjssj}}</td>
               </tr>
@@ -82,17 +82,17 @@
                   v-for="(jl,index) in jlList"
                   :class="{'progress-dot':true,'progress-dot-last':index == (jlList.length-1)}"
                   :key="index"
-                >
-              </div>
-                <div>
-                  <span>
-                    {{jl.jlsj}}&#x3000;
-                    <span
-                      style="color:rgb(21, 145, 202)"
-                    >{{!jl.jlrxm?'':jl.jlrxm}}</span>
-                    &#x3000;服务日期：{{jl.fwrq}}&#x3000;工时：{{jl.trgs}}
-                  </span>
-                  <div v-html="jl.nr"></div>
+                  >
+                  <div>
+                    <span>
+                      {{jl.jlsj}}&#x3000;
+                      <span
+                        style="color:rgb(21, 145, 202)"
+                      >{{!jl.jlrxm?'':jl.jlrxm}}</span>
+                      &#x3000;服务日期：{{jl.fwrq}}&#x3000;工时：{{jl.trgs}}
+                    </span>
+                    <div v-html="jl.nr"></div>
+                  </div>
                 </div>
               </div>
               <div v-if="!jlList.length" class="emptyContent">
@@ -174,7 +174,6 @@ export default {
             trgs: this.formData.trgs
           }).then(res => {
             if (res.state == "success") {
-              this.$message({ message: "保存成功", type: "success" });
               this.formData.fwrq = "";
               this.formData.trgs = 0;
               this.formData.nr = "";

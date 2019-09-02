@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       :title="title"
-      width="1000px"
+      width="1100px"
       top="30px"
       :visible.sync="visible"
       :append-to-body="true"
@@ -48,13 +48,13 @@
                   width="30%"
                 >{{ Number(ssfyTotalkm) + Number(ekfyTotalkm) + Number(kbfyTotalkm) }}</td>
                 <th>实施费用（元）</th>
-                <td width="30%">{{ ssfyTotalkm }}</td>
+                <td width="30%">{{ Math.floor(Number(ssfyTotalkm) * 100) / 100 }}</td>
               </tr>
               <tr>
                 <th>二开费用（元）</th>
-                <td width="30%">{{ ekfyTotalkm }}</td>
+                <td width="30%">{{ Math.floor(Number(ekfyTotalkm) * 100) / 100 }}</td>
                 <th>可变费用（元）</th>
-                <td width="30%">{{ kbfyTotalkm }}</td>
+                <td width="30%">{{ Math.floor(Number(kbfyTotalkm) * 100) / 100 }}</td>
               </tr>
             </table>
           </div>
@@ -73,7 +73,11 @@
               <el-table-column prop="usercode" label="工号" width="100"></el-table-column>
               <el-table-column prop="username" label="姓名" width="100"></el-table-column>
               <el-table-column prop="ywx" label="负责业务线"></el-table-column>
-              <el-table-column prop="ssfy" label="分配实施金额"></el-table-column>
+              <el-table-column prop="ssfy" label="分配实施金额">
+                <template slot-scope="scope">
+                  <span>{{ Math.floor(Number(scope.row.ssfy) * 100) / 100}}</span>
+                </template>
+              </el-table-column>
               <el-table-column prop="ekfy" label="分配二开金额"></el-table-column>
               <el-table-column prop="kbfy" label="分配可变金额"></el-table-column>
             </el-table>
@@ -88,6 +92,9 @@
                 <th>说明</th>
                 <th>项目类别</th>
                 <th>责任人</th>
+                <th>实施人月</th>
+                <th>任职等级</th>
+                <th>任职系数</th>
                 <th>实施金额</th>
                 <th>二开金额</th>
                 <th>可变金额</th>
@@ -107,7 +114,7 @@
                     size="mini"
                     placeholder="请选择"
                     style="border: none;"
-                    @change="handleSeleteUser"
+                    @change="handleSeleteUser($event,index)"
                   >
                     <el-option
                       v-for="(item, index) in userData"
@@ -117,6 +124,15 @@
                     ></el-option>
                   </el-select>
                 </td>
+                <td width="80px">
+                   <input
+                    type="number"
+                    v-model="item.tbssry"
+                    @input="handleChangefy(index, 'ssry', item.zrrbh)"
+                  />
+                </td>
+                <td>{{ item.xmjldjmc }}</td>
+                <td>{{ !item.xmjldjxs?'':item.xmjldjxs }}</td>
                 <td width="80px">
                   <input
                     type="number"
@@ -158,7 +174,7 @@
       </div>
     </el-dialog>
 
-    <userDialog :show.sync="userShow" :isdept="false" @addUserSuccess="addUserSuccess"></userDialog>
+    <userDialog :show.sync="userShow" :isdept="false" :xmjldj="'1'" @addUserSuccess="addUserSuccess"></userDialog>
   </div>
 </template>
 
@@ -230,6 +246,10 @@ export default {
     // 添加成员
     addUserSuccess(data) {
       let i = false;
+      let userObj = data;
+      data.ssfy = 0;
+      data.ekfy = 0;
+      data.kbfy = 0;
       if (!this.userData.length) {
         this.userData.push(data);
       } else {
@@ -325,22 +345,28 @@ export default {
     // },
 
     // 分配用户
-    handleSeleteUser(val) {
+    handleSeleteUser(val,index) {
       this.ssfyTotalkm = this.ekfyTotalkm = this.kbfyTotalkm = 0;
-      let zrrxm = "";
+      let curUser = {};
       this.userData.forEach((element, j, arr) => {
-        this.userData[j].ssfy = this.userData[j].ekfy = this.userData[
-          j
-        ].kbfy = 0;
         this.$set(this.userData[j], "ywx", "");
+        this.$set(this.userData[j], "ssfy", 0);
+        this.$set(this.userData[j], "ekfy", 0);
+        this.$set(this.userData[j], "kbfy", 0);
         this.userYwyData[j] = [];
         if (val == element.usercode) {
-          zrrxm = element.username;
+          curUser = element;
         }
+
         this.ywyData.forEach((ele, i, arr) => {
           if (val == ele.zrrbh) {
-            this.ywyData[i].zrrxm = zrrxm;
+            this.ywyData[i].zrrxm = curUser.username;
+            this.ywyData[i].xmjldj = curUser.xmjldj;
+            this.ywyData[i].xmjldjmc = curUser.xmjldjmc;
+            this.ywyData[i].xmjldjxs = curUser.xmjldjxs;
+
           }
+
           if (element.usercode == ele.zrrbh) {
             if (!this.userYwyData[j].includes(ele.ywymc)) {
               this.userYwyData[j].push(ele.ywymc);
@@ -351,11 +377,15 @@ export default {
             this.$set(this.userData[j], "ywx", this.userYwyData[j].join(","));
           }
         });
+
         this.ssfyTotalkm += this.userData[j].ssfy; //投标费用实施费用 计算
         this.ekfyTotalkm += this.userData[j].ekfy; //投标费用二开费用 计算
         this.kbfyTotalkm += this.userData[j].kbfy; //投标费用可变费用 计算
+
+        this.ywyData[index].ssfy = this.ywyData[index].ssbz*this.ywyData[index].xmjldjxs*this.ywyData[index].tbssry;
       });
     },
+
     // 实施费用
     handleChangefy(index, type, yhbh) {
       if (!this.ywyData[index].zrrbh) {
@@ -365,11 +395,15 @@ export default {
         });
         return;
       }
+      let curObj = {}; //记录视图没更新的数据
       switch (type) {
         case "ss":
           this.ssfyTotal = 0;
           this.ssfyTotalkm = 0;
-          this.ywyData.forEach(ele => {
+          this.ywyData.forEach((ele,i,arr) => {
+            if(index == i){
+              this.$set(this.ywyData[i], "tbssry", (ele.ssfy/ele.xmjldjxs/ele.ssbz).toFixed(2));
+            }
             if (ele.zrrbh == yhbh) {
               this.ssfyTotal += Number(ele.ssfy);
             }
@@ -377,10 +411,10 @@ export default {
           this.userData.forEach((ele, i, arr) => {
             if (ele.usercode == yhbh) {
               this.$set(this.userData[i], "ssfy", this.ssfyTotal);
+              curObj = this.userData[i];
+              this.userData.splice(i,1,curObj);
             }
-            this.ssfyTotalkm += !this.userData[i].ssfy
-              ? 0
-              : this.userData[i].ssfy;
+            this.ssfyTotalkm += !this.userData[i].ssfy? 0: this.userData[i].ssfy;
           });
           break;
         case "ek":
@@ -394,10 +428,10 @@ export default {
           this.userData.forEach((ele, i, arr) => {
             if (ele.usercode == yhbh) {
               this.$set(this.userData[i], "ekfy", this.ekfyTotal);
+              curObj = this.userData[i];
+              this.userData.splice(i,1,curObj);
             }
-            this.ekfyTotalkm += !this.userData[i].ekfy
-              ? 0
-              : this.userData[i].ekfy;
+            this.ekfyTotalkm += !this.userData[i].ekfy? 0: this.userData[i].ekfy;
           });
           break;
         case "kb":
@@ -411,12 +445,33 @@ export default {
           this.userData.forEach((ele, i, arr) => {
             if (ele.usercode == yhbh) {
               this.$set(this.userData[i], "kbfy", this.kbfyTotal);
+              curObj = this.userData[i];
+              this.userData.splice(i,1,curObj);
             }
-            this.kbfyTotalkm += !this.userData[i].kbfy
-              ? 0
-              : this.userData[i].kbfy;
+            this.kbfyTotalkm += !this.userData[i].kbfy? 0: this.userData[i].kbfy;
           });
           break;
+
+        case "ssry":
+          this.ssfyTotal = 0;
+          this.ssfyTotalkm = 0;
+          this.ywyData.forEach((ele,i,arr) => {
+            if(index == i){
+              this.$set(this.ywyData[i], "ssfy", ele.ssbz*ele.xmjldjxs*ele.tbssry);
+            }
+            if (ele.zrrbh == yhbh) {
+              this.ssfyTotal += Number(ele.ssfy);
+            }
+          });
+          this.userData.forEach((ele, i, arr) => {
+            if (ele.usercode == yhbh) {
+              this.$set(this.userData[i], "ssfy", this.ssfyTotal);
+              curObj = this.userData[i];
+              this.userData.splice(i,1,curObj);
+            }
+            this.ssfyTotalkm += !this.userData[i].ssfy? 0: this.userData[i].ssfy;
+          });
+          
         default:
           break;
       }
@@ -427,11 +482,12 @@ export default {
       this.fileName = "";
       this.fileList = [];
     },
+
     // 提交投标
     handleCommit() {
       let tdList = [],
         zrrnull = false;
-      this.ywyData.forEach(ele => {
+        this.ywyData.forEach(ele => {
         if (!ele.zrrbh) {
           zrrnull = true;
         }
@@ -439,9 +495,13 @@ export default {
           htnrwid: ele.htnrwid,
           zrrbh: ele.zrrbh,
           zrrxm: ele.zrrxm,
-          ssfy: ele.ssfy,
-          ekfy: ele.ekfy,
-          kbfy: ele.kbfy
+          ssfy: Math.floor(Number(ele.ssfy) * 100) / 100,
+          ekfy: Math.floor(Number(ele.ekfy) * 100) / 100,
+          kbfy: Math.floor(Number(ele.kbfy) * 100) / 100,
+          xmjldj:ele.xmjldj,
+          xmjldjmc:ele.xmjldjmc,
+          xmjldjxs:ele.xmjldjxs,
+          tbssry:ele.tbssry
         });
       });
       if (!!zrrnull) {
@@ -478,8 +538,10 @@ export default {
         }
       });
     },
+
     // 获取投标详情
     getTbxq() {
+      this.userList = [];
       tbxq({ fbbh: this.fbbh ,tbbh:this.tbbh}).then(({ data }) => {
         if (data.state == "success") {
           this.ywyData = !data.data.htnrfy ? [] : data.data.htnrfy;
@@ -506,9 +568,8 @@ export default {
                 kbfy: ele.kbfy
               });
             });
+            this.userData =  this.userList;
           }
-          this.userData =  this.userList;
-
           this.userData.forEach((ele, i, arr) => {
             this.userYwyData[i] = [];
           });
@@ -521,17 +582,17 @@ export default {
       this.visible = this.show;
       if (!!n) {
          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-         this.userList = [];
-        if (this.type == "tb") {
-          this.userList.push({
-            username: this.userInfo.nickName,
-            usercode: this.userInfo.userName,
-            ywx: "",
-            ssfy: "",
-            ekfy: "",
-            kbfy: ""
-          });
-        }
+        //  this.userList = [];
+        // if (this.type == "tb") {
+        //   this.userList.push({
+        //     username: this.userInfo.nickName,
+        //     usercode: this.userInfo.userName,
+        //     ywx: "",
+        //     ssfy: "",
+        //     ekfy: "",
+        //     kbfy: ""
+        //   });
+        // }
         if (this.type == "edit") {
           this.fileList = [];
         }

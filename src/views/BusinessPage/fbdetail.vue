@@ -12,8 +12,8 @@
 				<div class="project__extra">
 					<b>已有 {{ $route.query.r }} 人投标</b>
 					<p>招标截止日期： {{ fbxxData.zbjzrq }}</p>
-					<a href="javaScript:;;" @click="handleToubiao('tb')" v-if="(!istb && !!tbzt) || !tbzt">我要投标</a>
-					<el-tag v-if="!!istb && !!tbzt" type="success">已投标</el-tag>
+					<a href="javaScript:;;" @click="handleToubiao('tb')" v-if="!istb && !!tbzt">我要投标</a>
+					<el-tag v-if="!!istb && !tbzt" type="success">已投标</el-tag>
 					<el-button size="mini" type="primary" v-if="!!istb && !!tbzt" @click="handleToubiao('edit')">编辑投标</el-button>
 				</div>
 			</div>
@@ -206,8 +206,8 @@ export default {
 			htnrData: [],
 
 			tbfyData: [],
-			istb: '',
-			tbzt: '',
+			istb: false,
+			tbzt: false,
 			fbxxData: {}, //分包信息
 			fbnrData: [], //分包内容
 

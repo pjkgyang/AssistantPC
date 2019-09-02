@@ -209,7 +209,11 @@ export default {
           })
           .catch(error => {});
       } else {
-        this.$emit("handleCommitTB", this.form);
+        this.$alert("请上传巡检附件", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
       }
     },
     newFiles(file) {
@@ -287,13 +291,7 @@ export default {
         });
         return false;
       }
-      if (!this.files.length) {
-        this.$alert("请上传巡检附件", "提示", {
-          confirmButtonText: "确定",
-          type: "warning"
-        });
-        return false;
-      }
+
       
       return true;
     }

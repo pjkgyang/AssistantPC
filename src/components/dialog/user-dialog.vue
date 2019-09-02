@@ -106,27 +106,28 @@
           }
        },
        getUsers(){
-           getUsers({
-            curPage: this.currentPage,
-            pageSize: this.pageSize,
-            unitType:!this.unitType?0:this.unitType,
-            keyword: this.keyword,
-            dept:!!this.isdept?'01AM':''
-        }).then(({ data }) => {
-            if (data.state == "success") {
-            if(!data.data || !data.data.rows){
+           this.$get(this.API.getProjectUsers,{
+                curPage: this.currentPage,
+                pageSize: this.pageSize,
+                unitType:!this.unitType?0:this.unitType,
+                keyword: this.keyword,
+                dept:!!this.isdept?'01AM':'',
+                xmjldj:this.xmjldj
+           }).then(res=>{
+            if (res.state == "success") {
+            if(!res.data || !res.data.rows){
                 this.total  = 0
                 this.tableData = []
             }else{
-                 this.total = data.data.records;
-                 this.tableData = data.data.rows;
+                 this.total = res.data.records;
+                 this.tableData = res.data.rows;
                  this.tableData.forEach(ele=>{
                     ele.ytj = 1
                 })
 				this.userDatas = this.tableData;
               }
             }
-        });
+           })
        }
    },
    props:{
@@ -146,6 +147,14 @@
 		   type:String,
 		   default:''
        },
+       xmjldj:{
+          type:String,
+		  default:'' 
+       },
+       dwbh:{
+          type:String,
+		  default:''  
+       }
    },
      watch: {
         show (n,o) {

@@ -25,6 +25,7 @@
 <script>
 import axios from "axios";
 import Qs from "qs";
+
 export default {
   data() {
     return {
@@ -85,8 +86,7 @@ export default {
       } else {
         this.uploadForm.append("uploadCrowd", file);
       }
-      axios
-        .post(
+      axios.post(
           window.baseurl +
             (!this.isCrowd
               ? "attachment/uploadAttach.do"

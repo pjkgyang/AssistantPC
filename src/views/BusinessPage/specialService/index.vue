@@ -136,8 +136,9 @@
             <el-table-column prop="fwjd" label="服务阶段" min-width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop="fwx" label="服务项" min-width="150" show-overflow-tooltip></el-table-column>
             <el-table-column prop="fwnr" label="服务内容" min-width="220" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="jhkssj" label="开始日期" min-width="100" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="jhjssj" label="结束日期" min-width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="jfw" label="交付物" width="200" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sjkssj" label="实际开始日期" min-width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sjjssj" label="实际结束日期" min-width="120" show-overflow-tooltip></el-table-column>
           </el-table>
         </section>
         <div text-right style="margin-top:2px">
@@ -287,13 +288,12 @@ export default {
     // 编辑提交
     handleCommitEdit(data) {
       this.$post(this.API.updateZxfws, {
-        wids: !this.plxgZrr ? this.curRow.wid : this.widsArr,
+        wids: !this.plxgZrr ? this.curRow.wid : this.widsArr.join(','),
         jzfzrbh: data.jzfzrbh,
         jzfzrxm: data.jzfzrxm,
         xxfzrxm: data.xxfzrxm,
         xxfzrbh: data.xxfzrbh,
-        jhkssj: data.jhksrq,
-        jhjssj: data.jhjsrq
+        jhjssj: data.jhjssj
       }).then(res => {
         if (res.state == "success") {
           this.$message({ message: "保存成功", type: "success" });
@@ -525,6 +525,10 @@ export default {
           this.$message({ message: "发布成功", type: "success" });
           this.pageSpecialService();
         } else {
+          this.$alert(res.msg, "提示", {
+            confirmButtonText: "确定",
+            type: "error"
+          });
         }
       });
     }

@@ -164,29 +164,6 @@
 			</div>
 			<div flex>
 				<div class="filter">
-					<span class="filter-title">计划结束时间:</span>
-					<el-date-picker
-						style="width:150px"
-						v-model="jhkssj"
-						type="date"
-						size="mini"
-						placeholder="开始日期"
-						format="yyyy-MM-dd"
-						value-format="yyyy-MM-dd"
-					></el-date-picker>
-					&nbsp;至&nbsp;
-					<el-date-picker
-						style="width:150px"
-						v-model="jhjssj"
-						type="date"
-						size="mini"
-						placeholder="结束日期"
-						format="yyyy-MM-dd"
-						value-format="yyyy-MM-dd"
-					></el-date-picker>
-				</div>
-
-				<div class="filter">
 					<span class="filter-title">承诺结束时间:</span>
 					<el-date-picker
 						style="width:150px"
@@ -208,8 +185,6 @@
 						value-format="yyyy-MM-dd"
 					></el-date-picker>
 				</div>
-			</div>
-			<div flex>
 				<div class="filter">
 					<span class="filter-title">实际结束时间:</span>
 					<el-date-picker
@@ -232,6 +207,8 @@
 						value-format="yyyy-MM-dd"
 					></el-date-picker>
 				</div>
+			</div>
+			<div flex>
 				<div class="filter">
 					<span class="filter-title">认定结束时间:</span>
 					<el-date-picker
@@ -247,6 +224,28 @@
 					<el-date-picker
 						style="width:150px"
 						v-model="rdjssj"
+						type="date"
+						size="mini"
+						placeholder="结束日期"
+						format="yyyy-MM-dd"
+						value-format="yyyy-MM-dd"
+					></el-date-picker>
+				</div>
+				<div class="filter">
+					<span class="filter-title">签字时间:</span>
+					<el-date-picker
+						style="width:150px"
+						v-model="jhkssj"
+						type="date"
+						size="mini"
+						placeholder="开始日期"
+						format="yyyy-MM-dd"
+						value-format="yyyy-MM-dd"
+					></el-date-picker>
+					&nbsp;至&nbsp;
+					<el-date-picker
+						style="width:150px"
+						v-model="jhjssj"
 						type="date"
 						size="mini"
 						placeholder="结束日期"

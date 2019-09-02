@@ -10,6 +10,8 @@
           </el-table-column>
           <el-table-column prop="xmmc" label="项目名称" show-overflow-tooltip min-width="240">
           </el-table-column>
+          <el-table-column prop="rwmc" label="任务名称" show-overflow-tooltip min-width="240">
+          </el-table-column>
           <el-table-column prop="kfxzmc" label="开发性质" width="120">
           </el-table-column>
           <el-table-column prop="fwlxmc" label="服务类型"  width="120">

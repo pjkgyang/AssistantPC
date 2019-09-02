@@ -26,17 +26,17 @@
               type="date"
               placeholder="选择日期"
               value-format="yyyy-MM-dd"
-              v-model="form.jhjsrq"
+              v-model="form.jhjssj"
               style="width:100%;"
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="金智责任人">
             <el-select
-              v-model="form.jzzrrbh"
+              v-model="form.jzfzrbh"
               placeholder="请选择责任人(可按姓名搜索)"
               filterable
               style="width:100%;"
-              @change="handleChangeZrr"
+              @change="handleChangeJzZrr"
             >
               <el-option
                 v-for="item in jzzrrList"
@@ -48,7 +48,7 @@
           </el-form-item>
           <el-form-item label="学校责任人">
             <el-select
-              v-model="form.xxzrrbh"
+              v-model="form.xxfzrbh"
               placeholder="请选择责任人(可按姓名搜索)"
               filterable
               style="width:100%;"
@@ -81,12 +81,11 @@ export default {
       xxzrrList: [],
       form: {
         // jhksrq: "",
-        jhjsrq: "",
-        jzzrrxm: "",
-        jzzrrbh: "",
-        xxzrrxm: "",
-        xxzrrbh: "",
-        sm: ""
+        jhjssj: "",
+        jzfzrxm: "",
+        jzfzrbh: "",
+        xxfzrxm: "",
+        xxfzrbh: "",
       },
       pickerBeginDate: {
         disabledDate(time) {
@@ -97,18 +96,26 @@ export default {
     };
   },
   methods: {
+    handleChangeJzZrr(val){
+      this.form.jzfzrbh = val;
+      this.jzzrrList.forEach(ele => {
+        if (ele.userid == val) {
+          this.form.jzfzrxm = ele.username;
+        }
+      });
+    },
     // 更换责任人
     handleChangeZrr(val) {
-      this.form.zrrbh = val;
-      this.zrrList.forEach(ele => {
-        if (ele.userId == val) {
-          this.form.zrrxm = ele.userName;
+      this.form.xxfzrbh = val;
+      this.xxzrrList.forEach(ele => {
+        if (ele.userid == val) {
+          this.form.xxfzrxm = ele.username;
         }
       });
     },
     handleCommit() {
       if (!this.validate()) return;
-      this.$emit("handleCommit", this.form);
+      this.$emit("handleCommitEdit", this.form);
     },
     handleClose() {
       this.visible = false;
@@ -139,15 +146,22 @@ export default {
       //   });
       //   return false;
       // }
-      if (!this.form.jhjsrq && !this.plxgZrr) {
+      if (!this.form.jhjssj && !this.plxgZrr) {
         this.$alert("请填写计划结束日期", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
         return false;
       }
-      if (!!this.plxgZrr && !this.form.zrrbh) {
-        this.$alert("请选择责任人", "提示", {
+      if (!this.form.jzfzrbh ) {
+        this.$alert("请选择金智责任人", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        });
+        return false;
+      }
+      if (!this.form.xxfzrbh ) {
+        this.$alert("请选择学校责任人", "提示", {
           confirmButtonText: "确定",
           type: "warning"
         });
@@ -176,18 +190,20 @@ export default {
     show(n, o) {
       this.visible = this.show;
       if (!n) {
-        this.form.zrrxm = this.form.zrrbh = this.form.jhksrq = this.form.jhjsrq = this.form.sm =
-          "";
+        this.form.jzfzrbh =   "";
+        this.form.jzfzrxm = "";
+        this.form.xxfzrbh = "";
+        this.form.xxfzrxm = "";
+        this.form.jhjssj = "";
       } else {
         this.getUsers(0);
         this.getUsers(1);
 
-        this.form.jzzrrbh = this.dataInfo.jzfzrbh;
-        this.form.jzzrrxm = this.dataInfo.jzfzrxm;
-        this.form.xxzrrbh =
-          this.dataInfo.xxfzrbh == "-" ? "" : this.dataInfo.xxfzrbh;
-        this.form.xxzrrxm =
-          this.dataInfo.xxfzrxm == "-" ? "" : this.dataInfo.xxfzrxm;
+        this.form.jhjssj = this.dataInfo.jhjssj == "-"?"":this.dataInfo.jhjssj;
+        this.form.jzfzrbh = this.dataInfo.jzfzrbh;
+        this.form.jzfzrxm = this.dataInfo.jzfzrxm;
+        this.form.xxfzrbh = this.dataInfo.xxfzrbh == "-" ? "" : this.dataInfo.xxfzrbh;
+        this.form.xxfzrxm = this.dataInfo.xxfzrxm == "-" ? "" : this.dataInfo.xxfzrxm;
       }
     }
   },

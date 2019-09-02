@@ -14,7 +14,7 @@
             v-model="filterData.keyword"
             style="width:493px;"
             size="mini"
-            placeholder="请输入问题提出人姓名/工号/手机号/标题/项目编号/项目名称/学校名称"
+            placeholder="请输入提出人姓名/工号/手机号/标题/项目编号/项目名称"
             @change="handleQuery"
           ></el-input>&#x3000;
           <el-button type="primary" size="mini" @click="handleQuery">查询</el-button>&#x3000;
